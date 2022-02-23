@@ -1,5 +1,5 @@
 //
-//  HelloApp.cpp
+//  LiminalSpirit.cpp
 //  Cornell University Game Library (CUGL)
 //
 //  This is the implementation file for the custom application. This is the
@@ -28,7 +28,7 @@
 //  Version: 1/8/17
 //
 // Include the class header, which includes all of the CUGL classes
-#include "HelloApp.h"
+#include "LiminalSpiritApp.h"
 #include <cugl/base/CUBase.h>
 
 // Add support for simple random number generation
@@ -57,7 +57,7 @@ static void test_cases() {
  * very last line.  This ensures that the state will transition to FOREGROUND,
  * causing the application to run.
  */
-void HelloApp::onStartup() {
+void LiminalSpirit::onStartup() {
     Size size = getDisplaySize();
     size *= GAME_WIDTH/size.width;
     
@@ -115,7 +115,7 @@ void HelloApp::onStartup() {
  * very last line.  This ensures that the state will transition to NONE,
  * causing the application to be deleted.
  */
-void HelloApp::onShutdown() {
+void LiminalSpirit::onShutdown() {
     // Delete all smart pointers
     _logo = nullptr;
     _scene = nullptr;
@@ -142,7 +142,7 @@ void HelloApp::onShutdown() {
  *
  * @param timestep  The amount of time (in seconds) since the last frame
  */
-void HelloApp::update(float timestep) {
+void LiminalSpirit::update(float timestep) {
     if (_countdown == 0) {
         // Move the logo about the screen
         Size size = getDisplaySize();
@@ -165,7 +165,7 @@ void HelloApp::update(float timestep) {
  * When overriding this method, you do not need to call the parent method
  * at all. The default implmentation does nothing.
  */
-void HelloApp::draw() {
+void LiminalSpirit::draw() {
     // This takes care of begin/end
     _scene->render(_batch);
 }
@@ -177,7 +177,7 @@ void HelloApp::draw() {
  * you do in 3152.  However, they greatly simplify scene management, and
  * have become standard in most game engines.
  */
-void HelloApp::buildScene() {
+void LiminalSpirit::buildScene() {
     Size  size  = getDisplaySize();
     float scale = GAME_WIDTH/size.width;
     size *= scale;
