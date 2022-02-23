@@ -2700,6 +2700,7 @@ size_t Font::getGlyphBoxes(Mesh<SpriteVertex2>& mesh, const char* substr, const 
                     offset.x += adjusts[pos++];
                 }
             }
+            prvchar = thechar;
             getOutline(prvchar,offset,mesh,rect);
             total++;
         } else if (_fallback && hasGlyph(thechar)) {
@@ -2709,6 +2710,7 @@ size_t Font::getGlyphBoxes(Mesh<SpriteVertex2>& mesh, const char* substr, const 
                     offset.x += adjusts[pos++];
                 }
             }
+            prvchar = thechar;
             getOutline(prvchar,offset,mesh,rect);
             total++;
         }

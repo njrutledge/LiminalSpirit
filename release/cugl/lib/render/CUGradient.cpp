@@ -453,15 +453,16 @@ Gradient& Gradient::set(const Color4 inner, const Color4 outer, const Vec2 start
  * @return this gradient, returned for chaining
  */
 Gradient& Gradient::set(const Color4 inner, const Color4 outer, const Vec2 center, float radius) {
+    float r = radius*0.5f;
     _inverse.setIdentity();
     _inverse.m[4] = -center.x;
     _inverse.m[5] = -center.y;
     
     _inner = inner;
     _outer = outer;
-    _extent.set(radius,radius);
-    _radius  = radius;
-    _feather = 0.0f;
+    _extent.set(r,r);
+    _radius  = r;
+    _feather = radius;
     return *this;
 }
 
