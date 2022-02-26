@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		57A6157E27C830490086454D /* LiminalSpirit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57A6157D27C830490086454D /* LiminalSpirit.cpp */; };
+		57A6157F27C830490086454D /* LiminalSpirit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57A6157D27C830490086454D /* LiminalSpirit.cpp */; };
+		57A6158027C830490086454D /* LiminalSpirit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57A6157D27C830490086454D /* LiminalSpirit.cpp */; };
+		57A6158427C830870086454D /* InputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57A6158227C830870086454D /* InputController.cpp */; };
+		57A6158527C830870086454D /* InputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57A6158227C830870086454D /* InputController.cpp */; };
+		57A6158627C830870086454D /* InputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57A6158227C830870086454D /* InputController.cpp */; };
+		57A6158B27C888A10086454D /* SwipeController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57A6158927C888A10086454D /* SwipeController.cpp */; };
+		57A6158C27C888A10086454D /* SwipeController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57A6158927C888A10086454D /* SwipeController.cpp */; };
+		57A6158D27C888A10086454D /* SwipeController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57A6158927C888A10086454D /* SwipeController.cpp */; };
 		EB07CFB621EFF3F8000CB3A3 /* DeviceMargins.plist in Resources */ = {isa = PBXBuildFile; fileRef = EB07CFB021EFF3EF000CB3A3 /* DeviceMargins.plist */; };
 		EB22BDE025D0E00A002ACE41 /* libcugl-mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EB22BDC825D0DE75002ACE41 /* libcugl-mac.a */; };
 		EB22BDFC25D0E0E2002ACE41 /* libcugl-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EB22BDCA25D0DE75002ACE41 /* libcugl-ios.a */; };
@@ -16,7 +25,6 @@
 		EB22BF9625D0EA50002ACE41 /* json in Resources */ = {isa = PBXBuildFile; fileRef = EBFE7C041E19B496001007C2 /* json */; };
 		EB22BF9725D0EA51002ACE41 /* textures in Resources */ = {isa = PBXBuildFile; fileRef = EB2BE9BA1D7498D2002FE78B /* textures */; };
 		EB22BF9B25D0EA5C002ACE41 /* DeviceMargins.plist in Resources */ = {isa = PBXBuildFile; fileRef = EB07CFB021EFF3EF000CB3A3 /* DeviceMargins.plist */; };
-		EB2BE9B51D74952A002FE78B /* HelloApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB2BE9B21D74952A002FE78B /* HelloApp.cpp */; };
 		EB2BE9B61D74952A002FE78B /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB2BE9B41D74952A002FE78B /* main.cpp */; };
 		EB2BE9BB1D7498D2002FE78B /* textures in Resources */ = {isa = PBXBuildFile; fileRef = EB2BE9BA1D7498D2002FE78B /* textures */; };
 		EB2BE9C11D749908002FE78B /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB2BE9BE1D749908002FE78B /* Carbon.framework */; };
@@ -31,9 +39,7 @@
 		EB7454AC1D74D846002FBAE6 /* Landscape.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB7454A81D74D846002FBAE6 /* Landscape.storyboard */; };
 		EB7454AD1D74D846002FBAE6 /* Portrait.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB7454A91D74D846002FBAE6 /* Portrait.storyboard */; };
 		EB7454AE1D74D891002FBAE6 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB2BE9B41D74952A002FE78B /* main.cpp */; };
-		EB7454AF1D74D891002FBAE6 /* HelloApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB2BE9B21D74952A002FE78B /* HelloApp.cpp */; };
 		EB7454D01D750623002FBAE6 /* textures in Resources */ = {isa = PBXBuildFile; fileRef = EB2BE9BA1D7498D2002FE78B /* textures */; };
-		EB9CDA3525D0EAAC00EE1A09 /* HelloApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB2BE9B21D74952A002FE78B /* HelloApp.cpp */; };
 		EB9CDA3925D0EAB100EE1A09 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB2BE9B41D74952A002FE78B /* main.cpp */; };
 		EB9CDA4625D0EB5A00EE1A09 /* CoreHaptics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBDD16C225C35D3400154533 /* CoreHaptics.framework */; };
 		EB9CDA4725D0EB5A00EE1A09 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBDD16C025C35D3400154533 /* CoreAudio.framework */; };
@@ -102,10 +108,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		57A6157D27C830490086454D /* LiminalSpirit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LiminalSpirit.cpp; sourceTree = "<group>"; };
+		57A6158127C830520086454D /* LiminalSpiritApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LiminalSpiritApp.h; sourceTree = "<group>"; };
+		57A6158227C830870086454D /* InputController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = InputController.cpp; sourceTree = "<group>"; };
+		57A6158327C830870086454D /* InputController.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = InputController.hpp; sourceTree = "<group>"; };
+		57A6158927C888A10086454D /* SwipeController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SwipeController.cpp; sourceTree = "<group>"; };
+		57A6158A27C888A10086454D /* SwipeController.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SwipeController.hpp; sourceTree = "<group>"; };
 		EB07CFB021EFF3EF000CB3A3 /* DeviceMargins.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DeviceMargins.plist; sourceTree = "<group>"; };
 		EB22BF5E25D0E8BC002ACE41 /* LiminalSpirit (Sim).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LiminalSpirit (Sim).app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		EB2BE9B21D74952A002FE78B /* HelloApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HelloApp.cpp; sourceTree = "<group>"; };
-		EB2BE9B31D74952A002FE78B /* HelloApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelloApp.h; sourceTree = "<group>"; };
 		EB2BE9B41D74952A002FE78B /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		EB2BE9BA1D7498D2002FE78B /* textures */ = {isa = PBXFileReference; lastKnownFileType = folder; path = textures; sourceTree = "<group>"; };
 		EB2BE9BE1D749908002FE78B /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
@@ -332,9 +342,13 @@
 		EBBF18B11D749176008E2001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				57A6157D27C830490086454D /* LiminalSpirit.cpp */,
+				57A6158127C830520086454D /* LiminalSpiritApp.h */,
 				EB2BE9B41D74952A002FE78B /* main.cpp */,
-				EB2BE9B31D74952A002FE78B /* HelloApp.h */,
-				EB2BE9B21D74952A002FE78B /* HelloApp.cpp */,
+				57A6158227C830870086454D /* InputController.cpp */,
+				57A6158327C830870086454D /* InputController.hpp */,
+				57A6158927C888A10086454D /* SwipeController.cpp */,
+				57A6158A27C888A10086454D /* SwipeController.hpp */,
 			);
 			name = Source;
 			path = ../source;
@@ -410,10 +424,11 @@
 					};
 					EB74548B1D74D75C002FBAE6 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = G6P7H83FK6;
+						DevelopmentTeam = SK24KCQ5NU;
 					};
 					EBBF18901D74904A008E2001 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = SK24KCQ5NU;
 					};
 				};
 			};
@@ -511,8 +526,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				57A6158D27C888A10086454D /* SwipeController.cpp in Sources */,
 				EB9CDA3925D0EAB100EE1A09 /* main.cpp in Sources */,
-				EB9CDA3525D0EAAC00EE1A09 /* HelloApp.cpp in Sources */,
+				57A6158627C830870086454D /* InputController.cpp in Sources */,
+				57A6158027C830490086454D /* LiminalSpirit.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -520,8 +537,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				57A6158C27C888A10086454D /* SwipeController.cpp in Sources */,
 				EB7454AE1D74D891002FBAE6 /* main.cpp in Sources */,
-				EB7454AF1D74D891002FBAE6 /* HelloApp.cpp in Sources */,
+				57A6158527C830870086454D /* InputController.cpp in Sources */,
+				57A6157F27C830490086454D /* LiminalSpirit.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -529,8 +548,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				57A6158B27C888A10086454D /* SwipeController.cpp in Sources */,
 				EB2BE9B61D74952A002FE78B /* main.cpp in Sources */,
-				EB2BE9B51D74952A002FE78B /* HelloApp.cpp in Sources */,
+				57A6158427C830870086454D /* InputController.cpp in Sources */,
+				57A6157E27C830490086454D /* LiminalSpirit.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -595,11 +616,12 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = SK24KCQ5NU;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/iOS-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.ios.HelloWorld;
+				PRODUCT_BUNDLE_IDENTIFIER = liminalspirit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -615,11 +637,12 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = SK24KCQ5NU;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/iOS-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.ios.HelloWorld;
+				PRODUCT_BUNDLE_IDENTIFIER = liminalspirit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -751,9 +774,10 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = SK24KCQ5NU;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Mac-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.mac.HelloWorld;
+				PRODUCT_BUNDLE_IDENTIFIER = liminalspirit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -765,9 +789,10 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = SK24KCQ5NU;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Mac-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.mac.HelloWorld;
+				PRODUCT_BUNDLE_IDENTIFIER = liminalspirit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

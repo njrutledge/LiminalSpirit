@@ -143,17 +143,22 @@ void LiminalSpirit::onShutdown() {
  * @param timestep  The amount of time (in seconds) since the last frame
  */
 void LiminalSpirit::update(float timestep) {
-    if (_countdown == 0) {
-        // Move the logo about the screen
-        Size size = getDisplaySize();
-        size *= GAME_WIDTH/size.width;
-		float x = (float)(std::rand() % (int)(size.width/2))+size.width/4;
-		float y = (float)(std::rand() % (int)(size.height/2))+size.height/8;
-        _logo->setPosition(Vec2(x,y));
-        _countdown = TIME_STEP;
-    } else {
-        _countdown--;
-    }
+//  Leaving this here incase anyone wants to use it for something similar
+//    if (_countdown == 0) {
+//        // Move the logo about the screen
+//        Size size = getDisplaySize();
+//        size *= GAME_WIDTH/size.width;
+//		float x = (float)(std::rand() % (int)(size.width/2))+size.width/4;
+//		float y = (float)(std::rand() % (int)(size.height/2))+size.height/8;
+//        _logo->setPosition(Vec2(x,y));
+//        _countdown = TIME_STEP;
+//    } else {
+//        _countdown--;
+//    }
+    
+    // Update swipe controller
+    _swiper.update();
+   
 }
 
 /**
@@ -184,6 +189,11 @@ void LiminalSpirit::buildScene() {
     
     // The logo is actually an image+label.  We need a parent node
     _logo = scene2::SceneNode::alloc();
+    
+    // Initialize swipe controller
+    // Must use safe bounds for swipe width
+    Rect bounds = getSafeBounds();
+    _swiper.init(bounds.getMinX(), bounds.size.width);
     
     // Get the image and add it to the node.
     std::shared_ptr<Texture> texture  = _assets->get<Texture>("logo");
