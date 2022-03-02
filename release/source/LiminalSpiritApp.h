@@ -48,6 +48,8 @@ protected:
     std::shared_ptr<cugl::SpriteBatch>  _batch;
     /** A reference to the logo, so that we can move it around */
     std::shared_ptr<cugl::scene2::SceneNode>  _logo;
+    /** The physics world */
+    std::shared_ptr<cugl::physics2::ObstacleWorld> _world;
 
     /** A countdown used to move the logo */
     int  _countdown;

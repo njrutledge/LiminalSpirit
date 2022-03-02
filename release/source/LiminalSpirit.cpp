@@ -43,6 +43,12 @@ using namespace cugl;
 // This is adjusted by screen aspect ratio to get the height
 #define GAME_WIDTH 1024
 
+/** The ratio between the physics world and the screen. */
+#define PHYSICS_SCALE 50
+
+/** The constant for gravity in the physics world. */
+#define GRAVITY 9.8
+
 static void test_cases() {
     
 }
@@ -101,6 +107,9 @@ void LiminalSpirit::onStartup() {
     bounds = getDisplayBounds();
     CULog("Full Area %sx%s",bounds.origin.toString().c_str(),
                             bounds.size.toString().c_str());
+    
+    // Enable physics -jdg274
+    _world = physics2::ObstacleWorld::alloc(bounds/PHYSICS_SCALE, Vec2(0,-GRAVITY));
 
 }
 
@@ -154,6 +163,7 @@ void LiminalSpirit::update(float timestep) {
     } else {
         _countdown--;
     }
+    _world->update(timestep);
 }
 
 /**
@@ -221,6 +231,38 @@ void LiminalSpirit::buildScene() {
     // Get the right and bottom offsets.
     float bOffset = safe.origin.y;
     float rOffset = (size.width)-(safe.origin.x+safe.size.width);
+    
+    // Making left and top offsets -jdg274
+    float lOffset = safe.origin.x;
+    float tOffset = (size.height)-(safe.origin.y+safe.size.height);
+    
+    // Making the floor -jdg274
+    std::shared_ptr<scene2::PolygonNode> floor = scene2::PolygonNode::alloc();
+    floor->setPolygon(Rect(0, 0, safe.size.width, 10));
+    floor->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+    floor->setPosition(lOffset, bOffset);
+    _scene->addChild(floor);
+    
+    // Making the ceiling -jdg274
+    std::shared_ptr<scene2::PolygonNode> ceiling = scene2::PolygonNode::alloc();
+    ceiling->setPolygon(Rect(0, 0, safe.size.width, 10));
+    ceiling->setAnchor(Vec2::ANCHOR_TOP_LEFT);
+    ceiling->setPosition(lOffset, size.height-tOffset);
+    _scene->addChild(ceiling);
+    
+    // Making the left wall -jdg274
+    std::shared_ptr<scene2::PolygonNode> left = scene2::PolygonNode::alloc();
+    left->setPolygon(Rect(0,0,10, safe.size.height));
+    left->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+    left->setPosition(lOffset, bOffset);
+    _scene->addChild(left);
+
+    // Making the right wall -jdg274
+    std::shared_ptr<scene2::PolygonNode> right = scene2::PolygonNode::alloc();
+    right->setPolygon(Rect(0, 0, 10, safe.size.height+10));
+    right->setAnchor(Vec2::ANCHOR_BOTTOM_RIGHT);
+    right->setPosition(size.width-rOffset, bOffset);
+    _scene->addChild(right);
 
     // Position the button in the bottom right corner
     button->setAnchor(Vec2::ANCHOR_CENTER);
