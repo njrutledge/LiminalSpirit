@@ -21,6 +21,13 @@
 			"magfilter":"linear",
 			"wrapS":    "clamp",
 			"wrapT":    "clamp"
+		},
+		"enemy": {
+			"file":     "textures/enemy.png",
+			"minfilter":"nearest",
+			"magfilter":"linear",
+			"wrapS":    "clamp",
+			"wrapT":    "clamp"
 		}
 	}
 }
