@@ -22,7 +22,7 @@ using namespace cugl;
 /** Adjustment factor for accelerometer input (found experimentally) */
 #define ACCELEROM_X_FACTOR          5.0f
 /** Whether to active the accelerometer (this is TRICKY!) */
-#define USE_ACCELEROMETER           false
+#define USE_ACCELEROMETER           true
 /** How the time necessary to process a double tap (in milliseconds) */
 #define EVENT_DOUBLE_CLICK          400
 /** The key for the event handlers */
@@ -87,12 +87,12 @@ bool MovementInput::init() {
     }
     Touchscreen* touch = Input::get<Touchscreen>();
 
-    touch->addBeginListener(LISTENER_KEY,[=](const cugl::TouchEvent& event, bool focus) {
-        this->touchBeganCB(event,focus);
-    });
-    touch->addEndListener(LISTENER_KEY,[=](const cugl::TouchEvent& event, bool focus) {
-        this->touchEndedCB(event,focus);
-    });
+//    touch->addBeginListener(LISTENER_KEY,[=](const cugl::TouchEvent& event, bool focus) {
+//        this->touchBeganCB(event,focus);
+//    });
+//    touch->addEndListener(LISTENER_KEY,[=](const cugl::TouchEvent& event, bool focus) {
+//        this->touchEndedCB(event,focus);
+//    });
 #endif
     
     _active = success;
