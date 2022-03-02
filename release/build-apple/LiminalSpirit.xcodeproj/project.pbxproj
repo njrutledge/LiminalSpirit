@@ -157,6 +157,8 @@
 		EBDD16C725C35D3400154533 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.4.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		EBEC12012194B6F4007E708B /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		EBFE7C041E19B496001007C2 /* json */ = {isa = PBXFileReference; lastKnownFileType = folder; path = json; sourceTree = "<group>"; };
+		F05ADABE27CFD84B00FB8F1A /* AttackController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AttackController.cpp; sourceTree = "<group>"; };
+		F05ADABF27CFD84B00FB8F1A /* AttackController.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AttackController.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -349,6 +351,8 @@
 				57A6158327C830870086454D /* InputController.hpp */,
 				57A6158927C888A10086454D /* SwipeController.cpp */,
 				57A6158A27C888A10086454D /* SwipeController.hpp */,
+				F05ADABE27CFD84B00FB8F1A /* AttackController.cpp */,
+				F05ADABF27CFD84B00FB8F1A /* AttackController.hpp */,
 			);
 			name = Source;
 			path = ../source;
