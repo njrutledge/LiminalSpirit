@@ -309,7 +309,7 @@ void LiminalSpirit::buildScene()
     Vec2 enemyPos = ENEMY_POS;
     std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
     std::shared_ptr<Texture> image = _assets->get<Texture>(ENEMY_TEXTURE);
-    _enemy = BaseEnemyModel::alloc(enemyPos, image->getSize() / scale, scale);
+    _enemy = BaseEnemyModel::alloc(enemyPos, image->getSize() / _scale, _scale);
     std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
     _enemy->setSceneNode(sprite);
     _enemy->setDebugColor(Color4::RED);
