@@ -20,7 +20,7 @@ using namespace cugl;
 /** Adjustment factor for touch input */
 #define X_ADJUST_FACTOR             50.0f
 /** Adjustment factor for accelerometer input (found experimentally) */
-#define ACCELEROM_X_FACTOR          5.0f
+#define ACCELEROM_X_FACTOR          10.0f
 /** Whether to active the accelerometer (this is TRICKY!) */
 #define USE_ACCELEROMETER           true
 /** How the time necessary to process a double tap (in milliseconds) */
@@ -144,7 +144,7 @@ void MovementInput::update(float dt, float width, float characterWidth) {
     // MOBILE CONTROLS
     if (USE_ACCELEROMETER) {
         Vec3 acc = Input::get<Accelerometer>()->getAcceleration();
-        if(_posx+acc.x*ACCELEROM_X_FACTOR>=characterWidth/2 || _posx+acc.x*ACCELEROM_X_FACTOR <= width-characterWidth/2) {
+        if(_posx+acc.x*ACCELEROM_X_FACTOR>=characterWidth/2 && _posx+acc.x*ACCELEROM_X_FACTOR <= width-characterWidth/2) {
             _posx +=  acc.x*ACCELEROM_X_FACTOR;
         }
     }
