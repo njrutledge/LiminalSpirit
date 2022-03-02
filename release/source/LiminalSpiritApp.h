@@ -54,6 +54,10 @@ protected:
     std::shared_ptr<BaseEnemyModel> _enemy;
     /** The physics world */
     std::shared_ptr<cugl::physics2::ObstacleWorld> _world;
+    /** Reference to the physics root of the scene graph */
+    std::shared_ptr<cugl::scene2::SceneNode> _worldnode;
+    /** The scale between the physics world and the screen (MUST BE UNIFORM) */
+    float _scale;
 
     /** A countdown used to move the logo */
     int _countdown;
@@ -136,6 +140,10 @@ public:
      * at all. The default implmentation does nothing.
      */
     virtual void draw() override;
+    
+    virtual void addObstacle(const std::shared_ptr<cugl::physics2::Obstacle>& obj,
+                                const std::shared_ptr<cugl::scene2::SceneNode>& node,
+                             bool useObjPosition);
 };
 
 #endif /* __HELLO_APP_H__ */

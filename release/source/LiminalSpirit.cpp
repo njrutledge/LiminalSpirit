@@ -41,12 +41,13 @@ using namespace cugl;
 
 // The number of frames before moving the logo to a new position
 #define TIME_STEP 60
-// This is adjusted by screen aspect ratio to get the height
-#define GAME_WIDTH 1024
-
-/** The ratio between the physics world and the screen. */
-#define PHYSICS_SCALE 50
-
+/** This is adjusted by screen aspect ratio to get the height */
+#define SCENE_WIDTH 1024
+#define SCENE_HEIGHT 576
+/** Width of the game world in Box2d units */
+#define DEFAULT_WIDTH   32.0f
+/** Height of the game world in Box2d units */
+#define DEFAULT_HEIGHT  18.0f
 /** The constant for gravity in the physics world. */
 #define GRAVITY 9.8
 
@@ -66,7 +67,7 @@ static void test_cases() {
  */
 void LiminalSpirit::onStartup() {
     Size size = getDisplaySize();
-    size *= GAME_WIDTH/size.width;
+    size *= SCENE_WIDTH/size.width;
     
     // Create a scene graph the same size as the window
     _scene = Scene2::alloc(size.width, size.height);
@@ -93,7 +94,6 @@ void LiminalSpirit::onStartup() {
 #endif
     
     // Build the scene from these assets
-    buildScene();
     Application::onStartup();
     
     // Report the safe area
@@ -110,7 +110,26 @@ void LiminalSpirit::onStartup() {
                             bounds.size.toString().c_str());
     
     // Enable physics -jdg274
-    _world = physics2::ObstacleWorld::alloc(bounds/PHYSICS_SCALE, Vec2(0,-GRAVITY));
+    bounds = Display::get()->getSafeBounds();
+    _scale = size.width == SCENE_WIDTH ? size.width/bounds.size.width : size.height/bounds.size.height;
+    Vec2 offset((size.width-SCENE_WIDTH)/2.0f,(size.height-SCENE_HEIGHT)/2.0f);
+
+    // Create the scene graph
+    _worldnode = scene2::SceneNode::alloc();
+    _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+    _worldnode->setPosition(offset);
+    _scene->addChild(_worldnode);
+    
+    _world = physics2::ObstacleWorld::alloc(Rect(0,0,DEFAULT_WIDTH,DEFAULT_HEIGHT), Vec2(0,-GRAVITY));
+    _world->activateCollisionCallbacks(true);
+//    _world->onBeginContact = [this](b2Contact* contact) {
+//      beginContact(contact);
+//    };
+//    _world->onEndContact = [this](b2Contact* contact) {
+//      endContact(contact);
+//    };
+    
+    buildScene();
 
 }
 
@@ -131,6 +150,8 @@ void LiminalSpirit::onShutdown() {
     _scene = nullptr;
     _batch = nullptr;
     _assets = nullptr;
+    _world = nullptr;
+    _worldnode = nullptr;
     
     // Deativate input
 #if defined CU_TOUCH_SCREEN
@@ -156,7 +177,7 @@ void LiminalSpirit::update(float timestep) {
     if (_countdown == 0) {
         // Move the logo about the screen
         Size size = getDisplaySize();
-        size *= GAME_WIDTH/size.width;
+        size *= SCENE_WIDTH/size.width;
 		float x = (float)(std::rand() % (int)(size.width/2))+size.width/4;
 		float y = (float)(std::rand() % (int)(size.height/2))+size.height/8;
         _logo->setPosition(Vec2(x,y));
@@ -190,7 +211,7 @@ void LiminalSpirit::draw() {
  */
 void LiminalSpirit::buildScene() {
     Size  size  = getDisplaySize();
-    float scale = GAME_WIDTH/size.width;
+    float scale = SCENE_WIDTH/size.width;
     size *= scale;
     
     // The logo is actually an image+label.  We need a parent node
@@ -238,32 +259,35 @@ void LiminalSpirit::buildScene() {
     float tOffset = (size.height)-(safe.origin.y+safe.size.height);
     
     // Making the floor -jdg274
-    std::shared_ptr<scene2::PolygonNode> floor = scene2::PolygonNode::alloc();
-    floor->setPolygon(Rect(0, 0, safe.size.width, 10));
-    floor->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
-    floor->setPosition(lOffset, bOffset);
-    _scene->addChild(floor);
+    std::shared_ptr<physics2::PolygonObstacle> floor = physics2::PolygonObstacle::allocWithAnchor(Rect(DEFAULT_WIDTH/2, DEFAULT_HEIGHT/2, 10, 10), Vec2::ANCHOR_CENTER);
+    floor->setBodyType(b2_staticBody);
+    addObstacle(floor, scene2::PolygonNode::alloc(), 1);
+//    std::shared_ptr<scene2::PolygonNode> floor = scene2::PolygonNode::alloc();
+//    floor->setPolygon(Rect(0, 0, safe.size.width, 10));
+//    floor->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+//    floor->setPosition(lOffset, bOffset);
+//    _scene->addChild(floor);
     
     // Making the ceiling -jdg274
-    std::shared_ptr<scene2::PolygonNode> ceiling = scene2::PolygonNode::alloc();
-    ceiling->setPolygon(Rect(0, 0, safe.size.width, 10));
-    ceiling->setAnchor(Vec2::ANCHOR_TOP_LEFT);
-    ceiling->setPosition(lOffset, size.height-tOffset);
-    _scene->addChild(ceiling);
+//    std::shared_ptr<scene2::PolygonNode> ceiling = scene2::PolygonNode::alloc();
+//    ceiling->setPolygon(Rect(0, 0, safe.size.width, 10));
+//    ceiling->setAnchor(Vec2::ANCHOR_TOP_LEFT);
+//    ceiling->setPosition(lOffset, size.height-tOffset);
+//    _scene->addChild(ceiling);
     
     // Making the left wall -jdg274
-    std::shared_ptr<scene2::PolygonNode> left = scene2::PolygonNode::alloc();
-    left->setPolygon(Rect(0,0,10, safe.size.height));
-    left->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
-    left->setPosition(lOffset, bOffset);
-    _scene->addChild(left);
+//    std::shared_ptr<scene2::PolygonNode> left = scene2::PolygonNode::alloc();
+//    left->setPolygon(Rect(0,0,10, safe.size.height));
+//    left->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+//    left->setPosition(lOffset, bOffset);
+//    _scene->addChild(left);
 
     // Making the right wall -jdg274
-    std::shared_ptr<scene2::PolygonNode> right = scene2::PolygonNode::alloc();
-    right->setPolygon(Rect(0, 0, 10, safe.size.height+10));
-    right->setAnchor(Vec2::ANCHOR_BOTTOM_RIGHT);
-    right->setPosition(size.width-rOffset, bOffset);
-    _scene->addChild(right);
+//    std::shared_ptr<scene2::PolygonNode> right = scene2::PolygonNode::alloc();
+//    right->setPolygon(Rect(0, 0, 10, safe.size.height+10));
+//    right->setAnchor(Vec2::ANCHOR_BOTTOM_RIGHT);
+//    right->setPosition(size.width-rOffset, bOffset);
+//    _scene->addChild(right);
 
     // Position the button in the bottom right corner
     button->setAnchor(Vec2::ANCHOR_CENTER);
@@ -279,4 +303,38 @@ void LiminalSpirit::buildScene() {
     // Start the logo countdown and C-style random number generator
     _countdown = TIME_STEP;
     std::srand((int)std::time(0));
+}
+
+/**
+ * Adds the physics object to the physics world and loosely couples it to the scene graph
+ *
+ * There are two ways to link a physics object to a scene graph node on the
+ * screen.  One way is to make a subclass of a physics object, like we did
+ * with dude.  The other is to use callback functions to loosely couple
+ * the two.  This function is an example of the latter.
+ *
+ * @param obj             The physics object to add
+ * @param node            The scene graph node to attach it to
+ * @param useObjPosition  Whether to update the node's position to be at the object's position
+ */
+void LiminalSpirit::addObstacle(const std::shared_ptr<cugl::physics2::Obstacle>& obj,
+                            const std::shared_ptr<cugl::scene2::SceneNode>& node,
+                            bool useObjPosition) {
+    
+    _world->addObstacle(obj);
+    
+    // Position the scene graph node (enough for static objects)
+      if (useObjPosition) {
+          node->setPosition(obj->getPosition()*_scale);
+      }
+      _worldnode->addChild(node);
+    
+    // Dynamic objects need constant updating
+    if (obj->getBodyType() == b2_dynamicBody) {
+        scene2::SceneNode* weak = node.get(); // No need for smart pointer in callback
+        obj->setListener([=](physics2::Obstacle* obs){
+            weak->setPosition(obs->getPosition()*_scale);
+            weak->setAngle(obs->getAngle());
+        });
+    }
 }
