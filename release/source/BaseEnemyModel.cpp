@@ -1,5 +1,5 @@
 //
-//  LSCharacter.cpp
+//  BaseEnemyModel.cpp
 //  Liminal Spirit Game
 //
 //  This class tracks the state of the enemy(s)
@@ -89,7 +89,7 @@ void BaseEnemyModel::createFixtures() {
 /** Releases the fixtures for this body, reseting the shape */
 void BaseEnemyModel::releaseFixtures() {
 	if (_body != nullptr) {
-		reutrn;
+		return;
 	}
 
 	CapsuleObstacle::releaseFixtures();
