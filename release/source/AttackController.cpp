@@ -8,7 +8,7 @@
 
 #include "AttackController.hpp"
 
-AttackController::Attack::Attack(const cugl::Vec2 p, float r, float a, float dmg, float scale, Side s, cugl::Vec2 oof) {
+AttackController::Attack::Attack(const cugl::Vec2 p, float r, float a, float dmg, float scale, Side s, cugl::Vec2 oof, cugl::PolyFactory b) {
     
     position = p;
     radius = r;
@@ -18,6 +18,7 @@ AttackController::Attack::Attack(const cugl::Vec2 p, float r, float a, float dmg
     _scale = scale;
     offset = oof;
     active = true;
+    ball = b.makeCircle(p+oof, r);
 }
 
 
@@ -57,11 +58,12 @@ void AttackController::update(const cugl::Vec2 p) {
             
     
 void AttackController::attackLeft(cugl::Vec2 p, SwipeController::Swipe direction) {
+    
     switch (direction) {
         case SwipeController::left:
-            _pending.emplace(std::make_shared<Attack>(p, 3, 3, 9001, 1.5, Side::left, leftOff));
+            _pending.emplace(std::make_shared<Attack>(p, 3, 3, 9001, 1.5, Side::left, leftOff, ballMakyr));
         case SwipeController::right:
-            _pending.emplace(std::make_shared<Attack>(p, 3, 3, 9001, 1.5, Side::left, rightOff));
+            _pending.emplace(std::make_shared<Attack>(p, 3, 3, 9001, 1.5, Side::left, rightOff, ballMakyr));
         case SwipeController::up:
         case SwipeController::down:
         case SwipeController::none:
@@ -72,9 +74,9 @@ void AttackController::attackLeft(cugl::Vec2 p, SwipeController::Swipe direction
 void AttackController::attackRight(cugl::Vec2 p, SwipeController::Swipe direction) {
     switch (direction) {
         case SwipeController::left:
-            _pending.emplace(std::make_shared<Attack>(p, 3, 3, 9001, 1.5, Side::right, leftOff));
+            _pending.emplace(std::make_shared<Attack>(p, 3, 3, 9001, 1.5, Side::right, leftOff, ballMakyr));
         case SwipeController::right:
-            _pending.emplace(std::make_shared<Attack>(p, 3, 3, 9001, 1.5, Side::right, rightOff));
+            _pending.emplace(std::make_shared<Attack>(p, 3, 3, 9001, 1.5, Side::right, rightOff, ballMakyr));
         case SwipeController::up:
         case SwipeController::down:
         case SwipeController::none:
