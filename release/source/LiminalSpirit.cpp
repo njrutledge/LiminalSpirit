@@ -104,6 +104,7 @@ void LiminalSpirit::onStartup()
     // This reads the given JSON file and uses it to load all other assets
     _assets->loadDirectory("json/assets.json");
 
+    _tiltInput.init();
     // Activate mouse or touch screen input as appropriate
     // We have to do this BEFORE the scene, because the scene has a button
 
@@ -172,6 +173,7 @@ void LiminalSpirit::onShutdown()
     _worldnode = nullptr;
     _enemy = nullptr;
 
+    _tiltInput.dispose();
     // Deativate input
 #if defined CU_TOUCH_SCREEN
     Input::deactivate<Touchscreen>();
@@ -206,6 +208,12 @@ void LiminalSpirit::update(float timestep)
     }
     _player->setGrounded(true);
     _player->applyForce();
+    
+    // Update tilt input controller
+    _tiltInput.update(timestep, GAME_WIDTH, _logo->getSize().width);
+    float posx = _tiltInput.getPosx();
+    _logo->setPositionX(posx);
+   
 }
 
 /**
@@ -240,6 +248,22 @@ void LiminalSpirit::buildScene()
     Size size = getDisplaySize();
     float scale = SCENE_WIDTH / size.width;
     size *= scale;
+    
+    // The logo is actually an image+label.  We need a parent node
+    _logo = scene2::SceneNode::alloc();
+    
+    // Initialize swipe controller
+    // Must use safe bounds for swipe width
+    Rect bounds = getSafeBounds();
+    //_swiper.init(bounds.getMinX(), bounds.size.width);
+    
+    // Get the image and add it to the node.
+    std::shared_ptr<Texture> texture  = _assets->get<Texture>("logo");
+    _logo = scene2::PolygonNode::allocWithTexture(texture);
+    _logo->setScale(0.2f); // Magic number to rescale asset
+    // Put the logo in the middle of the screen
+    _logo->setAnchor(Vec2::ANCHOR_CENTER);
+    _logo->setPosition(size.width/2,size.height/2);
 
     // Create a button.  A button has an up image and a down image
     std::shared_ptr<Texture> up = _assets->get<Texture>("close-normal");

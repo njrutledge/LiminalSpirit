@@ -34,7 +34,7 @@
 #include "PlayerModel.h"
 #include "AttackController.hpp"
 #include "InputController.hpp"
-
+#include "MovementInput.hpp"
 /**
  * Class for a simple Hello World style application
  *
@@ -63,6 +63,9 @@ protected:
     AttackController _attacks;
     
     SwipeController _swipes;
+    
+    /** tilt controller */
+    MovementInput _tiltInput;
 
     /**Base Enemy (NEED TO MAKE LIST) */
     std::shared_ptr<BaseEnemyModel> _enemy;
@@ -72,7 +75,7 @@ protected:
 
     /** A countdown used to move the logo */
     int _countdown;
-
+    
     /**
      * Internal helper to build the scene graph.
      *
