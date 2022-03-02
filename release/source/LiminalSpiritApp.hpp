@@ -34,7 +34,7 @@
 #include "PlayerModel.h"
 #include "AttackController.hpp"
 #include "InputController.hpp"
-
+#include "MovementInput.hpp"
 /**
  * Class for a simple Hello World style application
  *
@@ -72,7 +72,12 @@ protected:
 
     /** A countdown used to move the logo */
     int _countdown;
-
+    
+    /** tilt controller */
+    MovementInput _tiltInput;
+    /** A countdown used to move the logo */
+    int  _countdown;
+    
     /**
      * Internal helper to build the scene graph.
      *
