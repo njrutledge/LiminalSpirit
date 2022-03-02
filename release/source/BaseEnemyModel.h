@@ -1,5 +1,5 @@
 //
-//  LSCharacter.h
+//  BaseEnemyModel.h
 //  Liminal Spirit Game
 //
 //  This class tracks the state of the enemy(s)
@@ -90,6 +90,11 @@ public:
 	static std::shared_ptr<BaseEnemyModel> alloc(const cugl::Vec2& pos, const cugl::Size& size) {
 		std::shared_ptr<BaseEnemyModel> result = std::make_shared<BaseEnemyModel>();
 		return (result->init(pos, size) ? result : nullptr);
+	}
+
+	static std::shared_ptr<BaseEnemyModel> alloc(const cugl::Vec2& pos, const cugl::Size& size, float scale) {
+		std::shared_ptr<BaseEnemyModel> result = std::make_shared<BaseEnemyModel>();
+		return (result->init(pos, size, scale) ? result : nullptr);
 	}
 
 #pragma mark -

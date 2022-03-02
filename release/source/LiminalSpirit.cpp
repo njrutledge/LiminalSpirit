@@ -50,6 +50,9 @@ using namespace cugl;
 /** The constant for gravity in the physics world. */
 #define GRAVITY 9.8
 
+/** The initial position of the dude */
+float ENEMY_POS[] = { 2.5f, 5.0f };
+
 static void test_cases() {
     
 }
@@ -131,6 +134,7 @@ void LiminalSpirit::onShutdown() {
     _scene = nullptr;
     _batch = nullptr;
     _assets = nullptr;
+    _enemy = nullptr;
     
     // Deativate input
 #if defined CU_TOUCH_SCREEN

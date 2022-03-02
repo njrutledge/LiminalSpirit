@@ -1,5 +1,5 @@
 //
-//  LSCharacter.cpp
+//  BaseEnemyModel.cpp
 //  Liminal Spirit Game
 //
 //  This class tracks the state of the enemy(s)

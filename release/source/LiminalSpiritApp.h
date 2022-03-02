@@ -30,6 +30,7 @@
 #ifndef __LIMINALSPIRIT_APP_H__
 #define __LIMINALSPIRIT_APP_H__
 #include <cugl/cugl.h>
+#include "BaseEnemyModel.h"
 
 /**
  * Class for a simple Hello World style application
@@ -50,6 +51,9 @@ protected:
     std::shared_ptr<cugl::scene2::SceneNode>  _logo;
     /** The physics world */
     std::shared_ptr<cugl::physics2::ObstacleWorld> _world;
+
+    /**Base Enemy (NEED TO MAKE LIST) */
+    std::shared_ptr<BaseEnemyModel> _enemy;
 
     /** A countdown used to move the logo */
     int  _countdown;
