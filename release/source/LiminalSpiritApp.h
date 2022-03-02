@@ -38,7 +38,8 @@
  * The application simply moves the CUGL logo across the screen.  It also
  * provides a button to quit the application.
  */
-class LiminalSpirit : public cugl::Application {
+class LiminalSpirit : public cugl::Application
+{
 protected:
     /** The loaders to (synchronously) load in assets */
     std::shared_ptr<cugl::AssetManager> _assets;
@@ -46,16 +47,18 @@ protected:
     /** A scene graph, used to display our 2D scenes */
     std::shared_ptr<cugl::Scene2> _scene;
     /** A 3152 style SpriteBatch to render the scene */
-    std::shared_ptr<cugl::SpriteBatch>  _batch;
+    std::shared_ptr<cugl::SpriteBatch> _batch;
     /** A reference to the logo, so that we can move it around */
-    std::shared_ptr<cugl::scene2::SceneNode>  _logo;
+    std::shared_ptr<cugl::scene2::SceneNode> _logo;
     /** Enemy One Test */
     std::shared_ptr<BaseEnemyModel> _enemy;
+    /** The physics world */
+    std::shared_ptr<cugl::physics2::ObstacleWorld> _world;
 
     /** A countdown used to move the logo */
-    int  _countdown;
-    
-    /** 
+    int _countdown;
+
+    /**
      * Internal helper to build the scene graph.
      *
      * Scene graphs are not required.  You could manage all scenes just like
@@ -63,7 +66,7 @@ protected:
      * have become standard in most game engines.
      */
     void buildScene();
-    
+
 public:
     /**
      * Creates, but does not initialized a new application.
@@ -75,16 +78,16 @@ public:
      * advanced configuration of the application before it starts.
      */
     LiminalSpirit() : Application(), _countdown(-1) {}
-    
+
     /**
      * Disposes of this application, releasing all resources.
      *
-     * This destructor is called by main.cpp when the application quits. 
+     * This destructor is called by main.cpp when the application quits.
      * It simply calls the dispose() method in Application.  There is nothing
      * special to do here.
      */
-    ~LiminalSpirit() { }
-    
+    ~LiminalSpirit() {}
+
     /**
      * The method called after OpenGL is initialized, but before running the application.
      *
@@ -109,7 +112,7 @@ public:
      * causing the application to be deleted.
      */
     virtual void onShutdown() override;
-    
+
     /**
      * The method called to update the application data.
      *
@@ -122,7 +125,7 @@ public:
      * @param timestep  The amount of time (in seconds) since the last frame
      */
     virtual void update(float timestep) override;
-    
+
     /**
      * The method called to draw the application to the screen.
      *
@@ -133,7 +136,6 @@ public:
      * at all. The default implmentation does nothing.
      */
     virtual void draw() override;
-    
 };
 
 #endif /* __HELLO_APP_H__ */
