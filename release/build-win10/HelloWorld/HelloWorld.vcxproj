@@ -188,12 +188,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\source\AttackController.hpp" />
+    <ClInclude Include="..\..\source\InputController.hpp" />
     <ClInclude Include="..\..\source\LiminalSpiritApp.h" />
+    <ClInclude Include="..\..\source\SwipeController.hpp" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\source\AttackController.cpp" />
+    <ClCompile Include="..\..\source\InputController.cpp" />
     <ClCompile Include="..\..\source\LiminalSpirit.cpp" />
     <ClCompile Include="..\..\source\main.cpp" />
+    <ClCompile Include="..\..\source\SwipeController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LiminalSpirit.rc" />
