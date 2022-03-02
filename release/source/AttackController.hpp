@@ -17,8 +17,11 @@ class AttackController {
     
     class Attack {
         
-        //The position of the attack hitbox
+        //The position of the player
         cugl::Vec2 position;
+        
+        //The Transform from the position of the attack hitbox
+        cugl::Affine2 transform;
         
         //The radius of the attack hitbox
         float radius;
@@ -53,7 +56,7 @@ class AttackController {
         
         
         /**
-         * Updates the attack box. Set true to move with player while active.
+         * Updates the attack hitbox. Set true to move with player while active.
          *
          * @param move          The vecture to move the hitbox by
          * @param follow      Whether to follow the player's movement while active
@@ -66,6 +69,10 @@ class AttackController {
     std::unordered_set<std::shared_ptr<Attack>> _current;
     
     float scale;
+    
+    cugl::Affine2 left;
+    
+    cugl::Affine2 right;
     
     
     /**
@@ -92,7 +99,7 @@ class AttackController {
     
     
     /**
-     *  Creates an attack for a  left sided swipe.
+     *  Creates an attack for a left sided swipe.
      */
     void attackLeft();
     
