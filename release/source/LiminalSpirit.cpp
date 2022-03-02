@@ -180,20 +180,6 @@ void LiminalSpirit::onShutdown()
  */
 void LiminalSpirit::update(float timestep)
 {
-    if (_countdown == 0)
-    {
-        // Move the logo about the screen
-        Size size = getDisplaySize();
-        size *= SCENE_WIDTH / size.width;
-        float x = (float)(std::rand() % (int)(size.width / 2)) + size.width / 4;
-        float y = (float)(std::rand() % (int)(size.height / 2)) + size.height / 8;
-        _logo->setPosition(Vec2(x, y));
-        _countdown = TIME_STEP;
-    }
-    else
-    {
-        _countdown--;
-    }
     _world->update(timestep);
 }
 
@@ -224,18 +210,6 @@ void LiminalSpirit::buildScene()
     Size size = getDisplaySize();
     float scale = SCENE_WIDTH / size.width;
     size *= scale;
-
-    // The logo is actually an image+label.  We need a parent node
-    _logo = scene2::SceneNode::alloc();
-
-    // Get the image and add it to the node.
-    std::shared_ptr<Texture> texture = _assets->get<Texture>("logo");
-    _logo = scene2::PolygonNode::allocWithTexture(texture);
-    _logo->setScale(0.2f); // Magic number to rescale asset
-
-    // Put the logo in the middle of the screen
-    _logo->setAnchor(Vec2::ANCHOR_CENTER);
-    _logo->setPosition(size.width / 2, size.height / 2);
 
     // Create a button.  A button has an up image and a down image
     std::shared_ptr<Texture> up = _assets->get<Texture>("close-normal");
@@ -269,38 +243,36 @@ void LiminalSpirit::buildScene()
     float tOffset = (size.height) - (safe.origin.y + safe.size.height);
 
     // Making the floor -jdg274
-    Rect floorRect = Rect(22, 8, 10, 10);
+    Rect floorRect = Rect(0, 0, 32, 1);
     std::shared_ptr<physics2::PolygonObstacle> floor = physics2::PolygonObstacle::allocWithAnchor(floorRect, Vec2::ANCHOR_CENTER);
     floor->setBodyType(b2_staticBody);
-    std::shared_ptr<scene2::PolygonNode> floorNode = scene2::PolygonNode::allocWithPoly(floorRect);
-    floorNode->setColor(Color4::BLUE);
+    std::shared_ptr<scene2::PolygonNode> floorNode = scene2::PolygonNode::allocWithPoly(floorRect*_scale);
+    floorNode->setColor(Color4::BLACK);
     addObstacle(floor, floorNode, 1);
-    //    std::shared_ptr<scene2::PolygonNode> floor = scene2::PolygonNode::alloc();
-    //    floor->setPolygon(Rect(0, 0, safe.size.width, 10));
-    //    floor->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
-    //    floor->setPosition(lOffset, bOffset);
-    //    _scene->addChild(floor);
 
     // Making the ceiling -jdg274
-    //    std::shared_ptr<scene2::PolygonNode> ceiling = scene2::PolygonNode::alloc();
-    //    ceiling->setPolygon(Rect(0, 0, safe.size.width, 10));
-    //    ceiling->setAnchor(Vec2::ANCHOR_TOP_LEFT);
-    //    ceiling->setPosition(lOffset, size.height-tOffset);
-    //    _scene->addChild(ceiling);
+    Rect ceilingRect = Rect(0, 17, 32, 1);
+    std::shared_ptr<physics2::PolygonObstacle> ceiling = physics2::PolygonObstacle::allocWithAnchor(ceilingRect, Vec2::ANCHOR_CENTER);
+    ceiling->setBodyType(b2_staticBody);
+    std::shared_ptr<scene2::PolygonNode> ceilingNode = scene2::PolygonNode::allocWithPoly(ceilingRect*_scale);
+    ceilingNode->setColor(Color4::BLACK);
+    addObstacle(ceiling, ceilingNode, 1);
 
     // Making the left wall -jdg274
-    //    std::shared_ptr<scene2::PolygonNode> left = scene2::PolygonNode::alloc();
-    //    left->setPolygon(Rect(0,0,10, safe.size.height));
-    //    left->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
-    //    left->setPosition(lOffset, bOffset);
-    //    _scene->addChild(left);
+    Rect leftRect = Rect(0, 0, 1, 18);
+    std::shared_ptr<physics2::PolygonObstacle> left = physics2::PolygonObstacle::allocWithAnchor(leftRect, Vec2::ANCHOR_CENTER);
+    left->setBodyType(b2_staticBody);
+    std::shared_ptr<scene2::PolygonNode> leftNode = scene2::PolygonNode::allocWithPoly(leftRect*_scale);
+    leftNode->setColor(Color4::BLACK);
+    addObstacle(left, leftNode, 1);
 
     // Making the right wall -jdg274
-    //    std::shared_ptr<scene2::PolygonNode> right = scene2::PolygonNode::alloc();
-    //    right->setPolygon(Rect(0, 0, 10, safe.size.height+10));
-    //    right->setAnchor(Vec2::ANCHOR_BOTTOM_RIGHT);
-    //    right->setPosition(size.width-rOffset, bOffset);
-    //    _scene->addChild(right);
+    Rect rightRect = Rect(31, 0, 1, 18);
+    std::shared_ptr<physics2::PolygonObstacle> right = physics2::PolygonObstacle::allocWithAnchor(rightRect, Vec2::ANCHOR_CENTER);
+    right->setBodyType(b2_staticBody);
+    std::shared_ptr<scene2::PolygonNode> rightNode = scene2::PolygonNode::allocWithPoly(rightRect*_scale);
+    rightNode->setColor(Color4::BLACK);
+    addObstacle(right, rightNode, 1);
 
     // Position the button in the bottom right corner
     button->setAnchor(Vec2::ANCHOR_CENTER);
@@ -309,14 +281,14 @@ void LiminalSpirit::buildScene()
     Vec2 enemyPos = ENEMY_POS;
     std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
     std::shared_ptr<Texture> image = _assets->get<Texture>(ENEMY_TEXTURE);
-    _enemy = BaseEnemyModel::alloc(enemyPos, image->getSize() / _scale, _scale);
+    _enemy = BaseEnemyModel::alloc(enemyPos, image->getSize() / _scale / 5, _scale);
     std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
     _enemy->setSceneNode(sprite);
     _enemy->setDebugColor(Color4::RED);
+    sprite->setScale(0.2f);
     addObstacle(_enemy, sprite, true);
 
     // Add the logo and button to the scene graph
-    _scene->addChild(_logo);
     _scene->addChild(button);
 
     // We can only activate a button AFTER it is added to a scene
