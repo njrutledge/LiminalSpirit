@@ -48,6 +48,8 @@ public:
         //Which type of swipe this is
         Side side;
         
+        cugl::Poly2 ball;
+        
         
     public:
         /**
@@ -59,7 +61,7 @@ public:
          * @param dmg     The amount of damage the hitbox does
          * @param scale The drawing scale size of the hitbox
          */
-        Attack(const cugl::Vec2 p, float r, float a, float dmg, float scale, Side s, cugl::Vec2 oof);
+        Attack(const cugl::Vec2 p, float r, float a, float dmg, float scale, Side s, cugl::Vec2 oof, cugl::PolyFactory b);
         
         
         /**
@@ -71,6 +73,10 @@ public:
         void update(const cugl::Vec2 p, bool follow);
         
         bool isActive() {return active;}
+        
+        float getRadius() {return radius;}
+        
+        cugl::Poly2 getBall() {return ball;}
     };
     
     std::unordered_set<std::shared_ptr<Attack>> _pending;
@@ -82,6 +88,8 @@ public:
     cugl::Vec2 leftOff;
     
     cugl::Vec2 rightOff;
+    
+    cugl::PolyFactory ballMakyr;
     
     
     /**
