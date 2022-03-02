@@ -6,8 +6,8 @@
 //  Copyright © 2022 Game Design Initiative at Cornell. All rights reserved.
 //
 
-#ifndef AttackController_hpp
-#define AttackController_hpp
+#ifndef AttackController_h
+#define AttackController_h
 
 #include <cugl/cugl.h>
 #include <unordered_set>

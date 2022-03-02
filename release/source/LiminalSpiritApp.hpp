@@ -1,5 +1,5 @@
 //
-//  LiminalSpirit.h
+//  LiminalSpirit.hpp
 //  Cornell University Game Library (CUGL)
 //
 //  This is the header for the custom application.  It is necessary so that

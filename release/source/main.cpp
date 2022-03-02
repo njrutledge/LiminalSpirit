@@ -28,7 +28,7 @@
 //  Version: 7/1/16
 
 // Include your application class
-#include "LiminalSpiritApp.h"
+#include "LiminalSpiritApp.hpp"
 
 // This keeps us from having to write cugl:: all the time
 using namespace cugl;

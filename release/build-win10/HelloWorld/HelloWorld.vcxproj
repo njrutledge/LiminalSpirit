@@ -190,9 +190,9 @@
   <ItemGroup>
     <ClInclude Include="..\..\source\AttackController.hpp" />
     <ClInclude Include="..\..\source\InputController.hpp" />
-    <ClInclude Include="..\..\source\LiminalSpiritApp.h" />
+    <ClInclude Include="..\..\source\LiminalSpiritApp.hpp" />
     <ClInclude Include="..\..\source\SwipeController.hpp" />
-    <ClInclude Include="resource.h" />
+    <ClInclude Include="resource.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\AttackController.cpp" />

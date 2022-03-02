@@ -28,7 +28,7 @@
 //  Version: 1/8/17
 //
 // Include the class header, which includes all of the CUGL classes
-#include "LiminalSpiritApp.h"
+#include "LiminalSpiritApp.hpp"
 #include <cugl/base/CUBase.h>
 
 // Add support for simple random number generation
