@@ -52,7 +52,7 @@ using namespace cugl;
 #define GRAVITY 9.8
 
 /** The initial position of the dude */
-float ENEMY_POS[] = {500.0f, 300.0f};
+float ENEMY_POS[] = {16.0f, 12.0f};
 
 static void test_cases()
 {
@@ -306,15 +306,14 @@ void LiminalSpirit::buildScene()
     button->setAnchor(Vec2::ANCHOR_CENTER);
     button->setPosition(size.width - (bsize.width + rOffset) / 2, (bsize.height + bOffset) / 2);
 
-//    Vec2 enemyPos = ENEMY_POS;
-//    std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
-//    std::shared_ptr<Texture> image = _assets->get<Texture>(ENEMY_TEXTURE);
-//    _enemy = BaseEnemyModel::alloc(enemyPos, image->getSize() / scale, scale);
-//    std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
-//    sprite->setScale(Vec2(scale / 2, scale / 2));
-//    _enemy->setSceneNode(sprite);
-//    _enemy->setDebugColor(Color4::RED);
-//    _scene->addChild(_enemy->getSceneNode());
+    Vec2 enemyPos = ENEMY_POS;
+    std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
+    std::shared_ptr<Texture> image = _assets->get<Texture>(ENEMY_TEXTURE);
+    _enemy = BaseEnemyModel::alloc(enemyPos, image->getSize() / scale, scale);
+    std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
+    _enemy->setSceneNode(sprite);
+    _enemy->setDebugColor(Color4::RED);
+    addObstacle(_enemy, sprite, true);
 
     // Add the logo and button to the scene graph
     _scene->addChild(_logo);
