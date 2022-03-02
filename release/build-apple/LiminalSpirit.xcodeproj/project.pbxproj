@@ -81,6 +81,7 @@
 		EBEC12022194B6F4007E708B /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBEC12012194B6F4007E708B /* Metal.framework */; };
 		EBFE7C051E19B496001007C2 /* json in Resources */ = {isa = PBXBuildFile; fileRef = EBFE7C041E19B496001007C2 /* json */; };
 		EBFE7C091E19B4AC001007C2 /* json in Resources */ = {isa = PBXBuildFile; fileRef = EBFE7C041E19B496001007C2 /* json */; };
+		F05ADAC327D000B600FB8F1A /* AttackController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F05ADABE27CFD84B00FB8F1A /* AttackController.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -555,6 +556,7 @@
 				57A6158B27C888A10086454D /* SwipeController.cpp in Sources */,
 				EB2BE9B61D74952A002FE78B /* main.cpp in Sources */,
 				57A6158427C830870086454D /* InputController.cpp in Sources */,
+				F05ADAC327D000B600FB8F1A /* AttackController.cpp in Sources */,
 				57A6157E27C830490086454D /* LiminalSpirit.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

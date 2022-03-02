@@ -10,18 +10,25 @@
 #define AttackController_hpp
 
 #include <cugl/cugl.h>
-#include <unordered.set>
+#include <unordered_set>
 #include "SwipeController.hpp"
 
 class AttackController {
+    
+    enum Side {
+        left,
+        right
+    };
+    
+public:
     
     class Attack {
         
         //The position of the player
         cugl::Vec2 position;
         
-        //The Transform from the position of the attack hitbox
-        cugl::Affine2 transform;
+        //The Offset from the position of the attack hitbox
+        cugl::Vec2 offset;
         
         //The radius of the attack hitbox
         float radius;
@@ -33,16 +40,16 @@ class AttackController {
         bool active;
         
         //Drawing scale for hitbox
-        float scale;
+        float _scale;
         
         //The damage of the hitbox
         float damage;
         
-        enum Side {
-            left,
-            right
-        };
+        //Which type of swipe this is
+        Side side;
         
+        
+    public:
         /**
          * Creates an attack circle with the specified parameters. Scale is constant as it is dependent on the drawing scene.
          *
@@ -52,17 +59,19 @@ class AttackController {
          * @param dmg     The amount of damage the hitbox does
          * @param scale The drawing scale size of the hitbox
          */
-        Attack(const cugl::Vec2 p, float r, float age, float dmg, float scale);
+        Attack(const cugl::Vec2 p, float r, float a, float dmg, float scale, Side s, cugl::Vec2 oof);
         
         
         /**
          * Updates the attack hitbox. Set true to move with player while active.
          *
-         * @param move          The vecture to move the hitbox by
+         * @param p          The position of the player
          * @param follow      Whether to follow the player's movement while active
          */
-        void update(const cugl::Vec2 move, bool follow);
-    }
+        void update(const cugl::Vec2 p, bool follow);
+        
+        bool isActive() {return active;}
+    };
     
     std::unordered_set<std::shared_ptr<Attack>> _pending;
     
@@ -70,9 +79,9 @@ class AttackController {
     
     float scale;
     
-    cugl::Affine2 left;
+    cugl::Vec2 leftOff;
     
-    cugl::Affine2 right;
+    cugl::Vec2 rightOff;
     
     
     /**
@@ -86,6 +95,13 @@ class AttackController {
      */
     //bool init(std::shared_ptr<cugl::JsonValue> data);
     
+    /**
+     *  Update function for attack controller. Updates all attacks and removes inactive attacks from queue.
+     *
+     *  @param p    The player position
+     */
+    void update(const cugl::Vec2 p);
+    
     
     /**
      *  Helper method to determine whether there are no active hitboxes.
@@ -95,12 +111,17 @@ class AttackController {
     /**
      *  Creates an attack for a right sided swipe.
      */
-    void attackRight();
-    
+    void attackRight(cugl::Vec2 p, SwipeController::Swipe direction);
     
     /**
      *  Creates an attack for a left sided swipe.
      */
-    void attackLeft();
+    void attackLeft(cugl::Vec2 p, SwipeController::Swipe direction);
     
-}
+    void setLeftOffset(const cugl::Vec2 l);
+    
+    void setRightOffset(const cugl::Vec2 r);
+    
+};
+
+#endif

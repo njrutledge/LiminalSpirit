@@ -17,7 +17,7 @@
  * This class figures out what type of swipe was drawn based on the input
  */
 class SwipeController {
-    
+public:
     /** Enum for swipe directions or none if no swipe was done */
     enum Swipe {
         up,

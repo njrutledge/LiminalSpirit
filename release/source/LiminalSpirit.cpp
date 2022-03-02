@@ -43,10 +43,6 @@ using namespace cugl;
 // This is adjusted by screen aspect ratio to get the height
 #define GAME_WIDTH 1024
 
-static void test_cases() {
-    
-}
-
 /**
  * The method called after OpenGL is initialized, but before running the application.
  *
