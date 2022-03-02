@@ -76,6 +76,9 @@
 		EBEC12022194B6F4007E708B /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBEC12012194B6F4007E708B /* Metal.framework */; };
 		EBFE7C051E19B496001007C2 /* json in Resources */ = {isa = PBXBuildFile; fileRef = EBFE7C041E19B496001007C2 /* json */; };
 		EBFE7C091E19B4AC001007C2 /* json in Resources */ = {isa = PBXBuildFile; fileRef = EBFE7C041E19B496001007C2 /* json */; };
+		F025104027D02C6C00AB80AA /* InputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F025103B27D02C6C00AB80AA /* InputController.cpp */; };
+		F025104127D02C6C00AB80AA /* SwipeController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F025103D27D02C6C00AB80AA /* SwipeController.cpp */; };
+		F025104227D02C6C00AB80AA /* AttackController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F025103F27D02C6C00AB80AA /* AttackController.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -109,7 +112,7 @@
 		EB07CFB021EFF3EF000CB3A3 /* DeviceMargins.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DeviceMargins.plist; sourceTree = "<group>"; };
 		EB22BF5E25D0E8BC002ACE41 /* LiminalSpirit (Sim).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LiminalSpirit (Sim).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB2BE9B21D74952A002FE78B /* LiminalSpirit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LiminalSpirit.cpp; sourceTree = "<group>"; };
-		EB2BE9B31D74952A002FE78B /* LiminalSpiritApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LiminalSpiritApp.h; sourceTree = "<group>"; };
+		EB2BE9B31D74952A002FE78B /* LiminalSpiritApp.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LiminalSpiritApp.hpp; sourceTree = "<group>"; };
 		EB2BE9B41D74952A002FE78B /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		EB2BE9BA1D7498D2002FE78B /* textures */ = {isa = PBXFileReference; lastKnownFileType = folder; path = textures; sourceTree = "<group>"; };
 		EB2BE9BE1D749908002FE78B /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
@@ -151,6 +154,12 @@
 		EBDD16C725C35D3400154533 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.4.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		EBEC12012194B6F4007E708B /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		EBFE7C041E19B496001007C2 /* json */ = {isa = PBXFileReference; lastKnownFileType = folder; path = json; sourceTree = "<group>"; };
+		F025103A27D02C6C00AB80AA /* AttackController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AttackController.hpp; sourceTree = "<group>"; };
+		F025103B27D02C6C00AB80AA /* InputController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputController.cpp; sourceTree = "<group>"; };
+		F025103C27D02C6C00AB80AA /* InputController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = InputController.hpp; sourceTree = "<group>"; };
+		F025103D27D02C6C00AB80AA /* SwipeController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SwipeController.cpp; sourceTree = "<group>"; };
+		F025103E27D02C6C00AB80AA /* SwipeController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SwipeController.hpp; sourceTree = "<group>"; };
+		F025103F27D02C6C00AB80AA /* AttackController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AttackController.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -336,11 +345,17 @@
 		EBBF18B11D749176008E2001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				F025103F27D02C6C00AB80AA /* AttackController.cpp */,
+				F025103A27D02C6C00AB80AA /* AttackController.hpp */,
+				F025103B27D02C6C00AB80AA /* InputController.cpp */,
+				F025103C27D02C6C00AB80AA /* InputController.hpp */,
+				F025103D27D02C6C00AB80AA /* SwipeController.cpp */,
+				F025103E27D02C6C00AB80AA /* SwipeController.hpp */,
 				85D0B48727D01107004EF4C8 /* LSCharacter.h */,
 				85D0B48527D010FC004EF4C8 /* BaseEnemyModel.cpp */,
 				85D0B48127D010E9004EF4C8 /* BaseEnemyModel.h */,
 				EB2BE9B41D74952A002FE78B /* main.cpp */,
-				EB2BE9B31D74952A002FE78B /* LiminalSpiritApp.h */,
+				EB2BE9B31D74952A002FE78B /* LiminalSpiritApp.hpp */,
 				EB2BE9B21D74952A002FE78B /* LiminalSpirit.cpp */,
 			);
 			name = Source;
@@ -536,7 +551,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F025104127D02C6C00AB80AA /* SwipeController.cpp in Sources */,
+				F025104027D02C6C00AB80AA /* InputController.cpp in Sources */,
 				EB2BE9B61D74952A002FE78B /* main.cpp in Sources */,
+				F025104227D02C6C00AB80AA /* AttackController.cpp in Sources */,
 				EB2BE9B51D74952A002FE78B /* LiminalSpirit.cpp in Sources */,
 				85D0B48627D010FC004EF4C8 /* BaseEnemyModel.cpp in Sources */,
 			);
