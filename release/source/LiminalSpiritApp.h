@@ -30,6 +30,7 @@
 #ifndef __LIMINALSPIRIT_APP_H__
 #define __LIMINALSPIRIT_APP_H__
 #include <cugl/cugl.h>
+#include "BaseEnemyModel.h"
 
 /**
  * Class for a simple Hello World style application
@@ -48,6 +49,8 @@ protected:
     std::shared_ptr<cugl::SpriteBatch>  _batch;
     /** A reference to the logo, so that we can move it around */
     std::shared_ptr<cugl::scene2::SceneNode>  _logo;
+    /** Enemy One Test */
+    std::shared_ptr<BaseEnemyModel> _enemy;
 
     /** A countdown used to move the logo */
     int  _countdown;

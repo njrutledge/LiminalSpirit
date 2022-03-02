@@ -30,6 +30,7 @@
 // Include the class header, which includes all of the CUGL classes
 #include "LiminalSpiritApp.h"
 #include <cugl/base/CUBase.h>
+#include "BaseEnemyModel.h"
 
 // Add support for simple random number generation
 #include <cstdlib>
