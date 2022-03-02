@@ -31,6 +31,7 @@
 #include "LiminalSpiritApp.hpp"
 #include <cugl/base/CUBase.h>
 #include "BaseEnemyModel.h"
+#include "AttackController.hpp"
 
 // Add support for simple random number generation
 #include <cstdlib>

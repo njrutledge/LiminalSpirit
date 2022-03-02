@@ -30,6 +30,9 @@
     <ClInclude Include="..\..\source\SwipeController.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\BaseEnemyModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\LiminalSpirit.cpp">
@@ -45,6 +48,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\SwipeController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\BaseEnemyModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

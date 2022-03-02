@@ -189,6 +189,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\AttackController.hpp" />
+    <ClInclude Include="..\..\source\BaseEnemyModel.h" />
     <ClInclude Include="..\..\source\InputController.hpp" />
     <ClInclude Include="..\..\source\LiminalSpiritApp.hpp" />
     <ClInclude Include="..\..\source\SwipeController.hpp" />
@@ -196,6 +197,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\AttackController.cpp" />
+    <ClCompile Include="..\..\source\BaseEnemyModel.cpp" />
     <ClCompile Include="..\..\source\InputController.cpp" />
     <ClCompile Include="..\..\source\LiminalSpirit.cpp" />
     <ClCompile Include="..\..\source\main.cpp" />
