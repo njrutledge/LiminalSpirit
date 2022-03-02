@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EB74548B1D74D75C002FBAE6"
-               BuildableName = "LiminalSpirit (iOS).app"
-               BlueprintName = "LiminalSpirit (iOS)"
+               BlueprintIdentifier = "EB22BF5D25D0E8BC002ACE41"
+               BuildableName = "LiminalSpirit (Sim).app"
+               BlueprintName = "LiminalSpirit (Sim)"
                ReferencedContainer = "container:LiminalSpirit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -27,15 +27,6 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EB74548B1D74D75C002FBAE6"
-            BuildableName = "LiminalSpirit (iOS).app"
-            BlueprintName = "LiminalSpirit (iOS)"
-            ReferencedContainer = "container:LiminalSpirit.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <Testables>
       </Testables>
    </TestAction>
@@ -53,9 +44,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EB74548B1D74D75C002FBAE6"
-            BuildableName = "LiminalSpirit (iOS).app"
-            BlueprintName = "LiminalSpirit (iOS)"
+            BlueprintIdentifier = "EB22BF5D25D0E8BC002ACE41"
+            BuildableName = "LiminalSpirit (Sim).app"
+            BlueprintName = "LiminalSpirit (Sim)"
             ReferencedContainer = "container:LiminalSpirit.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -70,9 +61,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EB74548B1D74D75C002FBAE6"
-            BuildableName = "LiminalSpirit (iOS).app"
-            BlueprintName = "LiminalSpirit (iOS)"
+            BlueprintIdentifier = "EB22BF5D25D0E8BC002ACE41"
+            BuildableName = "LiminalSpirit (Sim).app"
+            BlueprintName = "LiminalSpirit (Sim)"
             ReferencedContainer = "container:LiminalSpirit.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

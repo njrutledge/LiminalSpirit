@@ -28,8 +28,9 @@
 //  Version: 1/8/17
 //
 // Include the class header, which includes all of the CUGL classes
-#include "LiminalSpiritApp.hpp"
+#include "LiminalSpiritApp.h"
 #include <cugl/base/CUBase.h>
+#include "BaseEnemyModel.h"
 
 // Add support for simple random number generation
 #include <cstdlib>
@@ -40,8 +41,22 @@ using namespace cugl;
 
 // The number of frames before moving the logo to a new position
 #define TIME_STEP 60
-// This is adjusted by screen aspect ratio to get the height
-#define GAME_WIDTH 1024
+/** This is adjusted by screen aspect ratio to get the height */
+#define SCENE_WIDTH 1024
+#define SCENE_HEIGHT 576
+/** Width of the game world in Box2d units */
+#define DEFAULT_WIDTH 32.0f
+/** Height of the game world in Box2d units */
+#define DEFAULT_HEIGHT 18.0f
+/** The constant for gravity in the physics world. */
+#define GRAVITY 9.8
+
+/** The initial position of the dude */
+float ENEMY_POS[] = {16.0f, 12.0f};
+
+static void test_cases()
+{
+}
 
 /**
  * The method called after OpenGL is initialized, but before running the application.
@@ -53,51 +68,72 @@ using namespace cugl;
  * very last line.  This ensures that the state will transition to FOREGROUND,
  * causing the application to run.
  */
-void LiminalSpirit::onStartup() {
+void LiminalSpirit::onStartup()
+{
     Size size = getDisplaySize();
-    size *= GAME_WIDTH/size.width;
-    
+    size *= SCENE_WIDTH / size.width;
+
     // Create a scene graph the same size as the window
     _scene = Scene2::alloc(size.width, size.height);
     // Create a sprite batch (and background color) to render the scene
     _batch = SpriteBatch::alloc();
-    setClearColor(Color4(229,229,229,255));
-    
+    setClearColor(Color4(229, 229, 229, 255));
+
     // Create an asset manager to load all assets
     _assets = AssetManager::alloc();
-    
+
     // You have to attach the individual loaders for each asset type
     _assets->attach<Texture>(TextureLoader::alloc()->getHook());
     _assets->attach<Font>(FontLoader::alloc()->getHook());
-    
+
     // This reads the given JSON file and uses it to load all other assets
     _assets->loadDirectory("json/assets.json");
 
     // Activate mouse or touch screen input as appropriate
     // We have to do this BEFORE the scene, because the scene has a button
-#if defined (CU_TOUCH_SCREEN)
+#if defined(CU_TOUCH_SCREEN)
     Input::activate<Touchscreen>();
 #else
     Input::activate<Mouse>();
 #endif
-    
+
     // Build the scene from these assets
-    buildScene();
     Application::onStartup();
-    
+
     // Report the safe area
     Rect bounds = Display::get()->getSafeBounds();
-    CULog("Safe Area %sx%s",bounds.origin.toString().c_str(),
-                            bounds.size.toString().c_str());
+    CULog("Safe Area %sx%s", bounds.origin.toString().c_str(),
+          bounds.size.toString().c_str());
 
     bounds = getSafeBounds();
-    CULog("Safe Area %sx%s",bounds.origin.toString().c_str(),
-                            bounds.size.toString().c_str());
+    CULog("Safe Area %sx%s", bounds.origin.toString().c_str(),
+          bounds.size.toString().c_str());
 
     bounds = getDisplayBounds();
-    CULog("Full Area %sx%s",bounds.origin.toString().c_str(),
-                            bounds.size.toString().c_str());
+    CULog("Full Area %sx%s", bounds.origin.toString().c_str(),
+          bounds.size.toString().c_str());
 
+    // Enable physics -jdg274
+    bounds = Display::get()->getSafeBounds();
+    _scale = size.width == SCENE_WIDTH ? size.width / DEFAULT_WIDTH : size.height / DEFAULT_HEIGHT;
+    Vec2 offset((size.width - SCENE_WIDTH) / 2.0f, (size.height - SCENE_HEIGHT) / 2.0f);
+
+    // Create the scene graph
+    _worldnode = scene2::SceneNode::alloc();
+    _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+    _worldnode->setPosition(offset);
+    _scene->addChild(_worldnode);
+
+    _world = physics2::ObstacleWorld::alloc(Rect(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT), Vec2(0, -GRAVITY));
+    _world->activateCollisionCallbacks(true);
+    //    _world->onBeginContact = [this](b2Contact* contact) {
+    //      beginContact(contact);
+    //    };
+    //    _world->onEndContact = [this](b2Contact* contact) {
+    //      endContact(contact);
+    //    };
+
+    buildScene();
 }
 
 /**
@@ -111,13 +147,17 @@ void LiminalSpirit::onStartup() {
  * very last line.  This ensures that the state will transition to NONE,
  * causing the application to be deleted.
  */
-void LiminalSpirit::onShutdown() {
+void LiminalSpirit::onShutdown()
+{
     // Delete all smart pointers
     _logo = nullptr;
     _scene = nullptr;
     _batch = nullptr;
     _assets = nullptr;
-    
+    _world = nullptr;
+    _worldnode = nullptr;
+    _enemy = nullptr;
+
     // Deativate input
 #if defined CU_TOUCH_SCREEN
     Input::deactivate<Touchscreen>();
@@ -138,23 +178,9 @@ void LiminalSpirit::onShutdown() {
  *
  * @param timestep  The amount of time (in seconds) since the last frame
  */
-void LiminalSpirit::update(float timestep) {
-//  Leaving this here incase anyone wants to use it for something similar
-//    if (_countdown == 0) {
-//        // Move the logo about the screen
-//        Size size = getDisplaySize();
-//        size *= GAME_WIDTH/size.width;
-//		float x = (float)(std::rand() % (int)(size.width/2))+size.width/4;
-//		float y = (float)(std::rand() % (int)(size.height/2))+size.height/8;
-//        _logo->setPosition(Vec2(x,y));
-//        _countdown = TIME_STEP;
-//    } else {
-//        _countdown--;
-//    }
-    
-    // Update swipe controller
-    _swiper.update();
-   
+void LiminalSpirit::update(float timestep)
+{
+    _world->update(timestep);
 }
 
 /**
@@ -166,7 +192,8 @@ void LiminalSpirit::update(float timestep) {
  * When overriding this method, you do not need to call the parent method
  * at all. The default implmentation does nothing.
  */
-void LiminalSpirit::draw() {
+void LiminalSpirit::draw()
+{
     // This takes care of begin/end
     _scene->render(_batch);
 }
@@ -178,68 +205,132 @@ void LiminalSpirit::draw() {
  * you do in 3152.  However, they greatly simplify scene management, and
  * have become standard in most game engines.
  */
-void LiminalSpirit::buildScene() {
-    Size  size  = getDisplaySize();
-    float scale = GAME_WIDTH/size.width;
+void LiminalSpirit::buildScene()
+{
+    Size size = getDisplaySize();
+    float scale = SCENE_WIDTH / size.width;
     size *= scale;
-    
-    // The logo is actually an image+label.  We need a parent node
-    _logo = scene2::SceneNode::alloc();
-    
-    // Initialize swipe controller
-    // Must use safe bounds for swipe width
-    Rect bounds = getSafeBounds();
-    _swiper.init(bounds.getMinX(), bounds.size.width);
-    
-    // Get the image and add it to the node.
-    std::shared_ptr<Texture> texture  = _assets->get<Texture>("logo");
-    _logo = scene2::PolygonNode::allocWithTexture(texture);
-    _logo->setScale(0.2f); // Magic number to rescale asset
 
-    // Put the logo in the middle of the screen
-    _logo->setAnchor(Vec2::ANCHOR_CENTER);
-    _logo->setPosition(size.width/2,size.height/2);
-
-    
     // Create a button.  A button has an up image and a down image
-    std::shared_ptr<Texture> up   = _assets->get<Texture>("close-normal");
+    std::shared_ptr<Texture> up = _assets->get<Texture>("close-normal");
     std::shared_ptr<Texture> down = _assets->get<Texture>("close-selected");
-    
+
     Size bsize = up->getSize();
     std::shared_ptr<scene2::Button> button = scene2::Button::alloc(scene2::PolygonNode::allocWithTexture(up),
                                                                    scene2::PolygonNode::allocWithTexture(down));
-    
+
     // Create a callback function for the button
     button->setName("close");
-    button->addListener([=] (const std::string& name, bool down) {
+    button->addListener([=](const std::string &name, bool down)
+                        {
         // Only quit when the button is released
         if (!down) {
             CULog("Goodbye!");
             this->quit();
-        }
-    });
-    
+        } });
+
     // Find the safe area, adapting to the iPhone X
     Rect safe = getSafeBounds();
     safe.origin *= scale;
-    safe.size   *= scale;
-    
+    safe.size *= scale;
+
     // Get the right and bottom offsets.
     float bOffset = safe.origin.y;
-    float rOffset = (size.width)-(safe.origin.x+safe.size.width);
+    float rOffset = (size.width) - (safe.origin.x + safe.size.width);
+
+    // Making left and top offsets -jdg274
+    float lOffset = safe.origin.x;
+    float tOffset = (size.height) - (safe.origin.y + safe.size.height);
+
+    // Making the floor -jdg274
+    Rect floorRect = Rect(0, 0, 32, 1);
+    std::shared_ptr<physics2::PolygonObstacle> floor = physics2::PolygonObstacle::allocWithAnchor(floorRect, Vec2::ANCHOR_CENTER);
+    floor->setBodyType(b2_staticBody);
+    std::shared_ptr<scene2::PolygonNode> floorNode = scene2::PolygonNode::allocWithPoly(floorRect*_scale);
+    floorNode->setColor(Color4::BLACK);
+    addObstacle(floor, floorNode, 1);
+
+    // Making the ceiling -jdg274
+    Rect ceilingRect = Rect(0, 17, 32, 1);
+    std::shared_ptr<physics2::PolygonObstacle> ceiling = physics2::PolygonObstacle::allocWithAnchor(ceilingRect, Vec2::ANCHOR_CENTER);
+    ceiling->setBodyType(b2_staticBody);
+    std::shared_ptr<scene2::PolygonNode> ceilingNode = scene2::PolygonNode::allocWithPoly(ceilingRect*_scale);
+    ceilingNode->setColor(Color4::BLACK);
+    addObstacle(ceiling, ceilingNode, 1);
+
+    // Making the left wall -jdg274
+    Rect leftRect = Rect(0, 0, 1, 18);
+    std::shared_ptr<physics2::PolygonObstacle> left = physics2::PolygonObstacle::allocWithAnchor(leftRect, Vec2::ANCHOR_CENTER);
+    left->setBodyType(b2_staticBody);
+    std::shared_ptr<scene2::PolygonNode> leftNode = scene2::PolygonNode::allocWithPoly(leftRect*_scale);
+    leftNode->setColor(Color4::BLACK);
+    addObstacle(left, leftNode, 1);
+
+    // Making the right wall -jdg274
+    Rect rightRect = Rect(31, 0, 1, 18);
+    std::shared_ptr<physics2::PolygonObstacle> right = physics2::PolygonObstacle::allocWithAnchor(rightRect, Vec2::ANCHOR_CENTER);
+    right->setBodyType(b2_staticBody);
+    std::shared_ptr<scene2::PolygonNode> rightNode = scene2::PolygonNode::allocWithPoly(rightRect*_scale);
+    rightNode->setColor(Color4::BLACK);
+    addObstacle(right, rightNode, 1);
 
     // Position the button in the bottom right corner
     button->setAnchor(Vec2::ANCHOR_CENTER);
-    button->setPosition(size.width-(bsize.width+rOffset)/2,(bsize.height+bOffset)/2);
-    
+    button->setPosition(size.width - (bsize.width + rOffset) / 2, (bsize.height + bOffset) / 2);
+
+    Vec2 enemyPos = ENEMY_POS;
+    std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
+    std::shared_ptr<Texture> image = _assets->get<Texture>(ENEMY_TEXTURE);
+    _enemy = BaseEnemyModel::alloc(enemyPos, image->getSize() / _scale / 5, _scale);
+    std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
+    _enemy->setSceneNode(sprite);
+    _enemy->setDebugColor(Color4::RED);
+    sprite->setScale(0.2f);
+    addObstacle(_enemy, sprite, true);
+
     // Add the logo and button to the scene graph
-    _scene->addChild(_logo);
     _scene->addChild(button);
-    
+
     // We can only activate a button AFTER it is added to a scene
     button->activate();
 
     // Start the logo countdown and C-style random number generator
     _countdown = TIME_STEP;
     std::srand((int)std::time(0));
+}
+
+/**
+ * Adds the physics object to the physics world and loosely couples it to the scene graph
+ *
+ * There are two ways to link a physics object to a scene graph node on the
+ * screen.  One way is to make a subclass of a physics object, like we did
+ * with dude.  The other is to use callback functions to loosely couple
+ * the two.  This function is an example of the latter.
+ *
+ * @param obj             The physics object to add
+ * @param node            The scene graph node to attach it to
+ * @param useObjPosition  Whether to update the node's position to be at the object's position
+ */
+void LiminalSpirit::addObstacle(const std::shared_ptr<cugl::physics2::Obstacle> &obj,
+                                const std::shared_ptr<cugl::scene2::SceneNode> &node,
+                                bool useObjPosition)
+{
+    _world->addObstacle(obj);
+
+    // Position the scene graph node (enough for static objects)
+    if (useObjPosition)
+    {
+        node->setPosition(obj->getPosition() * _scale);
+    }
+    _worldnode->addChild(node);
+
+    // Dynamic objects need constant updating
+    if (obj->getBodyType() == b2_dynamicBody)
+    {
+        scene2::SceneNode *weak = node.get(); // No need for smart pointer in callback
+        obj->setListener([=](physics2::Obstacle *obs)
+                         {
+            weak->setPosition(obs->getPosition()*_scale);
+            weak->setAngle(obs->getAngle()); });
+    }
 }
