@@ -115,7 +115,7 @@ void LiminalSpirit::onStartup()
 
     // Enable physics -jdg274
     bounds = Display::get()->getSafeBounds();
-    _scale = size.width == SCENE_WIDTH ? size.width / bounds.size.width : size.height / bounds.size.height;
+    _scale = size.width == SCENE_WIDTH ? size.width / DEFAULT_WIDTH : size.height / DEFAULT_HEIGHT;
     Vec2 offset((size.width - SCENE_WIDTH) / 2.0f, (size.height - SCENE_HEIGHT) / 2.0f);
 
     // Create the scene graph
@@ -269,9 +269,12 @@ void LiminalSpirit::buildScene()
     float tOffset = (size.height) - (safe.origin.y + safe.size.height);
 
     // Making the floor -jdg274
-    std::shared_ptr<physics2::PolygonObstacle> floor = physics2::PolygonObstacle::allocWithAnchor(Rect(DEFAULT_WIDTH / 2, DEFAULT_HEIGHT / 2, 10, 10), Vec2::ANCHOR_CENTER);
+    Rect floorRect = Rect(22, 8, 10, 10);
+    std::shared_ptr<physics2::PolygonObstacle> floor = physics2::PolygonObstacle::allocWithAnchor(floorRect, Vec2::ANCHOR_CENTER);
     floor->setBodyType(b2_staticBody);
-    addObstacle(floor, scene2::PolygonNode::alloc(), 1);
+    std::shared_ptr<scene2::PolygonNode> floorNode = scene2::PolygonNode::allocWithPoly(floorRect);
+    floorNode->setColor(Color4::BLUE);
+    addObstacle(floor, floorNode, 1);
     //    std::shared_ptr<scene2::PolygonNode> floor = scene2::PolygonNode::alloc();
     //    floor->setPolygon(Rect(0, 0, safe.size.width, 10));
     //    floor->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
@@ -303,15 +306,15 @@ void LiminalSpirit::buildScene()
     button->setAnchor(Vec2::ANCHOR_CENTER);
     button->setPosition(size.width - (bsize.width + rOffset) / 2, (bsize.height + bOffset) / 2);
 
-    Vec2 enemyPos = ENEMY_POS;
-    std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
-    std::shared_ptr<Texture> image = _assets->get<Texture>(ENEMY_TEXTURE);
-    _enemy = BaseEnemyModel::alloc(enemyPos, image->getSize() / scale, scale);
-    std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
-    sprite->setScale(Vec2(scale / 2, scale / 2));
-    _enemy->setSceneNode(sprite);
-    _enemy->setDebugColor(Color4::RED);
-    _scene->addChild(_enemy->getSceneNode());
+//    Vec2 enemyPos = ENEMY_POS;
+//    std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
+//    std::shared_ptr<Texture> image = _assets->get<Texture>(ENEMY_TEXTURE);
+//    _enemy = BaseEnemyModel::alloc(enemyPos, image->getSize() / scale, scale);
+//    std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
+//    sprite->setScale(Vec2(scale / 2, scale / 2));
+//    _enemy->setSceneNode(sprite);
+//    _enemy->setDebugColor(Color4::RED);
+//    _scene->addChild(_enemy->getSceneNode());
 
     // Add the logo and button to the scene graph
     _scene->addChild(_logo);
@@ -341,7 +344,6 @@ void LiminalSpirit::addObstacle(const std::shared_ptr<cugl::physics2::Obstacle> 
                                 const std::shared_ptr<cugl::scene2::SceneNode> &node,
                                 bool useObjPosition)
 {
-
     _world->addObstacle(obj);
 
     // Position the scene graph node (enough for static objects)
