@@ -196,6 +196,9 @@
     <ClInclude Include="..\..\source\SwipeController.hpp" />
     <ClInclude Include="CollisionController.hpp" />
     <ClInclude Include="resource.hpp" />
+    <ClInclude Include="..\..\source\LiminalSpiritApp.h" />
+    <ClInclude Include="..\..\source\PlayerModel.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\AttackController.cpp" />
@@ -205,6 +208,7 @@
     <ClCompile Include="..\..\source\main.cpp" />
     <ClCompile Include="..\..\source\SwipeController.cpp" />
     <ClCompile Include="CollisionController.cpp" />
+    <ClCompile Include="..\..\source\PlayerModel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LiminalSpirit.rc" />

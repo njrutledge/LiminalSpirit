@@ -37,6 +37,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CollisionController.hpp">
+    <ClInclude Include="..\..\source\PlayerModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -60,6 +61,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CollisionController.cpp">
+    <ClCompile Include="..\..\source\PlayerModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

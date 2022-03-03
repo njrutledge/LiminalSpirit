@@ -32,6 +32,7 @@
 #include <cugl/base/CUBase.h>
 #include "BaseEnemyModel.h"
 #include "AttackController.hpp"
+#include "PlayerModel.h"
 
 // Add support for simple random number generation
 #include <cstdlib>
@@ -54,6 +55,9 @@ using namespace cugl;
 
 /** The initial position of the dude */
 float ENEMY_POS[] = {16.0f, 12.0f};
+
+/** The initial position of the player*/
+float PLAYER_POS[] = { 16.0f, 4.0f };
 
 static void test_cases()
 {
@@ -115,16 +119,15 @@ void LiminalSpirit::onStartup()
           bounds.size.toString().c_str());
 
     // Enable physics -jdg274
-    bounds = Display::get()->getSafeBounds();
-    _scale = size.width == SCENE_WIDTH ? size.width / DEFAULT_WIDTH : size.height / DEFAULT_HEIGHT;
-    Vec2 offset((size.width - SCENE_WIDTH) / 2.0f, (size.height - SCENE_HEIGHT) / 2.0f);
-
-    // Create the scene graph
-    _worldnode = scene2::SceneNode::alloc();
-    _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
-    _worldnode->setPosition(offset);
-    _scene->addChild(_worldnode);
-
+    Size dimen = getDisplaySize();
+    float ratio1 = dimen.width/dimen.height;
+    float ratio2 = ((float)SCENE_WIDTH)/((float)SCENE_HEIGHT);
+    if (ratio1 < ratio2) {
+        dimen *= SCENE_WIDTH/dimen.width;
+    } else {
+        dimen *= SCENE_HEIGHT/dimen.height;
+    }
+    
     _world = physics2::ObstacleWorld::alloc(Rect(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT), Vec2(0, -GRAVITY));
     _world->activateCollisionCallbacks(true);
     //    _world->onBeginContact = [this](b2Contact* contact) {
@@ -133,6 +136,16 @@ void LiminalSpirit::onStartup()
     //    _world->onEndContact = [this](b2Contact* contact) {
     //      endContact(contact);
     //    };
+    
+    _scale = dimen.width == SCENE_WIDTH ? dimen.width / DEFAULT_WIDTH : dimen.height / DEFAULT_HEIGHT;
+    Vec2 offset((dimen.width - SCENE_WIDTH) / 2.0f, (dimen.height - SCENE_HEIGHT) / 2.0f);
+    CULog("Offset: %f,%f, Scale: %f, Width: %f, Height: %f", offset.x,offset.y,_scale,DEFAULT_WIDTH,DEFAULT_HEIGHT);
+    
+    // Create the scene graph
+    _worldnode = scene2::SceneNode::alloc();
+    _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+    _worldnode->setPosition(offset);
+    _scene->addChild(_worldnode);
 
     buildScene();
 }
@@ -239,12 +252,8 @@ void LiminalSpirit::buildScene()
     float bOffset = safe.origin.y;
     float rOffset = (size.width) - (safe.origin.x + safe.size.width);
 
-    // Making left and top offsets -jdg274
-    float lOffset = safe.origin.x;
-    float tOffset = (size.height) - (safe.origin.y + safe.size.height);
-
     // Making the floor -jdg274
-    Rect floorRect = Rect(0, 0, 32, 1);
+    Rect floorRect = Rect(0, 0, 32, 0.5);
     std::shared_ptr<physics2::PolygonObstacle> floor = physics2::PolygonObstacle::allocWithAnchor(floorRect, Vec2::ANCHOR_CENTER);
     floor->setBodyType(b2_staticBody);
     std::shared_ptr<scene2::PolygonNode> floorNode = scene2::PolygonNode::allocWithPoly(floorRect*_scale);
@@ -252,7 +261,7 @@ void LiminalSpirit::buildScene()
     addObstacle(floor, floorNode, 1);
 
     // Making the ceiling -jdg274
-    Rect ceilingRect = Rect(0, 17, 32, 1);
+    Rect ceilingRect = Rect(0, 17.5, 32, 0.5);
     std::shared_ptr<physics2::PolygonObstacle> ceiling = physics2::PolygonObstacle::allocWithAnchor(ceilingRect, Vec2::ANCHOR_CENTER);
     ceiling->setBodyType(b2_staticBody);
     std::shared_ptr<scene2::PolygonNode> ceilingNode = scene2::PolygonNode::allocWithPoly(ceilingRect*_scale);
@@ -260,7 +269,7 @@ void LiminalSpirit::buildScene()
     addObstacle(ceiling, ceilingNode, 1);
 
     // Making the left wall -jdg274
-    Rect leftRect = Rect(0, 0, 1, 18);
+    Rect leftRect = Rect(0, 0, 0.5, 18);
     std::shared_ptr<physics2::PolygonObstacle> left = physics2::PolygonObstacle::allocWithAnchor(leftRect, Vec2::ANCHOR_CENTER);
     left->setBodyType(b2_staticBody);
     std::shared_ptr<scene2::PolygonNode> leftNode = scene2::PolygonNode::allocWithPoly(leftRect*_scale);
@@ -268,7 +277,7 @@ void LiminalSpirit::buildScene()
     addObstacle(left, leftNode, 1);
 
     // Making the right wall -jdg274
-    Rect rightRect = Rect(31, 0, 1, 18);
+    Rect rightRect = Rect(31.5, 0, 0.5, 18);
     std::shared_ptr<physics2::PolygonObstacle> right = physics2::PolygonObstacle::allocWithAnchor(rightRect, Vec2::ANCHOR_CENTER);
     right->setBodyType(b2_staticBody);
     std::shared_ptr<scene2::PolygonNode> rightNode = scene2::PolygonNode::allocWithPoly(rightRect*_scale);
@@ -279,15 +288,26 @@ void LiminalSpirit::buildScene()
     button->setAnchor(Vec2::ANCHOR_CENTER);
     button->setPosition(size.width - (bsize.width + rOffset) / 2, (bsize.height + bOffset) / 2);
 
-    Vec2 enemyPos = ENEMY_POS;
+    //Vec2 enemyPos = ENEMY_POS;
+    //std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
+    //std::shared_ptr<Texture> image = _assets->get<Texture>(ENEMY_TEXTURE);
+    //_enemy = BaseEnemyModel::alloc(enemyPos, image->getSize() / _scale / 5, _scale);
+    //std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
+    //_enemy->setSceneNode(sprite);
+    //_enemy->setDebugColor(Color4::RED);
+    //sprite->setScale(0.2f);
+    //addObstacle(_enemy, sprite, true);
+
+    Vec2 playerPos = PLAYER_POS;
     std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
     std::shared_ptr<Texture> image = _assets->get<Texture>(ENEMY_TEXTURE);
-    _enemy = BaseEnemyModel::alloc(enemyPos, image->getSize() / _scale / 5, _scale);
+    _player = PlayerModel::alloc(playerPos, image->getSize() / _scale / 5, _scale);
     std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
-    _enemy->setSceneNode(sprite);
-    _enemy->setDebugColor(Color4::RED);
+    _player->setSceneNode(sprite);
+    _player->setDebugColor(Color4::RED);
     sprite->setScale(0.2f);
-    addObstacle(_enemy, sprite, true);
+    addObstacle(_player, sprite, true);
+
 
     // Add the logo and button to the scene graph
     _scene->addChild(button);

@@ -31,6 +31,7 @@
 #define __LIMINALSPIRIT_APP_H__
 #include <cugl/cugl.h>
 #include "BaseEnemyModel.h"
+#include "PlayerModel.h"
 
 /**
  * Class for a simple Hello World style application
@@ -59,6 +60,9 @@ protected:
 
     /**Base Enemy (NEED TO MAKE LIST) */
     std::shared_ptr<BaseEnemyModel> _enemy;
+
+    /** Player character */
+    std::shared_ptr<PlayerModel> _player;
 
     /** A countdown used to move the logo */
     int _countdown;
