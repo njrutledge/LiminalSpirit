@@ -147,7 +147,7 @@ void LiminalSpirit::onStartup()
     _worldnode->setPosition(offset);
     _scene->addChild(_worldnode);
     
-    _attacks = AttackController();
+    _attacks.init(SCENE_WIDTH / getDisplayWidth());
 
     buildScene();
 }
@@ -217,8 +217,12 @@ void LiminalSpirit::update(float timestep)
 void LiminalSpirit::draw()
 {
     // This takes care of begin/end
-    _attacks.draw(_batch);
+    
     _scene->render(_batch);
+    
+    _batch->begin(_scene->getCamera()->getCombined());
+    _attacks.draw(_batch);
+    _batch->end();
 }
 
 /**

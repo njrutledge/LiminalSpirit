@@ -40,6 +40,10 @@ AttackController::AttackController() {
     rightOff = cugl::Vec2(1.0f, 0.0f);
 }
 
+void AttackController::init(float scale) {
+    _scale = scale;
+}
+
 void AttackController::update(const cugl::Vec2 p) {
     
     auto it = _current.begin();
@@ -63,10 +67,10 @@ void AttackController::attackLeft(cugl::Vec2 p, SwipeController::Swipe direction
     
     switch (direction) {
         case SwipeController::Swipe::left:
-            _pending.emplace(std::make_shared<Attack>(p, 3, 9001, 1.5, Side::left, leftOff, ballMakyr));
+            _pending.emplace(std::make_shared<Attack>(p, 3, 9001, _scale, Side::left, leftOff, ballMakyr));
             break;
         case SwipeController::Swipe::right:
-            _pending.emplace(std::make_shared<Attack>(p, 3, 9001, 1.5, Side::left, rightOff, ballMakyr));
+            _pending.emplace(std::make_shared<Attack>(p, 3, 9001, _scale, Side::left, rightOff, ballMakyr));
             break;
         case SwipeController::up:
         case SwipeController::down:
@@ -78,10 +82,10 @@ void AttackController::attackLeft(cugl::Vec2 p, SwipeController::Swipe direction
 void AttackController::attackRight(cugl::Vec2 p, SwipeController::Swipe direction) {
     switch (direction) {
         case SwipeController::Swipe::left:
-            _pending.emplace(std::make_shared<Attack>(p, 3, 9001, 1.5, Side::right, leftOff, ballMakyr));
+            _pending.emplace(std::make_shared<Attack>(p, 3, 9001, _scale, Side::right, leftOff, ballMakyr));
             break;
         case SwipeController::Swipe::right:
-            _pending.emplace(std::make_shared<Attack>(p, 3, 9001, 1.5, Side::right, rightOff, ballMakyr));
+            _pending.emplace(std::make_shared<Attack>(p, 3, 9001, _scale, Side::right, rightOff, ballMakyr));
             break;
         case SwipeController::up:
         case SwipeController::down:
@@ -92,12 +96,15 @@ void AttackController::attackRight(cugl::Vec2 p, SwipeController::Swipe directio
 
 void AttackController::draw(const std::shared_ptr<cugl::SpriteBatch>& batch) {
     for(auto it = _current.begin(); it != _current.end(); ++it) {
+        cugl::Affine2 trans;
+        trans.scale(_scale);
+        trans.translate((*it)->getPosition());
         if ((*it)->getSide() == Side::left) {
             batch->setColor(cugl::Color4::GREEN);
-            batch->fill((*it)->getBall(), (*it)->getPosition());
+            batch->fill((*it)->getBall(), cugl::Vec2::ZERO, trans);
         } else {
             batch->setColor(cugl::Color4::RED);
-            batch->fill((*it)->getBall(), (*it)->getPosition());
+            batch->fill((*it)->getBall(), cugl::Vec2::ZERO, trans);
         }
     }
 }

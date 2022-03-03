@@ -85,7 +85,7 @@ public:
     
     std::unordered_set<std::shared_ptr<Attack>> _current;
     
-    float scale;
+    float _scale;
     
     cugl::Vec2 leftOff;
     
@@ -103,7 +103,7 @@ public:
     /**
      *  Initializes the attack controller. Currently greyed out because we only have basic attack hitboxes. Can use a json to set predetermined attack shapes, designs, and damage if we have more complicated moves and attacks.
      */
-    //bool init(std::shared_ptr<cugl::JsonValue> data);
+    void init(float scale);
     
     /**
      *  Update function for attack controller. Updates all attacks and removes inactive attacks from queue.
