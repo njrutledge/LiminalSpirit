@@ -72,8 +72,15 @@ float PLAYER_POS[] = { 16.0f, 4.0f };
  */
 void LiminalSpirit::onStartup()
 {
-    Size size = getDisplaySize();
-    size *= SCENE_WIDTH / size.width;
+    Size dimen = getDisplaySize();
+    float ratio1 = dimen.width/dimen.height;
+    float ratio2 = ((float)SCENE_WIDTH)/((float)SCENE_HEIGHT);
+    if (ratio1 < ratio2) {
+        dimen *= SCENE_WIDTH/dimen.width;
+    } else {
+        dimen *= SCENE_HEIGHT/dimen.height;
+    }
+    CULog("Dimen: %f, %f", dimen.width, dimen.height);
     
     #if defined(CU_TOUCH_SCREEN)
     Input::activate<Touchscreen>();
@@ -84,7 +91,7 @@ void LiminalSpirit::onStartup()
     #endif
 
     // Create a scene graph the same size as the window
-    _scene = Scene2::alloc(size.width, size.height);
+    _scene = Scene2::alloc(dimen.width, dimen.height);
     // Create a sprite batch (and background color) to render the scene
     _batch = SpriteBatch::alloc();
     setClearColor(Color4(229, 229, 229, 255));
@@ -119,15 +126,6 @@ void LiminalSpirit::onStartup()
           bounds.size.toString().c_str());
 
     // Enable physics -jdg274
-    Size dimen = getDisplaySize();
-    float ratio1 = dimen.width/dimen.height;
-    float ratio2 = ((float)SCENE_WIDTH)/((float)SCENE_HEIGHT);
-    if (ratio1 < ratio2) {
-        dimen *= SCENE_WIDTH/dimen.width;
-    } else {
-        dimen *= SCENE_HEIGHT/dimen.height;
-    }
-    
     _world = physics2::ObstacleWorld::alloc(Rect(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT), Vec2(0, -GRAVITY));
     _world->activateCollisionCallbacks(true);
     //    _world->onBeginContact = [this](b2Contact* contact) {
