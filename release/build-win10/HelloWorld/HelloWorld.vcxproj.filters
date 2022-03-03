@@ -1,78 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
+    <ClCompile Include="..\..\source\AttackController.cpp" />
+    <ClCompile Include="..\..\source\BaseEnemyModel.cpp" />
+    <ClCompile Include="..\..\source\InputController.cpp" />
+    <ClCompile Include="..\..\source\LiminalSpirit.cpp" />
+    <ClCompile Include="..\..\source\main.cpp" />
+    <ClCompile Include="..\..\source\SwipeController.cpp" />
+    <ClCompile Include="..\..\source\PlayerModel.cpp" />
+    <ClCompile Include="..\..\source\CollisionController.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\source\LiminalSpiritApp.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\AttackController.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\InputController.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\SwipeController.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\BaseEnemyModel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\LSCharacter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionController.hpp">
-    <ClInclude Include="..\..\source\PlayerModel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClInclude Include="..\..\source\AttackController.hpp" />
+    <ClInclude Include="..\..\source\BaseEnemyModel.h" />
+    <ClInclude Include="..\..\source\InputController.hpp" />
+    <ClInclude Include="..\..\source\LiminalSpiritApp.hpp" />
+    <ClInclude Include="..\..\source\LSCharacter.h" />
+    <ClInclude Include="..\..\source\SwipeController.hpp" />
+    <ClInclude Include="resource.hpp" />
+    <ClInclude Include="..\..\source\LiminalSpiritApp.h" />
+    <ClInclude Include="..\..\source\PlayerModel.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="..\..\source\CollisionController.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\source\LiminalSpirit.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\AttackController.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\InputController.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\SwipeController.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\BaseEnemyModel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CollisionController.cpp">
-    <ClCompile Include="..\..\source\PlayerModel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ResourceCompile Include="LiminalSpirit.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="LiminalSpirit.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="icon1.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
+    <Image Include="icon1.ico" />
   </ItemGroup>
 </Project>

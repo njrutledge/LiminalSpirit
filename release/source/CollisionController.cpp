@@ -23,4 +23,5 @@ bool CollisionController::resolveCollision(AttackController& ac, BaseEnemyModel&
 		
 		++it;
 	}
+	return false;
 }
