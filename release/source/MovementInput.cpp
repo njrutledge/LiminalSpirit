@@ -57,9 +57,9 @@ void MovementInput::dispose() {
         if (USE_ACCELEROMETER) {
             Input::deactivate<Accelerometer>();
         }
-        Touchscreen* touch = Input::get<Touchscreen>();
-        touch->removeBeginListener(LISTENER_KEY);
-        touch->removeEndListener(LISTENER_KEY);
+//        Touchscreen* touch = Input::get<Touchscreen>();
+//        touch->removeBeginListener(LISTENER_KEY);
+//        touch->removeEndListener(LISTENER_KEY);
         _active = false;
 #endif
     }
