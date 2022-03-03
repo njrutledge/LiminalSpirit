@@ -42,6 +42,7 @@ void AttackController::init(float scale, cugl::Vec2 oof) {
     _scale = scale;
     leftOff = cugl::Vec2(-1.5f, -0.5f) + (oof / (2 * scale));
     rightOff = cugl::Vec2(1.5f, -0.5f) + (oof / (2 * scale));
+    upOff = cugl::Vec2(0, 1.0f) = (oof / (2 * scale));
 }
 
 void AttackController::update(const cugl::Vec2 p) {

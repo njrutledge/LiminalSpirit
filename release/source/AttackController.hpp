@@ -90,6 +90,10 @@ public:
     cugl::Vec2 leftOff;
     
     cugl::Vec2 rightOff;
+
+    cugl::Vec2 upOff;
+
+    cugl::Vec2 downOff;
     
     cugl::PolyFactory ballMakyr;
     
