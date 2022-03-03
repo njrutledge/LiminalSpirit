@@ -77,6 +77,8 @@ public:
         float getRadius() {return radius;}
         
         cugl::Poly2 getBall() {return ball;}
+        cugl::Vec2 getPosition() { return position + offset; }
+        int getDamage() { return damage; }
     };
     
     std::unordered_set<std::shared_ptr<Attack>> _pending;

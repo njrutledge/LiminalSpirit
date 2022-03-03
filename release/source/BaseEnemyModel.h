@@ -74,6 +74,10 @@ public:
 	/** Base init function */
 	virtual bool init(const cugl::Vec2& pos, const cugl::Size& size, float scale);
 
+	float getRadius() {
+		return _sensorFixture->GetShape()->m_radius;
+	}
+
 #pragma mark - 
 #pragma mark Static Constructors
 	/** Allocates a new enemy at the origin */
