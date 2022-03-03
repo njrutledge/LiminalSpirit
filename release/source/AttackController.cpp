@@ -10,7 +10,7 @@
 
 AttackController::Attack::Attack(const cugl::Vec2 p,float a, float dmg, float scale, Side s, cugl::Vec2 oof, cugl::PolyFactory b) {
     
-    position = p+oof;
+    position = (p+oof)*scale;
     radius = 2;
     age = a;
     damage = dmg;
@@ -18,14 +18,14 @@ AttackController::Attack::Attack(const cugl::Vec2 p,float a, float dmg, float sc
     _scale = scale;
     offset = oof;
     active = true;
-    ball = b.makeCircle(cugl::Vec2(radius, radius), radius);
+    ball = b.makeCircle(cugl::Vec2::ZERO, radius);
 }
 
 
 void AttackController::Attack::update(const cugl::Vec2 p, bool follow) {
     if (active) {
         if (follow) {
-            position = p + offset;
+            position = (p + offset)*_scale;
         }
         age -= 1;
         if (age == 0) {
@@ -36,8 +36,8 @@ void AttackController::Attack::update(const cugl::Vec2 p, bool follow) {
 
 AttackController::AttackController() {
     //need to add initialization for left and right offsets
-    leftOff = cugl::Vec2(-1.0f, 0.0f);
-    rightOff = cugl::Vec2(1.0f, 0.0f);
+    leftOff = cugl::Vec2(-4.0f, 0.0f);
+    rightOff = cugl::Vec2(4.0f, 0.0f);
 }
 
 void AttackController::init(float scale) {

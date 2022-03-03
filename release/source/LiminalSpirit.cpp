@@ -84,8 +84,6 @@ void LiminalSpirit::onStartup()
     
     #if defined(CU_TOUCH_SCREEN)
     Input::activate<Touchscreen>();
-    _swipes = SwipeController();
-    _swipes.init(0, SCENE_WIDTH);
     #else
         Input::activate<Mouse>();
     #endif
@@ -144,8 +142,10 @@ void LiminalSpirit::onStartup()
     _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
     _worldnode->setPosition(offset);
     _scene->addChild(_worldnode);
+
+    _swipes.init(0, getDisplayWidth());
     
-    _attacks.init(SCENE_WIDTH / getDisplayWidth());
+    _attacks.init(_scale);
 
     buildScene();
 }
@@ -196,8 +196,8 @@ void LiminalSpirit::update(float timestep)
 {
     _world->update(timestep);
     _swipes.update();
-    _attacks.attackLeft(_player->cugl::physics2::Obstacle::getPosition(), _swipes.getLeftSwipe());
-    _attacks.attackRight(_player->cugl::physics2::Obstacle::getPosition(), _swipes.getRightSwipe());
+    _attacks.attackLeft(_player->cugl::physics2::Obstacle::getPosition()*_scale, _swipes.getLeftSwipe());
+    _attacks.attackRight(_player->cugl::physics2::Obstacle::getPosition()*_scale, _swipes.getRightSwipe());
     _attacks.update(_player->cugl::physics2::Obstacle::getPosition());
     
     
