@@ -1,6 +1,7 @@
 #include "CollisionController.hpp"
 
 using namespace cugl;
+//TEST
 bool CollisionController::resolveCollision(AttackController& ac, BaseEnemyModel& enemy) {
 	bool collision = false;
 	auto it = ac._current.begin();
