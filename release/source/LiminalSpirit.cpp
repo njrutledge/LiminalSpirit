@@ -145,7 +145,7 @@ void LiminalSpirit::onStartup()
 
     _swipes.init(0, getDisplayWidth());
     
-    _attacks.init(_scale);
+    _attacks.init(_scale, offset);
 
     buildScene();
 }
@@ -196,8 +196,8 @@ void LiminalSpirit::update(float timestep)
 {
     _world->update(timestep);
     _swipes.update();
-    _attacks.attackLeft(_player->cugl::physics2::Obstacle::getPosition()*_scale, _swipes.getLeftSwipe());
-    _attacks.attackRight(_player->cugl::physics2::Obstacle::getPosition()*_scale, _swipes.getRightSwipe());
+    _attacks.attackLeft(_player->cugl::physics2::Obstacle::getPosition(), _swipes.getLeftSwipe());
+    _attacks.attackRight(_player->cugl::physics2::Obstacle::getPosition(), _swipes.getRightSwipe());
     _attacks.update(_player->cugl::physics2::Obstacle::getPosition());
     
     

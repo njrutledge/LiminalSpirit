@@ -10,7 +10,7 @@
 
 AttackController::Attack::Attack(const cugl::Vec2 p,float a, float dmg, float scale, Side s, cugl::Vec2 oof, cugl::PolyFactory b) {
     
-    position = (p+oof)*scale;
+    position = (p + oof);
     radius = 2;
     age = a;
     damage = dmg;
@@ -25,7 +25,7 @@ AttackController::Attack::Attack(const cugl::Vec2 p,float a, float dmg, float sc
 void AttackController::Attack::update(const cugl::Vec2 p, bool follow) {
     if (active) {
         if (follow) {
-            position = (p + offset)*_scale;
+            position = p + offset;
         }
         age -= 1;
         if (age == 0) {
@@ -36,12 +36,12 @@ void AttackController::Attack::update(const cugl::Vec2 p, bool follow) {
 
 AttackController::AttackController() {
     //need to add initialization for left and right offsets
-    leftOff = cugl::Vec2(-4.0f, 0.0f);
-    rightOff = cugl::Vec2(4.0f, 0.0f);
 }
 
-void AttackController::init(float scale) {
+void AttackController::init(float scale, cugl::Vec2 oof) {
     _scale = scale;
+    leftOff = cugl::Vec2(-1.5f, -0.5f) + (oof / (2 * scale));
+    rightOff = cugl::Vec2(1.5f, -0.5f) + (oof / (2 * scale));
 }
 
 void AttackController::update(const cugl::Vec2 p) {
@@ -96,15 +96,16 @@ void AttackController::attackRight(cugl::Vec2 p, SwipeController::Swipe directio
 
 void AttackController::draw(const std::shared_ptr<cugl::SpriteBatch>& batch) {
     for(auto it = _current.begin(); it != _current.end(); ++it) {
+        //cugl::Vec2 center = cugl::Vec2((*it)->getRadius(),(*it)->getRadius());
         cugl::Affine2 trans;
-        trans.scale(_scale);
-        trans.translate((*it)->getPosition());
+        //trans.scale(_scale);
+        //trans.translate((*it)->getPosition()*_scale);
         if ((*it)->getSide() == Side::left) {
             batch->setColor(cugl::Color4::GREEN);
-            batch->fill((*it)->getBall(), cugl::Vec2::ZERO, trans);
+            batch->fill((*it)->getBall(), cugl::Vec2::ZERO, cugl::Vec2(_scale, _scale), 0, (*it)->getPosition()*_scale);
         } else {
             batch->setColor(cugl::Color4::RED);
-            batch->fill((*it)->getBall(), cugl::Vec2::ZERO, trans);
+            batch->fill((*it)->getBall(), cugl::Vec2::ZERO, cugl::Vec2(_scale, _scale), 0, (*it)->getPosition()*_scale);
         }
     }
 }
