@@ -75,8 +75,6 @@ protected:
     
     /** tilt controller */
     MovementInput _tiltInput;
-    /** A countdown used to move the logo */
-    int  _countdown;
     
     /**
      * Internal helper to build the scene graph.

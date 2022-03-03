@@ -9,6 +9,7 @@
     <ClCompile Include="..\..\source\SwipeController.cpp" />
     <ClCompile Include="..\..\source\PlayerModel.cpp" />
     <ClCompile Include="..\..\source\CollisionController.cpp" />
+    <ClCompile Include="..\..\source\MovementInput.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\AttackController.hpp" />
@@ -22,6 +23,7 @@
     <ClInclude Include="..\..\source\PlayerModel.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="..\..\source\CollisionController.hpp" />
+    <ClInclude Include="..\..\source\MovementInput.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LiminalSpirit.rc" />

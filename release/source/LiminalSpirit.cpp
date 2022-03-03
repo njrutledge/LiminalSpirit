@@ -203,7 +203,7 @@ void LiminalSpirit::update(float timestep)
     _attacks.update(_player->cugl::physics2::Obstacle::getPosition());
     
     // Update tilt input controller
-    _tiltInput.update(timestep, GAME_WIDTH, _logo->getSize().width);
+    _tiltInput.update(timestep, SCENE_WIDTH, _logo->getSize().width);
     float posx = _tiltInput.getPosx();
     _logo->setPositionX(posx);
    
