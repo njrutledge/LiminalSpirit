@@ -59,9 +59,6 @@ float ENEMY_POS[] = {16.0f, 12.0f};
 /** The initial position of the player*/
 float PLAYER_POS[] = { 16.0f, 4.0f };
 
-static void test_cases()
-{
-}
 
 /**
  * The method called after OpenGL is initialized, but before running the application.
@@ -77,6 +74,14 @@ void LiminalSpirit::onStartup()
 {
     Size size = getDisplaySize();
     size *= SCENE_WIDTH / size.width;
+    
+    #if defined(CU_TOUCH_SCREEN)
+    Input::activate<Touchscreen>();
+    _swipes = SwipeController();
+    _swipes.init(0, SCENE_WIDTH);
+    #else
+        Input::activate<Mouse>();
+    #endif
 
     // Create a scene graph the same size as the window
     _scene = Scene2::alloc(size.width, size.height);
@@ -96,11 +101,6 @@ void LiminalSpirit::onStartup()
 
     // Activate mouse or touch screen input as appropriate
     // We have to do this BEFORE the scene, because the scene has a button
-#if defined(CU_TOUCH_SCREEN)
-    Input::activate<Touchscreen>();
-#else
-    Input::activate<Mouse>();
-#endif
 
     // Build the scene from these assets
     Application::onStartup();
@@ -146,6 +146,8 @@ void LiminalSpirit::onStartup()
     _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
     _worldnode->setPosition(offset);
     _scene->addChild(_worldnode);
+    
+    _attacks = AttackController();
 
     buildScene();
 }
@@ -195,6 +197,12 @@ void LiminalSpirit::onShutdown()
 void LiminalSpirit::update(float timestep)
 {
     _world->update(timestep);
+    _swipes.update();
+    _attacks.attackLeft(_player->cugl::physics2::Obstacle::getPosition(), _swipes.getLeftSwipe());
+    _attacks.attackRight(_player->cugl::physics2::Obstacle::getPosition(), _swipes.getRightSwipe());
+    _attacks.update(_player->cugl::physics2::Obstacle::getPosition());
+    
+    
 }
 
 /**
@@ -209,6 +217,7 @@ void LiminalSpirit::update(float timestep)
 void LiminalSpirit::draw()
 {
     // This takes care of begin/end
+    _attacks.draw(_batch);
     _scene->render(_batch);
 }
 

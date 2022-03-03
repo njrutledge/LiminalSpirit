@@ -32,6 +32,8 @@
 #include <cugl/cugl.h>
 #include "BaseEnemyModel.h"
 #include "PlayerModel.h"
+#include "AttackController.hpp"
+#include "InputController.hpp"
 
 /**
  * Class for a simple Hello World style application
@@ -57,6 +59,10 @@ protected:
     std::shared_ptr<cugl::scene2::SceneNode> _worldnode;
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
     float _scale;
+    
+    AttackController _attacks;
+    
+    SwipeController _swipes;
 
     /**Base Enemy (NEED TO MAKE LIST) */
     std::shared_ptr<BaseEnemyModel> _enemy;

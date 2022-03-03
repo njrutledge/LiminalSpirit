@@ -8,17 +8,17 @@
 
 #include "AttackController.hpp"
 
-AttackController::Attack::Attack(const cugl::Vec2 p, float r, float a, float dmg, float scale, Side s, cugl::Vec2 oof, cugl::PolyFactory b) {
+AttackController::Attack::Attack(const cugl::Vec2 p,float a, float dmg, float scale, Side s, cugl::Vec2 oof, cugl::PolyFactory b) {
     
-    position = p;
-    radius = r;
+    position = p+oof;
+    radius = 2;
     age = a;
     damage = dmg;
     side = s;
     _scale = scale;
     offset = oof;
     active = true;
-    ball = b.makeCircle(p+oof, r);
+    ball = b.makeCircle(cugl::Vec2(radius, radius), radius);
 }
 
 
@@ -36,6 +36,8 @@ void AttackController::Attack::update(const cugl::Vec2 p, bool follow) {
 
 AttackController::AttackController() {
     //need to add initialization for left and right offsets
+    leftOff = cugl::Vec2(-1.0f, 0.0f);
+    rightOff = cugl::Vec2(1.0f, 0.0f);
 }
 
 void AttackController::update(const cugl::Vec2 p) {
@@ -60,10 +62,12 @@ void AttackController::update(const cugl::Vec2 p) {
 void AttackController::attackLeft(cugl::Vec2 p, SwipeController::Swipe direction) {
     
     switch (direction) {
-        case SwipeController::left:
-            _pending.emplace(std::make_shared<Attack>(p, 3, 3, 9001, 1.5, Side::left, leftOff, ballMakyr));
-        case SwipeController::right:
-            _pending.emplace(std::make_shared<Attack>(p, 3, 3, 9001, 1.5, Side::left, rightOff, ballMakyr));
+        case SwipeController::Swipe::left:
+            _pending.emplace(std::make_shared<Attack>(p, 3, 9001, 1.5, Side::left, leftOff, ballMakyr));
+            break;
+        case SwipeController::Swipe::right:
+            _pending.emplace(std::make_shared<Attack>(p, 3, 9001, 1.5, Side::left, rightOff, ballMakyr));
+            break;
         case SwipeController::up:
         case SwipeController::down:
         case SwipeController::none:
@@ -73,10 +77,12 @@ void AttackController::attackLeft(cugl::Vec2 p, SwipeController::Swipe direction
 
 void AttackController::attackRight(cugl::Vec2 p, SwipeController::Swipe direction) {
     switch (direction) {
-        case SwipeController::left:
-            _pending.emplace(std::make_shared<Attack>(p, 3, 3, 9001, 1.5, Side::right, leftOff, ballMakyr));
-        case SwipeController::right:
-            _pending.emplace(std::make_shared<Attack>(p, 3, 3, 9001, 1.5, Side::right, rightOff, ballMakyr));
+        case SwipeController::Swipe::left:
+            _pending.emplace(std::make_shared<Attack>(p, 3, 9001, 1.5, Side::right, leftOff, ballMakyr));
+            break;
+        case SwipeController::Swipe::right:
+            _pending.emplace(std::make_shared<Attack>(p, 3, 9001, 1.5, Side::right, rightOff, ballMakyr));
+            break;
         case SwipeController::up:
         case SwipeController::down:
         case SwipeController::none:
@@ -84,12 +90,15 @@ void AttackController::attackRight(cugl::Vec2 p, SwipeController::Swipe directio
     }
 }
 
-void AttackController::setLeftOffset (const cugl::Vec2 l) {
-    leftOff = l;
+void AttackController::draw(const std::shared_ptr<cugl::SpriteBatch>& batch) {
+    for(auto it = _current.begin(); it != _current.end(); ++it) {
+        if ((*it)->getSide() == Side::left) {
+            batch->setColor(cugl::Color4::GREEN);
+            batch->fill((*it)->getBall(), (*it)->getPosition());
+        } else {
+            batch->setColor(cugl::Color4::RED);
+            batch->fill((*it)->getBall(), (*it)->getPosition());
+        }
+    }
 }
-
-void AttackController::setRightOffset (const cugl::Vec2 r) {
-    rightOff = r;
-}
-
 

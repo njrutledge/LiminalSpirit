@@ -56,12 +56,11 @@ public:
          * Creates an attack circle with the specified parameters. Scale is constant as it is dependent on the drawing scene.
          *
          * @param p         The position of the hitbox
-         * @param r         The radius / size of the hitbox
          * @param age     The duration of the hitbox
          * @param dmg     The amount of damage the hitbox does
          * @param scale The drawing scale size of the hitbox
          */
-        Attack(const cugl::Vec2 p, float r, float a, float dmg, float scale, Side s, cugl::Vec2 oof, cugl::PolyFactory b);
+        Attack(const cugl::Vec2 p, float a, float dmg, float scale, Side s, cugl::Vec2 oof, cugl::PolyFactory b);
         
         
         /**
@@ -79,6 +78,7 @@ public:
         cugl::Poly2 getBall() {return ball;}
         cugl::Vec2 getPosition() { return position + offset; }
         int getDamage() { return damage; }
+        Side getSide(){return side;}
     };
     
     std::unordered_set<std::shared_ptr<Attack>> _pending;
@@ -128,9 +128,7 @@ public:
      */
     void attackLeft(cugl::Vec2 p, SwipeController::Swipe direction);
     
-    void setLeftOffset(const cugl::Vec2 l);
-    
-    void setRightOffset(const cugl::Vec2 r);
+    void draw(const std::shared_ptr<cugl::SpriteBatch>& batch);
     
 };
 
