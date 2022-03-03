@@ -103,7 +103,7 @@ public:
     /**
      *  Initializes the attack controller. Currently greyed out because we only have basic attack hitboxes. Can use a json to set predetermined attack shapes, designs, and damage if we have more complicated moves and attacks.
      */
-    void init(float scale);
+    void init(float scale, cugl::Vec2 oof);
     
     /**
      *  Update function for attack controller. Updates all attacks and removes inactive attacks from queue.
