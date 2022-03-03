@@ -130,6 +130,10 @@ void PlayerModel::dispose() {
     _sensorNode = nullptr;
 }
 
+void PlayerModel::setVX(float value) {
+    _body->SetLinearVelocity(b2Vec2(value, 0));
+}
+
 void PlayerModel::applyForce() {
     if (!isEnabled()) {
         return;
