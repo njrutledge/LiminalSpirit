@@ -155,6 +155,9 @@ public:
 	/** Sets whether the player is on the ground*/
 	void setGrounded(bool value) { _isGrounded = value;  }
 
+	/** Set X velocity */
+	void setVX(float value);
+
 
 	/**
 	 * Returns how much force to apply to get the player moving
