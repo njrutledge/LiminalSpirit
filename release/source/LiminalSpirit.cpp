@@ -31,6 +31,7 @@
 #include "LiminalSpiritApp.h"
 #include <cugl/base/CUBase.h>
 #include "BaseEnemyModel.h"
+#include "PlayerModel.h"
 
 // Add support for simple random number generation
 #include <cstdlib>
@@ -53,6 +54,9 @@ using namespace cugl;
 
 /** The initial position of the dude */
 float ENEMY_POS[] = {16.0f, 12.0f};
+
+/** The initial position of the player*/
+float PLAYER_POS[] = { 16.0f, 4.0f };
 
 static void test_cases()
 {
@@ -283,15 +287,26 @@ void LiminalSpirit::buildScene()
     button->setAnchor(Vec2::ANCHOR_CENTER);
     button->setPosition(size.width - (bsize.width + rOffset) / 2, (bsize.height + bOffset) / 2);
 
-//    Vec2 enemyPos = ENEMY_POS;
-//    std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
-//    std::shared_ptr<Texture> image = _assets->get<Texture>(ENEMY_TEXTURE);
-//    _enemy = BaseEnemyModel::alloc(enemyPos, image->getSize() / _scale / 5, _scale);
-//    std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
-//    _enemy->setSceneNode(sprite);
-//    _enemy->setDebugColor(Color4::RED);
-//    sprite->setScale(0.2f);
-//    addObstacle(_enemy, sprite, true);
+    //Vec2 enemyPos = ENEMY_POS;
+    //std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
+    //std::shared_ptr<Texture> image = _assets->get<Texture>(ENEMY_TEXTURE);
+    //_enemy = BaseEnemyModel::alloc(enemyPos, image->getSize() / _scale / 5, _scale);
+    //std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
+    //_enemy->setSceneNode(sprite);
+    //_enemy->setDebugColor(Color4::RED);
+    //sprite->setScale(0.2f);
+    //addObstacle(_enemy, sprite, true);
+
+    Vec2 playerPos = PLAYER_POS;
+    std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
+    std::shared_ptr<Texture> image = _assets->get<Texture>(ENEMY_TEXTURE);
+    _player = PlayerModel::alloc(playerPos, image->getSize() / _scale / 5, _scale);
+    std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
+    _player->setSceneNode(sprite);
+    _player->setDebugColor(Color4::RED);
+    sprite->setScale(0.2f);
+    addObstacle(_player, sprite, true);
+
 
     // Add the logo and button to the scene graph
     _scene->addChild(button);

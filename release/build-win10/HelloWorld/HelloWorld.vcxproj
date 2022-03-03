@@ -190,12 +190,14 @@
   <ItemGroup>
     <ClInclude Include="..\..\source\BaseEnemyModel.h" />
     <ClInclude Include="..\..\source\LiminalSpiritApp.h" />
+    <ClInclude Include="..\..\source\PlayerModel.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\BaseEnemyModel.cpp" />
     <ClCompile Include="..\..\source\LiminalSpirit.cpp" />
     <ClCompile Include="..\..\source\main.cpp" />
+    <ClCompile Include="..\..\source\PlayerModel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LiminalSpirit.rc" />
