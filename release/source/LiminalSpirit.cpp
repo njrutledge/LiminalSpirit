@@ -54,6 +54,7 @@ using namespace cugl;
 #define GRAVITY 20
 
 
+
 /** The initial position of the dude */
 float ENEMY_POS[] = {16.0f, 12.0f};
 
