@@ -40,9 +40,10 @@ AttackController::AttackController() {
 
 void AttackController::init(float scale, cugl::Vec2 oof) {
     _scale = scale;
-    leftOff = cugl::Vec2(-1.5f, -0.5f) + (oof / (2 * scale));
-    rightOff = cugl::Vec2(1.5f, -0.5f) + (oof / (2 * scale));
-    upOff = cugl::Vec2(0, 1.0f) = (oof / (2 * scale));
+    leftOff = cugl::Vec2(-1.5f, 0.0f) + (oof / (2 * scale));
+    rightOff = cugl::Vec2(1.5f, 0.0f) + (oof / (2 * scale));
+    upOff = cugl::Vec2(0, 1.5f) + (oof / (2 * scale));
+    downOff = cugl::Vec2(0, -1.5f) + (oof / (2 * scale));
 }
 
 void AttackController::update(const cugl::Vec2 p) {
@@ -64,7 +65,7 @@ void AttackController::update(const cugl::Vec2 p) {
 }
             
     
-void AttackController::attackLeft(cugl::Vec2 p, SwipeController::Swipe direction) {
+void AttackController::attackLeft(cugl::Vec2 p, SwipeController::Swipe direction, bool grounded) {
     
     switch (direction) {
         case SwipeController::Swipe::left:
@@ -74,13 +75,22 @@ void AttackController::attackLeft(cugl::Vec2 p, SwipeController::Swipe direction
             _pending.emplace(std::make_shared<Attack>(p, 3, 9001, _scale, Side::left, rightOff, ballMakyr));
             break;
         case SwipeController::up:
+            _pending.emplace(std::make_shared<Attack>(p, 5, 9001, _scale, Side::left, upOff, ballMakyr));
+            break;
         case SwipeController::down:
+            if(!grounded){
+            _pending.emplace(std::make_shared<Attack>(p, 5, 9001, _scale, Side::left, downOff, ballMakyr));
+            } else{
+                _pending.emplace(std::make_shared<Attack>(p, 3, 9001, _scale, Side::left, leftOff, ballMakyr));
+                _pending.emplace(std::make_shared<Attack>(p, 3, 9001, _scale, Side::left, rightOff, ballMakyr));
+            }
+            break;
         case SwipeController::none:
             break;
     }
 }
 
-void AttackController::attackRight(cugl::Vec2 p, SwipeController::Swipe direction) {
+void AttackController::attackRight(cugl::Vec2 p, SwipeController::Swipe direction, bool grounded) {
     switch (direction) {
         case SwipeController::Swipe::left:
             _pending.emplace(std::make_shared<Attack>(p, 3, 9001, _scale, Side::right, leftOff, ballMakyr));
@@ -89,7 +99,16 @@ void AttackController::attackRight(cugl::Vec2 p, SwipeController::Swipe directio
             _pending.emplace(std::make_shared<Attack>(p, 3, 9001, _scale, Side::right, rightOff, ballMakyr));
             break;
         case SwipeController::up:
+            _pending.emplace(std::make_shared<Attack>(p, 5, 9001, _scale, Side::right, upOff, ballMakyr));
+            break;
         case SwipeController::down:
+            if(!grounded){
+            _pending.emplace(std::make_shared<Attack>(p, 5, 9001, _scale, Side::right, downOff, ballMakyr));
+            } else{
+                _pending.emplace(std::make_shared<Attack>(p, 3, 9001, _scale, Side::right, leftOff, ballMakyr));
+                _pending.emplace(std::make_shared<Attack>(p, 3, 9001, _scale, Side::right, rightOff, ballMakyr));
+            }
+            break;
         case SwipeController::none:
             break;
     }

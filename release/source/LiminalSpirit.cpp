@@ -51,7 +51,7 @@ using namespace cugl;
 /** Height of the game world in Box2d units */
 #define DEFAULT_HEIGHT 18.0f
 /** The constant for gravity in the physics world. */
-#define GRAVITY 9.8
+#define GRAVITY 20
 
 /** The initial position of the dude */
 float ENEMY_POS[] = {16.0f, 12.0f};
@@ -196,11 +196,16 @@ void LiminalSpirit::update(float timestep)
 {
     _world->update(timestep);
     _swipes.update();
-    _attacks.attackLeft(_player->cugl::physics2::Obstacle::getPosition(), _swipes.getLeftSwipe());
-    _attacks.attackRight(_player->cugl::physics2::Obstacle::getPosition(), _swipes.getRightSwipe());
-    _attacks.update(_player->cugl::physics2::Obstacle::getPosition());
-    
-    
+    _attacks.attackLeft(_player->getPosition(), _swipes.getLeftSwipe(), _player->isGrounded());
+    _attacks.attackRight(_player->getPosition(), _swipes.getRightSwipe(),_player->isGrounded());
+    _attacks.update(_player->getPosition());
+    if(_swipes.getLeftSwipe() == _swipes.up || _swipes.getRightSwipe() == _swipes.up){
+        _player->setJumping(true);
+    } else {
+        _player->setJumping(false);
+    }
+    _player->setGrounded(true);
+    _player->applyForce();
 }
 
 /**

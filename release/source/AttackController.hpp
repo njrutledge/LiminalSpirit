@@ -95,7 +95,7 @@ public:
 
     cugl::Vec2 downOff;
     
-    cugl::PolyFactory ballMakyr;
+    cugl::PolyFactory ballMakyr = cugl::PolyFactory(0.05f);
     
     
     /**
@@ -125,12 +125,12 @@ public:
     /**
      *  Creates an attack for a right sided swipe.
      */
-    void attackRight(cugl::Vec2 p, SwipeController::Swipe direction);
+    void attackRight(cugl::Vec2 p, SwipeController::Swipe direction, bool grounded);
     
     /**
      *  Creates an attack for a left sided swipe.
      */
-    void attackLeft(cugl::Vec2 p, SwipeController::Swipe direction);
+    void attackLeft(cugl::Vec2 p, SwipeController::Swipe direction, bool grounded);
     
     void draw(const std::shared_ptr<cugl::SpriteBatch>& batch);
     
