@@ -1,1 +1,3 @@
 .vs/*
+release/build-apple/LiminalSpirit.xcodeproj/project.pbxproj
+release/cugl/build-apple/box2d.xcodeproj/xcuserdata/jgomez.xcuserdatad/xcschemes/xcschememanagement.plist

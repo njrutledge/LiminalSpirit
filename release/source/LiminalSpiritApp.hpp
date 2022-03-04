@@ -158,6 +158,27 @@ public:
     virtual void addObstacle(const std::shared_ptr<cugl::physics2::Obstacle> &obj,
                              const std::shared_ptr<cugl::scene2::SceneNode> &node,
                              bool useObjPosition);
+    
+    /**
+    * Processes the start of a collision
+    *
+    * This method is called when we first get a collision between two objects.  We use
+    * this method to test if it is the "right" kind of collision.  In particular, we
+    * use it to test if we make it to the win door.  
+    *
+    * @param  contact  The two bodies that collided
+    */
+    void beginContact(b2Contact* contact);
+
+    /**
+    * Processes the end of a collision
+    *
+    * This method is called when we no longer have a collision between two objects.
+    * We use this method allow the character to jump again.
+    *
+    * @param  contact  The two bodies that collided
+    */
+    void endContact(b2Contact* contact);
 };
 
 #endif /* __HELLO_APP_H__ */
