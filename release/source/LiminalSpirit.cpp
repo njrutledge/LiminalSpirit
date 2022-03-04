@@ -205,6 +205,17 @@ void LiminalSpirit::update(float timestep)
     float xPos = _tiltInput.getXpos();
     _player->setVX(xPos);
     
+    //FLIPPING LOGIC
+    if(xPos > 0){
+        _player->setFacingRight(true);
+    } else if (xPos < 0){
+        _player->setFacingRight(false);
+    }
+    scene2::TexturedNode* image = dynamic_cast<scene2::TexturedNode*>(_player->getSceneNode().get());
+    if (image != nullptr) {
+        image->flipHorizontal(_player->isFacingRight());
+    }
+    
     _world->update(timestep);
     _swipes.update();
     _attacks.attackLeft(_player->getPosition(), _swipes.getLeftSwipe(), _player->isGrounded());
@@ -348,7 +359,7 @@ void LiminalSpirit::buildScene()
 
     Vec2 playerPos = PLAYER_POS;
     std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
-    std::shared_ptr<Texture> image = _assets->get<Texture>(ENEMY_TEXTURE);
+    std::shared_ptr<Texture> image = _assets->get<Texture>(PLAYER_TEXTURE);
     _player = PlayerModel::alloc(playerPos, image->getSize() / _scale / 5, _scale);
     std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
     _player->setSceneNode(sprite);

@@ -142,6 +142,9 @@ public:
 
 	/** Returns true if the player is facing right */
 	bool isFacingRight() const { return _faceRight; }
+    
+    /** Sets whetherthe player is facing right */
+    void setFacingRight(bool value) { _faceRight = value; }
 
 	/** Returns true if the player is actively jumping*/
 	bool isJumping() const { return _isJumping;  }
