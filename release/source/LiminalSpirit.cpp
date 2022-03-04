@@ -53,6 +53,7 @@ using namespace cugl;
 /** The constant for gravity in the physics world. */
 #define GRAVITY 20
 
+
 /** The initial position of the dude */
 float ENEMY_POS[] = {16.0f, 12.0f};
 
@@ -210,9 +211,11 @@ void LiminalSpirit::update(float timestep)
     _player->applyForce();
     
     // Update tilt input controller
-    _tiltInput.update(timestep, SCENE_WIDTH, _logo->getSize().width);
-    float posx = _tiltInput.getPosx();
-    _logo->setPositionX(posx);
+    _tiltInput.update(timestep, _player->getX(), SCENE_WIDTH, _logo->getSize().width);
+    float xPos = _tiltInput.getXpos();
+    _player->setVX(xPos);
+    
+ 
    
 }
 
