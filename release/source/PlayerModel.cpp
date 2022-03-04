@@ -25,7 +25,7 @@
 /**Density of character*/
 #define PLAYER_DENSITY 1.0f
 /** Impulse of the player jump */
-#define PLAYER_JUMP 125.0f
+#define PLAYER_JUMP 75.0f
 /** Debug color for sensor */
 #define DEBUG_COLOR Color4::RED
 
@@ -131,7 +131,7 @@ void PlayerModel::dispose() {
 }
 
 void PlayerModel::setVX(float value) {
-    _body->SetLinearVelocity(b2Vec2(value, 0));
+    _body->SetLinearVelocity(b2Vec2(value, _body->GetLinearVelocity().y));
 }
 
 void PlayerModel::applyForce() {

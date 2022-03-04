@@ -51,7 +51,7 @@ using namespace cugl;
 /** Height of the game world in Box2d units */
 #define DEFAULT_HEIGHT 18.0f
 /** The constant for gravity in the physics world. */
-#define GRAVITY 20
+#define GRAVITY 30
 
 
 
@@ -198,6 +198,12 @@ void LiminalSpirit::onShutdown()
  */
 void LiminalSpirit::update(float timestep)
 {
+
+    // Update tilt input controller
+    _tiltInput.update(timestep, _player->getX(), SCENE_WIDTH, _logo->getSize().width);
+    float xPos = _tiltInput.getXpos();
+    _player->setVX(xPos);
+    
     _world->update(timestep);
     _swipes.update();
     _attacks.attackLeft(_player->getPosition(), _swipes.getLeftSwipe(), _player->isGrounded());
@@ -211,11 +217,8 @@ void LiminalSpirit::update(float timestep)
     _player->setGrounded(true);
     _player->applyForce();
     
-    // Update tilt input controller
-    _tiltInput.update(timestep, _player->getX(), SCENE_WIDTH, _logo->getSize().width);
-    float xPos = _tiltInput.getXpos();
-    _player->setVX(xPos);
-    
+
+
  
    
 }
