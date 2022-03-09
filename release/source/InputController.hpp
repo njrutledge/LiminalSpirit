@@ -41,7 +41,6 @@ protected:
     /** Middle x coordinate for the screen for calculating if a finger press is on the left or right */
     float _screenMidpoint;
 
-
 protected:
     // Touchscreen variables
     /** The key for the touch listeners */
@@ -71,6 +70,9 @@ protected:
 
 #pragma mark Input Control
 public:
+    int _leftCode;
+    int _rightCode;
+    int _moveCode;
     /**
      * Creates a new input controller.
      *
@@ -100,6 +102,9 @@ public:
      * @return true if the initialization was successful
      */
     bool init(float leftmostX, float screenWidth);
+
+    /** TESTING ONLY: reads keyboard on PC*/
+    void readInput();
     
     
     /**

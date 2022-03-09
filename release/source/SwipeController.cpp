@@ -45,6 +45,7 @@ void SwipeController::dispose() {
  * Updates the input controller and the current swipes.
  */
 void SwipeController::update() {
+#ifdef CU_TOUCH_SCREEN
     _input.update();
     
     // If left finger lifted, process left swipe
@@ -64,6 +65,31 @@ void SwipeController::update() {
     else {
         setRightSwipe(none);
     }
+#else
+    _input.readInput();
+    switch (_input._leftCode) {
+    case 0: setLeftSwipe(none);
+        break;
+    case 1: setLeftSwipe(up);
+        break;
+    case 2: setLeftSwipe(left);
+        break;
+    case 3: setLeftSwipe(down);
+        break;
+    case 4: setLeftSwipe(right);
+    }
+    switch (_input._rightCode) {
+    case 0: setRightSwipe(none);
+        break;
+    case 1: setRightSwipe(up);
+        break;
+    case 2: setRightSwipe(left);
+        break;
+    case 3: setRightSwipe(down);
+        break;
+    case 4: setRightSwipe(right);
+    }
+#endif
 
 }
 
