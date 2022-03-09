@@ -106,6 +106,11 @@ void BaseEnemyModel::dispose() {
 	_sensorNode = nullptr;
 }
 
+/** Sets the vertical movement of the enemy*/
+void BaseEnemyModel::setVX(float value) {
+	_body->SetLinearVelocity(b2Vec2(value, _body->GetLinearVelocity().y));
+}
+
 /** Applies the force to the body of this enemy */
 
 void BaseEnemyModel::applyForce() {

@@ -33,6 +33,7 @@
 #include <box2d/b2_contact.h>
 #include "BaseEnemyModel.h"
 #include "AttackController.hpp"
+#include "AIController.hpp"
 #include "PlayerModel.h"
 
 // Add support for simple random number generation
@@ -151,6 +152,8 @@ void LiminalSpirit::onStartup()
     
     _attacks.init(_scale, offset);
 
+    _ai = AIController();
+
     buildScene();
 }
 
@@ -175,6 +178,8 @@ void LiminalSpirit::onShutdown()
     _world = nullptr;
     _worldnode = nullptr;
     _enemy = nullptr;
+
+    _ai.dispose();
 
     _tiltInput.dispose();
     // Deativate input
@@ -215,6 +220,12 @@ void LiminalSpirit::update(float timestep)
     if (image != nullptr) {
         image->flipHorizontal(_player->isFacingRight());
     }
+
+    // Enemy AI logic
+    // For each enemy
+    // TODO: create a set of enemy to go through
+    float direction = _ai.getMovement(_enemy, _player->getPosition());
+    _enemy->setVX(direction);
     
     _world->update(timestep);
     _swipes.update();
@@ -228,10 +239,6 @@ void LiminalSpirit::update(float timestep)
     }
     //_player->setGrounded(true);
     _player->applyForce();
-    
-
-
- 
    
 }
 
@@ -347,15 +354,15 @@ void LiminalSpirit::buildScene()
     button->setAnchor(Vec2::ANCHOR_CENTER);
     button->setPosition(size.width - (bsize.width + rOffset) / 2, (bsize.height + bOffset) / 2);
 
-    //Vec2 enemyPos = ENEMY_POS;
-    //std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
-    //std::shared_ptr<Texture> image = _assets->get<Texture>(ENEMY_TEXTURE);
-    //_enemy = BaseEnemyModel::alloc(enemyPos, image->getSize() / _scale / 5, _scale);
-    //std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
-    //_enemy->setSceneNode(sprite);
-    //_enemy->setDebugColor(Color4::RED);
-    //sprite->setScale(0.2f);
-    //addObstacle(_enemy, sprite, true);
+    Vec2 enemyPos = ENEMY_POS;
+    std::shared_ptr<scene2::SceneNode> enemyNode = scene2::SceneNode::alloc();
+    std::shared_ptr<Texture> enemyImage = _assets->get<Texture>(ENEMY_TEXTURE);
+    _enemy = BaseEnemyModel::alloc(enemyPos, enemyImage->getSize() / _scale / 5, _scale);
+    std::shared_ptr<scene2::PolygonNode> enemySprite = scene2::PolygonNode::allocWithTexture(enemyImage);
+    _enemy->setSceneNode(enemySprite);
+    _enemy->setDebugColor(Color4::RED);
+    enemySprite->setScale(0.2f);
+    addObstacle(_enemy, enemySprite, true);
 
     Vec2 playerPos = PLAYER_POS;
     std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();

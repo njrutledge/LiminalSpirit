@@ -10,6 +10,7 @@
     <ClCompile Include="..\..\source\PlayerModel.cpp" />
     <ClCompile Include="..\..\source\CollisionController.cpp" />
     <ClCompile Include="..\..\source\MovementInput.cpp" />
+    <ClCompile Include="..\..\source\AIController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\AttackController.hpp" />
@@ -24,6 +25,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="..\..\source\CollisionController.hpp" />
     <ClInclude Include="..\..\source\MovementInput.hpp" />
+    <ClInclude Include="..\..\source\AIController.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LiminalSpirit.rc" />

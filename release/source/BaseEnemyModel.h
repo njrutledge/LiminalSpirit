@@ -129,6 +129,9 @@ public:
 	/**Creates and adds the physics body(s) to the world */
 	void createFixtures() override;
 
+	/** Sets the vertical velocity of the enemy */
+	void setVX(float value);
+
 	/** Releases the fixtures of this body(s) from the world */
 	void releaseFixtures() override;
 	/** Updates the object's physics state (not game logic) */

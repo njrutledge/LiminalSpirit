@@ -33,6 +33,7 @@
 #include "BaseEnemyModel.h"
 #include "PlayerModel.h"
 #include "AttackController.hpp"
+#include "AIController.hpp"
 #include "InputController.hpp"
 #include "MovementInput.hpp"
 /**
@@ -63,6 +64,8 @@ protected:
     AttackController _attacks;
     
     SwipeController _swipes;
+
+    AIController _ai;
     
     /** tilt controller */
     MovementInput _tiltInput;
