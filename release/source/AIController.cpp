@@ -16,6 +16,11 @@ AIController::AIController() {
 
 float AIController::getMovement(shared_ptr<BaseEnemyModel> e, Vec2 player_pos) {
 	// Basic for testing purposes
+	//TODO: - check if grounded -> don't move if falling (unless flying enemy)
+	// - set states for the enemy -> more interesting ai
+	// - Stop while attacking -> determine when in range to attack
+	// - Create enemy files with more info on move speed, etc.
+
 	if (player_pos.x > e->getPosition().x) {
 		return 1.0f;
 	}
