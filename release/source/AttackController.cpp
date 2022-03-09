@@ -8,7 +8,7 @@
 
 #include "AttackController.hpp"
 
-AttackController::Attack::Attack(const cugl::Vec2 p,float a, float dmg, float scale, Side s, cugl::Vec2 oof, cugl::PolyFactory b) {
+bool AttackController::Attack::init(const cugl::Vec2 p,float a, float dmg, float scale, Side s, cugl::Vec2 oof, cugl::PolyFactory b) {
     
     position = (p + oof);
     radius = 2;
@@ -18,7 +18,45 @@ AttackController::Attack::Attack(const cugl::Vec2 p,float a, float dmg, float sc
     _scale = scale;
     offset = oof;
     active = true;
-    ball = b.makeCircle(cugl::Vec2::ZERO, radius);
+    ball = b.makeCircle(cugl::Vec2::ZERO, radius); 
+    if (CapsuleObstacle::init(position)) {
+        return true;
+    }
+    return false;
+}
+
+void AttackController::Attack::createFixtures() {
+    if (_body == nullptr) {
+        return;
+    }
+    CapsuleObstacle::createFixtures();
+    b2FixtureDef sensorDef;
+    sensorDef.density = 0;
+    sensorDef.isSensor = true;
+    b2PolygonShape sensorShape;
+
+    const cugl::Vec2* cuglVerts = ball.getVertices().data();
+    std::vector<b2Vec2>* verts;
+    //Following is a temporary copy fix, hopefully will find a better solution.
+    for (int i = 0; i < cuglVerts->length(); i++) {
+        verts->push_back(b2Vec2(cuglVerts[i].x, cuglVerts[i].y));
+    }
+    //const cugl::Vec2* cuglVerts = ball.getVertices().data()-> operator b2Vec2;
+    sensorShape.Set(verts->data(), verts->data()->Length());
+    sensorDef.shape = &sensorShape;
+    sensorDef.userData.pointer = reinterpret_cast<uintptr_t>(getSensorName());
+    _sensorFixture = _body->CreateFixture(&sensorDef);
+}
+
+void AttackController::Attack::releaseFixtures() {
+    if (_body != nullptr) {
+        return;
+    }
+    CapsuleObstacle::releaseFixtures();
+    if (_sensorFixture != nullptr) {
+        _body->DestroyFixture(_sensorFixture);
+        _sensorFixture = nullptr;
+    }
 }
 
 
@@ -69,20 +107,20 @@ void AttackController::attackLeft(cugl::Vec2 p, SwipeController::Swipe direction
     
     switch (direction) {
         case SwipeController::Swipe::left:
-            _pending.emplace(std::make_shared<Attack>(p, 3, 9001, _scale, Side::left, leftOff, ballMakyr));
+            _pending.emplace(Attack::alloc(p, 3, 9001, _scale, Side::left, leftOff, ballMakyr));
             break;
         case SwipeController::Swipe::right:
-            _pending.emplace(std::make_shared<Attack>(p, 3, 9001, _scale, Side::left, rightOff, ballMakyr));
+            _pending.emplace(Attack::alloc(p, 3, 9001, _scale, Side::left, rightOff, ballMakyr));
             break;
         case SwipeController::up:
-            _pending.emplace(std::make_shared<Attack>(p, 5, 9001, _scale, Side::left, upOff, ballMakyr));
+            _pending.emplace(Attack::alloc(p, 5, 9001, _scale, Side::left, upOff, ballMakyr));
             break;
         case SwipeController::down:
             if(!grounded){
-            _pending.emplace(std::make_shared<Attack>(p, 5, 9001, _scale, Side::left, downOff, ballMakyr));
+            _pending.emplace(Attack::alloc(p, 5, 9001, _scale, Side::left, downOff, ballMakyr));
             } else{
-                _pending.emplace(std::make_shared<Attack>(p, 3, 9001, _scale, Side::left, leftOff, ballMakyr));
-                _pending.emplace(std::make_shared<Attack>(p, 3, 9001, _scale, Side::left, rightOff, ballMakyr));
+                _pending.emplace(Attack::alloc(p, 3, 9001, _scale, Side::left, leftOff, ballMakyr));
+                _pending.emplace(Attack::alloc(p, 3, 9001, _scale, Side::left, rightOff, ballMakyr));
             }
             break;
         case SwipeController::none:
@@ -93,20 +131,20 @@ void AttackController::attackLeft(cugl::Vec2 p, SwipeController::Swipe direction
 void AttackController::attackRight(cugl::Vec2 p, SwipeController::Swipe direction, bool grounded) {
     switch (direction) {
         case SwipeController::Swipe::left:
-            _pending.emplace(std::make_shared<Attack>(p, 3, 9001, _scale, Side::right, leftOff, ballMakyr));
+            _pending.emplace(Attack::alloc(p, 3, 9001, _scale, Side::right, leftOff, ballMakyr));
             break;
         case SwipeController::Swipe::right:
-            _pending.emplace(std::make_shared<Attack>(p, 3, 9001, _scale, Side::right, rightOff, ballMakyr));
+            _pending.emplace(Attack::alloc(p, 3, 9001, _scale, Side::right, rightOff, ballMakyr));
             break;
         case SwipeController::up:
-            _pending.emplace(std::make_shared<Attack>(p, 5, 9001, _scale, Side::right, upOff, ballMakyr));
+            _pending.emplace(Attack::alloc(p, 5, 9001, _scale, Side::right, upOff, ballMakyr));
             break;
         case SwipeController::down:
             if(!grounded){
-            _pending.emplace(std::make_shared<Attack>(p, 5, 9001, _scale, Side::right, downOff, ballMakyr));
+            _pending.emplace(Attack::alloc(p, 5, 9001, _scale, Side::right, downOff, ballMakyr));
             } else{
-                _pending.emplace(std::make_shared<Attack>(p, 3, 9001, _scale, Side::right, leftOff, ballMakyr));
-                _pending.emplace(std::make_shared<Attack>(p, 3, 9001, _scale, Side::right, rightOff, ballMakyr));
+                _pending.emplace(Attack::alloc(p, 3, 9001, _scale, Side::right, leftOff, ballMakyr));
+                _pending.emplace(Attack::alloc(p, 3, 9001, _scale, Side::right, rightOff, ballMakyr));
             }
             break;
         case SwipeController::none:

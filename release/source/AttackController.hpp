@@ -9,6 +9,10 @@
 #ifndef AttackController_h
 #define AttackController_h
 
+#define SENSOR_NAME "attacksensor"
+
+
+
 #include <cugl/cugl.h>
 #include <unordered_set>
 #include "SwipeController.hpp"
@@ -22,7 +26,7 @@ class AttackController {
     
 public:
     
-    class Attack {
+    class Attack : public cugl::physics2::CapsuleObstacle{
         
         //The position of the player
         cugl::Vec2 position;
@@ -49,6 +53,11 @@ public:
         Side side;
         
         cugl::Poly2 ball;
+
+        /**Attack sensor */
+        b2Fixture* _sensorFixture;
+        /** Name of sensor */
+        std::string _sensorName;
         
         
     public:
@@ -60,7 +69,8 @@ public:
          * @param dmg     The amount of damage the hitbox does
          * @param scale The drawing scale size of the hitbox
          */
-        Attack(const cugl::Vec2 p, float a, float dmg, float scale, Side s, cugl::Vec2 oof, cugl::PolyFactory b);
+        Attack() : CapsuleObstacle(), _sensorName(SENSOR_NAME) { }
+        bool init(const cugl::Vec2 p, float a, float dmg, float scale, Side s, cugl::Vec2 oof, cugl::PolyFactory b);
         
         
         /**
@@ -79,6 +89,22 @@ public:
         cugl::Vec2 getPosition() { return position + offset; }
         int getDamage() { return damage; }
         Side getSide(){return side;}
+
+        std::string* getSensorName() { return &_sensorName; }
+
+#pragma mark - 
+#pragma mark Physics Methods
+        /**Creates and adds the physics body(s) to the world */
+        void createFixtures() override;
+
+        /** Releases the fixtures of this body(s) from the world */
+        void releaseFixtures() override;
+#pragma mark -
+#pragma mark Static Constructors
+        static std::shared_ptr<Attack> alloc(const cugl::Vec2 p, float a, float dmg, float scale, Side s, cugl::Vec2 oof, cugl::PolyFactory b) {
+            std::shared_ptr<Attack> result = std::make_shared<Attack>();
+            return (result->init(p, a, dmg, scale, s, oof, b) ? result : nullptr);
+        }
     };
     
     std::unordered_set<std::shared_ptr<Attack>> _pending;

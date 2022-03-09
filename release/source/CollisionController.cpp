@@ -12,16 +12,13 @@ bool CollisionController::resolveCollision(AttackController& ac, BaseEnemyModel&
 		float distance = norm.length();
 		float impactDistance = attack->getRadius() + enemy.getRadius();
 		if (distance < impactDistance) {
+			collision = true;
 			enemy.setHealth(enemy.getHealth() - attack->getDamage());
 			if (enemy.getHealth() <= 0) {
 				enemy.markRemoved(true);
 			}
 		}
-
-
-		
-		
 		++it;
 	}
-	return false;
+	return collision;
 }
