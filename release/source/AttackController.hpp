@@ -125,12 +125,12 @@ public:
     /**
      *  Creates an attack for a right sided swipe.
      */
-    void attackRight(cugl::Vec2 p, SwipeController::Swipe direction, bool grounded);
+    void attackRight(cugl::Vec2 p, SwipeController::SwipeAttack attack, bool grounded);
     
     /**
      *  Creates an attack for a left sided swipe.
      */
-    void attackLeft(cugl::Vec2 p, SwipeController::Swipe direction, bool grounded);
+    void attackLeft(cugl::Vec2 p, SwipeController::SwipeAttack attack, bool grounded);
     
     void draw(const std::shared_ptr<cugl::SpriteBatch>& batch);
     

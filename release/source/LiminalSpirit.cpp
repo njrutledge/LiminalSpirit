@@ -221,7 +221,7 @@ void LiminalSpirit::update(float timestep)
     _attacks.attackLeft(_player->getPosition(), _swipes.getLeftSwipe(), _player->isGrounded());
     _attacks.attackRight(_player->getPosition(), _swipes.getRightSwipe(),_player->isGrounded());
     _attacks.update(_player->getPosition());
-    if(_swipes.getLeftSwipe() == _swipes.up || _swipes.getRightSwipe() == _swipes.up){
+    if(_swipes.getLeftSwipe() == _swipes.upAttack || _swipes.getRightSwipe() == _swipes.upAttack){
         _player->setJumping(true);
     } else {
         _player->setJumping(false);

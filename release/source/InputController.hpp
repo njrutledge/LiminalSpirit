@@ -54,9 +54,9 @@ protected:
     cugl::Vec2 _rightStartPos;
     /** Right finger position at end of swipe */
     cugl::Vec2 _rightEndPos;
-    /** Whether the current finger is down */
+    /** Whether the right finger is down */
     bool _rightFingerDown;
-    
+
     // Left finger variables
     /** Left finger ID */
     cugl::TouchID _leftFingerID;
@@ -66,6 +66,8 @@ protected:
     cugl::Vec2 _leftEndPos;
     /** Whether the left finger is down */
     bool _leftFingerDown;
+    /** Time that the left finger went down*/
+    cugl::Timestamp _leftStartTime;
 
     
 
@@ -155,6 +157,15 @@ public:
     }
     
     /**
+     * Returns whether the left finger is down
+     *
+     * @return whether the left finger is down
+     */
+    const bool isLeftDown() const {
+        return _leftFingerDown;
+    }
+    
+    /**
      * Returns the position the right swipe started at
      *
      * @return the right swipe start position
@@ -172,6 +183,15 @@ public:
         return _rightEndPos;
     }
     
+    /**
+     * Returns the time the left swipe started at
+     *
+     * @return the left swipe start time
+     */
+    const cugl::Timestamp getLeftStartTime() const {
+        return _leftStartTime;
+    }
+
     /**
      * Return true if the user initiated a press this frame.
      *
