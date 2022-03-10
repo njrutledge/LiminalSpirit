@@ -198,7 +198,6 @@
     <ClInclude Include="..\..\source\MovementInput.hpp" />
     <ClInclude Include="..\..\source\SwipeController.hpp" />
     <ClInclude Include="resource.hpp" />
-    <ClInclude Include="..\..\source\LiminalSpiritApp.h" />
     <ClInclude Include="..\..\source\PlayerModel.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
