@@ -13,7 +13,7 @@ using namespace cugl;
 #pragma mark Input Factors
 
 /** Historical choice from Marmalade */
-#define KEYBOARD_FORCE_INCREMENT    1.0f
+#define KEYBOARD_FORCE_INCREMENT    5.0f
 /** Adjustment factor for accelerometer input (found experimentally) */
 #define ACCELEROM_X_FACTOR          30.0f
 
@@ -82,19 +82,14 @@ void MovementInput::update(float dt, float xpos, float width, float characterWid
     // Forces increase the longer you hold a key.
     if (keys->keyDown(KeyCode::ARROW_LEFT)) {
         if (true|| _xpos - KEYBOARD_FORCE_INCREMENT >= characterWidth / 2) {
-            _xpos -= KEYBOARD_FORCE_INCREMENT;
-            CULog("X CHANGED LEFT");
+            _xpos = -KEYBOARD_FORCE_INCREMENT;
         }
-        CULog("left pressed");
     } else if (keys->keyDown(KeyCode::ARROW_RIGHT)) {
         if (true|| _xpos+KEYBOARD_FORCE_INCREMENT <= width-characterWidth/2) {
-            _xpos += KEYBOARD_FORCE_INCREMENT;
-            CULog("X CHANGED RIGHT");
+            _xpos = KEYBOARD_FORCE_INCREMENT;
         }
         
-        CULog("right pressed");
     }
-    CULog("x:%f", _xpos);
 #else
     // MOBILE CONTROLS
     Vec3 acc = Input::get<Accelerometer>()->getAcceleration();

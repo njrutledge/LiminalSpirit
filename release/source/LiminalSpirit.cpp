@@ -32,6 +32,7 @@
 #include <cugl/base/CUBase.h>
 #include <box2d/b2_contact.h>
 #include "BaseEnemyModel.h"
+#include "Lost.hpp"
 #include "AttackController.hpp"
 #include "AIController.hpp"
 #include "PlayerModel.h"
@@ -58,10 +59,10 @@ using namespace cugl;
 
 
 /** The initial position of the dude */
-float ENEMY_POS[] = {16.0f, 12.0f};
+float ENEMY_POS[] = {20.0f, 12.0f};
 
 /** The initial position of the player*/
-float PLAYER_POS[] = { 16.0f, 4.0f };
+float PLAYER_POS[] = { 10.0f, 4.0f };
 
 
 /**
@@ -357,7 +358,7 @@ void LiminalSpirit::buildScene()
     Vec2 enemyPos = ENEMY_POS;
     std::shared_ptr<scene2::SceneNode> enemyNode = scene2::SceneNode::alloc();
     std::shared_ptr<Texture> enemyImage = _assets->get<Texture>(ENEMY_TEXTURE);
-    _enemy = BaseEnemyModel::alloc(enemyPos, enemyImage->getSize() / _scale / 5, _scale);
+    _enemy = Lost::alloc(enemyPos, enemyImage->getSize() / _scale / 5, _scale);
     std::shared_ptr<scene2::PolygonNode> enemySprite = scene2::PolygonNode::allocWithTexture(enemyImage);
     _enemy->setSceneNode(enemySprite);
     _enemy->setDebugColor(Color4::RED);

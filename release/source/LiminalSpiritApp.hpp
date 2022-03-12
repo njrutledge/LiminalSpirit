@@ -31,6 +31,7 @@
 #define __LIMINALSPIRIT_APP_H__
 #include <cugl/cugl.h>
 #include "BaseEnemyModel.h"
+#include "Lost.hpp"
 #include "PlayerModel.h"
 #include "AttackController.hpp"
 #include "AIController.hpp"
@@ -71,7 +72,7 @@ protected:
     MovementInput _tiltInput;
 
     /**Base Enemy (NEED TO MAKE LIST) */
-    std::shared_ptr<BaseEnemyModel> _enemy;
+    std::shared_ptr<Lost> _enemy;
 
     /** Player character */
     std::shared_ptr<PlayerModel> _player;

@@ -11,6 +11,7 @@
 
 #include <cugl/cugl.h>
 #include "BaseEnemyModel.h"
+#include "Lost.hpp"
 
 class AIController {
 	enum States {
@@ -22,8 +23,8 @@ public:
 	/** Creates a basic empty AI Controller*/
 	AIController();
 
-	/** Takes in an enemy and returns its movement based on the pathfinding towards the player's position */
-	float getMovement(shared_ptr<BaseEnemyModel> e, cugl::Vec2 player_pos);
+	/** Takes in a lost enemy and returns its movement based on the pathfinding towards the player's position */
+	float getMovement(shared_ptr<Lost> lost, cugl::Vec2 player_pos);
 
 	/** Remove any unwanted assets and clean up */
 	void dispose() {};
