@@ -167,7 +167,8 @@ void LiminalSpirit::onStartup()
 
     setDebug(true);
     buildScene();
-    _attacks.init(_scale / 2.0f, offset, _player);
+    _pMeleeTexture = _assets->get<Texture>(PATTACK_TEXTURE);
+    _attacks.init(_pMeleeTexture->getSize()/_scale/2.0f, _scale / 2.0f, offset, _player);
 
 
 }
@@ -256,10 +257,10 @@ void LiminalSpirit::update(float timestep)
     _attacks.attackRight(_swipes.getRightSwipe(),_player->isGrounded());
     for (auto it = _attacks._pending.begin(); it != _attacks._pending.end(); ++it) {
         //FIX WHEN TEXTURE EXISTS
-        std::shared_ptr<Texture> enemyImage = _assets->get<Texture>(ENEMY_TEXTURE);
-        std::shared_ptr<scene2::PolygonNode> enemySprite = scene2::PolygonNode::allocWithTexture(enemyImage);
+        std::shared_ptr<scene2::PolygonNode> attackSprite = scene2::PolygonNode::allocWithTexture(_pMeleeTexture);
+        attackSprite->setScale(.5f);
 
-        addObstacle((*it), enemySprite, true);
+        addObstacle((*it), attackSprite, true);
     }
     _attacks.update(_player->getPosition(), _player->getBody()->GetLinearVelocity());
     if(_swipes.getLeftSwipe() == _swipes.up || _swipes.getRightSwipe() == _swipes.up){
@@ -270,6 +271,7 @@ void LiminalSpirit::update(float timestep)
     //_player->setGrounded(true);
     _player->applyForce();
 
+    //Remove attacks
     auto ait = _attacks._current.begin();
     while(ait != _attacks._current.end()) {
         if ((*ait)->isRemoved()) {
@@ -285,6 +287,8 @@ void LiminalSpirit::update(float timestep)
             ait++;
         }
     }
+
+    //remove enemies
     auto eit = _enemies.begin();
     while (eit != _enemies.end()) {
         if ((*eit)->isRemoved()) {
@@ -300,8 +304,8 @@ void LiminalSpirit::update(float timestep)
             eit++;
         }
     }
-    CULog("Attacks size: %d", _attacks._current.size());
-    CULog("World Size: %d", _world->getObstacles().size());
+    //CULog("Attacks size: %d", _attacks._current.size());
+    //CULog("World Size: %d", _world->getObstacles().size());
    
 }
 
@@ -322,7 +326,7 @@ void LiminalSpirit::draw()
     _scene->render(_batch);
     
     _batch->begin(_scene->getCamera()->getCombined());
-    //_attacks.draw(_batch);
+    _attacks.draw(_batch);
     _batch->end();
 }
 

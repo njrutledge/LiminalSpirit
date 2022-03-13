@@ -67,7 +67,9 @@ protected:
     float _scale;
     
     AttackController _attacks;
-    
+    /** reference to the player Attack Texture*/
+    std::shared_ptr<cugl::Texture> _pMeleeTexture;
+        
     SwipeController _swipes;
 
     AIController _ai;

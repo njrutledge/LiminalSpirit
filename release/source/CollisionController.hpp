@@ -22,6 +22,9 @@ public:
 private:
 	/** handle collision between enemy and an obstacle */
 	void handleEnemyCollision(BaseEnemyModel* enemy, cugl::physics2::Obstacle* bd, string* fd);
+
+	/**handle collision between player and an obstacle */
+	void handlePlayerCollision(PlayerModel* player, cugl::physics2::Obstacle* bd, std::string* fd);
 };
 
 #endif /* __LS_COLLISION_CONTROLLER_H__ */

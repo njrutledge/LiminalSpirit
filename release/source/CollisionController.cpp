@@ -28,23 +28,36 @@ void CollisionController::beginContact(b2Contact* contact, std::shared_ptr<Playe
 
 
 	// See if we have landed on the ground.
+	//THIS NEED TO BE CHANGED
 	if ((player->getSensorName() == fd2 && player.get() != bd1) ||
 		(player->getSensorName() == fd1 && player.get() != bd2)) {
 		player->setGrounded(true);
 	}
-	
+	//handle enemy collision
 	if (BaseEnemyModel* enemy = dynamic_cast<BaseEnemyModel*>(bd1)) {
 		handleEnemyCollision(enemy, bd2, fd2);
 	}
 	else if (BaseEnemyModel* enemy = dynamic_cast<BaseEnemyModel*>(bd2)) {
 		handleEnemyCollision(enemy, bd1, fd1);
 	}
+
+	//handlePlayerCollision
+	if (PlayerModel* player = dynamic_cast<PlayerModel*>(bd1)) {
+		handlePlayerCollision(player, bd2, fd2);
+	}
+	else if (PlayerModel* player = dynamic_cast<PlayerModel*>(bd1)) {
+		handlePlayerCollision(player, bd1, fd1);
+
+	}
 }
 
 
-
+/** 
+* helper method for handling beginning of enemy collision
+*/
 void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::Obstacle* bd, std::string* fd) {
 	if (AttackController::Attack* attack = dynamic_cast<AttackController::Attack*>(bd)) {
+		//TODO: Make "playerattacksensor" a constant somewhere
 		if (*(attack->getSensorName()) == "playerattacksensor") {
 			enemy->setHealth(enemy->getHealth() - attack->getDamage());
 			if (enemy->getHealth() <= 0) {
@@ -53,6 +66,22 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
 		}
 	}
 }
+
+/**
+* helper method for handling beginning of player collision
+*/
+void CollisionController::handlePlayerCollision(PlayerModel* player, physics2::Obstacle* bd, std::string* fd) {
+	if (AttackController::Attack* attack = dynamic_cast<AttackController::Attack*>(bd)) {
+		//TODO: Make "enemyattacksensor" a constant somewhere
+		if (*(attack->getSensorName()) == "enemyattacksensor") {
+			player->setHealth(player->getHealth() - attack->getDamage());
+			if (player->getHealth() <= 0) {
+				player->markRemoved(true);
+			}
+		}
+	}
+}
+
 /**
  * Callback method for the end of a collision
  *
@@ -73,6 +102,7 @@ void CollisionController::endContact(b2Contact* contact, std::shared_ptr<PlayerM
 	physics2::Obstacle* bd2 = reinterpret_cast<physics2::Obstacle*>(body2->GetUserData().pointer);
 
 	// See if we have left the ground
+	//THIS NEEDS TO BE CHANGED
 	if ((player->getSensorName() == fd2 && player.get() != bd1) ||
 		(player->getSensorName() == fd1 && player.get() != bd2)) {
 		player->setGrounded(false);
