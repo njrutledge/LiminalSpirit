@@ -14,16 +14,18 @@ AIController::AIController() {
 	// Add initialization variables if needed
 }
 
-float AIController::getMovement(shared_ptr<BaseEnemyModel> e, Vec2 player_pos) {
-	if (e->getName() == "Lost") {
-		return getLostMovement(e, player_pos);
+Vec2 AIController::getMovement(shared_ptr<BaseEnemyModel> e, Vec2 player_pos) {
+	std::string name = e->getName();
+	if (name == "Lost") {
+		return Vec2(getLostMovement(e, player_pos), 0.0f);
+	} else if (name == "Specter") {
+		return getSpecterMovement(e, player_pos);
 	}
 	else {
-		return 0.0f;
+		return Vec2();
 	}
 }
 
-// Gets movement for the Lost enemy based on the player position
 float AIController::getLostMovement(shared_ptr<BaseEnemyModel> lost, Vec2 player_pos) {
 	//TODO: - check if grounded -> don't move if falling (unless flying enemy)
 	// - set states for the enemy -> more interesting ai
@@ -55,5 +57,38 @@ float AIController::getLostMovement(shared_ptr<BaseEnemyModel> lost, Vec2 player
 			lost->setFramesPast(lost->getFramesPast() + 1);
 		}
 		return 0; 
+	}
+}
+
+Vec2 AIController::getSpecterMovement(shared_ptr<BaseEnemyModel> specter, Vec2 player_pos) {
+	//TODO: Add vertical movement
+	// Use line of sight to determine ranged attacks
+
+	//Check if enemy is already attacking
+	if (!specter->isAttacking()) {
+		if (player_pos.x <= specter->getPosition().x + specter->getAttackRadius()
+			&& player_pos.x >= specter->getPosition().x - specter->getAttackRadius()
+			&& player_pos.y <= specter->getPosition().y + specter->getAttackRadius()
+			&& player_pos.y >= specter->getPosition().y - specter->getAttackRadius()) {
+			specter->setIsAttacking(true);
+			return Vec2(); // lost stops moving
+		}
+		else if (player_pos.x > specter->getPosition().x) {
+			return Vec2(specter->getHorizontalSpeed(), 0);
+		}
+		else {
+			return Vec2(- 1 * specter->getHorizontalSpeed(), 0);
+		}
+	}
+	else {
+		// Check if attack timer should be reset
+		if (specter->getAttackCooldown() < specter->getFramesPast()) {
+			specter->setIsAttacking(false);
+			specter->setFramesPast(0);
+		}
+		else {
+			specter->setFramesPast(specter->getFramesPast() + 1);
+		}
+		return Vec2();
 	}
 }

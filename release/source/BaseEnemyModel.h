@@ -29,6 +29,7 @@ struct EnemyProperties {
 	float hspeed;
 	int attackCooldown;
 	float attackRadius;
+	float density;
 	std::string name;
 };
 
@@ -64,6 +65,9 @@ protected:
 
 	/** The attack radius for the enemy*/
 	float _attackRadius; 
+
+	/** The density of the enemy*/
+	float _density;
 
 	/** Enemy name*/
 	std::string _enemyName;
@@ -110,7 +114,7 @@ public:
 	/** Allocates a new enemy, using placeholder values, DO NOT MAKE IN-GAME ENEMIES USING THIS MODEL */
 	static std::shared_ptr<BaseEnemyModel> alloc(const cugl::Vec2& pos, const cugl::Size& size, float scale) {
 		std::shared_ptr<BaseEnemyModel> result = std::make_shared<BaseEnemyModel>();
-		return (result->init(pos, size, scale, { 10, 1.0f, 1.0f, 600, 1, "base" }) ? result : nullptr);
+		return (result->init(pos, size, scale, { 10, 1.0f, 1.0f, 600, 1, 1.0f, "base" }) ? result : nullptr);
 	}
 
 #pragma mark -
