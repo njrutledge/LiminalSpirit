@@ -35,6 +35,7 @@
 #include "AttackController.hpp"
 #include "AIController.hpp"
 #include "PlayerModel.h"
+#include "CollisionController.hpp"
 
 // Add support for simple random number generation
 #include <cstdlib>
@@ -132,10 +133,10 @@ void LiminalSpirit::onStartup()
     _world = physics2::ObstacleWorld::alloc(Rect(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT), Vec2(0, -GRAVITY));
     _world->activateCollisionCallbacks(true);
         _world->onBeginContact = [this](b2Contact* contact) {
-          beginContact(contact);
+          _collider.beginContact(contact, _player);
         };
         _world->onEndContact = [this](b2Contact* contact) {
-          endContact(contact);
+          _collider.endContact(contact, _player);
         };
     
     _scale = dimen.width == SCENE_WIDTH ? dimen.width / DEFAULT_WIDTH : dimen.height / DEFAULT_HEIGHT;
@@ -150,11 +151,15 @@ void LiminalSpirit::onStartup()
 
     _swipes.init(0, getDisplayWidth());
     
-    _attacks.init(_scale, offset);
 
     _ai = AIController();
 
+    _collider = CollisionController();
+
     buildScene();
+    _attacks.init(_scale / 2.0f, offset, _player);
+
+
 }
 
 /**
@@ -177,7 +182,12 @@ void LiminalSpirit::onShutdown()
     _assets = nullptr;
     _world = nullptr;
     _worldnode = nullptr;
-    _enemy = nullptr;
+
+    //TODO: CHECK IF THIS IS RIGHT FOR DISPOSING
+    for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
+        (*it).~shared_ptr();
+    }
+    _enemies.clear();
 
     _ai.dispose();
 
@@ -224,14 +234,23 @@ void LiminalSpirit::update(float timestep)
     // Enemy AI logic
     // For each enemy
     // TODO: create a set of enemy to go through
-    float direction = _ai.getMovement(_enemy, _player->getPosition());
-    _enemy->setVX(direction);
+    for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
+        float direction = _ai.getMovement(*it, _player->getPosition());
+        (*it)->setVX(direction);
+    }
     
     _world->update(timestep);
     _swipes.update();
-    _attacks.attackLeft(_player->getPosition(), _swipes.getLeftSwipe(), _player->isGrounded());
-    _attacks.attackRight(_player->getPosition(), _swipes.getRightSwipe(),_player->isGrounded());
-    _attacks.update(_player->getPosition());
+    _attacks.attackLeft(_swipes.getLeftSwipe(), _player->isGrounded());
+    _attacks.attackRight(_swipes.getRightSwipe(),_player->isGrounded());
+    for (auto it = _attacks._pending.begin(); it != _attacks._pending.end(); ++it) {
+        //FIX WHEN TEXTURE EXISTS
+        std::shared_ptr<Texture> enemyImage = _assets->get<Texture>(ENEMY_TEXTURE);
+        std::shared_ptr<scene2::PolygonNode> enemySprite = scene2::PolygonNode::allocWithTexture(enemyImage);
+
+        addObstacle((*it), enemySprite, true);
+    }
+    _attacks.update(_player->getPosition(), _player->getBody()->GetLinearVelocity());
     if(_swipes.getLeftSwipe() == _swipes.up || _swipes.getRightSwipe() == _swipes.up){
         _player->setJumping(true);
     } else {
@@ -239,8 +258,42 @@ void LiminalSpirit::update(float timestep)
     }
     //_player->setGrounded(true);
     _player->applyForce();
+
+    auto ait = _attacks._current.begin();
+    while(ait != _attacks._current.end()) {
+        if ((*ait)->isRemoved()) {
+            //int log1 = _world->getObstacles().size();
+            cugl::physics2::Obstacle* obj = dynamic_cast<cugl::physics2::Obstacle*>(&**ait);
+            _world->removeObstacle(obj);
+            _worldnode->removeChild(obj->_node);
+
+            //int log2 = _world->getObstacles().size();
+            ait = _attacks._current.erase(ait);
+        }
+        else {
+            ait++;
+        }
+    }
+    auto eit = _enemies.begin();
+    while (eit != _enemies.end()) {
+        if ((*eit)->isRemoved()) {
+            //int log1 = _world->getObstacles().size();
+            cugl::physics2::Obstacle* obj = dynamic_cast<cugl::physics2::Obstacle*>(&**eit);
+            _world->removeObstacle(obj);
+            _worldnode->removeChild(obj->_node);
+
+            //int log2 = _world->getObstacles().size();
+            eit = _enemies.erase(eit);
+        }
+        else {
+            eit++;
+        }
+    }
+    CULog("Attacks size: %d", _attacks._current.size());
+    CULog("World Size: %d", _world->getObstacles().size());
    
 }
+
 
 /**
  * The method called to draw the application to the screen.
@@ -258,7 +311,7 @@ void LiminalSpirit::draw()
     _scene->render(_batch);
     
     _batch->begin(_scene->getCamera()->getCombined());
-    _attacks.draw(_batch);
+    //_attacks.draw(_batch);
     _batch->end();
 }
 
@@ -357,12 +410,13 @@ void LiminalSpirit::buildScene()
     Vec2 enemyPos = ENEMY_POS;
     std::shared_ptr<scene2::SceneNode> enemyNode = scene2::SceneNode::alloc();
     std::shared_ptr<Texture> enemyImage = _assets->get<Texture>(ENEMY_TEXTURE);
-    _enemy = BaseEnemyModel::alloc(enemyPos, enemyImage->getSize() / _scale / 5, _scale);
+    std::shared_ptr<BaseEnemyModel> enemy = BaseEnemyModel::alloc(enemyPos, enemyImage->getSize() / _scale / 5, _scale);
     std::shared_ptr<scene2::PolygonNode> enemySprite = scene2::PolygonNode::allocWithTexture(enemyImage);
-    _enemy->setSceneNode(enemySprite);
-    _enemy->setDebugColor(Color4::RED);
+    enemy->setSceneNode(enemySprite);
+    enemy->setDebugColor(Color4::RED);
     enemySprite->setScale(0.2f);
-    addObstacle(_enemy, enemySprite, true);
+    addObstacle(enemy, enemySprite, true);
+    _enemies.insert(enemy);
 
     Vec2 playerPos = PLAYER_POS;
     std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
@@ -411,6 +465,7 @@ void LiminalSpirit::addObstacle(const std::shared_ptr<cugl::physics2::Obstacle> 
         node->setPosition(obj->getPosition() * _scale);
     }
     _worldnode->addChild(node);
+    obj->setNode(node);
 
     // Dynamic objects need constant updating
     if (obj->getBodyType() == b2_dynamicBody)
@@ -424,58 +479,3 @@ void LiminalSpirit::addObstacle(const std::shared_ptr<cugl::physics2::Obstacle> 
 }
 
 #pragma mark Collision Handling
-/**
- * Processes the start of a collision
- *
- * This method is called when we first get a collision between two objects.  We use
- * this method to test if it is the "right" kind of collision.  In particular, we
- * use it to test if we make it to the win door.
- *
- * @param  contact  The two bodies that collided
- */
-void LiminalSpirit::beginContact(b2Contact* contact) {
-    b2Fixture* fix1 = contact->GetFixtureA();
-    b2Fixture* fix2 = contact->GetFixtureB();
-
-    b2Body* body1 = fix1->GetBody();
-    b2Body* body2 = fix2->GetBody();
-
-    std::string* fd1 = reinterpret_cast<std::string*>(fix1->GetUserData().pointer);
-    std::string* fd2 = reinterpret_cast<std::string*>(fix2->GetUserData().pointer);
-
-    physics2::Obstacle* bd1 = reinterpret_cast<physics2::Obstacle*>(body1->GetUserData().pointer);
-    physics2::Obstacle* bd2 = reinterpret_cast<physics2::Obstacle*>(body2->GetUserData().pointer);
-    
-
-    // See if we have landed on the ground.
-    if ((_player->getSensorName() == fd2 && _player.get() != bd1) ||
-        (_player->getSensorName() == fd1 && _player.get() != bd2)) {
-        _player->setGrounded(true);
-    }
-}
-
-/**
- * Callback method for the start of a collision
- *
- * This method is called when two objects cease to touch.  The main use of this method
- * is to determine when the characer is NOT on the ground.  This is how we prevent
- * double jumping.
- */
-void LiminalSpirit::endContact(b2Contact* contact) {
-    b2Fixture* fix1 = contact->GetFixtureA();
-    b2Fixture* fix2 = contact->GetFixtureB();
-
-    b2Body* body1 = fix1->GetBody();
-    b2Body* body2 = fix2->GetBody();
-
-    std::string* fd1 = reinterpret_cast<std::string*>(fix1->GetUserData().pointer);
-    std::string* fd2 = reinterpret_cast<std::string*>(fix2->GetUserData().pointer);
-
-    physics2::Obstacle* bd1 = reinterpret_cast<physics2::Obstacle*>(body1->GetUserData().pointer);
-    physics2::Obstacle* bd2 = reinterpret_cast<physics2::Obstacle*>(body2->GetUserData().pointer);
-
-    if ((_player->getSensorName() == fd2 && _player.get() != bd1) ||
-        (_player->getSensorName() == fd1 && _player.get() != bd2)) {
-            _player->setGrounded(false);
-    }
-}

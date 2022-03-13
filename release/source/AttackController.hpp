@@ -9,13 +9,14 @@
 #ifndef AttackController_h
 #define AttackController_h
 
-#define SENSOR_NAME "attacksensor"
+#define ATTACK_SENSOR_NAME "attacksensor"
 
 
 
 #include <cugl/cugl.h>
 #include <unordered_set>
 #include "SwipeController.hpp"
+#include "PlayerModel.h"
 
 class AttackController {
     
@@ -69,8 +70,8 @@ public:
          * @param dmg     The amount of damage the hitbox does
          * @param scale The drawing scale size of the hitbox
          */
-        Attack() : CapsuleObstacle(), _sensorName(SENSOR_NAME) { }
-        bool init(const cugl::Vec2 p, float a, float dmg, float scale, Side s, cugl::Vec2 oof, cugl::PolyFactory b);
+        Attack() : CapsuleObstacle(), _sensorName(ATTACK_SENSOR_NAME) { }
+        bool init(const cugl::Vec2 p, float a, float dmg, float scale, Side s, cugl::Vec2 oof, cugl::PolyFactory b, boolean playerAttack);
         
         
         /**
@@ -79,7 +80,7 @@ public:
          * @param p          The position of the player
          * @param follow      Whether to follow the player's movement while active
          */
-        void update(const cugl::Vec2 p, bool follow);
+        void update(const cugl::Vec2 p, b2Vec2 VX, bool follow);
         
         bool isActive() {return active;}
         
@@ -91,6 +92,7 @@ public:
         Side getSide(){return side;}
 
         std::string* getSensorName() { return &_sensorName; }
+        std::string* setSensorName(string s) { _sensorName = s; }
 
 #pragma mark - 
 #pragma mark Physics Methods
@@ -101,9 +103,9 @@ public:
         void releaseFixtures() override;
 #pragma mark -
 #pragma mark Static Constructors
-        static std::shared_ptr<Attack> alloc(const cugl::Vec2 p, float a, float dmg, float scale, Side s, cugl::Vec2 oof, cugl::PolyFactory b) {
+        static std::shared_ptr<Attack> alloc(const cugl::Vec2 p, float a, float dmg, float scale, Side s, cugl::Vec2 oof, cugl::PolyFactory b, boolean playerAttack) {
             std::shared_ptr<Attack> result = std::make_shared<Attack>();
-            return (result->init(p, a, dmg, scale, s, oof, b) ? result : nullptr);
+            return (result->init(p, a, dmg, scale, s, oof, b, playerAttack) ? result : nullptr);
         }
     };
     
@@ -112,6 +114,8 @@ public:
     std::unordered_set<std::shared_ptr<Attack>> _current;
     
     float _scale;
+
+    std::shared_ptr<PlayerModel> _player;
     
     cugl::Vec2 leftOff;
     
@@ -121,7 +125,7 @@ public:
 
     cugl::Vec2 downOff;
     
-    cugl::PolyFactory ballMakyr = cugl::PolyFactory(0.05f);
+    cugl::PolyFactory ballMakyr = cugl::PolyFactory(0.25f);
     
     
     /**
@@ -133,14 +137,15 @@ public:
     /**
      *  Initializes the attack controller. Currently greyed out because we only have basic attack hitboxes. Can use a json to set predetermined attack shapes, designs, and damage if we have more complicated moves and attacks.
      */
-    void init(float scale, cugl::Vec2 oof);
+    void init(float scale, cugl::Vec2 oof, std::shared_ptr<PlayerModel> player);
     
     /**
      *  Update function for attack controller. Updates all attacks and removes inactive attacks from queue.
      *
      *  @param p    The player position
+     *  @param VX   The linear velocity of the player
      */
-    void update(const cugl::Vec2 p);
+    void update(const cugl::Vec2 p, b2Vec2 VX);
     
     
     /**
@@ -151,12 +156,12 @@ public:
     /**
      *  Creates an attack for a right sided swipe.
      */
-    void attackRight(cugl::Vec2 p, SwipeController::Swipe direction, bool grounded);
+    void attackRight(SwipeController::Swipe direction, bool grounded);
     
     /**
      *  Creates an attack for a left sided swipe.
      */
-    void attackLeft(cugl::Vec2 p, SwipeController::Swipe direction, bool grounded);
+    void attackLeft(SwipeController::Swipe direction, bool grounded);
     
     void draw(const std::shared_ptr<cugl::SpriteBatch>& batch);
     

@@ -36,6 +36,7 @@
 #include "AIController.hpp"
 #include "InputController.hpp"
 #include "MovementInput.hpp"
+#include "CollisionController.hpp"
 /**
  * Class for a simple Hello World style application
  *
@@ -69,9 +70,12 @@ protected:
     
     /** tilt controller */
     MovementInput _tiltInput;
+    
+    /**Collision Controller*/
+    CollisionController _collider;
 
-    /**Base Enemy (NEED TO MAKE LIST) */
-    std::shared_ptr<BaseEnemyModel> _enemy;
+    /**Enemies set */
+    std::unordered_set < std::shared_ptr<BaseEnemyModel>> _enemies;
 
     /** Player character */
     std::shared_ptr<PlayerModel> _player;
@@ -162,15 +166,7 @@ public:
                              const std::shared_ptr<cugl::scene2::SceneNode> &node,
                              bool useObjPosition);
     
-    /**
-    * Processes the start of a collision
-    *
-    * This method is called when we first get a collision between two objects.  We use
-    * this method to test if it is the "right" kind of collision.  In particular, we
-    * use it to test if we make it to the win door.  
-    *
-    * @param  contact  The two bodies that collided
-    */
+    
     void beginContact(b2Contact* contact);
 
     /**

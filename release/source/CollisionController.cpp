@@ -1,24 +1,91 @@
 #include "CollisionController.hpp"
-
+#include <box2d/b2_contact.h>
+#include "PlayerModel.h"
+#include "AttackController.hpp"
 using namespace cugl;
-//TEST
-bool CollisionController::resolveCollision(AttackController& ac, BaseEnemyModel& enemy) {
-	bool collision = false;
-	auto it = ac._current.begin();
-	while (it != ac._current.end()) {
-		std::shared_ptr<AttackController::Attack> attack = *it;
 
-		Vec2 norm = attack->getPosition() - Vec2(enemy.getBody()->GetPosition().x, enemy.getBody()->GetPosition().y);
-		float distance = norm.length();
-		float impactDistance = attack->getRadius() + enemy.getRadius();
-		if (distance < impactDistance) {
-			collision = true;
-			enemy.setHealth(enemy.getHealth() - attack->getDamage());
-			if (enemy.getHealth() <= 0) {
-				enemy.markRemoved(true);
+/**
+	* Processes the start of a collision
+	*
+	* This method is called when we first get a collision between two objects.
+	*
+	* @param  contact  The two bodies that collided
+	* @param  player   The player pointer
+	*/
+void CollisionController::beginContact(b2Contact* contact, std::shared_ptr<PlayerModel> player) {
+	//setup
+	b2Fixture* fix1 = contact->GetFixtureA();
+	b2Fixture* fix2 = contact->GetFixtureB();
+
+	b2Body* body1 = fix1->GetBody();
+	b2Body* body2 = fix2->GetBody();
+
+	std::string* fd1 = reinterpret_cast<std::string*>(fix1->GetUserData().pointer);
+	std::string* fd2 = reinterpret_cast<std::string*>(fix2->GetUserData().pointer);
+
+	physics2::Obstacle* bd1 = reinterpret_cast<physics2::Obstacle*>(body1->GetUserData().pointer);
+	physics2::Obstacle* bd2 = reinterpret_cast<physics2::Obstacle*>(body2->GetUserData().pointer);
+
+
+	// See if we have landed on the ground.
+	if ((player->getSensorName() == fd2 && player.get() != bd1) ||
+		(player->getSensorName() == fd1 && player.get() != bd2)) {
+		player->setGrounded(true);
+	}
+	
+	if (BaseEnemyModel* enemy = dynamic_cast<BaseEnemyModel*>(bd1)) {
+		handleEnemyCollision(enemy, bd2, fd2);
+	}
+	else if (BaseEnemyModel* enemy = dynamic_cast<BaseEnemyModel*>(bd2)) {
+		handleEnemyCollision(enemy, bd1, fd1);
+	}
+}
+
+
+
+void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::Obstacle* bd, std::string* fd) {
+	if (AttackController::Attack* attack = dynamic_cast<AttackController::Attack*>(bd)) {
+		if (*(attack->getSensorName()) == "playerattacksensor") {
+			enemy->setHealth(enemy->getHealth() - attack->getDamage());
+			if (enemy->getHealth() <= 0) {
+				enemy->markRemoved(true);
 			}
 		}
-		++it;
 	}
-	return collision;
+}
+/**
+ * Callback method for the end of a collision
+ *
+ * This method is called when two objects cease to touch.
+ */
+void CollisionController::endContact(b2Contact* contact, std::shared_ptr<PlayerModel> player) {
+	//setup
+	b2Fixture* fix1 = contact->GetFixtureA();
+	b2Fixture* fix2 = contact->GetFixtureB();
+
+	b2Body* body1 = fix1->GetBody();
+	b2Body* body2 = fix2->GetBody();
+
+	std::string* fd1 = reinterpret_cast<std::string*>(fix1->GetUserData().pointer);
+	std::string* fd2 = reinterpret_cast<std::string*>(fix2->GetUserData().pointer);
+
+	physics2::Obstacle* bd1 = reinterpret_cast<physics2::Obstacle*>(body1->GetUserData().pointer);
+	physics2::Obstacle* bd2 = reinterpret_cast<physics2::Obstacle*>(body2->GetUserData().pointer);
+
+	// See if we have left the ground
+	if ((player->getSensorName() == fd2 && player.get() != bd1) ||
+		(player->getSensorName() == fd1 && player.get() != bd2)) {
+		player->setGrounded(false);
+	}
+	/* if (*fd1 == "attacksensor") {
+		if (*fd2 == "enemysensor") {
+			CULog("ATTACK end");
+		}
+	}
+	else if (*fd2 == "attacksensor") {
+		if (*fd1 == "enemysensor") {
+			CULog("ATTACK end");
+		}
+	}
+	*/
 }

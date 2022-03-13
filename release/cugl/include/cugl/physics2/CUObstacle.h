@@ -172,6 +172,8 @@ public:
      */
     virtual bool init(const Vec2 vec);
 
+
+
     
 #pragma mark -
 #pragma mark BodyDef Methods
@@ -1047,7 +1049,12 @@ public:
      * @return true if the obstacle has a wireframe for debugging.
      */
     bool hasDebug() { return _scene != nullptr; }
+
+    std::shared_ptr<cugl::scene2::SceneNode> _node;
+    virtual void setNode(std::shared_ptr<cugl::scene2::SceneNode> node) { _node = node; }
+
 };
+
     }
 }
 
