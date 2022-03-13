@@ -11,8 +11,6 @@
 
 /**
  * Creates a new swipe controller.
- *
- * Should call the {@link #init} method to initialize the controller.
  */
 SwipeController::SwipeController() :
 _leftSwipe(noAttack),
@@ -22,40 +20,25 @@ _rightSwipe(noAttack)
 }
 
 /**
- * Initializes the swipe controller by initializing the input controller
- *
- * @param leftmostX      the leftmost X coordinate that is safe for swipes
- * @param screenWidth  the width of the screen
- *
- * @return true if the initialization was successful
- */
-bool SwipeController::init(float leftMostX, float width) {
-    return _input.init(leftMostX, width);
-}
-
-/**
  * Deletes this swipe controller, releasing all resources.
  */
-void SwipeController::dispose() {
-    //Nothing to dispose, input controller has a destructor
+SwipeController::~SwipeController() {
+    //Nothing to release
 }
 
 /**
- * Updates the swipe controller for the latest frame.
- *
- * Updates the input controller and the current swipes.
+ * Updates the swipe controller based on the latest inputs.
  */
-void SwipeController::update() {
-    _input.update();
+void SwipeController::update(InputController& input) {
     
     // If the left finger is pressed down, check if it has been pressed long enough for
     // a charge attack
-    if(_input.isLeftDown()) {
-        calculateChargeAttack();
+    if(input.isLeftDown()) {
+        calculateChargeAttack(input.getLeftStartTime());
     }
     // If left finger lifted, process left swipe
-    else if(_input.didLeftRelease()) {
-        calculateSwipeDirection(_input.getLeftStartPosition(), _input.getLeftEndPosition(), true);
+    else if(input.didLeftRelease()) {
+        calculateSwipeDirection(input.getLeftStartPosition(), input.getLeftEndPosition(), true);
     }
     // Otherwise note that no left swipe was completed this frame
     else {
@@ -63,8 +46,8 @@ void SwipeController::update() {
     }
     
     // If right finger lifted, process right swipe
-    if(_input.didRightRelease()) {
-        calculateSwipeDirection(_input.getRightStartPosition(), _input.getRightEndPosition(), false);
+    if(input.didRightRelease()) {
+        calculateSwipeDirection(input.getRightStartPosition(), input.getRightEndPosition(), false);
     }
     // Otherwise note that no right swipe was completed this frame
     else {
@@ -77,14 +60,14 @@ void SwipeController::update() {
  * Calculates whether a finger has been pressed down long enough for a charge attack
  * and updates the state accordingly
  */
-void SwipeController::calculateChargeAttack() {
+void SwipeController::calculateChargeAttack(cugl::Timestamp leftStartTime) {
     
     // If the attack is already charged, stop calculating the time diff
     if (hasChargedAttack()) return;
     
     _currTime.mark();
 
-    Uint64 chargeTime = cugl::Timestamp::ellapsedMillis(_input.getLeftStartTime(), _currTime);
+    Uint64 chargeTime = cugl::Timestamp::ellapsedMillis(leftStartTime, _currTime);
     
     // This is currently 500 for easier testing, change it back to 1000 when done testing
     if (chargeTime >= 500) { //1000) {
@@ -103,9 +86,6 @@ void SwipeController::calculateChargeAttack() {
  *
  */
 void SwipeController::calculateSwipeDirection(cugl::Vec2 startPos, cugl::Vec2 endPos, bool isLeftSidedSwipe){
-    
-    // Do we have to check that endPos and startPos on the same side of screen for
-    // the swipe to count?
     
     float startx = startPos.x;
     float starty = startPos.y;

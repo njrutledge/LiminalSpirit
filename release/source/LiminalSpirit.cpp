@@ -107,19 +107,11 @@ void LiminalSpirit::onStartup()
     // This reads the given JSON file and uses it to load all other assets
     _assets->loadDirectory("json/assets.json");
 
-    _tiltInput.init();
-    // Activate mouse or touch screen input as appropriate
-    // We have to do this BEFORE the scene, because the scene has a button
-
     // Build the scene from these assets
     Application::onStartup();
 
     // Report the safe area
     Rect bounds = Display::get()->getSafeBounds();
-    CULog("Safe Area %sx%s", bounds.origin.toString().c_str(),
-          bounds.size.toString().c_str());
-
-    bounds = getSafeBounds();
     CULog("Safe Area %sx%s", bounds.origin.toString().c_str(),
           bounds.size.toString().c_str());
 
@@ -147,7 +139,11 @@ void LiminalSpirit::onStartup()
     _worldnode->setPosition(offset);
     _scene->addChild(_worldnode);
 
-    _swipes.init(0, getDisplayWidth());
+    // Only want to get swipes within safe bounds
+    bounds = getSafeBounds();
+    CULog("Safe Area %sx%s", bounds.origin.toString().c_str(),
+          bounds.size.toString().c_str());
+    _input.init(bounds.getMinX(), bounds.size.width);
     
     _attacks.init(_scale, offset);
 
@@ -176,7 +172,6 @@ void LiminalSpirit::onShutdown()
     _worldnode = nullptr;
     _enemy = nullptr;
 
-    _tiltInput.dispose();
     // Deativate input
 #if defined CU_TOUCH_SCREEN
     Input::deactivate<Touchscreen>();
@@ -199,10 +194,12 @@ void LiminalSpirit::onShutdown()
  */
 void LiminalSpirit::update(float timestep)
 {
-
-    // Update tilt input controller
-    _tiltInput.update(timestep, _player->getX(), SCENE_WIDTH, _logo->getSize().width);
-    float xPos = _tiltInput.getXpos();
+    // Update input controller
+    _input.update();
+    
+    // Update tilt controller
+    _tilt.update(_input, SCENE_WIDTH, _logo->getSize().width);
+    float xPos = _tilt.getXpos();
     _player->setVX(xPos);
     
     //FLIPPING LOGIC
@@ -217,7 +214,7 @@ void LiminalSpirit::update(float timestep)
     }
     
     _world->update(timestep);
-    _swipes.update();
+    _swipes.update(_input);
     _attacks.attackLeft(_player->getPosition(), _swipes.getLeftSwipe(), _player->isGrounded());
     _attacks.attackRight(_player->getPosition(), _swipes.getRightSwipe(),_player->isGrounded());
     _attacks.update(_player->getPosition());
@@ -270,11 +267,6 @@ void LiminalSpirit::buildScene()
     
     // The logo is actually an image+label.  We need a parent node
     _logo = scene2::SceneNode::alloc();
-    
-    // Initialize swipe controller
-    // Must use safe bounds for swipe width
-    Rect bounds = getSafeBounds();
-    //_swiper.init(bounds.getMinX(), bounds.size.width);
     
     // Get the image and add it to the node.
     std::shared_ptr<Texture> texture  = _assets->get<Texture>("logo");

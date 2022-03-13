@@ -15,10 +15,8 @@
 /**
  * Device-independent input manager.
  *
- * This class supports drag controls. This means pressing at a location,
- * dragging while pressed, and then releasing. However, the implementation
- * for this approach varies according to whether it is a mouse or mobile
- * touch controls. This interface hides the details.
+ * This class supports swiping and tilting on mobile and keyboard controls
+ * for desktop testing. This interface hides the details.
  */
 class InputController {
 
@@ -68,8 +66,10 @@ protected:
     bool _leftFingerDown;
     /** Time that the left finger went down*/
     cugl::Timestamp _leftStartTime;
-
     
+    // Acceloremeter variables
+    /** Current acceleration */
+    cugl::Vec3 _acceleration;
 
 #pragma mark Input Control
 public:
@@ -115,14 +115,6 @@ public:
     
     /**
      * Updates the input controller for the latest frame.
-     *
-     * It might seem weird to have this method given that everything
-     * is processed with call back functions.  But we need some way
-     * to synchronize the input with the animation frame.  Otherwise,
-     * how can we know what was the touch location *last frame*?
-     * Maybe there has been no callback function executed since the
-     * last frame. This method guarantees that everything is properly
-     * synchronized.
      */
     void update();
 
@@ -166,6 +158,15 @@ public:
     }
     
     /**
+     * Returns the time the left swipe started at
+     *
+     * @return the left swipe start time
+     */
+    const cugl::Timestamp getLeftStartTime() const {
+        return _leftStartTime;
+    }
+    
+    /**
      * Returns the position the right swipe started at
      *
      * @return the right swipe start position
@@ -181,15 +182,6 @@ public:
      */
     const cugl::Vec2& getRightEndPosition() const {
         return _rightEndPos;
-    }
-    
-    /**
-     * Returns the time the left swipe started at
-     *
-     * @return the left swipe start time
-     */
-    const cugl::Timestamp getLeftStartTime() const {
-        return _leftStartTime;
     }
 
     /**
@@ -239,6 +231,15 @@ public:
      */
     bool didRightRelease() const {
         return !_currRightDown && _prevRightDown;
+    }
+    
+    /**
+     * Return the current acceleration from the accelerometer
+     *
+     * @return the current acceleration
+     */
+    cugl::Vec3 getAcceleration() const {
+        return _acceleration;
     }
 
 
