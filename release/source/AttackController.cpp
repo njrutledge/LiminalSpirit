@@ -9,7 +9,7 @@
 #include "AttackController.hpp"
 #include "PlayerModel.h"
 
-bool AttackController::Attack::init(const cugl::Vec2 p,float a, float dmg, float scale, Side s, cugl::Vec2 oof, cugl::PolyFactory b, boolean playerAttack) {
+bool AttackController::Attack::init(const cugl::Vec2 p,float a, float dmg, float scale, cugl::Size size, Side s, cugl::Vec2 oof, cugl::PolyFactory b, boolean playerAttack) {
     
     position = (p + oof);
     radius = 2;
@@ -17,6 +17,7 @@ bool AttackController::Attack::init(const cugl::Vec2 p,float a, float dmg, float
     damage = dmg;
     side = s;
     _scale = scale;
+    cugl::Size nsize = size;
     offset = oof;
     active = true;
     ball = b.makeCircle(position, radius);
@@ -27,6 +28,7 @@ bool AttackController::Attack::init(const cugl::Vec2 p,float a, float dmg, float
         else {
             _sensorName = "enemy" + _sensorName;
         }
+        this->setSensor(true);
         return true;
     }
     return false;
@@ -84,7 +86,8 @@ AttackController::AttackController() {
     //need to add initialization for left and right offsets
 }
 
-void AttackController::init(float scale, cugl::Vec2 oof, std::shared_ptr<PlayerModel> player) {
+void AttackController::init(cugl::Size size, float scale, cugl::Vec2 oof, std::shared_ptr<PlayerModel> player) {
+    _nsize = size;
     _scale = scale;
     _player = player;
     leftOff = cugl::Vec2(-1.5f, 0.0f) + (oof / (2 * scale));
@@ -121,20 +124,20 @@ void AttackController::attackLeft(SwipeController::Swipe direction, bool grounde
     
     switch (direction) {
         case SwipeController::Swipe::left:
-            _pending.emplace(Attack::alloc(_player->getPosition(), 3, 9001, _scale, Side::left, leftOff, ballMakyr, true));
+            _pending.emplace(Attack::alloc(_player->getPosition(), 3, 9001, _scale, _nsize, Side::left, leftOff, ballMakyr, true));
             break;
         case SwipeController::Swipe::right:
-            _pending.emplace(Attack::alloc(_player->getPosition(), 3, 9001, _scale, Side::left, rightOff, ballMakyr, true));
+            _pending.emplace(Attack::alloc(_player->getPosition(), 3, 9001, _scale, _nsize, Side::left, rightOff, ballMakyr, true));
             break;
         case SwipeController::up:
-            _pending.emplace(Attack::alloc(_player->getPosition(), 5, 9001, _scale, Side::left, upOff, ballMakyr, true));
+            _pending.emplace(Attack::alloc(_player->getPosition(), 5, 9001, _scale, _nsize, Side::left, upOff, ballMakyr, true));
             break;
         case SwipeController::down:
             if(!grounded){
-            _pending.emplace(Attack::alloc(_player->getPosition(), 5, 9001, _scale, Side::left, downOff, ballMakyr, true));
+            _pending.emplace(Attack::alloc(_player->getPosition(), 5, 9001, _scale, _nsize, Side::left, downOff, ballMakyr, true));
             } else{
-                _pending.emplace(Attack::alloc(_player->getPosition(), 3, 9001, _scale, Side::left, leftOff, ballMakyr, true));
-                _pending.emplace(Attack::alloc(_player->getPosition(), 3, 9001, _scale, Side::left, rightOff, ballMakyr, true));
+                _pending.emplace(Attack::alloc(_player->getPosition(), 3, 9001, _scale, _nsize, Side::left, leftOff, ballMakyr, true));
+                _pending.emplace(Attack::alloc(_player->getPosition(), 3, 9001, _scale, _nsize, Side::left, rightOff, ballMakyr, true));
             }
             break;
         case SwipeController::none:
@@ -145,20 +148,20 @@ void AttackController::attackLeft(SwipeController::Swipe direction, bool grounde
 void AttackController::attackRight(SwipeController::Swipe direction, bool grounded) {
     switch (direction) {
         case SwipeController::Swipe::left:
-            _pending.emplace(Attack::alloc(_player->getPosition(), 3, 9001, _scale, Side::right, leftOff, ballMakyr, true));
+            _pending.emplace(Attack::alloc(_player->getPosition(), 3, 9001, _scale,_nsize,  Side::right, leftOff, ballMakyr, true));
             break;
         case SwipeController::Swipe::right:
-            _pending.emplace(Attack::alloc(_player->getPosition(), 3, 9001, _scale, Side::right, rightOff, ballMakyr, true));
+            _pending.emplace(Attack::alloc(_player->getPosition(), 3, 9001, _scale,_nsize, Side::right, rightOff, ballMakyr, true));
             break;
         case SwipeController::up:
-            _pending.emplace(Attack::alloc(_player->getPosition(), 5, 9001, _scale, Side::right, upOff, ballMakyr, true));
+            _pending.emplace(Attack::alloc(_player->getPosition(), 5, 9001, _scale, _nsize, Side::right, upOff, ballMakyr, true));
             break;
         case SwipeController::down:
             if(!grounded){
-            _pending.emplace(Attack::alloc(_player->getPosition(), 5, 9001, _scale, Side::right, downOff, ballMakyr, true));
+            _pending.emplace(Attack::alloc(_player->getPosition(), 5, 9001, _scale, _nsize, Side::right, downOff, ballMakyr, true));
             } else{
-                _pending.emplace(Attack::alloc(_player->getPosition(), 3, 9001, _scale, Side::right, leftOff, ballMakyr, true));
-                _pending.emplace(Attack::alloc(_player->getPosition(), 3, 9001, _scale, Side::right, rightOff, ballMakyr, true));
+                _pending.emplace(Attack::alloc(_player->getPosition(), 3, 9001, _scale, _nsize, Side::right, leftOff, ballMakyr, true));
+                _pending.emplace(Attack::alloc(_player->getPosition(), 3, 9001, _scale, _nsize, Side::right, rightOff, ballMakyr, true));
             }
             break;
         case SwipeController::none:
@@ -173,15 +176,16 @@ void AttackController::draw(const std::shared_ptr<cugl::SpriteBatch>& batch) {
         //trans.scale(_scale);
         //trans.translate((*it)->getPosition()*_scale);
         b2Vec2 pos = (*it)->getBody()->GetPosition();
-        /*
+        cugl::Vec2 pos2 = (*it)->getPosition();
+
+        
         if ((*it)->getSide() == Side::left) {
             batch->setColor(cugl::Color4::GREEN);
-            batch->fill((*it)->getBall(), cugl::Vec2::ZERO, cugl::Vec2(_scale, _scale), 0, cugl::Vec2(pos.x, pos.y) * _scale);
+            batch->fill((*it)->getBall(), cugl::Vec2::ZERO, cugl::Vec2(_scale, _scale), 0, (*it)->getPosition() * _scale);
         } else {
             batch->setColor(cugl::Color4::RED);
             batch->fill((*it)->getBall(), cugl::Vec2::ZERO, cugl::Vec2(_scale, _scale), 0, cugl::Vec2(pos.x, pos.y) * _scale);
         }
-        */
     }
 }
 

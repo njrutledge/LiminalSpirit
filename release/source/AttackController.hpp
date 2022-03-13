@@ -10,6 +10,7 @@
 #define AttackController_h
 
 #define ATTACK_SENSOR_NAME "attacksensor"
+#define PATTACK_TEXTURE "pattack"
 
 
 
@@ -71,7 +72,7 @@ public:
          * @param scale The drawing scale size of the hitbox
          */
         Attack() : CapsuleObstacle(), _sensorName(ATTACK_SENSOR_NAME) { }
-        bool init(const cugl::Vec2 p, float a, float dmg, float scale, Side s, cugl::Vec2 oof, cugl::PolyFactory b, boolean playerAttack);
+        bool init(const cugl::Vec2 p, float a, float dmg, float scale,cugl::Size size, Side s, cugl::Vec2 oof, cugl::PolyFactory b, boolean playerAttack);
         
         
         /**
@@ -87,7 +88,7 @@ public:
         float getRadius() {return radius;}
         
         cugl::Poly2 getBall() {return ball;}
-        cugl::Vec2 getPosition() { return position + offset; }
+        cugl::Vec2 getPosition() { return position; }
         int getDamage() { return damage; }
         Side getSide(){return side;}
 
@@ -103,9 +104,9 @@ public:
         void releaseFixtures() override;
 #pragma mark -
 #pragma mark Static Constructors
-        static std::shared_ptr<Attack> alloc(const cugl::Vec2 p, float a, float dmg, float scale, Side s, cugl::Vec2 oof, cugl::PolyFactory b, boolean playerAttack) {
+        static std::shared_ptr<Attack> alloc(const cugl::Vec2 p, float a, float dmg, float scale, cugl::Size size, Side s, cugl::Vec2 oof, cugl::PolyFactory b, boolean playerAttack) {
             std::shared_ptr<Attack> result = std::make_shared<Attack>();
-            return (result->init(p, a, dmg, scale, s, oof, b, playerAttack) ? result : nullptr);
+            return (result->init(p, a, dmg, scale, size, s, oof, b, playerAttack) ? result : nullptr);
         }
     };
     
@@ -114,6 +115,8 @@ public:
     std::unordered_set<std::shared_ptr<Attack>> _current;
     
     float _scale;
+
+    cugl::Size _nsize;
 
     std::shared_ptr<PlayerModel> _player;
     
@@ -137,7 +140,7 @@ public:
     /**
      *  Initializes the attack controller. Currently greyed out because we only have basic attack hitboxes. Can use a json to set predetermined attack shapes, designs, and damage if we have more complicated moves and attacks.
      */
-    void init(float scale, cugl::Vec2 oof, std::shared_ptr<PlayerModel> player);
+    void init(cugl::Size size, float scale, cugl::Vec2 oof, std::shared_ptr<PlayerModel> player);
     
     /**
      *  Update function for attack controller. Updates all attacks and removes inactive attacks from queue.
