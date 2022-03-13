@@ -21,6 +21,7 @@ bool AttackController::Attack::init(const cugl::Vec2 p,float a, float dmg, float
     offset = oof;
     active = true;
     ball = b.makeCircle(position, radius);
+    _isPlayerAttack = playerAttack;
     if (CapsuleObstacle::init(position)) {
         if (playerAttack) {
             _sensorName = "player" + _sensorName;
@@ -169,6 +170,10 @@ void AttackController::attackRight(SwipeController::Swipe direction, bool ground
     }
 }
 
+void AttackController::createEnemyAttack(cugl::Vec2 pos, int frames, int damage, float scale, cugl::Size size, cugl::Vec2 offset) {
+    _pending.emplace(Attack::alloc(pos, frames, damage, scale, size, Side::none, offset, ballMakyr, false));
+}
+
 void AttackController::draw(const std::shared_ptr<cugl::SpriteBatch>& batch) {
     for(auto it = _current.begin(); it != _current.end(); ++it) {
         //cugl::Vec2 center = cugl::Vec2((*it)->getRadius(),(*it)->getRadius());
@@ -178,13 +183,19 @@ void AttackController::draw(const std::shared_ptr<cugl::SpriteBatch>& batch) {
         b2Vec2 pos = (*it)->getBody()->GetPosition();
         cugl::Vec2 pos2 = (*it)->getPosition();
 
-        
-        if ((*it)->getSide() == Side::left) {
-            batch->setColor(cugl::Color4::GREEN);
+        if ((*it)->isPlayerAttack()) {
+            if ((*it)->getSide() == Side::left) {
+                batch->setColor(cugl::Color4::GREEN);
+                batch->fill((*it)->getBall(), cugl::Vec2::ZERO, cugl::Vec2(_scale, _scale), 0, (*it)->getPosition() * _scale);
+            }
+            else {
+                batch->setColor(cugl::Color4::RED);
+                batch->fill((*it)->getBall(), cugl::Vec2::ZERO, cugl::Vec2(_scale, _scale), 0, cugl::Vec2(pos.x, pos.y) * _scale);
+            }
+        }
+        else {
+            batch->setColor(cugl::Color4::YELLOW);
             batch->fill((*it)->getBall(), cugl::Vec2::ZERO, cugl::Vec2(_scale, _scale), 0, (*it)->getPosition() * _scale);
-        } else {
-            batch->setColor(cugl::Color4::RED);
-            batch->fill((*it)->getBall(), cugl::Vec2::ZERO, cugl::Vec2(_scale, _scale), 0, cugl::Vec2(pos.x, pos.y) * _scale);
         }
     }
 }

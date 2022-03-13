@@ -23,7 +23,8 @@ class AttackController {
     
     enum Side {
         left,
-        right
+        right,
+        none
     };
     
 public:
@@ -44,6 +45,9 @@ public:
         
         //Whether the hitbox is active or not
         bool active;
+
+        //Whether this is a player attack or not
+        bool _isPlayerAttack;
         
         //Drawing scale for hitbox
         float _scale;
@@ -86,6 +90,8 @@ public:
         bool isActive() {return active;}
         
         float getRadius() {return radius;}
+
+        bool isPlayerAttack() { return _isPlayerAttack; }
         
         cugl::Poly2 getBall() {return ball;}
         cugl::Vec2 getPosition() { return position; }
@@ -165,6 +171,8 @@ public:
      *  Creates an attack for a left sided swipe.
      */
     void attackLeft(SwipeController::Swipe direction, bool grounded);
+
+    void createEnemyAttack(cugl::Vec2 pos, int frames, int damage, float scale, cugl::Size size, cugl::Vec2 offset);
     
     void draw(const std::shared_ptr<cugl::SpriteBatch>& batch);
     
