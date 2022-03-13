@@ -17,7 +17,9 @@ class AttackController {
     
     enum Side {
         left,
-        right
+        right,
+        exp,
+        enemy
     };
     
 public:
@@ -140,6 +142,11 @@ public:
      *  Creates an attack for a left sided swipe.
      */
     void attackLeft(cugl::Vec2 p, SwipeController::SwipeAttack attack, bool grounded);
+    
+    /**
+     *  Creates an attack with the designated parameters. This is mostly to create enemy attacks, but also any explosion attacks for the player. There is no parameter. This must be calculated in the position. 
+     */
+    void createAttack(cugl::Vec2 p, float radius, float age, float damage, Side s, cugl::Vec2 vel);
     
     void draw(const std::shared_ptr<cugl::SpriteBatch>& batch);
     

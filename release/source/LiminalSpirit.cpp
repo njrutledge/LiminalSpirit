@@ -145,7 +145,7 @@ void LiminalSpirit::onStartup()
           bounds.size.toString().c_str());
     _input.init(bounds.getMinX(), bounds.size.width);
     
-    _attacks.init(_scale, offset, cugl::Vec2::UNIT_Y, cugl::Vec2::UNIT_Y);
+    _attacks.init(_scale, offset, cugl::Vec2::UNIT_Y, cugl::Vec2(0,0.5));
 
     buildScene();
 }
@@ -218,7 +218,7 @@ void LiminalSpirit::update(float timestep)
     _attacks.attackLeft(_player->getPosition(), _swipes.getLeftSwipe(), _player->isGrounded());
     _attacks.attackRight(_player->getPosition(), _swipes.getRightSwipe(),_player->isGrounded());
     _attacks.update(_player->getPosition());
-    if(_swipes.getLeftSwipe() == _swipes.upAttack || _swipes.getRightSwipe() == _swipes.upAttack){
+    if(_swipes.getRightSwipe() == _swipes.upAttack){
         _player->setJumping(true);
     } else {
         _player->setJumping(false);

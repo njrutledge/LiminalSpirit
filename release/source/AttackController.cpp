@@ -93,9 +93,18 @@ void AttackController::attackLeft(cugl::Vec2 p, SwipeController::SwipeAttack att
             }
             break;
         case SwipeController::chargedLeft:
+            _pending.emplace(std::make_shared<Attack>(p, 5, 30, 9001, _scale, Side::left, cugl::Vec2(_c_vel).rotate(M_PI * 0.5) ,leftOff, ballMakyr));
+            break;
         case SwipeController::chargedRight:
+            _pending.emplace(std::make_shared<Attack>(p, 5, 30, 9001, _scale, Side::left, cugl::Vec2(_c_vel).rotate(M_PI * 1.5), rightOff, ballMakyr));
+            break;
         case SwipeController::chargedUp:
+            _pending.emplace(std::make_shared<Attack>(p, 5, 30, 9001, _scale, Side::left, _c_vel, upOff, ballMakyr));
+            break;
         case SwipeController::chargedDown:
+            _pending.emplace(std::make_shared<Attack>(p, 3, 10, 9001, _scale, Side::left, cugl::Vec2::ZERO, leftOff,  ballMakyr));
+            _pending.emplace(std::make_shared<Attack>(p, 3, 10, 9001, _scale, Side::left, cugl::Vec2::ZERO, rightOff, ballMakyr));
+            break;
         default:
             break;
     }
@@ -126,6 +135,10 @@ void AttackController::attackRight(cugl::Vec2 p, SwipeController::SwipeAttack at
         default:
             break;
     }
+}
+
+void AttackController::createAttack(cugl::Vec2 p, float radius, float age, float damage, Side s, cugl::Vec2 vel) {
+    _pending.emplace(std::make_shared<Attack>(p, radius, age, damage, _scale, s, vel, cugl::Vec2::ZERO, ballMakyr));
 }
 
 void AttackController::draw(const std::shared_ptr<cugl::SpriteBatch>& batch) {
