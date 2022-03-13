@@ -152,6 +152,12 @@ void LiminalSpirit::onStartup()
     _worldnode->setPosition(offset);
     _scene->addChild(_worldnode);
 
+    _debugnode = scene2::SceneNode::alloc();
+    _debugnode->setScale(_scale); // Debug node draws in PHYSICS coordinates
+    _debugnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+    _debugnode->setPosition(offset);
+    _scene->addChild(_debugnode);
+
     _swipes.init(0, getDisplayWidth());
     
 
@@ -159,6 +165,7 @@ void LiminalSpirit::onStartup()
 
     _collider = CollisionController();
 
+    setDebug(true);
     buildScene();
     _attacks.init(_scale / 2.0f, offset, _player);
 
@@ -185,6 +192,7 @@ void LiminalSpirit::onShutdown()
     _assets = nullptr;
     _world = nullptr;
     _worldnode = nullptr;
+    _debugnode = nullptr;
 
     //TODO: CHECK IF THIS IS RIGHT FOR DISPOSING
     for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
@@ -472,6 +480,7 @@ void LiminalSpirit::addObstacle(const std::shared_ptr<cugl::physics2::Obstacle> 
                                 bool useObjPosition)
 {
     _world->addObstacle(obj);
+    obj->setDebugScene(_debugnode);
 
     // Position the scene graph node (enough for static objects)
     if (useObjPosition)

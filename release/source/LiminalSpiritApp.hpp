@@ -60,6 +60,9 @@ protected:
     std::shared_ptr<cugl::physics2::ObstacleWorld> _world;
     /** Reference to the physics root of the scene graph */
     std::shared_ptr<cugl::scene2::SceneNode> _worldnode;
+    /** Reference to the debug root of the scene graph */
+    std::shared_ptr<cugl::scene2::SceneNode> _debugnode;
+
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
     float _scale;
     
@@ -83,6 +86,9 @@ protected:
 
     /** A countdown used to move the logo */
     int _countdown;
+
+    /** Whether or not debug mode is active */
+    bool _debug;
     
     /**
      * Internal helper to build the scene graph.
@@ -167,7 +173,25 @@ public:
                              const std::shared_ptr<cugl::scene2::SceneNode> &node,
                              bool useObjPosition);
     
-    
+     /**
+     * Returns true if debug mode is active.
+     *
+     * If true, all objects will display their physics bodies.
+     *
+     * @return true if debug mode is active.
+     */
+    bool isDebug() const { return _debug; }
+
+    /**
+     * Sets whether debug mode is active.
+     *
+     * If true, all objects will display their physics bodies.
+     *
+     * @param value whether debug mode is active.
+     */
+    void setDebug(bool value) { _debug = value; _debugnode->setVisible(value); }
+
+
     void beginContact(b2Contact* contact);
 
     /**
