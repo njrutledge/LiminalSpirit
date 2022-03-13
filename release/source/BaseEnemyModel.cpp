@@ -21,8 +21,6 @@
 #define ENEMY_SSHRINK 0.6f
 /**Height of the sensor */
 #define SENSOR_HEIGHT 01.f
-/**Density of character*/
-#define ENEMY_DENSITY 1.0f
 /** Debug color for sensor */
 #define DEBUG_COLOR Color4::RED
 
@@ -44,9 +42,10 @@ bool BaseEnemyModel::init(const cugl::Vec2& pos, const cugl::Size& size, float s
 	_attackRadius = props.attackRadius;
 	_framesPast = 0;
 	_enemyName = props.name;
+	_density = props.density;
 
 	if (CapsuleObstacle::init(pos, nsize)) {
-		setDensity(ENEMY_DENSITY);
+		setDensity(_density);
 		setFriction(0.0f);
 		setFixedRotation(true);
 
@@ -65,7 +64,7 @@ void BaseEnemyModel::createFixtures() {
 	}
 	CapsuleObstacle::createFixtures();
 	b2FixtureDef sensorDef;
-	sensorDef.density = ENEMY_DENSITY;
+	sensorDef.density = _density;
 	sensorDef.isSensor = true;
 
 	// Sensor dimensions

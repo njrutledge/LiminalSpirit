@@ -33,6 +33,7 @@
 #include <box2d/b2_contact.h>
 #include "BaseEnemyModel.h"
 #include "Lost.hpp"
+#include "Specter.hpp"
 #include "AttackController.hpp"
 #include "AIController.hpp"
 #include "PlayerModel.h"
@@ -59,8 +60,9 @@ using namespace cugl;
 
 
 
-/** The initial position of the dude */
-float ENEMY_POS[] = {20.0f, 12.0f};
+/** The initial position of the enemies */
+float ENEMY_POS[] = {20.0f, 5.0f};
+float ENEMY_POS2[] = { 24.0f, 10.0f };
 
 /** The initial position of the player*/
 float PLAYER_POS[] = { 10.0f, 4.0f };
@@ -236,8 +238,9 @@ void LiminalSpirit::update(float timestep)
     // Enemy AI logic
     // For each enemy
     for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
-        float direction = _ai.getMovement(*it, _player->getPosition());
-        (*it)->setVX(direction);
+        Vec2 direction = _ai.getMovement(*it, _player->getPosition());
+        (*it)->setVX(direction.x);
+        //TODO: Add vertical movement
     }
     
     _world->update(timestep);
@@ -421,6 +424,17 @@ void LiminalSpirit::buildScene()
     enemySprite->setScale(0.2f);
     addObstacle(enemy, enemySprite, true);
     _enemies.insert(enemy);
+
+    Vec2 enemyPos2 = ENEMY_POS2; 
+    std::shared_ptr<scene2::SceneNode> specterNode = scene2::SceneNode::alloc();
+    std::shared_ptr<Texture> specterImage = _assets->get<Texture>(ENEMY_TEXTURE);
+    std::shared_ptr<Specter> specter = Specter::alloc(enemyPos2, specterImage->getSize() / _scale / 10, _scale);
+    std::shared_ptr<scene2::PolygonNode> specterSprite = scene2::PolygonNode::allocWithTexture(specterImage);
+    specter->setSceneNode(specterSprite);
+    specter->setDebugColor(Color4::BLUE);
+    specterSprite->setScale(0.2f);
+    addObstacle(specter, specterSprite, true);
+    _enemies.insert(specter);
 
     Vec2 playerPos = PLAYER_POS;
     std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
