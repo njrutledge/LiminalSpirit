@@ -33,15 +33,37 @@ class BaseEnemyModel : public cugl::physics2::CapsuleObstacle {
 protected:
 	/** Health */
 	int _health;
+
+	/** True if the enemy is on the ground */
+	bool _isGrounded; 
+
+	/** True if the enemy is currently attacking */
+	bool _isAttacking;
+
+	/** The vertical speed of the enemy */
+	float _verticalSpeed;
+
+	/** The horizontal speed of the enemy */
+	float _horizontalSpeed;
+
+	/** Current time (in frames) since intializing most recent attack */
+	int _framesPast;
+
+	/** The cooldown for attacking (in frames) */
+	int _attackCooldown;
+
 	/** Ground/feet sensor */
 	b2Fixture* _sensorFixture;
+
 	/** Name of sensor */
 	std::string _sensorName;
+
 	/** Debug Sensor */
 	std::shared_ptr<cugl::scene2::WireNode> _sensorNode;
 
 	/** Scene Graph Node */
 	std::shared_ptr<cugl::scene2::SceneNode> _node;
+
 	/** Draw Scale*/
 	float _drawScale;
 
@@ -60,19 +82,8 @@ public:
 	/**Disposes all resources and assets of this Enemy Model */
 	void dispose();
 
-	/** Initializes a new enemy at origin */
-	virtual bool init() override { return init(cugl::Vec2::ZERO, cugl::Size(1, 1), 1.0f); }
-
-	/** Initializes a new enemy at the given position */
-	virtual bool init(const cugl::Vec2 pos) override { return init(pos, cugl::Size(1, 1), 1.0f); }
-
-	/** Initializes a new enemy at the given position with given size*/
-	virtual bool init(const cugl::Vec2 pos, const cugl::Size size) override {
-		return init(pos, size, 1.0f);
-	}
-
 	/** Base init function */
-	virtual bool init(const cugl::Vec2& pos, const cugl::Size& size, float scale);
+	virtual bool init(const cugl::Vec2& pos, const cugl::Size& size, float scale, int health, float vspeed, float hspeed, int attackCooldown);
 
 	float getRadius() {
 		return _sensorFixture->GetShape()->m_radius;
@@ -80,25 +91,10 @@ public:
 
 #pragma mark - 
 #pragma mark Static Constructors
-	/** Allocates a new enemy at the origin */
-	static std::shared_ptr<BaseEnemyModel> alloc() {
-		std::shared_ptr<BaseEnemyModel> result = std::make_shared<BaseEnemyModel>();
-		return (result->init() ? result : nullptr);
-	}
-
-	static std::shared_ptr<BaseEnemyModel> alloc(const cugl::Vec2& pos) {
-		std::shared_ptr<BaseEnemyModel> result = std::make_shared<BaseEnemyModel>();
-		return (result->init(pos) ? result : nullptr);
-	}
-
-	static std::shared_ptr<BaseEnemyModel> alloc(const cugl::Vec2& pos, const cugl::Size& size) {
-		std::shared_ptr<BaseEnemyModel> result = std::make_shared<BaseEnemyModel>();
-		return (result->init(pos, size) ? result : nullptr);
-	}
-
+	/** Allocates a new enemy, using placeholder values, DO NOT MAKE IN-GAME ENEMIES USING THIS MODEL */
 	static std::shared_ptr<BaseEnemyModel> alloc(const cugl::Vec2& pos, const cugl::Size& size, float scale) {
 		std::shared_ptr<BaseEnemyModel> result = std::make_shared<BaseEnemyModel>();
-		return (result->init(pos, size, scale) ? result : nullptr);
+		return (result->init(pos, size, scale, 10, 1.0f, 1.0f, 600) ? result : nullptr);
 	}
 
 #pragma mark -
@@ -120,6 +116,40 @@ public:
 
 	/** Sets the enemy health */
 	void setHealth(int value) { _health = value; }
+
+	/** Returns true if the enemy is on the ground*/
+	bool isGrounded() const { return _isGrounded; }
+
+	/** Sets whether the enemy is on the ground*/
+	void setGrounded(bool value) { _isGrounded = value; }
+
+	/** Returns true if the enemy is attacking*/
+	bool isAttacking() const { return _isAttacking; }
+
+	/** Sets whether the enemy is attacking*/
+	void setIsAttacking(bool value) { _isAttacking = value; }
+
+	/** Returns the vertical speed of the enemy*/
+	float getVerticalSpeed() const { return _verticalSpeed; }
+
+	/** Sets the vertical speed of the enemy */
+	void setVerticalSpeed(bool value) { _verticalSpeed = value; }
+
+	/** Returns the horizontal speed of the enemy*/
+	float getHorizontalSpeed() const { return _horizontalSpeed; }
+
+	/** Sets the horizontal speed of the enemy*/
+	void setHorizontalSpeed(bool value) { _horizontalSpeed = value; }
+
+	/** Returns the frames since the last attack*/
+	float getFramesPast() const { return _framesPast; }
+
+	/** Sets the horizontal speed of the enemy*/
+	void setFramesPast(int value) { _framesPast = value; }
+
+
+	/** Returns the attack cooldown */
+	float getAttackCooldown() const { return _attackCooldown; }
 
 	/** Returns the name of the ground sensor */
 	std::string* getSensorName() { return &_sensorName; }

@@ -31,6 +31,7 @@
 #define __LIMINALSPIRIT_APP_H__
 #include <cugl/cugl.h>
 #include "BaseEnemyModel.h"
+#include "Lost.hpp"
 #include "PlayerModel.h"
 #include "AttackController.hpp"
 #include "AIController.hpp"

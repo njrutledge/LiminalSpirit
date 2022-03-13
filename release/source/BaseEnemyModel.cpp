@@ -31,12 +31,17 @@ using namespace cugl;
 #pragma mark - 
 #pragma mark Constructors
 
-/** Initializes the enemy at the given position */
-bool BaseEnemyModel::init(const cugl::Vec2& pos, const cugl::Size& size, float scale) {
+/** Initializes the enemy at the given position, with size, scale, health and horizontal/vertical speed. */
+bool BaseEnemyModel::init(const cugl::Vec2& pos, const cugl::Size& size, float scale, int health, float vspeed, float hspeed, int attackCooldown) {
 	Size nsize = size;
 	nsize.width *= ENEMY_HSHRINK;
 	nsize.height *= ENEMY_VSHRINK;
 	_drawScale = scale;
+	_health = health;
+	_verticalSpeed = vspeed;
+	_horizontalSpeed = hspeed;
+	_attackCooldown = attackCooldown;
+	_framesPast = 0;
 
 	if (CapsuleObstacle::init(pos, nsize)) {
 		setDensity(ENEMY_DENSITY);
@@ -47,11 +52,6 @@ bool BaseEnemyModel::init(const cugl::Vec2& pos, const cugl::Size& size, float s
 	}
 	return false;
 }
-
-#pragma mark - 
-#pragma mark Attribute Properties
-
-// TBA
 
 #pragma mark - 
 #pragma mark Physics Methods

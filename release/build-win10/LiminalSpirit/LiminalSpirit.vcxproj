@@ -194,6 +194,7 @@
     <ClInclude Include="..\..\source\CollisionController.hpp" />
     <ClInclude Include="..\..\source\InputController.hpp" />
     <ClInclude Include="..\..\source\LiminalSpiritApp.hpp" />
+    <ClInclude Include="..\..\source\Lost.hpp" />
     <ClInclude Include="..\..\source\LSCharacter.h" />
     <ClInclude Include="..\..\source\MovementInput.hpp" />
     <ClInclude Include="..\..\source\SwipeController.hpp" />
@@ -208,6 +209,7 @@
     <ClCompile Include="..\..\source\CollisionController.cpp" />
     <ClCompile Include="..\..\source\InputController.cpp" />
     <ClCompile Include="..\..\source\LiminalSpirit.cpp" />
+    <ClCompile Include="..\..\source\Lost.cpp" />
     <ClCompile Include="..\..\source\main.cpp" />
     <ClCompile Include="..\..\source\MovementInput.cpp" />
     <ClCompile Include="..\..\source\SwipeController.cpp" />
