@@ -149,7 +149,7 @@ void LiminalSpirit::onStartup()
 
     _swipes.init(0, getDisplayWidth());
     
-    _attacks.init(_scale, offset);
+    _attacks.init(_scale, offset, cugl::Vec2::UNIT_Y, cugl::Vec2::UNIT_Y);
 
     buildScene();
 }

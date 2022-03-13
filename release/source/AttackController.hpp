@@ -31,7 +31,7 @@ public:
         cugl::Vec2 offset;
         
         //The radius of the attack hitbox
-        float radius;
+        float _radius;
         
         //The age of the hitbox (how long it stays active)
         float age;
@@ -44,6 +44,10 @@ public:
         
         //The damage of the hitbox
         float damage;
+        
+        //A velocity vector to update the projectile
+        
+        cugl::Vec2 _vel;
         
         //Which type of swipe this is
         Side side;
@@ -60,7 +64,7 @@ public:
          * @param dmg     The amount of damage the hitbox does
          * @param scale The drawing scale size of the hitbox
          */
-        Attack(const cugl::Vec2 p, float a, float dmg, float scale, Side s, cugl::Vec2 oof, cugl::PolyFactory b);
+        Attack(const cugl::Vec2 p, float radius, float a, float dmg, float scale, Side s, cugl::Vec2 vel, cugl::Vec2 oof, cugl::PolyFactory b);
         
         
         /**
@@ -73,7 +77,7 @@ public:
         
         bool isActive() {return active;}
         
-        float getRadius() {return radius;}
+        float getRadius() {return _radius;}
         
         cugl::Poly2 getBall() {return ball;}
         cugl::Vec2 getPosition() { return position + offset; }
@@ -95,6 +99,10 @@ public:
 
     cugl::Vec2 downOff;
     
+    cugl::Vec2 _p_vel;
+    
+    cugl::Vec2 _c_vel;
+    
     cugl::PolyFactory ballMakyr = cugl::PolyFactory(0.05f);
     
     
@@ -106,8 +114,9 @@ public:
     
     /**
      *  Initializes the attack controller. Currently greyed out because we only have basic attack hitboxes. Can use a json to set predetermined attack shapes, designs, and damage if we have more complicated moves and attacks.
+     *  Projectile velocities are vectors facing the +y direction. They are rotated accordingly when initializing different direction attacks.
      */
-    void init(float scale, cugl::Vec2 oof);
+    void init(float scale, cugl::Vec2 oof, cugl::Vec2 p_vel, cugl::Vec2 c_vel);
     
     /**
      *  Update function for attack controller. Updates all attacks and removes inactive attacks from queue.
