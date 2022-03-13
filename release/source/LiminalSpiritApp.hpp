@@ -34,7 +34,7 @@
 #include "PlayerModel.h"
 #include "AttackController.hpp"
 #include "InputController.hpp"
-#include "MovementInput.hpp"
+#include "TiltController.hpp"
 /**
  * Class for a simple Hello World style application
  *
@@ -60,12 +60,14 @@ protected:
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
     float _scale;
     
+    InputController _input;
+    
     AttackController _attacks;
     
     SwipeController _swipes;
     
     /** tilt controller */
-    MovementInput _tiltInput;
+    TiltController _tilt;
 
     /**Base Enemy (NEED TO MAKE LIST) */
     std::shared_ptr<BaseEnemyModel> _enemy;

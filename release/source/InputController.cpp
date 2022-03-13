@@ -46,6 +46,8 @@ _touchKey(0)
  * @return true if the initialization was successful
  */
 bool InputController::init(float leftmostX, float screenWidth) {
+#ifdef CU_TOUCH_SCREEN
+    _active = Input::activate<Accelerometer>();
     Touchscreen* tscreen = Input::get<Touchscreen>();
     if (tscreen) {
         _touchKey = tscreen->acquireKey();
@@ -55,9 +57,11 @@ bool InputController::init(float leftmostX, float screenWidth) {
         tscreen->addEndListener(_touchKey, [=](const cugl::TouchEvent& event, bool focus) {
             this->fingerUpCB(event, focus);
         });
-        _active = true;
         _screenMidpoint = leftmostX + (screenWidth/2);
     }
+#else
+    _active = Input::activate<Keyboard>();
+#endif
     return _active;
 }
 
@@ -70,29 +74,29 @@ bool InputController::init(float leftmostX, float screenWidth) {
  */
 void InputController::dispose() {
     if (_active) {
+#ifdef CU_TOUCH_SCREEN
+        Input::deactivate<Accelerometer>();
         Touchscreen* tscreen = Input::get<Touchscreen>();
         tscreen->removeBeginListener(_touchKey);
         tscreen->removeEndListener(_touchKey);
         _active = false;
+#else
+        Input::deactivate<Keyboard>();
+#endif
     }
 }
 
 /**
  * Updates the input controller for the latest frame.
- *
- * It might seem weird to have this method given that everything
- * is processed with call back functions.  But we need some way
- * to synchronize the input with the animation frame.  Otherwise,
- * how can we know what was the touch location *last frame*?
- * Maybe there has been no callback function executed since the
- * last frame. This method guarantees that everything is properly
- * synchronized.
  */
 void InputController::update() {
     _prevRightDown = _currRightDown;
     _currRightDown = _rightFingerDown;
     _prevLeftDown = _currLeftDown;
     _currLeftDown = _leftFingerDown;
+#ifdef CU_TOUCH_SCREEN
+    _acceleration = Input::get<Accelerometer>()->getAcceleration();
+#endif
 }
 
 #pragma mark Touchscreen Callbacks

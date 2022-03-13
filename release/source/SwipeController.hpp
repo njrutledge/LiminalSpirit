@@ -70,9 +70,6 @@ protected:
     /** Swipe attack completed on the left side */
     SwipeAttack _leftSwipe;
     
-    /** Input controller */
-    InputController _input;
-    
     /** Timestamp to get the current time for charge calculations */
     cugl::Timestamp _currTime;
     
@@ -106,8 +103,11 @@ protected:
     /**
      * Calculates whether a finger has been pressed down long enough for a charge attack
      * and updates the state accordingly
+     *
+     * @param leftStartTime  the timestamp for when the left finger went down
+     *
      */
-    void calculateChargeAttack();
+    void calculateChargeAttack(cugl::Timestamp leftStartTime);
     
     /**
      * Charge the attack for the left side state
@@ -152,35 +152,18 @@ public:
     
     /**
      * Creates a new swipe controller.
-     *
-     * Should call the {@link #init} method to initialize the controller.
      */
     SwipeController();
     
     /**
      * Deletes this swipe controller, releasing all resources.
      */
-    ~SwipeController() { dispose(); }
+    ~SwipeController();
     
     /**
-     * Initializes the swipe controller by initializing the input controller
-     *
-     * @param leftmostX      the leftmost X coordinate that is safe for swipes
-     * @param screenWidth  the width of the screen
-     *
-     * @return true if the initialization was successful
+     * Updates the swipe controller based on the latest inputs.
      */
-    bool init(float leftMostX, float width);
-    
-    /**
-     * Deletes this swipe controller, releasing all resources.
-     */
-    void dispose();
-    
-    /**
-     * Updates the swipe controller for the latest frame.
-     */
-    void update();
+    void update(InputController& input);
     
     /**
      * Returns the type of swipe attack that was just completed on the right side
