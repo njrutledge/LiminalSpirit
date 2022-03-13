@@ -23,8 +23,11 @@ public:
 	/** Creates a basic empty AI Controller*/
 	AIController();
 
+	/** Degenerate way to get movement (for base enemy class) used for when AI is not implemented for an enemy yet */
+	float getMovement(shared_ptr<BaseEnemyModel> e, cugl::Vec2 player_pos);
+
 	/** Takes in a lost enemy and returns its movement based on the pathfinding towards the player's position */
-	float getMovement(shared_ptr<Lost> lost, cugl::Vec2 player_pos);
+	float getLostMovement(shared_ptr<BaseEnemyModel> lost, cugl::Vec2 player_pos);
 
 	/** Remove any unwanted assets and clean up */
 	void dispose() {};

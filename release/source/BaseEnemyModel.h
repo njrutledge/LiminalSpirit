@@ -21,6 +21,17 @@
 /** ID for the sensor*/
 #define SENSOR_NAME "enemysensor"
 
+#pragma mark -
+#pragma mark Enemy Properties
+struct EnemyProperties {
+	int health;
+	float vspeed;
+	float hspeed;
+	int attackCooldown;
+	float attackRadius;
+	std::string name;
+};
+
 #pragma mark - 
 #pragma mark Base Enemy Model
 
@@ -29,7 +40,6 @@
 *
 */
 class BaseEnemyModel : public cugl::physics2::CapsuleObstacle {
-
 protected:
 	/** Health */
 	int _health;
@@ -51,6 +61,12 @@ protected:
 
 	/** The cooldown for attacking (in frames) */
 	int _attackCooldown;
+
+	/** The attack radius for the enemy*/
+	float _attackRadius; 
+
+	/** Enemy name*/
+	std::string _enemyName;
 
 	/** Ground/feet sensor */
 	b2Fixture* _sensorFixture;
@@ -83,7 +99,7 @@ public:
 	void dispose();
 
 	/** Base init function */
-	virtual bool init(const cugl::Vec2& pos, const cugl::Size& size, float scale, int health, float vspeed, float hspeed, int attackCooldown);
+	virtual bool init(const cugl::Vec2& pos, const cugl::Size& size, float scale, EnemyProperties props);
 
 	float getRadius() {
 		return _sensorFixture->GetShape()->m_radius;
@@ -94,7 +110,7 @@ public:
 	/** Allocates a new enemy, using placeholder values, DO NOT MAKE IN-GAME ENEMIES USING THIS MODEL */
 	static std::shared_ptr<BaseEnemyModel> alloc(const cugl::Vec2& pos, const cugl::Size& size, float scale) {
 		std::shared_ptr<BaseEnemyModel> result = std::make_shared<BaseEnemyModel>();
-		return (result->init(pos, size, scale, 10, 1.0f, 1.0f, 600) ? result : nullptr);
+		return (result->init(pos, size, scale, { 10, 1.0f, 1.0f, 600, 1, "base" }) ? result : nullptr);
 	}
 
 #pragma mark -
@@ -147,6 +163,11 @@ public:
 	/** Sets the horizontal speed of the enemy*/
 	void setFramesPast(int value) { _framesPast = value; }
 
+	/** Gets the name of the enemy*/
+	std::string getName() { return _enemyName; }
+
+	/** Returns the attack radius of the Lost*/
+	float getAttackRadius() { return _attackRadius; }
 
 	/** Returns the attack cooldown */
 	float getAttackCooldown() const { return _attackCooldown; }

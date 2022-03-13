@@ -32,16 +32,18 @@ using namespace cugl;
 #pragma mark Constructors
 
 /** Initializes the enemy at the given position, with size, scale, health and horizontal/vertical speed. */
-bool BaseEnemyModel::init(const cugl::Vec2& pos, const cugl::Size& size, float scale, int health, float vspeed, float hspeed, int attackCooldown) {
+bool BaseEnemyModel::init(const cugl::Vec2& pos, const cugl::Size& size, float scale, EnemyProperties props) {
 	Size nsize = size;
 	nsize.width *= ENEMY_HSHRINK;
 	nsize.height *= ENEMY_VSHRINK;
 	_drawScale = scale;
-	_health = health;
-	_verticalSpeed = vspeed;
-	_horizontalSpeed = hspeed;
-	_attackCooldown = attackCooldown;
+	_health = props.health;
+	_verticalSpeed = props.vspeed;
+	_horizontalSpeed = props.hspeed;
+	_attackCooldown = props.attackCooldown;
+	_attackRadius = props.attackRadius;
 	_framesPast = 0;
+	_enemyName = props.name;
 
 	if (CapsuleObstacle::init(pos, nsize)) {
 		setDensity(ENEMY_DENSITY);

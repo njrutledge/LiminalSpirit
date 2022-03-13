@@ -14,8 +14,17 @@ AIController::AIController() {
 	// Add initialization variables if needed
 }
 
+float AIController::getMovement(shared_ptr<BaseEnemyModel> e, Vec2 player_pos) {
+	if (e->getName() == "Lost") {
+		return getLostMovement(e, player_pos);
+	}
+	else {
+		return 0.0f;
+	}
+}
+
 // Gets movement for the Lost enemy based on the player position
-float AIController::getMovement(shared_ptr<Lost> lost, Vec2 player_pos) {
+float AIController::getLostMovement(shared_ptr<BaseEnemyModel> lost, Vec2 player_pos) {
 	//TODO: - check if grounded -> don't move if falling (unless flying enemy)
 	// - set states for the enemy -> more interesting ai
 

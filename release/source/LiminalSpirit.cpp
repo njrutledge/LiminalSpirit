@@ -234,7 +234,6 @@ void LiminalSpirit::update(float timestep)
 
     // Enemy AI logic
     // For each enemy
-    // TODO: create a set of enemy to go through
     for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
         float direction = _ai.getMovement(*it, _player->getPosition());
         (*it)->setVX(direction);
@@ -411,7 +410,7 @@ void LiminalSpirit::buildScene()
     Vec2 enemyPos = ENEMY_POS;
     std::shared_ptr<scene2::SceneNode> enemyNode = scene2::SceneNode::alloc();
     std::shared_ptr<Texture> enemyImage = _assets->get<Texture>(ENEMY_TEXTURE);
-    enemy = Lost::alloc(enemyPos, enemyImage->getSize() / _scale / 5, _scale);
+    std::shared_ptr<Lost> enemy = Lost::alloc(enemyPos, enemyImage->getSize() / _scale / 5, _scale);
     std::shared_ptr<scene2::PolygonNode> enemySprite = scene2::PolygonNode::allocWithTexture(enemyImage);
     enemy->setSceneNode(enemySprite);
     enemy->setDebugColor(Color4::RED);

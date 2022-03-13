@@ -76,7 +76,7 @@ protected:
     CollisionController _collider;
 
     /**Enemies set */
-    std::unordered_set < std::shared_ptr<BaseEnemyModel>> _enemies;
+    std::unordered_set <std::shared_ptr<BaseEnemyModel>> _enemies;
 
     /** Player character */
     std::shared_ptr<PlayerModel> _player;
