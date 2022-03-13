@@ -27,8 +27,9 @@ using namespace cugl;
  * object. This makes it safe to use this class without a pointer.
  */
 MovementInput::MovementInput() :
-_active(false),
-_xpos(0)
+    _active(false),
+    _xpos(0),
+    _debugKeyPressed(false)
 {
 }
 
@@ -78,6 +79,7 @@ void MovementInput::update(float dt, float xpos, float width, float characterWid
 // Only process keyboard on desktop
 #ifndef CU_TOUCH_SCREEN
     Keyboard* keys = Input::get<Keyboard>();
+    _debugKeyPressed = false;
 
     // Forces increase the longer you hold a key.
     if (keys->keyDown(KeyCode::ARROW_LEFT)) {
@@ -89,6 +91,9 @@ void MovementInput::update(float dt, float xpos, float width, float characterWid
             _xpos = KEYBOARD_FORCE_INCREMENT;
         }
         
+    }
+    if (keys->keyPressed(KeyCode::B)) {
+        _debugKeyPressed = true;
     }
 #else
     // MOBILE CONTROLS

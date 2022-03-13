@@ -165,7 +165,7 @@ void LiminalSpirit::onStartup()
 
     _collider = CollisionController();
 
-    setDebug(true);
+    setDebug(false);
     buildScene();
     _pMeleeTexture = _assets->get<Texture>(PATTACK_TEXTURE);
     _attacks.init(_pMeleeTexture->getSize()/_scale/2.0f, _scale / 2.0f, offset, _player);
@@ -231,6 +231,9 @@ void LiminalSpirit::update(float timestep)
     _tiltInput.update(timestep, _player->getX(), SCENE_WIDTH, _logo->getSize().width);
     float xPos = _tiltInput.getXpos();
     _player->setVX(xPos);
+
+    //Debug Mode on/off
+    if (_tiltInput.getDebugKeyPressed()) { setDebug(!isDebug()); }
     
     //FLIPPING LOGIC
     if(xPos > 0){

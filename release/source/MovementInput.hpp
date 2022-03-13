@@ -20,6 +20,9 @@ class MovementInput {
     /** x position*/
     float _xpos;
 
+    /** debug key is pressed */
+    bool _debugKeyPressed;
+
 protected:
     // Input results
 
@@ -96,6 +99,7 @@ public:
      */
     const cugl::Vec2& getThrust() { return _inputThrust; }
     const float getXpos() { return _xpos; }
+    bool getDebugKeyPressed() { return _debugKeyPressed; }
     
 };
 
