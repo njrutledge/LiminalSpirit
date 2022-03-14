@@ -75,9 +75,15 @@ public:
     int _leftCode;
     int _rightCode;
     int _moveCode;
+//    cugl::Keyboard* _keys;
+    /** debug key is pressed */
+    bool _debugKeyPressed;
 
-    /** TESTING ONLY: reads keyboard on PC*/
+    /** TESTING ONLY: reads keyboard input on PC*/
     void readInput();
+    
+    /** Debugging on PC */
+    bool getDebugKeyPressed() { return _debugKeyPressed; }
 
     /**
      * Creates a new input controller.

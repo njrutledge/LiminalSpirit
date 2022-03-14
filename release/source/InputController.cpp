@@ -26,7 +26,8 @@ _currLeftDown(false),
 _prevLeftDown(false),
 _leftFingerDown(false),
 _rightFingerDown(false),
-_touchKey(0)
+_touchKey(0),
+_debugKeyPressed(false)
 {
 }
 
@@ -68,29 +69,29 @@ bool InputController::init(float leftmostX, float screenWidth) {
 void InputController::readInput() {
     _moveCode = _leftCode = _rightCode = 0;
     Keyboard* keys = Input::get<Keyboard>();
-    if (keys->keyDown(KeyCode::W)) {
+    if (keys->keyPressed(KeyCode::W)) {
         _leftCode = 1;
     } 
-    else if (keys->keyDown(KeyCode::A)) {
+    else if (keys->keyPressed(KeyCode::A)) {
         _leftCode = 2;
     } 
-    else if (keys->keyDown(KeyCode::S)) {
+    else if (keys->keyPressed(KeyCode::S)) {
         _leftCode = 3;
     } 
-    else if (keys->keyDown(KeyCode::D)) {
+    else if (keys->keyPressed(KeyCode::D)) {
         _leftCode = 4;
     }
 
-    if (keys->keyDown(KeyCode::I)) {
+    if (keys->keyPressed(KeyCode::I)) {
         _rightCode = 1;
     }
-    else if (keys->keyDown(KeyCode::J)) {
+    else if (keys->keyPressed(KeyCode::J)) {
         _rightCode = 2;
     }
-    else if (keys->keyDown(KeyCode::K)) {
+    else if (keys->keyPressed(KeyCode::K)) {
         _rightCode = 3;
     }
-    else if (keys->keyDown(KeyCode::L)) {
+    else if (keys->keyPressed(KeyCode::L)) {
         _rightCode = 4;
     }
 
@@ -99,6 +100,12 @@ void InputController::readInput() {
     }
     else if (keys->keyDown(KeyCode::ARROW_RIGHT)) {
         _moveCode = 1;
+    }
+    
+    if (keys->keyPressed(KeyCode::B)) {
+        _debugKeyPressed = true;
+    } else {
+        _debugKeyPressed = false;
     }
 }
 
@@ -133,6 +140,8 @@ void InputController::update() {
     _currLeftDown = _leftFingerDown;
 #ifdef CU_TOUCH_SCREEN
     _acceleration = Input::get<Accelerometer>()->getAcceleration();
+#else
+    readInput();
 #endif
 }
 

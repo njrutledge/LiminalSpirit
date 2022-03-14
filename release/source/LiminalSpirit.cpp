@@ -229,7 +229,7 @@ void LiminalSpirit::update(float timestep)
     _player->setVX(xPos);
 
     //Debug Mode on/off
-    if (_tilt.getDebugKeyPressed()) { setDebug(!isDebug()); }
+    if (_input.getDebugKeyPressed()) { setDebug(!isDebug()); }
     
     //FLIPPING LOGIC
     if(xPos > 0){

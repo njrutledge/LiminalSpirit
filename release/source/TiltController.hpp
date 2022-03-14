@@ -16,9 +16,6 @@ class TiltController {
     
     /** x position */
     float _xpos;
-
-    /** debug key is pressed */
-    bool _debugKeyPressed;
     
 public:
 
@@ -54,8 +51,6 @@ public:
      * Returns the current xpos
      */
     const float getXpos() { return _xpos; }
-
-    bool getDebugKeyPressed() { return _debugKeyPressed; }
     
 };
 

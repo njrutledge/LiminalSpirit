@@ -55,28 +55,39 @@ void SwipeController::update(InputController& input) {
         setRightSwipe(noAttack);
     }
 #else
-    input.readInput();
     switch (input._leftCode) {
-        case 0: setLeftSwipe(noAttack);
+        case 0:
+            setLeftSwipe(noAttack);
             break;
-        case 1: setLeftSwipe(upAttack);
+        case 1:
+            setLeftSwipe(upAttack);
             break;
-        case 2: setLeftSwipe(leftAttack);
+        case 2:
+            setLeftSwipe(leftAttack);
             break;
-        case 3: setLeftSwipe(downAttack);
+        case 3:
+            setLeftSwipe(downAttack);
             break;
-        case 4: setLeftSwipe(rightAttack);
+        case 4:
+            setLeftSwipe(rightAttack);
+            break;
     }
     switch (input._rightCode) {
-        case 0: setRightSwipe(noAttack);
+        case 0:
+            setRightSwipe(noAttack);
             break;
-        case 1: setRightSwipe(upAttack);
+        case 1:
+            setRightSwipe(upAttack);
             break;
-        case 2: setRightSwipe(leftAttack);
+        case 2:
+            setRightSwipe(leftAttack);
             break;
-        case 3: setRightSwipe(downAttack);
+        case 3:
+            setRightSwipe(downAttack);
             break;
-        case 4: setRightSwipe(rightAttack);
+        case 4:
+            setRightSwipe(rightAttack);
+            break;
     }
 #endif
 }

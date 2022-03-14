@@ -56,22 +56,12 @@ void TiltController::update(InputController& input, float width, float character
     }
 #else
     // Only process keyboard on desktop
-    Keyboard* keys = Input::get<Keyboard>();
-    _debugKeyPressed = false;
-
-    // Forces increase the longer you hold a key.
-    if (keys->keyDown(KeyCode::ARROW_LEFT)) {
-        if (true|| _xpos - KEYBOARD_FORCE_INCREMENT >= characterWidth / 2) {
-            _xpos = -KEYBOARD_FORCE_INCREMENT;
-        }
-    } else if (keys->keyDown(KeyCode::ARROW_RIGHT)) {
-        if (true|| _xpos+KEYBOARD_FORCE_INCREMENT <= width-characterWidth/2) {
-            _xpos = KEYBOARD_FORCE_INCREMENT;
-        }
-        
-    }
-    if (keys->keyPressed(KeyCode::B)) {
-        _debugKeyPressed = true;
+    if (input._moveCode == -1) {
+        _xpos = -KEYBOARD_FORCE_INCREMENT;
+    } else if (input._moveCode == 1) {
+        _xpos = KEYBOARD_FORCE_INCREMENT;
+    } else {
+        _xpos = 0;
     }
 #endif
 }
