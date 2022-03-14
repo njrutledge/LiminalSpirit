@@ -37,9 +37,9 @@
     <ClCompile Include="..\..\source\Specter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\GameScene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\source\LSCharacter.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="..\..\source\AIController.hpp">
       <Filter>Header Files</Filter>
@@ -77,6 +77,7 @@
     <ClInclude Include="..\..\source\Specter.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\GameScene.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LiminalSpirit.rc" />

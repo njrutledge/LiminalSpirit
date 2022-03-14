@@ -1,5 +1,5 @@
 //
-//  LiminalSpirit.cpp
+//  GameScene.cpp
 //  Cornell University Game Library (CUGL)
 //
 //  This is the implementation file for the custom application. This is the
@@ -171,6 +171,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     buildScene();
     _pMeleeTexture = _assets->get<Texture>(PATTACK_TEXTURE);
     _attacks.init(_pMeleeTexture->getSize() / _scale / 2.0f, _scale / 2.0f, offset, _player);
+    return true;
 }
 
 /**
@@ -485,6 +486,13 @@ void GameScene::buildScene()
     // Start the logo countdown and C-style random number generator
     _countdown = TIME_STEP;
     std::srand((int)std::time(0));
+}
+
+/**
+ * Resets the status of the game so that we can play again.
+ */
+void GameScene::reset()
+{
 }
 
 /**
