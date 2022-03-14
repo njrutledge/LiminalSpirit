@@ -72,7 +72,9 @@ void LiminalSpirit::onShutdown()
 
     // Shutdown input
 #ifdef CU_MOBILE
+    // Deativate input
     Input::deactivate<Touchscreen>();
+// #if defined CU_TOUCH_SCREEN
 #else
     Input::deactivate<Mouse>();
 #endif

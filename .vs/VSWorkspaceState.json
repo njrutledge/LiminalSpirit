@@ -1,9 +1,7 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\release",
-    "\\release\\build-win10"
+    ""
   ],
-  "SelectedNode": "\\release\\build-win10\\LiminalSpirit.sln",
+  "SelectedNode": "\\HelloWorld.sln",
   "PreviewInSolutionExplorer": false
 }

@@ -11,6 +11,9 @@
 
 #define ATTACK_SENSOR_NAME "attacksensor"
 #define PATTACK_TEXTURE "pattack"
+#define ATTACK_SSHRINK 0.6f
+/**Height of the sensor */
+#define SENSOR_HEIGHT 01.f
 
 
 
@@ -21,49 +24,62 @@
 
 class AttackController {
     
-    enum Side {
-        left,
-        right,
-        none
+    enum State {
+        first,
+        h2_right,
+        h3_right,
+        h2_left,
+        h3_left,
+        cool
     };
     
 public:
+
+    enum Type {
+        p_left,
+        p_right,
+        p_normal,
+        e_melee,
+        e_range
+    };
     
     class Attack : public cugl::physics2::CapsuleObstacle{
         
         //The position of the player
-        cugl::Vec2 position;
+        cugl::Vec2 _position;
         
         //The Offset from the position of the attack hitbox
-        cugl::Vec2 offset;
+        cugl::Vec2 _offset;
         
         //The radius of the attack hitbox
-        float radius;
+        float _radius;
         
         //The age of the hitbox (how long it stays active)
-        float age;
+        float _age;
         
         //Whether the hitbox is active or not
-        bool active;
-
-        //Whether this is a player attack or not
-        bool _isPlayerAttack;
+        bool _active;
         
         //Drawing scale for hitbox
         float _scale;
         
         //The damage of the hitbox
-        float damage;
+        float _damage;
+        
+        //A velocity vector to update the projectile
+        cugl::Vec2 _vel;
         
         //Which type of swipe this is
-        Side side;
+        Type _type;
         
-        cugl::Poly2 ball;
+        cugl::Poly2 _ball;
 
         /**Attack sensor */
         b2Fixture* _sensorFixture;
         /** Name of sensor */
         std::string _sensorName;
+        /** Debug Sensor */
+        std::shared_ptr<cugl::scene2::WireNode> _sensorNode;
         
         
     public:
@@ -76,7 +92,7 @@ public:
          * @param scale The drawing scale size of the hitbox
          */
         Attack() : CapsuleObstacle(), _sensorName(ATTACK_SENSOR_NAME) { }
-        bool init(const cugl::Vec2 p, float a, float dmg, float scale,cugl::Size size, Side s, cugl::Vec2 oof, cugl::PolyFactory b, bool playerAttack);
+        bool init(const cugl::Vec2 p, float radius, float a, float dmg, float scale, Type s, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel);
         
         
         /**
@@ -85,18 +101,16 @@ public:
          * @param p          The position of the player
          * @param follow      Whether to follow the player's movement while active
          */
-        void update(const cugl::Vec2 p, b2Vec2 VX, bool follow);
+        void update(const cugl::Vec2 p, bool follow, float dt, b2Vec2 VX);
         
-        bool isActive() {return active;}
+        bool isActive() {return _active;}
         
-        float getRadius() {return radius;}
-
-        bool isPlayerAttack() { return _isPlayerAttack; }
+        float getRadius() {return _radius;}
         
-        cugl::Poly2 getBall() {return ball;}
-        cugl::Vec2 getPosition() { return position; }
-        int getDamage() { return damage; }
-        Side getSide(){return side;}
+        cugl::Poly2 getBall() {return _ball;}
+        cugl::Vec2 getPosition() { return _position; }
+        int getDamage() { return _damage; }
+        Type getType(){return _type;}
 
         std::string* getSensorName() { return &_sensorName; }
         void setSensorName(string s) { _sensorName = s; }
@@ -108,11 +122,19 @@ public:
 
         /** Releases the fixtures of this body(s) from the world */
         void releaseFixtures() override;
+        
+        void resetDebug() override;
 #pragma mark -
 #pragma mark Static Constructors
-        static std::shared_ptr<Attack> alloc(const cugl::Vec2 p, float a, float dmg, float scale, cugl::Size size, Side s, cugl::Vec2 oof, cugl::PolyFactory b, bool playerAttack) {
+        static std::shared_ptr<Attack> alloc(const cugl::Vec2 p, float radius, float age, float dmg, float scale,
+                                             Type s, cugl::Vec2 vel, cugl::Vec2 oof, cugl::PolyFactory b) {
             std::shared_ptr<Attack> result = std::make_shared<Attack>();
-            return (result->init(p, a, dmg, scale, size, s, oof, b, playerAttack) ? result : nullptr);
+            return (result->init(p, radius, age, dmg, scale, s, oof, b, vel) ? result : nullptr);
+        }
+        
+        static std::shared_ptr<Attack> alloc(const cugl::Vec2 p, float radius, float age, float dmg, float scale, Type s, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel) {
+            std::shared_ptr<Attack> result = std::make_shared<Attack>();
+            return (result->init(p, radius, age, dmg, scale, s, oof, b, vel) ? result : nullptr);
         }
     };
     
@@ -122,19 +144,37 @@ public:
     
     float _scale;
 
-    cugl::Size _nsize;
-
     std::shared_ptr<PlayerModel> _player;
     
-    cugl::Vec2 leftOff;
+    cugl::Vec2 _leftOff;
     
-    cugl::Vec2 rightOff;
+    cugl::Vec2 _rightOff;
 
-    cugl::Vec2 upOff;
+    cugl::Vec2 _upOff;
 
-    cugl::Vec2 downOff;
+    cugl::Vec2 _downOff;
     
-    cugl::PolyFactory ballMakyr = cugl::PolyFactory(0.25f);
+    cugl::Vec2 _p_vel;
+    
+    cugl::Vec2 _c_vel;
+    
+    cugl::PolyFactory ballMakyr = cugl::PolyFactory(0.05f);
+    
+    float _meleeCounter;
+    
+    float _multiCounter;
+    
+    float _hit_window;
+    
+    float _multi_cooldown;
+    
+    float _rangedCounter;
+    
+    float _reload;
+    
+    float _swing;
+    
+    State _melee;
     
     
     /**
@@ -145,16 +185,18 @@ public:
     
     /**
      *  Initializes the attack controller. Currently greyed out because we only have basic attack hitboxes. Can use a json to set predetermined attack shapes, designs, and damage if we have more complicated moves and attacks.
+     *  Projectile velocities are vectors facing the +y direction. They are rotated accordingly when initializing different direction attacks.
      */
-    void init(cugl::Size size, float scale, cugl::Vec2 oof, std::shared_ptr<PlayerModel> player);
+    void init(float scale, float oof, cugl::Vec2 p_vel, cugl::Vec2 c_vel, float hit_wind, float hit_cooldown, float reload, float swingSpeed);
     
     /**
      *  Update function for attack controller. Updates all attacks and removes inactive attacks from queue.
      *
      *  @param p    The player position
      *  @param VX   The linear velocity of the player
+     *  @param dt   The timestep
      */
-    void update(const cugl::Vec2 p, b2Vec2 VX);
+    void update(const cugl::Vec2 p, b2Vec2 VX, float dt) ;
     
     
     /**
@@ -165,16 +207,21 @@ public:
     /**
      *  Creates an attack for a right sided swipe.
      */
-    void attackRight(SwipeController::Swipe direction, bool grounded);
+    void attackRight(cugl::Vec2 p, SwipeController::SwipeAttack attack, bool grounded);
     
     /**
      *  Creates an attack for a left sided swipe.
      */
-    void attackLeft(SwipeController::Swipe direction, bool grounded);
-
-    void createEnemyAttack(cugl::Vec2 pos, int frames, int damage, float scale, cugl::Size size, cugl::Vec2 offset);
+    void attackLeft(cugl::Vec2 p, SwipeController::SwipeAttack attack, bool grounded);
     
-    void draw(const std::shared_ptr<cugl::SpriteBatch>& batch);
+    /**
+     *  Creates an attack with the designated parameters. This is mostly to create enemy attacks, but also any explosion attacks for the player. There is no parameter. This must be calculated in the position. 
+     */
+    void createAttack(cugl::Vec2 p, float radius, float age, float damage, Type s, cugl::Vec2 vel);
+
+   // void createEnemyAttack(cugl::Vec2 pos, float radius, float age, int damage, float scale, cugl::Size size, cugl::Vec2 offset, cugl::Vec2 vel);
+    
+//    void draw(const std::shared_ptr<cugl::SpriteBatch>& batch);
     
 };
 

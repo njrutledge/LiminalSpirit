@@ -18,8 +18,24 @@
  */
 class SwipeController {
 public:
+    
+    /** Enum for swipe attacks or noAttack if no swipe was done */
+    enum SwipeAttack {
+        upAttack,
+        rightAttack,
+        downAttack,
+        leftAttack,
+        chargedUp,
+        chargedRight,
+        chargedDown,
+        chargedLeft,
+        noAttack
+    };
+    
+protected:
+    
     /** Enum for swipe directions or none if no swipe was done */
-    enum Swipe {
+    enum SwipeDirection {
         up,
         right,
         down,
@@ -27,104 +43,154 @@ public:
         none
     };
     
-protected:
-    /** Swipe completed on the right side */
-    Swipe _rightSwipe;
-    /** Swipe completed on the left side */
-    Swipe _leftSwipe;
+    /**
+     * Struct for the state of the left side attacks
+     *
+     * direction is the direction of the left swipe
+     * isCharged is whether the attack is charged
+     */
+    struct LeftSwipeState {
+        SwipeDirection direction;
+        bool isCharged;
+
+        /**
+         * Constructor to initialize the left side state
+         */
+        void construct() {
+            direction = none;
+            isCharged = false;
+        }
+    };
     
-    /** Input controller */
-    InputController _input;
+    /** State of the left side swipes */
+    LeftSwipeState _leftState;
+    
+    /** Swipe attack completed on the right side */
+    SwipeAttack _rightSwipe;
+    /** Swipe attack completed on the left side */
+    SwipeAttack _leftSwipe;
+    
+    /** Timestamp to get the current time for charge calculations */
+    cugl::Timestamp _currTime;
+    
+    /**
+     * Set the left sided direction
+     *
+     * @param s the swipe direction completed on the left side
+     */
+    void setLeftDirection(SwipeDirection d){
+        _leftState.direction = d;
+    };
     
     /**
      * Set the left sided swipe
      *
-     * @param s, the swipe completed on the left side
+     * @param s  the swipe attack completed on the left side
      */
-    void setLeftSwipe(Swipe s){
+    void setLeftSwipe(SwipeAttack s){
         _leftSwipe = s;
     };
+    
     /**
      * Set the right sided swipe
      *
-     * @param s  the swipe completed on the right side
+     * @param s  the swipe attack completed on the right side
      */
-    void setRightSwipe(Swipe s){
+    void setRightSwipe(SwipeAttack s){
         _rightSwipe = s;
     };
     
     /**
-     * Print the side and direction of the swipe.
+     * Calculates whether a finger has been pressed down long enough for a charge attack
+     * and updates the state accordingly
+     *
+     * @param leftStartTime  the timestamp for when the left finger went down
+     *
+     */
+    void calculateChargeAttack(cugl::Timestamp leftStartTime);
+    
+    /**
+     * Charge the attack for the left side state
+     */
+    void chargeAttack() {
+        _leftState.isCharged = true;
+    }
+    
+    /**
+     * Calculates the direction of the swipe and sets the state/swipe.
+     *
+     * @param startPos  the starting position of the swipe
+     * @param endPos       the ending posiition of the swipe
+     * @param isLeftSidedSwipe  if the swipe was on the left side of the screen
+     *
+     */
+    void calculateSwipeDirection(cugl::Vec2 startPos, cugl::Vec2 endPos, bool isLeftSidedSwipe);
+    
+    /**
+     * Processes the type of swipe attack that was just completed on the left side
+     * and resets the left side state
+     */
+    void processLeftState();
+    
+    /**
+     * Resets the left side state to no direction and not charged
+     */
+    void resetLeftState() {
+        _leftState.direction = none;
+        _leftState.isCharged = false;
+    }
+    
+    /**
+     * Print the side and direction of the swipe (for testing only)
      *
      * @param s  the swipe we want to print
      * @param isLeftSidedSwipe if the swipe was completed on the left side
      */
-    void printSwipe(Swipe s, bool isLeftSidedSwipe);
-
+    void printSwipe(SwipeAttack s, bool isLeftSidedSwipe);
     
 public:
     
     /**
      * Creates a new swipe controller.
-     *
-     * Should call the {@link #init} method to initialize the controller.
      */
     SwipeController();
     
     /**
      * Deletes this swipe controller, releasing all resources.
      */
-    ~SwipeController() { dispose(); }
+    ~SwipeController();
     
     /**
-     * Initializes the swipe controller by initializing the input controller
-     *
-     * @param leftmostX      the leftmost X coordinate that is safe for swipes
-     * @param screenWidth  the width of the screen
-     *
-     * @return true if the initialization was successful
+     * Updates the swipe controller based on the latest inputs.
      */
-    bool init(float leftMostX, float width);
+    void update(InputController& input);
     
     /**
-     * Deletes this swipe controller, releasing all resources.
-     */
-    void dispose();
-    
-    /**
-     * Updates the swipe controller for the latest frame.
-     */
-    void update();
-    
-    /**
-     * Calculates the direction of the swipe.
+     * Returns the type of swipe attack that was just completed on the right side
      *
-     * @param startPos  the starting position of the swipe
-     * @param endPos       the ending posiition of the swipe
-     * @param isLeftSidedSwipe  if the swipe was on the left side of the screen
-     *
-     * @return Swipe, the direction of the swipe
+     * @return the right-sided swipe attack
      */
-    Swipe calculateSwipeDirection(cugl::Vec2 startPos, cugl::Vec2 endPos, bool isLeftSidedSwipe);
-
-    /**
-     * Returns the type of swipe that was just completed on the right side
-     *
-     * @return the right-sided swipe
-     */
-    Swipe getRightSwipe(){
+    SwipeAttack getRightSwipe() {
         return _rightSwipe;
     };
+    
     /**
-     * Returns the type of swipe that was just completed on the left side
+     * Returns the type of swipe attack that was just completed on the left side
      *
-     * @return the left-sided swipe
+     * @return the left-sided swipe attack
      */
-    Swipe getLeftSwipe(){
+    SwipeAttack getLeftSwipe() {
         return _leftSwipe;
     };
     
-
+    /**
+     * Returns whether the left attack is charged
+     *
+     * @return whether the left attack is charged
+     */
+    bool hasChargedAttack() {
+        return _leftState.isCharged;
+    }
     
 };
 

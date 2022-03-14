@@ -17,7 +17,7 @@ EnemyProperties SPECTER_PROPS{
 	/** Cooldown for attack(s) in seconds*/
 	2,
 	/** Attack radius of the specter*/
-	10.0f,
+	5.0f,
 	/** Density of the specter */
 	0.0f,
 	/** Name of the specter*/

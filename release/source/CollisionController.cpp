@@ -29,8 +29,9 @@ void CollisionController::beginContact(b2Contact* contact, std::shared_ptr<Playe
 
 	// See if we have landed on the ground.
 	//THIS NEED TO BE CHANGED
-	if ((player->getSensorName() == fd2 && player.get() != bd1) ||
-		(player->getSensorName() == fd1 && player.get() != bd2)) {
+	if ((player->getSensorName() == fd2 && bd1->getName() == "floor") ||
+		(player->getSensorName() == fd1 && bd2->getName() == "floor")) {
+        
 		player->setGrounded(true);
 	}
 	//handle enemy collision
@@ -103,8 +104,8 @@ void CollisionController::endContact(b2Contact* contact, std::shared_ptr<PlayerM
 
 	// See if we have left the ground
 	//THIS NEEDS TO BE CHANGED
-	if ((player->getSensorName() == fd2 && player.get() != bd1) ||
-		(player->getSensorName() == fd1 && player.get() != bd2)) {
+	if ((player->getSensorName() == fd2 && bd1->getName() == "floor") ||
+		(player->getSensorName() == fd1 && bd2->getName() == "floor")) {
 		player->setGrounded(false);
 	}
 	/* if (*fd1 == "attacksensor") {
