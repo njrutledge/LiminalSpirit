@@ -40,7 +40,7 @@ bool BaseEnemyModel::init(const cugl::Vec2& pos, const cugl::Size& size, float s
 	_horizontalSpeed = props.hspeed;
 	_attackCooldown = props.attackCooldown;
 	_attackRadius = props.attackRadius;
-	_framesPast = 0;
+	_timePast = 0.0f;
 	_enemyName = props.name;
 	_density = props.density;
 

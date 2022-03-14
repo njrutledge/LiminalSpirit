@@ -14,19 +14,19 @@ AIController::AIController() {
 	// Add initialization variables if needed
 }
 
-Vec2 AIController::getMovement(shared_ptr<BaseEnemyModel> e, Vec2 player_pos) {
+Vec2 AIController::getMovement(shared_ptr<BaseEnemyModel> e, Vec2 player_pos, float timestep) {
 	std::string name = e->getName();
 	if (name == "Lost") {
-		return Vec2(getLostMovement(e, player_pos), 0.0f);
+		return Vec2(getLostMovement(e, player_pos, timestep), 0.0f);
 	} else if (name == "Specter") {
-		return getSpecterMovement(e, player_pos);
+		return getSpecterMovement(e, player_pos, timestep);
 	}
 	else {
 		return Vec2();
 	}
 }
 
-float AIController::getLostMovement(shared_ptr<BaseEnemyModel> lost, Vec2 player_pos) {
+float AIController::getLostMovement(shared_ptr<BaseEnemyModel> lost, Vec2 player_pos, float timestep) {
 	//TODO: - check if grounded -> don't move if falling (unless flying enemy)
 	// - set states for the enemy -> more interesting ai
 
@@ -49,18 +49,18 @@ float AIController::getLostMovement(shared_ptr<BaseEnemyModel> lost, Vec2 player
 	}
 	else {
 		// Check if attack timer should be reset
-		if (lost->getAttackCooldown() < lost->getFramesPast()) {
+		if (lost->getAttackCooldown() < lost->getTimePast()) {
 			lost->setIsAttacking(false);
-			lost->setFramesPast(0);
+			lost->setTimePast(0.0f);
 		}
 		else {
-			lost->setFramesPast(lost->getFramesPast() + 1);
+			lost->setTimePast(lost->getTimePast() + timestep);
 		}
 		return 0; 
 	}
 }
 
-Vec2 AIController::getSpecterMovement(shared_ptr<BaseEnemyModel> specter, Vec2 player_pos) {
+Vec2 AIController::getSpecterMovement(shared_ptr<BaseEnemyModel> specter, Vec2 player_pos, float timestep) {
 	//TODO: Add vertical movement
 	// Use line of sight to determine ranged attacks
 
@@ -82,12 +82,12 @@ Vec2 AIController::getSpecterMovement(shared_ptr<BaseEnemyModel> specter, Vec2 p
 	}
 	else {
 		// Check if attack timer should be reset
-		if (specter->getAttackCooldown() < specter->getFramesPast()) {
+		if (specter->getAttackCooldown() < specter->getTimePast()) {
 			specter->setIsAttacking(false);
-			specter->setFramesPast(0);
+			specter->setTimePast(0.0f);
 		}
 		else {
-			specter->setFramesPast(specter->getFramesPast() + 1);
+			specter->setTimePast(specter->getTimePast() + timestep);
 		}
 		return Vec2();
 	}

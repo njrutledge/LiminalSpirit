@@ -14,8 +14,8 @@ EnemyProperties SPECTER_PROPS{
 	2.0f,
 	/** Horizontal speed of the specter*/
 	4.0f,
-	/** Cooldown for attack(s) in frames*/
-	120,
+	/** Cooldown for attack(s) in seconds*/
+	2,
 	/** Attack radius of the specter*/
 	10.0f,
 	/** Density of the specter */

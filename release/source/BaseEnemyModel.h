@@ -57,8 +57,8 @@ protected:
 	/** The horizontal speed of the enemy */
 	float _horizontalSpeed;
 
-	/** Current time (in frames) since intializing most recent attack */
-	int _framesPast;
+	/** Current time (in ms) since intializing most recent attack */
+	float _timePast;
 
 	/** The cooldown for attacking (in frames) */
 	int _attackCooldown;
@@ -161,11 +161,11 @@ public:
 	/** Sets the horizontal speed of the enemy*/
 	void setHorizontalSpeed(bool value) { _horizontalSpeed = value; }
 
-	/** Returns the frames since the last attack*/
-	float getFramesPast() const { return _framesPast; }
+	/** Returns the time since the last attack*/
+	float getTimePast() const { return _timePast; }
 
-	/** Sets the horizontal speed of the enemy*/
-	void setFramesPast(int value) { _framesPast = value; }
+	/** Time since last attack */
+	void setTimePast(float value) { _timePast = value; }
 
 	/** Gets the name of the enemy*/
 	std::string getName() { return _enemyName; }
