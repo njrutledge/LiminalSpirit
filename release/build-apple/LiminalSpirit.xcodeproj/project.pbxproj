@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		57BCBDFB27DF869700AD65C1 /* AIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57BCBDF627DF869700AD65C1 /* AIController.cpp */; };
-		57BCBDFC27DF869700AD65C1 /* AIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57BCBDF627DF869700AD65C1 /* AIController.cpp */; };
 		57BF1B1427D17EAD003AC976 /* MovementInput.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57BF1B0F27D17EAD003AC976 /* MovementInput.cpp */; };
 		57BF1B1527D180BA003AC976 /* MovementInput.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57BF1B0F27D17EAD003AC976 /* MovementInput.cpp */; };
 		85D0B48627D010FC004EF4C8 /* BaseEnemyModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85D0B48527D010FC004EF4C8 /* BaseEnemyModel.cpp */; };
@@ -124,8 +122,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		57BCBDF627DF869700AD65C1 /* AIController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AIController.cpp; sourceTree = "<group>"; };
-		57BCBDFA27DF869700AD65C1 /* AIController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AIController.hpp; sourceTree = "<group>"; };
 		57BF1B0F27D17EAD003AC976 /* MovementInput.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MovementInput.cpp; sourceTree = "<group>"; };
 		57BF1B1327D17EAD003AC976 /* MovementInput.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MovementInput.hpp; sourceTree = "<group>"; };
 		85D0B48127D010E9004EF4C8 /* BaseEnemyModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseEnemyModel.h; sourceTree = "<group>"; };
@@ -371,8 +367,6 @@
 		EBBF18B11D749176008E2001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				57BCBDF627DF869700AD65C1 /* AIController.cpp */,
-				57BCBDFA27DF869700AD65C1 /* AIController.hpp */,
 				57BF1B0F27D17EAD003AC976 /* MovementInput.cpp */,
 				57BF1B1327D17EAD003AC976 /* MovementInput.hpp */,
 				F05176D727D071D900C0617F /* CollisionController.cpp */,
@@ -584,7 +578,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F05176DD27D080C800C0617F /* SwipeController.cpp in Sources */,
-				57BCBDFC27DF869700AD65C1 /* AIController.cpp in Sources */,
 				F05176DB27D0808A00C0617F /* AttackController.cpp in Sources */,
 				F05176E127D080DF00C0617F /* CollisionController.cpp in Sources */,
 				57BF1B1527D180BA003AC976 /* MovementInput.cpp in Sources */,
@@ -601,7 +594,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F025104127D02C6C00AB80AA /* SwipeController.cpp in Sources */,
-				57BCBDFB27DF869700AD65C1 /* AIController.cpp in Sources */,
 				F025104027D02C6C00AB80AA /* InputController.cpp in Sources */,
 				EB2BE9B61D74952A002FE78B /* main.cpp in Sources */,
 				57BF1B1427D17EAD003AC976 /* MovementInput.cpp in Sources */,
