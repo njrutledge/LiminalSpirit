@@ -79,7 +79,17 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 {
 
     Size dimen = Application::get()->getDisplaySize();
-    float ratio1 = dimen.width / dimen.height;
+    dimen *= SCENE_WIDTH / dimen.width;
+    if (assets == nullptr)
+    {
+        return false;
+    }
+    else if (!Scene2::init(dimen))
+    {
+        return false;
+    }
+
+    /*float ratio1 = dimen.width / dimen.height;
     float ratio2 = ((float)SCENE_WIDTH) / ((float)SCENE_HEIGHT);
     if (ratio1 < ratio2)
     {
@@ -90,21 +100,24 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         dimen *= SCENE_HEIGHT / dimen.height;
     }
     CULog("Dimen: %f, %f", dimen.width, dimen.height);
-
+    */
 #if defined(CU_TOUCH_SCREEN)
     Input::activate<Touchscreen>();
 #else
     Input::activate<Mouse>();
 #endif
 
-    // Create a scene graph the same size as the window
-    _scene = Scene2::alloc(dimen.width, dimen.height);
-    // Create a sprite batch (and background color) to render the scene
-    //_batch = SpriteBatch::alloc();
-    Application::get()->setClearColor(Color4(229, 229, 229, 255));
+    // Start up the input handler
+    _assets = assets;
 
-    // Create an asset manager to load all assets
-    _assets = AssetManager::alloc();
+    // Create a scene graph the same size as the window
+    //_scene = Scene2::alloc(dimen.width, dimen.height);
+    auto scene = _assets->get<scene2::SceneNode>("game");
+    scene->setContentSize(dimen);
+    scene->doLayout();
+
+    /**
+    Application::get()->setClearColor(Color4(229, 229, 229, 255));
 
     // You have to attach the individual loaders for each asset type
     _assets->attach<Texture>(TextureLoader::alloc()->getHook());
@@ -114,11 +127,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _assets->loadDirectory("json/assets.json");
 
     _tiltInput.init();
+
     // Activate mouse or touch screen input as appropriate
     // We have to do this BEFORE the scene, because the scene has a button
-
-    // Build the scene from these assets
-    // Application::onStartup();
 
     // Report the safe area
     Rect bounds = Display::get()->getSafeBounds();
@@ -153,13 +164,15 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _worldnode = scene2::SceneNode::alloc();
     _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
     _worldnode->setPosition(offset);
-    _scene->addChild(_worldnode);
+    // scene->addChild(_worldnode);
+    addChild(_worldnode);
 
     _debugnode = scene2::SceneNode::alloc();
     _debugnode->setScale(_scale); // Debug node draws in PHYSICS coordinates
     _debugnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
     _debugnode->setPosition(offset);
-    _scene->addChild(_debugnode);
+    // scene->addChild(_debugnode);
+    addChild(_debugnode);
 
     _swipes.init(0, Application::get()->getDisplayWidth());
 
@@ -167,10 +180,50 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     _collider = CollisionController();
 
-    setDebug(false);
-    buildScene();
-    _pMeleeTexture = _assets->get<Texture>(PATTACK_TEXTURE);
-    _attacks.init(_pMeleeTexture->getSize() / _scale / 2.0f, _scale / 2.0f, offset, _player);
+    // add HUD
+    // // Create a button.  A button has an up image and a down image
+    /*
+    std::shared_ptr<Texture> up = _assets->get<Texture>("close-normal");
+    std::shared_ptr<Texture> down = _assets->get<Texture>("close-selected");
+
+    Size bsize = up->getSize();
+    std::shared_ptr<scene2::Button> button = scene2::Button::alloc(scene2::PolygonNode::allocWithTexture(up),
+        scene2::PolygonNode::allocWithTexture(down));*/
+    //  Create a callback function for the button
+    /*button->setName("close");
+    button->addListener([=](const std::string &name, bool down)
+                        {
+        // Only quit when the button is released
+        if (!down) {
+            CULog("Goodbye!");
+            Application::get()->quit();//this->quit();
+        } });
+
+    // Find the safe area, adapting to the iPhone X
+    Rect safe = Application::get()->getSafeBounds();
+    safe.origin *= scale;
+    safe.size *= scale;
+
+    // Get the right and bottom offsets.
+    float bOffset = safe.origin.y;
+    float rOffset = (size.width) - (safe.origin.x + safe.size.width);
+
+    // Position the button in the bottom right corner
+    button->setAnchor(Vec2::ANCHOR_CENTER);
+    button->setPosition(size.width - (bsize.width + rOffset) / 2, (bsize.height + bOffset) / 2);
+    */
+    // Add the logo and button to the scene graph
+    // scene->addChild(button);
+
+    // We can only activate a button AFTER it is added to a scene
+    // button->activate();
+
+    // activate scene
+    //     setDebug(false);
+    // buildScene();
+    addChild(scene);
+    // _pMeleeTexture = _assets->get<Texture>(PATTACK_TEXTURE);
+    // _attacks.init(_pMeleeTexture->getSize() / _scale / 2.0f, _scale / 2.0f, offset, _player);
     return true;
 }
 
@@ -181,7 +234,7 @@ void GameScene::dispose()
 {
     // Delete all smart pointers
     _logo = nullptr;
-    _scene = nullptr;
+    //_scene = nullptr;
     //_batch = nullptr;
     _assets = nullptr;
     _world = nullptr;
@@ -315,14 +368,14 @@ void GameScene::update(float timestep)
 /**
  * The method called to draw the gameplay scene
  */
-void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
+void GameScene::render(const std::shared_ptr<cugl::SpriteBatch>& batch)
 {
     // This takes care of begin/end
 
-    _scene->render(batch);
-
-    batch->begin(_scene->getCamera()->getCombined());
-    _attacks.draw(batch);
+    //_scene->render(batch);
+    Scene2::render(batch);
+    //batch->begin(getCamera()->getCombined());
+    //_attacks.draw(batch);
     batch->end();
 }
 
@@ -354,33 +407,6 @@ void GameScene::buildScene()
     // Put the logo in the middle of the screen
     _logo->setAnchor(Vec2::ANCHOR_CENTER);
     _logo->setPosition(size.width / 2, size.height / 2);
-
-    // Create a button.  A button has an up image and a down image
-    std::shared_ptr<Texture> up = _assets->get<Texture>("close-normal");
-    std::shared_ptr<Texture> down = _assets->get<Texture>("close-selected");
-
-    Size bsize = up->getSize();
-    std::shared_ptr<scene2::Button> button = scene2::Button::alloc(scene2::PolygonNode::allocWithTexture(up),
-                                                                   scene2::PolygonNode::allocWithTexture(down));
-
-    // Create a callback function for the button
-    button->setName("close");
-    button->addListener([=](const std::string &name, bool down)
-                        {
-        // Only quit when the button is released
-        if (!down) {
-            CULog("Goodbye!");
-            Application::get()->quit();//this->quit();
-        } });
-
-    // Find the safe area, adapting to the iPhone X
-    Rect safe = Application::get()->getSafeBounds();
-    safe.origin *= scale;
-    safe.size *= scale;
-
-    // Get the right and bottom offsets.
-    float bOffset = safe.origin.y;
-    float rOffset = (size.width) - (safe.origin.x + safe.size.width);
 
     // Making the floor -jdg274
     Rect floorRect = Rect(0, 0, 32, 0.5);
@@ -414,10 +440,6 @@ void GameScene::buildScene()
     rightNode->setColor(Color4::BLACK);
     addObstacle(right, rightNode, 1);
 
-    // Position the button in the bottom right corner
-    button->setAnchor(Vec2::ANCHOR_CENTER);
-    button->setPosition(size.width - (bsize.width + rOffset) / 2, (bsize.height + bOffset) / 2);
-
     Vec2 enemyPos = ENEMY_POS;
     std::shared_ptr<scene2::SceneNode> enemyNode = scene2::SceneNode::alloc();
     std::shared_ptr<Texture> enemyImage = _assets->get<Texture>(ENEMY_TEXTURE);
@@ -450,12 +472,6 @@ void GameScene::buildScene()
     _player->setDebugColor(Color4::RED);
     sprite->setScale(0.2f);
     addObstacle(_player, sprite, true);
-
-    // Add the logo and button to the scene graph
-    _scene->addChild(button);
-
-    // We can only activate a button AFTER it is added to a scene
-    button->activate();
 
     // Start the logo countdown and C-style random number generator
     _countdown = TIME_STEP;

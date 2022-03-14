@@ -2,7 +2,7 @@
 //  GameScene.hpp
 //  Cornell University Game Library (CUGL)
 //
-//  This class manages the gameplay.
+//  This class manages the gameplay. It represents a Scene
 //
 //  CUGL zlib License:
 //      This software is provided 'as-is', without any express or implied
@@ -49,7 +49,7 @@ protected:
     /** The asset manager for this game mode */
     std::shared_ptr<cugl::AssetManager> _assets;
     /** A scene graph, used to display our 2D scenes */
-    std::shared_ptr<cugl::Scene2> _scene;
+    // std::shared_ptr<cugl::Scene2> _scene;
     /** A reference to the logo, so that we can move it around */
     std::shared_ptr<cugl::scene2::SceneNode> _logo;
     /** The physics world */

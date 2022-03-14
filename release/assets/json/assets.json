@@ -43,5 +43,31 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		}
+	},
+	"scene2s": {
+		"game": {
+			"type": "Node",
+			"comment": "This is the root node of the scene",
+			"format": {
+				"type": "Anchored"
+			},
+			"children": {
+				"backdrop": {
+					"type": "Image",
+					"data": {
+						"texture": "background",
+						"anchor": [
+							0,
+							0.5
+						],
+						"scale": 0.5
+					},
+					"layout": {
+						"x_anchor": "left",
+						"y_anchor": "middle"
+					}
+				}
+			}
+		}
 	}
 }
