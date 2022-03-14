@@ -152,7 +152,7 @@ void LiminalSpirit::onStartup()
     
     // TODO this init might be wrong, Nick had _scale/2.0f
     _pMeleeTexture = _assets->get<Texture>(PATTACK_TEXTURE);
-    _attacks.init(_pMeleeTexture->getSize()/_scale/2.0f, _scale, 1.5, cugl::Vec2::UNIT_Y, cugl::Vec2(0,0.5), 0.5, 1, 0.5, 0.1);
+    _attacks.init(_scale, 1.5, cugl::Vec2::UNIT_Y, cugl::Vec2(0,0.5), 0.5, 1, 0.5, 0.1);
     _debugnode = scene2::SceneNode::alloc();
     _debugnode->setScale(_scale); // Debug node draws in PHYSICS coordinates
     _debugnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
@@ -250,11 +250,16 @@ void LiminalSpirit::update(float timestep)
         (*it)->setVY(direction.y);
         if ((*it)->isAttacking()) {
             //TODO: Need to variablize attack variables based on enemy type
+            (*it)->setIsAttacking(false);
+            Vec2 play_p = _player->getPosition();
+            Vec2 en_p = (*it)->getPosition();
+            Vec2 vel = Vec2(0.5, 0);
             if ((*it)->getName() == "Lost") {
-                _attacks.createAttack(Vec2((*it)->getX(), (*it)->getY()) , 1.0f, 60.0f, 1.0f, AttackController::Type::e_melee, Vec2());
+                _attacks.createAttack(Vec2((*it)->getX(), (*it)->getY()) , 1.0f, 0.08f, 1.0f, AttackController::Type::e_melee, vel.rotate((play_p - en_p).getAngle()));
+                
             }
             else if ((*it)->getName() == "Specter") {
-                //_attacks.createAttack();
+                _attacks.createAttack(Vec2((*it)->getX(), (*it)->getY()) , 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()));
             }
         }
     }
@@ -316,6 +321,9 @@ void LiminalSpirit::update(float timestep)
             eit++;
         }
     }
+   // if (_player->isRemoved()) {
+    
+   // }
     //CULog("Attacks size: %d", _attacks._current.size());
     //CULog("World Size: %d", _world->getObstacles().size());
    

@@ -92,7 +92,7 @@ public:
          * @param scale The drawing scale size of the hitbox
          */
         Attack() : CapsuleObstacle(), _sensorName(ATTACK_SENSOR_NAME) { }
-        bool init(const cugl::Vec2 p, float radius, float a, float dmg, float scale, cugl::Size size, Type s, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel);
+        bool init(const cugl::Vec2 p, float radius, float a, float dmg, float scale, Type s, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel);
         
         
         /**
@@ -129,12 +129,12 @@ public:
         static std::shared_ptr<Attack> alloc(const cugl::Vec2 p, float radius, float age, float dmg, float scale,
                                              Type s, cugl::Vec2 vel, cugl::Vec2 oof, cugl::PolyFactory b) {
             std::shared_ptr<Attack> result = std::make_shared<Attack>();
-            return (result->init(p, radius, age, dmg, scale, cugl::Size(10,10), s, oof, b, vel) ? result : nullptr);
+            return (result->init(p, radius, age, dmg, scale, s, oof, b, vel) ? result : nullptr);
         }
         
-        static std::shared_ptr<Attack> alloc(const cugl::Vec2 p, float radius, float age, float dmg, float scale, cugl::Size size, Type s, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel) {
+        static std::shared_ptr<Attack> alloc(const cugl::Vec2 p, float radius, float age, float dmg, float scale, Type s, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel) {
             std::shared_ptr<Attack> result = std::make_shared<Attack>();
-            return (result->init(p, radius, age, dmg, scale, size, s, oof, b, vel) ? result : nullptr);
+            return (result->init(p, radius, age, dmg, scale, s, oof, b, vel) ? result : nullptr);
         }
     };
     
@@ -143,8 +143,6 @@ public:
     std::unordered_set<std::shared_ptr<Attack>> _current;
     
     float _scale;
-
-    cugl::Size _nsize;
 
     std::shared_ptr<PlayerModel> _player;
     
@@ -189,7 +187,7 @@ public:
      *  Initializes the attack controller. Currently greyed out because we only have basic attack hitboxes. Can use a json to set predetermined attack shapes, designs, and damage if we have more complicated moves and attacks.
      *  Projectile velocities are vectors facing the +y direction. They are rotated accordingly when initializing different direction attacks.
      */
-    void init(cugl::Size size, float scale, float oof, cugl::Vec2 p_vel, cugl::Vec2 c_vel, float hit_wind, float hit_cooldown, float reload, float swingSpeed);
+    void init(float scale, float oof, cugl::Vec2 p_vel, cugl::Vec2 c_vel, float hit_wind, float hit_cooldown, float reload, float swingSpeed);
     
     /**
      *  Update function for attack controller. Updates all attacks and removes inactive attacks from queue.
