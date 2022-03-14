@@ -35,7 +35,7 @@
 #include "AttackController.hpp"
 #include "InputController.hpp"
 #include "MovementInput.hpp"
-#include "PlatformSet.hpp"
+//#include "PlatformSet.hpp"
 /**
  * Class for a simple Hello World style application
  *
