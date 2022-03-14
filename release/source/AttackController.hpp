@@ -24,14 +24,6 @@
 
 class AttackController {
     
-    enum Type {
-        p_left,
-        p_right,
-        p_normal,
-        e_melee,
-        e_range
-    };
-    
     enum State {
         first,
         h2_right,
@@ -42,6 +34,14 @@ class AttackController {
     };
     
 public:
+
+    enum Type {
+        p_left,
+        p_right,
+        p_normal,
+        e_melee,
+        e_range
+    };
     
     class Attack : public cugl::physics2::CapsuleObstacle{
         

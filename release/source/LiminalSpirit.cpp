@@ -248,6 +248,15 @@ void LiminalSpirit::update(float timestep)
         Vec2 direction = _ai.getMovement(*it, _player->getPosition(), timestep);
         (*it)->setVX(direction.x);
         (*it)->setVY(direction.y);
+        if ((*it)->isAttacking()) {
+            //TODO: Need to variablize attack variables based on enemy type
+            if ((*it)->getName() == "Lost") {
+                _attacks.createAttack(Vec2((*it)->getX(), (*it)->getY()) , 1.0f, 60.0f, 1.0f, AttackController::Type::e_melee, Vec2());
+            }
+            else if ((*it)->getName() == "Specter") {
+                //_attacks.createAttack();
+            }
+        }
     }
     
 
