@@ -9,7 +9,7 @@
 #include "AttackController.hpp"
 #include "PlayerModel.h"
 
-bool AttackController::Attack::init(const cugl::Vec2 p,float a, float dmg, float scale, cugl::Size size, Side s, cugl::Vec2 oof, cugl::PolyFactory b, boolean playerAttack) {
+bool AttackController::Attack::init(const cugl::Vec2 p,float a, float dmg, float scale, cugl::Size size, Side s, cugl::Vec2 oof, cugl::PolyFactory b, bool playerAttack) {
     
     position = (p + oof);
     radius = 2;

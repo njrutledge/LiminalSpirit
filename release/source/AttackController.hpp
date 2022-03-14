@@ -76,7 +76,7 @@ public:
          * @param scale The drawing scale size of the hitbox
          */
         Attack() : CapsuleObstacle(), _sensorName(ATTACK_SENSOR_NAME) { }
-        bool init(const cugl::Vec2 p, float a, float dmg, float scale,cugl::Size size, Side s, cugl::Vec2 oof, cugl::PolyFactory b, boolean playerAttack);
+        bool init(const cugl::Vec2 p, float a, float dmg, float scale,cugl::Size size, Side s, cugl::Vec2 oof, cugl::PolyFactory b, bool playerAttack);
         
         
         /**
@@ -99,7 +99,7 @@ public:
         Side getSide(){return side;}
 
         std::string* getSensorName() { return &_sensorName; }
-        std::string* setSensorName(string s) { _sensorName = s; }
+        void setSensorName(string s) { _sensorName = s; }
 
 #pragma mark - 
 #pragma mark Physics Methods
@@ -110,7 +110,7 @@ public:
         void releaseFixtures() override;
 #pragma mark -
 #pragma mark Static Constructors
-        static std::shared_ptr<Attack> alloc(const cugl::Vec2 p, float a, float dmg, float scale, cugl::Size size, Side s, cugl::Vec2 oof, cugl::PolyFactory b, boolean playerAttack) {
+        static std::shared_ptr<Attack> alloc(const cugl::Vec2 p, float a, float dmg, float scale, cugl::Size size, Side s, cugl::Vec2 oof, cugl::PolyFactory b, bool playerAttack) {
             std::shared_ptr<Attack> result = std::make_shared<Attack>();
             return (result->init(p, a, dmg, scale, size, s, oof, b, playerAttack) ? result : nullptr);
         }

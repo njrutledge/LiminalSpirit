@@ -9,6 +9,21 @@
 /* Begin PBXBuildFile section */
 		57BF1B1427D17EAD003AC976 /* MovementInput.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57BF1B0F27D17EAD003AC976 /* MovementInput.cpp */; };
 		57BF1B1527D180BA003AC976 /* MovementInput.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57BF1B0F27D17EAD003AC976 /* MovementInput.cpp */; };
+		85B0001727DFAC8500DAC3F2 /* Lost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001127DFAC8500DAC3F2 /* Lost.cpp */; };
+		85B0001827DFAC8500DAC3F2 /* Lost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001127DFAC8500DAC3F2 /* Lost.cpp */; };
+		85B0001927DFAC8500DAC3F2 /* Lost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001127DFAC8500DAC3F2 /* Lost.cpp */; };
+		85B0001A27DFAC8500DAC3F2 /* Specter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001227DFAC8500DAC3F2 /* Specter.cpp */; };
+		85B0001B27DFAC8500DAC3F2 /* Specter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001227DFAC8500DAC3F2 /* Specter.cpp */; };
+		85B0001C27DFAC8500DAC3F2 /* Specter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001227DFAC8500DAC3F2 /* Specter.cpp */; };
+		85B0001D27DFAC8500DAC3F2 /* GameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001427DFAC8500DAC3F2 /* GameScene.cpp */; };
+		85B0001E27DFAC8500DAC3F2 /* GameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001427DFAC8500DAC3F2 /* GameScene.cpp */; };
+		85B0001F27DFAC8500DAC3F2 /* GameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001427DFAC8500DAC3F2 /* GameScene.cpp */; };
+		85B0002027DFAC8500DAC3F2 /* LoadingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001527DFAC8500DAC3F2 /* LoadingScene.cpp */; };
+		85B0002127DFAC8500DAC3F2 /* LoadingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001527DFAC8500DAC3F2 /* LoadingScene.cpp */; };
+		85B0002227DFAC8500DAC3F2 /* LoadingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001527DFAC8500DAC3F2 /* LoadingScene.cpp */; };
+		85B0002327DFAC8500DAC3F2 /* AIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001627DFAC8500DAC3F2 /* AIController.cpp */; };
+		85B0002427DFAC8500DAC3F2 /* AIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001627DFAC8500DAC3F2 /* AIController.cpp */; };
+		85B0002527DFAC8500DAC3F2 /* AIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001627DFAC8500DAC3F2 /* AIController.cpp */; };
 		85D0B48627D010FC004EF4C8 /* BaseEnemyModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85D0B48527D010FC004EF4C8 /* BaseEnemyModel.cpp */; };
 		EB07CFB621EFF3F8000CB3A3 /* DeviceMargins.plist in Resources */ = {isa = PBXBuildFile; fileRef = EB07CFB021EFF3EF000CB3A3 /* DeviceMargins.plist */; };
 		EB22BDE025D0E00A002ACE41 /* libcugl-mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EB22BDC825D0DE75002ACE41 /* libcugl-mac.a */; };
@@ -124,9 +139,18 @@
 /* Begin PBXFileReference section */
 		57BF1B0F27D17EAD003AC976 /* MovementInput.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MovementInput.cpp; sourceTree = "<group>"; };
 		57BF1B1327D17EAD003AC976 /* MovementInput.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MovementInput.hpp; sourceTree = "<group>"; };
+		85B0000D27DFAC8500DAC3F2 /* AIController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AIController.hpp; sourceTree = "<group>"; };
+		85B0000E27DFAC8500DAC3F2 /* GameScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameScene.hpp; sourceTree = "<group>"; };
+		85B0000F27DFAC8500DAC3F2 /* Lost.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Lost.hpp; sourceTree = "<group>"; };
+		85B0001027DFAC8500DAC3F2 /* LoadingScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LoadingScene.hpp; sourceTree = "<group>"; };
+		85B0001127DFAC8500DAC3F2 /* Lost.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Lost.cpp; sourceTree = "<group>"; };
+		85B0001227DFAC8500DAC3F2 /* Specter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Specter.cpp; sourceTree = "<group>"; };
+		85B0001327DFAC8500DAC3F2 /* Specter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Specter.hpp; sourceTree = "<group>"; };
+		85B0001427DFAC8500DAC3F2 /* GameScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameScene.cpp; sourceTree = "<group>"; };
+		85B0001527DFAC8500DAC3F2 /* LoadingScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoadingScene.cpp; sourceTree = "<group>"; };
+		85B0001627DFAC8500DAC3F2 /* AIController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AIController.cpp; sourceTree = "<group>"; };
 		85D0B48127D010E9004EF4C8 /* BaseEnemyModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseEnemyModel.h; sourceTree = "<group>"; };
 		85D0B48527D010FC004EF4C8 /* BaseEnemyModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaseEnemyModel.cpp; sourceTree = "<group>"; };
-		85D0B48727D01107004EF4C8 /* LSCharacter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSCharacter.h; sourceTree = "<group>"; };
 		EB07CFB021EFF3EF000CB3A3 /* DeviceMargins.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DeviceMargins.plist; sourceTree = "<group>"; };
 		EB22BF5E25D0E8BC002ACE41 /* LiminalSpirit (Sim).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LiminalSpirit (Sim).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB2BE9B21D74952A002FE78B /* LiminalSpirit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LiminalSpirit.cpp; sourceTree = "<group>"; };
@@ -367,6 +391,16 @@
 		EBBF18B11D749176008E2001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				85B0001627DFAC8500DAC3F2 /* AIController.cpp */,
+				85B0000D27DFAC8500DAC3F2 /* AIController.hpp */,
+				85B0001427DFAC8500DAC3F2 /* GameScene.cpp */,
+				85B0000E27DFAC8500DAC3F2 /* GameScene.hpp */,
+				85B0001527DFAC8500DAC3F2 /* LoadingScene.cpp */,
+				85B0001027DFAC8500DAC3F2 /* LoadingScene.hpp */,
+				85B0001127DFAC8500DAC3F2 /* Lost.cpp */,
+				85B0000F27DFAC8500DAC3F2 /* Lost.hpp */,
+				85B0001227DFAC8500DAC3F2 /* Specter.cpp */,
+				85B0001327DFAC8500DAC3F2 /* Specter.hpp */,
 				57BF1B0F27D17EAD003AC976 /* MovementInput.cpp */,
 				57BF1B1327D17EAD003AC976 /* MovementInput.hpp */,
 				F05176D727D071D900C0617F /* CollisionController.cpp */,
@@ -379,7 +413,6 @@
 				F025103C27D02C6C00AB80AA /* InputController.hpp */,
 				F025103D27D02C6C00AB80AA /* SwipeController.cpp */,
 				F025103E27D02C6C00AB80AA /* SwipeController.hpp */,
-				85D0B48727D01107004EF4C8 /* LSCharacter.h */,
 				85D0B48527D010FC004EF4C8 /* BaseEnemyModel.cpp */,
 				85D0B48127D010E9004EF4C8 /* BaseEnemyModel.h */,
 				EB2BE9B41D74952A002FE78B /* main.cpp */,
@@ -562,12 +595,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				85B0001927DFAC8500DAC3F2 /* Lost.cpp in Sources */,
 				F05176DE27D080C900C0617F /* SwipeController.cpp in Sources */,
+				85B0001C27DFAC8500DAC3F2 /* Specter.cpp in Sources */,
 				F05176DC27D0808B00C0617F /* AttackController.cpp in Sources */,
 				F05176E227D080DF00C0617F /* CollisionController.cpp in Sources */,
 				F05176E427D080E700C0617F /* InputController.cpp in Sources */,
 				EB9CDA3925D0EAB100EE1A09 /* main.cpp in Sources */,
 				F05176E627D080ED00C0617F /* BaseEnemyModel.cpp in Sources */,
+				85B0001F27DFAC8500DAC3F2 /* GameScene.cpp in Sources */,
+				85B0002527DFAC8500DAC3F2 /* AIController.cpp in Sources */,
+				85B0002227DFAC8500DAC3F2 /* LoadingScene.cpp in Sources */,
 				F05176E027D080CE00C0617F /* PlayerModel.cpp in Sources */,
 				EB9CDA3525D0EAAC00EE1A09 /* LiminalSpirit.cpp in Sources */,
 			);
@@ -578,14 +616,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				F05176DD27D080C800C0617F /* SwipeController.cpp in Sources */,
+				85B0002427DFAC8500DAC3F2 /* AIController.cpp in Sources */,
 				F05176DB27D0808A00C0617F /* AttackController.cpp in Sources */,
+				85B0002127DFAC8500DAC3F2 /* LoadingScene.cpp in Sources */,
 				F05176E127D080DF00C0617F /* CollisionController.cpp in Sources */,
+				85B0001B27DFAC8500DAC3F2 /* Specter.cpp in Sources */,
 				57BF1B1527D180BA003AC976 /* MovementInput.cpp in Sources */,
 				F05176E327D080E600C0617F /* InputController.cpp in Sources */,
 				EB7454AE1D74D891002FBAE6 /* main.cpp in Sources */,
 				F05176E527D080EC00C0617F /* BaseEnemyModel.cpp in Sources */,
 				F05176DF27D080CE00C0617F /* PlayerModel.cpp in Sources */,
 				EB7454AF1D74D891002FBAE6 /* LiminalSpirit.cpp in Sources */,
+				85B0001E27DFAC8500DAC3F2 /* GameScene.cpp in Sources */,
+				85B0001827DFAC8500DAC3F2 /* Lost.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -594,14 +637,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				F025104127D02C6C00AB80AA /* SwipeController.cpp in Sources */,
+				85B0002327DFAC8500DAC3F2 /* AIController.cpp in Sources */,
 				F025104027D02C6C00AB80AA /* InputController.cpp in Sources */,
+				85B0002027DFAC8500DAC3F2 /* LoadingScene.cpp in Sources */,
 				EB2BE9B61D74952A002FE78B /* main.cpp in Sources */,
+				85B0001A27DFAC8500DAC3F2 /* Specter.cpp in Sources */,
 				57BF1B1427D17EAD003AC976 /* MovementInput.cpp in Sources */,
 				F025104227D02C6C00AB80AA /* AttackController.cpp in Sources */,
 				F05176D927D071D900C0617F /* CollisionController.cpp in Sources */,
 				EB2BE9B51D74952A002FE78B /* LiminalSpirit.cpp in Sources */,
 				F05176DA27D071D900C0617F /* PlayerModel.cpp in Sources */,
 				85D0B48627D010FC004EF4C8 /* BaseEnemyModel.cpp in Sources */,
+				85B0001D27DFAC8500DAC3F2 /* GameScene.cpp in Sources */,
+				85B0001727DFAC8500DAC3F2 /* Lost.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -347,7 +347,7 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
 
     _scene->render(batch);
 
-    // batch->begin(_scene->getCamera()->getCombined());
+    batch->begin(_scene->getCamera()->getCombined());
     _attacks.draw(batch);
     batch->end();
 }
