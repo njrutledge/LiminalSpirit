@@ -389,6 +389,7 @@ void LiminalSpirit::buildScene()
     floor->setBodyType(b2_staticBody);
     std::shared_ptr<scene2::PolygonNode> floorNode = scene2::PolygonNode::allocWithPoly(floorRect*_scale);
     floorNode->setColor(Color4::BLACK);
+    floor->setName("floor");
     addObstacle(floor, floorNode, 1);
 
     // Making the ceiling -jdg274
