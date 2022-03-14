@@ -152,7 +152,7 @@ void LiminalSpirit::onStartup()
     
     // TODO this init might be wrong, Nick had _scale/2.0f
     _pMeleeTexture = _assets->get<Texture>(PATTACK_TEXTURE);
-    _attacks.init(_pMeleeTexture->getSize()/_scale/2.0f, _scale, offset, cugl::Vec2::UNIT_Y, cugl::Vec2(0,0.5), 0.5, 1, 0.5, 0.1);
+    _attacks.init(_pMeleeTexture->getSize()/_scale/2.0f, _scale, 1.5, cugl::Vec2::UNIT_Y, cugl::Vec2(0,0.5), 0.5, 1, 0.5, 0.1);
     _debugnode = scene2::SceneNode::alloc();
     _debugnode->setScale(_scale); // Debug node draws in PHYSICS coordinates
     _debugnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
@@ -260,10 +260,11 @@ void LiminalSpirit::update(float timestep)
     for (auto it = _attacks._pending.begin(); it != _attacks._pending.end(); ++it) {
         //FIX WHEN TEXTURE EXISTS
         std::shared_ptr<scene2::PolygonNode> attackSprite = scene2::PolygonNode::allocWithTexture(_pMeleeTexture);
-        attackSprite->setScale(.5f);
+        attackSprite->setScale(.5f * (*it)->getRadius());
 
         addObstacle((*it), attackSprite, true);
     }
+    //DO NOT MOVE THIS LINE
     _attacks.update(_player->getPosition(), _player->getBody()->GetLinearVelocity(), timestep);
     if(_swipes.getRightSwipe() == _swipes.upAttack){
         _player->setJumping(true);
@@ -328,7 +329,7 @@ void LiminalSpirit::draw()
     _scene->render(_batch);
     
     _batch->begin(_scene->getCamera()->getCombined());
-    _attacks.draw(_batch);
+//    _attacks.draw(_batch);
     _batch->end();
 }
 

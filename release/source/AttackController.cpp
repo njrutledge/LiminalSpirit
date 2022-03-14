@@ -15,20 +15,20 @@ using namespace cugl;
 
 bool AttackController::Attack::init(const cugl::Vec2 p, float radius, float a, float dmg, float scale, cugl::Size size, Side s, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel) {
     
-    position = (p + oof);
+    _position = (p + oof);
     _radius = radius;
-    age = a;
-    damage = dmg;
-    side = s;
+    _age = a;
+    _damage = dmg;
+    _side = s;
     _scale = scale;
     _vel = vel;
     cugl::Size nsize = size;
-    offset = oof;
-    active = true;
-    ball = b.makeCircle(position, radius);
-    if (CapsuleObstacle::init(position, nsize)) {
+    _offset = oof;
+    _active = true;
+    _ball = b.makeCircle(_position, _radius);
+    if (CapsuleObstacle::init(_position, nsize)) {
         // TODO change the sensor naming based on if its player attack
-        if (side == Side::left || side == Side::right){
+        if (_side == Side::left || _side == Side::right){
             _sensorName = "player" + _sensorName;
         }else {
             _sensorName = "enemy"  + _sensorName;
@@ -80,17 +80,17 @@ void AttackController::Attack::releaseFixtures() {
 }
 
 void AttackController::Attack::update(const cugl::Vec2 p, bool follow, float dt, b2Vec2 VX) {
-    if (active) {
+    if (_active) {
         if (follow) {
-            position = p + offset;
+            _position = p + _offset;
             _body->SetLinearVelocity(VX);
         }else{
             _body->SetLinearVelocity(b2Vec2(_vel.x*_scale, _vel.y*_scale));
         }
-        position = position + _vel;
-        age -= 1;
-        if (age == 0) {
-            active =  false;
+        _position = _position + _vel;
+        _age -= 1;
+        if (_age == 0) {
+            _active =  false;
         }
     }
 }
@@ -99,19 +99,20 @@ AttackController::AttackController() {
     //need to add initialization for left and right offsets
 }
 
-void AttackController::init(cugl::Size size, float scale, cugl::Vec2 oof, cugl::Vec2 p_vel, cugl::Vec2 c_vel, float hit_wind, float hit_cooldown, float reload, float swingSpeed) {
+void AttackController::init(cugl::Size size, float scale, float oof, cugl::Vec2 p_vel, cugl::Vec2 c_vel, float hit_wind, float hit_cooldown, float reload, float swingSpeed) {
     _nsize = size;
     _scale = scale;
-    leftOff = cugl::Vec2(-1.5f, 0.0f) + (oof / (2 * scale));
-    rightOff = cugl::Vec2(1.5f, 0.0f) + (oof / (2 * scale));
-    upOff = cugl::Vec2(0, 1.5f) + (oof / (2 * scale));
-    downOff = cugl::Vec2(0, -1.5f) + (oof / (2 * scale));
+    _leftOff = cugl::Vec2(-oof, 0.0f);
+    _rightOff = cugl::Vec2(oof, 0.0f);
+    _upOff = cugl::Vec2(0, oof);
+    _downOff = cugl::Vec2(0, -oof);
     _p_vel = p_vel;
     _c_vel = c_vel;
     _hit_window = hit_wind;
     _multi_cooldown = hit_cooldown;
     _meleeCounter = 0;
     _rangedCounter = 0;
+    _multiCounter = 0;
     _reload = reload;
     _swing = swingSpeed;
     _melee = first;
@@ -154,41 +155,41 @@ void AttackController::attackLeft(cugl::Vec2 p, SwipeController::SwipeAttack att
     if (_rangedCounter > _reload) {
         switch (attack) {
             case SwipeController::leftAttack:
-                _pending.emplace(Attack::alloc(p, 1, 30, 9001, _scale, Side::left, cugl::Vec2(_p_vel).rotate(M_PI * 0.5) ,leftOff, ballMakyr));
+                _pending.emplace(Attack::alloc(p, 1, 30, 9001, _scale, Side::left, cugl::Vec2(_p_vel).rotate(M_PI * 0.5), _leftOff, ballMakyr));
                 _rangedCounter = 0;
                 break;
             case SwipeController::rightAttack:
-                _pending.emplace(Attack::alloc(p, 1, 30, 9001, _scale, Side::left, cugl::Vec2(_p_vel).rotate(M_PI * 1.5), rightOff, ballMakyr));
+                _pending.emplace(Attack::alloc(p, 1, 30, 9001, _scale, Side::left, cugl::Vec2(_p_vel).rotate(M_PI * 1.5), _rightOff, ballMakyr));
                 _rangedCounter = 0;
                 break;
             case SwipeController::upAttack:
-                _pending.emplace(Attack::alloc(p, 1, 30, 9001, _scale, Side::left, _p_vel, upOff, ballMakyr));
+                _pending.emplace(Attack::alloc(p, 1, 30, 9001, _scale, Side::left, _p_vel, _upOff, ballMakyr));
                 _rangedCounter = 0;
                 break;
             case SwipeController::downAttack:
                 if(!grounded){
-                _pending.emplace(Attack::alloc(p, 1, 30, 9001, _scale, Side::left, cugl::Vec2(_p_vel).rotate(M_PI), downOff, ballMakyr));
+                _pending.emplace(Attack::alloc(p, 1, 30, 9001, _scale, Side::left, cugl::Vec2(_p_vel).rotate(M_PI), _downOff, ballMakyr));
                 } else{
-                    _pending.emplace(Attack::alloc(p, 1, 4, 9001, _scale, Side::left, cugl::Vec2(_p_vel).rotate(M_PI * 0.5), leftOff, ballMakyr));
-                    _pending.emplace(Attack::alloc(p, 1, 4, 9001, _scale, Side::left, cugl::Vec2(_p_vel).rotate(M_PI * 1.5), rightOff, ballMakyr));
+                    _pending.emplace(Attack::alloc(p, 1, 4, 9001, _scale, Side::left, cugl::Vec2(_p_vel).rotate(M_PI * 0.5), _leftOff, ballMakyr));
+                    _pending.emplace(Attack::alloc(p, 1, 4, 9001, _scale, Side::left, cugl::Vec2(_p_vel).rotate(M_PI * 1.5), _rightOff, ballMakyr));
                 }
                 _rangedCounter = 0;
                 break;
             case SwipeController::chargedLeft:
-                _pending.emplace(Attack::alloc(p, 5, 30, 9001, _scale, Side::left, cugl::Vec2(_c_vel).rotate(M_PI * 0.5) ,leftOff, ballMakyr));
+                _pending.emplace(Attack::alloc(p, 5, 30, 9001, _scale, Side::left, cugl::Vec2(_c_vel).rotate(M_PI * 0.5), _leftOff, ballMakyr));
                 _rangedCounter = 0;
                 break;
             case SwipeController::chargedRight:
-                _pending.emplace(Attack::alloc(p, 5, 30, 9001, _scale, Side::left, cugl::Vec2(_c_vel).rotate(M_PI * 1.5), rightOff, ballMakyr));
+                _pending.emplace(Attack::alloc(p, 5, 30, 9001, _scale, Side::left, cugl::Vec2(_c_vel).rotate(M_PI * 1.5), _rightOff, ballMakyr));
                 _rangedCounter = 0;
                 break;
             case SwipeController::chargedUp:
-                _pending.emplace(Attack::alloc(p, 5, 30, 9001, _scale, Side::left, _c_vel, upOff, ballMakyr));
+                _pending.emplace(Attack::alloc(p, 5, 30, 9001, _scale, Side::left, _c_vel, _upOff, ballMakyr));
                 _rangedCounter = 0;
                 break;
             case SwipeController::chargedDown:
-                _pending.emplace(Attack::alloc(p, 3, 10, 9001, _scale, Side::left, cugl::Vec2::ZERO, leftOff,  ballMakyr));
-                _pending.emplace(Attack::alloc(p, 3, 10, 9001, _scale, Side::left, cugl::Vec2::ZERO, rightOff, ballMakyr));
+                _pending.emplace(Attack::alloc(p, 3, 10, 9001, _scale, Side::left, cugl::Vec2::ZERO, _leftOff,  ballMakyr));
+                _pending.emplace(Attack::alloc(p, 3, 10, 9001, _scale, Side::left, cugl::Vec2::ZERO, _rightOff, ballMakyr));
                 _rangedCounter = 0;
                 break;
             default:
@@ -208,13 +209,13 @@ void AttackController::attackRight(cugl::Vec2 p, SwipeController::SwipeAttack at
                 if (_melee == cool) {
                     break;
                 } else if (_melee == h2_left && _multiCounter < _hit_window) {
-                    _pending.emplace(Attack::alloc(p, 1, 3, 9001, _scale, Side::right, cugl::Vec2::ZERO, leftOff, ballMakyr));
+                    _pending.emplace(Attack::alloc(p, 2, 3, 9001, _scale, Side::right, cugl::Vec2::ZERO, _leftOff, ballMakyr));
                     _melee = h3_left;
                 } else if (_melee == h3_left && _multiCounter < _hit_window) {
-                    _pending.emplace(Attack::alloc(p, 1.5, 3, 9001, _scale, Side::right, cugl::Vec2::ZERO, leftOff, ballMakyr));
+                    _pending.emplace(Attack::alloc(p, 2.5, 3, 9001, _scale, Side::right, cugl::Vec2::ZERO, _leftOff, ballMakyr));
                     _melee = cool;
                 } else {
-                    _pending.emplace(Attack::alloc(p, 1.5, 3, 9001, _scale, Side::right, cugl::Vec2::ZERO, leftOff, ballMakyr));
+                    _pending.emplace(Attack::alloc(p, 1.5, 3, 9001, _scale, Side::right, cugl::Vec2::ZERO, _leftOff, ballMakyr));
                     _melee = h2_left;
                 }
                 break;
@@ -222,25 +223,25 @@ void AttackController::attackRight(cugl::Vec2 p, SwipeController::SwipeAttack at
                 if (_melee == cool) {
                     break;
                 } else if (_melee == h2_right && _multiCounter < _hit_window) {
-                    _pending.emplace(Attack::alloc(p, 1, 3, 9001, _scale, Side::right, cugl::Vec2::ZERO, rightOff, ballMakyr));
+                    _pending.emplace(Attack::alloc(p, 2, 3, 9001, _scale, Side::right, cugl::Vec2::ZERO, _rightOff, ballMakyr));
                     _melee = h3_right;
                 } else if (_melee == h3_right && _multiCounter < _hit_window) {
-                    _pending.emplace(Attack::alloc(p, 1.5, 3, 9001, _scale, Side::right, cugl::Vec2::ZERO, rightOff, ballMakyr));
+                    _pending.emplace(Attack::alloc(p, 2.5, 3, 9001, _scale, Side::right, cugl::Vec2::ZERO, _rightOff, ballMakyr));
                     _melee = cool;
                 } else {
-                    _pending.emplace(Attack::alloc(p, 1.5, 3, 9001, _scale, Side::right, cugl::Vec2::ZERO, rightOff, ballMakyr));
+                    _pending.emplace(Attack::alloc(p, 1.5, 3, 9001, _scale, Side::right, cugl::Vec2::ZERO, _rightOff, ballMakyr));
                     _melee = h2_right;
                 }
                 break;
             case SwipeController::upAttack:
-                _pending.emplace(Attack::alloc(p, 1.5, 5, 9001, _scale, Side::right, cugl::Vec2::ZERO, upOff, ballMakyr));
+                _pending.emplace(Attack::alloc(p, 1.5, 5, 9001, _scale, Side::right, cugl::Vec2::ZERO, _upOff, ballMakyr));
                 break;
             case SwipeController::downAttack:
                 if(!grounded){
-                _pending.emplace(Attack::alloc(p, 1.5, 5, 9001, _scale, Side::right, cugl::Vec2::ZERO, downOff, ballMakyr));
+                _pending.emplace(Attack::alloc(p, 1.5, 5, 9001, _scale, Side::right, cugl::Vec2::ZERO, _downOff, ballMakyr));
                 } else{
-                    _pending.emplace(Attack::alloc(p, 1.5, 3, 9001, _scale, Side::right, cugl::Vec2::ZERO, leftOff, ballMakyr));
-                    _pending.emplace(Attack::alloc(p, 1.5, 3, 9001, _scale,  Side::right, cugl::Vec2::ZERO, rightOff, ballMakyr));
+                    _pending.emplace(Attack::alloc(p, 1.5, 3, 9001, _scale, Side::right, cugl::Vec2::ZERO, _leftOff, ballMakyr));
+                    _pending.emplace(Attack::alloc(p, 1.5, 3, 9001, _scale,  Side::right, cugl::Vec2::ZERO, _rightOff, ballMakyr));
                 }
                 break;
             default:
@@ -258,10 +259,10 @@ void AttackController::createEnemyAttack(cugl::Vec2 pos, float radius, float age
     _pending.emplace(Attack::alloc(pos, radius, age, damage, scale, size, Side::enemy, offset, ballMakyr, vel));
 }
 
-void AttackController::draw(const std::shared_ptr<cugl::SpriteBatch>& batch) {
-    for(auto it = _current.begin(); it != _current.end(); ++it) {
-        //cugl::Vec2 center = cugl::Vec2((*it)->getRadius(),(*it)->getRadius());
-        cugl::Affine2 trans;
+//void AttackController::draw(const std::shared_ptr<cugl::SpriteBatch>& batch) {
+//    for(auto it = _current.begin(); it != _current.end(); ++it) {
+//        //cugl::Vec2 center = cugl::Vec2((*it)->getRadius(),(*it)->getRadius());
+//        cugl::Affine2 trans;
         
                 //trans.scale(_scale);
                 //trans.translate((*it)->getPosition()*_scale);
@@ -292,8 +293,8 @@ void AttackController::draw(const std::shared_ptr<cugl::SpriteBatch>& batch) {
 //            batch->setColor(cugl::Color4::YELLOW);
 //            batch->fill((*it)->getBall(), cugl::Vec2::ZERO, cugl::Vec2(_scale, _scale), 0, (*it)->getPosition() * _scale);
 //        }
-    }
-}
+//    }
+//}
 
 void AttackController::Attack::resetDebug() {
     CapsuleObstacle::resetDebug();

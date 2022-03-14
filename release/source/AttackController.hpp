@@ -45,33 +45,33 @@ public:
     class Attack : public cugl::physics2::CapsuleObstacle{
         
         //The position of the player
-        cugl::Vec2 position;
+        cugl::Vec2 _position;
         
         //The Offset from the position of the attack hitbox
-        cugl::Vec2 offset;
+        cugl::Vec2 _offset;
         
         //The radius of the attack hitbox
         float _radius;
         
         //The age of the hitbox (how long it stays active)
-        float age;
+        float _age;
         
         //Whether the hitbox is active or not
-        bool active;
+        bool _active;
         
         //Drawing scale for hitbox
         float _scale;
         
         //The damage of the hitbox
-        float damage;
+        float _damage;
         
         //A velocity vector to update the projectile
         cugl::Vec2 _vel;
         
         //Which type of swipe this is
-        Side side;
+        Side _side;
         
-        cugl::Poly2 ball;
+        cugl::Poly2 _ball;
 
         /**Attack sensor */
         b2Fixture* _sensorFixture;
@@ -102,14 +102,14 @@ public:
          */
         void update(const cugl::Vec2 p, bool follow, float dt, b2Vec2 VX);
         
-        bool isActive() {return active;}
+        bool isActive() {return _active;}
         
         float getRadius() {return _radius;}
         
-        cugl::Poly2 getBall() {return ball;}
-        cugl::Vec2 getPosition() { return position; }
-        int getDamage() { return damage; }
-        Side getSide(){return side;}
+        cugl::Poly2 getBall() {return _ball;}
+        cugl::Vec2 getPosition() { return _position; }
+        int getDamage() { return _damage; }
+        Side getSide(){return _side;}
 
         std::string* getSensorName() { return &_sensorName; }
         void setSensorName(string s) { _sensorName = s; }
@@ -147,13 +147,13 @@ public:
 
     std::shared_ptr<PlayerModel> _player;
     
-    cugl::Vec2 leftOff;
+    cugl::Vec2 _leftOff;
     
-    cugl::Vec2 rightOff;
+    cugl::Vec2 _rightOff;
 
-    cugl::Vec2 upOff;
+    cugl::Vec2 _upOff;
 
-    cugl::Vec2 downOff;
+    cugl::Vec2 _downOff;
     
     cugl::Vec2 _p_vel;
     
@@ -188,7 +188,7 @@ public:
      *  Initializes the attack controller. Currently greyed out because we only have basic attack hitboxes. Can use a json to set predetermined attack shapes, designs, and damage if we have more complicated moves and attacks.
      *  Projectile velocities are vectors facing the +y direction. They are rotated accordingly when initializing different direction attacks.
      */
-    void init(cugl::Size size, float scale, cugl::Vec2 oof, cugl::Vec2 p_vel, cugl::Vec2 c_vel, float hit_wind, float hit_cooldown, float reload, float swingSpeed);
+    void init(cugl::Size size, float scale, float oof, cugl::Vec2 p_vel, cugl::Vec2 c_vel, float hit_wind, float hit_cooldown, float reload, float swingSpeed);
     
     /**
      *  Update function for attack controller. Updates all attacks and removes inactive attacks from queue.
@@ -222,7 +222,7 @@ public:
 
     void createEnemyAttack(cugl::Vec2 pos, float radius, float age, int damage, float scale, cugl::Size size, cugl::Vec2 offset, cugl::Vec2 vel);
     
-    void draw(const std::shared_ptr<cugl::SpriteBatch>& batch);
+//    void draw(const std::shared_ptr<cugl::SpriteBatch>& batch);
     
 };
 
