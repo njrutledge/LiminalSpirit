@@ -24,11 +24,12 @@
 
 class AttackController {
     
-    enum Side {
-        left,
-        right,
-        exp,
-        enemy
+    enum Type {
+        p_left,
+        p_right,
+        p_normal,
+        e_melee,
+        e_range
     };
     
     enum State {
@@ -69,7 +70,7 @@ public:
         cugl::Vec2 _vel;
         
         //Which type of swipe this is
-        Side _side;
+        Type _type;
         
         cugl::Poly2 _ball;
 
@@ -91,7 +92,7 @@ public:
          * @param scale The drawing scale size of the hitbox
          */
         Attack() : CapsuleObstacle(), _sensorName(ATTACK_SENSOR_NAME) { }
-        bool init(const cugl::Vec2 p, float radius, float a, float dmg, float scale, cugl::Size size, Side s, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel);
+        bool init(const cugl::Vec2 p, float radius, float a, float dmg, float scale, cugl::Size size, Type s, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel);
         
         
         /**
@@ -109,7 +110,7 @@ public:
         cugl::Poly2 getBall() {return _ball;}
         cugl::Vec2 getPosition() { return _position; }
         int getDamage() { return _damage; }
-        Side getSide(){return _side;}
+        Type getType(){return _type;}
 
         std::string* getSensorName() { return &_sensorName; }
         void setSensorName(string s) { _sensorName = s; }
@@ -126,12 +127,12 @@ public:
 #pragma mark -
 #pragma mark Static Constructors
         static std::shared_ptr<Attack> alloc(const cugl::Vec2 p, float radius, float age, float dmg, float scale,
-                                             Side s, cugl::Vec2 vel, cugl::Vec2 oof, cugl::PolyFactory b) {
+                                             Type s, cugl::Vec2 vel, cugl::Vec2 oof, cugl::PolyFactory b) {
             std::shared_ptr<Attack> result = std::make_shared<Attack>();
             return (result->init(p, radius, age, dmg, scale, cugl::Size(10,10), s, oof, b, vel) ? result : nullptr);
         }
         
-        static std::shared_ptr<Attack> alloc(const cugl::Vec2 p, float radius, float age, float dmg, float scale, cugl::Size size, Side s, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel) {
+        static std::shared_ptr<Attack> alloc(const cugl::Vec2 p, float radius, float age, float dmg, float scale, cugl::Size size, Type s, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel) {
             std::shared_ptr<Attack> result = std::make_shared<Attack>();
             return (result->init(p, radius, age, dmg, scale, size, s, oof, b, vel) ? result : nullptr);
         }
@@ -218,9 +219,9 @@ public:
     /**
      *  Creates an attack with the designated parameters. This is mostly to create enemy attacks, but also any explosion attacks for the player. There is no parameter. This must be calculated in the position. 
      */
-    void createAttack(cugl::Vec2 p, float radius, float age, float damage, Side s, cugl::Vec2 vel);
+    void createAttack(cugl::Vec2 p, float radius, float age, float damage, Type s, cugl::Vec2 vel);
 
-    void createEnemyAttack(cugl::Vec2 pos, float radius, float age, int damage, float scale, cugl::Size size, cugl::Vec2 offset, cugl::Vec2 vel);
+   // void createEnemyAttack(cugl::Vec2 pos, float radius, float age, int damage, float scale, cugl::Size size, cugl::Vec2 offset, cugl::Vec2 vel);
     
 //    void draw(const std::shared_ptr<cugl::SpriteBatch>& batch);
     
