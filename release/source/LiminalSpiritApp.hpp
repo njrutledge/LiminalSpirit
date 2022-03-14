@@ -35,6 +35,7 @@
 #include "AttackController.hpp"
 #include "InputController.hpp"
 #include "MovementInput.hpp"
+#include "Platform.hpp"
 /**
  * Class for a simple Hello World style application
  *
@@ -73,7 +74,8 @@ protected:
 
     /** Player character */
     std::shared_ptr<PlayerModel> _player;
-    
+    /** Platform character */
+    std::shared_ptr<PlatformModel> _platform;
     /** Platform set*/
     std::unordered_set<std::shared_ptr<cugl::physics2::PolygonObstacle>> _platforms;
 
