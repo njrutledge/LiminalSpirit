@@ -101,13 +101,14 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     }
     CULog("Dimen: %f, %f", dimen.width, dimen.height);
     */
+    // Start up the input handler
 #if defined(CU_TOUCH_SCREEN)
     Input::activate<Touchscreen>();
 #else
     Input::activate<Mouse>();
 #endif
 
-    // Start up the input handler
+    //set assets
     _assets = assets;
 
     // Create a scene graph the same size as the window
@@ -116,32 +117,19 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     scene->setContentSize(dimen);
     scene->doLayout();
 
-    Application::get()->setClearColor(Color4(229, 229, 229, 255));
+    //Application::get()->setClearColor(Color4(229, 229, 229, 255));
 
     // You have to attach the individual loaders for each asset type
     _assets->attach<Texture>(TextureLoader::alloc()->getHook());
     _assets->attach<Font>(FontLoader::alloc()->getHook());
 
     // This reads the given JSON file and uses it to load all other assets
-    _assets->loadDirectory("json/assets.json");
+    //_assets->loadDirectory("json/assets.json");
 
     _tiltInput.init();
 
     // Activate mouse or touch screen input as appropriate
     // We have to do this BEFORE the scene, because the scene has a button
-
-    // Report the safe area
-    Rect bounds = Display::get()->getSafeBounds();
-    CULog("Safe Area %sx%s", bounds.origin.toString().c_str(),
-          bounds.size.toString().c_str());
-
-    bounds = Application::get()->getSafeBounds();
-    CULog("Safe Area %sx%s", bounds.origin.toString().c_str(),
-          bounds.size.toString().c_str());
-
-    bounds = Application::get()->getDisplayBounds();
-    CULog("Full Area %sx%s", bounds.origin.toString().c_str(),
-          bounds.size.toString().c_str());
 
     // Enable physics -jdg274
     _world = physics2::ObstacleWorld::alloc(Rect(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT), Vec2(0, -GRAVITY));
@@ -155,7 +143,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         _collider.endContact(contact, _player);
     };
 
-    _scale = dimen.width == SCENE_WIDTH ? dimen.width / DEFAULT_WIDTH : dimen.height / DEFAULT_HEIGHT;
+    _scale = dimen.width / DEFAULT_WIDTH;
     Vec2 offset((dimen.width - SCENE_WIDTH) / 2.0f, (dimen.height - SCENE_HEIGHT) / 2.0f);
     CULog("Offset: %f,%f, Scale: %f, Width: %f, Height: %f", offset.x, offset.y, _scale, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
