@@ -17,7 +17,7 @@ AIController::AIController() {
 Vec2 AIController::getMovement(shared_ptr<BaseEnemyModel> e, Vec2 player_pos, float timestep) {
 	std::string name = e->getName();
 	if (name == "Lost") {
-		return Vec2(getLostMovement(e, player_pos, timestep), 0.0f);
+		return Vec2(getLostMovement(e, player_pos, timestep), -9.8f);
 	} else if (name == "Specter") {
 		return getSpecterMovement(e, player_pos, timestep);
 	}
@@ -63,7 +63,7 @@ float AIController::getLostMovement(shared_ptr<BaseEnemyModel> lost, Vec2 player
 Vec2 AIController::getSpecterMovement(shared_ptr<BaseEnemyModel> specter, Vec2 player_pos, float timestep) {
 	//TODO: Add vertical movement
 	// Use line of sight to determine ranged attacks
-
+	int flip = 1; // flips y direction
 	//Check if enemy is already attacking
 	if (!specter->isAttacking()) {
 		if (player_pos.x <= specter->getPosition().x + specter->getAttackRadius()
@@ -73,13 +73,22 @@ Vec2 AIController::getSpecterMovement(shared_ptr<BaseEnemyModel> specter, Vec2 p
 			specter->setIsAttacking(true);
 			return Vec2(); // lost stops moving
 		}
+		else if (specter->getVY() == 0) {
+			return Vec2(specter->getHorizontalSpeed(), -1 * specter->getVerticalSpeed());
+		}
 		else if (player_pos.x > specter->getPosition().x) {
-			return Vec2(specter->getHorizontalSpeed(), 0);
+			if (player_pos.y >= specter->getPosition().y || abs(player_pos.y - specter->getPosition().y) > 10) {
+				flip = -1;
+			}
+			return Vec2(specter->getHorizontalSpeed(), flip * specter->getVY());
 		}
 		else {
-			return Vec2(- 1 * specter->getHorizontalSpeed(), 0);
+			if (player_pos.y >= specter->getPosition().y || abs(player_pos.y - specter->getPosition().y) > 10) {
+				flip = -1;
+			}
+			return Vec2(-1 * specter->getHorizontalSpeed(), flip * specter->getVY());
 		}
-	}
+	} 
 	else {
 		// Check if attack timer should be reset
 		if (specter->getAttackCooldown() < specter->getTimePast()) {

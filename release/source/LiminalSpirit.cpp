@@ -247,7 +247,7 @@ void LiminalSpirit::update(float timestep)
     for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
         Vec2 direction = _ai.getMovement(*it, _player->getPosition(), timestep);
         (*it)->setVX(direction.x);
-        //TODO: Add vertical movement
+        (*it)->setVY(direction.y);
     }
     
 
