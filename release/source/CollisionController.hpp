@@ -2,7 +2,9 @@
 #define __LS_COLLISION_CONTROLLER_H__
 #include <cugl/cugl.h>
 #include "AttackController.hpp"
+#include <box2d/b2_contact.h>
 #include "BaseEnemyModel.h"
+#include "PlayerModel.h"
 
 class CollisionController {
 public:
@@ -12,8 +14,17 @@ public:
 	/**Deletes the collision controller */
 	~CollisionController() {}
 
-	/** returns true if there is a attack-enemy collision. If there is a collision, this also resolves it*/
-	bool resolveCollision(AttackController& aset, BaseEnemyModel& enemy);
+
+	void beginContact(b2Contact* contact, std::shared_ptr<PlayerModel> player);
+
+	void endContact(b2Contact* contact, std::shared_ptr<PlayerModel> player);
+
+private:
+	/** handle collision between enemy and an obstacle */
+	void handleEnemyCollision(BaseEnemyModel* enemy, cugl::physics2::Obstacle* bd, string* fd);
+
+	/**handle collision between player and an obstacle */
+	void handlePlayerCollision(PlayerModel* player, cugl::physics2::Obstacle* bd, std::string* fd);
 };
 
 #endif /* __LS_COLLISION_CONTROLLER_H__ */

@@ -68,22 +68,22 @@ protected:
 public:
 
 #pragma mark Hidden Constructors
-	/** Creates a degenerate Enemy */
+	/** Creates a degenerate Player */
 	PlayerModel() : CapsuleObstacle(), _sensorName(SENSOR_NAME) { }
 
-	/**Destroys this Base Enemy Model, releasing all resources */
+	/**Destroys this Player Model, releasing all resources */
 	virtual ~PlayerModel(void) { dispose(); }
 
-	/**Disposes all resources and assets of this Enemy Model */
+	/**Disposes all resources and assets of this Player Model */
 	void dispose();
 
-	/** Initializes a new enemy at origin */
+	/** Initializes a new player at origin */
 	virtual bool init() override { return init(cugl::Vec2::ZERO, cugl::Size(1, 1), 1.0f); }
 
-	/** Initializes a new enemy at the given position */
+	/** Initializes a new player at the given position */
 	virtual bool init(const cugl::Vec2 pos) override { return init(pos, cugl::Size(1, 1), 1.0f); }
 
-	/** Initializes a new enemy at the given position with given size*/
+	/** Initializes a new player at the given position with given size*/
 	virtual bool init(const cugl::Vec2 pos, const cugl::Size size) override {
 		return init(pos, size, 1.0f);
 	}
@@ -93,7 +93,7 @@ public:
 
 #pragma mark - 
 #pragma mark Static Constructors
-	/** Allocates a new enemy at the origin */
+	/** Allocates a new player at the origin */
 	static std::shared_ptr<PlayerModel> alloc() {
 		std::shared_ptr<PlayerModel> result = std::make_shared<PlayerModel>();
 		return (result->init() ? result : nullptr);
@@ -116,10 +116,10 @@ public:
 
 #pragma mark -
 #pragma mark Scene Node
-	/** Returns the scene graph node representing this enemy*/
+	/** Returns the scene graph node representing the player*/
 	const std::shared_ptr<cugl::scene2::SceneNode>& getSceneNode() const { return _node; }
 
-	/** Sets the scene graph node representing this enemy */
+	/** Sets the scene graph node representing the player */
 	void setSceneNode(const std::shared_ptr<cugl::scene2::SceneNode>& node) {
 		_node = node;
 		_node->setPosition(getPosition() * _drawScale);
@@ -128,10 +128,10 @@ public:
 #pragma mark - 
 #pragma mark Attribute Properties
 
-	/**Returns the health of the enemy */
+	/**Returns the health of the player */
 	int getHealth() const { return _health; }
 
-	/** Sets the enemy health */
+	/** Sets the player health */
 	void setHealth(int value) { _health = value; }
 
 	/** Returns the horizontal movement of the player*/

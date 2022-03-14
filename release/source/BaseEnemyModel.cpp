@@ -21,8 +21,6 @@
 #define ENEMY_SSHRINK 0.6f
 /**Height of the sensor */
 #define SENSOR_HEIGHT 01.f
-/**Density of character*/
-#define ENEMY_DENSITY 1.0f
 /** Debug color for sensor */
 #define DEBUG_COLOR Color4::RED
 
@@ -31,15 +29,23 @@ using namespace cugl;
 #pragma mark - 
 #pragma mark Constructors
 
-/** Initializes the enemy at the given position */
-bool BaseEnemyModel::init(const cugl::Vec2& pos, const cugl::Size& size, float scale) {
+/** Initializes the enemy at the given position, with size, scale, health and horizontal/vertical speed. */
+bool BaseEnemyModel::init(const cugl::Vec2& pos, const cugl::Size& size, float scale, EnemyProperties props) {
 	Size nsize = size;
 	nsize.width *= ENEMY_HSHRINK;
 	nsize.height *= ENEMY_VSHRINK;
 	_drawScale = scale;
+	_health = props.health;
+	_verticalSpeed = props.vspeed;
+	_horizontalSpeed = props.hspeed;
+	_attackCooldown = props.attackCooldown;
+	_attackRadius = props.attackRadius;
+	_timePast = 0.0f;
+	_enemyName = props.name;
+	_density = props.density;
 
 	if (CapsuleObstacle::init(pos, nsize)) {
-		setDensity(ENEMY_DENSITY);
+		setDensity(_density);
 		setFriction(0.0f);
 		setFixedRotation(true);
 
@@ -47,11 +53,6 @@ bool BaseEnemyModel::init(const cugl::Vec2& pos, const cugl::Size& size, float s
 	}
 	return false;
 }
-
-#pragma mark - 
-#pragma mark Attribute Properties
-
-// TBA
 
 #pragma mark - 
 #pragma mark Physics Methods
@@ -63,7 +64,7 @@ void BaseEnemyModel::createFixtures() {
 	}
 	CapsuleObstacle::createFixtures();
 	b2FixtureDef sensorDef;
-	sensorDef.density = ENEMY_DENSITY;
+	sensorDef.density = _density;
 	sensorDef.isSensor = true;
 
 	// Sensor dimensions
@@ -104,6 +105,11 @@ void BaseEnemyModel::dispose() {
 	_core = nullptr;
 	_node = nullptr;
 	_sensorNode = nullptr;
+}
+
+/** Sets the vertical movement of the enemy*/
+void BaseEnemyModel::setVX(float value) {
+	_body->SetLinearVelocity(b2Vec2(value, _body->GetLinearVelocity().y));
 }
 
 /** Applies the force to the body of this enemy */

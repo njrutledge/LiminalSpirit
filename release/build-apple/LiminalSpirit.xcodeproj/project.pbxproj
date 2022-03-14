@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		579F0A0127DF89AF00D00FFB /* AIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 579F09FC27DF89AF00D00FFB /* AIController.cpp */; };
+		579F0A0227DF89AF00D00FFB /* AIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 579F09FC27DF89AF00D00FFB /* AIController.cpp */; };
+		579F0A0727DF89D800D00FFB /* Specter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 579F0A0627DF89D800D00FFB /* Specter.cpp */; };
+		579F0A0827DF89D800D00FFB /* Specter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 579F0A0627DF89D800D00FFB /* Specter.cpp */; };
+		579F0A0927DF9C0600D00FFB /* AIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 579F09FC27DF89AF00D00FFB /* AIController.cpp */; };
+		579F0A0A27DF9C0800D00FFB /* Specter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 579F0A0627DF89D800D00FFB /* Specter.cpp */; };
+		579F0A0C27DFA7CF00D00FFB /* Lost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 579F0A0B27DFA7CE00D00FFB /* Lost.cpp */; };
+		579F0A0D27DFA7CF00D00FFB /* Lost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 579F0A0B27DFA7CE00D00FFB /* Lost.cpp */; };
 		85D0B48627D010FC004EF4C8 /* BaseEnemyModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85D0B48527D010FC004EF4C8 /* BaseEnemyModel.cpp */; };
 		EB07CFB621EFF3F8000CB3A3 /* DeviceMargins.plist in Resources */ = {isa = PBXBuildFile; fileRef = EB07CFB021EFF3EF000CB3A3 /* DeviceMargins.plist */; };
 		EB22BDE025D0E00A002ACE41 /* libcugl-mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EB22BDC825D0DE75002ACE41 /* libcugl-mac.a */; };
@@ -123,6 +131,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		579F09FC27DF89AF00D00FFB /* AIController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AIController.cpp; sourceTree = "<group>"; };
+		579F0A0027DF89AF00D00FFB /* AIController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AIController.hpp; sourceTree = "<group>"; };
+		579F0A0327DF89D700D00FFB /* Specter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Specter.hpp; sourceTree = "<group>"; };
+		579F0A0427DF89D700D00FFB /* Lost.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Lost.hpp; sourceTree = "<group>"; };
+		579F0A0627DF89D800D00FFB /* Specter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Specter.cpp; sourceTree = "<group>"; };
+		579F0A0B27DFA7CE00D00FFB /* Lost.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Lost.cpp; sourceTree = "<group>"; };
 		85D0B48127D010E9004EF4C8 /* BaseEnemyModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseEnemyModel.h; sourceTree = "<group>"; };
 		85D0B48527D010FC004EF4C8 /* BaseEnemyModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaseEnemyModel.cpp; sourceTree = "<group>"; };
 		85D0B48727D01107004EF4C8 /* LSCharacter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSCharacter.h; sourceTree = "<group>"; };
@@ -368,6 +382,12 @@
 		EBBF18B11D749176008E2001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				579F0A0427DF89D700D00FFB /* Lost.hpp */,
+				579F0A0B27DFA7CE00D00FFB /* Lost.cpp */,
+				579F0A0627DF89D800D00FFB /* Specter.cpp */,
+				579F0A0327DF89D700D00FFB /* Specter.hpp */,
+				579F09FC27DF89AF00D00FFB /* AIController.cpp */,
+				579F0A0027DF89AF00D00FFB /* AIController.hpp */,
 				F04BAE9427DEA68D00A8FE21 /* TiltController.cpp */,
 				F04BAE9527DEA68D00A8FE21 /* TiltController.hpp */,
 				F05176D727D071D900C0617F /* CollisionController.cpp */,
@@ -461,7 +481,7 @@
 					};
 					EB74548B1D74D75C002FBAE6 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = PXKGFP2M23;
+						DevelopmentTeam = SK24KCQ5NU;
 					};
 					EBBF18901D74904A008E2001 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -564,7 +584,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				F05176DE27D080C900C0617F /* SwipeController.cpp in Sources */,
+				579F0A0927DF9C0600D00FFB /* AIController.cpp in Sources */,
 				F04BAE9D27DEAB6100A8FE21 /* TiltController.cpp in Sources */,
+				579F0A0A27DF9C0800D00FFB /* Specter.cpp in Sources */,
 				F05176DC27D0808B00C0617F /* AttackController.cpp in Sources */,
 				F05176E227D080DF00C0617F /* CollisionController.cpp in Sources */,
 				F05176E427D080E700C0617F /* InputController.cpp in Sources */,
@@ -580,7 +602,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				F05176DD27D080C800C0617F /* SwipeController.cpp in Sources */,
+				579F0A0227DF89AF00D00FFB /* AIController.cpp in Sources */,
 				F04BAE9927DEAB5D00A8FE21 /* TiltController.cpp in Sources */,
+				579F0A0D27DFA7CF00D00FFB /* Lost.cpp in Sources */,
+				579F0A0827DF89D800D00FFB /* Specter.cpp in Sources */,
 				F05176DB27D0808A00C0617F /* AttackController.cpp in Sources */,
 				F05176E127D080DF00C0617F /* CollisionController.cpp in Sources */,
 				F05176E327D080E600C0617F /* InputController.cpp in Sources */,
@@ -596,7 +621,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				F025104127D02C6C00AB80AA /* SwipeController.cpp in Sources */,
+				579F0A0127DF89AF00D00FFB /* AIController.cpp in Sources */,
 				F04BAE9627DEA68D00A8FE21 /* TiltController.cpp in Sources */,
+				579F0A0C27DFA7CF00D00FFB /* Lost.cpp in Sources */,
+				579F0A0727DF89D800D00FFB /* Specter.cpp in Sources */,
 				F025104027D02C6C00AB80AA /* InputController.cpp in Sources */,
 				EB2BE9B61D74952A002FE78B /* main.cpp in Sources */,
 				F025104227D02C6C00AB80AA /* AttackController.cpp in Sources */,
@@ -668,12 +696,12 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = PXKGFP2M23;
+				DEVELOPMENT_TEAM = SK24KCQ5NU;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/iOS-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = Sashimi.Liminal.Tech;
+				PRODUCT_BUNDLE_IDENTIFIER = gamedesign.LiminalSpirit2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -689,12 +717,12 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = PXKGFP2M23;
+				DEVELOPMENT_TEAM = SK24KCQ5NU;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/iOS-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = Sashimi.Liminal.Tech;
+				PRODUCT_BUNDLE_IDENTIFIER = gamedesign.LiminalSpirit2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -13,7 +13,7 @@ using namespace cugl;
 #pragma mark Accelerom Factors
 
 /** Historical choice from Marmalade */
-#define KEYBOARD_FORCE_INCREMENT    50.0f
+#define KEYBOARD_FORCE_INCREMENT    5.0f
 /** Adjustment factor for accelerometer input (found experimentally) */
 #define ACCELEROM_X_FACTOR          30.0f
 
@@ -57,19 +57,21 @@ void TiltController::update(InputController& input, float width, float character
 #else
     // Only process keyboard on desktop
     Keyboard* keys = Input::get<Keyboard>();
+    _debugKeyPressed = false;
 
     // Forces increase the longer you hold a key.
     if (keys->keyDown(KeyCode::ARROW_LEFT)) {
-        if (_xpos-KEYBOARD_FORCE_INCREMENT >= characterWidth/2) {
-            _xpos -= KEYBOARD_FORCE_INCREMENT;
+        if (true|| _xpos - KEYBOARD_FORCE_INCREMENT >= characterWidth / 2) {
+            _xpos = -KEYBOARD_FORCE_INCREMENT;
         }
-        cout << "left pressed" << endl;
     } else if (keys->keyDown(KeyCode::ARROW_RIGHT)) {
-        if (_xpos+KEYBOARD_FORCE_INCREMENT <= width-characterWidth/2) {
-            _xpos += KEYBOARD_FORCE_INCREMENT;
+        if (true|| _xpos+KEYBOARD_FORCE_INCREMENT <= width-characterWidth/2) {
+            _xpos = KEYBOARD_FORCE_INCREMENT;
         }
         
-        cout << "right pressed" << endl;
+    }
+    if (keys->keyPressed(KeyCode::B)) {
+        _debugKeyPressed = true;
     }
 #endif
 }

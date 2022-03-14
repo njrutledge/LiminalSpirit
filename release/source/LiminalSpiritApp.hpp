@@ -31,10 +31,13 @@
 #define __LIMINALSPIRIT_APP_H__
 #include <cugl/cugl.h>
 #include "BaseEnemyModel.h"
+#include "Lost.hpp"
 #include "PlayerModel.h"
 #include "AttackController.hpp"
+#include "AIController.hpp"
 #include "InputController.hpp"
 #include "TiltController.hpp"
+#include "CollisionController.hpp"
 /**
  * Class for a simple Hello World style application
  *
@@ -57,26 +60,41 @@ protected:
     std::shared_ptr<cugl::physics2::ObstacleWorld> _world;
     /** Reference to the physics root of the scene graph */
     std::shared_ptr<cugl::scene2::SceneNode> _worldnode;
+    /** Reference to the debug root of the scene graph */
+    std::shared_ptr<cugl::scene2::SceneNode> _debugnode;
+
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
     float _scale;
     
     InputController _input;
     
     AttackController _attacks;
-    
+    /** reference to the player Attack Texture*/
+    std::shared_ptr<cugl::Texture> _pMeleeTexture;
+        
+    /** Swipe Controller */
     SwipeController _swipes;
-    
-    /** tilt controller */
-    TiltController _tilt;
 
-    /**Base Enemy (NEED TO MAKE LIST) */
-    std::shared_ptr<BaseEnemyModel> _enemy;
+    /** AI Controller */
+    AIController _ai;
+    
+    /** Tilt Controller */
+    TiltController _tilt;
+    
+    /** Collision Controller */
+    CollisionController _collider;
+
+    /** Enemies set */
+    std::unordered_set <std::shared_ptr<BaseEnemyModel>> _enemies;
 
     /** Player character */
     std::shared_ptr<PlayerModel> _player;
 
     /** A countdown used to move the logo */
     int _countdown;
+
+    /** Whether or not debug mode is active */
+    bool _debug;
     
     /**
      * Internal helper to build the scene graph.
@@ -161,15 +179,25 @@ public:
                              const std::shared_ptr<cugl::scene2::SceneNode> &node,
                              bool useObjPosition);
     
+     /**
+     * Returns true if debug mode is active.
+     *
+     * If true, all objects will display their physics bodies.
+     *
+     * @return true if debug mode is active.
+     */
+    bool isDebug() const { return _debug; }
+
     /**
-    * Processes the start of a collision
-    *
-    * This method is called when we first get a collision between two objects.  We use
-    * this method to test if it is the "right" kind of collision.  In particular, we
-    * use it to test if we make it to the win door.  
-    *
-    * @param  contact  The two bodies that collided
-    */
+     * Sets whether debug mode is active.
+     *
+     * If true, all objects will display their physics bodies.
+     *
+     * @param value whether debug mode is active.
+     */
+    void setDebug(bool value) { _debug = value; _debugnode->setVisible(value); }
+
+
     void beginContact(b2Contact* contact);
 
     /**

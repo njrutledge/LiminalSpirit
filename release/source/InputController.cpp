@@ -65,6 +65,43 @@ bool InputController::init(float leftmostX, float screenWidth) {
     return _active;
 }
 
+void InputController::readInput() {
+    _moveCode = _leftCode = _rightCode = 0;
+    Keyboard* keys = Input::get<Keyboard>();
+    if (keys->keyDown(KeyCode::W)) {
+        _leftCode = 1;
+    } 
+    else if (keys->keyDown(KeyCode::A)) {
+        _leftCode = 2;
+    } 
+    else if (keys->keyDown(KeyCode::S)) {
+        _leftCode = 3;
+    } 
+    else if (keys->keyDown(KeyCode::D)) {
+        _leftCode = 4;
+    }
+
+    if (keys->keyDown(KeyCode::I)) {
+        _rightCode = 1;
+    }
+    else if (keys->keyDown(KeyCode::J)) {
+        _rightCode = 2;
+    }
+    else if (keys->keyDown(KeyCode::K)) {
+        _rightCode = 3;
+    }
+    else if (keys->keyDown(KeyCode::L)) {
+        _rightCode = 4;
+    }
+
+    if (keys->keyDown(KeyCode::ARROW_LEFT)) {
+        _moveCode = -1;
+    }
+    else if (keys->keyDown(KeyCode::ARROW_RIGHT)) {
+        _moveCode = 1;
+    }
+}
+
 /**
  * Disposes this input controller, deactivating all listeners.
  *

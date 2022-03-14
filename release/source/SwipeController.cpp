@@ -30,6 +30,7 @@ SwipeController::~SwipeController() {
  * Updates the swipe controller based on the latest inputs.
  */
 void SwipeController::update(InputController& input) {
+#ifdef CU_TOUCH_SCREEN
     
     // If the left finger is pressed down, check if it has been pressed long enough for
     // a charge attack
@@ -53,7 +54,31 @@ void SwipeController::update(InputController& input) {
     else {
         setRightSwipe(noAttack);
     }
-
+#else
+    input.readInput();
+    switch (input._leftCode) {
+        case 0: setLeftSwipe(noAttack);
+            break;
+        case 1: setLeftSwipe(upAttack);
+            break;
+        case 2: setLeftSwipe(leftAttack);
+            break;
+        case 3: setLeftSwipe(downAttack);
+            break;
+        case 4: setLeftSwipe(rightAttack);
+    }
+    switch (input._rightCode) {
+        case 0: setRightSwipe(noAttack);
+            break;
+        case 1: setRightSwipe(upAttack);
+            break;
+        case 2: setRightSwipe(leftAttack);
+            break;
+        case 3: setRightSwipe(downAttack);
+            break;
+        case 4: setRightSwipe(rightAttack);
+    }
+#endif
 }
 
 /**

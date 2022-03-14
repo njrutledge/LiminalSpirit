@@ -32,8 +32,12 @@
 #include <cugl/base/CUBase.h>
 #include <box2d/b2_contact.h>
 #include "BaseEnemyModel.h"
+#include "Lost.hpp"
+#include "Specter.hpp"
 #include "AttackController.hpp"
+#include "AIController.hpp"
 #include "PlayerModel.h"
+#include "CollisionController.hpp"
 
 // Add support for simple random number generation
 #include <cstdlib>
@@ -56,11 +60,12 @@ using namespace cugl;
 
 
 
-/** The initial position of the dude */
-float ENEMY_POS[] = {16.0f, 12.0f};
+/** The initial position of the enemies */
+float ENEMY_POS[] = {20.0f, 5.0f};
+float ENEMY_POS2[] = { 24.0f, 10.0f };
 
 /** The initial position of the player*/
-float PLAYER_POS[] = { 16.0f, 4.0f };
+float PLAYER_POS[] = { 10.0f, 4.0f };
 
 
 /**
@@ -123,10 +128,10 @@ void LiminalSpirit::onStartup()
     _world = physics2::ObstacleWorld::alloc(Rect(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT), Vec2(0, -GRAVITY));
     _world->activateCollisionCallbacks(true);
         _world->onBeginContact = [this](b2Contact* contact) {
-          beginContact(contact);
+          _collider.beginContact(contact, _player);
         };
         _world->onEndContact = [this](b2Contact* contact) {
-          endContact(contact);
+          _collider.endContact(contact, _player);
         };
     
     _scale = dimen.width == SCENE_WIDTH ? dimen.width / DEFAULT_WIDTH : dimen.height / DEFAULT_HEIGHT;
@@ -145,9 +150,22 @@ void LiminalSpirit::onStartup()
           bounds.size.toString().c_str());
     _input.init(bounds.getMinX(), bounds.size.width);
     
-    _attacks.init(_scale, offset, cugl::Vec2::UNIT_Y, cugl::Vec2(0,0.5), 0.5, 1, 0.5, 0.1);
+    // TODO this init might be wrong, Nick had _scale/2.0f
+    _pMeleeTexture = _assets->get<Texture>(PATTACK_TEXTURE);
+    _attacks.init(_pMeleeTexture->getSize()/_scale/2.0f, _scale, offset, cugl::Vec2::UNIT_Y, cugl::Vec2(0,0.5), 0.5, 1, 0.5, 0.1);
+    _debugnode = scene2::SceneNode::alloc();
+    _debugnode->setScale(_scale); // Debug node draws in PHYSICS coordinates
+    _debugnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+    _debugnode->setPosition(offset);
+    _scene->addChild(_debugnode);
 
+    _ai = AIController();
+
+    _collider = CollisionController();
+
+    setDebug(false);
     buildScene();
+
 }
 
 /**
@@ -170,7 +188,15 @@ void LiminalSpirit::onShutdown()
     _assets = nullptr;
     _world = nullptr;
     _worldnode = nullptr;
-    _enemy = nullptr;
+    _debugnode = nullptr;
+
+    //TODO: CHECK IF THIS IS RIGHT FOR DISPOSING
+    for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
+        (*it).~shared_ptr();
+    }
+    _enemies.clear();
+
+    _ai.dispose();
 
     // Deativate input
 #if defined CU_TOUCH_SCREEN
@@ -201,6 +227,9 @@ void LiminalSpirit::update(float timestep)
     _tilt.update(_input, SCENE_WIDTH, _logo->getSize().width);
     float xPos = _tilt.getXpos();
     _player->setVX(xPos);
+
+    //Debug Mode on/off
+    if (_tilt.getDebugKeyPressed()) { setDebug(!isDebug()); }
     
     //FLIPPING LOGIC
     if(xPos > 0){
@@ -212,12 +241,30 @@ void LiminalSpirit::update(float timestep)
     if (image != nullptr) {
         image->flipHorizontal(_player->isFacingRight());
     }
+
+    // Enemy AI logic
+    // For each enemy
+    for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
+        Vec2 direction = _ai.getMovement(*it, _player->getPosition(), timestep);
+        (*it)->setVX(direction.x);
+        //TODO: Add vertical movement
+    }
     
-    _world->update(timestep);
+
     _swipes.update(_input);
-    _attacks.attackLeft(_player->getPosition(), _swipes.getLeftSwipe(), _player->isGrounded());
-    _attacks.attackRight(_player->getPosition(), _swipes.getRightSwipe(),_player->isGrounded());
-    _attacks.update(_player->getPosition(), timestep);
+    b2Vec2 playerPos = _player->getBody()->GetPosition();
+    _attacks.attackLeft(Vec2(playerPos.x, playerPos.y), _swipes.getLeftSwipe(), _player->isGrounded());
+    _attacks.attackRight(Vec2(playerPos.x, playerPos.y), _swipes.getRightSwipe(),_player->isGrounded());
+    _world->update(timestep);
+    
+    for (auto it = _attacks._pending.begin(); it != _attacks._pending.end(); ++it) {
+        //FIX WHEN TEXTURE EXISTS
+        std::shared_ptr<scene2::PolygonNode> attackSprite = scene2::PolygonNode::allocWithTexture(_pMeleeTexture);
+        attackSprite->setScale(.5f);
+
+        addObstacle((*it), attackSprite, true);
+    }
+    _attacks.update(_player->getPosition(), _player->getBody()->GetLinearVelocity(), timestep);
     if(_swipes.getRightSwipe() == _swipes.upAttack){
         _player->setJumping(true);
     } else {
@@ -225,12 +272,45 @@ void LiminalSpirit::update(float timestep)
     }
     //_player->setGrounded(true);
     _player->applyForce();
-    
 
+    //Remove attacks
+    auto ait = _attacks._current.begin();
+    while(ait != _attacks._current.end()) {
+        if ((*ait)->isRemoved()) {
+            //int log1 = _world->getObstacles().size();
+            cugl::physics2::Obstacle* obj = dynamic_cast<cugl::physics2::Obstacle*>(&**ait);
+            _world->removeObstacle(obj);
+            _worldnode->removeChild(obj->_node);
 
- 
+            //int log2 = _world->getObstacles().size();
+            ait = _attacks._current.erase(ait);
+        }
+        else {
+            ait++;
+        }
+    }
+
+    //remove enemies
+    auto eit = _enemies.begin();
+    while (eit != _enemies.end()) {
+        if ((*eit)->isRemoved()) {
+            //int log1 = _world->getObstacles().size();
+            cugl::physics2::Obstacle* obj = dynamic_cast<cugl::physics2::Obstacle*>(&**eit);
+            _world->removeObstacle(obj);
+            _worldnode->removeChild(obj->_node);
+
+            //int log2 = _world->getObstacles().size();
+            eit = _enemies.erase(eit);
+        }
+        else {
+            eit++;
+        }
+    }
+    //CULog("Attacks size: %d", _attacks._current.size());
+    //CULog("World Size: %d", _world->getObstacles().size());
    
 }
+
 
 /**
  * The method called to draw the application to the screen.
@@ -339,20 +419,33 @@ void LiminalSpirit::buildScene()
     button->setAnchor(Vec2::ANCHOR_CENTER);
     button->setPosition(size.width - (bsize.width + rOffset) / 2, (bsize.height + bOffset) / 2);
 
-    //Vec2 enemyPos = ENEMY_POS;
-    //std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
-    //std::shared_ptr<Texture> image = _assets->get<Texture>(ENEMY_TEXTURE);
-    //_enemy = BaseEnemyModel::alloc(enemyPos, image->getSize() / _scale / 5, _scale);
-    //std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
-    //_enemy->setSceneNode(sprite);
-    //_enemy->setDebugColor(Color4::RED);
-    //sprite->setScale(0.2f);
-    //addObstacle(_enemy, sprite, true);
+    Vec2 enemyPos = ENEMY_POS;
+    std::shared_ptr<scene2::SceneNode> enemyNode = scene2::SceneNode::alloc();
+    std::shared_ptr<Texture> enemyImage = _assets->get<Texture>(ENEMY_TEXTURE);
+    std::shared_ptr<Lost> enemy = Lost::alloc(enemyPos, enemyImage->getSize() / _scale / 5, _scale);
+    std::shared_ptr<scene2::PolygonNode> enemySprite = scene2::PolygonNode::allocWithTexture(enemyImage);
+    enemy->setSceneNode(enemySprite);
+    enemy->setDebugColor(Color4::RED);
+    enemySprite->setScale(0.2f);
+    addObstacle(enemy, enemySprite, true);
+    _enemies.insert(enemy);
+
+    Vec2 enemyPos2 = ENEMY_POS2; 
+    std::shared_ptr<scene2::SceneNode> specterNode = scene2::SceneNode::alloc();
+    std::shared_ptr<Texture> specterImage = _assets->get<Texture>(ENEMY_TEXTURE);
+    std::shared_ptr<Specter> specter = Specter::alloc(enemyPos2, specterImage->getSize() / _scale / 10, _scale);
+    std::shared_ptr<scene2::PolygonNode> specterSprite = scene2::PolygonNode::allocWithTexture(specterImage);
+    specter->setSceneNode(specterSprite);
+    specter->setDebugColor(Color4::BLUE);
+    specterSprite->setScale(0.2f);
+    addObstacle(specter, specterSprite, true);
+    _enemies.insert(specter);
 
     Vec2 playerPos = PLAYER_POS;
     std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
     std::shared_ptr<Texture> image = _assets->get<Texture>(PLAYER_TEXTURE);
     _player = PlayerModel::alloc(playerPos, image->getSize() / _scale / 5, _scale);
+    _player->setMovement(0);
     std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
     _player->setSceneNode(sprite);
     _player->setDebugColor(Color4::RED);
@@ -388,6 +481,7 @@ void LiminalSpirit::addObstacle(const std::shared_ptr<cugl::physics2::Obstacle> 
                                 bool useObjPosition)
 {
     _world->addObstacle(obj);
+    obj->setDebugScene(_debugnode);
 
     // Position the scene graph node (enough for static objects)
     if (useObjPosition)
@@ -395,6 +489,7 @@ void LiminalSpirit::addObstacle(const std::shared_ptr<cugl::physics2::Obstacle> 
         node->setPosition(obj->getPosition() * _scale);
     }
     _worldnode->addChild(node);
+    obj->setNode(node);
 
     // Dynamic objects need constant updating
     if (obj->getBodyType() == b2_dynamicBody)
@@ -408,58 +503,3 @@ void LiminalSpirit::addObstacle(const std::shared_ptr<cugl::physics2::Obstacle> 
 }
 
 #pragma mark Collision Handling
-/**
- * Processes the start of a collision
- *
- * This method is called when we first get a collision between two objects.  We use
- * this method to test if it is the "right" kind of collision.  In particular, we
- * use it to test if we make it to the win door.
- *
- * @param  contact  The two bodies that collided
- */
-void LiminalSpirit::beginContact(b2Contact* contact) {
-    b2Fixture* fix1 = contact->GetFixtureA();
-    b2Fixture* fix2 = contact->GetFixtureB();
-
-    b2Body* body1 = fix1->GetBody();
-    b2Body* body2 = fix2->GetBody();
-
-    std::string* fd1 = reinterpret_cast<std::string*>(fix1->GetUserData().pointer);
-    std::string* fd2 = reinterpret_cast<std::string*>(fix2->GetUserData().pointer);
-
-    physics2::Obstacle* bd1 = reinterpret_cast<physics2::Obstacle*>(body1->GetUserData().pointer);
-    physics2::Obstacle* bd2 = reinterpret_cast<physics2::Obstacle*>(body2->GetUserData().pointer);
-    
-
-    // See if we have landed on the ground.
-    if ((_player->getSensorName() == fd2 && _player.get() != bd1) ||
-        (_player->getSensorName() == fd1 && _player.get() != bd2)) {
-        _player->setGrounded(true);
-    }
-}
-
-/**
- * Callback method for the start of a collision
- *
- * This method is called when two objects cease to touch.  The main use of this method
- * is to determine when the characer is NOT on the ground.  This is how we prevent
- * double jumping.
- */
-void LiminalSpirit::endContact(b2Contact* contact) {
-    b2Fixture* fix1 = contact->GetFixtureA();
-    b2Fixture* fix2 = contact->GetFixtureB();
-
-    b2Body* body1 = fix1->GetBody();
-    b2Body* body2 = fix2->GetBody();
-
-    std::string* fd1 = reinterpret_cast<std::string*>(fix1->GetUserData().pointer);
-    std::string* fd2 = reinterpret_cast<std::string*>(fix2->GetUserData().pointer);
-
-    physics2::Obstacle* bd1 = reinterpret_cast<physics2::Obstacle*>(body1->GetUserData().pointer);
-    physics2::Obstacle* bd2 = reinterpret_cast<physics2::Obstacle*>(body2->GetUserData().pointer);
-
-    if ((_player->getSensorName() == fd2 && _player.get() != bd1) ||
-        (_player->getSensorName() == fd1 && _player.get() != bd2)) {
-            _player->setGrounded(false);
-    }
-}
