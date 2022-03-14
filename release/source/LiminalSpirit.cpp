@@ -13,8 +13,6 @@
 
 using namespace cugl;
 
-static std::shared_ptr<OrthographicCamera> cam = nullptr;
-
 #pragma mark -
 #pragma mark Gameplay Control
 
@@ -32,7 +30,7 @@ void LiminalSpirit::onStartup()
 {
     _assets = AssetManager::alloc();
     _batch = SpriteBatch::alloc();
-    cam = OrthographicCamera::alloc(getDisplaySize());
+    _cam = OrthographicCamera::alloc(getDisplaySize());
 
     // Start-up basic input
 #ifdef CU_MOBILE
