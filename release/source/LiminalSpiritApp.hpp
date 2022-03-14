@@ -26,6 +26,8 @@ protected:
     std::shared_ptr<cugl::SpriteBatch> _batch;
     /** The global asset manager */
     std::shared_ptr<cugl::AssetManager> _assets;
+    /** The global camera */
+    std::shared_ptr<cugl::OrthographicCamera> _cam;
 
     // Player modes
     /** The primary controller for the game world */
