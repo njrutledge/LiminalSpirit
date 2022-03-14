@@ -116,7 +116,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     scene->setContentSize(dimen);
     scene->doLayout();
 
-    /**
     Application::get()->setClearColor(Color4(229, 229, 229, 255));
 
     // You have to attach the individual loaders for each asset type
@@ -164,15 +163,13 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _worldnode = scene2::SceneNode::alloc();
     _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
     _worldnode->setPosition(offset);
-    // scene->addChild(_worldnode);
-    addChild(_worldnode);
+    scene->addChild(_worldnode);
 
     _debugnode = scene2::SceneNode::alloc();
     _debugnode->setScale(_scale); // Debug node draws in PHYSICS coordinates
     _debugnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
     _debugnode->setPosition(offset);
-    // scene->addChild(_debugnode);
-    addChild(_debugnode);
+    scene->addChild(_debugnode);
 
     _swipes.init(0, Application::get()->getDisplayWidth());
 
@@ -220,7 +217,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     // activate scene
     //     setDebug(false);
-    // buildScene();
+    buildScene(scene);
     addChild(scene);
     // _pMeleeTexture = _assets->get<Texture>(PATTACK_TEXTURE);
     // _attacks.init(_pMeleeTexture->getSize() / _scale / 2.0f, _scale / 2.0f, offset, _player);
@@ -374,7 +371,7 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch>& batch)
 
     //_scene->render(batch);
     Scene2::render(batch);
-    //batch->begin(getCamera()->getCombined());
+    batch->begin(getCamera()->getCombined());
     //_attacks.draw(batch);
     batch->end();
 }
@@ -386,7 +383,7 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch>& batch)
  * you do in 3152.  However, they greatly simplify scene management, and
  * have become standard in most game engines.
  */
-void GameScene::buildScene()
+void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
 {
     Size size = Application::get()->getDisplaySize();
     float scale = SCENE_WIDTH / size.width;

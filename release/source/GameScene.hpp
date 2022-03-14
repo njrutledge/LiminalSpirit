@@ -95,7 +95,7 @@ protected:
      * you do in 3152.  However, they greatly simplify scene management, and
      * have become standard in most game engines.
      */
-    void buildScene();
+    void buildScene(std::shared_ptr<cugl::scene2::SceneNode> scene);
 
 public:
     /**
