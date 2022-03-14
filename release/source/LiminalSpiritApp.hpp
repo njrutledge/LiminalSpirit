@@ -35,7 +35,6 @@
 #include "AttackController.hpp"
 #include "InputController.hpp"
 #include "MovementInput.hpp"
-//#include "PlatformSet.hpp"
 /**
  * Class for a simple Hello World style application
  *
@@ -76,8 +75,8 @@ protected:
     std::shared_ptr<PlayerModel> _player;
     
     /** Platform set*/
-//    PlatformSet _platforms;
-    std::shared_ptr<cugl::physics2::PolygonObstacle> _platform;
+    std::unordered_set<std::shared_ptr<cugl::physics2::PolygonObstacle>> _platforms;
+
     /** A countdown used to move the logo */
     int _countdown;
     

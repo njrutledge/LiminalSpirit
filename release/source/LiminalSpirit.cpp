@@ -34,7 +34,6 @@
 #include "BaseEnemyModel.h"
 #include "AttackController.hpp"
 #include "PlayerModel.h"
-//#include "PlatformSet.hpp"
 
 // Add support for simple random number generation
 #include <cstdlib>
@@ -54,7 +53,8 @@ using namespace cugl;
 #define DEFAULT_HEIGHT 18.0f
 /** The constant for gravity in the physics world. */
 #define GRAVITY 30
-
+#define PLATFORM_ATT 4
+#define PLATFORM_COUNT 3
 
 
 /** The initial position of the dude */
@@ -63,7 +63,11 @@ float ENEMY_POS[] = {16.0f, 12.0f};
 /** The initial position of the player*/
 float PLAYER_POS[] = { 16.0f, 4.0f };
 
-
+float PLATFORMS[PLATFORM_COUNT][PLATFORM_ATT] = {
+    {15, 3, 10, 0.5},
+    {5, 7, 8, 0.5},
+    {7, 10, 9, 0.5}
+};
 /**
  * The method called after OpenGL is initialized, but before running the application.
  *
@@ -105,9 +109,6 @@ void LiminalSpirit::onStartup()
     _assets->attach<Texture>(TextureLoader::alloc()->getHook());
     _assets->attach<Font>(FontLoader::alloc()->getHook());
     _assets->attach<JsonValue>(JsonLoader::alloc()->getHook());
-    
-    _constants = _assets->get<JsonValue>("constants");
-//    _platforms.init(_constants->get("platforms"));
     
     // This reads the given JSON file and uses it to load all other assets
     _assets->loadDirectory("json/assets.json");
@@ -156,9 +157,7 @@ void LiminalSpirit::onStartup()
     _swipes.init(0, getDisplayWidth());
     
     _attacks.init(_scale, offset);
-    Rect platformRect = Rect(15, 3, 10, 0.5);
-    _platform = physics2::PolygonObstacle::allocWithAnchor(platformRect, Vec2::ANCHOR_CENTER);
-    _platform->setBodyType(b2_staticBody);
+    
     buildScene();
 }
 
@@ -236,25 +235,23 @@ void LiminalSpirit::update(float timestep)
     }
     auto objects = _world->getObstacles();
     bool containObj;
-    if (std::find(objects.begin(), objects.end(), _platform) != objects.end())
-    {
-        containObj = true;
-    } else {
-        containObj = false;
-    }
-    if(_platform->getY() + _platform->getHeight() < _player->getPosition().y && !containObj) {
+    for(auto it = _platforms.begin(); it != _platforms.end(); ++it) {
+        if (std::find(objects.begin(), objects.end(), *it) != objects.end())
+        {
+            containObj = true;
+        } else {
+            containObj = false;
+        }
+        if(it->get()->getY() + it->get()->getHeight() < _player->getPosition().y && !containObj) {
 
-        _world->addObstacle(_platform);
-        
-    } else if (_platform->getY() + _platform->getHeight() > _player->getPosition().y && containObj) {
-        _world->removeObstacle(_platform.get());
+            _world->addObstacle(*it);
+        } else if (it->get()->getY() + it->get()->getHeight() > _player->getPosition().y && containObj) {
+            _world->removeObstacle((*it).get());
+        }
     }
-    //_player->setGrounded(true);
+    
     _player->applyForce();
     
-
-
- 
    
 }
 
@@ -365,11 +362,20 @@ void LiminalSpirit::buildScene()
     std::shared_ptr<scene2::PolygonNode> rightNode = scene2::PolygonNode::allocWithPoly(rightRect*_scale);
     rightNode->setColor(Color4::BLACK);
     addObstacle(right, rightNode, 1);
+    
+    for (int ii = 0; ii < PLATFORM_COUNT; ii++) {
+        std::shared_ptr<physics2::PolygonObstacle> platobj;
+        Rect platformRect = Rect(PLATFORMS[ii][0], PLATFORMS[ii][1], PLATFORMS[ii][2], PLATFORMS[ii][3]);
+        platobj = physics2::PolygonObstacle::allocWithAnchor(platformRect, Vec2::ANCHOR_CENTER);
+        // Set the physics attributes
+        platobj->setBodyType(b2_staticBody);
 
-    Rect platformRect = Rect(15, 3, 10, 0.5);
-    std::shared_ptr<scene2::PolygonNode> platformNode = scene2::PolygonNode::allocWithPoly(platformRect*_scale);
-    platformNode->setColor(Color4::BLACK);
-    addObstacle(_platform, platformNode, 1);
+        std::shared_ptr<scene2::PolygonNode> platformNode = scene2::PolygonNode::allocWithPoly(platformRect*_scale);
+        platformNode->setColor(Color4::BLACK);
+        addObstacle(platobj,platformNode,1);
+        _platforms.emplace(platobj);
+    }
+
     // Position the button in the bottom right corner
     button->setAnchor(Vec2::ANCHOR_CENTER);
     button->setPosition(size.width - (bsize.width + rOffset) / 2, (bsize.height + bOffset) / 2);
