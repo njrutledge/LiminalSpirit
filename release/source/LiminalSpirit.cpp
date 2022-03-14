@@ -34,6 +34,7 @@
 #include "BaseEnemyModel.h"
 #include "AttackController.hpp"
 #include "PlayerModel.h"
+#include "PlatformSet.hpp"
 
 // Add support for simple random number generation
 #include <cstdlib>
@@ -103,11 +104,16 @@ void LiminalSpirit::onStartup()
     // You have to attach the individual loaders for each asset type
     _assets->attach<Texture>(TextureLoader::alloc()->getHook());
     _assets->attach<Font>(FontLoader::alloc()->getHook());
-
+    _assets->attach<JsonValue>(JsonLoader::alloc()->getHook());
+    
+    _constants = _assets->get<JsonValue>("constants");
+//    _platforms.init(_constants->get("platforms"));
+    
     // This reads the given JSON file and uses it to load all other assets
     _assets->loadDirectory("json/assets.json");
 
     _tiltInput.init();
+    
     // Activate mouse or touch screen input as appropriate
     // We have to do this BEFORE the scene, because the scene has a button
 
@@ -150,7 +156,9 @@ void LiminalSpirit::onStartup()
     _swipes.init(0, getDisplayWidth());
     
     _attacks.init(_scale, offset);
-
+    Rect platformRect = Rect(15, 3, 10, 0.5);
+    _platform = physics2::PolygonObstacle::allocWithAnchor(platformRect, Vec2::ANCHOR_CENTER);
+    _platform->setBodyType(b2_staticBody);
     buildScene();
 }
 
@@ -225,6 +233,21 @@ void LiminalSpirit::update(float timestep)
         _player->setJumping(true);
     } else {
         _player->setJumping(false);
+    }
+    auto objects = _world->getObstacles();
+    bool containObj;
+    if (std::find(objects.begin(), objects.end(), _platform) != objects.end())
+    {
+        containObj = true;
+    } else {
+        containObj = false;
+    }
+    if(_platform->getY() + _platform->getHeight() < _player->getPosition().y && !containObj) {
+
+        _world->addObstacle(_platform);
+        
+    } else if (_platform->getY() + _platform->getHeight() > _player->getPosition().y && containObj) {
+        _world->removeObstacle(_platform.get());
     }
     //_player->setGrounded(true);
     _player->applyForce();
@@ -343,6 +366,10 @@ void LiminalSpirit::buildScene()
     rightNode->setColor(Color4::BLACK);
     addObstacle(right, rightNode, 1);
 
+    Rect platformRect = Rect(15, 3, 10, 0.5);
+    std::shared_ptr<scene2::PolygonNode> platformNode = scene2::PolygonNode::allocWithPoly(platformRect*_scale);
+    platformNode->setColor(Color4::BLACK);
+    addObstacle(_platform, platformNode, 1);
     // Position the button in the bottom right corner
     button->setAnchor(Vec2::ANCHOR_CENTER);
     button->setPosition(size.width - (bsize.width + rOffset) / 2, (bsize.height + bOffset) / 2);
@@ -367,7 +394,7 @@ void LiminalSpirit::buildScene()
     sprite->setScale(0.2f);
     addObstacle(_player, sprite, true);
 
-
+    
     // Add the logo and button to the scene graph
     _scene->addChild(button);
 
@@ -395,7 +422,10 @@ void LiminalSpirit::addObstacle(const std::shared_ptr<cugl::physics2::Obstacle> 
                                 const std::shared_ptr<cugl::scene2::SceneNode> &node,
                                 bool useObjPosition)
 {
+    
     _world->addObstacle(obj);
+    
+    
 
     // Position the scene graph node (enough for static objects)
     if (useObjPosition)
@@ -403,16 +433,16 @@ void LiminalSpirit::addObstacle(const std::shared_ptr<cugl::physics2::Obstacle> 
         node->setPosition(obj->getPosition() * _scale);
     }
     _worldnode->addChild(node);
-
+    
     // Dynamic objects need constant updating
-    if (obj->getBodyType() == b2_dynamicBody)
-    {
-        scene2::SceneNode *weak = node.get(); // No need for smart pointer in callback
-        obj->setListener([=](physics2::Obstacle *obs)
-                         {
+    if (obj->getBodyType() == b2_dynamicBody) {
+        scene2::SceneNode* weak = node.get(); // No need for smart pointer in callback
+        obj->setListener([=](physics2::Obstacle* obs){
             weak->setPosition(obs->getPosition()*_scale);
-            weak->setAngle(obs->getAngle()); });
+            weak->setAngle(obs->getAngle());
+        });
     }
+
 }
 
 #pragma mark Collision Handling
@@ -437,12 +467,14 @@ void LiminalSpirit::beginContact(b2Contact* contact) {
 
     physics2::Obstacle* bd1 = reinterpret_cast<physics2::Obstacle*>(body1->GetUserData().pointer);
     physics2::Obstacle* bd2 = reinterpret_cast<physics2::Obstacle*>(body2->GetUserData().pointer);
-    
 
     // See if we have landed on the ground.
     if ((_player->getSensorName() == fd2 && _player.get() != bd1) ||
         (_player->getSensorName() == fd1 && _player.get() != bd2)) {
-        _player->setGrounded(true);
+        
+        if(_player->getLinearVelocity().y <= 0) {
+            _player->setGrounded(true);
+        }
     }
 }
 

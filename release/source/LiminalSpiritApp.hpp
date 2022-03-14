@@ -35,6 +35,7 @@
 #include "AttackController.hpp"
 #include "InputController.hpp"
 #include "MovementInput.hpp"
+#include "PlatformSet.hpp"
 /**
  * Class for a simple Hello World style application
  *
@@ -46,7 +47,8 @@ class LiminalSpirit : public cugl::Application
 protected:
     /** The loaders to (synchronously) load in assets */
     std::shared_ptr<cugl::AssetManager> _assets;
-
+    /** The JSON value with all of the constants */
+    std::shared_ptr<cugl::JsonValue> _constants;
     /** A scene graph, used to display our 2D scenes */
     std::shared_ptr<cugl::Scene2> _scene;
     /** A 3152 style SpriteBatch to render the scene */
@@ -72,7 +74,10 @@ protected:
 
     /** Player character */
     std::shared_ptr<PlayerModel> _player;
-
+    
+    /** Platform set*/
+//    PlatformSet _platforms;
+    std::shared_ptr<cugl::physics2::PolygonObstacle> _platform;
     /** A countdown used to move the logo */
     int _countdown;
     
