@@ -2,8 +2,7 @@
 //  GameScene.hpp
 //  Cornell University Game Library (CUGL)
 //
-//  This is the header for the custom application.  It is necessary so that
-//  main.cpp can access your custom class.
+//  This class manages the gameplay.
 //
 //  CUGL zlib License:
 //      This software is provided 'as-is', without any express or implied
@@ -47,13 +46,10 @@
 class GameScene : public cugl::Scene2
 {
 protected:
-    /** The loaders to (synchronously) load in assets */
+    /** The asset manager for this game mode */
     std::shared_ptr<cugl::AssetManager> _assets;
-
     /** A scene graph, used to display our 2D scenes */
     std::shared_ptr<cugl::Scene2> _scene;
-    /** A 3152 style SpriteBatch to render the scene */
-    // std::shared_ptr<cugl::SpriteBatch> _batch;
     /** A reference to the logo, so that we can move it around */
     std::shared_ptr<cugl::scene2::SceneNode> _logo;
     /** The physics world */
@@ -103,13 +99,10 @@ protected:
 
 public:
     /**
-     * Creates, but does not initialized a new application.
+     * Creates a new game mode with the default values.
      *
-     * This constructor is called by main.cpp.  You will notice that, like
-     * most of the classes in CUGL, we do not do any initialization in the
-     * constructor.  That is the purpose of the init() method.  Separation
-     * of initialization from the constructor allows main.cpp to perform
-     * advanced configuration of the application before it starts.
+     * This constructor does not allocate any objects or start the game.
+     * This allows us to use the object without a heap pointer.
      */
     GameScene() : cugl::Scene2(), _countdown(-1) {}
 
@@ -155,18 +148,20 @@ public:
      */
     void reset();
 
-    void render(const std::shared_ptr<cugl::SpriteBatch> &batch);
     /**
-     * The method called to draw the application to the screen.
+     * @brief Overrides the Scene2 render to render the scene.
      *
-     * This is your core loop and should be replaced with your custom implementation.
-     * This method should OpenGL and related drawing calls.
-     *
-     * When overriding this method, you do not need to call the parent method
-     * at all. The default implmentation does nothing.
+     * @param batch the batch to draw
      */
-    // virtual void draw() override;
+    void render(const std::shared_ptr<cugl::SpriteBatch> &batch);
 
+    /**
+     * @brief Adds an object to the ObstacleWorld.
+     *
+     * @param obj
+     * @param node
+     * @param useObjPosition
+     */
     virtual void addObstacle(const std::shared_ptr<cugl::physics2::Obstacle> &obj,
                              const std::shared_ptr<cugl::scene2::SceneNode> &node,
                              bool useObjPosition);
@@ -206,4 +201,4 @@ public:
     void endContact(b2Contact *contact);
 };
 
-#endif /* __HELLO_APP_H__ */
+#endif /* __Game_Scene_hpp__ */

@@ -2,8 +2,7 @@
 //  GameScene.cpp
 //  Cornell University Game Library (CUGL)
 //
-//  This is the implementation file for the custom application. This is the
-//  definition of your root (and in this case only) class.
+//  Root scene to manage the gameplay
 //
 //  CUGL zlib License:
 //      This software is provided 'as-is', without any express or implied
@@ -66,14 +65,15 @@ float ENEMY_POS2[] = {24.0f, 10.0f};
 float PLAYER_POS[] = {10.0f, 4.0f};
 
 /**
- * The method called after OpenGL is initialized, but before running the application.
+ * Initializes the controller contents, and starts the game
  *
- * This is the method in which all user-defined program intialization should
- * take place.  You should not create a new init() method.
+ * The constructor does not allocate any objects or memory.  This allows
+ * us to have a non-pointer reference to this controller, reducing our
+ * memory allocation.  Instead, allocation happens in this method.
  *
- * When overriding this method, you should call the parent method as the
- * very last line.  This ensures that the state will transition to FOREGROUND,
- * causing the application to run.
+ * @param assets    The (loaded) assets for this game mode
+ *
+ * @return true if the controller is initialized properly, false otherwise.
  */
 bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 {
@@ -175,15 +175,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 }
 
 /**
- * The method called when the application is ready to quit.
- *
- * This is the method to dispose of all resources allocated by this
- * application.  As a rule of thumb, everything created in onStartup()
- * should be deleted here.
- *
- * When overriding this method, you should call the parent method as the
- * very last line.  This ensures that the state will transition to NONE,
- * causing the application to be deleted.
+ * Disposes of all (non-static) resources allocated to this mode.
  */
 void GameScene::dispose()
 {
@@ -206,24 +198,12 @@ void GameScene::dispose()
     _ai.dispose();
 
     _tiltInput.dispose();
-    /*
-    // Deativate input
-#if defined CU_TOUCH_SCREEN
-    Input::deactivate<Touchscreen>();
-#else
-    Input::deactivate<Mouse>();
-#endif
-    Application::onShutdown();*/
 }
 
 /**
- * The method called to update the application data.
+ * The method called to update the game mode.
  *
- * This is your core loop and should be replaced with your custom implementation.
- * This method should contain any code that is not an OpenGL call.
- *
- * When overriding this method, you do not need to call the parent method
- * at all. The default implmentation does nothing.
+ * This method contains any gameplay code that is not an OpenGL call.
  *
  * @param timestep  The amount of time (in seconds) since the last frame
  */
@@ -333,13 +313,7 @@ void GameScene::update(float timestep)
 }
 
 /**
- * The method called to draw the application to the screen.
- *
- * This is your core loop and should be replaced with your custom implementation.
- * This method should OpenGL and related drawing calls.
- *
- * When overriding this method, you do not need to call the parent method
- * at all. The default implmentation does nothing.
+ * The method called to draw the gameplay scene
  */
 void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
 {
