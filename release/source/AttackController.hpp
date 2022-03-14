@@ -22,6 +22,15 @@ class AttackController {
         enemy
     };
     
+    enum State {
+        first,
+        h2_right,
+        h3_right,
+        h2_left,
+        h3_left,
+        cool
+    };
+    
 public:
     
     class Attack {
@@ -48,7 +57,6 @@ public:
         float damage;
         
         //A velocity vector to update the projectile
-        
         cugl::Vec2 _vel;
         
         //Which type of swipe this is
@@ -75,7 +83,7 @@ public:
          * @param p          The position of the player
          * @param follow      Whether to follow the player's movement while active
          */
-        void update(const cugl::Vec2 p, bool follow);
+        void update(const cugl::Vec2 p, bool follow, float dt);
         
         bool isActive() {return active;}
         
@@ -107,6 +115,22 @@ public:
     
     cugl::PolyFactory ballMakyr = cugl::PolyFactory(0.05f);
     
+    float _meleeCounter;
+    
+    float _multiCounter;
+    
+    float _hit_window;
+    
+    float _multi_cooldown;
+    
+    float _rangedCounter;
+    
+    float _reload;
+    
+    float _swing;
+    
+    State _melee;
+    
     
     /**
      *  Creates an empty attack controller. The attack controller simply updates and creates attack hitboxes and removes them from the active queue.
@@ -118,14 +142,14 @@ public:
      *  Initializes the attack controller. Currently greyed out because we only have basic attack hitboxes. Can use a json to set predetermined attack shapes, designs, and damage if we have more complicated moves and attacks.
      *  Projectile velocities are vectors facing the +y direction. They are rotated accordingly when initializing different direction attacks.
      */
-    void init(float scale, cugl::Vec2 oof, cugl::Vec2 p_vel, cugl::Vec2 c_vel);
+    void init(float scale, cugl::Vec2 oof, cugl::Vec2 p_vel, cugl::Vec2 c_vel, float hit_wind, float hit_cooldown, float reload, float swingSpeed);
     
     /**
      *  Update function for attack controller. Updates all attacks and removes inactive attacks from queue.
      *
      *  @param p    The player position
      */
-    void update(const cugl::Vec2 p);
+    void update(const cugl::Vec2 p, float dt);
     
     
     /**
