@@ -195,6 +195,7 @@
     <ClInclude Include="..\..\source\GameScene.hpp" />
     <ClInclude Include="..\..\source\InputController.hpp" />
     <ClInclude Include="..\..\source\LiminalSpiritApp.hpp" />
+    <ClInclude Include="..\..\source\LoadingScene.hpp" />
     <ClInclude Include="..\..\source\Lost.hpp" />
     <ClInclude Include="..\..\source\MovementInput.hpp" />
     <ClInclude Include="..\..\source\Specter.hpp" />
@@ -211,6 +212,7 @@
     <ClCompile Include="..\..\source\GameScene.cpp" />
     <ClCompile Include="..\..\source\InputController.cpp" />
     <ClCompile Include="..\..\source\LiminalSpirit.cpp" />
+    <ClCompile Include="..\..\source\LoadingScene.cpp" />
     <ClCompile Include="..\..\source\Lost.cpp" />
     <ClCompile Include="..\..\source\main.cpp" />
     <ClCompile Include="..\..\source\MovementInput.cpp" />

@@ -53,7 +53,7 @@ protected:
     /** A scene graph, used to display our 2D scenes */
     std::shared_ptr<cugl::Scene2> _scene;
     /** A 3152 style SpriteBatch to render the scene */
-    std::shared_ptr<cugl::SpriteBatch> _batch;
+    // std::shared_ptr<cugl::SpriteBatch> _batch;
     /** A reference to the logo, so that we can move it around */
     std::shared_ptr<cugl::scene2::SceneNode> _logo;
     /** The physics world */

@@ -100,7 +100,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     // Create a scene graph the same size as the window
     _scene = Scene2::alloc(dimen.width, dimen.height);
     // Create a sprite batch (and background color) to render the scene
-    _batch = SpriteBatch::alloc();
+    //_batch = SpriteBatch::alloc();
     Application::get()->setClearColor(Color4(229, 229, 229, 255));
 
     // Create an asset manager to load all assets
@@ -190,7 +190,7 @@ void GameScene::dispose()
     // Delete all smart pointers
     _logo = nullptr;
     _scene = nullptr;
-    _batch = nullptr;
+    //_batch = nullptr;
     _assets = nullptr;
     _world = nullptr;
     _worldnode = nullptr;
@@ -345,11 +345,11 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
 {
     // This takes care of begin/end
 
-    _scene->render(_batch);
+    _scene->render(batch);
 
-    _batch->begin(_scene->getCamera()->getCombined());
-    _attacks.draw(_batch);
-    _batch->end();
+    // batch->begin(_scene->getCamera()->getCombined());
+    _attacks.draw(batch);
+    batch->end();
 }
 
 /**

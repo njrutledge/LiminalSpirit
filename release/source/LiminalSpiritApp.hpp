@@ -14,7 +14,7 @@
 #define LiminalSpirit_hpp
 #include <cugl/cugl.h>
 #include "GameScene.hpp"
-//#include "SDLoadingScene.h"
+#include "LoadingScene.hpp"
 
 /**
  * This class represents the application root for the ship demo.
@@ -31,7 +31,7 @@ protected:
     /** The primary controller for the game world */
     GameScene _gameplay;
     /** The controller for the loading screen */
-    // LoadingScene _loading;
+    LoadingScene _loading;
 
     /** Whether or not we have finished loading all assets */
     bool _loaded;
