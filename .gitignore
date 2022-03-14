@@ -6,3 +6,5 @@ release/cugl/build-apple/box2d.xcodeproj/xcuserdata/jgomez.xcuserdatad/xcschemes
 release/build-apple/LiminalSpirit.xcodeproj/project.pbxproj
 *.plist
 release/cugl/build-apple/box2d.xcodeproj/xcuserdata/jgomez.xcuserdatad/xcschemes/xcschememanagement.plist
+release/build-apple/LiminalSpirit.xcodeproj/project.pbxproj
+*.pbxproj

@@ -30,7 +30,6 @@ void LiminalSpirit::onStartup()
 {
     _assets = AssetManager::alloc();
     _batch = SpriteBatch::alloc();
-    _cam = OrthographicCamera::alloc(getDisplaySize());
 
     // Start-up basic input
 #ifdef CU_MOBILE
@@ -49,7 +48,7 @@ void LiminalSpirit::onStartup()
 
     // Queue up the other assets
     _assets->loadDirectoryAsync("json/assets.json", nullptr);
-
+    //_assets->loadDirectory("json/assets.json");
     Application::onStartup(); // YOU MUST END with call to parent
 }
 

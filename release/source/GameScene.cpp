@@ -49,11 +49,11 @@ using namespace cugl;
 #define TIME_STEP 60
 /** This is adjusted by screen aspect ratio to get the height */
 #define SCENE_WIDTH 1024
-#define SCENE_HEIGHT 576
+#define SCENE_HEIGHT 576 * 2
 /** Width of the game world in Box2d units */
 #define DEFAULT_WIDTH 32.0f
 /** Height of the game world in Box2d units */
-#define DEFAULT_HEIGHT 18.0f
+#define DEFAULT_HEIGHT 18.0f * 2
 /** The constant for gravity in the physics world. */
 #define GRAVITY 30
 
@@ -144,7 +144,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     };
 
     _scale = dimen.width / DEFAULT_WIDTH;
-    Vec2 offset((dimen.width - SCENE_WIDTH) / 2.0f, (dimen.height - SCENE_HEIGHT) / 2.0f);
+    Vec2 offset((dimen.width - SCENE_WIDTH) / 2.0f, 0);
     CULog("Offset: %f,%f, Scale: %f, Width: %f, Height: %f", offset.x, offset.y, _scale, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
     // Create the scene graph
@@ -165,50 +165,12 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     _collider = CollisionController();
 
-    // add HUD
-    // // Create a button.  A button has an up image and a down image
-    /*
-    std::shared_ptr<Texture> up = _assets->get<Texture>("close-normal");
-    std::shared_ptr<Texture> down = _assets->get<Texture>("close-selected");
-
-    Size bsize = up->getSize();
-    std::shared_ptr<scene2::Button> button = scene2::Button::alloc(scene2::PolygonNode::allocWithTexture(up),
-        scene2::PolygonNode::allocWithTexture(down));*/
-    //  Create a callback function for the button
-    /*button->setName("close");
-    button->addListener([=](const std::string &name, bool down)
-                        {
-        // Only quit when the button is released
-        if (!down) {
-            CULog("Goodbye!");
-            Application::get()->quit();//this->quit();
-        } });
-
-    // Find the safe area, adapting to the iPhone X
-    Rect safe = Application::get()->getSafeBounds();
-    safe.origin *= scale;
-    safe.size *= scale;
-
-    // Get the right and bottom offsets.
-    float bOffset = safe.origin.y;
-    float rOffset = (size.width) - (safe.origin.x + safe.size.width);
-
-    // Position the button in the bottom right corner
-    button->setAnchor(Vec2::ANCHOR_CENTER);
-    button->setPosition(size.width - (bsize.width + rOffset) / 2, (bsize.height + bOffset) / 2);
-    */
-    // Add the logo and button to the scene graph
-    // scene->addChild(button);
-
-    // We can only activate a button AFTER it is added to a scene
-    // button->activate();
-
     // activate scene
     //     setDebug(false);
     buildScene(scene);
     addChild(scene);
-    // _pMeleeTexture = _assets->get<Texture>(PATTACK_TEXTURE);
-    // _attacks.init(_pMeleeTexture->getSize() / _scale / 2.0f, _scale / 2.0f, offset, _player);
+    _pMeleeTexture = _assets->get<Texture>(PATTACK_TEXTURE);
+    _attacks.init(_pMeleeTexture->getSize() / _scale / 2.0f, _scale / 2.0f, offset, _player);
     return true;
 }
 
@@ -247,7 +209,6 @@ void GameScene::dispose()
  */
 void GameScene::update(float timestep)
 {
-
     // Update tilt input controller
     _tiltInput.update(timestep, _player->getX(), SCENE_WIDTH, _logo->getSize().width);
     float xPos = _tiltInput.getXpos();
@@ -306,6 +267,10 @@ void GameScene::update(float timestep)
     }
     //_player->setGrounded(true);
     _player->applyForce();
+    
+    float dy = _player->getVY() * 0.5;
+    getCamera()->translate(0, dy);
+    getCamera()->update();
 
     // Remove attacks
     auto ait = _attacks._current.begin();
@@ -402,7 +367,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     addObstacle(floor, floorNode, 1);
 
     // Making the ceiling -jdg274
-    Rect ceilingRect = Rect(0, 17.5, 32, 0.5);
+    Rect ceilingRect = Rect(0, DEFAULT_HEIGHT - 0.5, 32, 0.5);
     std::shared_ptr<physics2::PolygonObstacle> ceiling = physics2::PolygonObstacle::allocWithAnchor(ceilingRect, Vec2::ANCHOR_CENTER);
     ceiling->setBodyType(b2_staticBody);
     std::shared_ptr<scene2::PolygonNode> ceilingNode = scene2::PolygonNode::allocWithPoly(ceilingRect * _scale);
@@ -410,7 +375,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     addObstacle(ceiling, ceilingNode, 1);
 
     // Making the left wall -jdg274
-    Rect leftRect = Rect(0, 0, 0.5, 18);
+    Rect leftRect = Rect(0, 0, 0.5, DEFAULT_HEIGHT);
     std::shared_ptr<physics2::PolygonObstacle> left = physics2::PolygonObstacle::allocWithAnchor(leftRect, Vec2::ANCHOR_CENTER);
     left->setBodyType(b2_staticBody);
     std::shared_ptr<scene2::PolygonNode> leftNode = scene2::PolygonNode::allocWithPoly(leftRect * _scale);
@@ -418,7 +383,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     addObstacle(left, leftNode, 1);
 
     // Making the right wall -jdg274
-    Rect rightRect = Rect(31.5, 0, 0.5, 18);
+    Rect rightRect = Rect(DEFAULT_WIDTH - 0.5, 0, 0.5, DEFAULT_HEIGHT);
     std::shared_ptr<physics2::PolygonObstacle> right = physics2::PolygonObstacle::allocWithAnchor(rightRect, Vec2::ANCHOR_CENTER);
     right->setBodyType(b2_staticBody);
     std::shared_ptr<scene2::PolygonNode> rightNode = scene2::PolygonNode::allocWithPoly(rightRect * _scale);

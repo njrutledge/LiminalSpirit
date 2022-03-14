@@ -44,7 +44,7 @@
 			"wrapT": "clamp"
 		},
         "background":{
-            "file": "textures/background.jpg"
+            "file": "textures/background.png"
         }
 	},
 	"scene2s": {
@@ -63,7 +63,7 @@
 							0.5,
 							0.5
 						],
-						"scale": 2
+						"scale": 0.75
 					},
 					"layout": {
 						"x_anchor": "center",
