@@ -1,0 +1,209 @@
+//
+//  LiminalSpirit.h
+//  Cornell University Game Library (CUGL)
+//
+//  This is the header for the custom application.  It is necessary so that
+//  main.cpp can access your custom class.
+//
+//  CUGL zlib License:
+//      This software is provided 'as-is', without any express or implied
+//      warranty.  In no event will the authors be held liable for any damages
+//      arising from the use of this software.
+//
+//      Permission is granted to anyone to use this software for any purpose,
+//      including commercial applications, and to alter it and redistribute it
+//      freely, subject to the following restrictions:
+//
+//      1. The origin of this software must not be misrepresented; you must not
+//      claim that you wrote the original software. If you use this software
+//      in a product, an acknowledgment in the product documentation would be
+//      appreciated but is not required.
+//
+//      2. Altered source versions must be plainly marked as such, and must not
+//      be misrepresented as being the original software.
+//
+//      3. This notice may not be removed or altered from any source distribution.
+//
+//  Author: Walker White
+//  Version: 1/8/17
+//
+#ifndef GameScene_hpp
+#define GameScene_hpp
+#include <cugl/cugl.h>
+#include "BaseEnemyModel.h"
+#include "Lost.hpp"
+#include "PlayerModel.h"
+#include "AttackController.hpp"
+#include "AIController.hpp"
+#include "InputController.hpp"
+#include "MovementInput.hpp"
+#include "CollisionController.hpp"
+/**
+ * Class for a simple Hello World style application
+ *
+ * The application simply moves the CUGL logo across the screen.  It also
+ * provides a button to quit the application.
+ */
+class GameScene : public cugl::Scene2
+{
+protected:
+    /** The loaders to (synchronously) load in assets */
+    std::shared_ptr<cugl::AssetManager> _assets;
+
+    /** A scene graph, used to display our 2D scenes */
+    std::shared_ptr<cugl::Scene2> _scene;
+    /** A 3152 style SpriteBatch to render the scene */
+    std::shared_ptr<cugl::SpriteBatch> _batch;
+    /** A reference to the logo, so that we can move it around */
+    std::shared_ptr<cugl::scene2::SceneNode> _logo;
+    /** The physics world */
+    std::shared_ptr<cugl::physics2::ObstacleWorld> _world;
+    /** Reference to the physics root of the scene graph */
+    std::shared_ptr<cugl::scene2::SceneNode> _worldnode;
+    /** Reference to the debug root of the scene graph */
+    std::shared_ptr<cugl::scene2::SceneNode> _debugnode;
+
+    /** The scale between the physics world and the screen (MUST BE UNIFORM) */
+    float _scale;
+
+    AttackController _attacks;
+    /** reference to the player Attack Texture*/
+    std::shared_ptr<cugl::Texture> _pMeleeTexture;
+
+    SwipeController _swipes;
+
+    AIController _ai;
+
+    /** tilt controller */
+    MovementInput _tiltInput;
+
+    /**Collision Controller*/
+    CollisionController _collider;
+
+    /**Enemies set */
+    std::unordered_set<std::shared_ptr<BaseEnemyModel>> _enemies;
+
+    /** Player character */
+    std::shared_ptr<PlayerModel> _player;
+
+    /** A countdown used to move the logo */
+    int _countdown;
+
+    /** Whether or not debug mode is active */
+    bool _debug;
+
+    /**
+     * Internal helper to build the scene graph.
+     *
+     * Scene graphs are not required.  You could manage all scenes just like
+     * you do in 3152.  However, they greatly simplify scene management, and
+     * have become standard in most game engines.
+     */
+    void buildScene();
+
+public:
+    /**
+     * Creates, but does not initialized a new application.
+     *
+     * This constructor is called by main.cpp.  You will notice that, like
+     * most of the classes in CUGL, we do not do any initialization in the
+     * constructor.  That is the purpose of the init() method.  Separation
+     * of initialization from the constructor allows main.cpp to perform
+     * advanced configuration of the application before it starts.
+     */
+    GameScene() : cugl::Scene2(), _countdown(-1) {}
+
+    /**
+     * Disposes of all (non-static) resources allocated to this mode.
+     *
+     * This method is different from dispose() in that it ALSO shuts off any
+     * static resources, like the input controller.
+     */
+    ~GameScene() { dispose(); }
+
+    /**
+     * Disposes of all (non-static) resources allocated to this mode.
+     */
+    void dispose();
+
+    /**
+     * Initializes the controller contents, and starts the game
+     *
+     * The constructor does not allocate any objects or memory.  This allows
+     * us to have a non-pointer reference to this controller, reducing our
+     * memory allocation.  Instead, allocation happens in this method.
+     *
+     * @param assets    The (loaded) assets for this game mode
+     *
+     * @return true if the controller is initialized properly, false otherwise.
+     */
+    bool init(const std::shared_ptr<cugl::AssetManager> &assets);
+
+#pragma mark -
+#pragma mark Gameplay Handling
+    /**
+     * The method called to update the game mode.
+     *
+     * This method contains any gameplay code that is not an OpenGL call.
+     *
+     * @param timestep  The amount of time (in seconds) since the last frame
+     */
+    void update(float timestep);
+
+    /**
+     * Resets the status of the game so that we can play again.
+     */
+    void reset();
+
+    void render(const std::shared_ptr<cugl::SpriteBatch> &batch);
+    /**
+     * The method called to draw the application to the screen.
+     *
+     * This is your core loop and should be replaced with your custom implementation.
+     * This method should OpenGL and related drawing calls.
+     *
+     * When overriding this method, you do not need to call the parent method
+     * at all. The default implmentation does nothing.
+     */
+    // virtual void draw() override;
+
+    virtual void addObstacle(const std::shared_ptr<cugl::physics2::Obstacle> &obj,
+                             const std::shared_ptr<cugl::scene2::SceneNode> &node,
+                             bool useObjPosition);
+
+    /**
+     * Returns true if debug mode is active.
+     *
+     * If true, all objects will display their physics bodies.
+     *
+     * @return true if debug mode is active.
+     */
+    bool isDebug() const { return _debug; }
+
+    /**
+     * Sets whether debug mode is active.
+     *
+     * If true, all objects will display their physics bodies.
+     *
+     * @param value whether debug mode is active.
+     */
+    void setDebug(bool value)
+    {
+        _debug = value;
+        _debugnode->setVisible(value);
+    }
+
+    void beginContact(b2Contact *contact);
+
+    /**
+     * Processes the end of a collision
+     *
+     * This method is called when we no longer have a collision between two objects.
+     * We use this method allow the character to jump again.
+     *
+     * @param  contact  The two bodies that collided
+     */
+    void endContact(b2Contact *contact);
+};
+
+#endif /* __HELLO_APP_H__ */
