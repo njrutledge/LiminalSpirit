@@ -507,7 +507,7 @@ void LiminalSpirit::buildScene()
     _platform = PlatformModel::alloc(platformPos, 10, 3, _scale);
     std::shared_ptr<scene2::PolygonNode> spritePlatform = scene2::PolygonNode::allocWithTexture(imagePlatform);
     _platform->setSceneNode(spritePlatform);
-    _platform->setDebugColor(Color4::RED);
+    _platform->setDebugColor(Color4::WHITE);
     spritePlatform->setScale(0.2f);
     addObstacle(_platform, spritePlatform, true);
     // Add the logo and button to the scene graph

@@ -38,7 +38,6 @@
 #include "InputController.hpp"
 #include "TiltController.hpp"
 #include "CollisionController.hpp"
-#include "MovementInput.hpp"
 #include "Platform.hpp"
 /**
  * Class for a simple Hello World style application

@@ -196,6 +196,7 @@
     <ClInclude Include="..\..\source\LiminalSpiritApp.hpp" />
     <ClInclude Include="..\..\source\Lost.hpp" />
     <ClInclude Include="..\..\source\LSCharacter.h" />
+    <ClInclude Include="..\..\source\Platform.hpp" />
     <ClInclude Include="..\..\source\Specter.hpp" />
     <ClInclude Include="..\..\source\SwipeController.hpp" />
     <ClInclude Include="..\..\source\TiltController.hpp" />
@@ -212,6 +213,7 @@
     <ClCompile Include="..\..\source\LiminalSpirit.cpp" />
     <ClCompile Include="..\..\source\Lost.cpp" />
     <ClCompile Include="..\..\source\main.cpp" />
+    <ClCompile Include="..\..\source\Platform.cpp" />
     <ClCompile Include="..\..\source\Specter.cpp" />
     <ClCompile Include="..\..\source\SwipeController.cpp" />
     <ClCompile Include="..\..\source\PlayerModel.cpp" />
