@@ -84,6 +84,9 @@
 		EBEC12022194B6F4007E708B /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBEC12012194B6F4007E708B /* Metal.framework */; };
 		EBFE7C051E19B496001007C2 /* json in Resources */ = {isa = PBXBuildFile; fileRef = EBFE7C041E19B496001007C2 /* json */; };
 		EBFE7C091E19B4AC001007C2 /* json in Resources */ = {isa = PBXBuildFile; fileRef = EBFE7C041E19B496001007C2 /* json */; };
+		F009929327E1356900169340 /* Platform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F009929227E1356900169340 /* Platform.cpp */; };
+		F009929427E1356C00169340 /* Platform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F009929227E1356900169340 /* Platform.cpp */; };
+		F009929527E1356D00169340 /* Platform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F009929227E1356900169340 /* Platform.cpp */; };
 		F025104027D02C6C00AB80AA /* InputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F025103B27D02C6C00AB80AA /* InputController.cpp */; };
 		F025104127D02C6C00AB80AA /* SwipeController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F025103D27D02C6C00AB80AA /* SwipeController.cpp */; };
 		F025104227D02C6C00AB80AA /* AttackController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F025103F27D02C6C00AB80AA /* AttackController.cpp */; };
@@ -185,6 +188,8 @@
 		EBDD16C725C35D3400154533 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.4.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		EBEC12012194B6F4007E708B /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		EBFE7C041E19B496001007C2 /* json */ = {isa = PBXFileReference; lastKnownFileType = folder; path = json; sourceTree = "<group>"; };
+		F009928E27E1356900169340 /* Platform.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Platform.hpp; sourceTree = "<group>"; };
+		F009929227E1356900169340 /* Platform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Platform.cpp; sourceTree = "<group>"; };
 		F025103A27D02C6C00AB80AA /* AttackController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AttackController.hpp; sourceTree = "<group>"; };
 		F025103B27D02C6C00AB80AA /* InputController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputController.cpp; sourceTree = "<group>"; };
 		F025103C27D02C6C00AB80AA /* InputController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = InputController.hpp; sourceTree = "<group>"; };
@@ -382,6 +387,8 @@
 		EBBF18B11D749176008E2001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				F009929227E1356900169340 /* Platform.cpp */,
+				F009928E27E1356900169340 /* Platform.hpp */,
 				579F0A0427DF89D700D00FFB /* Lost.hpp */,
 				579F0A0B27DFA7CE00D00FFB /* Lost.cpp */,
 				579F0A0627DF89D800D00FFB /* Specter.cpp */,
@@ -593,6 +600,7 @@
 				EB9CDA3925D0EAB100EE1A09 /* main.cpp in Sources */,
 				F05176E627D080ED00C0617F /* BaseEnemyModel.cpp in Sources */,
 				F05176E027D080CE00C0617F /* PlayerModel.cpp in Sources */,
+				F009929527E1356D00169340 /* Platform.cpp in Sources */,
 				EB9CDA3525D0EAAC00EE1A09 /* LiminalSpirit.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -604,6 +612,7 @@
 				F05176DD27D080C800C0617F /* SwipeController.cpp in Sources */,
 				579F0A0227DF89AF00D00FFB /* AIController.cpp in Sources */,
 				F04BAE9927DEAB5D00A8FE21 /* TiltController.cpp in Sources */,
+				F009929427E1356C00169340 /* Platform.cpp in Sources */,
 				579F0A0D27DFA7CF00D00FFB /* Lost.cpp in Sources */,
 				579F0A0827DF89D800D00FFB /* Specter.cpp in Sources */,
 				F05176DB27D0808A00C0617F /* AttackController.cpp in Sources */,
@@ -623,6 +632,7 @@
 				F025104127D02C6C00AB80AA /* SwipeController.cpp in Sources */,
 				579F0A0127DF89AF00D00FFB /* AIController.cpp in Sources */,
 				F04BAE9627DEA68D00A8FE21 /* TiltController.cpp in Sources */,
+				F009929327E1356900169340 /* Platform.cpp in Sources */,
 				579F0A0C27DFA7CF00D00FFB /* Lost.cpp in Sources */,
 				579F0A0727DF89D800D00FFB /* Specter.cpp in Sources */,
 				F025104027D02C6C00AB80AA /* InputController.cpp in Sources */,

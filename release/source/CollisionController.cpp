@@ -87,6 +87,7 @@ void CollisionController::handlePlayerCollision(PlayerModel* player, physics2::O
 		//TODO: Make "enemyattacksensor" a constant somewhere
 		if (*(attack->getSensorName()) == "enemyattacksensor") {
 			player->setHealth(player->getHealth() - attack->getDamage());
+            attack->setInactive();
 			if (player->getHealth() <= 0) {
 				player->markRemoved(true);
 			}
