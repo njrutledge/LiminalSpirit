@@ -324,3 +324,8 @@ void AttackController::Attack::resetDebug() {
     _sensorNode->setPosition(Vec2(_debug->getContentSize().width/2.0f, _debug->getContentSize().height / 2.0f));
     _debug->addChild(_sensorNode);
 }
+
+void AttackController::reset() {
+    _pending.clear();
+    _current.clear();
+}
