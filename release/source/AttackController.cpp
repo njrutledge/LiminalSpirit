@@ -25,7 +25,7 @@ bool AttackController::Attack::init(const cugl::Vec2 p, float radius, float a, f
     _offset = oof;
     _active = true;
     _ball = b.makeCircle(_position, _radius);
-    if (CapsuleObstacle::init(_position)) {
+    if (CapsuleObstacle::init(_position, Size(_radius, _radius))) {
         // TODO change the sensor naming based on if its player attack
         switch (_type) {
             case Type::p_range:
@@ -58,7 +58,8 @@ void AttackController::Attack::createFixtures() {
     cugl::Vec2 vec(0, _radius);
     for(int i = 0; i < 8; i++){
         corners[i] = b2Vec2(vec.x, vec.y);
-        vec.rotate(45);
+        _debugVerticies.push_back(Vec2(vec));
+        vec.rotate(M_PI/4.0f);
     }
 //    std::vector<cugl::Vec2> cuglVerts = ball.getVertices();
 //    int n = cuglVerts.size();
@@ -98,6 +99,12 @@ void AttackController::Attack::update(const cugl::Vec2 p, bool follow, float dt,
             _active =  false;
         }
     }
+}
+
+void AttackController::Attack::dispose() {
+    _core = nullptr;
+    _node = nullptr;
+    _sensorNode = nullptr;
 }
 
 AttackController::AttackController() {
@@ -160,10 +167,10 @@ void AttackController::update(const cugl::Vec2 p, b2Vec2 VX, float dt) {
 }
 
 void AttackController::attackLeft(cugl::Vec2 p, SwipeController::SwipeAttack attack, bool grounded) {
+    //Attack::Alloc(const cugl::Vec2 p, float radius, float a, float dmg, float scale, Type s, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel)
     if (_rangedCounter > _reload) {
         switch (attack) {
             case SwipeController::leftAttack:
-                _pending.emplace(Attack::alloc(p, 1, 0.5, 9001, _scale, Type::p_range, cugl::Vec2(_p_vel).rotate(M_PI * 0.5), _leftOff, ballMakyr));
                 _pending.emplace(Attack::alloc(p, 0.5, 0.5, 9001, _scale, Type::p_range, _leftOff, ballMakyr, cugl::Vec2(_p_vel).rotate(M_PI * 0.5)));
                 _rangedCounter = 0;
                 break;
@@ -172,12 +179,12 @@ void AttackController::attackLeft(cugl::Vec2 p, SwipeController::SwipeAttack att
                 _rangedCounter = 0;
                 break;
             case SwipeController::upAttack:
-                _pending.emplace(Attack::alloc(p, 1, 0.5, 9001, _scale, Type::p_range, _p_vel, _upOff, ballMakyr));
+                _pending.emplace(Attack::alloc(p, 0.5, 0.5, 9001, _scale, Type::p_range, _upOff, ballMakyr, _p_vel));
                 _rangedCounter = 0;
                 break;
             case SwipeController::downAttack:
                 if(!grounded){
-                _pending.emplace(Attack::alloc(p, 1, 0.5, 9001, _scale, Type::p_range, cugl::Vec2(_p_vel).rotate(M_PI), _downOff, ballMakyr));
+                _pending.emplace(Attack::alloc(p, 0.5, 0.5, 9001, _scale, Type::p_range, _downOff, ballMakyr, cugl::Vec2(_p_vel).rotate(M_PI)));
                 } else{
                     _pending.emplace(Attack::alloc(p, 0.5, 0.1, 9001, _scale, Type::p_range, _leftOff, ballMakyr, cugl::Vec2(_p_vel).rotate(M_PI * 0.5)));
                     _pending.emplace(Attack::alloc(p, 0.5, 0.1, 9001, _scale, Type::p_range, _rightOff, ballMakyr, cugl::Vec2(_p_vel).rotate(M_PI * 1.5)));
@@ -185,13 +192,15 @@ void AttackController::attackLeft(cugl::Vec2 p, SwipeController::SwipeAttack att
                 _rangedCounter = 0;
                 break;
             case SwipeController::chargedLeft:
+                _pending.emplace(Attack::alloc(p, 0.3, 1.5, 9001, _scale, Type::p_exp_package, _leftOff, ballMakyr, cugl::Vec2(_c_vel).rotate(M_PI * 0.5)));
                 _rangedCounter = 0;
                 break;
             case SwipeController::chargedRight:
-                _pending.emplace(Attack::alloc(p, 0.6, 1.5, 0, _scale, Type::p_exp_package, cugl::Vec2(_c_vel).rotate(M_PI * 1.5), _rightOff, ballMakyr));
+                _pending.emplace(Attack::alloc(p, 0.3, 1.5, 9001, _scale, Type::p_exp_package, _rightOff, ballMakyr, cugl::Vec2(_c_vel).rotate(M_PI * 1.5)));
                 _rangedCounter = 0;
                 break;
             case SwipeController::chargedUp:
+                _pending.emplace(Attack::alloc(p, 0.3, 1.5, 9001, _scale, Type::p_exp_package, _upOff, ballMakyr, _c_vel));
                 _rangedCounter = 0;
                 break;
             case SwipeController::chargedDown:
@@ -306,11 +315,12 @@ void AttackController::createAttack(cugl::Vec2 p, float radius, float age, float
 
 void AttackController::Attack::resetDebug() {
     CapsuleObstacle::resetDebug();
-    float w = ATTACK_SSHRINK * _dimension.width;
-    float h = SENSOR_HEIGHT;
-    Poly2 poly(Rect(-w / 2.0f, -h / 2.0f, w, h));
+    //Poly2 poly = _ball;
+    std::vector<Uint32> debugIndicies{ 0,1,2,   2,3,4,   4,5,6,   6,7,0 };
+    Poly2 poly(_debugVerticies, debugIndicies);
 
     _sensorNode = scene2::WireNode::allocWithTraversal(poly, poly2::Traversal::INTERIOR);
+    _sensorNode->setColor(Color4::RED);
     _sensorNode->setPosition(Vec2(_debug->getContentSize().width/2.0f, _debug->getContentSize().height / 2.0f));
     _debug->addChild(_sensorNode);
 }
