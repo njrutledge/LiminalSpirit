@@ -36,9 +36,10 @@ class AttackController {
 public:
 
     enum Type {
-        p_left,
-        p_right,
-        p_normal,
+        p_melee,
+        p_range,
+        p_exp_package,
+        p_exp,
         e_melee,
         e_range
     };
@@ -102,6 +103,8 @@ public:
          * @param follow      Whether to follow the player's movement while active
          */
         void update(const cugl::Vec2 p, bool follow, float dt, b2Vec2 VX);
+        
+        void setInactive() {_active = false;}
         
         bool isActive() {return _active;}
         

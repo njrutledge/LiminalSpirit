@@ -128,7 +128,7 @@ void LiminalSpirit::onStartup()
     _world = physics2::ObstacleWorld::alloc(Rect(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT), Vec2(0, -GRAVITY));
     _world->activateCollisionCallbacks(true);
         _world->onBeginContact = [this](b2Contact* contact) {
-          _collider.beginContact(contact, _player);
+          _collider.beginContact(contact, _player, _attacks);
         };
         _world->onEndContact = [this](b2Contact* contact) {
           _collider.endContact(contact, _player);
@@ -152,7 +152,8 @@ void LiminalSpirit::onStartup()
     
     // TODO this init might be wrong, Nick had _scale/2.0f
     _pMeleeTexture = _assets->get<Texture>(PATTACK_TEXTURE);
-    _attacks.init(_scale, 1.5, cugl::Vec2::UNIT_Y, cugl::Vec2(0,0.5), 0.5, 1, 0.5, 0.1);
+    _attacks = std::make_shared<AttackController>();
+    _attacks->init(_scale, 1.5, cugl::Vec2::UNIT_Y, cugl::Vec2(0,0.5), 0.5, 1, 0.5, 0.1);
     _debugnode = scene2::SceneNode::alloc();
     _debugnode->setScale(_scale); // Debug node draws in PHYSICS coordinates
     _debugnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
@@ -255,11 +256,11 @@ void LiminalSpirit::update(float timestep)
             Vec2 en_p = (*it)->getPosition();
             Vec2 vel = Vec2(0.5, 0);
             if ((*it)->getName() == "Lost") {
-                _attacks.createAttack(Vec2((*it)->getX(), (*it)->getY()) , 1.0f, 0.08f, 1.0f, AttackController::Type::e_melee, vel.rotate((play_p - en_p).getAngle()));
+                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 1.0f, 0.08f, 1.0f, AttackController::Type::e_melee, vel.rotate((play_p - en_p).getAngle()));
                 
             }
             else if ((*it)->getName() == "Specter") {
-                _attacks.createAttack(Vec2((*it)->getX(), (*it)->getY()) , 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()));
+                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()));
             }
         }
     }
@@ -267,11 +268,11 @@ void LiminalSpirit::update(float timestep)
 
     _swipes.update(_input);
     b2Vec2 playerPos = _player->getBody()->GetPosition();
-    _attacks.attackLeft(Vec2(playerPos.x, playerPos.y), _swipes.getLeftSwipe(), _player->isGrounded());
-    _attacks.attackRight(Vec2(playerPos.x, playerPos.y), _swipes.getRightSwipe(),_player->isGrounded());
+    _attacks->attackLeft(Vec2(playerPos.x, playerPos.y), _swipes.getLeftSwipe(), _player->isGrounded());
+    _attacks->attackRight(Vec2(playerPos.x, playerPos.y), _swipes.getRightSwipe(),_player->isGrounded());
     _world->update(timestep);
     
-    for (auto it = _attacks._pending.begin(); it != _attacks._pending.end(); ++it) {
+    for (auto it = _attacks->_pending.begin(); it != _attacks->_pending.end(); ++it) {
         //FIX WHEN TEXTURE EXISTS
         std::shared_ptr<scene2::PolygonNode> attackSprite = scene2::PolygonNode::allocWithTexture(_pMeleeTexture);
         attackSprite->setScale(.5f * (*it)->getRadius());
@@ -279,7 +280,7 @@ void LiminalSpirit::update(float timestep)
         addObstacle((*it), attackSprite, true);
     }
     //DO NOT MOVE THIS LINE
-    _attacks.update(_player->getPosition(), _player->getBody()->GetLinearVelocity(), timestep);
+    _attacks->update(_player->getPosition(), _player->getBody()->GetLinearVelocity(), timestep);
     if(_swipes.getRightSwipe() == _swipes.upAttack){
         _player->setJumping(true);
     } else {
@@ -289,8 +290,8 @@ void LiminalSpirit::update(float timestep)
     _player->applyForce();
 
     //Remove attacks
-    auto ait = _attacks._current.begin();
-    while(ait != _attacks._current.end()) {
+    auto ait = _attacks->_current.begin();
+    while(ait != _attacks->_current.end()) {
         if ((*ait)->isRemoved()) {
             //int log1 = _world->getObstacles().size();
             cugl::physics2::Obstacle* obj = dynamic_cast<cugl::physics2::Obstacle*>(&**ait);
@@ -298,7 +299,7 @@ void LiminalSpirit::update(float timestep)
             _worldnode->removeChild(obj->_node);
 
             //int log2 = _world->getObstacles().size();
-            ait = _attacks._current.erase(ait);
+            ait = _attacks->_current.erase(ait);
         }
         else {
             ait++;

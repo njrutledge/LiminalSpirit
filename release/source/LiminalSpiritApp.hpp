@@ -68,7 +68,7 @@ protected:
     
     InputController _input;
     
-    AttackController _attacks;
+    std::shared_ptr<AttackController> _attacks;
     /** reference to the player Attack Texture*/
     std::shared_ptr<cugl::Texture> _pMeleeTexture;
         

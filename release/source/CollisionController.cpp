@@ -12,7 +12,7 @@ using namespace cugl;
 	* @param  contact  The two bodies that collided
 	* @param  player   The player pointer
 	*/
-void CollisionController::beginContact(b2Contact* contact, std::shared_ptr<PlayerModel> player) {
+void CollisionController::beginContact(b2Contact* contact, std::shared_ptr<PlayerModel> player, std::shared_ptr<AttackController> AC) {
 	//setup
 	b2Fixture* fix1 = contact->GetFixtureA();
 	b2Fixture* fix2 = contact->GetFixtureB();
@@ -36,10 +36,10 @@ void CollisionController::beginContact(b2Contact* contact, std::shared_ptr<Playe
 	}
 	//handle enemy collision
 	if (BaseEnemyModel* enemy = dynamic_cast<BaseEnemyModel*>(bd1)) {
-		handleEnemyCollision(enemy, bd2, fd2);
+		handleEnemyCollision(enemy, bd2, fd2, AC);
 	}
 	else if (BaseEnemyModel* enemy = dynamic_cast<BaseEnemyModel*>(bd2)) {
-		handleEnemyCollision(enemy, bd1, fd1);
+		handleEnemyCollision(enemy, bd1, fd1, AC);
 	}
 
 	//handlePlayerCollision
@@ -56,7 +56,7 @@ void CollisionController::beginContact(b2Contact* contact, std::shared_ptr<Playe
 /** 
 * helper method for handling beginning of enemy collision
 */
-void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::Obstacle* bd, std::string* fd) {
+void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::Obstacle* bd, std::string* fd, std::shared_ptr<AttackController> AC) {
 	if (AttackController::Attack* attack = dynamic_cast<AttackController::Attack*>(bd)) {
 		//TODO: Make "playerattacksensor" a constant somewhere
 		if (*(attack->getSensorName()) == "playerattacksensor") {
@@ -64,6 +64,17 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
 			if (enemy->getHealth() <= 0) {
 				enemy->markRemoved(true);
 			}
+            if (attack->getType() == AttackController::p_exp_package) {
+                AC->createAttack(cugl::Vec2(bd->getPosition().x, bd->getPosition().y), 3, 0.1, 9000, AttackController::p_exp, cugl::Vec2::ZERO);
+            }
+            switch (attack->getType()) {
+                case AttackController::p_range:
+                case AttackController::p_exp_package:
+                    attack->setInactive();
+                    break;
+                default:
+                    break;
+            }
 		}
 	}
 }
