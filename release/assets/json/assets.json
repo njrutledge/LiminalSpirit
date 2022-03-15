@@ -37,7 +37,7 @@
 			"wrapT": "clamp"
 		},
 		"pattack": {
-			"file": "textures/pattack.png",
+			"file": "textures/nugget.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",

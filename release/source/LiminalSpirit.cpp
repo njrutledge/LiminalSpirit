@@ -283,7 +283,7 @@ void LiminalSpirit::update(float timestep)
     for (auto it = _attacks->_pending.begin(); it != _attacks->_pending.end(); ++it) {
         //FIX WHEN TEXTURE EXISTS
         std::shared_ptr<scene2::PolygonNode> attackSprite = scene2::PolygonNode::allocWithTexture(_pMeleeTexture);
-        attackSprite->setScale(.45f * (*it)->getRadius());
+        attackSprite->setScale(.85f * (*it)->getRadius());
         (*it)->setDebugColor(Color4::YELLOW);
         addObstacle((*it), attackSprite, true);
     }
