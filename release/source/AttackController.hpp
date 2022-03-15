@@ -81,6 +81,8 @@ public:
         std::string _sensorName;
         /** Debug Sensor */
         std::shared_ptr<cugl::scene2::WireNode> _sensorNode;
+
+        std::vector<cugl::Vec2> _debugVerticies;
         
         virtual void resetDebug() override;
         
@@ -136,12 +138,12 @@ public:
 #pragma mark -
 #pragma mark Static Constructors
         static std::shared_ptr<Attack> alloc(const cugl::Vec2 p, float radius, float age, float dmg, float scale,
-                                             Type s, cugl::Vec2 vel, cugl::Vec2 oof, cugl::PolyFactory b) {
+                                             Type s, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel) {
             std::shared_ptr<Attack> result = std::make_shared<Attack>();
             return (result->init(p, radius, age, dmg, scale, s, oof, b, vel) ? result : nullptr);
         }
         
-        static std::shared_ptr<Attack> alloc(const cugl::Vec2 p, float radius, float age, float dmg, float scale, Type s, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel) {
+        static std::shared_ptr<Attack> alloc2(const cugl::Vec2 p, float radius, float age, float dmg, float scale, Type s, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel) {
             std::shared_ptr<Attack> result = std::make_shared<Attack>();
             return (result->init(p, radius, age, dmg, scale, s, oof, b, vel) ? result : nullptr);
         }
