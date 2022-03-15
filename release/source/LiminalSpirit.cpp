@@ -137,6 +137,9 @@ void LiminalSpirit::onStartup()
     // Enable physics -jdg274
     _world = physics2::ObstacleWorld::alloc(Rect(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT), Vec2(0, -GRAVITY));
     _world->activateCollisionCallbacks(true);
+//    _world->PreSolve = [this](b2Contact* contact, const b2Manifold *oldManifold) {
+//        preSolve(contact, oldManifold);
+//    };
         _world->onBeginContact = [this](b2Contact* contact) {
           beginContact(contact);
         };
@@ -233,6 +236,13 @@ void LiminalSpirit::update(float timestep)
     } else {
         _player->setJumping(false);
     }
+    if (_player->getVY() > 0) {
+        _player->setSensor(true);
+    } else {
+        _player->setSensor(false);
+    }
+    
+    
 //    auto objects = _world->getObstacles();
 //    bool containObj;
 //    for(auto it = _platforms.begin(); it != _platforms.end(); ++it) {
@@ -335,6 +345,7 @@ void LiminalSpirit::buildScene()
     Rect floorRect = Rect(0, 0, 32, 0.5);
     std::shared_ptr<physics2::PolygonObstacle> floor = physics2::PolygonObstacle::allocWithAnchor(floorRect, Vec2::ANCHOR_CENTER);
     floor->setBodyType(b2_staticBody);
+    
     std::shared_ptr<scene2::PolygonNode> floorNode = scene2::PolygonNode::allocWithPoly(floorRect*_scale);
     floorNode->setColor(Color4::BLACK);
     addObstacle(floor, floorNode, 1);
@@ -343,6 +354,7 @@ void LiminalSpirit::buildScene()
     Rect ceilingRect = Rect(0, 17.5, 32, 0.5);
     std::shared_ptr<physics2::PolygonObstacle> ceiling = physics2::PolygonObstacle::allocWithAnchor(ceilingRect, Vec2::ANCHOR_CENTER);
     ceiling->setBodyType(b2_staticBody);
+    
     std::shared_ptr<scene2::PolygonNode> ceilingNode = scene2::PolygonNode::allocWithPoly(ceilingRect*_scale);
     ceilingNode->setColor(Color4::BLACK);
     addObstacle(ceiling, ceilingNode, 1);
@@ -351,6 +363,7 @@ void LiminalSpirit::buildScene()
     Rect leftRect = Rect(0, 0, 0.5, 18);
     std::shared_ptr<physics2::PolygonObstacle> left = physics2::PolygonObstacle::allocWithAnchor(leftRect, Vec2::ANCHOR_CENTER);
     left->setBodyType(b2_staticBody);
+    
     std::shared_ptr<scene2::PolygonNode> leftNode = scene2::PolygonNode::allocWithPoly(leftRect*_scale);
     leftNode->setColor(Color4::BLACK);
     addObstacle(left, leftNode, 1);
@@ -400,14 +413,15 @@ void LiminalSpirit::buildScene()
     sprite->setScale(0.2f);
     addObstacle(_player, sprite, true);
 
-    Vec2 platformPos = Vec2(10.0f, 7.0f);
+    Vec2 platformPos = Vec2(15.0f, 5.0f);
     std::shared_ptr<scene2::SceneNode> platformNode = scene2::SceneNode::alloc();
     std::shared_ptr<Texture> imagePlatform = _assets->get<Texture>(PLAYER_TEXTURE);
-    _platform = PlatformModel::alloc(platformPos, 10, 3, _scale);
+    _platform = PlatformModel::alloc(platformPos, 10, 0.5, _scale);
     std::shared_ptr<scene2::PolygonNode> spritePlatform = scene2::PolygonNode::allocWithTexture(imagePlatform);
     _platform->setSceneNode(spritePlatform);
     _platform->setDebugColor(Color4::RED);
     spritePlatform->setScale(0.2f);
+    //_platform->setSensor(true);
     addObstacle(_platform, spritePlatform, true);
     // Add the logo and button to the scene graph
     _scene->addChild(button);
@@ -460,6 +474,7 @@ void LiminalSpirit::addObstacle(const std::shared_ptr<cugl::physics2::Obstacle> 
 }
 
 #pragma mark Collision Handling
+
 /**
  * Processes the start of a collision
  *
@@ -475,21 +490,28 @@ void LiminalSpirit::beginContact(b2Contact* contact) {
 
     b2Body* body1 = fix1->GetBody();
     b2Body* body2 = fix2->GetBody();
-
+    
     std::string* fd1 = reinterpret_cast<std::string*>(fix1->GetUserData().pointer);
     std::string* fd2 = reinterpret_cast<std::string*>(fix2->GetUserData().pointer);
 
     physics2::Obstacle* bd1 = reinterpret_cast<physics2::Obstacle*>(body1->GetUserData().pointer);
     physics2::Obstacle* bd2 = reinterpret_cast<physics2::Obstacle*>(body2->GetUserData().pointer);
 
+//    if ((_player.get() == bd2 && _platform.get() == bd1) ||
+//        (_player.get() == bd1 && _platform.get() == bd2)) {
+//        if (_player->getVY() > 0) {
+//            _player->setSensor(true);
+//        } else {
+//            _player->setSensor(false);
+//        }
+//    }
     // See if we have landed on the ground.
     if ((_player->getSensorName() == fd2 && _player.get() != bd1) ||
         (_player->getSensorName() == fd1 && _player.get() != bd2)) {
         
-        if(_player->getLinearVelocity().y <= 0) {
-            _player->setGrounded(true);
-        }
+        _player->setGrounded(true);
     }
+
 }
 
 /**
