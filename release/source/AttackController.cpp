@@ -25,7 +25,7 @@ bool AttackController::Attack::init(const cugl::Vec2 p, float radius, float a, f
     _offset = oof;
     _active = true;
     _ball = b.makeCircle(_position, _radius);
-    if (CapsuleObstacle::init(_position)) {
+    if (CapsuleObstacle::init(_position, Size(1.8, 2.4))) {
         // TODO change the sensor naming based on if its player attack
         if (_type == Type::p_left || _type == Type::p_right){
             _sensorName = "player" + _sensorName;
@@ -92,6 +92,12 @@ void AttackController::Attack::update(const cugl::Vec2 p, bool follow, float dt,
             _active =  false;
         }
     }
+}
+
+void AttackController::Attack::dispose() {
+    _core = nullptr;
+    _node = nullptr;
+    _sensorNode = nullptr;
 }
 
 AttackController::AttackController() {

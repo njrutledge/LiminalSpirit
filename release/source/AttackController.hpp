@@ -11,7 +11,7 @@
 
 #define ATTACK_SENSOR_NAME "attacksensor"
 #define PATTACK_TEXTURE "pattack"
-#define ATTACK_SSHRINK 0.6f
+#define ATTACK_SSHRINK 1.0f
 /**Height of the sensor */
 #define SENSOR_HEIGHT 01.f
 
@@ -45,6 +45,7 @@ public:
     
     class Attack : public cugl::physics2::CapsuleObstacle{
         
+    protected:
         //The position of the player
         cugl::Vec2 _position;
         
@@ -81,6 +82,8 @@ public:
         /** Debug Sensor */
         std::shared_ptr<cugl::scene2::WireNode> _sensorNode;
         
+        virtual void resetDebug() override;
+        
         
     public:
         /**
@@ -92,6 +95,11 @@ public:
          * @param scale The drawing scale size of the hitbox
          */
         Attack() : CapsuleObstacle(), _sensorName(ATTACK_SENSOR_NAME) { }
+
+        virtual ~Attack(void) { dispose(); }
+
+        void dispose();
+
         bool init(const cugl::Vec2 p, float radius, float a, float dmg, float scale, Type s, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel);
         
         
@@ -122,8 +130,9 @@ public:
 
         /** Releases the fixtures of this body(s) from the world */
         void releaseFixtures() override;
-        
-        void resetDebug() override;
+
+ public:
+
 #pragma mark -
 #pragma mark Static Constructors
         static std::shared_ptr<Attack> alloc(const cugl::Vec2 p, float radius, float age, float dmg, float scale,
