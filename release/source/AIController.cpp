@@ -51,6 +51,15 @@ float AIController::getLostMovement(shared_ptr<BaseEnemyModel> lost, Vec2 player
             return 0; // lost stops moving
 			
 		}
+		else if (abs(player_pos.y - lost->getPosition().y) > 5 && !lost->getHasSeenPlayer()) {
+			//This is jank -> will likely use some from of LoS instead once we can detect platforms and walls
+			if ((abs(player_pos.x - lost->getPosition().x) < 5)) {
+				return lost->getHorizontalSpeed(); // only works if platfrom has an exit to the right
+			}
+			else {
+				return 0; 
+			}
+		}
 		else if (player_pos.x > lost->getPosition().x) {
 			return lost->getHorizontalSpeed();
 		}
@@ -69,10 +78,11 @@ float AIController::getLostMovement(shared_ptr<BaseEnemyModel> lost, Vec2 player
 }
 
 Vec2 AIController::getSpecterMovement(shared_ptr<BaseEnemyModel> specter, Vec2 player_pos, float timestep) {
-	//TODO: Add vertical movement
-    specter->setTimePast(specter->getTimePast() + timestep);
+	//TODO: 
 	// Use line of sight to determine ranged attacks
+    specter->setTimePast(specter->getTimePast() + timestep);
 	int flip = 1; // flips y direction
+
 	//Check if enemy is already attacking
 	if (!specter->isAttacking()) {
 		if (player_pos.x <= specter->getPosition().x + specter->getAttackRadius()
@@ -83,7 +93,7 @@ Vec2 AIController::getSpecterMovement(shared_ptr<BaseEnemyModel> specter, Vec2 p
                 specter->setIsAttacking(true);
                 specter->setTimePast(0.0f);
             }
-			return Vec2(); // lost stops moving
+			return Vec2(); // Specterstops moving
 		}
 		else if (specter->getVY() == 0) {
 			return Vec2(specter->getHorizontalSpeed(), -1 * specter->getVerticalSpeed());

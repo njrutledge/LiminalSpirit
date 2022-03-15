@@ -69,6 +69,9 @@ protected:
 	/** The density of the enemy*/
 	float _density;
 
+	/** True if the enemy has had line of sight of the player */
+	bool _hasSeenPlayer;
+
 	/** Enemy name*/
 	std::string _enemyName;
 
@@ -175,6 +178,12 @@ public:
 
 	/** Returns the attack cooldown */
 	float getAttackCooldown() const { return _attackCooldown; }
+
+	/** Returns true if this enemy has seen the player */
+	bool getHasSeenPlayer() { return _hasSeenPlayer; }
+
+	/** Sets to true if the enemy has seen the player */
+	void setHasSeenPlayer(bool value) { _hasSeenPlayer = value; }
 
 	/** Returns the name of the ground sensor */
 	std::string* getSensorName() { return &_sensorName; }

@@ -62,7 +62,7 @@ using namespace cugl;
 
 
 /** The initial position of the enemies */
-float ENEMY_POS[] = {20.0f, 5.0f};
+float ENEMY_POS[] = {12.0f, 15.0f};
 float ENEMY_POS2[] = { 24.0f, 10.0f };
 
 /** The initial position of the player*/
