@@ -39,6 +39,7 @@
 #include "PlayerModel.h"
 #include "CollisionController.hpp"
 
+#include "Platform.hpp"
 // Add support for simple random number generation
 #include <cstdlib>
 #include <ctime>
@@ -322,6 +323,22 @@ void LiminalSpirit::update(float timestep)
         }
     }
    // if (_player->isRemoved()) {
+//    auto objects = _world->getObstacles();
+//    bool containObj;
+//    for(auto it = _platforms.begin(); it != _platforms.end(); ++it) {
+//        if (std::find(objects.begin(), objects.end(), *it) != objects.end())
+//        {
+//            containObj = true;
+//        } else {
+//            containObj = false;
+//        }
+//        if(it->get()->getY() + it->get()->getHeight() < _player->getPosition().y && !containObj) {
+//
+//            _world->addObstacle(*it);
+//        } else if (it->get()->getY() + it->get()->getHeight() > _player->getPosition().y && containObj) {
+//            _world->removeObstacle((*it).get());
+//        }
+//    }
     
    // }
     //CULog("Attacks size: %d", _attacks._current.size());
@@ -433,6 +450,19 @@ void LiminalSpirit::buildScene()
     std::shared_ptr<scene2::PolygonNode> rightNode = scene2::PolygonNode::allocWithPoly(rightRect*_scale);
     rightNode->setColor(Color4::BLACK);
     addObstacle(right, rightNode, 1);
+    
+//    for (int ii = 0; ii < PLATFORM_COUNT; ii++) {
+//        std::shared_ptr<physics2::PolygonObstacle> platobj;
+//        Rect platformRect = Rect(PLATFORMS[ii][0], PLATFORMS[ii][1], PLATFORMS[ii][2], PLATFORMS[ii][3]);
+//        platobj = physics2::PolygonObstacle::allocWithAnchor(platformRect, Vec2::ANCHOR_CENTER);
+//        // Set the physics attributes
+//        platobj->setBodyType(b2_staticBody);
+//        platobj->setSensor(true);
+//        std::shared_ptr<scene2::PolygonNode> platformNode = scene2::PolygonNode::allocWithPoly(platformRect*_scale);
+//        platformNode->setColor(Color4::BLACK);
+//        addObstacle(platobj,platformNode,1);
+//        _platforms.emplace(platobj);
+//    }
 
     // Position the button in the bottom right corner
     button->setAnchor(Vec2::ANCHOR_CENTER);
@@ -471,7 +501,15 @@ void LiminalSpirit::buildScene()
     sprite->setScale(0.2f);
     addObstacle(_player, sprite, true);
 
-
+    Vec2 platformPos = Vec2(10.0f, 7.0f);
+    std::shared_ptr<scene2::SceneNode> platformNode = scene2::SceneNode::alloc();
+    std::shared_ptr<Texture> imagePlatform = _assets->get<Texture>(PLAYER_TEXTURE);
+    _platform = PlatformModel::alloc(platformPos, 10, 3, _scale);
+    std::shared_ptr<scene2::PolygonNode> spritePlatform = scene2::PolygonNode::allocWithTexture(imagePlatform);
+    _platform->setSceneNode(spritePlatform);
+    _platform->setDebugColor(Color4::WHITE);
+    spritePlatform->setScale(0.2f);
+    addObstacle(_platform, spritePlatform, true);
     // Add the logo and button to the scene graph
     _scene->addChild(button);
 
