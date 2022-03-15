@@ -145,6 +145,20 @@ void InputController::update() {
 #endif
 }
 
+/**
+ * Resets input controller. Does not remove listeners.
+ */
+void InputController::reset() {
+    _currRightDown = false;
+    _prevRightDown = false;
+    _currLeftDown = false;
+    _prevLeftDown = false;
+    _leftFingerDown = false;
+    _rightFingerDown = false;
+    _debugKeyPressed = false;
+}
+
+
 #pragma mark Touchscreen Callbacks
 
 /**

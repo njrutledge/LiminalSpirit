@@ -43,9 +43,9 @@ public:
     void update(InputController& input, float width, float characterWidth);
     
     /**
-     * Clears any buffered inputs so that we may start fresh.
+     * Resets tilt controller.
      */
-    void clear();
+    void reset();
 
     /**
      * Returns the current xpos

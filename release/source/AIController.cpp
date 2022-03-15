@@ -14,6 +14,11 @@ AIController::AIController() {
 	// Add initialization variables if needed
 }
 
+/** Reset AI Controller */
+void AIController::reset() {
+    // Add reset variables if needed
+};
+
 Vec2 AIController::getMovement(shared_ptr<BaseEnemyModel> e, Vec2 player_pos, float timestep) {
 	std::string name = e->getName();
 	if (name == "Lost") {

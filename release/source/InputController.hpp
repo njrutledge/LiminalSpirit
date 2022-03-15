@@ -75,7 +75,7 @@ public:
     int _leftCode;
     int _rightCode;
     int _moveCode;
-//    cugl::Keyboard* _keys;
+
     /** debug key is pressed */
     bool _debugKeyPressed;
 
@@ -128,6 +128,11 @@ public:
      * Updates the input controller for the latest frame.
      */
     void update();
+    
+    /**
+     * Resets input controller. Does not remove listeners.
+     */
+    void reset();
 
 #pragma mark Attributes
     /**

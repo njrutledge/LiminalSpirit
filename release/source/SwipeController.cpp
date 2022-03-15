@@ -305,3 +305,11 @@ void SwipeController::printSwipe(SwipeAttack s, bool isLeftSidedSwipe) {
     }
     
 }
+
+void SwipeController::reset() {
+    
+    resetLeftState();
+    _leftSwipe = noAttack;
+    _rightSwipe = noAttack;
+    
+}

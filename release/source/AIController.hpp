@@ -3,7 +3,7 @@
 //  LiminalSpirit
 //
 //  Created by Sashimi Software on 3/8/22.
-//  Copyright © 2022 Game Design Initiative at Cornell. All rights reserved.
+//  Copyright ï¿½ 2022 Game Design Initiative at Cornell. All rights reserved.
 //
 
 #ifndef __AI_CONTROLLER_H__
@@ -34,6 +34,9 @@ public:
 
 	/** Remove any unwanted assets and clean up */
 	void dispose() {};
+    
+    /** Reset AI Controller */
+    void reset();
 
 };
 

@@ -36,6 +36,7 @@
 #include "AttackController.hpp"
 #include "AIController.hpp"
 #include "InputController.hpp"
+#include "SwipeController.hpp"
 #include "TiltController.hpp"
 #include "CollisionController.hpp"
 #include "Platform.hpp"
@@ -86,7 +87,7 @@ protected:
     CollisionController _collider;
 
     /** Enemies set */
-    std::unordered_set <std::shared_ptr<BaseEnemyModel>> _enemies;
+    std::vector <std::shared_ptr<BaseEnemyModel>> _enemies;
 
     /** Player character */
     std::shared_ptr<PlayerModel> _player;
@@ -214,6 +215,16 @@ public:
     * @param  contact  The two bodies that collided
     */
     void endContact(b2Contact* contact);
+    
+    /**
+     * Creates all enemies and adds to _enemies
+     */
+    void createEnemies();
+    
+    /**
+     * Reset on player death
+     */
+    void reset();
 };
 
 #endif /* __HELLO_APP_H__ */

@@ -192,6 +192,11 @@ public:
         return _leftState.isCharged;
     }
     
+    /**
+     * Reset swipes states and values
+     */
+    void reset();
+    
 };
 
 #endif /* SwipeController_hpp */

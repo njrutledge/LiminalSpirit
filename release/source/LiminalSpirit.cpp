@@ -183,6 +183,7 @@ void LiminalSpirit::onStartup()
  */
 void LiminalSpirit::onShutdown()
 {
+
     // Delete all smart pointers
     _logo = nullptr;
     _scene = nullptr;
@@ -191,13 +192,19 @@ void LiminalSpirit::onShutdown()
     _world = nullptr;
     _worldnode = nullptr;
     _debugnode = nullptr;
-
+    
     //TODO: CHECK IF THIS IS RIGHT FOR DISPOSING
-    for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
-        (*it).~shared_ptr();
-    }
+//    for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
+//        (*it).~shared_ptr();
+//    }
+    // This should work because smart pointers free themselves when vector is cleared
     _enemies.clear();
-
+    
+    //TODO: deleting physics before deleting BoxObstacle
+    
+    _player = nullptr;
+    _platform = nullptr;
+    
     _ai.dispose();
 
     // Deativate input
@@ -323,6 +330,13 @@ void LiminalSpirit::update(float timestep)
             eit++;
         }
     }
+    
+    CULog("%f",_player->getHealth());
+    if (_player->isRemoved()) {
+        reset();
+        _player->markRemoved(false);
+    }
+    
    // if (_player->isRemoved()) {
 //    auto objects = _world->getObstacles();
 //    bool containObj;
@@ -366,6 +380,30 @@ void LiminalSpirit::draw()
     _batch->begin(_scene->getCamera()->getCombined());
 //    _attacks.draw(_batch);
     _batch->end();
+}
+
+void LiminalSpirit::createEnemies() {
+    Vec2 enemyPos = ENEMY_POS;
+    std::shared_ptr<scene2::SceneNode> enemyNode = scene2::SceneNode::alloc();
+    std::shared_ptr<Texture> enemyImage = _assets->get<Texture>(ENEMY_TEXTURE);
+    std::shared_ptr<Lost> enemy = Lost::alloc(enemyPos, enemyImage->getSize() / _scale / 5, _scale);
+    std::shared_ptr<scene2::PolygonNode> enemySprite = scene2::PolygonNode::allocWithTexture(enemyImage);
+    enemy->setSceneNode(enemySprite);
+    enemy->setDebugColor(Color4::RED);
+    enemySprite->setScale(0.2f);
+    addObstacle(enemy, enemySprite, true);
+    _enemies.push_back(enemy);
+
+    Vec2 enemyPos2 = ENEMY_POS2;
+    std::shared_ptr<scene2::SceneNode> specterNode = scene2::SceneNode::alloc();
+    std::shared_ptr<Texture> specterImage = _assets->get<Texture>(ENEMY_TEXTURE);
+    std::shared_ptr<Specter> specter = Specter::alloc(enemyPos2, specterImage->getSize() / _scale / 10, _scale);
+    std::shared_ptr<scene2::PolygonNode> specterSprite = scene2::PolygonNode::allocWithTexture(specterImage);
+    specter->setSceneNode(specterSprite);
+    specter->setDebugColor(Color4::BLUE);
+    specterSprite->setScale(0.2f);
+    addObstacle(specter, specterSprite, true);
+    _enemies.push_back(specter);
 }
 
 /**
@@ -469,27 +507,7 @@ void LiminalSpirit::buildScene()
     button->setAnchor(Vec2::ANCHOR_CENTER);
     button->setPosition(size.width - (bsize.width + rOffset) / 2, (bsize.height + bOffset) / 2);
 
-    Vec2 enemyPos = ENEMY_POS;
-    std::shared_ptr<scene2::SceneNode> enemyNode = scene2::SceneNode::alloc();
-    std::shared_ptr<Texture> enemyImage = _assets->get<Texture>(ENEMY_TEXTURE);
-    std::shared_ptr<Lost> enemy = Lost::alloc(enemyPos, enemyImage->getSize() / _scale / 5, _scale);
-    std::shared_ptr<scene2::PolygonNode> enemySprite = scene2::PolygonNode::allocWithTexture(enemyImage);
-    enemy->setSceneNode(enemySprite);
-    enemy->setDebugColor(Color4::RED);
-    enemySprite->setScale(0.2f);
-    addObstacle(enemy, enemySprite, true);
-    _enemies.insert(enemy);
-
-    Vec2 enemyPos2 = ENEMY_POS2; 
-    std::shared_ptr<scene2::SceneNode> specterNode = scene2::SceneNode::alloc();
-    std::shared_ptr<Texture> specterImage = _assets->get<Texture>(ENEMY_TEXTURE);
-    std::shared_ptr<Specter> specter = Specter::alloc(enemyPos2, specterImage->getSize() / _scale / 10, _scale);
-    std::shared_ptr<scene2::PolygonNode> specterSprite = scene2::PolygonNode::allocWithTexture(specterImage);
-    specter->setSceneNode(specterSprite);
-    specter->setDebugColor(Color4::BLUE);
-    specterSprite->setScale(0.2f);
-    addObstacle(specter, specterSprite, true);
-    _enemies.insert(specter);
+    createEnemies();
 
     Vec2 playerPos = PLAYER_POS;
     std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
@@ -558,6 +576,36 @@ void LiminalSpirit::addObstacle(const std::shared_ptr<cugl::physics2::Obstacle> 
             weak->setPosition(obs->getPosition()*_scale);
             weak->setAngle(obs->getAngle()); });
     }
+}
+
+/**
+ * Reset on player death
+ */
+void LiminalSpirit::reset() {
+    _input.reset();
+    _swipes.reset();
+    _tilt.reset();
+    // Does nothing right now
+    _ai.reset();
+    
+    // Reset player position & health & other member fields
+    Vec2 playerPos = PLAYER_POS;
+    _player->reset(playerPos);
+    
+    // Remove all enemies
+    auto eit = _enemies.begin();
+    while (eit != _enemies.end()) {
+        cugl::physics2::Obstacle* obj = dynamic_cast<cugl::physics2::Obstacle*>(&**eit);
+        _world->removeObstacle(obj);
+        _worldnode->removeChild(obj->_node);
+
+        eit = _enemies.erase(eit);
+    }
+    
+    // Make all enemies
+    createEnemies();
+
+    
 }
 
 #pragma mark Collision Handling

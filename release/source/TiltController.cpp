@@ -67,8 +67,8 @@ void TiltController::update(InputController& input, float width, float character
 }
 
 /**
- * Clears any buffered inputs so that we may start fresh.
+ * Resets tilt controller.
  */
-void TiltController::clear() {
+void TiltController::reset() {
     _xpos = 0;
 }

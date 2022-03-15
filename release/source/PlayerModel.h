@@ -41,7 +41,7 @@ class PlayerModel : public cugl::physics2::CapsuleObstacle {
 
 protected:
 	/** Health */
-	int _health;
+	float _health;
 	/** Which direction the player is facing */
 	bool _faceRight;
 	/** The current horizontal movement of the player */
@@ -76,6 +76,9 @@ public:
 
 	/**Disposes all resources and assets of this Player Model */
 	void dispose();
+    
+    /**Resets player */
+    void reset(const cugl::Vec2 pos);
 
 	/** Initializes a new player at origin */
 	virtual bool init() override { return init(cugl::Vec2::ZERO, cugl::Size(1, 1), 1.0f); }
@@ -129,10 +132,10 @@ public:
 #pragma mark Attribute Properties
 
 	/**Returns the health of the player */
-	int getHealth() const { return _health; }
+	float getHealth() const { return _health; }
 
 	/** Sets the player health */
-	void setHealth(int value) { _health = value; }
+	void setHealth(float value) { _health = value; }
 
 	/** Returns the horizontal movement of the player*/
 	float getMovement() const { return _movement; }
@@ -159,7 +162,7 @@ public:
 	void setGrounded(bool value) { _isGrounded = value;  }
 
 	/** Set X velocity */
-	void setVX(float value);
+	void setVX(float value) override;
 
 
 	/**

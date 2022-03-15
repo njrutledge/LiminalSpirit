@@ -28,6 +28,8 @@
 #define PLAYER_JUMP 75.0f
 /** Debug color for sensor */
 #define DEBUG_COLOR Color4::RED
+/** Player health */
+#define HEALTH 20.0f
 
 using namespace cugl;
 
@@ -44,6 +46,7 @@ bool PlayerModel::init(const cugl::Vec2& pos, const cugl::Size& size, float scal
         setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
 
         // Gameplay attributes
+        _health = HEALTH;
         _faceRight = true;
 
         return true;
@@ -128,6 +131,16 @@ void PlayerModel::dispose() {
     _core = nullptr;
     _node = nullptr;
     _sensorNode = nullptr;
+}
+
+void PlayerModel::reset(Vec2 pos) {
+    setPosition(pos);
+    _health = HEALTH;
+    _faceRight = true;
+    _movement = 0.0f;
+    _body->SetLinearVelocity(b2Vec2(0,0));
+    _isJumping = false;
+    _isGrounded = true;
 }
 
 void PlayerModel::setVX(float value) {
