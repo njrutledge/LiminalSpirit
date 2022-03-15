@@ -108,7 +108,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     Input::activate<Mouse>();
 #endif
 
-    //set assets
+    // set assets
     _assets = assets;
 
     // Create a scene graph the same size as the window
@@ -117,7 +117,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     scene->setContentSize(dimen);
     scene->doLayout();
 
-    //Application::get()->setClearColor(Color4(229, 229, 229, 255));
+    // Application::get()->setClearColor(Color4(229, 229, 229, 255));
 
     // You have to attach the individual loaders for each asset type
     _assets->attach<Texture>(TextureLoader::alloc()->getHook());
@@ -125,9 +125,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     // This reads the given JSON file and uses it to load all other assets
     //_assets->loadDirectory("json/assets.json");
-
-    _tiltInput.init();
-
     // Activate mouse or touch screen input as appropriate
     // We have to do this BEFORE the scene, because the scene has a button
 
@@ -159,18 +156,29 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _debugnode->setPosition(offset);
     scene->addChild(_debugnode);
 
-    _swipes.init(0, Application::get()->getDisplayWidth());
+    // Only want to get swipes within safe bounds
+    Rect bounds = Application::get()->getSafeBounds();
+    CULog("Safe Area %sx%s", bounds.origin.toString().c_str(),
+          bounds.size.toString().c_str());
+    _input.init(bounds.getMinX(), bounds.size.width);
+
+    // TODO this init might be wrong, Nick had _scale/2.0f
+    _pMeleeTexture = _assets->get<Texture>(PATTACK_TEXTURE);
+    _attacks.init(_scale, 1.5, cugl::Vec2::UNIT_Y, cugl::Vec2(0, 0.5), 0.5, 1, 0.5, 0.1);
+    _debugnode = scene2::SceneNode::alloc();
+    _debugnode->setScale(_scale); // Debug node draws in PHYSICS coordinates
+    _debugnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+    _debugnode->setPosition(offset);
+    scene->addChild(_debugnode);
 
     _ai = AIController();
 
     _collider = CollisionController();
 
     // activate scene
-    //     setDebug(false);
+    setDebug(false);
     buildScene(scene);
     addChild(scene);
-    _pMeleeTexture = _assets->get<Texture>(PATTACK_TEXTURE);
-    _attacks.init(_pMeleeTexture->getSize() / _scale / 2.0f, _scale / 2.0f, offset, _player);
     return true;
 }
 
@@ -196,8 +204,6 @@ void GameScene::dispose()
     _enemies.clear();
 
     _ai.dispose();
-
-    _tiltInput.dispose();
 }
 
 /**
@@ -209,13 +215,18 @@ void GameScene::dispose()
  */
 void GameScene::update(float timestep)
 {
-    // Update tilt input controller
-    _tiltInput.update(timestep, _player->getX(), SCENE_WIDTH, _logo->getSize().width);
-    float xPos = _tiltInput.getXpos();
+    _ogY = _player->getPosition().y;
+
+    // Update input controller
+    _input.update();
+
+    // Update tilt controller
+    _tilt.update(_input, SCENE_WIDTH, _logo->getSize().width);
+    float xPos = _tilt.getXpos();
     _player->setVX(xPos);
 
     // Debug Mode on/off
-    if (_tiltInput.getDebugKeyPressed())
+    if (_input.getDebugKeyPressed())
     {
         setDebug(!isDebug());
     }
@@ -241,23 +252,42 @@ void GameScene::update(float timestep)
     {
         Vec2 direction = _ai.getMovement(*it, _player->getPosition(), timestep);
         (*it)->setVX(direction.x);
-        // TODO: Add vertical movement
+        (*it)->setVY(direction.y);
+        if ((*it)->isAttacking())
+        {
+            // TODO: Need to variablize attack variables based on enemy type
+            (*it)->setIsAttacking(false);
+            Vec2 play_p = _player->getPosition();
+            Vec2 en_p = (*it)->getPosition();
+            Vec2 vel = Vec2(0.5, 0);
+            if ((*it)->getName() == "Lost")
+            {
+                _attacks.createAttack(Vec2((*it)->getX(), (*it)->getY()), 1.0f, 0.08f, 1.0f, AttackController::Type::e_melee, vel.rotate((play_p - en_p).getAngle()));
+            }
+            else if ((*it)->getName() == "Specter")
+            {
+                _attacks.createAttack(Vec2((*it)->getX(), (*it)->getY()), 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()));
+            }
+        }
     }
 
+    _swipes.update(_input);
+    b2Vec2 playerPos = _player->getBody()->GetPosition();
+    _attacks.attackLeft(Vec2(playerPos.x, playerPos.y), _swipes.getLeftSwipe(), _player->isGrounded());
+    _attacks.attackRight(Vec2(playerPos.x, playerPos.y), _swipes.getRightSwipe(), _player->isGrounded());
     _world->update(timestep);
-    _swipes.update();
-    _attacks.attackLeft(_swipes.getLeftSwipe(), _player->isGrounded());
-    _attacks.attackRight(_swipes.getRightSwipe(), _player->isGrounded());
+
     for (auto it = _attacks._pending.begin(); it != _attacks._pending.end(); ++it)
     {
         // FIX WHEN TEXTURE EXISTS
         std::shared_ptr<scene2::PolygonNode> attackSprite = scene2::PolygonNode::allocWithTexture(_pMeleeTexture);
-        attackSprite->setScale(.5f);
+        attackSprite->setScale(.5f * (*it)->getRadius());
 
         addObstacle((*it), attackSprite, true);
     }
-    _attacks.update(_player->getPosition(), _player->getBody()->GetLinearVelocity());
-    if (_swipes.getLeftSwipe() == _swipes.up || _swipes.getRightSwipe() == _swipes.up)
+    // DO NOT MOVE THIS LINE
+    _attacks.update(_player->getPosition(), _player->getBody()->GetLinearVelocity(), timestep);
+    if (_swipes.getRightSwipe() == _swipes.upAttack)
     {
         _player->setJumping(true);
     }
@@ -267,9 +297,10 @@ void GameScene::update(float timestep)
     }
     //_player->setGrounded(true);
     _player->applyForce();
+
     
-    float dy = _player->getVY() * 0.5;
-    getCamera()->translate(0, dy);
+    float dy = _player->getPosition().y - _ogY;
+    getCamera()->translate(0, 0);
     getCamera()->update();
 
     // Remove attacks
@@ -318,7 +349,7 @@ void GameScene::update(float timestep)
 /**
  * The method called to draw the gameplay scene
  */
-void GameScene::render(const std::shared_ptr<cugl::SpriteBatch>& batch)
+void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
 {
     // This takes care of begin/end
 
@@ -345,11 +376,6 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     // The logo is actually an image+label.  We need a parent node
     _logo = scene2::SceneNode::alloc();
 
-    // Initialize swipe controller
-    // Must use safe bounds for swipe width
-    Rect bounds = Application::get()->getSafeBounds();
-    //_swiper.init(bounds.getMinX(), bounds.size.width);
-
     // Get the image and add it to the node.
     std::shared_ptr<Texture> texture = _assets->get<Texture>("logo");
     _logo = scene2::PolygonNode::allocWithTexture(texture);
@@ -364,6 +390,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     floor->setBodyType(b2_staticBody);
     std::shared_ptr<scene2::PolygonNode> floorNode = scene2::PolygonNode::allocWithPoly(floorRect * _scale);
     floorNode->setColor(Color4::BLACK);
+    floor->setName("floor");
     addObstacle(floor, floorNode, 1);
 
     // Making the ceiling -jdg274

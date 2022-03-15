@@ -35,7 +35,7 @@
 #include "AttackController.hpp"
 #include "AIController.hpp"
 #include "InputController.hpp"
-#include "MovementInput.hpp"
+#include "TiltController.hpp"
 #include "CollisionController.hpp"
 /**
  * Class for a simple Hello World style application
@@ -61,6 +61,10 @@ protected:
 
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
     float _scale;
+    
+    float _ogY;
+
+    InputController _input;
 
     AttackController _attacks;
     /** reference to the player Attack Texture*/
@@ -71,13 +75,13 @@ protected:
     AIController _ai;
 
     /** tilt controller */
-    MovementInput _tiltInput;
+    TiltController _tilt;
 
     /**Collision Controller*/
     CollisionController _collider;
 
     /**Enemies set */
-    std::unordered_set<std::shared_ptr<BaseEnemyModel>> _enemies;
+    std::unordered_set<std::shared_ptr<BaseEnemyModel> > _enemies;
 
     /** Player character */
     std::shared_ptr<PlayerModel> _player;
