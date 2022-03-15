@@ -264,7 +264,7 @@ void LiminalSpirit::update(float timestep)
             Vec2 en_p = (*it)->getPosition();
             Vec2 vel = Vec2(0.5, 0);
             if ((*it)->getName() == "Lost") {
-                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 1.0f, 0.08f, 1.0f, AttackController::Type::e_melee, vel.rotate((play_p - en_p).getAngle()));
+                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 1.0f, 0.2f, 1.0f, AttackController::Type::e_melee, vel.rotate((play_p - en_p).getAngle()));
                 
             }
             else if ((*it)->getName() == "Specter") {
@@ -585,6 +585,7 @@ void LiminalSpirit::reset() {
     _input.reset();
     _swipes.reset();
     _tilt.reset();
+    _attacks->reset();
     // Does nothing right now
     _ai.reset();
     
