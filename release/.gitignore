@@ -1,3 +1,4 @@
 /build-android
 /build-apple
 .DS_Store
+/build-apple/LiminalSpirit.xcodeproj/project.pbxproj
