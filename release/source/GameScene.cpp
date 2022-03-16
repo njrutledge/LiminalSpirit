@@ -184,6 +184,15 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     setDebug(false);
     buildScene(scene);
     addChild(scene);
+    
+    // Get font
+    _font = assets->get<Font>("marker");
+    
+    // Create and layout the health meter
+    std::string msg = strtool::format("Health %d", (int)_player->getHealth());
+    _text = TextLayout::allocWithText(msg, assets->get<Font>("marker"));
+    _text->layout();
+    
     return true;
 }
 
@@ -366,6 +375,10 @@ void GameScene::update(float timestep)
         _player->markRemoved(false);
     }
     
+    // Update the health meter
+    _text->setText(strtool::format("Health %d", (int)_player->getHealth()));
+    _text->layout();
+    
    // if (_player->isRemoved()) {
 //    auto objects = _world->getObstacles();
 //    bool containObj;
@@ -400,6 +413,7 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     Scene2::render(batch);
     batch->begin(getCamera()->getCombined());
     //_attacks.draw(batch);
+    batch->drawText(_text,Vec2(10,getSize().height-_text->getBounds().size.height));
     batch->end();
 }
 

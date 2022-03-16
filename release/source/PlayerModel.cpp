@@ -29,7 +29,7 @@
 /** Debug color for sensor */
 #define DEBUG_COLOR Color4::RED
 /** Player health */
-#define HEALTH 20.0f
+#define HEALTH 10.0f
 
 using namespace cugl;
 

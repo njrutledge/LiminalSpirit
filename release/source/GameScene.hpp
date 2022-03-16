@@ -63,6 +63,12 @@ protected:
     std::shared_ptr<cugl::scene2::SceneNode> _worldnode;
     /** Reference to the debug root of the scene graph */
     std::shared_ptr<cugl::scene2::SceneNode> _debugnode;
+    
+    /** The text with the current health */
+    std::shared_ptr<cugl::TextLayout> _text;    
+    /** Text font */
+    std::shared_ptr<cugl::Font> _font;
+
 
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
     float _scale;
