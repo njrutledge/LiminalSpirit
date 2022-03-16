@@ -556,10 +556,10 @@ void LiminalSpirit::buildScene()
     sprite->setScale(0.2f);
     addObstacle(_player, sprite, true);
 
-    Vec2 platformPos = Vec2(10.0f, 7.0f);
+    Vec2 platformPos = Vec2(10.0f, 5.0f);
     std::shared_ptr<scene2::SceneNode> platformNode = scene2::SceneNode::alloc();
     std::shared_ptr<Texture> imagePlatform = _assets->get<Texture>(PLAYER_TEXTURE);
-    _platform = PlatformModel::alloc(platformPos, 10, 3, _scale);
+    _platform = PlatformModel::alloc(platformPos, 10, 0.5, _scale);
     std::shared_ptr<scene2::PolygonNode> spritePlatform = scene2::PolygonNode::allocWithTexture(imagePlatform);
     _platform->setName("platform");
     _platform->setSceneNode(spritePlatform);
