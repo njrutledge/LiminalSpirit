@@ -303,7 +303,7 @@ void LiminalSpirit::update(float timestep)
     } else {
         _player->setJumping(false);
     }
-    if (_player->getVY() > 0) {
+    if (_player->getVY() > 0 && _player->getPosition().x > 1.0f && _player->getPosition().x < 31.0f) {
         _player->setSensor(true);
     } else {
         _player->setSensor(false);
@@ -514,6 +514,7 @@ void LiminalSpirit::buildScene()
     left->setBodyType(b2_staticBody);
     
     std::shared_ptr<scene2::PolygonNode> leftNode = scene2::PolygonNode::allocWithPoly(leftRect*_scale);
+    leftNode->setName("leftwall");
     leftNode->setColor(Color4::BLACK);
     addObstacle(left, leftNode, 1);
 
@@ -522,6 +523,7 @@ void LiminalSpirit::buildScene()
     std::shared_ptr<physics2::PolygonObstacle> right = physics2::PolygonObstacle::allocWithAnchor(rightRect, Vec2::ANCHOR_CENTER);
     right->setBodyType(b2_staticBody);
     std::shared_ptr<scene2::PolygonNode> rightNode = scene2::PolygonNode::allocWithPoly(rightRect*_scale);
+    rightNode->setName("rightwall");
     rightNode->setColor(Color4::BLACK);
     addObstacle(right, rightNode, 1);
     
@@ -560,6 +562,7 @@ void LiminalSpirit::buildScene()
     std::shared_ptr<Texture> imagePlatform = _assets->get<Texture>(PLAYER_TEXTURE);
     _platform = PlatformModel::alloc(platformPos, 10, 3, _scale);
     std::shared_ptr<scene2::PolygonNode> spritePlatform = scene2::PolygonNode::allocWithTexture(imagePlatform);
+    _platform->setName("platform");
     _platform->setSceneNode(spritePlatform);
     _platform->setDebugColor(Color4::WHITE);
     spritePlatform->setScale(0.2f);

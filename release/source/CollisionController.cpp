@@ -29,11 +29,17 @@ void CollisionController::beginContact(b2Contact* contact, std::shared_ptr<Playe
 
 	// See if we have landed on the ground.
 	//THIS NEED TO BE CHANGED
-	if ((player->getSensorName() == fd2 && bd1->getName() == "floor") ||
-		(player->getSensorName() == fd1 && bd2->getName() == "floor")) {
+	if ((player->getSensorName() == fd2 && (bd1->getName() == "floor" || bd1->getName() == "platform")) ||
+		(player->getSensorName() == fd1 && (bd2->getName() == "floor" || bd2->getName() == "platform"))) {
         
 		player->setGrounded(true);
 	}
+
+	if ((player->getSensorName() == fd2 && (bd1->getName() == "leftwall" || bd1->getName() == "rightwall")) ||
+		(player->getSensorName() == fd1 && (bd2->getName() == "leftwall" || bd2->getName() == "rightwall"))) {
+		player->setSensor(false);
+	}
+
 	//handle enemy collision
 	if (BaseEnemyModel* enemy = dynamic_cast<BaseEnemyModel*>(bd1)) {
 		handleEnemyCollision(enemy, bd2, fd2, AC);
