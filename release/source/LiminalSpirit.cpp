@@ -668,6 +668,7 @@ void LiminalSpirit::endContact(b2Contact* contact) {
 
     physics2::Obstacle* bd1 = reinterpret_cast<physics2::Obstacle*>(body1->GetUserData().pointer);
     physics2::Obstacle* bd2 = reinterpret_cast<physics2::Obstacle*>(body2->GetUserData().pointer);
+}
 void LiminalSpirit::reset() {
     _input.reset();
     _swipes.reset();
