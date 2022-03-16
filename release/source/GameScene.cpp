@@ -91,8 +91,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 {
 
     Size dimen = Application::get()->getDisplaySize();
-    float scale = SCENE_WIDTH / dimen.width;
-    dimen *= scale;
+    float boundScale = SCENE_WIDTH / dimen.width;
+    dimen *= boundScale;
 
     // TODO: FIX THIS SHIT
 //    float ratio1 = dimen.width / dimen.height;
@@ -162,8 +162,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
           bounds.size.toString().c_str());
     _input.init(bounds.getMinX(), bounds.size.width);
     
-    bounds.origin *= scale;
-    bounds.size *= scale;
+    bounds.origin *= boundScale;
+    bounds.size *= boundScale;
 
     _scale = bounds.size.width / DEFAULT_WIDTH;
     Vec2 offset(bounds.getMinX(),0);
