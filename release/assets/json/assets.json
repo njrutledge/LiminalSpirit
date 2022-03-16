@@ -29,13 +29,13 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
-        "enemy2": {
-            "file": "textures/speturtest.png",
-            "minfilter": "nearest",
-            "magfilter": "linear",
-            "wrapS": "clamp",
-            "wrapT": "clamp"
-        },
+		"enemy2": {
+			"file": "textures/speturtest.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
 		"player": {
 			"file": "textures/player.png",
 			"minfilter": "nearest",
@@ -57,9 +57,9 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
-        "background":{
-            "file": "textures/background.png"
-        }
+		"background": {
+			"file": "textures/backgrounds/forest_draft_no_platforms.png"
+		}
 	},
 	"scene2s": {
 		"game": {
