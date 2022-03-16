@@ -99,16 +99,20 @@ Vec2 AIController::getSpecterMovement(shared_ptr<BaseEnemyModel> specter, Vec2 p
 			return Vec2(specter->getHorizontalSpeed(), -1 * specter->getVerticalSpeed());
 		}
 		else if (player_pos.x > specter->getPosition().x) {
-			if (player_pos.y >= specter->getPosition().y || abs(player_pos.y - specter->getPosition().y) > 10) {
-				flip = -1;
+			if (player_pos.y >= specter->getPosition().y) {
+				return Vec2(specter->getHorizontalSpeed(), specter->getVerticalSpeed());
 			}
-			return Vec2(specter->getHorizontalSpeed(), flip * specter->getVY());
+			else {
+				return Vec2(specter->getHorizontalSpeed(), -1 * specter->getVerticalSpeed());
+			}
 		}
 		else {
-			if (player_pos.y >= specter->getPosition().y || abs(player_pos.y - specter->getPosition().y) > 10) {
-				flip = -1;
+			if (player_pos.y >= specter->getPosition().y) {
+				return Vec2(-1 * specter->getHorizontalSpeed(), specter->getVerticalSpeed());
 			}
-			return Vec2(-1 * specter->getHorizontalSpeed(), flip * specter->getVY());
+			else {
+				return Vec2(-1 * specter->getHorizontalSpeed(), -1 * specter->getVerticalSpeed());
+			}
 		}
 	} 
 	else {

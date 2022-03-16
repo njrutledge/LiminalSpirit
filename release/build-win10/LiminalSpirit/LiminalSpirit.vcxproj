@@ -192,8 +192,10 @@
     <ClInclude Include="..\..\source\AttackController.hpp" />
     <ClInclude Include="..\..\source\BaseEnemyModel.h" />
     <ClInclude Include="..\..\source\CollisionController.hpp" />
+    <ClInclude Include="..\..\source\GameScene.hpp" />
     <ClInclude Include="..\..\source\InputController.hpp" />
     <ClInclude Include="..\..\source\LiminalSpiritApp.hpp" />
+    <ClInclude Include="..\..\source\LoadingScene.hpp" />
     <ClInclude Include="..\..\source\Lost.hpp" />
     <ClInclude Include="..\..\source\LSCharacter.h" />
     <ClInclude Include="..\..\source\Platform.hpp" />
@@ -209,8 +211,10 @@
     <ClCompile Include="..\..\source\AttackController.cpp" />
     <ClCompile Include="..\..\source\BaseEnemyModel.cpp" />
     <ClCompile Include="..\..\source\CollisionController.cpp" />
+    <ClCompile Include="..\..\source\GameScene.cpp" />
     <ClCompile Include="..\..\source\InputController.cpp" />
     <ClCompile Include="..\..\source\LiminalSpirit.cpp" />
+    <ClCompile Include="..\..\source\LoadingScene.cpp" />
     <ClCompile Include="..\..\source\Lost.cpp" />
     <ClCompile Include="..\..\source\main.cpp" />
     <ClCompile Include="..\..\source\Platform.cpp" />

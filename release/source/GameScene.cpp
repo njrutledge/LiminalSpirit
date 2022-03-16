@@ -297,7 +297,7 @@ void GameScene::update(float timestep)
     } else {
         _player->setJumping(false);
     }
-    if (_player->getVY() > 0 && _player->getPosition().x > 1.0f && _player->getPosition().x < 31.0f) {
+    if (_player->getVY() > 0 && _player->getPosition().x > 1.0f && _player->getPosition().x < 31.0f && _player->getPosition().y < 17.0f) {
         _player->setSensor(true);
     } else {
         _player->setSensor(false);
@@ -543,19 +543,45 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
     _player->setSceneNode(sprite);
     _player->setDebugColor(Color4::RED);
-    sprite->setScale(0.2f);
+    sprite->setScale(0.3f);
     addObstacle(_player, sprite, true);
 
-    Vec2 platformPos = Vec2(10.0f, 7.0f);
-    Rect platRect = Rect(10.0f, 7.0f, 10, 3);
+    Vec2 platformPos = Vec2(5.0f, 5.0f);
+    Rect platRect = Rect(5.0f, 5.0f, 10, 1);
     std::shared_ptr<scene2::SceneNode> platformNode = scene2::SceneNode::alloc();
-    std::shared_ptr<Texture> imagePlatform = _assets->get<Texture>(PLATFORMTEXTURE);
-    _platform = PlatformModel::alloc(platformPos, 10, 3, _scale);
-    std::shared_ptr<scene2::PolygonNode> spritePlatform = scene2::PolygonNode::allocWithPoly(platRect*_scale);
-    _platform->setName("platform");
-    _platform->setSceneNode(spritePlatform);
-    _platform->setDebugColor(Color4::BLACK);
-    addObstacle(_platform, spritePlatform, true);
+    _platforms.push_back(PlatformModel::alloc(platformPos, 10, 1, _scale));
+    std::shared_ptr<scene2::PolygonNode> spritePlatform = scene2::PolygonNode::allocWithPoly(platRect * _scale);
+    _platformNodes.push_back(spritePlatform);
+
+    platformPos = Vec2(30.0f, 5.0f);
+    platRect = Rect(30.0f, 5.0f, 3, 1);
+    platformNode = scene2::SceneNode::alloc();
+    _platforms.push_back(PlatformModel::alloc(platformPos, 3, 1, _scale));
+    spritePlatform = scene2::PolygonNode::allocWithPoly(platRect * _scale);
+    _platformNodes.push_back(spritePlatform);
+
+    platformPos = Vec2(10.0f, 10.0f);
+    platRect = Rect(10.0f, 10.0f, 5, 1);
+    platformNode = scene2::SceneNode::alloc();
+    _platforms.push_back(PlatformModel::alloc(platformPos, 5, 1, _scale));
+    spritePlatform = scene2::PolygonNode::allocWithPoly(platRect * _scale);
+    _platformNodes.push_back(spritePlatform);
+
+    platformPos = Vec2(20.0f, 12.0f);
+    platRect = Rect(20.0f, 12.0f, 8, 1);
+    platformNode = scene2::SceneNode::alloc();
+    _platforms.push_back(PlatformModel::alloc(platformPos, 8, 1, _scale));
+    spritePlatform = scene2::PolygonNode::allocWithPoly(platRect * _scale);
+    _platformNodes.push_back(spritePlatform);
+
+    // Add platforms to the world
+    for (int i = 0; i < _platforms.size(); i++) {
+        _platforms[i]->setName("platform");
+        _platforms[i]->setSceneNode(_platformNodes[i]);
+        _platforms[i]->setDebugColor(Color4::RED);
+        _platformNodes[i]->setColor(Color4::BLACK);
+        addObstacle(_platforms[i], _platformNodes[i], true);
+    }
 
     // Add the logo and button to the scene graph
     // TODO get rid of this

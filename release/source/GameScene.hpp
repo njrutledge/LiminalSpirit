@@ -93,9 +93,8 @@ protected:
     /** Player character */
     std::shared_ptr<PlayerModel> _player;
     /** Platform character */
-    std::shared_ptr<PlatformModel> _platform;
-    /** Platform set*/
-    std::unordered_set<std::shared_ptr<cugl::physics2::PolygonObstacle>> _platforms;
+    std::vector<std::shared_ptr<PlatformModel>> _platforms;
+    std::vector < std::shared_ptr<scene2::PolygonNode>> _platformNodes;
 
     /** A countdown used to move the logo */
     int _countdown;
