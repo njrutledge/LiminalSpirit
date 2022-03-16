@@ -48,13 +48,15 @@ using namespace cugl;
 
 // The number of frames before moving the logo to a new position
 #define TIME_STEP 60
-/** This is adjusted by screen aspect ratio to get the height */
+/** This is the size of the active portion of the screen */
 #define SCENE_WIDTH 1024
 #define SCENE_HEIGHT 576
+
 /** Width of the game world in Box2d units */
 #define DEFAULT_WIDTH 32.0f
 /** Height of the game world in Box2d units */
-#define DEFAULT_HEIGHT 18.0f
+float DEFAULT_HEIGHT = DEFAULT_WIDTH/SCENE_WIDTH*SCENE_HEIGHT;
+
 /** The constant for gravity in the physics world. */
 #define GRAVITY 30
 #define PLATFORM_ATT 4
@@ -89,20 +91,21 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 {
 
     Size dimen = Application::get()->getDisplaySize();
-    //dimen *= SCENE_WIDTH / dimen.width;
+    float scale = SCENE_WIDTH / dimen.width;
+    dimen *= scale;
 
     // TODO: FIX THIS SHIT
-    float ratio1 = dimen.width / dimen.height;
-    float ratio2 = ((float)SCENE_WIDTH) / ((float)SCENE_HEIGHT);
-    if (ratio1 < ratio2)
-    {
-        dimen *= SCENE_WIDTH / dimen.width;
-    }
-    else
-    {
-        dimen *= SCENE_HEIGHT / dimen.height;
-    }
-    CULog("Dimen: %f, %f", dimen.width, dimen.height);
+//    float ratio1 = dimen.width / dimen.height;
+//    float ratio2 = ((float)SCENE_WIDTH) / ((float)SCENE_HEIGHT);
+//    if (ratio1 < ratio2)
+//    {
+//        dimen *= SCENE_WIDTH / dimen.width;
+//    }
+//    else
+//    {
+//        dimen *= SCENE_HEIGHT / dimen.height;
+//    }
+//    CULog("Dimen: %f, %f", dimen.width, dimen.height);
     
     if (assets == nullptr)
     {
@@ -152,9 +155,18 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _world->onEndContact = [this](b2Contact* contact) {
         _collider.endContact(contact, _player);
     };
+    
+    // Only want to get swipes within safe bounds
+    Rect bounds = Application::get()->getSafeBounds();
+    CULog("Safe Area %sx%s", bounds.origin.toString().c_str(),
+          bounds.size.toString().c_str());
+    _input.init(bounds.getMinX(), bounds.size.width);
+    
+    bounds.origin *= scale;
+    bounds.size *= scale;
 
-    _scale = dimen.height / DEFAULT_HEIGHT;
-    Vec2 offset((dimen.width-SCENE_WIDTH)/2.0f,0);
+    _scale = bounds.size.width / DEFAULT_WIDTH;
+    Vec2 offset(bounds.getMinX(),0);
     CULog("Offset: %f,%f, Scale: %f, Width: %f, Height: %f", offset.x,offset.y,_scale,DEFAULT_WIDTH,DEFAULT_HEIGHT);
     
     // Create the scene graph
@@ -168,12 +180,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _debugnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
     _debugnode->setPosition(offset);
     scene->addChild(_debugnode);
-
-    // Only want to get swipes within safe bounds
-    Rect bounds = Application::get()->getSafeBounds();
-    CULog("Safe Area %sx%s", bounds.origin.toString().c_str(),
-          bounds.size.toString().c_str());
-    _input.init(bounds.getMinX(), bounds.size.width);
     
     // TODO this init might be wrong, Nick had _scale/2.0f
     _pMeleeTexture = _assets->get<Texture>(PATTACK_TEXTURE);
@@ -236,13 +242,12 @@ void GameScene::dispose()
  */
 void GameScene::update(float timestep)
 {
-    _ogY = _player->getPosition().y;
 
     // Update input controller
     _input.update();
     
     // Update tilt controller
-    _tilt.update(_input, SCENE_WIDTH, _logo->getSize().width);
+    _tilt.update(_input, SCENE_WIDTH);
     float xPos = _tilt.getXpos();
     _player->setVX(xPos);
 
@@ -334,10 +339,6 @@ void GameScene::update(float timestep)
     _player->applyForce();
 
     
-    float dy = _player->getPosition().y - _ogY;
-    getCamera()->translate(0, dy-dy);
-    getCamera()->update();
-
     //Remove attacks
     auto ait = _attacks->_current.begin();
     while(ait != _attacks->_current.end()) {
@@ -456,16 +457,6 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     float scale = SCENE_WIDTH / size.width;
     size *= scale;
 
-    // The logo is actually an image+label.  We need a parent node
-    _logo = scene2::SceneNode::alloc();
-
-        // Get the image and add it to the node.
-    std::shared_ptr<Texture> texture  = _assets->get<Texture>("logo");
-    _logo = scene2::PolygonNode::allocWithTexture(texture);
-    _logo->setScale(0.2f); // Magic number to rescale asset
-    // Put the logo in the middle of the screen
-    _logo->setAnchor(Vec2::ANCHOR_CENTER);
-    _logo->setPosition(size.width/2,size.height/2);
 
     // Create a button.  A button has an up image and a down image
     std::shared_ptr<Texture> up = _assets->get<Texture>("close-normal");

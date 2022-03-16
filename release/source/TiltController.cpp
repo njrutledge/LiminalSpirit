@@ -41,7 +41,7 @@ TiltController::~TiltController() {
  * This method is used to to poll the current input state.  This will poll the
  * keyboard or accelerometer.
  */
-void TiltController::update(InputController& input, float width, float characterWidth) {
+void TiltController::update(InputController& input, float width) {
 // TODO: Leaving the keyboard input stuff here for now, will fix when merging with Nick's keyboard stuff
 #ifdef CU_TOUCH_SCREEN
     // MOBILE CONTROLS

@@ -40,7 +40,7 @@ public:
      * This method is used to to poll the current input state.  This will poll the
      * keyboard or accelerometer.
      */
-    void update(InputController& input, float width, float characterWidth);
+    void update(InputController& input, float width);
     
     /**
      * Resets tilt controller.
