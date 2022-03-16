@@ -104,6 +104,7 @@ bool WireNode::initWithPoly(const Rect rect) {
 bool WireNode::initWithPath(const Path2& path) {
     if (TexturedNode::initWithTexture(nullptr)) {
         setPath(path);
+        setContentSize(_polygon.getBounds().size);
         return true;
     }
     return false;
@@ -143,6 +144,7 @@ bool WireNode::initWithPath(const std::vector<Vec2>& vertices) {
     if (TexturedNode::initWithTexture(nullptr)) {
         _traversal = poly2::Traversal::CLOSED;
         setPath(vertices);
+        setContentSize(_polygon.getBounds().size);
         return true;
     }
     return false;
@@ -169,6 +171,7 @@ bool WireNode::initWithTraversal(const Poly2& poly, poly2::Traversal traversal) 
         _traversal = traversal;
         _polygon = poly;
         makeTraversal(poly, _traversal);
+        setContentSize(_polygon.getBounds().size);
         return true;
     }
     return false;
@@ -198,6 +201,7 @@ bool WireNode::initWithTraversal(const std::vector<Vec2>& vertices, const std::v
         _traversal = poly2::Traversal::NONE;
         _polygon.set(vertices);
         _indices = indices;
+        setContentSize(_polygon.getBounds().size);
         return true;
     }
     return false;
@@ -229,6 +233,7 @@ bool WireNode::initWithTraversal(Vec2* vertices, size_t vsize, Uint32* indices, 
         _traversal = poly2::Traversal::NONE;
         _polygon.set(vertices,vsize);
         _indices.insert(_indices.begin(), indices, indices+isize);
+        setContentSize(_polygon.getBounds().size);
         return true;
     }
     return false;

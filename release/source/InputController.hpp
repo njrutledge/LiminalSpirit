@@ -15,10 +15,8 @@
 /**
  * Device-independent input manager.
  *
- * This class supports drag controls. This means pressing at a location,
- * dragging while pressed, and then releasing. However, the implementation
- * for this approach varies according to whether it is a mouse or mobile
- * touch controls. This interface hides the details.
+ * This class supports swiping and tilting on mobile and keyboard controls
+ * for desktop testing. This interface hides the details.
  */
 class InputController {
 
@@ -41,7 +39,6 @@ protected:
     /** Middle x coordinate for the screen for calculating if a finger press is on the left or right */
     float _screenMidpoint;
 
-
 protected:
     // Touchscreen variables
     /** The key for the touch listeners */
@@ -54,9 +51,9 @@ protected:
     cugl::Vec2 _rightStartPos;
     /** Right finger position at end of swipe */
     cugl::Vec2 _rightEndPos;
-    /** Whether the current finger is down */
+    /** Whether the right finger is down */
     bool _rightFingerDown;
-    
+
     // Left finger variables
     /** Left finger ID */
     cugl::TouchID _leftFingerID;
@@ -66,11 +63,28 @@ protected:
     cugl::Vec2 _leftEndPos;
     /** Whether the left finger is down */
     bool _leftFingerDown;
-
+    /** Time that the left finger went down*/
+    cugl::Timestamp _leftStartTime;
     
+    // Acceloremeter variables
+    /** Current acceleration */
+    cugl::Vec3 _acceleration;
 
 #pragma mark Input Control
 public:
+    int _leftCode;
+    int _rightCode;
+    int _moveCode;
+
+    /** debug key is pressed */
+    bool _debugKeyPressed;
+
+    /** TESTING ONLY: reads keyboard input on PC*/
+    void readInput();
+    
+    /** Debugging on PC */
+    bool getDebugKeyPressed() { return _debugKeyPressed; }
+
     /**
      * Creates a new input controller.
      *
@@ -101,7 +115,6 @@ public:
      */
     bool init(float leftmostX, float screenWidth);
     
-    
     /**
      * Disposes this input controller, deactivating all listeners.
      *
@@ -113,16 +126,13 @@ public:
     
     /**
      * Updates the input controller for the latest frame.
-     *
-     * It might seem weird to have this method given that everything
-     * is processed with call back functions.  But we need some way
-     * to synchronize the input with the animation frame.  Otherwise,
-     * how can we know what was the touch location *last frame*?
-     * Maybe there has been no callback function executed since the
-     * last frame. This method guarantees that everything is properly
-     * synchronized.
      */
     void update();
+    
+    /**
+     * Resets input controller. Does not remove listeners.
+     */
+    void reset();
 
 #pragma mark Attributes
     /**
@@ -155,6 +165,24 @@ public:
     }
     
     /**
+     * Returns whether the left finger is down
+     *
+     * @return whether the left finger is down
+     */
+    const bool isLeftDown() const {
+        return _leftFingerDown;
+    }
+    
+    /**
+     * Returns the time the left swipe started at
+     *
+     * @return the left swipe start time
+     */
+    const cugl::Timestamp getLeftStartTime() const {
+        return _leftStartTime;
+    }
+    
+    /**
      * Returns the position the right swipe started at
      *
      * @return the right swipe start position
@@ -171,7 +199,7 @@ public:
     const cugl::Vec2& getRightEndPosition() const {
         return _rightEndPos;
     }
-    
+
     /**
      * Return true if the user initiated a press this frame.
      *
@@ -219,6 +247,15 @@ public:
      */
     bool didRightRelease() const {
         return !_currRightDown && _prevRightDown;
+    }
+    
+    /**
+     * Return the current acceleration from the accelerometer
+     *
+     * @return the current acceleration
+     */
+    cugl::Vec3 getAcceleration() const {
+        return _acceleration;
     }
 
 
