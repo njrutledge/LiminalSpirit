@@ -81,7 +81,7 @@ Vec2 AIController::getSpecterMovement(shared_ptr<BaseEnemyModel> specter, Vec2 p
 	//TODO: 
 	// Use line of sight to determine ranged attacks
     specter->setTimePast(specter->getTimePast() + timestep);
-	int flip = 1; // flips y direction
+//	int flip = 1; // flips y direction
 
 	//Check if enemy is already attacking
 	if (!specter->isAttacking()) {

@@ -19,7 +19,7 @@
 /** Texture for the enemy*/
 #define PLAYER_TEXTURE "player"
 /** ID for the sensor*/
-#define SENSOR_NAME "playersensor"
+#define PLAYER_SENSOR_NAME "playersensor"
 
 #pragma mark -
 #pragma mark Physics Constants
@@ -69,7 +69,7 @@ public:
 
 #pragma mark Hidden Constructors
 	/** Creates a degenerate Player */
-	PlayerModel() : CapsuleObstacle(), _sensorName(SENSOR_NAME) { }
+	PlayerModel() : CapsuleObstacle(), _sensorName(PLAYER_SENSOR_NAME) { }
 
 	/**Destroys this Player Model, releasing all resources */
 	virtual ~PlayerModel(void) { dispose(); }
