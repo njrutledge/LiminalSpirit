@@ -23,12 +23,19 @@
 			"wrapT": "clamp"
 		},
 		"enemy": {
-			"file": "textures/enemy.png",
+			"file": "textures/mirrortest.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
+        "enemy2": {
+            "file": "textures/speturtest.png",
+            "minfilter": "nearest",
+            "magfilter": "linear",
+            "wrapS": "clamp",
+            "wrapT": "clamp"
+        },
 		"player": {
 			"file": "textures/player.png",
 			"minfilter": "nearest",
