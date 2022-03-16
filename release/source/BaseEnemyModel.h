@@ -20,7 +20,7 @@
 #define ENEMY_TEXTURE "enemy"
 #define ENEMY_TEXTURE2 "enemy2"
 /** ID for the sensor*/
-#define SENSOR_NAME "enemysensor"
+#define ENEMY_SENSOR_NAME "enemysensor"
 
 #pragma mark -
 #pragma mark Enemy Properties
@@ -98,7 +98,7 @@ public:
 
 #pragma mark Hidden Constructors
 	/** Creates a degenerate Enemy */
-	BaseEnemyModel() : CapsuleObstacle(), _sensorName(SENSOR_NAME) { }
+	BaseEnemyModel() : CapsuleObstacle(), _sensorName(ENEMY_SENSOR_NAME) { }
 
 	/**Destroys this Base Enemy Model, releasing all resources */
 	virtual ~BaseEnemyModel(void) { dispose(); }
@@ -195,7 +195,7 @@ public:
 	void createFixtures() override;
 
 	/** Sets the vertical velocity of the enemy */
-	void setVX(float value);
+	void setVX(float value) override;
 
 	/** Releases the fixtures of this body(s) from the world */
 	void releaseFixtures() override;

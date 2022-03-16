@@ -322,7 +322,7 @@ void GameScene::update(float timestep)
     _player->applyForce();
 
     
-    float dy = _player->getPosition().y - _ogY;
+//    float dy = _player->getPosition().y - _ogY;
     getCamera()->translate(0, 0);
     getCamera()->update();
 
@@ -465,8 +465,8 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
                         {
         // Only quit when the button is released
         if (!down) {
-            CULog("Goodbye!");
-//            this->quit();
+            CULog("Reset");
+            reset();
         } });
 
     // Find the safe area, adapting to the iPhone X
