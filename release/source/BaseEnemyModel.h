@@ -18,6 +18,7 @@
 #pragma mark Drawing Constants
 /** Texture for the enemy*/
 #define ENEMY_TEXTURE "enemy"
+#define ENEMY_TEXTURE2 "enemy2"
 /** ID for the sensor*/
 #define SENSOR_NAME "enemysensor"
 

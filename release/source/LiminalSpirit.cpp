@@ -198,6 +198,7 @@ void LiminalSpirit::onShutdown()
     _scene = nullptr;
     _batch = nullptr;
     _assets = nullptr;
+    _constants = nullptr;
     _world = nullptr;
     _worldnode = nullptr;
     _debugnode = nullptr;
@@ -209,11 +210,9 @@ void LiminalSpirit::onShutdown()
     // This should work because smart pointers free themselves when vector is cleared
     _enemies.clear();
     
-    //TODO: deleting physics before deleting BoxObstacle
-    
     _player = nullptr;
-    _platform = nullptr;
-    
+    _attacks = nullptr;
+
     _ai.dispose();
 
     // Deativate input
@@ -428,7 +427,7 @@ void LiminalSpirit::createEnemies() {
 
     Vec2 enemyPos2 = ENEMY_POS2;
     std::shared_ptr<scene2::SceneNode> specterNode = scene2::SceneNode::alloc();
-    std::shared_ptr<Texture> specterImage = _assets->get<Texture>(ENEMY_TEXTURE);
+    std::shared_ptr<Texture> specterImage = _assets->get<Texture>(ENEMY_TEXTURE2);
     std::shared_ptr<Specter> specter = Specter::alloc(enemyPos2, specterImage->getSize() / _scale / 10, _scale);
     std::shared_ptr<scene2::PolygonNode> specterSprite = scene2::PolygonNode::allocWithTexture(specterImage);
     specter->setSceneNode(specterSprite);
