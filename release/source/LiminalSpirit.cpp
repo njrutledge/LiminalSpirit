@@ -60,6 +60,7 @@ using namespace cugl;
 #define GRAVITY 30
 #define PLATFORM_ATT 4
 #define PLATFORM_COUNT 3
+#define PLATFORMTEXTURE "platform"
 
 
 /** The initial position of the enemies */
@@ -558,8 +559,9 @@ void LiminalSpirit::buildScene()
     addObstacle(_player, sprite, true);
 
     Vec2 platformPos = Vec2(10.0f, 7.0f);
+    Rect platRect = Rect(10.0f, 7.0f, 10, 3);
     std::shared_ptr<scene2::SceneNode> platformNode = scene2::SceneNode::alloc();
-    std::shared_ptr<Texture> imagePlatform = _assets->get<Texture>(PLAYER_TEXTURE);
+    std::shared_ptr<Texture> imagePlatform = _assets->get<Texture>(PLATFORMTEXTURE);
     _platform = PlatformModel::alloc(platformPos, 10, 3, _scale);
     std::shared_ptr<scene2::PolygonNode> spritePlatform = scene2::PolygonNode::allocWithTexture(imagePlatform);
     _platform->setName("platform");
