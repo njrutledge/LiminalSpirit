@@ -603,7 +603,27 @@ void GameScene::reset()
     _input.reset();
     _swipes.reset();
     _tilt.reset();
-    _attacks->reset();
+    auto ac_it = _attacks->_current.begin();
+    while (ac_it != _attacks->_current.end()) {
+        //int log1 = _world->getObstacles().size();
+        cugl::physics2::Obstacle* obj = dynamic_cast<cugl::physics2::Obstacle*>(&**ac_it);
+        _world->removeObstacle(obj);
+        _worldnode->removeChild(obj->_node);
+
+        //int log2 = _world->getObstacles().size();
+        ac_it = _attacks->_current.erase(ac_it);
+    }
+    auto ap_it = _attacks->_current.begin();
+    while (ap_it != _attacks->_current.end()) {
+        //int log1 = _world->getObstacles().size();
+        cugl::physics2::Obstacle* obj = dynamic_cast<cugl::physics2::Obstacle*>(&**ap_it);
+        _world->removeObstacle(obj);
+        _worldnode->removeChild(obj->_node);
+
+        //int log2 = _world->getObstacles().size();
+        ac_it = _attacks->_current.erase(ap_it);
+    }
+    //_attacks->reset();  Shouldn't be needed now
     // Does nothing right now
     _ai.reset();
     
