@@ -8,16 +8,29 @@
 
 /* Begin PBXBuildFile section */
 		578388FD27E1156D000CB5B9 /* Platform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 578388FC27E1156D000CB5B9 /* Platform.cpp */; };
-		578388FE27E1156D000CB5B9 /* Platform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 578388FC27E1156D000CB5B9 /* Platform.cpp */; };
 		578388FF27E1156D000CB5B9 /* Platform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 578388FC27E1156D000CB5B9 /* Platform.cpp */; };
-		579F0A0127DF89AF00D00FFB /* AIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 579F09FC27DF89AF00D00FFB /* AIController.cpp */; };
-		579F0A0227DF89AF00D00FFB /* AIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 579F09FC27DF89AF00D00FFB /* AIController.cpp */; };
-		579F0A0727DF89D800D00FFB /* Specter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 579F0A0627DF89D800D00FFB /* Specter.cpp */; };
-		579F0A0827DF89D800D00FFB /* Specter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 579F0A0627DF89D800D00FFB /* Specter.cpp */; };
-		579F0A0927DF9C0600D00FFB /* AIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 579F09FC27DF89AF00D00FFB /* AIController.cpp */; };
-		579F0A0A27DF9C0800D00FFB /* Specter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 579F0A0627DF89D800D00FFB /* Specter.cpp */; };
-		579F0A0C27DFA7CF00D00FFB /* Lost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 579F0A0B27DFA7CE00D00FFB /* Lost.cpp */; };
-		579F0A0D27DFA7CF00D00FFB /* Lost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 579F0A0B27DFA7CE00D00FFB /* Lost.cpp */; };
+		5783892727E2369B000CB5B9 /* SwipeController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F025103D27D02C6C00AB80AA /* SwipeController.cpp */; };
+		5783892827E2369B000CB5B9 /* Platform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 578388FC27E1156D000CB5B9 /* Platform.cpp */; };
+		5783892927E2369B000CB5B9 /* BaseEnemyModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85D0B48527D010FC004EF4C8 /* BaseEnemyModel.cpp */; };
+		5783892A27E2369B000CB5B9 /* BaseEnemyModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85D0B48527D010FC004EF4C8 /* BaseEnemyModel.cpp */; };
+		5783892E27E23F49000CB5B9 /* AIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001627DFAC8500DAC3F2 /* AIController.cpp */; };
+		85B0001727DFAC8500DAC3F2 /* Lost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001127DFAC8500DAC3F2 /* Lost.cpp */; };
+		85B0001827DFAC8500DAC3F2 /* Lost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001127DFAC8500DAC3F2 /* Lost.cpp */; };
+		85B0001927DFAC8500DAC3F2 /* Lost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001127DFAC8500DAC3F2 /* Lost.cpp */; };
+		85B0001A27DFAC8500DAC3F2 /* Specter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001227DFAC8500DAC3F2 /* Specter.cpp */; };
+		85B0001B27DFAC8500DAC3F2 /* Specter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001227DFAC8500DAC3F2 /* Specter.cpp */; };
+		85B0001C27DFAC8500DAC3F2 /* Specter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001227DFAC8500DAC3F2 /* Specter.cpp */; };
+		85B0001D27DFAC8500DAC3F2 /* GameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001427DFAC8500DAC3F2 /* GameScene.cpp */; };
+		85B0001E27DFAC8500DAC3F2 /* GameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001427DFAC8500DAC3F2 /* GameScene.cpp */; };
+		85B0001F27DFAC8500DAC3F2 /* GameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001427DFAC8500DAC3F2 /* GameScene.cpp */; };
+		85B0002027DFAC8500DAC3F2 /* LoadingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001527DFAC8500DAC3F2 /* LoadingScene.cpp */; };
+		85B0002127DFAC8500DAC3F2 /* LoadingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001527DFAC8500DAC3F2 /* LoadingScene.cpp */; };
+		85B0002227DFAC8500DAC3F2 /* LoadingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001527DFAC8500DAC3F2 /* LoadingScene.cpp */; };
+		85B0002327DFAC8500DAC3F2 /* AIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001627DFAC8500DAC3F2 /* AIController.cpp */; };
+		85B0002527DFAC8500DAC3F2 /* AIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001627DFAC8500DAC3F2 /* AIController.cpp */; };
+		85B0004127E00AD600DAC3F2 /* TiltController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0004027E00AD600DAC3F2 /* TiltController.cpp */; };
+		85B0004227E00AD600DAC3F2 /* TiltController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0004027E00AD600DAC3F2 /* TiltController.cpp */; };
+		85B0004327E00AD600DAC3F2 /* TiltController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0004027E00AD600DAC3F2 /* TiltController.cpp */; };
 		85D0B48627D010FC004EF4C8 /* BaseEnemyModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85D0B48527D010FC004EF4C8 /* BaseEnemyModel.cpp */; };
 		EB07CFB621EFF3F8000CB3A3 /* DeviceMargins.plist in Resources */ = {isa = PBXBuildFile; fileRef = EB07CFB021EFF3EF000CB3A3 /* DeviceMargins.plist */; };
 		EB22BDE025D0E00A002ACE41 /* libcugl-mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EB22BDC825D0DE75002ACE41 /* libcugl-mac.a */; };
@@ -90,14 +103,10 @@
 		F025104027D02C6C00AB80AA /* InputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F025103B27D02C6C00AB80AA /* InputController.cpp */; };
 		F025104127D02C6C00AB80AA /* SwipeController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F025103D27D02C6C00AB80AA /* SwipeController.cpp */; };
 		F025104227D02C6C00AB80AA /* AttackController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F025103F27D02C6C00AB80AA /* AttackController.cpp */; };
-		F04BAE9627DEA68D00A8FE21 /* TiltController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F04BAE9427DEA68D00A8FE21 /* TiltController.cpp */; };
-		F04BAE9927DEAB5D00A8FE21 /* TiltController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F04BAE9427DEA68D00A8FE21 /* TiltController.cpp */; };
-		F04BAE9D27DEAB6100A8FE21 /* TiltController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F04BAE9427DEA68D00A8FE21 /* TiltController.cpp */; };
 		F05176D927D071D900C0617F /* CollisionController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F05176D727D071D900C0617F /* CollisionController.cpp */; };
 		F05176DA27D071D900C0617F /* PlayerModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F05176D827D071D900C0617F /* PlayerModel.cpp */; };
 		F05176DB27D0808A00C0617F /* AttackController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F025103F27D02C6C00AB80AA /* AttackController.cpp */; };
 		F05176DC27D0808B00C0617F /* AttackController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F025103F27D02C6C00AB80AA /* AttackController.cpp */; };
-		F05176DD27D080C800C0617F /* SwipeController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F025103D27D02C6C00AB80AA /* SwipeController.cpp */; };
 		F05176DE27D080C900C0617F /* SwipeController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F025103D27D02C6C00AB80AA /* SwipeController.cpp */; };
 		F05176DF27D080CE00C0617F /* PlayerModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F05176D827D071D900C0617F /* PlayerModel.cpp */; };
 		F05176E027D080CE00C0617F /* PlayerModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F05176D827D071D900C0617F /* PlayerModel.cpp */; };
@@ -105,8 +114,6 @@
 		F05176E227D080DF00C0617F /* CollisionController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F05176D727D071D900C0617F /* CollisionController.cpp */; };
 		F05176E327D080E600C0617F /* InputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F025103B27D02C6C00AB80AA /* InputController.cpp */; };
 		F05176E427D080E700C0617F /* InputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F025103B27D02C6C00AB80AA /* InputController.cpp */; };
-		F05176E527D080EC00C0617F /* BaseEnemyModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85D0B48527D010FC004EF4C8 /* BaseEnemyModel.cpp */; };
-		F05176E627D080ED00C0617F /* BaseEnemyModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85D0B48527D010FC004EF4C8 /* BaseEnemyModel.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -136,15 +143,20 @@
 /* Begin PBXFileReference section */
 		578388F827E1156D000CB5B9 /* Platform.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Platform.hpp; sourceTree = "<group>"; };
 		578388FC27E1156D000CB5B9 /* Platform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Platform.cpp; sourceTree = "<group>"; };
-		579F09FC27DF89AF00D00FFB /* AIController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AIController.cpp; sourceTree = "<group>"; };
-		579F0A0027DF89AF00D00FFB /* AIController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AIController.hpp; sourceTree = "<group>"; };
-		579F0A0327DF89D700D00FFB /* Specter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Specter.hpp; sourceTree = "<group>"; };
-		579F0A0427DF89D700D00FFB /* Lost.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Lost.hpp; sourceTree = "<group>"; };
-		579F0A0627DF89D800D00FFB /* Specter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Specter.cpp; sourceTree = "<group>"; };
-		579F0A0B27DFA7CE00D00FFB /* Lost.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Lost.cpp; sourceTree = "<group>"; };
+		85B0000D27DFAC8500DAC3F2 /* AIController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AIController.hpp; sourceTree = "<group>"; };
+		85B0000E27DFAC8500DAC3F2 /* GameScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameScene.hpp; sourceTree = "<group>"; };
+		85B0000F27DFAC8500DAC3F2 /* Lost.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Lost.hpp; sourceTree = "<group>"; };
+		85B0001027DFAC8500DAC3F2 /* LoadingScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LoadingScene.hpp; sourceTree = "<group>"; };
+		85B0001127DFAC8500DAC3F2 /* Lost.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Lost.cpp; sourceTree = "<group>"; };
+		85B0001227DFAC8500DAC3F2 /* Specter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Specter.cpp; sourceTree = "<group>"; };
+		85B0001327DFAC8500DAC3F2 /* Specter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Specter.hpp; sourceTree = "<group>"; };
+		85B0001427DFAC8500DAC3F2 /* GameScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameScene.cpp; sourceTree = "<group>"; };
+		85B0001527DFAC8500DAC3F2 /* LoadingScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoadingScene.cpp; sourceTree = "<group>"; };
+		85B0001627DFAC8500DAC3F2 /* AIController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AIController.cpp; sourceTree = "<group>"; };
+		85B0003F27E00AD600DAC3F2 /* TiltController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TiltController.hpp; sourceTree = "<group>"; };
+		85B0004027E00AD600DAC3F2 /* TiltController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TiltController.cpp; sourceTree = "<group>"; };
 		85D0B48127D010E9004EF4C8 /* BaseEnemyModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseEnemyModel.h; sourceTree = "<group>"; };
 		85D0B48527D010FC004EF4C8 /* BaseEnemyModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaseEnemyModel.cpp; sourceTree = "<group>"; };
-		85D0B48727D01107004EF4C8 /* LSCharacter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSCharacter.h; sourceTree = "<group>"; };
 		EB07CFB021EFF3EF000CB3A3 /* DeviceMargins.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DeviceMargins.plist; sourceTree = "<group>"; };
 		EB22BF5E25D0E8BC002ACE41 /* LiminalSpirit (Sim).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LiminalSpirit (Sim).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB2BE9B21D74952A002FE78B /* LiminalSpirit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LiminalSpirit.cpp; sourceTree = "<group>"; };
@@ -196,8 +208,6 @@
 		F025103D27D02C6C00AB80AA /* SwipeController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SwipeController.cpp; sourceTree = "<group>"; };
 		F025103E27D02C6C00AB80AA /* SwipeController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SwipeController.hpp; sourceTree = "<group>"; };
 		F025103F27D02C6C00AB80AA /* AttackController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AttackController.cpp; sourceTree = "<group>"; };
-		F04BAE9427DEA68D00A8FE21 /* TiltController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TiltController.cpp; sourceTree = "<group>"; };
-		F04BAE9527DEA68D00A8FE21 /* TiltController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TiltController.hpp; sourceTree = "<group>"; };
 		F05176D227D071D800C0617F /* PlayerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerModel.h; sourceTree = "<group>"; };
 		F05176D627D071D800C0617F /* CollisionController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CollisionController.hpp; sourceTree = "<group>"; };
 		F05176D727D071D900C0617F /* CollisionController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CollisionController.cpp; sourceTree = "<group>"; };
@@ -389,14 +399,18 @@
 			children = (
 				578388FC27E1156D000CB5B9 /* Platform.cpp */,
 				578388F827E1156D000CB5B9 /* Platform.hpp */,
-				579F0A0427DF89D700D00FFB /* Lost.hpp */,
-				579F0A0B27DFA7CE00D00FFB /* Lost.cpp */,
-				579F0A0627DF89D800D00FFB /* Specter.cpp */,
-				579F0A0327DF89D700D00FFB /* Specter.hpp */,
-				579F09FC27DF89AF00D00FFB /* AIController.cpp */,
-				579F0A0027DF89AF00D00FFB /* AIController.hpp */,
-				F04BAE9427DEA68D00A8FE21 /* TiltController.cpp */,
-				F04BAE9527DEA68D00A8FE21 /* TiltController.hpp */,
+				85B0004027E00AD600DAC3F2 /* TiltController.cpp */,
+				85B0003F27E00AD600DAC3F2 /* TiltController.hpp */,
+				85B0001627DFAC8500DAC3F2 /* AIController.cpp */,
+				85B0000D27DFAC8500DAC3F2 /* AIController.hpp */,
+				85B0001427DFAC8500DAC3F2 /* GameScene.cpp */,
+				85B0000E27DFAC8500DAC3F2 /* GameScene.hpp */,
+				85B0001527DFAC8500DAC3F2 /* LoadingScene.cpp */,
+				85B0001027DFAC8500DAC3F2 /* LoadingScene.hpp */,
+				85B0001127DFAC8500DAC3F2 /* Lost.cpp */,
+				85B0000F27DFAC8500DAC3F2 /* Lost.hpp */,
+				85B0001227DFAC8500DAC3F2 /* Specter.cpp */,
+				85B0001327DFAC8500DAC3F2 /* Specter.hpp */,
 				F05176D727D071D900C0617F /* CollisionController.cpp */,
 				F05176D627D071D800C0617F /* CollisionController.hpp */,
 				F05176D827D071D900C0617F /* PlayerModel.cpp */,
@@ -407,7 +421,6 @@
 				F025103C27D02C6C00AB80AA /* InputController.hpp */,
 				F025103D27D02C6C00AB80AA /* SwipeController.cpp */,
 				F025103E27D02C6C00AB80AA /* SwipeController.hpp */,
-				85D0B48727D01107004EF4C8 /* LSCharacter.h */,
 				85D0B48527D010FC004EF4C8 /* BaseEnemyModel.cpp */,
 				85D0B48127D010E9004EF4C8 /* BaseEnemyModel.h */,
 				EB2BE9B41D74952A002FE78B /* main.cpp */,
@@ -492,7 +505,7 @@
 					};
 					EBBF18901D74904A008E2001 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = SK24KCQ5NU;
+						DevelopmentTeam = H2MPDV89H8;
 					};
 				};
 			};
@@ -590,15 +603,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				85B0001927DFAC8500DAC3F2 /* Lost.cpp in Sources */,
 				F05176DE27D080C900C0617F /* SwipeController.cpp in Sources */,
-				579F0A0927DF9C0600D00FFB /* AIController.cpp in Sources */,
-				F04BAE9D27DEAB6100A8FE21 /* TiltController.cpp in Sources */,
-				579F0A0A27DF9C0800D00FFB /* Specter.cpp in Sources */,
+				85B0001C27DFAC8500DAC3F2 /* Specter.cpp in Sources */,
 				F05176DC27D0808B00C0617F /* AttackController.cpp in Sources */,
+				85B0004327E00AD600DAC3F2 /* TiltController.cpp in Sources */,
 				F05176E227D080DF00C0617F /* CollisionController.cpp in Sources */,
 				F05176E427D080E700C0617F /* InputController.cpp in Sources */,
 				EB9CDA3925D0EAB100EE1A09 /* main.cpp in Sources */,
-				F05176E627D080ED00C0617F /* BaseEnemyModel.cpp in Sources */,
+				5783892A27E2369B000CB5B9 /* BaseEnemyModel.cpp in Sources */,
+				85B0001F27DFAC8500DAC3F2 /* GameScene.cpp in Sources */,
+				85B0002527DFAC8500DAC3F2 /* AIController.cpp in Sources */,
+				85B0002227DFAC8500DAC3F2 /* LoadingScene.cpp in Sources */,
 				F05176E027D080CE00C0617F /* PlayerModel.cpp in Sources */,
 				578388FF27E1156D000CB5B9 /* Platform.cpp in Sources */,
 				EB9CDA3525D0EAAC00EE1A09 /* LiminalSpirit.cpp in Sources */,
@@ -609,19 +625,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F05176DD27D080C800C0617F /* SwipeController.cpp in Sources */,
-				579F0A0227DF89AF00D00FFB /* AIController.cpp in Sources */,
-				F04BAE9927DEAB5D00A8FE21 /* TiltController.cpp in Sources */,
-				578388FE27E1156D000CB5B9 /* Platform.cpp in Sources */,
-				579F0A0D27DFA7CF00D00FFB /* Lost.cpp in Sources */,
-				579F0A0827DF89D800D00FFB /* Specter.cpp in Sources */,
+				5783892727E2369B000CB5B9 /* SwipeController.cpp in Sources */,
+				5783892827E2369B000CB5B9 /* Platform.cpp in Sources */,
 				F05176DB27D0808A00C0617F /* AttackController.cpp in Sources */,
+				85B0002127DFAC8500DAC3F2 /* LoadingScene.cpp in Sources */,
+				85B0004227E00AD600DAC3F2 /* TiltController.cpp in Sources */,
 				F05176E127D080DF00C0617F /* CollisionController.cpp in Sources */,
+				5783892E27E23F49000CB5B9 /* AIController.cpp in Sources */,
+				85B0001B27DFAC8500DAC3F2 /* Specter.cpp in Sources */,
 				F05176E327D080E600C0617F /* InputController.cpp in Sources */,
 				EB7454AE1D74D891002FBAE6 /* main.cpp in Sources */,
-				F05176E527D080EC00C0617F /* BaseEnemyModel.cpp in Sources */,
+				5783892927E2369B000CB5B9 /* BaseEnemyModel.cpp in Sources */,
 				F05176DF27D080CE00C0617F /* PlayerModel.cpp in Sources */,
 				EB7454AF1D74D891002FBAE6 /* LiminalSpirit.cpp in Sources */,
+				85B0001E27DFAC8500DAC3F2 /* GameScene.cpp in Sources */,
+				85B0001827DFAC8500DAC3F2 /* Lost.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -630,18 +648,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				F025104127D02C6C00AB80AA /* SwipeController.cpp in Sources */,
-				579F0A0127DF89AF00D00FFB /* AIController.cpp in Sources */,
-				F04BAE9627DEA68D00A8FE21 /* TiltController.cpp in Sources */,
 				578388FD27E1156D000CB5B9 /* Platform.cpp in Sources */,
-				579F0A0C27DFA7CF00D00FFB /* Lost.cpp in Sources */,
-				579F0A0727DF89D800D00FFB /* Specter.cpp in Sources */,
+				85B0002327DFAC8500DAC3F2 /* AIController.cpp in Sources */,
 				F025104027D02C6C00AB80AA /* InputController.cpp in Sources */,
+				85B0002027DFAC8500DAC3F2 /* LoadingScene.cpp in Sources */,
+				85B0004127E00AD600DAC3F2 /* TiltController.cpp in Sources */,
 				EB2BE9B61D74952A002FE78B /* main.cpp in Sources */,
+				85B0001A27DFAC8500DAC3F2 /* Specter.cpp in Sources */,
 				F025104227D02C6C00AB80AA /* AttackController.cpp in Sources */,
 				F05176D927D071D900C0617F /* CollisionController.cpp in Sources */,
 				EB2BE9B51D74952A002FE78B /* LiminalSpirit.cpp in Sources */,
 				F05176DA27D071D900C0617F /* PlayerModel.cpp in Sources */,
 				85D0B48627D010FC004EF4C8 /* BaseEnemyModel.cpp in Sources */,
+				85B0001D27DFAC8500DAC3F2 /* GameScene.cpp in Sources */,
+				85B0001727DFAC8500DAC3F2 /* Lost.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -864,10 +884,10 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = SK24KCQ5NU;
+				DEVELOPMENT_TEAM = H2MPDV89H8;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Mac-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = liminalSpirit3;
+				PRODUCT_BUNDLE_IDENTIFIER = SashimiSoftware.LiminalSpirit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -879,10 +899,10 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = SK24KCQ5NU;
+				DEVELOPMENT_TEAM = H2MPDV89H8;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Mac-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = liminalSpirit3;
+				PRODUCT_BUNDLE_IDENTIFIER = SashimiSoftware.LiminalSpirit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

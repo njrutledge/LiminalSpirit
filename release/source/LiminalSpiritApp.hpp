@@ -1,116 +1,40 @@
 //
-//  LiminalSpirit.h
-//  Cornell University Game Library (CUGL)
+//  LSApp.cpp
+//  Liminal Spirit
 //
-//  This is the header for the custom application.  It is necessary so that
-//  main.cpp can access your custom class.
-//
-//  CUGL zlib License:
-//      This software is provided 'as-is', without any express or implied
-//      warranty.  In no event will the authors be held liable for any damages
-//      arising from the use of this software.
-//
-//      Permission is granted to anyone to use this software for any purpose,
-//      including commercial applications, and to alter it and redistribute it
-//      freely, subject to the following restrictions:
-//
-//      1. The origin of this software must not be misrepresented; you must not
-//      claim that you wrote the original software. If you use this software
-//      in a product, an acknowledgment in the product documentation would be
-//      appreciated but is not required.
-//
-//      2. Altered source versions must be plainly marked as such, and must not
-//      be misrepresented as being the original software.
-//
-//      3. This notice may not be removed or altered from any source distribution.
+//  This is the root class for your game.  The file main.cpp accesses this class
+//  to run the application.  While you could put most of your game logic in
+//  this class, we prefer to break the game up into player modes and have a
+//  class for each mode.
 //
 //  Author: Walker White
-//  Version: 1/8/17
+//  Version: 1/10/17
 //
-#ifndef __LIMINALSPIRIT_APP_H__
-#define __LIMINALSPIRIT_APP_H__
+#ifndef LiminalSpirit_hpp
+#define LiminalSpirit_hpp
 #include <cugl/cugl.h>
-#include "BaseEnemyModel.h"
-#include "Lost.hpp"
-#include "PlayerModel.h"
-#include "AttackController.hpp"
-#include "AIController.hpp"
-#include "InputController.hpp"
-#include "SwipeController.hpp"
-#include "TiltController.hpp"
-#include "CollisionController.hpp"
-#include "Platform.hpp"
+#include "GameScene.hpp"
+#include "LoadingScene.hpp"
+
 /**
- * Class for a simple Hello World style application
- *
- * The application simply moves the CUGL logo across the screen.  It also
- * provides a button to quit the application.
+ * This class represents the application root for the ship demo.
  */
 class LiminalSpirit : public cugl::Application
 {
 protected:
-    /** The loaders to (synchronously) load in assets */
-    std::shared_ptr<cugl::AssetManager> _assets;
-    /** The JSON value with all of the constants */
-    std::shared_ptr<cugl::JsonValue> _constants;
-    /** A scene graph, used to display our 2D scenes */
-    std::shared_ptr<cugl::Scene2> _scene;
-    /** A 3152 style SpriteBatch to render the scene */
+    /** The global sprite batch for drawing (only want one of these) */
     std::shared_ptr<cugl::SpriteBatch> _batch;
-    /** A reference to the logo, so that we can move it around */
-    std::shared_ptr<cugl::scene2::SceneNode> _logo;
-    /** The physics world */
-    std::shared_ptr<cugl::physics2::ObstacleWorld> _world;
-    /** Reference to the physics root of the scene graph */
-    std::shared_ptr<cugl::scene2::SceneNode> _worldnode;
-    /** Reference to the debug root of the scene graph */
-    std::shared_ptr<cugl::scene2::SceneNode> _debugnode;
+    /** The global asset manager */
+    std::shared_ptr<cugl::AssetManager> _assets;
 
-    /** The scale between the physics world and the screen (MUST BE UNIFORM) */
-    float _scale;
-    
-    InputController _input;
-    
-    std::shared_ptr<AttackController> _attacks;
-    /** reference to the player Attack Texture*/
-    std::shared_ptr<cugl::Texture> _pMeleeTexture;
-        
-    /** Swipe Controller */
-    SwipeController _swipes;
+    // Player modes
+    /** The primary controller for the game world */
+    GameScene _gameplay;
+    /** The controller for the loading screen */
+    LoadingScene _loading;
 
-    /** AI Controller */
-    AIController _ai;
-    
-    /** Tilt Controller */
-    TiltController _tilt;
-    
-    /** Collision Controller */
-    CollisionController _collider;
-
-    /** Enemies set */
-    std::vector <std::shared_ptr<BaseEnemyModel>> _enemies;
-
-    /** Player character */
-    std::shared_ptr<PlayerModel> _player;
-    /** Platform character */
-    std::shared_ptr<PlatformModel> _platform;
-    /** Platform set*/
-    std::unordered_set<std::shared_ptr<cugl::physics2::PolygonObstacle>> _platforms;
-
-    /** A countdown used to move the logo */
-    int _countdown;
-
-    /** Whether or not debug mode is active */
-    bool _debug;
-    
-    /**
-     * Internal helper to build the scene graph.
-     *
-     * Scene graphs are not required.  You could manage all scenes just like
-     * you do in 3152.  However, they greatly simplify scene management, and
-     * have become standard in most game engines.
-     */
-    void buildScene();
+    /** Whether or not we have finished loading all assets */
+    bool _loaded;
 
 public:
     /**
@@ -122,7 +46,7 @@ public:
      * of initialization from the constructor allows main.cpp to perform
      * advanced configuration of the application before it starts.
      */
-    LiminalSpirit() : Application(), _countdown(-1) {}
+    LiminalSpirit() : cugl::Application(), _loaded(false) {}
 
     /**
      * Disposes of this application, releasing all resources.
@@ -181,51 +105,6 @@ public:
      * at all. The default implmentation does nothing.
      */
     virtual void draw() override;
-
-    virtual void addObstacle(const std::shared_ptr<cugl::physics2::Obstacle> &obj,
-                             const std::shared_ptr<cugl::scene2::SceneNode> &node,
-                             bool useObjPosition);
-    
-     /**
-     * Returns true if debug mode is active.
-     *
-     * If true, all objects will display their physics bodies.
-     *
-     * @return true if debug mode is active.
-     */
-    bool isDebug() const { return _debug; }
-
-    /**
-     * Sets whether debug mode is active.
-     *
-     * If true, all objects will display their physics bodies.
-     *
-     * @param value whether debug mode is active.
-     */
-    void setDebug(bool value) { _debug = value; _debugnode->setVisible(value); }
-
-
-    void beginContact(b2Contact* contact);
-
-    /**
-    * Processes the end of a collision
-    *
-    * This method is called when we no longer have a collision between two objects.
-    * We use this method allow the character to jump again.
-    *
-    * @param  contact  The two bodies that collided
-    */
-    void endContact(b2Contact* contact);
-    
-    /**
-     * Creates all enemies and adds to _enemies
-     */
-    void createEnemies();
-    
-    /**
-     * Reset on player death
-     */
-    void reset();
 };
 
-#endif /* __HELLO_APP_H__ */
+#endif /* __LiminalSpiritApp_hpp__ */
