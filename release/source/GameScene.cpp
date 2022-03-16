@@ -89,17 +89,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 {
 
     Size dimen = Application::get()->getDisplaySize();
-    dimen *= SCENE_WIDTH / dimen.width;
-    if (assets == nullptr)
-    {
-        return false;
-    }
-    else if (!Scene2::init(dimen))
-    {
-        return false;
-    }
+    //dimen *= SCENE_WIDTH / dimen.width;
 
-    /*float ratio1 = dimen.width / dimen.height;
+    // TODO: FIX THIS SHIT
+    float ratio1 = dimen.width / dimen.height;
     float ratio2 = ((float)SCENE_WIDTH) / ((float)SCENE_HEIGHT);
     if (ratio1 < ratio2)
     {
@@ -110,7 +103,16 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         dimen *= SCENE_HEIGHT / dimen.height;
     }
     CULog("Dimen: %f, %f", dimen.width, dimen.height);
-    */
+    
+    if (assets == nullptr)
+    {
+        return false;
+    }
+    else if (!Scene2::init(dimen))
+    {
+        return false;
+    }
+    
     // Start up the input handler
 #if defined(CU_TOUCH_SCREEN)
     Input::activate<Touchscreen>();
@@ -151,8 +153,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         _collider.endContact(contact, _player);
     };
 
-    _scale = dimen.width == SCENE_WIDTH ? dimen.width / DEFAULT_WIDTH : dimen.height / DEFAULT_HEIGHT;
-    Vec2 offset((dimen.width - SCENE_WIDTH) / 2.0f, (dimen.height - SCENE_HEIGHT) / 2.0f);
+    _scale = dimen.height / DEFAULT_HEIGHT;
+    Vec2 offset((dimen.width-SCENE_WIDTH)/2.0f,0);
     CULog("Offset: %f,%f, Scale: %f, Width: %f, Height: %f", offset.x,offset.y,_scale,DEFAULT_WIDTH,DEFAULT_HEIGHT);
     
     // Create the scene graph
@@ -160,6 +162,12 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
     _worldnode->setPosition(offset);
     scene->addChild(_worldnode);
+    
+    _debugnode = scene2::SceneNode::alloc();
+    _debugnode->setScale(_scale); // Debug node draws in PHYSICS coordinates
+    _debugnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+    _debugnode->setPosition(offset);
+    scene->addChild(_debugnode);
 
     // Only want to get swipes within safe bounds
     Rect bounds = Application::get()->getSafeBounds();
@@ -171,11 +179,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _pMeleeTexture = _assets->get<Texture>(PATTACK_TEXTURE);
     _attacks = std::make_shared<AttackController>();
     _attacks->init(_scale, 1.5, cugl::Vec2::UNIT_Y, cugl::Vec2(0,0.5), 0.5, 1, 0.5, 0.1);
-    _debugnode = scene2::SceneNode::alloc();
-    _debugnode->setScale(_scale); // Debug node draws in PHYSICS coordinates
-    _debugnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
-    _debugnode->setPosition(offset);
-    scene->addChild(_debugnode);
 
     _ai = AIController();
 
@@ -331,8 +334,8 @@ void GameScene::update(float timestep)
     _player->applyForce();
 
     
-//    float dy = _player->getPosition().y - _ogY;
-    getCamera()->translate(0, 0);
+    float dy = _player->getPosition().y - _ogY;
+    getCamera()->translate(0, dy-dy);
     getCamera()->update();
 
     //Remove attacks
@@ -369,7 +372,6 @@ void GameScene::update(float timestep)
         }
     }
     
-    CULog("%f",_player->getHealth());
     if (_player->isRemoved()) {
         reset();
         _player->markRemoved(false);
@@ -413,7 +415,7 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     Scene2::render(batch);
     batch->begin(getCamera()->getCombined());
     //_attacks.draw(batch);
-    batch->drawText(_text,Vec2(10,getSize().height-_text->getBounds().size.height));
+    batch->drawText(_text,Vec2(20,getSize().height-_text->getBounds().size.height-10));
     batch->end();
 }
 
