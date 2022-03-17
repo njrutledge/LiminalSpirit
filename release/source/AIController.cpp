@@ -54,7 +54,12 @@ float AIController::getLostMovement(shared_ptr<BaseEnemyModel> lost, Vec2 player
 		else if (abs(player_pos.y - lost->getPosition().y) > 5 && !lost->getHasSeenPlayer()) {
 			//This is jank -> will likely use some from of LoS instead once we can detect platforms and walls
 			if ((abs(player_pos.x - lost->getPosition().x) < 5)) {
-				return lost->getHorizontalSpeed(); // only works if platfrom has an exit to the right
+				if (player_pos.x > lost->getPosition().x) {
+					return lost->getHorizontalSpeed(); // TODO: Change to behavior
+				}
+				else {
+					return -1* lost->getHorizontalSpeed();
+				}
 			}
 			else {
 				return 0; 
