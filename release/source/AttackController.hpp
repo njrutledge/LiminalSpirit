@@ -140,8 +140,25 @@ public:
 
 #pragma mark -
 #pragma mark Static Constructors
-        static std::shared_ptr<Attack> alloc(const cugl::Vec2 p, float radius, float age, float dmg, float scale,
+        static std::shared_ptr<Attack> alloc(cugl::Vec2 p, float radius, float age, float dmg, float scale,
                                              Type s, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel) {
+       
+            CULog(" Before: %f %f", p.x, p.y);
+            float off = 1.5f;
+            if (p.x + radius + off > 32.0f) {
+                p.x = 31.9f - radius - off;
+            }
+            else if (p.x - radius - off < 0.0f) {
+                p.x = 0.1f + radius + off;
+            }
+
+            if (p.y + radius > 24.0f) {
+                p.y = 23.9f - radius;
+            } else if (p.y - radius < 0.0f) {
+                p.y = 0.1f + radius;
+            }
+
+            CULog(" After: %f %f", p.x, p.y);
             std::shared_ptr<Attack> result = std::make_shared<Attack>();
             return (result->init(p, radius, age, dmg, scale, s, oof, b, vel) ? result : nullptr);
         }
@@ -232,6 +249,18 @@ public:
      *  Creates an attack with the designated parameters. This is mostly to create enemy attacks, but also any explosion attacks for the player. There is no parameter. This must be calculated in the position. 
      */
     void createAttack(cugl::Vec2 p, float radius, float age, float damage, Type s, cugl::Vec2 vel);
+
+    /** Get left offset */
+    cugl::Vec2 getLeftOff() { return _leftOff; }
+
+    /** Get right offset */
+    cugl::Vec2 getRightOff() { return _rightOff; }
+
+    /** Get right offset */
+    cugl::Vec2 getUpOff() { return _upOff; }
+
+    /** Get right offset */
+    cugl::Vec2 getDownOff() { return _downOff; }
 
    // void createEnemyAttack(cugl::Vec2 pos, float radius, float age, int damage, float scale, cugl::Size size, cugl::Vec2 offset, cugl::Vec2 vel);
     
