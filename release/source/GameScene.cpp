@@ -51,7 +51,7 @@ using namespace cugl;
 /** This is the size of the active portion of the screen */
 #define SCENE_WIDTH 1024
 // #define SCENE_HEIGHT 576
- #define SCENE_HEIGHT 768
+#define SCENE_HEIGHT 768
 
 /** Width of the game world in Box2d units */
 #define DEFAULT_WIDTH 32.0f
@@ -463,7 +463,8 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     // Making the ceiling -jdg274
     Rect ceilingRect = Rect(0, DEFAULT_HEIGHT - 0.5, DEFAULT_WIDTH, 0.5);
     std::shared_ptr<physics2::PolygonObstacle> ceiling = physics2::PolygonObstacle::allocWithAnchor(ceilingRect, Vec2::ANCHOR_CENTER);
-    ceiling->setBodyType(b2_staticBody);
+    //filter.maskBits = 0b1100;
+    ceiling->setFilterData(filter);
     
     std::shared_ptr<scene2::PolygonNode> ceilingNode = scene2::PolygonNode::allocWithPoly(ceilingRect*_scale);
     ceilingNode->setColor(Color4::BLACK);
@@ -473,6 +474,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     Rect leftRect = Rect(0, 0, 0.5, DEFAULT_HEIGHT);
     std::shared_ptr<physics2::PolygonObstacle> left = physics2::PolygonObstacle::allocWithAnchor(leftRect, Vec2::ANCHOR_CENTER);
     left->setBodyType(b2_staticBody);
+    left->setFilterData(filter);
     
     std::shared_ptr<scene2::PolygonNode> leftNode = scene2::PolygonNode::allocWithPoly(leftRect*_scale);
     leftNode->setName("leftwall");
@@ -483,6 +485,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     Rect rightRect = Rect(DEFAULT_WIDTH-0.5, 0, 0.5, DEFAULT_HEIGHT);
     std::shared_ptr<physics2::PolygonObstacle> right = physics2::PolygonObstacle::allocWithAnchor(rightRect, Vec2::ANCHOR_CENTER);
     right->setBodyType(b2_staticBody);
+    right->setFilterData(filter);
     std::shared_ptr<scene2::PolygonNode> rightNode = scene2::PolygonNode::allocWithPoly(rightRect*_scale);
     rightNode->setName("rightwall");
     rightNode->setColor(Color4::BLACK);

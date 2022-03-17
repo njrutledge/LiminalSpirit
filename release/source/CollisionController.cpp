@@ -37,7 +37,7 @@ void CollisionController::beginContact(b2Contact* contact, std::shared_ptr<Playe
 
 	if ((player->getSensorName() == fd2 && (bd1->getName() == "leftwall" || bd1->getName() == "rightwall")) ||
 		(player->getSensorName() == fd1 && (bd2->getName() == "leftwall" || bd2->getName() == "rightwall"))) {
-		player->setSensor(false);
+		//player->setSensor(false);
 	}
 
 	//handle enemy collision

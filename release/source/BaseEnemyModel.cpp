@@ -50,7 +50,7 @@ bool BaseEnemyModel::init(const cugl::Vec2& pos, const cugl::Size& size, float s
 		setFixedRotation(true);
 		b2Filter filter = b2Filter();
 		filter.categoryBits = 0b10;
-		filter.maskBits = 0b1100;
+		filter.maskBits = 0b011100;
 		setFilterData(filter);
 
 		return true;

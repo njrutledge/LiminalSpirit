@@ -46,7 +46,7 @@ bool PlayerModel::init(const cugl::Vec2& pos, const cugl::Size& size, float scal
         setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
         b2Filter filter = b2Filter();
         filter.categoryBits = 0b1;
-        filter.maskBits = 0b1100;
+        filter.maskBits = 0b101100;
         setFilterData(filter);
         // Gameplay attributes
         _health = HEALTH;
@@ -197,10 +197,10 @@ void PlayerModel::update(float dt) {
 
     b2Filter filter = getFilterData();
     if (getVY() > 0.1) {
-        filter.maskBits = 0b1000;
+        filter.maskBits = 0b101000;
     }
     else {
-        filter.maskBits = 0b1100;
+        filter.maskBits = 0b101100;
     }
     setFilterData(filter);
 }
