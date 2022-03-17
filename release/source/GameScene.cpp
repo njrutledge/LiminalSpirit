@@ -463,7 +463,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     ceiling->setFilterData(filter);
     
     std::shared_ptr<scene2::PolygonNode> ceilingNode = scene2::PolygonNode::allocWithPoly(ceilingRect*_scale);
-    ceilingNode->setColor(Color4::BLACK);
+    ceilingNode->setColor(Color4::CLEAR);
     addObstacle(ceiling, ceilingNode, 1);
 
     // Making the left wall -jdg274

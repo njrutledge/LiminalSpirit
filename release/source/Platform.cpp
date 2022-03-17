@@ -121,10 +121,4 @@ void PlatformModel::resetDebug() {
     _sensorBottomNode->setColor(Color4::RED);
     _sensorBottomNode->setPosition(_debug->getContentSize().width / 2.0f, 3*_debug->getContentSize().height / 4);
     _debug->addChild(_sensorBottomNode);
-//    Poly2 poly(Rect(-w / 2.0f, -h / 2.0f, w, h));
-//
-//    _sensorNode = scene2::WireNode::allocWithTraversal(poly, poly2::Traversal::INTERIOR);
-//    _sensorNode->setColor(DEBUG_COLOR);
-//    _sensorNode->setPosition(Vec2(_debug->getContentSize().width / 2.0f, 0.0f));
-//    _debug->addChild(_sensorNode);
 }
