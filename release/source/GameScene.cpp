@@ -474,7 +474,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     
     std::shared_ptr<scene2::PolygonNode> leftNode = scene2::PolygonNode::allocWithPoly(leftRect*_scale);
     leftNode->setName("leftwall");
-    leftNode->setColor(Color4::BLACK);
+    leftNode->setColor(Color4::CLEAR);
     addObstacle(left, leftNode, 1);
 
     // Making the right wall -jdg274
@@ -484,7 +484,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     right->setFilterData(filter);
     std::shared_ptr<scene2::PolygonNode> rightNode = scene2::PolygonNode::allocWithPoly(rightRect*_scale);
     rightNode->setName("rightwall");
-    rightNode->setColor(Color4::BLACK);
+    rightNode->setColor(Color4::CLEAR);
     addObstacle(right, rightNode, 1);
 
     // Position the button in the bottom right corner
