@@ -44,7 +44,10 @@ bool PlayerModel::init(const cugl::Vec2& pos, const cugl::Size& size, float scal
         setDensity(PLAYER_DENSITY);
         setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
         setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
-
+        b2Filter filter = b2Filter();
+        filter.categoryBits = 0b1;
+        filter.maskBits = 0b1100;
+        setFilterData(filter);
         // Gameplay attributes
         _health = HEALTH;
         _faceRight = true;
@@ -191,6 +194,15 @@ void PlayerModel::update(float dt) {
         _node->setPosition(getPosition() * _drawScale);
         _node->setAngle(getAngle());
     }
+
+    b2Filter filter = getFilterData();
+    if (getVY() > 0.1) {
+        filter.maskBits = 0b1000;
+    }
+    else {
+        filter.maskBits = 0b1100;
+    }
+    setFilterData(filter);
 }
 
 #pragma mark -

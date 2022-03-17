@@ -305,9 +305,9 @@ void GameScene::update(float timestep)
         _player->setJumping(false);
     }
     if (_player->getVY() > 0 && _player->getPosition().x > 1.0f && _player->getPosition().x < 31.0f && _player->getPosition().y < 17.0f) {
-        _player->setSensor(true);
+       // _player->setSensor(true);
     } else {
-        _player->setSensor(false);
+      //  _player->setSensor(false);
     }
     
     _player->applyForce();
@@ -454,6 +454,10 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     std::shared_ptr<scene2::PolygonNode> floorNode = scene2::PolygonNode::allocWithPoly(floorRect*_scale);
     floorNode->setColor(Color4::BLACK);
     floor->setName("floor");
+    b2Filter filter = b2Filter();
+    filter.categoryBits = 0b1000;
+    //filter.maskBits = 0b1100;
+    floor->setFilterData(filter);
     addObstacle(floor, floorNode, 1);
 
     // Making the ceiling -jdg274
@@ -488,44 +492,33 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     button->setAnchor(Vec2::ANCHOR_CENTER);
     button->setPosition(size.width - (bsize.width + rOffset) / 2, (bsize.height + bOffset) / 2);
 
-    createEnemies();
-
-    Vec2 playerPos = PLAYER_POS;
-    std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
-    std::shared_ptr<Texture> image = _assets->get<Texture>(PLAYER_TEXTURE);
-    _player = PlayerModel::alloc(playerPos, image->getSize() / _scale / 8, _scale);
-    _player->setMovement(0);
-    std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
-    _player->setSceneNode(sprite);
-    _player->setDebugColor(Color4::RED);
-    sprite->setScale(0.175f);
-    addObstacle(_player, sprite, true);
+    
 
     Vec2 platformPos = Vec2(5.0f, 5.0f);
-    Rect platRect = Rect(5.0f, 5.0f, 10, 1);
+    Rect platRect = Rect(5.0f, 5.0f, 10, .5);
     std::shared_ptr<scene2::SceneNode> platformNode = scene2::SceneNode::alloc();
-    _platforms.push_back(PlatformModel::alloc(platformPos, 10, 1, _scale));
+    _platforms.push_back(PlatformModel::alloc(platformPos, 10, .5, _scale));
     std::shared_ptr<scene2::PolygonNode> spritePlatform = scene2::PolygonNode::allocWithPoly(platRect * _scale);
     _platformNodes.push_back(spritePlatform);
 
     platformPos = Vec2(30.0f, 5.0f);
-    platRect = Rect(30.0f, 5.0f, 3, 1);
+    platRect = Rect(30.0f, 5.0f, 3, .5);
     platformNode = scene2::SceneNode::alloc();
-    _platforms.push_back(PlatformModel::alloc(platformPos, 3, 1, _scale));
+    _platforms.push_back(PlatformModel::alloc(platformPos, 3, .5, _scale));
     spritePlatform = scene2::PolygonNode::allocWithPoly(platRect * _scale);
     _platformNodes.push_back(spritePlatform);
 
     platformPos = Vec2(10.0f, 10.0f);
-    platRect = Rect(10.0f, 10.0f, 5, 1);
+    platRect = Rect(10.0f, 10.0f, 5, .5);
     platformNode = scene2::SceneNode::alloc();
-    _platforms.push_back(PlatformModel::alloc(platformPos, 5, 1, _scale));
+    _platforms.push_back(PlatformModel::alloc(platformPos, 5, .5, _scale));
     spritePlatform = scene2::PolygonNode::allocWithPoly(platRect * _scale);
     _platformNodes.push_back(spritePlatform);
 
     platformPos = Vec2(20.0f, 12.0f);
-    platRect = Rect(20.0f, 12.0f, 8, 1);
+    platRect = Rect(20.0f, 12.0f, 8, .5);
     platformNode = scene2::SceneNode::alloc();
-    _platforms.push_back(PlatformModel::alloc(platformPos, 8, 1, _scale));
+    _platforms.push_back(PlatformModel::alloc(platformPos, 8, .5, _scale));
     spritePlatform = scene2::PolygonNode::allocWithPoly(platRect * _scale);
     _platformNodes.push_back(spritePlatform);
 
@@ -541,6 +534,20 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     // Add the logo and button to the scene graph
     // TODO get rid of this
     scene->addChild(button);
+
+    //add enemies and player last
+    createEnemies();
+
+    Vec2 playerPos = PLAYER_POS;
+    std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
+    std::shared_ptr<Texture> image = _assets->get<Texture>(PLAYER_TEXTURE);
+    _player = PlayerModel::alloc(playerPos, image->getSize() / _scale / 8, _scale);
+    _player->setMovement(0);
+    std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
+    _player->setSceneNode(sprite);
+    _player->setDebugColor(Color4::RED);
+    sprite->setScale(0.175f);
+    addObstacle(_player, sprite, true);
 
     // We can only activate a button AFTER it is added to a scene
     button->activate();

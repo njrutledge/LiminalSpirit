@@ -23,6 +23,10 @@ bool PlatformModel::init(const cugl::Vec2& pos, const float width, const float h
         setDensity(0);
         setFriction(0.0f);
         setFixedRotation(true);
+        b2Filter filter = b2Filter();
+        filter.categoryBits = 0b100;
+        //filter.maskBits = 0b1100;
+        setFilterData(filter);
 
         return true;
     }
