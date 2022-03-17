@@ -31,6 +31,8 @@
 /** Player health */
 #define HEALTH 10.0f
 
+#define PLAYER_MASS 5.0f
+
 using namespace cugl;
 
 /** Initializes the player at the given position*/
@@ -114,6 +116,7 @@ void PlayerModel::createFixtures() {
     sensorDef.shape = &sensorShape;
     sensorDef.userData.pointer = reinterpret_cast<uintptr_t>(getSensorName());
     _sensorFixture = _body->CreateFixture(&sensorDef);
+    setMass(PLAYER_MASS);
 }
 
 /** Releases the fixtures for this body, resets the shape*/
