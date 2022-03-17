@@ -50,7 +50,8 @@ using namespace cugl;
 #define TIME_STEP 60
 /** This is the size of the active portion of the screen */
 #define SCENE_WIDTH 1024
-#define SCENE_HEIGHT 576
+// #define SCENE_HEIGHT 576
+ #define SCENE_HEIGHT 768
 
 /** Width of the game world in Box2d units */
 #define DEFAULT_WIDTH 32.0f
@@ -93,19 +94,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     Size dimen = Application::get()->getDisplaySize();
     float boundScale = SCENE_WIDTH / dimen.width;
     dimen *= boundScale;
-
-    // TODO: FIX THIS SHIT
-//    float ratio1 = dimen.width / dimen.height;
-//    float ratio2 = ((float)SCENE_WIDTH) / ((float)SCENE_HEIGHT);
-//    if (ratio1 < ratio2)
-//    {
-//        dimen *= SCENE_WIDTH / dimen.width;
-//    }
-//    else
-//    {
-//        dimen *= SCENE_HEIGHT / dimen.height;
-//    }
-//    CULog("Dimen: %f, %f", dimen.width, dimen.height);
     
     if (assets == nullptr)
     {
@@ -170,14 +158,16 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     CULog("Offset: %f,%f, Scale: %f, Width: %f, Height: %f", offset.x,offset.y,_scale,DEFAULT_WIDTH,DEFAULT_HEIGHT);
     
     // Create the scene graph
-    _worldnode = scene2::SceneNode::alloc();
-    _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+    // Bounds do not matter when constraint is false
+    _worldnode = scene2::ScrollPane::allocWithBounds(bounds.size);
     _worldnode->setPosition(offset);
+    _worldnode->setInterior(Rect(0,0,bounds.size.width,SCENE_HEIGHT));
+    _worldnode->setConstrained(true);
     scene->addChild(_worldnode);
     
-    _debugnode = scene2::SceneNode::alloc();
+    // Bounds do not matter when constraint is false
+    _debugnode = scene2::ScrollPane::allocWithBounds(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     _debugnode->setScale(_scale); // Debug node draws in PHYSICS coordinates
-    _debugnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
     _debugnode->setPosition(offset);
     scene->addChild(_debugnode);
     
@@ -382,27 +372,14 @@ void GameScene::update(float timestep)
     _text->setText(strtool::format("Health %d", (int)_player->getHealth()));
     _text->layout();
     
-   // if (_player->isRemoved()) {
-//    auto objects = _world->getObstacles();
-//    bool containObj;
-//    for(auto it = _platforms.begin(); it != _platforms.end(); ++it) {
-//        if (std::find(objects.begin(), objects.end(), *it) != objects.end())
-//        {
-//            containObj = true;
-//        } else {
-//            containObj = false;
-//        }
-//        if(it->get()->getY() + it->get()->getHeight() < _player->getPosition().y && !containObj) {
-//
-//            _world->addObstacle(*it);
-//        } else if (it->get()->getY() + it->get()->getHeight() > _player->getPosition().y && containObj) {
-//            _world->removeObstacle((*it).get());
-//        }
-//    }
-    
-   // }
-    //CULog("Attacks size: %d", _attacks._current.size());
-    //CULog("World Size: %d", _world->getObstacles().size());
+    // Camera following player, with some non-linear smoothing
+    float dy = getChild(0)->getContentSize().height / 2 - _worldnode->getPaneTransform().transform(_player->getSceneNode()->getPosition()).y;
+    Vec2 pan = Vec2(0, dy);
+    pan = pan * pan.length() / 3000;
+    _worldnode->applyPan(pan);
+    // Copy World's zoom and transform
+    _debugnode->applyPan(-_debugnode->getPaneTransform().transform(Vec2()));
+    _debugnode->applyPan(_worldnode->getPaneTransform().transform(Vec2()) / _scale);
 }
 
 /**
@@ -486,7 +463,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     float rOffset = (size.width) - (safe.origin.x + safe.size.width);
 
     // Making the floor -jdg274
-    Rect floorRect = Rect(0, 0, 32, 0.5);
+    Rect floorRect = Rect(0, 0, DEFAULT_WIDTH, 0.5);
     std::shared_ptr<physics2::PolygonObstacle> floor = physics2::PolygonObstacle::allocWithAnchor(floorRect, Vec2::ANCHOR_CENTER);
     floor->setBodyType(b2_staticBody);
     
@@ -496,7 +473,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     addObstacle(floor, floorNode, 1);
 
     // Making the ceiling -jdg274
-    Rect ceilingRect = Rect(0, 17.5, 32, 0.5);
+    Rect ceilingRect = Rect(0, DEFAULT_HEIGHT - 0.5, DEFAULT_WIDTH, 0.5);
     std::shared_ptr<physics2::PolygonObstacle> ceiling = physics2::PolygonObstacle::allocWithAnchor(ceilingRect, Vec2::ANCHOR_CENTER);
     ceiling->setBodyType(b2_staticBody);
     
@@ -505,7 +482,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     addObstacle(ceiling, ceilingNode, 1);
 
     // Making the left wall -jdg274
-    Rect leftRect = Rect(0, 0, 0.5, 18);
+    Rect leftRect = Rect(0, 0, 0.5, DEFAULT_HEIGHT);
     std::shared_ptr<physics2::PolygonObstacle> left = physics2::PolygonObstacle::allocWithAnchor(leftRect, Vec2::ANCHOR_CENTER);
     left->setBodyType(b2_staticBody);
     
@@ -515,7 +492,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     addObstacle(left, leftNode, 1);
 
     // Making the right wall -jdg274
-    Rect rightRect = Rect(31.5, 0, 0.5, 18);
+    Rect rightRect = Rect(DEFAULT_WIDTH-0.5, 0, 0.5, DEFAULT_HEIGHT);
     std::shared_ptr<physics2::PolygonObstacle> right = physics2::PolygonObstacle::allocWithAnchor(rightRect, Vec2::ANCHOR_CENTER);
     right->setBodyType(b2_staticBody);
     std::shared_ptr<scene2::PolygonNode> rightNode = scene2::PolygonNode::allocWithPoly(rightRect*_scale);

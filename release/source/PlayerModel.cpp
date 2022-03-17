@@ -25,7 +25,7 @@
 /**Density of character*/
 #define PLAYER_DENSITY 1.0f
 /** Impulse of the player jump */
-#define PLAYER_JUMP 75.0f
+#define PLAYER_JUMP 100.0f
 /** Debug color for sensor */
 #define DEBUG_COLOR Color4::RED
 /** Player health */

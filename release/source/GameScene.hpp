@@ -60,9 +60,9 @@ protected:
     /** The physics world */
     std::shared_ptr<cugl::physics2::ObstacleWorld> _world;
     /** Reference to the physics root of the scene graph */
-    std::shared_ptr<cugl::scene2::SceneNode> _worldnode;
+    std::shared_ptr<cugl::scene2::ScrollPane> _worldnode;
     /** Reference to the debug root of the scene graph */
-    std::shared_ptr<cugl::scene2::SceneNode> _debugnode;
+    std::shared_ptr<cugl::scene2::ScrollPane> _debugnode;
     
     /** The text with the current health */
     std::shared_ptr<cugl::TextLayout> _text;    
