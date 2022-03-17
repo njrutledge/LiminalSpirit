@@ -65,11 +65,11 @@ float DEFAULT_HEIGHT = DEFAULT_WIDTH/SCENE_WIDTH*SCENE_HEIGHT;
 #define PLATFORMTEXTURE "platform"
 
 /** The initial position of the enemies */
-float ENEMY_POS[] = {12.0f, 15.0f};
-float ENEMY_POS2[] = { 24.0f, 10.0f };
+float ENEMY_POS[] = {18.0f, 15.0f};
+float ENEMY_POS2[] = { 28.0f, 10.0f };
 
 /** The initial position of the player*/
-float PLAYER_POS[] = { 10.0f, 4.0f };
+float PLAYER_POS[] = { 5.0f, 4.0f };
 
 float PLATFORMS[PLATFORM_COUNT][PLATFORM_ATT] = {
     {15, 3, 10, 0.5},
@@ -310,22 +310,6 @@ void GameScene::update(float timestep)
         _player->setSensor(false);
     }
     
-//    auto objects = _world->getObstacles();
-//    bool containObj;
-//    for(auto it = _platforms.begin(); it != _platforms.end(); ++it) {
-//        if (std::find(objects.begin(), objects.end(), *it) != objects.end())
-//        {
-//            containObj = true;
-//        } else {
-//            containObj = false;
-//        }
-//        if(it->get()->getY() + it->get()->getHeight() < _player->getPosition().y && !containObj) {
-//
-//            _world->addObstacle(*it);
-//        } else if (it->get()->getY() + it->get()->getHeight() > _player->getPosition().y && containObj) {
-//            _world->removeObstacle((*it).get());
-//        }
-//    }
     _player->applyForce();
 
     
@@ -401,22 +385,22 @@ void GameScene::createEnemies() {
     Vec2 enemyPos = ENEMY_POS;
     std::shared_ptr<scene2::SceneNode> enemyNode = scene2::SceneNode::alloc();
     std::shared_ptr<Texture> enemyImage = _assets->get<Texture>(ENEMY_TEXTURE);
-    std::shared_ptr<Lost> enemy = Lost::alloc(enemyPos, enemyImage->getSize() / _scale / 5, _scale);
+    std::shared_ptr<Lost> enemy = Lost::alloc(enemyPos, enemyImage->getSize() / _scale / 10, _scale);
     std::shared_ptr<scene2::PolygonNode> enemySprite = scene2::PolygonNode::allocWithTexture(enemyImage);
     enemy->setSceneNode(enemySprite);
     enemy->setDebugColor(Color4::RED);
-    enemySprite->setScale(0.2f);
+    enemySprite->setScale(0.15f);
     addObstacle(enemy, enemySprite, true);
     _enemies.push_back(enemy);
 
     Vec2 enemyPos2 = ENEMY_POS2;
     std::shared_ptr<scene2::SceneNode> specterNode = scene2::SceneNode::alloc();
     std::shared_ptr<Texture> specterImage = _assets->get<Texture>(ENEMY_TEXTURE2);
-    std::shared_ptr<Specter> specter = Specter::alloc(enemyPos2, specterImage->getSize() / _scale / 10, _scale);
+    std::shared_ptr<Specter> specter = Specter::alloc(enemyPos2, specterImage->getSize() / _scale / 15, _scale);
     std::shared_ptr<scene2::PolygonNode> specterSprite = scene2::PolygonNode::allocWithTexture(specterImage);
     specter->setSceneNode(specterSprite);
     specter->setDebugColor(Color4::BLUE);
-    specterSprite->setScale(0.2f);
+    specterSprite->setScale(0.15f);
     addObstacle(specter, specterSprite, true);
     _enemies.push_back(specter);
 }
@@ -500,19 +484,6 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     rightNode->setColor(Color4::BLACK);
     addObstacle(right, rightNode, 1);
 
-   //    for (int ii = 0; ii < PLATFORM_COUNT; ii++) {
-//        std::shared_ptr<physics2::PolygonObstacle> platobj;
-//        Rect platformRect = Rect(PLATFORMS[ii][0], PLATFORMS[ii][1], PLATFORMS[ii][2], PLATFORMS[ii][3]);
-//        platobj = physics2::PolygonObstacle::allocWithAnchor(platformRect, Vec2::ANCHOR_CENTER);
-//        // Set the physics attributes
-//        platobj->setBodyType(b2_staticBody);
-//        platobj->setSensor(true);
-//        std::shared_ptr<scene2::PolygonNode> platformNode = scene2::PolygonNode::allocWithPoly(platformRect*_scale);
-//        platformNode->setColor(Color4::BLACK);
-//        addObstacle(platobj,platformNode,1);
-//        _platforms.emplace(platobj);
-//    }
-
     // Position the button in the bottom right corner
     button->setAnchor(Vec2::ANCHOR_CENTER);
     button->setPosition(size.width - (bsize.width + rOffset) / 2, (bsize.height + bOffset) / 2);
@@ -522,12 +493,12 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     Vec2 playerPos = PLAYER_POS;
     std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
     std::shared_ptr<Texture> image = _assets->get<Texture>(PLAYER_TEXTURE);
-    _player = PlayerModel::alloc(playerPos, image->getSize() / _scale / 5, _scale);
+    _player = PlayerModel::alloc(playerPos, image->getSize() / _scale / 8, _scale);
     _player->setMovement(0);
     std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
     _player->setSceneNode(sprite);
     _player->setDebugColor(Color4::RED);
-    sprite->setScale(0.3f);
+    sprite->setScale(0.175f);
     addObstacle(_player, sprite, true);
 
     Vec2 platformPos = Vec2(5.0f, 5.0f);

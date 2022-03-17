@@ -23,7 +23,7 @@
 /**Height of the sensor */
 #define SENSOR_HEIGHT 01.f
 /**Density of character*/
-#define PLAYER_DENSITY 1.0f
+#define PLAYER_DENSITY 3.0f
 /** Impulse of the player jump */
 #define PLAYER_JUMP 100.0f
 /** Debug color for sensor */
@@ -99,9 +99,9 @@ void PlayerModel::createFixtures() {
     corners[0].x = -PLAYER_SSHRINK * getWidth() / 2.0f;
     corners[0].y = (-getHeight() + SENSOR_HEIGHT) / 2.0f;
     corners[1].x = -PLAYER_SSHRINK * getWidth() / 2.0f;
-    corners[1].y = (-getHeight() - SENSOR_HEIGHT) / 2.0f;
+    corners[1].y = (-getHeight() - SENSOR_HEIGHT) / 3.0f;
     corners[2].x = PLAYER_SSHRINK * getWidth() / 2.0f;
-    corners[2].y = (-getHeight() - SENSOR_HEIGHT) / 2.0f;
+    corners[2].y = (-getHeight() - SENSOR_HEIGHT) / 3.0f;
     corners[3].x = PLAYER_SSHRINK * getWidth() / 2.0f;
     corners[3].y = (-getHeight() + SENSOR_HEIGHT) / 2.0f;
 
@@ -206,7 +206,7 @@ void PlayerModel::resetDebug() {
     CapsuleObstacle::resetDebug();
     float w = PLAYER_SSHRINK * _dimension.width;
     float h = SENSOR_HEIGHT;
-    Poly2 poly(Rect(-w / 2.0f, -h / 2.0f, w, h));
+    Poly2 poly(Rect(-w / 2.0f, -h / 2, w, h*5/6)); // This may no longer be accurately lined up with the model
 
     _sensorNode = scene2::WireNode::allocWithTraversal(poly, poly2::Traversal::INTERIOR);
     _sensorNode->setColor(DEBUG_COLOR);
