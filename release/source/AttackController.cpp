@@ -27,17 +27,26 @@ bool AttackController::Attack::init(const cugl::Vec2 p, float radius, float a, f
     _ball = b.makeCircle(_position, _radius);
     if (CapsuleObstacle::init(_position, Size(_radius, _radius))) {
         // TODO change the sensor naming based on if its player attack
+        b2Filter filter = b2Filter();
+        
         switch (_type) {
             case Type::p_range:
             case Type::p_melee:
             case Type::p_exp:
             case Type::p_exp_package:
                 _sensorName = "player" + _sensorName;
+                filter.categoryBits = 0b010000;
+                filter.maskBits = 0b000010;
+                setFilterData(filter);
                 break;
             default:
                 _sensorName = "enemy"  + _sensorName;
+                filter.categoryBits = 0b100000;
+                filter.maskBits = 0b000001;
+                setFilterData(filter);
                 break;
         }
+
         this->setSensor(true);
         return true;
     }
