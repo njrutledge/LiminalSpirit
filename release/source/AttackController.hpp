@@ -142,8 +142,7 @@ public:
 #pragma mark Static Constructors
         static std::shared_ptr<Attack> alloc(cugl::Vec2 p, float radius, float age, float dmg, float scale,
                                              Type s, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel) {
-       
-            CULog(" Before: %f %f", p.x, p.y);
+
             float off = 1.5f;
             if (p.x + radius + off > 32.0f) {
                 p.x = 31.9f - radius - off;
@@ -158,7 +157,6 @@ public:
                 p.y = 0.1f + radius;
             }
 
-            CULog(" After: %f %f", p.x, p.y);
             std::shared_ptr<Attack> result = std::make_shared<Attack>();
             return (result->init(p, radius, age, dmg, scale, s, oof, b, vel) ? result : nullptr);
         }

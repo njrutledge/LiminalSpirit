@@ -146,8 +146,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     
     // Only want to get swipes within safe bounds
     Rect bounds = Application::get()->getSafeBounds();
-    CULog("Safe Area %sx%s", bounds.origin.toString().c_str(),
-          bounds.size.toString().c_str());
     _input.init(bounds.getMinX(), bounds.size.width);
     
     bounds.origin *= boundScale;
@@ -155,7 +153,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     _scale = bounds.size.width / DEFAULT_WIDTH;
     Vec2 offset(bounds.getMinX(),0);
-    CULog("Offset: %f,%f, Scale: %f, Width: %f, Height: %f", offset.x,offset.y,_scale,DEFAULT_WIDTH,DEFAULT_HEIGHT);
     
     // Create the scene graph
     // Bounds do not matter when constraint is false
@@ -433,7 +430,6 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
                         {
         // Only quit when the button is released
         if (!down) {
-            CULog("Reset");
             reset();
         } });
 
