@@ -379,6 +379,11 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     // This takes care of begin/end
 
     //_scene->render(batch);
+    if(_swipes.hasChargedAttack()){
+        _player->getSceneNode()->setColor(Color4::RED);
+    } else {
+        _player->getSceneNode()->setColor(Color4::WHITE);
+    }
     Scene2::render(batch);
     batch->begin(getCamera()->getCombined());
     //_attacks.draw(batch);
