@@ -298,13 +298,21 @@ void GameScene::update(float timestep)
     _attacks->update(_player->getPosition(), _player->getBody()->GetLinearVelocity(), timestep);
     if(_swipes.getRightSwipe() == _swipes.upAttack){
         _player->setJumping(true);
+        _player->setIsFirstFrame(true);
     } else {
         _player->setJumping(false);
     }
-    if (_player->getVY() > 0 && _player->getPosition().x > 1.0f && _player->getPosition().x < 31.0f && _player->getPosition().y < 17.0f) {
-       // _player->setSensor(true);
-    } else {
-      //  _player->setSensor(false);
+    if (_player->getVY() < -.2 || _player->getVY() > .2) {
+        _player->setGrounded(false);
+    }
+    else if (_player->getVY() >= -.2 && _player->getVY() <= .2) {
+        //check if this is the first "0" velocity frame, as this should not make the player grounded just yet. Might be height of jump. 
+        if (_player->isFirstFrame()) {
+            _player->setIsFirstFrame(false);
+        }
+        else {
+            _player->setGrounded(true);
+        }
     }
     
     _player->applyForce();

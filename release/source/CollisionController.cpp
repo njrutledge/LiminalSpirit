@@ -32,7 +32,7 @@ void CollisionController::beginContact(b2Contact* contact, std::shared_ptr<Playe
 	if ((player->getSensorName() == fd2 && (bd1->getName() == "floor" || bd1->getName() == "platform")) ||
 		(player->getSensorName() == fd1 && (bd2->getName() == "floor" || bd2->getName() == "platform"))) {
         
-		player->setGrounded(true);
+		//player->setGrounded(true);
 	}
 
 	if ((player->getSensorName() == fd2 && (bd1->getName() == "leftwall" || bd1->getName() == "rightwall")) ||
@@ -125,7 +125,7 @@ void CollisionController::endContact(b2Contact* contact, std::shared_ptr<PlayerM
 	if ((player->getSensorName() == fd2 && (bd1->getName() == "floor" || bd1->getName() == "platform")) ||
 		(player->getSensorName() == fd1 && (bd2->getName() == "floor" || bd2->getName() == "platform"))) {
 
-		player->setGrounded(false);
+		//player->setGrounded(false);
 	}
 	/* if (*fd1 == "attacksensor") {
 		if (*fd2 == "enemysensor") {

@@ -62,6 +62,9 @@ protected:
 	/** Draw Scale*/
 	float _drawScale;
 
+	/** flag for if this is the first frame of velocity 0 */
+	bool _isFirstFrame;
+
 	/** Redraws outline of physics fixtures */
 	virtual void resetDebug() override;
 
@@ -93,6 +96,11 @@ public:
 
 	/** Base init function (includes scale) */
 	virtual bool init(const cugl::Vec2& pos, const cugl::Size& size, float scale);
+
+	/** sets if this is the first frame where VY=0 */
+	void setIsFirstFrame(bool value) { _isFirstFrame = value; }
+	/** returns if this is the first frame where VY=0 */
+	bool isFirstFrame() { return _isFirstFrame; }
 
 #pragma mark - 
 #pragma mark Static Constructors
