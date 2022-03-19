@@ -44,6 +44,14 @@ public:
         e_range
     };
     
+    enum Side {
+        right,
+        left,
+        up,
+        down,
+        neither
+    };
+    
     class Attack : public cugl::physics2::CapsuleObstacle{
         
     protected:
@@ -141,29 +149,29 @@ public:
 #pragma mark -
 #pragma mark Static Constructors
         static std::shared_ptr<Attack> alloc(cugl::Vec2 p, float radius, float age, float dmg, float scale,
-                                             Type s, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel) {
-
+                                             Type t, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel,
+                                             Side s) {
             float off = 1.5f;
-            if (p.x + radius + off > 32.0f) {
+            if (p.x + radius + off > 32.0f && s == right) {
                 p.x = 31.9f - radius - off;
             }
-            else if (p.x - radius - off < 0.0f) {
+            else if (p.x - radius - off < 0.0f && s == left) {
                 p.x = 0.1f + radius + off;
             }
 
-            if (p.y + radius > 24.0f) {
+            if (p.y + radius > 24.0f && s == up) {
                 p.y = 23.9f - radius;
-            } else if (p.y - radius < 0.0f) {
+            } else if (p.y - radius < 0.0f && s == down) {
                 p.y = 0.1f + radius;
             }
 
             std::shared_ptr<Attack> result = std::make_shared<Attack>();
-            return (result->init(p, radius, age, dmg, scale, s, oof, b, vel) ? result : nullptr);
+            return (result->init(p, radius, age, dmg, scale, t, oof, b, vel) ? result : nullptr);
         }
         
-        static std::shared_ptr<Attack> alloc2(const cugl::Vec2 p, float radius, float age, float dmg, float scale, Type s, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel) {
+        static std::shared_ptr<Attack> alloc2(const cugl::Vec2 p, float radius, float age, float dmg, float scale, Type t, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel) {
             std::shared_ptr<Attack> result = std::make_shared<Attack>();
-            return (result->init(p, radius, age, dmg, scale, s, oof, b, vel) ? result : nullptr);
+            return (result->init(p, radius, age, dmg, scale, t, oof, b, vel) ? result : nullptr);
         }
     };
     
