@@ -108,7 +108,6 @@ void SwipeController::calculateChargeAttack(cugl::Timestamp leftStartTime) {
     // This is currently 500 for easier testing, change it back to 1000 when done testing
     if (chargeTime >= 500) { //1000) {
         chargeAttack();
-        CULog("charged projectile");
     }
     
 }
@@ -144,57 +143,84 @@ void SwipeController::calculateSwipeDirection(cugl::Vec2 startPos, cugl::Vec2 en
     
     // Calculate the angle the swipe makes with the horizontal in degrees
     // Angles should never be less than -90 or greater than 90
-    float swipeAngle = atan(ydiff/xdiff) * 180 / M_PI;
+    float angle = atan(ydiff/xdiff) * 180 / M_PI;
+
+    // Calculate swipeAngle in degrees out of 360
+    float swipeAngle;
+    // First quadrant
+    if (ydiff < 0 && angle < 0) {
+        swipeAngle = angle * -1;
+    }
+    // Second quadrant
+    else if (ydiff < 0 && angle > 0) {
+        swipeAngle = 180 - angle;;
+    }
+    // Third quadrant
+    else if (ydiff > 0 && angle < 0) {
+        swipeAngle = 180 + (angle * -1);
+    }
+    // Fourth quadrant
+    else {
+        swipeAngle = 360 - angle;
+    }
     
+    
+
     // x increases from left to right
     // y increases from top to bottom
     
-    // Up swipe, y diff is negative (b/c 0 at top of screen)
-    // Angle from 45 to 90 or -45 to -90, angle should never be > 90
-    // So > 45 or < -45 is sufficient
-    if (ydiff < 0 && (swipeAngle < -45 || swipeAngle > 45)) {
-        if (isLeftSidedSwipe) {
-            setLeftDirection(up);
-        } else {
-            setRightSwipe(upAttack);
-        }
-    }
-    // Down swipe, y diff is positive
-    // Angle from 45 to 90 or -45 to -90, > 45 or < -45
-    else if (ydiff > 0 && (swipeAngle < -45 || swipeAngle > 45)) {
-        if (isLeftSidedSwipe) {
-            setLeftDirection(down);
-        } else {
-            setRightSwipe(downAttack);
-        }
-    }
-    // Right swipe, x diff is poisitve
-    // Angle from -45 to 45
-    else if (xdiff > 0 && swipeAngle > -45 && swipeAngle < 45) {
+    // Right swipe
+    // Angle from 0 to 45 or 315 to 360
+    if (swipeAngle > 315 || swipeAngle <= 45) {
         if (isLeftSidedSwipe) {
             setLeftDirection(right);
+            setLeftAngle(swipeAngle);
         } else {
             setRightSwipe(rightAttack);
         }
     }
-    // Left swipe, x diff is negative
-    // Angle from -45 to 45
-    else if (xdiff < 0 && swipeAngle > -45 && swipeAngle < 45) {
+    // Up swipe
+    // Angle from 45 to 135
+    else if (swipeAngle > 45 && swipeAngle <= 135) {
+        if (isLeftSidedSwipe) {
+            setLeftDirection(up);
+            setLeftAngle(swipeAngle);
+        } else {
+            setRightSwipe(upAttack);
+        }
+    }
+    // Left swipe
+    // Angle from 135 to 225
+    else if (swipeAngle > 135 && swipeAngle <= 225) {
         if (isLeftSidedSwipe) {
             setLeftDirection(left);
+            setLeftAngle(swipeAngle);
         } else {
             setRightSwipe(leftAttack);
         }
     }
+    // Down swipe
+    // Angle from 225 to 315
+    else if (swipeAngle > 225 && swipeAngle <= 315) {
+        if (isLeftSidedSwipe) {
+            setLeftDirection(down);
+            setLeftAngle(swipeAngle);
+        } else {
+            setRightSwipe(downAttack);
+        }
+    }
+    
+
+    
     
     // Process the left swipe state now that a swipe direction was calculated
     // and print swipes for testing
     if (isLeftSidedSwipe) {
         processLeftState();
-        printSwipe(getLeftSwipe(),true);
+//        printSwipe(getLeftSwipe(),true);
     }
     else {
-        printSwipe(getRightSwipe(),false);
+//        printSwipe(getRightSwipe(),false);
     }
     
 }

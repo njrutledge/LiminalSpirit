@@ -175,8 +175,9 @@ void AttackController::update(const cugl::Vec2 p, b2Vec2 VX, float dt) {
     }
 }
 
-void AttackController::attackLeft(cugl::Vec2 p, SwipeController::SwipeAttack attack, bool grounded) {
-    //Attack::Alloc(const cugl::Vec2 p, float radius, float a, float dmg, float scale, Type s, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel)
+void AttackController::attackLeft(cugl::Vec2 p, SwipeController::SwipeAttack attack, float angle, bool grounded) {
+    // Subtract 90 degrees from the angle because vector rotates with the angle starting from the north
+    angle -= 90;
     if (_rangedCounter > _reload) {
         switch (attack) {
             case SwipeController::leftAttack:
@@ -201,15 +202,18 @@ void AttackController::attackLeft(cugl::Vec2 p, SwipeController::SwipeAttack att
                 _rangedCounter = 0;
                 break;
             case SwipeController::chargedLeft:
-                _pending.emplace(Attack::alloc(p, 0.3, 1.5, 9001, _scale, Type::p_exp_package, _leftOff, ballMakyr, cugl::Vec2(_c_vel).rotate(M_PI * 0.5), left));
+//                _pending.emplace(Attack::alloc(p, 0.3, 1.5, 9001, _scale, Type::p_exp_package, _leftOff, ballMakyr, cugl::Vec2(_c_vel).rotate(M_PI * 0.5), left));
+                _pending.emplace(Attack::alloc(p, 0.3, 1.5, 9001, _scale, Type::p_exp_package, _leftOff, ballMakyr, cugl::Vec2(_c_vel).rotate(angle * M_PI / 180), left));
                 _rangedCounter = 0;
                 break;
             case SwipeController::chargedRight:
-                _pending.emplace(Attack::alloc(p, 0.3, 1.5, 9001, _scale, Type::p_exp_package, _rightOff, ballMakyr, cugl::Vec2(_c_vel).rotate(M_PI * 1.5), right));
+//                _pending.emplace(Attack::alloc(p, 0.3, 1.5, 9001, _scale, Type::p_exp_package, _rightOff, ballMakyr, cugl::Vec2(_c_vel).rotate(M_PI * 1.5), right));
+                _pending.emplace(Attack::alloc(p, 0.3, 1.5, 9001, _scale, Type::p_exp_package, _rightOff, ballMakyr, cugl::Vec2(_c_vel).rotate(angle * M_PI / 180), right));
                 _rangedCounter = 0;
                 break;
             case SwipeController::chargedUp:
-                _pending.emplace(Attack::alloc(p, 0.3, 1.5, 9001, _scale, Type::p_exp_package, _upOff, ballMakyr, _c_vel, up));
+//                _pending.emplace(Attack::alloc(p, 0.3, 1.5, 9001, _scale, Type::p_exp_package, _upOff, ballMakyr, _c_vel, up));
+                _pending.emplace(Attack::alloc(p, 0.3, 1.5, 9001, _scale, Type::p_exp_package, _upOff, ballMakyr, cugl::Vec2(_c_vel).rotate(angle * M_PI / 180), up));
                 _rangedCounter = 0;
                 break;
             case SwipeController::chargedDown:

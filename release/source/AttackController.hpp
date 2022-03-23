@@ -249,7 +249,7 @@ public:
     /**
      *  Creates an attack for a left sided swipe.
      */
-    void attackLeft(cugl::Vec2 p, SwipeController::SwipeAttack attack, bool grounded);
+    void attackLeft(cugl::Vec2 p, SwipeController::SwipeAttack attack, float angle, bool grounded);
     
     /**
      *  Creates an attack with the designated parameters. This is mostly to create enemy attacks, but also any explosion attacks for the player. There is no parameter. This must be calculated in the position. 
