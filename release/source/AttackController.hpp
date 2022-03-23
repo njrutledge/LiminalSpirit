@@ -244,7 +244,7 @@ public:
     /**
      *  Creates an attack for a right sided swipe.
      */
-    void attackRight(cugl::Vec2 p, SwipeController::SwipeAttack attack, bool grounded);
+    void attackRight(cugl::Vec2 p, SwipeController::SwipeAttack attack, float angle, bool grounded);
     
     /**
      *  Creates an attack for a left sided swipe.

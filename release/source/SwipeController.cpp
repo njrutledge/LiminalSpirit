@@ -177,6 +177,7 @@ void SwipeController::calculateSwipeDirection(cugl::Vec2 startPos, cugl::Vec2 en
             setLeftAngle(swipeAngle);
         } else {
             setRightSwipe(rightAttack);
+            setRightAngle(swipeAngle);
         }
     }
     // Up swipe
@@ -187,6 +188,7 @@ void SwipeController::calculateSwipeDirection(cugl::Vec2 startPos, cugl::Vec2 en
             setLeftAngle(swipeAngle);
         } else {
             setRightSwipe(upAttack);
+            setRightAngle(swipeAngle);
         }
     }
     // Left swipe
@@ -197,6 +199,7 @@ void SwipeController::calculateSwipeDirection(cugl::Vec2 startPos, cugl::Vec2 en
             setLeftAngle(swipeAngle);
         } else {
             setRightSwipe(leftAttack);
+            setRightAngle(swipeAngle);
         }
     }
     // Down swipe
@@ -207,6 +210,7 @@ void SwipeController::calculateSwipeDirection(cugl::Vec2 startPos, cugl::Vec2 en
             setLeftAngle(swipeAngle);
         } else {
             setRightSwipe(downAttack);
+            setRightAngle(swipeAngle);
         }
     }
     

@@ -71,6 +71,8 @@ protected:
     SwipeAttack _leftSwipe;
     /** Swipe angle in degrees on the left side */
     float _leftAngle;
+    /** Swipe angle in degrees on the right side */
+    float _rightAngle;
     
     /** Timestamp to get the current time for charge calculations */
     cugl::Timestamp _currTime;
@@ -91,6 +93,15 @@ protected:
      */
     void setLeftAngle(float a){
         _leftAngle = a;
+    };
+    
+    /**
+     * Set the right sided swipe angle
+     *
+     * @param s the swipe angle completed on the left side
+     */
+    void setRightAngle(float a){
+        _rightAngle = a;
     };
     
     /**
@@ -201,6 +212,15 @@ public:
      */
     float getLeftAngle() {
         return _leftAngle;
+    };
+    
+    /**
+     * Returns the angle of the swipe attack that was just completed on the right side
+     *
+     * @return the right-sided swipe angle
+     */
+    float getRightAngle() {
+        return _rightAngle;
     };
     
     /**
