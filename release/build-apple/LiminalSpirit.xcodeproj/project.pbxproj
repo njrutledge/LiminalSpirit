@@ -35,6 +35,9 @@
 		85B0004227E00AD600DAC3F2 /* TiltController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0004027E00AD600DAC3F2 /* TiltController.cpp */; };
 		85B0004327E00AD600DAC3F2 /* TiltController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0004027E00AD600DAC3F2 /* TiltController.cpp */; };
 		85D0B48627D010FC004EF4C8 /* BaseEnemyModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85D0B48527D010FC004EF4C8 /* BaseEnemyModel.cpp */; };
+		85DA524127EE3B93006DA122 /* Glutton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85DA523F27EE3B93006DA122 /* Glutton.cpp */; };
+		85DA524227EE3B93006DA122 /* Glutton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85DA523F27EE3B93006DA122 /* Glutton.cpp */; };
+		85DA524327EE3B93006DA122 /* Glutton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85DA523F27EE3B93006DA122 /* Glutton.cpp */; };
 		EB07CFB621EFF3F8000CB3A3 /* DeviceMargins.plist in Resources */ = {isa = PBXBuildFile; fileRef = EB07CFB021EFF3EF000CB3A3 /* DeviceMargins.plist */; };
 		EB22BDE025D0E00A002ACE41 /* libcugl-mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EB22BDC825D0DE75002ACE41 /* libcugl-mac.a */; };
 		EB22BDFC25D0E0E2002ACE41 /* libcugl-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EB22BDCA25D0DE75002ACE41 /* libcugl-ios.a */; };
@@ -164,6 +167,8 @@
 		85B0004027E00AD600DAC3F2 /* TiltController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TiltController.cpp; sourceTree = "<group>"; };
 		85D0B48127D010E9004EF4C8 /* BaseEnemyModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseEnemyModel.h; sourceTree = "<group>"; };
 		85D0B48527D010FC004EF4C8 /* BaseEnemyModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaseEnemyModel.cpp; sourceTree = "<group>"; };
+		85DA523F27EE3B93006DA122 /* Glutton.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Glutton.cpp; sourceTree = "<group>"; };
+		85DA524027EE3B93006DA122 /* Glutton.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Glutton.hpp; sourceTree = "<group>"; };
 		EB07CFB021EFF3EF000CB3A3 /* DeviceMargins.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DeviceMargins.plist; sourceTree = "<group>"; };
 		EB22BF5E25D0E8BC002ACE41 /* LiminalSpirit (Sim).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LiminalSpirit (Sim).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB2BE9B21D74952A002FE78B /* LiminalSpirit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LiminalSpirit.cpp; sourceTree = "<group>"; };
@@ -438,6 +443,8 @@
 				EB2BE9B21D74952A002FE78B /* LiminalSpirit.cpp */,
 				F00746F127E91B2600AF5D7C /* SoundController.cpp */,
 				F00746F227E91B2600AF5D7C /* SoundController.hpp */,
+				85DA523F27EE3B93006DA122 /* Glutton.cpp */,
+				85DA524027EE3B93006DA122 /* Glutton.hpp */,
 			);
 			name = Source;
 			path = ../source;
@@ -628,6 +635,7 @@
 				F05176E427D080E700C0617F /* InputController.cpp in Sources */,
 				EB9CDA3925D0EAB100EE1A09 /* main.cpp in Sources */,
 				5783892A27E2369B000CB5B9 /* BaseEnemyModel.cpp in Sources */,
+				85DA524327EE3B93006DA122 /* Glutton.cpp in Sources */,
 				85B0001F27DFAC8500DAC3F2 /* GameScene.cpp in Sources */,
 				85B0002527DFAC8500DAC3F2 /* AIController.cpp in Sources */,
 				85B0002227DFAC8500DAC3F2 /* LoadingScene.cpp in Sources */,
@@ -651,6 +659,7 @@
 				5783892E27E23F49000CB5B9 /* AIController.cpp in Sources */,
 				85B0001B27DFAC8500DAC3F2 /* Specter.cpp in Sources */,
 				F05176E327D080E600C0617F /* InputController.cpp in Sources */,
+				85DA524227EE3B93006DA122 /* Glutton.cpp in Sources */,
 				EB7454AE1D74D891002FBAE6 /* main.cpp in Sources */,
 				5783892927E2369B000CB5B9 /* BaseEnemyModel.cpp in Sources */,
 				F05176DF27D080CE00C0617F /* PlayerModel.cpp in Sources */,
@@ -674,6 +683,7 @@
 				EB2BE9B61D74952A002FE78B /* main.cpp in Sources */,
 				85B0001A27DFAC8500DAC3F2 /* Specter.cpp in Sources */,
 				F025104227D02C6C00AB80AA /* AttackController.cpp in Sources */,
+				85DA524127EE3B93006DA122 /* Glutton.cpp in Sources */,
 				F05176D927D071D900C0617F /* CollisionController.cpp in Sources */,
 				EB2BE9B51D74952A002FE78B /* LiminalSpirit.cpp in Sources */,
 				F05176DA27D071D900C0617F /* PlayerModel.cpp in Sources */,
