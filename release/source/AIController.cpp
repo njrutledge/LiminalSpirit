@@ -25,10 +25,29 @@ Vec2 AIController::getMovement(shared_ptr<BaseEnemyModel> e, Vec2 player_pos, fl
 		return Vec2(getLostMovement(e, player_pos, timestep), -9.8f);
 	} else if (name == "Specter") {
 		return getSpecterMovement(e, player_pos, timestep);
-	}
+    } else if (name == "Glutton"){
+        return Vec2(getGluttonMovement(e, player_pos, timestep), -9.8f);
+    }
 	else {
 		return Vec2();
 	}
+}
+
+float AIController::getGluttonMovement(shared_ptr<BaseEnemyModel> glutton, Vec2 player_pos, float timestep) {
+    glutton->setTimePast(glutton->getTimePast() + timestep);
+    
+    //Check if enemy is already attacking
+    if (!glutton->isAttacking()) {
+        if (player_pos.x <= glutton->getPosition().x + glutton->getAttackRadius()
+            && player_pos.x >= glutton->getPosition().x - glutton->getAttackRadius()
+            && player_pos.y <= glutton->getPosition().y + glutton->getAttackRadius()
+            && player_pos.y >= glutton->getPosition().y - glutton->getAttackRadius()
+            && glutton->getAttackCooldown() < glutton->getTimePast()) {
+                glutton->setIsAttacking(true);
+                glutton->setTimePast(0.0f);
+        }
+    }
+    return 0;
 }
 
 float AIController::getLostMovement(shared_ptr<BaseEnemyModel> lost, Vec2 player_pos, float timestep) {
@@ -98,7 +117,7 @@ Vec2 AIController::getSpecterMovement(shared_ptr<BaseEnemyModel> specter, Vec2 p
                 specter->setIsAttacking(true);
                 specter->setTimePast(0.0f);
             }
-			return Vec2(); // Specterstops moving
+			return Vec2(); // Specter stops moving
 		}
 		else if (specter->getVY() == 0) {
 			return Vec2(specter->getHorizontalSpeed(), -1 * specter->getVerticalSpeed());

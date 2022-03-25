@@ -7,3 +7,20 @@
 //
 
 #include "Glutton.hpp"
+
+EnemyProperties GLUTTON_PROPS{
+    /** Starting health of the glutton */
+    10,
+    /** Vertical speed of the glutton */
+    0.0f,
+    /** Horizontal speed of the glutton*/
+    2.0f,
+    /** Cooldown for attack(s) in seconds*/
+    2,
+    /** Attack radius of the glutton*/
+    12.0f,
+    /** Density of the glutton*/
+    1.0f,
+    /** Name of the glutton*/
+    "Glutton",
+};

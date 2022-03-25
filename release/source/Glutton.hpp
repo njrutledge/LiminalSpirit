@@ -11,4 +11,28 @@
 
 #include <stdio.h>
 
+#include <cugl/cugl.h>
+#include "BaseEnemyModel.h"
+
+
+#pragma mark -
+#pragma mark Glutton
+
+extern struct EnemyProperties GLUTTON_PROPS;
+
+class Glutton : public BaseEnemyModel {
+    public:
+        /** Inheriting all constructors exactly as is since glutton does not need more initializers*/
+        using BaseEnemyModel::BaseEnemyModel;
+
+#pragma mark -
+#pragma mark Static Constructors
+        /** Allocates a new Glutton */
+        static std::shared_ptr<Glutton> alloc(const cugl::Vec2& pos, const cugl::Size& size, float scale) {
+            std::shared_ptr<Glutton> result = std::make_shared<Glutton>();
+            return (result->init(pos, size, scale, GLUTTON_PROPS) ? result : nullptr);
+        }
+
+};
+
 #endif /* Glutton_hpp */

@@ -31,6 +31,7 @@
 #include <cugl/cugl.h>
 #include "BaseEnemyModel.h"
 #include "Lost.hpp"
+#include "Glutton.hpp"
 #include "PlayerModel.h"
 #include "AttackController.hpp"
 #include "AIController.hpp"

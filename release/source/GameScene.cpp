@@ -67,6 +67,7 @@ float DEFAULT_HEIGHT = DEFAULT_WIDTH/SCENE_WIDTH*SCENE_HEIGHT;
 /** The initial position of the enemies */
 float ENEMY_POS[] = {18.0f, 15.0f};
 float ENEMY_POS2[] = { 28.0f, 10.0f };
+float ENEMY_POS3[] = { 31.0f, 6.0f};
 
 /** The initial position of the player*/
 float PLAYER_POS[] = { 5.0f, 4.0f };
@@ -278,6 +279,9 @@ void GameScene::update(float timestep)
             else if ((*it)->getName() == "Specter") {
                 _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()));
             }
+            else if ((*it)->getName() == "Glutton") {
+                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()));
+            }
         }
     }
 
@@ -413,6 +417,16 @@ void GameScene::createEnemies() {
     specterSprite->setScale(0.15f);
     addObstacle(specter, specterSprite, true);
     _enemies.push_back(specter);
+    
+    Vec2 enemyPos3 = ENEMY_POS3;
+    std::shared_ptr<scene2::SceneNode> enemyNode3 = scene2::SceneNode::alloc();
+    std::shared_ptr<Glutton> glutton = Glutton::alloc(enemyPos3, enemyImage->getSize() / _scale / 5, _scale);
+    std::shared_ptr<scene2::PolygonNode> gluttonSprite = scene2::PolygonNode::allocWithTexture(enemyImage);
+    glutton->setSceneNode(gluttonSprite);
+    glutton->setDebugColor(Color4::RED);
+    gluttonSprite->setScale(0.3f);
+    addObstacle(glutton, gluttonSprite, true);
+    _enemies.push_back(glutton);
 }
 
 /**

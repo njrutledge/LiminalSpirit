@@ -9,7 +9,7 @@
 
 EnemyProperties SPECTER_PROPS{
 	/** Starting health of the specter */
-	15,
+	4,
 	/** Vertical speed of the specter */
 	2.0f,
 	/** Horizontal speed of the specter*/
@@ -17,7 +17,7 @@ EnemyProperties SPECTER_PROPS{
 	/** Cooldown for attack(s) in seconds*/
 	2,
 	/** Attack radius of the specter*/
-	5.0f,
+	8.0f,
 	/** Density of the specter */
 	0.0f,
 	/** Name of the specter*/

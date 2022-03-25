@@ -28,6 +28,9 @@ public:
 
 	/** Takes in a lost enemy and returns its movement based on the pathfinding towards the player's position */
 	float getLostMovement(shared_ptr<BaseEnemyModel> lost, cugl::Vec2 player_pos, float timestep);
+    
+    // Gets movement for the glutton based on player position
+    float getGluttonMovement(shared_ptr<BaseEnemyModel> glutton, cugl::Vec2 player_pos, float timestep);
 
 	// Gets movement for the specter based on player position
 	cugl::Vec2 getSpecterMovement(shared_ptr<BaseEnemyModel> specter, cugl::Vec2 player_pos, float timestep);
