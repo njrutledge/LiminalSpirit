@@ -13,8 +13,9 @@
 #ifndef LiminalSpirit_hpp
 #define LiminalSpirit_hpp
 #include <cugl/cugl.h>
-#include "GameScene.hpp"
-#include "LoadingScene.hpp"
+#include "scenes/GameScene.hpp"
+#include "scenes/LoadingScene.hpp"
+#include "scenes/HomeScene.hpp"
 
 /**
  * This class represents the application root for the ship demo.
@@ -32,7 +33,8 @@ protected:
     GameScene _gameplay;
     /** The controller for the loading screen */
     LoadingScene _loading;
-
+    /** The controller for the home screen*/
+    HomeScene _home;
     /** Whether or not we have finished loading all assets */
     bool _loaded;
 

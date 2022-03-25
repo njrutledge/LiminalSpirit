@@ -20,7 +20,7 @@
 #include <cugl/cugl.h>
 #include <unordered_set>
 #include "SwipeController.hpp"
-#include "PlayerModel.h"
+#include "models/PlayerModel.h"
 
 class AttackController {
     

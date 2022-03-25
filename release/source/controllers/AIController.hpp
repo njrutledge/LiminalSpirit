@@ -10,8 +10,8 @@
 #define __AI_CONTROLLER_H__
 
 #include <cugl/cugl.h>
-#include "BaseEnemyModel.h"
-#include "Lost.hpp"
+#include "models/BaseEnemyModel.h"
+#include "models/Lost.hpp"
 
 class AIController {
 	enum States {

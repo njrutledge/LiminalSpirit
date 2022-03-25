@@ -7,7 +7,7 @@
 //
 
 #include "AttackController.hpp"
-#include "PlayerModel.h"
+#include "models/PlayerModel.h"
 
 /** Debug color for sensor */
 #define DEBUG_COLOR Color4::RED
