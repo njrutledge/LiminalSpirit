@@ -57,12 +57,25 @@ protected:
     std::shared_ptr<cugl::SpriteBatch> _batch; //check this 
     /** A reference to the logo, so that we can move it around */
     std::shared_ptr<cugl::scene2::SceneNode> _logo;
+
     /** The physics world */
     std::shared_ptr<cugl::physics2::ObstacleWorld> _world;
     /** Reference to the physics root of the scene graph */
     std::shared_ptr<cugl::scene2::ScrollPane> _worldnode;
     /** Reference to the debug root of the scene graph */
     std::shared_ptr<cugl::scene2::ScrollPane> _debugnode;
+
+    /** Graphics related*/
+    /** A shader */
+    std::shared_ptr<cugl::Shader> _shader;
+    /** A vertex buffer */
+    std::shared_ptr<cugl::VertexBuffer> _vertbuff;
+    /** A mesh for drawing */
+    cugl::Mesh<cugl::SpriteVertex2> _mesh;
+    /** Test texture */
+    std::shared_ptr<cugl::Texture> _textureGraphics;
+    /** The type*/
+    int _type;
     
     /** The text with the current health */
     std::shared_ptr<cugl::TextLayout> _text;    
@@ -114,6 +127,16 @@ protected:
      * have become standard in most game engines.
      */
     void buildScene(std::shared_ptr<cugl::scene2::SceneNode> scene);
+
+    /**
+    * Internal helper to build the graphics pipeline
+    *  needs:
+    *  - a shader program (vertex and fragment)
+    *  - a vertex buffer to stream/hold vertices
+    *  - a mesh to define vertices and geometry
+    *
+    */
+    void buildGraphicsPipeline();
 
 public:
     /**

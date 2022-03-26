@@ -28,6 +28,7 @@
 //
 // Include the class header, which includes all of the CUGL classes
 #include "GameScene.hpp"
+#include <cugl/render/CUVertexBuffer.h>
 #include <cugl/base/CUBase.h>
 #include <box2d/b2_contact.h>
 #include "BaseEnemyModel.h"
@@ -38,6 +39,7 @@
 #include "PlayerModel.h"
 #include "CollisionController.hpp"
 #include "Platform.hpp"
+#include "Glow.hpp"
 
 // Add support for simple random number generation
 #include <cstdlib>
@@ -76,6 +78,15 @@ float PLATFORMS[PLATFORM_COUNT][PLATFORM_ATT] = {
     {5, 7, 8, 0.5},
     {7, 10, 9, 0.5}
 };
+
+// Graphics Pipeline related information
+const std::string oglShaderFrag = 
+#include "shaders/Fragment.frag"
+;
+
+const std::string oglShaderVert = 
+#include "shaders/Vertex.vert"
+;
 
 /**
  * Initializes the controller contents, and starts the game
@@ -180,6 +191,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     setDebug(false);
     buildScene(scene);
     addChild(scene);
+
+
+    //buildGraphicsPipeline();
     
     // Get font
     _font = assets->get<Font>("marker");
@@ -206,6 +220,7 @@ void GameScene::dispose()
     _world = nullptr;
     _worldnode = nullptr;
     _debugnode = nullptr;
+    _vertbuff = nullptr;
     
     //TODO: CHECK IF THIS IS RIGHT FOR DISPOSING
 //    for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
@@ -237,6 +252,7 @@ void GameScene::update(float timestep)
     _tilt.update(_input, SCENE_WIDTH);
     float xPos = _tilt.getXpos();
     _player->setVX(xPos);
+
 
     // Debug Mode on/off
     if (_input.getDebugKeyPressed())
@@ -386,6 +402,16 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     }
     Scene2::render(batch);
     batch->begin(getCamera()->getCombined());
+
+    // OpenGL commands to enable alpha blending (if needed)
+    //glEnable(GL_BLEND);
+    //glBlendEquation(GL_FUNC_ADD);
+    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    //// Since we only have one shader and one vertex buffer
+    //// we never need to bind or unbind either of these
+    //_vertbuff->draw(_mesh.command, (int)_mesh.indices.size(), 0);
+
     //_attacks.draw(batch);
     batch->drawText(_text,Vec2(20,getSize().height-_text->getBounds().size.height-10));
     batch->end();
@@ -413,6 +439,95 @@ void GameScene::createEnemies() {
     specterSprite->setScale(0.15f);
     addObstacle(specter, specterSprite, true);
     _enemies.push_back(specter);
+}
+
+/** 
+* Internal helper to build the graphics pipeline
+*  needs:
+*  - a shader program (vertex and fragment)
+*  - a vertex buffer to stream/hold vertices
+*  - a mesh to define vertices and geometry
+* 
+*/
+void GameScene::buildGraphicsPipeline() {
+    //Size size = Application::get()->getDisplaySize();
+    //float scale = SCENE_WIDTH / size.width;
+    //size *= scale;
+
+    ////Allocate shader (binding)
+    //_shader = Shader::alloc(SHADER(oglShaderVert), SHADER(oglShaderFrag));
+
+    ////Attach camera to shader
+    //_shader->setUniformMat4("uPerspective", getCamera()->getCombined());
+    //_shader->setUniform1i("uType", 0);
+
+    ////Allocates the vertex buffer (binding)
+    //_vertbuff = cugl::VertexBuffer::alloc(sizeof(SpriteVertex2));
+    //_vertbuff->setupAttribute("aPosition", 2, GL_FLOAT, GL_FALSE,
+    //    offsetof(cugl::SpriteVertex2, position));
+    //_vertbuff->setupAttribute("aColor", 4, GL_UNSIGNED_BYTE, GL_TRUE,
+    //    offsetof(cugl::SpriteVertex2, color));
+    //_vertbuff->setupAttribute("aTexCoord", 2, GL_FLOAT, GL_FALSE,
+    //    offsetof(cugl::SpriteVertex2, texcoord));
+    //_vertbuff->setupAttribute("aGradCoord", 2, GL_FLOAT, GL_FALSE,
+    //    offsetof(cugl::SpriteVertex2, gradcoord));
+
+    //// Attach the shader
+    //_vertbuff->attach(_shader);
+
+    ////// Make a triangle cause why not
+    ////float radius = size.height / 16;
+    ////Vec2 up(0, radius);
+    ////Vec2 center(size.width / 2, size.height / 7);
+
+    ////Path2 triang;
+    ////triang.vertices.push_back(center + up);
+    ////up.rotate(-M_PI * 2 / 3);
+    ////triang.vertices.push_back(center + up);
+    ////up.rotate(-M_PI * 2 / 3);
+    ////triang.vertices.push_back(center + up);
+    ////triang.closed = true;
+
+    ////// Convert it into a mesh
+    ////_mesh.clear();
+    ////SpriteVertex2 vert;
+    ////Vec2 txcent(0.5, 0.5);
+    ////Color4 colors[3] = { Color4f::RED, Color4f::GREEN, Color4f::BLUE };
+
+    ////for (int ii = 0; ii < 3; ii++) {
+    ////    vert.position = triang.vertices[ii];
+    ////    vert.color = colors[ii].getPacked();  // Converts color to int
+    ////    vert.texcoord = txcent + (vert.position - center) / radius;
+    ////    vert.gradcoord = txcent + (vert.position - center) / (2 * radius);
+    ////    // Must flip y
+    ////    vert.texcoord.y = 1 - vert.texcoord.y;
+
+    ////    _mesh.vertices.push_back(vert);
+    ////    _mesh.indices.push_back(ii);
+    ////}
+
+    //// //Only one triangle, so this is best command
+    ////_mesh.command = GL_TRIANGLES;
+
+    ////// ADVANCED FEATURE: Create a gradient and load it into the shader
+    ////auto gradient = Gradient::allocRadial(Color4::MAGENTA, Color4::YELLOW,
+    ////    Vec2(0.5, 0.5), 0.5);
+
+    ////// A gradient is defined by SEVERAL uniform variables
+    ////float data[21];
+    ////gradient->getComponents(data);
+    ////_shader->setUniformMatrix3fv("gdMatrix", 1, data, false);
+    ////_shader->setUniform4f("gdInner", data[9], data[10], data[11], data[12]);
+    ////_shader->setUniform4f("gdOuter", data[13], data[14], data[15], data[16]);
+    ////_shader->setUniform2f("gdExtent", data[17], data[18]);
+    ////_shader->setUniform1f("gdRadius", data[19]);
+    ////_shader->setUniform1f("gdFeathr", data[20]);
+
+    ////// IMPORTANT LAST STEP: Load the mesh into the vertex buffer
+    ////// We want to reload is vertex data changes
+    ////_vertbuff->loadVertexData(_mesh.vertices.data(), (int)_mesh.vertices.size());
+    ////_vertbuff->loadIndexData(_mesh.indices.data(), (int)_mesh.indices.size());
+    ////
 }
 
 /**
@@ -560,6 +675,19 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     _player->setDebugColor(Color4::RED);
     sprite->setScale(0.175f);
     addObstacle(_player, sprite, true);
+
+    Vec2 testPos = PLAYER_POS;
+    std::shared_ptr<scene2::SceneNode> nodet = scene2::SceneNode::allocWithPosition(testPos);
+    nodet->setColor(Color4::RED);
+    std::shared_ptr<Texture> imaget = _assets->get<Texture>(GLOW_TEXTURE);
+    std::shared_ptr<Glow> test = Glow::alloc(testPos, imaget->getSize() / _scale * 10, _scale);
+    std::shared_ptr<scene2::PolygonNode> spritet = scene2::PolygonNode::allocWithTexture(imaget);
+    test->setSceneNode(spritet);
+    spritet->setScale(0.1f);
+    std::shared_ptr<Gradient> grad = Gradient::allocRadial(Color4::WHITE, Color4::CLEAR, Vec2(0.5, 0.5), 0.f, 1.f);
+    spritet->setGradient(grad);
+    spritet->setRelativeColor(false);
+    addObstacle(test, spritet, true);
 
     // We can only activate a button AFTER it is added to a scene
     button->activate();
