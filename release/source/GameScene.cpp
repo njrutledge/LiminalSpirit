@@ -672,11 +672,10 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     std::shared_ptr<scene2::SceneNode> nodet = scene2::SceneNode::allocWithPosition(testPos);
     nodet->setColor(Color4::RED);
     std::shared_ptr<Texture> imaget = _assets->get<Texture>(GLOW_TEXTURE);
-    _playerGlow = Glow::alloc(testPos, imaget->getSize() / _scale * 10, _scale);
+    _playerGlow = Glow::alloc(testPos, imaget->getSize() / _scale / 15, _scale);
     std::shared_ptr<scene2::PolygonNode> spritet = scene2::PolygonNode::allocWithTexture(imaget);
     _playerGlow->setSceneNode(spritet);
-    spritet->setScale(.75f);
-    std::shared_ptr<Gradient> grad = Gradient::allocRadial(Color4(255, 255, 255, 155), Color4(255,255,255, 0), Vec2(0.5, 0.5), 0.f, .05f);
+    std::shared_ptr<Gradient> grad = Gradient::allocRadial(Color4(255, 255, 255, 125), Color4(255,255,255, 0), Vec2(0.5, 0.5), 0.f, .2f);
     spritet->setGradient(grad);
     //spritet->setRelativeColor(false);
     addObstacle(_playerGlow, spritet, true);
