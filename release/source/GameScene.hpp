@@ -38,6 +38,7 @@
 #include "TiltController.hpp"
 #include "CollisionController.hpp"
 #include "Platform.hpp"
+#include "Glow.hpp"
 /**
  * Class for a simple Hello World style application
  *
@@ -66,6 +67,7 @@ protected:
     std::shared_ptr<cugl::scene2::ScrollPane> _debugnode;
 
     /** Graphics related*/
+    std::shared_ptr<Glow> _playerGlow;
     /** A shader */
     std::shared_ptr<cugl::Shader> _shader;
     /** A vertex buffer */

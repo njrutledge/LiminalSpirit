@@ -385,6 +385,8 @@ void GameScene::update(float timestep)
     // Copy World's zoom and transform
     _debugnode->applyPan(-_debugnode->getPaneTransform().transform(Vec2()));
     _debugnode->applyPan(_worldnode->getPaneTransform().transform(Vec2()) / _scale);
+
+    _playerGlow->setPosition(_player->getPosition());
 }
 
 /**
@@ -665,6 +667,21 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     //add enemies and player last
     createEnemies();
 
+    // Glow effect on player
+    Vec2 testPos = PLAYER_POS;
+    std::shared_ptr<scene2::SceneNode> nodet = scene2::SceneNode::allocWithPosition(testPos);
+    nodet->setColor(Color4::RED);
+    std::shared_ptr<Texture> imaget = _assets->get<Texture>(GLOW_TEXTURE);
+    _playerGlow = Glow::alloc(testPos, imaget->getSize() / _scale * 10, _scale);
+    std::shared_ptr<scene2::PolygonNode> spritet = scene2::PolygonNode::allocWithTexture(imaget);
+    _playerGlow->setSceneNode(spritet);
+    spritet->setScale(.75f);
+    std::shared_ptr<Gradient> grad = Gradient::allocRadial(Color4(255, 255, 255, 155), Color4(255,255,255, 0), Vec2(0.5, 0.5), 0.f, .05f);
+    spritet->setGradient(grad);
+    //spritet->setRelativeColor(false);
+    addObstacle(_playerGlow, spritet, true);
+
+    // Player creation
     Vec2 playerPos = PLAYER_POS;
     std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
     std::shared_ptr<Texture> image = _assets->get<Texture>(PLAYER_TEXTURE);
@@ -675,19 +692,6 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     _player->setDebugColor(Color4::RED);
     sprite->setScale(0.175f);
     addObstacle(_player, sprite, true);
-
-    Vec2 testPos = PLAYER_POS;
-    std::shared_ptr<scene2::SceneNode> nodet = scene2::SceneNode::allocWithPosition(testPos);
-    nodet->setColor(Color4::RED);
-    std::shared_ptr<Texture> imaget = _assets->get<Texture>(GLOW_TEXTURE);
-    std::shared_ptr<Glow> test = Glow::alloc(testPos, imaget->getSize() / _scale * 10, _scale);
-    std::shared_ptr<scene2::PolygonNode> spritet = scene2::PolygonNode::allocWithTexture(imaget);
-    test->setSceneNode(spritet);
-    spritet->setScale(0.1f);
-    std::shared_ptr<Gradient> grad = Gradient::allocRadial(Color4::WHITE, Color4::CLEAR, Vec2(0.5, 0.5), 0.f, 1.f);
-    spritet->setGradient(grad);
-    spritet->setRelativeColor(false);
-    addObstacle(test, spritet, true);
 
     // We can only activate a button AFTER it is added to a scene
     button->activate();
