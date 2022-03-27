@@ -26,6 +26,9 @@ Vec2 AIController::getMovement(shared_ptr<BaseEnemyModel> e, Vec2 player_pos, fl
 	} else if (name == "Specter") {
 		return getSpecterMovement(e, player_pos, timestep);
 	}
+	else if (name == "Mirror") {
+		return getMirrorMovement(dynamic_cast<Mirror*>(e.get()), player_pos, timestep);
+	}
 	else {
 		return Vec2();
 	}
@@ -130,4 +133,27 @@ Vec2 AIController::getSpecterMovement(shared_ptr<BaseEnemyModel> specter, Vec2 p
 			
 		return Vec2();
 	}
+}
+Vec2 AIController::getMirrorMovement(Mirror* mirror, cugl::Vec2 player_pos, float timestep) {
+	std::shared_ptr<BaseEnemyModel> linkedEnemy = mirror->getLinkedEnemy();
+	//mirror should move based off its linked enemy, or pick a new enemy to link to 
+	if (linkedEnemy) {
+		Vec2 enemy_pos = linkedEnemy->getPosition();
+		//see if we are close enough to be in protecting range DEBUG TRUE RN
+		if (true || enemy_pos.distance(mirror->getPosition())<=MIRROR_DISTANCE) {
+			//get slope of line between linked enemy and player. Mirror should be on this line at MIRROR_DISTANCE
+			Vec2 diff = enemy_pos - player_pos;
+			Vec2 targetPoint = enemy_pos - (diff * MIRROR_DISTANCE / (player_pos.distance(enemy_pos)));
+			diff = targetPoint - mirror->getPosition();
+			if (diff.length() > 1) diff.normalize();
+			return Vec2(diff.x * mirror->getHorizontalSpeed(), diff.y * mirror->getVerticalSpeed());
+			
+		}
+
+	}
+	else {
+		//TODO
+	}
+	return Vec2();
+	
 }

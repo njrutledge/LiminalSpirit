@@ -4,6 +4,7 @@
 #include "AttackController.hpp"
 #include <box2d/b2_contact.h>
 #include "BaseEnemyModel.h"
+#include "Mirror.hpp"
 #include "PlayerModel.h"
 
 class CollisionController {

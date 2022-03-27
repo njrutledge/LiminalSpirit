@@ -67,6 +67,7 @@ float DEFAULT_HEIGHT = DEFAULT_WIDTH/SCENE_WIDTH*SCENE_HEIGHT;
 /** The initial position of the enemies */
 float ENEMY_POS[] = {18.0f, 15.0f};
 float ENEMY_POS2[] = { 28.0f, 10.0f };
+float ENEMY_POS3[] = { 15.0f, 2.0f };
 
 /** The initial position of the player*/
 float PLAYER_POS[] = { 5.0f, 4.0f };
@@ -413,6 +414,17 @@ void GameScene::createEnemies() {
     specterSprite->setScale(0.15f);
     addObstacle(specter, specterSprite, true);
     _enemies.push_back(specter);
+
+    Vec2 enemyPos3 = ENEMY_POS3;
+    std::shared_ptr<scene2::SceneNode> mirrorNode = scene2::SceneNode::alloc();
+    std::shared_ptr<Texture> mirrorImage = _assets->get<Texture>(ENEMY_TEXTURE2);
+    std::shared_ptr<Mirror> mirror = Mirror::alloc(enemyPos3, specterImage->getSize() / _scale / 15, _scale, Mirror::Type::square, specter);
+    std::shared_ptr<scene2::PolygonNode> mirrorSprite = scene2::PolygonNode::allocWithTexture(specterImage);
+    mirror->setSceneNode(mirrorSprite);
+    mirror->setDebugColor(Color4::BLUE);
+    mirrorSprite->setScale(0.15f);
+    addObstacle(mirror, mirrorSprite, true);
+    _enemies.push_back(mirror);
 }
 
 /**

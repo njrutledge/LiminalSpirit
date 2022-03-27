@@ -18,6 +18,7 @@ bool AttackController::Attack::init(const cugl::Vec2 p, float radius, float a, f
     _position = (p + oof);
     _radius = radius;
     _age = a;
+    _maxAge = a;
     _damage = dmg;
     _type = s;
     _scale = scale;
@@ -278,7 +279,15 @@ void AttackController::attackRight(cugl::Vec2 p, SwipeController::SwipeAttack at
 
         
 void AttackController::createAttack(cugl::Vec2 p, float radius, float age, float damage, Type t, cugl::Vec2 vel) {
-    _pending.emplace(Attack::alloc(p, radius, age, damage, _scale, t, cugl::Vec2::ZERO, ballMakyr, vel, neither));
+    std::shared_ptr<Attack> attack = Attack::alloc(p, radius, age, damage, _scale, t, cugl::Vec2::ZERO, ballMakyr, vel, neither);
+    attack->setSplitable(true);
+    _pending.emplace(attack);
+}
+
+void AttackController::createAttack(cugl::Vec2 p, float radius, float age, float damage, Type t, cugl::Vec2 vel, bool splitable) {
+    std::shared_ptr<Attack> attack = Attack::alloc(p, radius, age, damage, _scale, t, cugl::Vec2::ZERO, ballMakyr, vel, neither);
+    attack->setSplitable(splitable);
+    _pending.emplace(attack);
 }
 
 //void AttackController::createEnemyAttack(cugl::Vec2 pos, float radius, float age, int damage, float scale, cugl::Size size, //cugl::Vec2 offset, cugl::Vec2 vel) {

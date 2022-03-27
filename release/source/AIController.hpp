@@ -12,6 +12,7 @@
 #include <cugl/cugl.h>
 #include "BaseEnemyModel.h"
 #include "Lost.hpp"
+#include "Mirror.hpp"
 
 class AIController {
 	enum States {
@@ -31,6 +32,9 @@ public:
 
 	// Gets movement for the specter based on player position
 	cugl::Vec2 getSpecterMovement(shared_ptr<BaseEnemyModel> specter, cugl::Vec2 player_pos, float timestep);
+
+	//Gets movement for the mirror
+	cugl::Vec2 getMirrorMovement(Mirror* mirror, cugl::Vec2 player_pos, float timestep);
 
 	/** Remove any unwanted assets and clean up */
 	void dispose() {};
