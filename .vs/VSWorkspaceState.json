@@ -3,9 +3,7 @@
     "",
     "\\release",
     "\\release\\build-win10",
-    "\\release\\cugl\\build-win10",
     "\\release\\source"
   ],
-  "SelectedNode": "\\release\\build-win10\\LiminalSpirit.sln",
   "PreviewInSolutionExplorer": false
 }
