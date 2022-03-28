@@ -96,16 +96,22 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
 					
 				}
 				else if (attack->getType() == AttackController::Type::p_melee) {
-					mirror->setHealth(mirror->getHealth() - attack->getDamage());
-					if (mirror->getHealth() <= 0) {
-						mirror->markRemoved(true);
+					if (mirror->getLastMelee() != attack) {
+						mirror->setHealth(mirror->getHealth() - attack->getDamage());
+						mirror->setLastMelee(attack);
+						if (mirror->getHealth() <= 0) {
+							mirror->markRemoved(true);
+						}
 					}
 				}
 			}
 			else{
-				enemy->setHealth(enemy->getHealth() - attack->getDamage());
-				if (enemy->getHealth() <= 0) {
-					enemy->markRemoved(true);
+				if (enemy->getLastMelee() != attack) {
+					enemy->setHealth(enemy->getHealth() - attack->getDamage());
+					if (attack->getType() == AttackController::Type::p_melee) enemy->setLastMelee(attack);
+					if (enemy->getHealth() <= 0) {
+						enemy->markRemoved(true);
+					}
 				}
 				if (attack->getType() == AttackController::p_exp_package) {
 					AC->createAttack(cugl::Vec2(bd->getPosition().x, bd->getPosition().y), 3, 0.1, 9000, AttackController::p_exp, cugl::Vec2::ZERO);

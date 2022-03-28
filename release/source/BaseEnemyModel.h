@@ -13,6 +13,7 @@
 #include <cugl/physics2/CUBoxObstacle.h>
 #include <cugl/physics2/CUCapsuleObstacle.h>
 #include <cugl/scene2/graph/CUWireNode.h>
+#include "AttackController.hpp"
 
 #pragma mark - 
 #pragma mark Drawing Constants
@@ -94,6 +95,9 @@ protected:
 	/** Redraws outline of physics fixtures */
 	virtual void resetDebug() override;
 
+	/** Melee attack that last hit this enemy (avoids multiple hits) */
+	AttackController::Attack* _lastMelee;
+
 public:
 
 #pragma mark Hidden Constructors
@@ -112,6 +116,11 @@ public:
 	float getRadius() {
 		return _sensorFixture->GetShape()->m_radius;
 	}
+
+	AttackController::Attack* getLastMelee() { return _lastMelee; }
+
+	void setLastMelee(AttackController::Attack* attack) { _lastMelee = attack; }
+
 
 #pragma mark - 
 #pragma mark Static Constructors
