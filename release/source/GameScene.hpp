@@ -216,6 +216,11 @@ public:
      */
     void createEnemies(int wave);
 
+    /** 
+    * helper to create mirror enemies, adding them to _enemmies
+    */
+    void createMirror(cugl::Vec2 enemyPos, Mirror::Type type);
+
 };
 
 #endif /* __Game_Scene_hpp__ */

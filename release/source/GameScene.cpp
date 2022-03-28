@@ -456,7 +456,7 @@ void GameScene::createEnemies(int wave) {
     std::vector<string> enemies = _spawn_order.at(wave);
     std::vector<cugl::Vec2> positions = _spawn_pos.at(wave);
     
-    for(int i = 0; i < enemies.size(); i++) {
+    for (int i = 0; i < enemies.size(); i++) {
         Vec2 enemyPos = positions[i];
         std::string enemyName = enemies[i];
         if (!enemyName.compare("lost")) {
@@ -469,7 +469,7 @@ void GameScene::createEnemies(int wave) {
             addObstacle(lost, lostSprite, true);
             _enemies.push_back(lost);
         }
-        else if(!enemyName.compare("specter")) {
+        else if (!enemyName.compare("specter")) {
             std::shared_ptr<Texture> specterImage = _assets->get<Texture>(ENEMY_TEXTURE2);
             std::shared_ptr<Specter> specter = Specter::alloc(enemyPos, specterImage->getSize() / _scale / 15, _scale);
             std::shared_ptr<scene2::PolygonNode> specterSprite = scene2::PolygonNode::allocWithTexture(specterImage);
@@ -479,20 +479,30 @@ void GameScene::createEnemies(int wave) {
             addObstacle(specter, specterSprite, true);
             _enemies.push_back(specter);
         }
-        else if(!enemyName.compare("mirror")) {
-             std::shared_ptr<Texture> mirrorImage = _assets->get<Texture>("mirror");
-             std::shared_ptr<Mirror> mirror = Mirror::alloc(enemyPos, mirrorImage->getSize() / _scale / 15, _scale, Mirror::Type::circle, _enemies[1]); // TODO this is not right, fix this to be closest enemy
-             std::shared_ptr<scene2::PolygonNode> mirrorSprite = scene2::PolygonNode::allocWithTexture(mirrorImage);
-             mirror->setSceneNode(mirrorSprite);
-             mirror->setDebugColor(Color4::BLUE);
-             mirrorSprite->setScale(0.15f);
-             addObstacle(mirror, mirrorSprite, true);
-             _enemies.push_back(mirror);
+        else if (!enemyName.compare("square")) {
+            createMirror(enemyPos, Mirror::Type::square);
+        }
+        else if (!enemyName.compare("triangle")) {
+            createMirror(enemyPos, Mirror::Type::triangle);
+        }
+        else if (!enemyName.compare("circle")) {
+            createMirror(enemyPos, Mirror::Type::triangle);
         }
         // TODO add more enemy types
         // If the enemy name is incorrect, no enemy will be made
     }
 }
+
+    void GameScene::createMirror(Vec2 enemyPos, Mirror::Type type) {
+        std::shared_ptr<Texture> mirrorImage = _assets->get<Texture>("mirror");
+        std::shared_ptr<Mirror> mirror = Mirror::alloc(enemyPos, mirrorImage->getSize() / _scale / 15, _scale, type, _enemies[1]); // TODO this is not right, fix this to be closest enemy
+        std::shared_ptr<scene2::PolygonNode> mirrorSprite = scene2::PolygonNode::allocWithTexture(mirrorImage);
+        mirror->setSceneNode(mirrorSprite);
+        mirror->setDebugColor(Color4::BLUE);
+        mirrorSprite->setScale(0.15f);
+        addObstacle(mirror, mirrorSprite, true);
+        _enemies.push_back(mirror);
+    }
 // void GameScene::createEnemies() {
 //     Vec2 enemyPos = ENEMY_POS;
 //     std::shared_ptr<scene2::SceneNode> enemyNode = scene2::SceneNode::alloc();
