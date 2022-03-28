@@ -69,7 +69,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
 					switch (mirror->getType()) {
 					case Mirror::Type::square:
 						//just reflect the attack
-						AC->createAttack(mirror->getPosition(), attack->getRadius(), attack->getMaxAge(),
+						AC->createAttack(attack->getPosition(), attack->getRadius()*MIRROR_AMPLIFY, attack->getMaxAge(),
 							attack->getDamage(), AttackController::Type::e_range,
 							linvel.rotate(M_PI), false);
 						break;
@@ -78,7 +78,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
 						linvel.rotate(4 * M_PI / 6);
 						angle_change = M_PI / 6.0f;
 						for (int i = 0; i < 3; i++) {
-							AC->createAttack(mirror->getPosition(), attack->getRadius(), attack->getMaxAge(),
+							AC->createAttack(attack->getPosition(), attack->getRadius(), attack->getMaxAge(),
 								attack->getDamage(), AttackController::Type::e_range,
 								linvel.rotate(angle_change)*.66f, false);
 						}
@@ -87,7 +87,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
 						//bullet hell all around!
 						angle_change = M_PI / 4;
 						for (float i = 0; i < 8; i++) {
-							AC->createAttack(mirror->getPosition(), attack->getRadius(), attack->getMaxAge(),
+							AC->createAttack(attack->getPosition(), attack->getRadius(), attack->getMaxAge(),
 								attack->getDamage(), AttackController::Type::e_range,
 								linvel.rotate(angle_change)*.5f, false);
 						}
@@ -97,6 +97,9 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
 				}
 				else if (attack->getType() == AttackController::Type::p_melee) {
 					mirror->setHealth(mirror->getHealth() - attack->getDamage());
+					if (mirror->getHealth() <= 0) {
+						mirror->markRemoved(true);
+					}
 				}
 			}
 			else{
@@ -126,7 +129,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
 				switch (mirror->getType()) {
 				case Mirror::Type::square:
 					//just amplify the attack
-					AC->createAttack(mirror->getPosition(), attack->getRadius()*MIRROR_AMPLIFY, attack->getMaxAge(),
+					AC->createAttack(attack->getPosition(), attack->getRadius()*MIRROR_AMPLIFY, attack->getMaxAge(),
 						attack->getDamage()*MIRROR_AMPLIFY, AttackController::Type::e_range,
 						linvel, false);
 					break;
@@ -135,7 +138,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
 					linvel.rotate(-2*M_PI / 6);
 					angle_change = M_PI / 6.0f;
 					for (int i = 0; i < 3; i++) {
-						AC->createAttack(mirror->getPosition(), attack->getRadius(), attack->getMaxAge(),
+						AC->createAttack(attack->getPosition(), attack->getRadius(), attack->getMaxAge(),
 							attack->getDamage(), AttackController::Type::e_range,
 							linvel.rotate(angle_change)*.66f, false);
 					}
@@ -144,7 +147,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
 					//bullet hell all around!
 					angle_change = M_PI / 4;
 					for (float i = 0; i < 8; i++) {
-						AC->createAttack(mirror->getPosition(), attack->getRadius(), attack->getMaxAge(),
+						AC->createAttack(attack->getPosition(), attack->getRadius(), attack->getMaxAge(),
 							attack->getDamage(), AttackController::Type::e_range,
 							linvel.rotate(angle_change)*.5f, false);
 					}

@@ -137,7 +137,7 @@ public:
         float getMaxAge() { return _maxAge;}
         
         cugl::Poly2 getBall() {return _ball;}
-        cugl::Vec2 getPosition() { return _position; }
+        cugl::Vec2 getPosition() { return cugl::Vec2(_body->GetPosition().x, _body->GetPosition().y); }
         int getDamage() { return _damage; }
         Type getType(){return _type;}
 

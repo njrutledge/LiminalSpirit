@@ -480,8 +480,8 @@ void GameScene::createEnemies(int wave) {
             _enemies.push_back(specter);
         }
         else if(!enemyName.compare("mirror")) {
-             std::shared_ptr<Texture> mirrorImage = _assets->get<Texture>(ENEMY_TEXTURE2);
-             std::shared_ptr<Mirror> mirror = Mirror::alloc(enemyPos, mirrorImage->getSize() / _scale / 15, _scale, Mirror::Type::square, _enemies[1]); // TODO this is not right, fix this to be closest enemy
+             std::shared_ptr<Texture> mirrorImage = _assets->get<Texture>("mirror");
+             std::shared_ptr<Mirror> mirror = Mirror::alloc(enemyPos, mirrorImage->getSize() / _scale / 15, _scale, Mirror::Type::circle, _enemies[1]); // TODO this is not right, fix this to be closest enemy
              std::shared_ptr<scene2::PolygonNode> mirrorSprite = scene2::PolygonNode::allocWithTexture(mirrorImage);
              mirror->setSceneNode(mirrorSprite);
              mirror->setDebugColor(Color4::BLUE);
