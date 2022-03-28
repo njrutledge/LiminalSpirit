@@ -202,6 +202,7 @@
     <ClInclude Include="..\..\source\models\Specter.hpp" />
     <ClInclude Include="..\..\source\controllers\SwipeController.hpp" />
     <ClInclude Include="..\..\source\controllers\TiltController.hpp" />
+    <ClInclude Include="..\..\source\scenes\WorldSelectScene.hpp" />
     <ClInclude Include="resource.hpp" />
     <ClInclude Include="..\..\source\models\PlayerModel.h" />
     <ClInclude Include="resource.h" />
@@ -223,6 +224,7 @@
     <ClCompile Include="..\..\source\controllers\SwipeController.cpp" />
     <ClCompile Include="..\..\source\models\PlayerModel.cpp" />
     <ClCompile Include="..\..\source\controllers\TiltController.cpp" />
+    <ClCompile Include="..\..\source\scenes\WorldSelectScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LiminalSpirit.rc" />

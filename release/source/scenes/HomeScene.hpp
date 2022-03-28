@@ -38,9 +38,11 @@
 class HomeScene : public cugl::Scene2
 {
 public:
-	enum Choice {
+	enum class Choice {
 		MENU,
+		PLAY_PREP,
 		PLAY,
+		OPTIONS_PREP,
 		OPTIONS,
 	};
 protected:
@@ -57,7 +59,7 @@ protected:
   std::shared_ptr<cugl::scene2::Button> _optionsButton;
 
   /** the player choice of this menu */
-  Choice _choice = MENU;
+  Choice _choice = Choice::MENU;
 
 public:
   /**

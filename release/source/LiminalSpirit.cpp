@@ -72,6 +72,7 @@ void LiminalSpirit::onShutdown()
     _loading.dispose();
     _gameplay.dispose();
     _home.dispose();
+    _worldSelect.dispose();
     _assets = nullptr;
     _batch = nullptr;
 
@@ -107,6 +108,9 @@ void LiminalSpirit::update(float timestep)
         break;
     case HOME:
         updateHomeScene(timestep);
+        break;
+    case WORLDS:
+        updateWorldSelectScene(timestep);
         break;
     case GAME:
         updateGameScene(timestep);
@@ -149,6 +153,7 @@ void LiminalSpirit::updateLoadingScene(float timestep)
         // TODO add other screens
         _home.init(_assets);
         _gameplay.init(_assets);
+        _worldSelect.init(_assets);
         _scene = State::HOME;
     }
 }
@@ -165,10 +170,33 @@ void LiminalSpirit::updateHomeScene(float timestep)
 {
     _home.update(timestep);
     switch (_home.getChoice()) {
-    case HomeScene::Choice::MENU:
-        break;
     case HomeScene::Choice::PLAY:
+        _scene = State::WORLDS;
+        break;
+    }
+}
+
+/**
+ * Individualized update method for the world select scene.
+ *
+ * This method keeps the primary {@link #update} from being a mess of switch
+ * statements. It also handles the transition logic from the home scene.
+ *
+ * @param timestep  The amount of time (in seconds) since the last frame
+ */
+void LiminalSpirit::updateWorldSelectScene(float timestep)
+{
+    _worldSelect.update(timestep);
+    switch (_worldSelect.getChoice()) {
+    case WorldSelectScene::Choice::CAVE:
         _scene = State::GAME;
+        break;
+    case WorldSelectScene::Choice::SHROOM:
+        _scene = State::GAME;
+        break;
+    case WorldSelectScene::Choice::FOREST:
+        _scene = State::GAME;
+        break;
     }
 }
 
@@ -203,6 +231,9 @@ void LiminalSpirit::draw()
         break;
     case HOME:
         _home.render(_batch);
+        break;
+    case WORLDS:
+        _worldSelect.render(_batch);
         break;
     case GAME:
         _gameplay.render(_batch);

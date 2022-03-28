@@ -71,7 +71,7 @@ bool HomeScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
   // set assets
   _assets = assets;
-  auto scene = _assets->get<scene2::SceneNode>("menu");
+  auto scene = _assets->get<scene2::SceneNode>("main_menu");
   scene->setContentSize(dimen);
   scene->doLayout();
 
@@ -79,17 +79,23 @@ bool HomeScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
   _assets->attach<Texture>(TextureLoader::alloc()->getHook());
   _assets->attach<Font>(FontLoader::alloc()->getHook());
 
-  _playButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("menu_start"));
+  _playButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("main_menu_start"));
   _playButton->addListener([=](const std::string& name, bool down)
       {
           if (down) {
+              _choice = Choice::PLAY_PREP;
+          }
+          else if (_choice == Choice::PLAY_PREP) {
               _choice = Choice::PLAY;
           }
       });
-  _optionsButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("menu_options"));
+  _optionsButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("main_menu_options"));
   _optionsButton->addListener([=](const std::string& name, bool down)
       {
           if (down) {
+              _choice = Choice::OPTIONS_PREP;
+          }
+          else if (_choice == Choice::OPTIONS_PREP) {
               _choice = Choice::OPTIONS;
           }
       });

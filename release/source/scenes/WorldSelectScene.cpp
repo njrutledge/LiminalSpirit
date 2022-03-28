@@ -33,11 +33,23 @@
 
 using namespace cugl;
 
+/** This is the size of the active portion of the screen */
+//TODO: MAKE THIS IN ONE SPOT ONLY
+#define SCENE_WIDTH 1024
+
 /**
  * Disposes of all (non-static) resources allocated to this mode.
  */
 void WorldSelectScene::dispose()
 {
+    if (_caveButton) _caveButton->deactivate();
+    _caveButton = nullptr;
+    if (_caveButton) _caveButton->deactivate();
+    _caveButton = nullptr;
+    if (_caveButton) _caveButton->deactivate();
+    _caveButton = nullptr;
+    _batch = nullptr;
+    _assets = nullptr;
 }
 
 /**
@@ -53,6 +65,70 @@ void WorldSelectScene::dispose()
  */
 bool WorldSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 {
+    Size dimen = Application::get()->getDisplaySize();
+    float boundScale = SCENE_WIDTH / dimen.width;
+    dimen *= boundScale;
+
+    if (assets == nullptr)
+    {
+        return false;
+    }
+    else if (!Scene2::init(dimen))
+    {
+        return false;
+    }
+
+    // Start up the input handler
+#if defined(CU_TOUCH_SCREEN)
+    Input::activate<Touchscreen>();
+#else
+    Input::activate<Mouse>();
+#endif
+
+    // set assets
+    _assets = assets;
+    auto scene = _assets->get<scene2::SceneNode>("world_select");
+    scene->setContentSize(dimen);
+    scene->doLayout();
+
+    // You have to attach the individual loaders for each asset type
+    _assets->attach<Texture>(TextureLoader::alloc()->getHook());
+    _assets->attach<Font>(FontLoader::alloc()->getHook());
+
+    _caveButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("world_select_cave"));
+    _caveButton->addListener([=](const std::string& name, bool down)
+        {
+            if (down) {
+                _choice = Choice::CAVE_PREP;
+            }
+            else if (_choice == Choice::CAVE_PREP) {
+                _choice = Choice::CAVE;
+            }
+        });
+
+    _shroomButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("world_select_shroom"));
+    _shroomButton->addListener([=](const std::string& name, bool down)
+        {
+            if (down) {
+                _choice = Choice::SHROOM_PREP;
+            }
+            else if (_choice == Choice::SHROOM_PREP) {
+                _choice = Choice::SHROOM;
+            }
+        });
+    _forestButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("world_select_forest"));
+    _forestButton->addListener([=](const std::string& name, bool down)
+        {
+            if (down) {
+                _choice = Choice::FOREST_PREP;
+            }
+            else if (_choice == Choice::FOREST_PREP) {
+                _choice = Choice::FOREST;
+            }
+        });
+
+    addChild(scene);
+    return true;
 }
 
 #pragma mark -
@@ -66,6 +142,13 @@ bool WorldSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
  */
 void WorldSelectScene::update(float timestep)
 {
+    _input.update();
+    _caveButton->setVisible(true);
+    _caveButton->activate();
+    _shroomButton->setVisible(true);
+    _shroomButton->activate();
+    _forestButton->setVisible(true);
+    _forestButton->activate();
 }
 
 /**
@@ -75,4 +158,5 @@ void WorldSelectScene::update(float timestep)
  */
 void WorldSelectScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
 {
+    Scene2::render(batch);
 }

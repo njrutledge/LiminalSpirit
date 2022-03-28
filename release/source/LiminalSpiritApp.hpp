@@ -16,6 +16,7 @@
 #include "scenes/GameScene.hpp"
 #include "scenes/LoadingScene.hpp"
 #include "scenes/HomeScene.hpp"
+#include "scenes/WorldSelectScene.hpp"
 
 /**
  * This class represents the application root for the ship demo.
@@ -60,6 +61,8 @@ protected:
     LoadingScene _loading;
     /** The controller for the home screen*/
     HomeScene _home;
+    /** The controller for the world select screen */
+    WorldSelectScene _worldSelect;
     /** Whether or not we have finished loading all assets */
     bool _loaded;
 
@@ -144,6 +147,16 @@ public:
      * @param timestep  The amount of time (in seconds) since the last frame
      */
     void updateHomeScene(float timestep);
+
+    /**
+     * Individualized update method for the world select scene.
+     *
+     * This method keeps the primary {@link #update} from being a mess of switch
+     * statements. It also handles the transition logic from the loading scene.
+     *
+     * @param timestep  The amount of time (in seconds) since the last frame
+     */
+    void updateWorldSelectScene(float timestep);
 
     /**
      * Individualized update method for the game scene.

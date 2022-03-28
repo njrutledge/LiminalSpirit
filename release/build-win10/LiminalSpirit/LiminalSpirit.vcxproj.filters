@@ -47,6 +47,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\scenes\HomeScene.cpp" />
+    <ClCompile Include="..\..\source\scenes\WorldSelectScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -96,6 +97,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\scenes\HomeScene.hpp" />
+    <ClInclude Include="..\..\source\scenes\WorldSelectScene.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LiminalSpirit.rc" />
