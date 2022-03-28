@@ -13,6 +13,7 @@
 #include <cugl/physics2/CUBoxObstacle.h>
 #include <cugl/physics2/CUCapsuleObstacle.h>
 #include <cugl/scene2/graph/CUWireNode.h>
+#include "Glow.hpp"
 
 #pragma mark - 
 #pragma mark Drawing Constants
@@ -47,7 +48,7 @@ protected:
 	int _health;
 
 	/** True if the enemy is on the ground */
-	bool _isGrounded; 
+	bool _isGrounded;
 
 	/** True if the enemy is currently attacking */
 	bool _isAttacking;
@@ -65,7 +66,7 @@ protected:
 	int _attackCooldown;
 
 	/** The attack radius for the enemy*/
-	float _attackRadius; 
+	float _attackRadius;
 
 	/** The density of the enemy*/
 	float _density;
@@ -90,6 +91,9 @@ protected:
 
 	/** Draw Scale*/
 	float _drawScale;
+
+	/** Pointer to the enemy's Glow*/
+	std::shared_ptr<Glow> _glow;
 
 	/** Redraws outline of physics fixtures */
 	virtual void resetDebug() override;
@@ -185,6 +189,12 @@ public:
 
 	/** Sets to true if the enemy has seen the player */
 	void setHasSeenPlayer(bool value) { _hasSeenPlayer = value; }
+
+	/** Returns the pointer to the enemy's glow */
+	std::shared_ptr<Glow> getGlow() { return _glow; }
+
+	/** Sets the pointer to the enemy's glow */
+	void setGlow(std::shared_ptr<Glow> glow) { _glow = glow; }
 
 	/** Returns the name of the ground sensor */
 	std::string* getSensorName() { return &_sensorName; }

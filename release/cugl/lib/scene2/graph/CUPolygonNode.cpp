@@ -335,8 +335,8 @@ void PolygonNode::updateTextureCoords() {
         it->texcoord.y = t*_texture->getMaxT()+(1-t)*_texture->getMinT();
     
         if (_gradient) {
-            s = (it->position.x)/_polygon.getBounds().size.width;
-            t = (it->position.y)/_polygon.getBounds().size.height;
+            s = (it->position.x+off.x)/_polygon.getBounds().size.width;
+            t = (it->position.y+off.y)/_polygon.getBounds().size.height;
 
             if (_flipHorizontal) { s = 1-s; }
             if (_flipVertical)  { t = 1-t; }

@@ -2,7 +2,7 @@
 //  Glow.hpp
 //  Liminal Spirit Game
 //
-//  This class tracks creates the glow effects and alters them
+//  This class tracks creates the glow effects and alters them depending on situation
 // 
 //
 
@@ -16,7 +16,7 @@
 
 #pragma mark - 
 #pragma mark Drawing Constants
-/** Texture for the enemy*/
+/** Texture for the glow*/
 #define GLOW_TEXTURE "whiteGrad"
 /** ID for the sensor*/
 #define GLOW_SENSOR_NAME "glowsensor"
@@ -43,13 +43,13 @@ protected:
 	virtual void resetDebug() override;
 
 public:
-	/** Creates a degenerate Enemy */
+	/** Creates a degenerate Glow */
 	Glow() : CapsuleObstacle(), _sensorName(GLOW_SENSOR_NAME) { }
 
-	/**Destroys this Base Enemy Model, releasing all resources */
+	/**Destroys this Glow, releasing all resources */
 	virtual ~Glow(void) { dispose(); }
 
-	/**Disposes all resources and assets of this Enemy Model */
+	/**Disposes all resources and assets of this Glow */
 	void dispose();
 
 	/** Base init function */
@@ -65,10 +65,10 @@ public:
 
 #pragma mark -
 #pragma mark Scene Node
-	/** Returns the scene graph node representing this enemy*/
+	/** Returns the scene graph node representing this glow*/
 	const std::shared_ptr<cugl::scene2::SceneNode>& getSceneNode() const { return _node; }
 
-	/** Sets the scene graph node representing this enemy */
+	/** Sets the scene graph node representing this glow */
 	void setSceneNode(const std::shared_ptr<cugl::scene2::SceneNode>& node) {
 		_node = node;
 		_node->setPosition(getPosition() * _drawScale);
@@ -91,7 +91,7 @@ public:
 	void releaseFixtures() override;
 	/** Updates the object's physics state (not game logic) */
 	void update(float dt) override;
-	/** Applies the force of the body of this enemy */
+	/** Applies the force of the body of this glow */
 	void applyForce();
 
 };

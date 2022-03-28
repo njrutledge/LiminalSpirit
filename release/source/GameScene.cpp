@@ -28,7 +28,6 @@
 //
 // Include the class header, which includes all of the CUGL classes
 #include "GameScene.hpp"
-#include <cugl/render/CUVertexBuffer.h>
 #include <cugl/base/CUBase.h>
 #include <box2d/b2_contact.h>
 #include "BaseEnemyModel.h"
@@ -78,15 +77,6 @@ float PLATFORMS[PLATFORM_COUNT][PLATFORM_ATT] = {
     {5, 7, 8, 0.5},
     {7, 10, 9, 0.5}
 };
-
-// Graphics Pipeline related information
-const std::string oglShaderFrag = 
-#include "shaders/Fragment.frag"
-;
-
-const std::string oglShaderVert = 
-#include "shaders/Vertex.vert"
-;
 
 /**
  * Initializes the controller contents, and starts the game
@@ -192,8 +182,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     buildScene(scene);
     addChild(scene);
 
-
-    //buildGraphicsPipeline();
     
     // Get font
     _font = assets->get<Font>("marker");
@@ -281,6 +269,7 @@ void GameScene::update(float timestep)
         Vec2 direction = _ai.getMovement(*it, _player->getPosition(), timestep);
         (*it)->setVX(direction.x);
         (*it)->setVY(direction.y);
+        (*it)->getGlow()->setPosition((*it)->getPosition());
         if ((*it)->isAttacking()) {
             //TODO: Need to variablize attack variables based on enemy type
             (*it)->setIsAttacking(false);
@@ -356,7 +345,10 @@ void GameScene::update(float timestep)
     while (eit != _enemies.end()) {
         if ((*eit)->isRemoved()) {
             //int log1 = _world->getObstacles().size();
+            cugl::physics2::Obstacle* glowObj = dynamic_cast<cugl::physics2::Obstacle*>(&*(*eit)->getGlow());
             cugl::physics2::Obstacle* obj = dynamic_cast<cugl::physics2::Obstacle*>(&**eit);
+            _world->removeObstacle(glowObj);
+            _worldnode->removeChild(glowObj->_node);
             _world->removeObstacle(obj);
             _worldnode->removeChild(obj->_node);
 
@@ -405,31 +397,45 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     Scene2::render(batch);
     batch->begin(getCamera()->getCombined());
 
-    // OpenGL commands to enable alpha blending (if needed)
-    //glEnable(GL_BLEND);
-    //glBlendEquation(GL_FUNC_ADD);
-    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    //// Since we only have one shader and one vertex buffer
-    //// we never need to bind or unbind either of these
-    //_vertbuff->draw(_mesh.command, (int)_mesh.indices.size(), 0);
-
     //_attacks.draw(batch);
     batch->drawText(_text,Vec2(20,getSize().height-_text->getBounds().size.height-10));
     batch->end();
 }
 
 void GameScene::createEnemies() {
+
+    Vec2 testPos = ENEMY_POS;
+    std::shared_ptr<Texture> enemyGlowImage = _assets->get<Texture>(GLOW_TEXTURE);
+    std::shared_ptr<Glow> enemyGlow = Glow::alloc(testPos, enemyGlowImage->getSize() / _scale, _scale);
+    std::shared_ptr<scene2::PolygonNode> enemyGlowSprite = scene2::PolygonNode::allocWithTexture(enemyGlowImage);
+    enemyGlow->setSceneNode(enemyGlowSprite);
+    std::shared_ptr<Gradient> grad = Gradient::allocRadial(Color4(255, 255, 255, 85), Color4(255, 255, 255, 0), Vec2(0.5, 0.5), .2f);
+    enemyGlowSprite->setGradient(grad);
+    enemyGlowSprite->setRelativeColor(false);
+    enemyGlowSprite->setScale(.65f);
+    addObstacle(enemyGlow, enemyGlowSprite, true);
+
     Vec2 enemyPos = ENEMY_POS;
-    std::shared_ptr<scene2::SceneNode> enemyNode = scene2::SceneNode::alloc();
     std::shared_ptr<Texture> enemyImage = _assets->get<Texture>(ENEMY_TEXTURE);
     std::shared_ptr<Lost> enemy = Lost::alloc(enemyPos, enemyImage->getSize() / _scale / 10, _scale);
     std::shared_ptr<scene2::PolygonNode> enemySprite = scene2::PolygonNode::allocWithTexture(enemyImage);
     enemy->setSceneNode(enemySprite);
     enemy->setDebugColor(Color4::RED);
     enemySprite->setScale(0.15f);
+    enemy->setGlow(enemyGlow);
     addObstacle(enemy, enemySprite, true);
     _enemies.push_back(enemy);
+
+    Vec2 testPos2 = ENEMY_POS2;
+    std::shared_ptr<Texture> enemyGlowImage2 = _assets->get<Texture>(GLOW_TEXTURE);
+    std::shared_ptr<Glow> enemyGlow2 = Glow::alloc(testPos2, enemyGlowImage2->getSize() / _scale, _scale);
+    std::shared_ptr<scene2::PolygonNode> enemyGlowSprite2 = scene2::PolygonNode::allocWithTexture(enemyGlowImage2);
+    enemyGlow2->setSceneNode(enemyGlowSprite2);
+    std::shared_ptr<Gradient> grad2 = Gradient::allocRadial(Color4(255, 255, 255, 85), Color4(255, 255, 255, 0), Vec2(0.5, 0.5), .2f);
+    enemyGlowSprite2->setGradient(grad2);
+    enemyGlowSprite2->setRelativeColor(false);
+    enemyGlowSprite2->setScale(.65f);
+    addObstacle(enemyGlow2, enemyGlowSprite2, true);
 
     Vec2 enemyPos2 = ENEMY_POS2;
     std::shared_ptr<scene2::SceneNode> specterNode = scene2::SceneNode::alloc();
@@ -438,98 +444,10 @@ void GameScene::createEnemies() {
     std::shared_ptr<scene2::PolygonNode> specterSprite = scene2::PolygonNode::allocWithTexture(specterImage);
     specter->setSceneNode(specterSprite);
     specter->setDebugColor(Color4::BLUE);
+    specter->setGlow(enemyGlow2);
     specterSprite->setScale(0.15f);
     addObstacle(specter, specterSprite, true);
     _enemies.push_back(specter);
-}
-
-/** 
-* Internal helper to build the graphics pipeline
-*  needs:
-*  - a shader program (vertex and fragment)
-*  - a vertex buffer to stream/hold vertices
-*  - a mesh to define vertices and geometry
-* 
-*/
-void GameScene::buildGraphicsPipeline() {
-    //Size size = Application::get()->getDisplaySize();
-    //float scale = SCENE_WIDTH / size.width;
-    //size *= scale;
-
-    ////Allocate shader (binding)
-    //_shader = Shader::alloc(SHADER(oglShaderVert), SHADER(oglShaderFrag));
-
-    ////Attach camera to shader
-    //_shader->setUniformMat4("uPerspective", getCamera()->getCombined());
-    //_shader->setUniform1i("uType", 0);
-
-    ////Allocates the vertex buffer (binding)
-    //_vertbuff = cugl::VertexBuffer::alloc(sizeof(SpriteVertex2));
-    //_vertbuff->setupAttribute("aPosition", 2, GL_FLOAT, GL_FALSE,
-    //    offsetof(cugl::SpriteVertex2, position));
-    //_vertbuff->setupAttribute("aColor", 4, GL_UNSIGNED_BYTE, GL_TRUE,
-    //    offsetof(cugl::SpriteVertex2, color));
-    //_vertbuff->setupAttribute("aTexCoord", 2, GL_FLOAT, GL_FALSE,
-    //    offsetof(cugl::SpriteVertex2, texcoord));
-    //_vertbuff->setupAttribute("aGradCoord", 2, GL_FLOAT, GL_FALSE,
-    //    offsetof(cugl::SpriteVertex2, gradcoord));
-
-    //// Attach the shader
-    //_vertbuff->attach(_shader);
-
-    ////// Make a triangle cause why not
-    ////float radius = size.height / 16;
-    ////Vec2 up(0, radius);
-    ////Vec2 center(size.width / 2, size.height / 7);
-
-    ////Path2 triang;
-    ////triang.vertices.push_back(center + up);
-    ////up.rotate(-M_PI * 2 / 3);
-    ////triang.vertices.push_back(center + up);
-    ////up.rotate(-M_PI * 2 / 3);
-    ////triang.vertices.push_back(center + up);
-    ////triang.closed = true;
-
-    ////// Convert it into a mesh
-    ////_mesh.clear();
-    ////SpriteVertex2 vert;
-    ////Vec2 txcent(0.5, 0.5);
-    ////Color4 colors[3] = { Color4f::RED, Color4f::GREEN, Color4f::BLUE };
-
-    ////for (int ii = 0; ii < 3; ii++) {
-    ////    vert.position = triang.vertices[ii];
-    ////    vert.color = colors[ii].getPacked();  // Converts color to int
-    ////    vert.texcoord = txcent + (vert.position - center) / radius;
-    ////    vert.gradcoord = txcent + (vert.position - center) / (2 * radius);
-    ////    // Must flip y
-    ////    vert.texcoord.y = 1 - vert.texcoord.y;
-
-    ////    _mesh.vertices.push_back(vert);
-    ////    _mesh.indices.push_back(ii);
-    ////}
-
-    //// //Only one triangle, so this is best command
-    ////_mesh.command = GL_TRIANGLES;
-
-    ////// ADVANCED FEATURE: Create a gradient and load it into the shader
-    ////auto gradient = Gradient::allocRadial(Color4::MAGENTA, Color4::YELLOW,
-    ////    Vec2(0.5, 0.5), 0.5);
-
-    ////// A gradient is defined by SEVERAL uniform variables
-    ////float data[21];
-    ////gradient->getComponents(data);
-    ////_shader->setUniformMatrix3fv("gdMatrix", 1, data, false);
-    ////_shader->setUniform4f("gdInner", data[9], data[10], data[11], data[12]);
-    ////_shader->setUniform4f("gdOuter", data[13], data[14], data[15], data[16]);
-    ////_shader->setUniform2f("gdExtent", data[17], data[18]);
-    ////_shader->setUniform1f("gdRadius", data[19]);
-    ////_shader->setUniform1f("gdFeathr", data[20]);
-
-    ////// IMPORTANT LAST STEP: Load the mesh into the vertex buffer
-    ////// We want to reload is vertex data changes
-    ////_vertbuff->loadVertexData(_mesh.vertices.data(), (int)_mesh.vertices.size());
-    ////_vertbuff->loadIndexData(_mesh.indices.data(), (int)_mesh.indices.size());
-    ////
 }
 
 /**
@@ -669,15 +587,14 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
 
     // Glow effect on player
     Vec2 testPos = PLAYER_POS;
-    std::shared_ptr<scene2::SceneNode> nodet = scene2::SceneNode::allocWithPosition(testPos);
-    nodet->setColor(Color4::RED);
     std::shared_ptr<Texture> imaget = _assets->get<Texture>(GLOW_TEXTURE);
-    _playerGlow = Glow::alloc(testPos, imaget->getSize() / _scale / 15, _scale);
+    _playerGlow = Glow::alloc(testPos, imaget->getSize() / _scale, _scale);
     std::shared_ptr<scene2::PolygonNode> spritet = scene2::PolygonNode::allocWithTexture(imaget);
     _playerGlow->setSceneNode(spritet);
-    std::shared_ptr<Gradient> grad = Gradient::allocRadial(Color4(255, 255, 255, 125), Color4(255,255,255, 0), Vec2(0.5, 0.5), 0.f, .2f);
+    std::shared_ptr<Gradient> grad = Gradient::allocRadial(Color4(255, 255, 255, 85), Color4(255,255,255, 0), Vec2(0.5, 0.5), .2f);
     spritet->setGradient(grad);
-    //spritet->setRelativeColor(false);
+    spritet->setRelativeColor(false);
+    spritet->setScale(.65f);
     addObstacle(_playerGlow, spritet, true);
 
     // Player creation
@@ -740,6 +657,9 @@ void GameScene::reset()
     auto eit = _enemies.begin();
     while (eit != _enemies.end()) {
         cugl::physics2::Obstacle* obj = dynamic_cast<cugl::physics2::Obstacle*>(&**eit);
+        cugl::physics2::Obstacle* glowObj = dynamic_cast<cugl::physics2::Obstacle*>(&*(*eit)->getGlow());
+        _world->removeObstacle(glowObj);
+        _worldnode->removeChild(glowObj->_node);
         _world->removeObstacle(obj);
         _worldnode->removeChild(obj->_node);
 
