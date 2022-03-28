@@ -164,6 +164,12 @@ void LiminalSpirit::updateLoadingScene(float timestep)
 void LiminalSpirit::updateHomeScene(float timestep)
 {
     _home.update(timestep);
+    switch (_home.getChoice()) {
+    case HomeScene::Choice::MENU:
+        break;
+    case HomeScene::Choice::PLAY:
+        _scene = State::GAME;
+    }
 }
 
 /**

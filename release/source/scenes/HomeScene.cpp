@@ -79,6 +79,21 @@ bool HomeScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
   _assets->attach<Texture>(TextureLoader::alloc()->getHook());
   _assets->attach<Font>(FontLoader::alloc()->getHook());
 
+  _playButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("menu_start"));
+  _playButton->addListener([=](const std::string& name, bool down)
+      {
+          if (down) {
+              _choice = Choice::PLAY;
+          }
+      });
+  _optionsButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("menu_options"));
+  _optionsButton->addListener([=](const std::string& name, bool down)
+      {
+          if (down) {
+              _choice = Choice::OPTIONS;
+          }
+      });
+
   // set buttons here
   addChild(scene);
   return true;
@@ -89,6 +104,10 @@ bool HomeScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
  */
 void HomeScene::dispose()
 {
+  if(_playButton) _playButton->deactivate();
+  _playButton = nullptr;
+  if(_optionsButton) _optionsButton->deactivate();
+  _optionsButton = nullptr;
   _batch = nullptr;
   _assets = nullptr;
 }
@@ -104,8 +123,12 @@ void HomeScene::dispose()
  */
 void HomeScene::update(float timestep)
 {
-  // Update input controller
-  _input.update();
+    // Update input controller
+    _input.update();
+    _playButton->setVisible(true);
+    _playButton->activate();
+    _optionsButton->setVisible(true);
+    _optionsButton->activate();
 }
 
 /**

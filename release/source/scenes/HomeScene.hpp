@@ -37,6 +37,12 @@
  */
 class HomeScene : public cugl::Scene2
 {
+public:
+	enum Choice {
+		MENU,
+		PLAY,
+		OPTIONS,
+	};
 protected:
   /** The loaders to (synchronously) load in assets */
   std::shared_ptr<cugl::AssetManager> _assets;
@@ -46,6 +52,12 @@ protected:
   std::shared_ptr<cugl::SpriteBatch> _batch; // check this
 
   InputController _input;
+
+  std::shared_ptr<cugl::scene2::Button> _playButton;
+  std::shared_ptr<cugl::scene2::Button> _optionsButton;
+
+  /** the player choice of this menu */
+  Choice _choice = MENU;
 
 public:
   /**
@@ -81,6 +93,8 @@ public:
    * @return true if the controller is initialized properly, false otherwise.
    */
   bool init(const std::shared_ptr<cugl::AssetManager> &assets);
+
+  Choice getChoice() { return _choice; };
 
 #pragma mark -
 #pragma mark Screen Handling

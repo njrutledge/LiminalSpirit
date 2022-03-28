@@ -57,14 +57,21 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
+		"home_play": {
+			"file": "textures/menus/home/tap_start.png",
+			"wrapS": "clamp",
+			"wrapT": "clamp",
+			"minfilter": "linear",
+			"magfilter": "linear"
+		},
 		"background": {
 			"file": "textures/backgrounds/forest_draft_no_platforms.png"
 		},
 		"home_background": {
 			"file": "textures/menus/home/home_background.png"
 		},
-		"home_tap_start": {
-			"file": "textures/menus/home/tap_start.png"
+		"home_title": {
+			"file": "textures/menus/home/title_text.png"
 		}
 	},
 	"fonts": {
@@ -120,6 +127,24 @@
 						"y_anchor": "middle"
 					}
 				},
+				"title": {
+					"type":  "Image",
+					"data": {
+						"texture": "home_title",
+						"anchor": [
+							0.5,
+							0.5
+						],
+						"scale": 0.66
+					},
+					"layout": {
+						"x_anchor": "center",
+						"y_anchor": "middle",
+						"y_offset": 0.15,
+						"x_offset": 0,
+						"absolute": false
+					}
+				},
 				"start": {
 					"type": "Button",
 					"data": {
@@ -134,15 +159,42 @@
 						"up": {
 							"type": "Image",
 							"data": {
-								"texture": "home_tap_start"
+								"texture": "home_play"
 							}
 						}
 					},
 					"layout": {
 						"x_anchor": "center",
-						"y_anchor": "bottom",
-						"y_offset": 0,
-						"x_offset": 0
+						"y_anchor": "middle",
+						"y_offset": -0.25,
+						"x_offset": 0,
+						"absolute": false
+					}
+				},
+				"options": {
+					"type": "Button",
+					"data": {
+						"upnode": "up",
+						"anchor": [
+							0.5,
+							0.4
+						],
+						"scale": 0.5
+					},
+					"children": {
+						"up": {
+							"type": "Image",
+							"data": {
+								"texture": "home_play"
+							}
+						}
+					},
+					"layout": {
+						"x_anchor": "center",
+						"y_anchor": "middle",
+						"y_offset": -0.33,
+						"x_offset": 0,
+						"absolute": false
 					}
 				}
 			}
