@@ -15,7 +15,7 @@ using namespace cugl;
 /** Historical choice from Marmalade */
 #define KEYBOARD_FORCE_INCREMENT    5.0f
 /** Adjustment factor for accelerometer input (found experimentally) */
-#define ACCELEROM_X_FACTOR          30.0f
+#define ACCELEROM_X_FACTOR          35.0f
 
 #pragma mark -
 #pragma mark Tilt Input
@@ -46,11 +46,18 @@ void TiltController::update(InputController& input, float width) {
 #ifdef CU_TOUCH_SCREEN
     // MOBILE CONTROLS
     Vec3 acc = input.getAcceleration();
+    float xAcc = acc.x;
     
     // Only process accelerometer if tilt is more than 0.1 so
     // player does not move when phone is straight
-    if(!(acc.x > -0.1 && acc.x < 0.1)) {
-        _xpos = acc.x * ACCELEROM_X_FACTOR;
+    // Cap the acceleration at 0.5 for both directions
+    if(!(xAcc > -0.1 && xAcc < 0.1)) {
+        if (xAcc > 0.5) {
+            xAcc = 0.5;
+        } else if (xAcc < -0.5) {
+            xAcc = -0.5;
+        }
+        _xpos = xAcc * ACCELEROM_X_FACTOR;
     } else {
         _xpos = 0;
     }
