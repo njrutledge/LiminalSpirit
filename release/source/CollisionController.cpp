@@ -126,7 +126,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
 				}
 			}
 		}
-		else if (*(attack->getSensorName()) == "enemyattacksensor" && attack->isSplitable()) {
+		else if (*(attack->getSensorName()) == "enemyattacksensor" && attack->isSplitable() && attack->getType() == AttackController::Type::e_range) {
 			if (Mirror* mirror = dynamic_cast<Mirror*>(enemy)) {
 				attack->setInactive();
 				float angle_change;
