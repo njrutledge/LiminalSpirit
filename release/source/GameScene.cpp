@@ -39,6 +39,7 @@
 #include "CollisionController.hpp"
 #include "Platform.hpp"
 #include "Glow.hpp"
+#include "Particle.hpp"
 
 // Add support for simple random number generation
 #include <cstdlib>
@@ -450,6 +451,20 @@ void GameScene::createEnemies() {
     _enemies.push_back(specter);
 }
 
+void GameScene::createParticles() {
+    //for (int i = 0; i < 9; i++) {
+    //    std::shared_ptr<Texture> particleTexture = _assets->get<Texture>(GLOW_TEXTURE);
+    //    std::shared_ptr<Particle> party = Particle::alloc(Vec2(10,10), particleTexture->getSize() / _scale / 10, _scale);
+    //    std::shared_ptr<scene2::PolygonNode> particleSprite = scene2::PolygonNode::allocWithTexture(particleTexture);
+    //    party->setSceneNode(particleSprite);
+    //    party->setDebugColor(Color4::RED);
+    //    particleSprite->setScale(0.1f);
+    //    //particleSprite->setVisible(false);
+    //    addObstacle(party, particleSprite, true);
+    //    _particlePool.push_back(party);
+    //}
+}
+
 /**
  * Internal helper to build the scene graph.
  *
@@ -584,6 +599,9 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
 
     //add enemies and player last
     createEnemies();
+
+    // Create particles
+    createParticles();
 
     // Glow effect on player
     Vec2 testPos = PLAYER_POS;

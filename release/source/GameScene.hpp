@@ -39,6 +39,7 @@
 #include "CollisionController.hpp"
 #include "Platform.hpp"
 #include "Glow.hpp"
+#include "Particle.hpp"
 /**
  * Class for a simple Hello World style application
  *
@@ -83,6 +84,9 @@ protected:
     std::shared_ptr<cugl::TextLayout> _text;    
     /** Text font */
     std::shared_ptr<cugl::Font> _font;
+
+    /** Particle Pool */
+    std::vector<std::shared_ptr<Particle>> _particlePool;
 
 
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
@@ -129,16 +133,6 @@ protected:
      * have become standard in most game engines.
      */
     void buildScene(std::shared_ptr<cugl::scene2::SceneNode> scene);
-
-    /**
-    * Internal helper to build the graphics pipeline
-    *  needs:
-    *  - a shader program (vertex and fragment)
-    *  - a vertex buffer to stream/hold vertices
-    *  - a mesh to define vertices and geometry
-    *
-    */
-    void buildGraphicsPipeline();
 
 public:
     /**
@@ -231,6 +225,9 @@ public:
      * Creates all enemies and adds to _enemies
      */
     void createEnemies();
+
+    /** Creates the intial particle pool */
+    void createParticles();
 
 };
 
