@@ -69,7 +69,7 @@ protected:
     /** Text font */
     std::shared_ptr<cugl::Font> _font;
 
-
+    float _platform_attr;
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
     float _scale;
     
@@ -97,9 +97,14 @@ protected:
     /** Player character */
     std::shared_ptr<PlayerModel> _player;
     /** Platform character */
+    std::vector<float*> _platforms_attr;
     std::vector<std::shared_ptr<PlatformModel>> _platforms;
-    std::vector < std::shared_ptr<scene2::PolygonNode>> _platformNodes;
-
+    std::vector <std::shared_ptr<scene2::PolygonNode>> _platformNodes;
+    
+    /**spawn info */
+    std::vector<vector<string>> _spawn_order;
+    std::vector<vector<Vec2>> _spawn_pos;
+    std::vector<float> _spawn_times;
     /** A countdown used to move the logo */
     int _countdown;
 

@@ -60,8 +60,9 @@ float DEFAULT_HEIGHT = DEFAULT_WIDTH/SCENE_WIDTH*SCENE_HEIGHT;
 
 /** The constant for gravity in the physics world. */
 #define GRAVITY 30
-#define PLATFORM_ATT 4
-#define PLATFORM_COUNT 3
+#define PLATFORM_ATT 3
+#define PLATFORM_COUNT 4
+#define PLATFORM_HEIGHT 0.5
 #define PLATFORMTEXTURE "platform"
 
 /** The initial position of the enemies */
@@ -71,11 +72,10 @@ float ENEMY_POS2[] = { 28.0f, 10.0f };
 /** The initial position of the player*/
 float PLAYER_POS[] = { 5.0f, 4.0f };
 
-float PLATFORMS[PLATFORM_COUNT][PLATFORM_ATT] = {
-    {15, 3, 10, 0.5},
-    {5, 7, 8, 0.5},
-    {7, 10, 9, 0.5}
-};
+string BIOME = "cave";
+float LEVEL_HEIGHT = 54;
+
+float PLATFORMS[PLATFORM_COUNT][PLATFORM_ATT] = {{5,5,3}, {30,5,5}, {10,10,4}, {20,12,3}};
 
 /**
  * Initializes the controller contents, and starts the game
@@ -113,7 +113,44 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     // set assets
     _assets = assets;
+    
+    // Get constant values from assets/level.json
+    _constants = assets->get<JsonValue>("constants");
+    BIOME = _constants->getString("biome");
+    LEVEL_HEIGHT = _constants->getFloat("level_height");
+    PLAYER_POS[0] = _constants->get("start_pos")->get(0)->asFloat();
+    PLAYER_POS[1] = _constants->get("start_pos")->get(1)->asFloat();
+    auto platformsAttr = _constants->get("platforms")->children();
+    for(auto it = platformsAttr.begin(); it != platformsAttr.end(); ++it) {
+        std::shared_ptr<JsonValue> entry = (*it);
+        float* attr = new float[3];
+        attr[0] = entry->get(0)->asFloat();
+        attr[1] = entry->get(1)->asFloat();
+        attr[2] = entry->get(2)->asFloat();
+        
+        _platforms_attr.push_back(attr);
+    }
 
+    auto spawn = _constants->get("spawn_order")->children();
+    auto spawnPos = _constants->get("spawn_pos");
+    auto spawnTime = _constants->get("spawn_times");
+    int index = 0;
+    Vec2 pos;
+    for(auto it = spawn.begin(); it != spawn.end(); ++it) {
+        std::shared_ptr<JsonValue> entry = (*it);
+        std::vector<string> enemies;
+        std::vector<Vec2> enemies_pos;
+        for(int i = 0; i < entry->size(); i++) {
+            enemies.push_back(entry->get(i)->asString());
+            pos.x = spawnPos->get(index)->get(i)->get(0)->asFloat();
+            pos.y = spawnPos->get(index)->get(i)->get(1)->asFloat();
+            enemies_pos.push_back(pos);
+        }
+        _spawn_order.push_back(enemies);
+        _spawn_pos.push_back(enemies_pos);
+        _spawn_times.push_back(spawnTime->get(index)->asFloat());
+        index++;
+    }
     // Create a scene graph the same size as the window
     //_scene = Scene2::alloc(dimen.width, dimen.height);
     auto scene = _assets->get<scene2::SceneNode>("game");
@@ -504,43 +541,29 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     button->setAnchor(Vec2::ANCHOR_CENTER);
     button->setPosition(size.width - (bsize.width + rOffset) / 2, (bsize.height + bOffset) / 2);
 
-    
-
-    Vec2 platformPos = Vec2(5.0f, 5.0f);
-    Rect platRect = Rect(5.0f, 5.0f, 10, .5);
-    std::shared_ptr<scene2::SceneNode> platformNode = scene2::SceneNode::alloc();
-    _platforms.push_back(PlatformModel::alloc(platformPos, 10, .5, _scale));
-    std::shared_ptr<scene2::PolygonNode> spritePlatform = scene2::PolygonNode::allocWithPoly(platRect * _scale);
-    _platformNodes.push_back(spritePlatform);
-
-    platformPos = Vec2(30.0f, 5.0f);
-    platRect = Rect(30.0f, 5.0f, 3, .5);
-    platformNode = scene2::SceneNode::alloc();
-    _platforms.push_back(PlatformModel::alloc(platformPos, 3, .5, _scale));
-    spritePlatform = scene2::PolygonNode::allocWithPoly(platRect * _scale);
-    _platformNodes.push_back(spritePlatform);
-
-    platformPos = Vec2(10.0f, 10.0f);
-    platRect = Rect(10.0f, 10.0f, 5, .5);
-    platformNode = scene2::SceneNode::alloc();
-    _platforms.push_back(PlatformModel::alloc(platformPos, 5, .5, _scale));
-    spritePlatform = scene2::PolygonNode::allocWithPoly(platRect * _scale);
-    _platformNodes.push_back(spritePlatform);
-
-    platformPos = Vec2(20.0f, 12.0f);
-    platRect = Rect(20.0f, 12.0f, 8, .5);
-    platformNode = scene2::SceneNode::alloc();
-    _platforms.push_back(PlatformModel::alloc(platformPos, 8, .5, _scale));
-    spritePlatform = scene2::PolygonNode::allocWithPoly(platRect * _scale);
-    _platformNodes.push_back(spritePlatform);
 
     // Add platforms to the world
-    for (int i = 0; i < _platforms.size(); i++) {
-        _platforms[i]->setName("platform");
-        _platforms[i]->setSceneNode(_platformNodes[i]);
-        _platforms[i]->setDebugColor(Color4::RED);
-        _platformNodes[i]->setColor(Color4::BLACK);
-        addObstacle(_platforms[i], _platformNodes[i], true);
+    Vec2 pos;
+    Rect platRect;
+    std::shared_ptr<scene2::SceneNode> platformNode;
+    std::shared_ptr<PlatformModel> platform;
+    std::shared_ptr<scene2::PolygonNode> spritePlatform;
+    for(int i = 0; i < _platforms_attr.size(); i++) {
+        pos.x = _platforms_attr[i][0];
+        pos.y = _platforms_attr[i][1];
+        float width = _platforms_attr[i][2];
+        cout << pos.x << " " << pos.y << " " << width << endl;
+        platRect = Rect(pos.x, pos.y, width, PLATFORM_HEIGHT);
+        platformNode = scene2::SceneNode::alloc();
+        platform = PlatformModel::alloc(pos, width, PLATFORM_HEIGHT, _scale);
+        _platforms.push_back(platform);
+        spritePlatform = scene2::PolygonNode::allocWithPoly(platRect * _scale);
+        _platformNodes.push_back(spritePlatform);
+        platform->setName("platform");
+        platform->setSceneNode(_platformNodes[i]);
+        platform->setDebugColor(Color4::RED);
+        spritePlatform->setColor(Color4::BLACK);
+        addObstacle(platform, spritePlatform, true);
     }
 
     // Add the logo and button to the scene graph
@@ -549,7 +572,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
 
     //add enemies and player last
     createEnemies();
-
+    
     Vec2 playerPos = PLAYER_POS;
     std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
     std::shared_ptr<Texture> image = _assets->get<Texture>(PLAYER_TEXTURE);
