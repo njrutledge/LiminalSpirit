@@ -22,11 +22,11 @@ void AIController::reset() {
 Vec2 AIController::getMovement(shared_ptr<BaseEnemyModel> e, Vec2 player_pos, float timestep) {
 	std::string name = e->getName();
 	if (name == "Lost") {
-		return Vec2(getLostMovement(e, player_pos, timestep), -9.8f);
+		return Vec2(getLostMovement(e, player_pos, timestep), e->getVY());
 	} else if (name == "Specter") {
 		return getSpecterMovement(e, player_pos, timestep);
     } else if (name == "Glutton"){
-        return Vec2(getGluttonMovement(e, player_pos, timestep), -9.8f);
+        return Vec2(getGluttonMovement(e, player_pos, timestep), e->getVY());
     }
 	else {
 		return Vec2();
@@ -35,17 +35,20 @@ Vec2 AIController::getMovement(shared_ptr<BaseEnemyModel> e, Vec2 player_pos, fl
 
 float AIController::getGluttonMovement(shared_ptr<BaseEnemyModel> glutton, Vec2 player_pos, float timestep) {
     glutton->setTimePast(glutton->getTimePast() + timestep);
-    
-    //Check if enemy is already attacking
     if (!glutton->isAttacking()) {
-        if (player_pos.x <= glutton->getPosition().x + glutton->getAttackRadius()
-            && player_pos.x >= glutton->getPosition().x - glutton->getAttackRadius()
-            && player_pos.y <= glutton->getPosition().y + glutton->getAttackRadius()
-            && player_pos.y >= glutton->getPosition().y - glutton->getAttackRadius()
-            && glutton->getAttackCooldown() < glutton->getTimePast()) {
-                glutton->setIsAttacking(true);
-                glutton->setTimePast(0.0f);
-        }
+        if (glutton->getAttackCooldown() < glutton->getTimePast()
+            && rand() % 100 <= 2.5) {
+            glutton->setIsAttacking(true);
+            glutton->setTimePast(0.0f);
+        } else
+            if ((abs(player_pos.x - glutton->getPosition().x) < glutton->getAttackRadius())) {
+                if (player_pos.x > glutton->getPosition().x) {
+                    return -1* glutton->getHorizontalSpeed();
+                }
+                else {
+                    return glutton->getHorizontalSpeed();
+                }
+            }
     }
     return 0;
 }
