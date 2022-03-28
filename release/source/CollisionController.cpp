@@ -26,20 +26,6 @@ void CollisionController::beginContact(b2Contact* contact, std::shared_ptr<Playe
 	physics2::Obstacle* bd1 = reinterpret_cast<physics2::Obstacle*>(body1->GetUserData().pointer);
 	physics2::Obstacle* bd2 = reinterpret_cast<physics2::Obstacle*>(body2->GetUserData().pointer);
 
-
-	// See if we have landed on the ground.
-	//THIS NEED TO BE CHANGED
-	if ((player->getSensorName() == fd2 && (bd1->getName() == "floor" || bd1->getName() == "platform")) ||
-		(player->getSensorName() == fd1 && (bd2->getName() == "floor" || bd2->getName() == "platform"))) {
-        
-		//player->setGrounded(true);
-	}
-
-	if ((player->getSensorName() == fd2 && (bd1->getName() == "leftwall" || bd1->getName() == "rightwall")) ||
-		(player->getSensorName() == fd1 && (bd2->getName() == "leftwall" || bd2->getName() == "rightwall"))) {
-		//player->setSensor(false);
-	}
-
 	//handle enemy collision
 	if (BaseEnemyModel* enemy = dynamic_cast<BaseEnemyModel*>(bd1)) {
 		handleEnemyCollision(enemy, bd2, fd2, AC);
@@ -64,23 +50,107 @@ void CollisionController::beginContact(b2Contact* contact, std::shared_ptr<Playe
 */
 void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::Obstacle* bd, std::string* fd, std::shared_ptr<AttackController> AC) {
 	if (AttackController::Attack* attack = dynamic_cast<AttackController::Attack*>(bd)) {
+		if (!enemy) {
+			//makes the compiler happy
+			return;
+		}
+		if (!attack->isActive()) {
+			return;
+		}
 		//TODO: Make "playerattacksensor" a constant somewhere
 		if (*(attack->getSensorName()) == "playerattacksensor") {
-			enemy->setHealth(enemy->getHealth() - attack->getDamage());
-			if (enemy->getHealth() <= 0) {
-				enemy->markRemoved(true);
+			if (Mirror* mirror = dynamic_cast<Mirror*>(enemy)) {
+				if (attack->getType() == AttackController::p_range) {
+					//attack->markRemoved();
+					attack->setInactive();
+					float angle_change;
+					cugl::Vec2 linvel = attack->getLinearVelocity().normalize();
+					
+					switch (mirror->getType()) {
+					case Mirror::Type::square:
+						//just reflect the attack
+						AC->createAttack(mirror->getPosition(), attack->getRadius(), attack->getMaxAge(),
+							attack->getDamage(), AttackController::Type::e_range,
+							linvel.rotate(M_PI), false);
+						break;
+					case Mirror::Type::triangle:
+						//reflect three back at you
+						linvel.rotate(4 * M_PI / 6);
+						angle_change = M_PI / 6.0f;
+						for (int i = 0; i < 3; i++) {
+							AC->createAttack(mirror->getPosition(), attack->getRadius(), attack->getMaxAge(),
+								attack->getDamage(), AttackController::Type::e_range,
+								linvel.rotate(angle_change)*.66f, false);
+						}
+						break;
+					case Mirror::Type::circle:
+						//bullet hell all around!
+						angle_change = M_PI / 4;
+						for (float i = 0; i < 8; i++) {
+							AC->createAttack(mirror->getPosition(), attack->getRadius(), attack->getMaxAge(),
+								attack->getDamage(), AttackController::Type::e_range,
+								linvel.rotate(angle_change)*.5f, false);
+						}
+						break;
+					}
+					
+				}
+				else if (attack->getType() == AttackController::Type::p_melee) {
+					mirror->setHealth(mirror->getHealth() - attack->getDamage());
+				}
 			}
-            if (attack->getType() == AttackController::p_exp_package) {
-                AC->createAttack(cugl::Vec2(bd->getPosition().x, bd->getPosition().y), 3, 0.1, 9000, AttackController::p_exp, cugl::Vec2::ZERO);
-            }
-            switch (attack->getType()) {
-                case AttackController::p_range:
-                case AttackController::p_exp_package:
-                    attack->setInactive();
-                    break;
-                default:
-                    break;
-            }
+			else{
+				enemy->setHealth(enemy->getHealth() - attack->getDamage());
+				if (enemy->getHealth() <= 0) {
+					enemy->markRemoved(true);
+				}
+				if (attack->getType() == AttackController::p_exp_package) {
+					AC->createAttack(cugl::Vec2(bd->getPosition().x, bd->getPosition().y), 3, 0.1, 9000, AttackController::p_exp, cugl::Vec2::ZERO);
+				}
+				switch (attack->getType()) {
+				case AttackController::p_range:
+				case AttackController::p_exp_package:
+					attack->setInactive();
+					break;
+				default:
+					break;
+				}
+			}
+		}
+		else if (*(attack->getSensorName()) == "enemyattacksensor" && attack->isSplitable()) {
+			if (Mirror* mirror = dynamic_cast<Mirror*>(enemy)) {
+				attack->setInactive();
+				float angle_change;
+				cugl::Vec2 linvel = attack->getLinearVelocity().normalize();
+
+				switch (mirror->getType()) {
+				case Mirror::Type::square:
+					//just amplify the attack
+					AC->createAttack(mirror->getPosition(), attack->getRadius()*MIRROR_AMPLIFY, attack->getMaxAge(),
+						attack->getDamage()*MIRROR_AMPLIFY, AttackController::Type::e_range,
+						linvel, false);
+					break;
+				case Mirror::Type::triangle:
+					//split into three
+					linvel.rotate(-2*M_PI / 6);
+					angle_change = M_PI / 6.0f;
+					for (int i = 0; i < 3; i++) {
+						AC->createAttack(mirror->getPosition(), attack->getRadius(), attack->getMaxAge(),
+							attack->getDamage(), AttackController::Type::e_range,
+							linvel.rotate(angle_change)*.66f, false);
+					}
+					break;
+				case Mirror::Type::circle:
+					//bullet hell all around!
+					angle_change = M_PI / 4;
+					for (float i = 0; i < 8; i++) {
+						AC->createAttack(mirror->getPosition(), attack->getRadius(), attack->getMaxAge(),
+							attack->getDamage(), AttackController::Type::e_range,
+							linvel.rotate(angle_change)*.5f, false);
+					}
+					break;
+				}
+			}
 		}
 	}
 }
@@ -119,23 +189,5 @@ void CollisionController::endContact(b2Contact* contact, std::shared_ptr<PlayerM
 
 	physics2::Obstacle* bd1 = reinterpret_cast<physics2::Obstacle*>(body1->GetUserData().pointer);
 	physics2::Obstacle* bd2 = reinterpret_cast<physics2::Obstacle*>(body2->GetUserData().pointer);
-
-	// See if we have left the ground
-	//THIS NEEDS TO BE CHANGED
-	if ((player->getSensorName() == fd2 && (bd1->getName() == "floor" || bd1->getName() == "platform")) ||
-		(player->getSensorName() == fd1 && (bd2->getName() == "floor" || bd2->getName() == "platform"))) {
-
-		//player->setGrounded(false);
-	}
-	/* if (*fd1 == "attacksensor") {
-		if (*fd2 == "enemysensor") {
-			CULog("ATTACK end");
-		}
-	}
-	else if (*fd2 == "attacksensor") {
-		if (*fd1 == "enemysensor") {
-			CULog("ATTACK end");
-		}
-	}
-	*/
+	//currently nothing still?
 }

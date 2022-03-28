@@ -66,6 +66,9 @@ public:
         
         //The age of the hitbox (how long it stays active)
         float _age;
+
+        //The max age of the hitbox 
+        float _maxAge;
         
         //Whether the hitbox is active or not
         bool _active;
@@ -92,6 +95,9 @@ public:
         std::shared_ptr<cugl::scene2::WireNode> _sensorNode;
 
         std::vector<cugl::Vec2> _debugVerticies;
+
+        //can the attack split?
+        bool _splitable;
         
         virtual void resetDebug() override;
         
@@ -127,6 +133,8 @@ public:
         bool isActive() {return _active;}
         
         float getRadius() {return _radius;}
+
+        float getMaxAge() { return _maxAge;}
         
         cugl::Poly2 getBall() {return _ball;}
         cugl::Vec2 getPosition() { return _position; }
@@ -135,6 +143,10 @@ public:
 
         std::string* getSensorName() { return &_sensorName; }
         void setSensorName(string s) { _sensorName = s; }
+
+        bool isSplitable() { return _splitable; }
+
+        void setSplitable(bool val) { _splitable = val; }
 
 #pragma mark - 
 #pragma mark Physics Methods
@@ -252,9 +264,14 @@ public:
     void attackLeft(cugl::Vec2 p, SwipeController::SwipeAttack attack, bool grounded);
     
     /**
-     *  Creates an attack with the designated parameters. This is mostly to create enemy attacks, but also any explosion attacks for the player. There is no parameter. This must be calculated in the position. 
+     *  Creates an attack with the designated parameters. This is mostly to create enemy attacks, but also any explosion attacks for the player. There is no parameter. This must be calculated in the position. The attack will be splitable
      */
     void createAttack(cugl::Vec2 p, float radius, float age, float damage, Type s, cugl::Vec2 vel);
+
+    /**
+     *  Creates an attack with the designated parameters. This is mostly to create enemy attacks, but also any explosion attacks for the player. There is no parameter. This must be calculated in the position.
+     */
+    void createAttack(cugl::Vec2 p, float radius, float age, float damage, Type s, cugl::Vec2 vel, bool splitable);
 
     /** Get left offset */
     cugl::Vec2 getLeftOff() { return _leftOff; }
