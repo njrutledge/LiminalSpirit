@@ -410,7 +410,7 @@ void GameScene::createEnemies() {
     std::shared_ptr<Glow> enemyGlow = Glow::alloc(testPos, enemyGlowImage->getSize() / _scale, _scale);
     std::shared_ptr<scene2::PolygonNode> enemyGlowSprite = scene2::PolygonNode::allocWithTexture(enemyGlowImage);
     enemyGlow->setSceneNode(enemyGlowSprite);
-    std::shared_ptr<Gradient> grad = Gradient::allocRadial(Color4(255, 255, 255, 85), Color4(255, 255, 255, 0), Vec2(0.5, 0.5), .2f);
+    std::shared_ptr<Gradient> grad = Gradient::allocRadial(Color4(255, 255, 255, 85), Color4(111, 111, 111, 0), Vec2(0.5, 0.5), .2f);
     enemyGlowSprite->setGradient(grad);
     enemyGlowSprite->setRelativeColor(false);
     enemyGlowSprite->setScale(.65f);
@@ -432,7 +432,7 @@ void GameScene::createEnemies() {
     std::shared_ptr<Glow> enemyGlow2 = Glow::alloc(testPos2, enemyGlowImage2->getSize() / _scale, _scale);
     std::shared_ptr<scene2::PolygonNode> enemyGlowSprite2 = scene2::PolygonNode::allocWithTexture(enemyGlowImage2);
     enemyGlow2->setSceneNode(enemyGlowSprite2);
-    std::shared_ptr<Gradient> grad2 = Gradient::allocRadial(Color4(255, 255, 255, 85), Color4(255, 255, 255, 0), Vec2(0.5, 0.5), .2f);
+    std::shared_ptr<Gradient> grad2 = Gradient::allocRadial(Color4(255, 255, 255, 85), Color4(111, 111, 111, 0), Vec2(0.5, 0.5), .2f);
     enemyGlowSprite2->setGradient(grad2);
     enemyGlowSprite2->setRelativeColor(false);
     enemyGlowSprite2->setScale(.65f);
@@ -452,6 +452,7 @@ void GameScene::createEnemies() {
 }
 
 void GameScene::createParticles() {
+    // deprecated for now as it lags the game
     //for (int i = 0; i < 9; i++) {
     //    std::shared_ptr<Texture> particleTexture = _assets->get<Texture>(GLOW_TEXTURE);
     //    std::shared_ptr<Particle> party = Particle::alloc(Vec2(10,10), particleTexture->getSize() / _scale / 10, _scale);
@@ -609,7 +610,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     _playerGlow = Glow::alloc(testPos, imaget->getSize() / _scale, _scale);
     std::shared_ptr<scene2::PolygonNode> spritet = scene2::PolygonNode::allocWithTexture(imaget);
     _playerGlow->setSceneNode(spritet);
-    std::shared_ptr<Gradient> grad = Gradient::allocRadial(Color4(255, 255, 255, 85), Color4(255,255,255, 0), Vec2(0.5, 0.5), .2f);
+    std::shared_ptr<Gradient> grad = Gradient::allocRadial(Color4(255, 255, 255, 55), Color4(111,111,111, 0), Vec2(0.5, 0.5), .3f);
     spritet->setGradient(grad);
     spritet->setRelativeColor(false);
     spritet->setScale(.65f);
