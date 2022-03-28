@@ -25,8 +25,9 @@ Vec2 AIController::getMovement(shared_ptr<BaseEnemyModel> e, Vec2 player_pos, fl
 		return Vec2(getLostMovement(e, player_pos, timestep), -9.8f);
 	} else if (name == "Specter") {
 		return getSpecterMovement(e, player_pos, timestep);
-	}
-	else {
+    } else if (name == "Seeker") {
+        return getSeekerMovement(e, player_pos, timestep);
+    } else {
 		return Vec2();
 	}
 }
@@ -130,4 +131,54 @@ Vec2 AIController::getSpecterMovement(shared_ptr<BaseEnemyModel> specter, Vec2 p
 			
 		return Vec2();
 	}
+}
+
+Vec2 AIController::getSeekerMovement(shared_ptr<BaseEnemyModel> specter, Vec2 player_pos, float timestep) {
+    //TODO:
+    // Use line of sight to determine ranged attacks
+    specter->setTimePast(specter->getTimePast() + timestep);
+//    int flip = 1; // flips y direction
+
+    //Check if enemy is already attacking
+    if (!specter->isAttacking()) {
+        if (player_pos.x <= specter->getPosition().x + specter->getAttackRadius()/4
+            && player_pos.x >= specter->getPosition().x - specter->getAttackRadius()/4
+            && player_pos.y <= specter->getPosition().y + specter->getAttackRadius()/4
+            && player_pos.y >= specter->getPosition().y - specter->getAttackRadius()/4) {
+            if (specter->getAttackCooldown() < specter->getTimePast()) {
+                specter->setIsAttacking(true);
+                specter->setTimePast(0.0f);
+            }
+            return Vec2(); // Specterstops moving
+        }
+        else if (specter->getVY() == 0) {
+            return Vec2(specter->getHorizontalSpeed(), -1 * specter->getVerticalSpeed());
+        }
+        else if (player_pos.x > specter->getPosition().x) {
+            if (player_pos.y >= specter->getPosition().y) {
+                return Vec2(specter->getHorizontalSpeed(), specter->getVerticalSpeed());
+            }
+            else {
+                return Vec2(specter->getHorizontalSpeed(), -1 * specter->getVerticalSpeed());
+            }
+        }
+        else {
+            if (player_pos.y >= specter->getPosition().y) {
+                return Vec2(-1 * specter->getHorizontalSpeed(), specter->getVerticalSpeed());
+            }
+            else {
+                return Vec2(-1 * specter->getHorizontalSpeed(), -1 * specter->getVerticalSpeed());
+            }
+        }
+    }
+    else {
+        // Check if attack timer should be reset
+        if (specter->getAttackCooldown() < specter->getTimePast()) {
+            specter->setIsAttacking(false);
+            specter->setTimePast(0.0f);
+        }
+        
+            
+        return Vec2();
+    }
 }

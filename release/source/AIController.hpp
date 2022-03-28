@@ -31,7 +31,10 @@ public:
 
 	// Gets movement for the specter based on player position
 	cugl::Vec2 getSpecterMovement(shared_ptr<BaseEnemyModel> specter, cugl::Vec2 player_pos, float timestep);
-
+    
+    // Gets movement for the seeker based on player position
+    cugl::Vec2 getSeekerMovement(shared_ptr<BaseEnemyModel> seeker, cugl::Vec2 player_pos, float timestep);
+    
 	/** Remove any unwanted assets and clean up */
 	void dispose() {};
     

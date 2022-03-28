@@ -278,6 +278,9 @@ void GameScene::update(float timestep)
             else if ((*it)->getName() == "Specter") {
                 _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()));
             }
+            else if ((*it)->getName() == "Seeker") {
+                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 1.0f, 0.2f, 2.0f, AttackController::Type::e_melee, (vel.scale(0.2)).rotate((play_p - en_p).getAngle()));
+            }
         }
     }
 
@@ -392,21 +395,32 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
 }
 
 void GameScene::createEnemies() {
-    Vec2 enemyPos = ENEMY_POS;
-    std::shared_ptr<scene2::SceneNode> enemyNode = scene2::SceneNode::alloc();
-    std::shared_ptr<Texture> enemyImage = _assets->get<Texture>(ENEMY_TEXTURE);
-    std::shared_ptr<Lost> enemy = Lost::alloc(enemyPos, enemyImage->getSize() / _scale / 10, _scale);
-    std::shared_ptr<scene2::PolygonNode> enemySprite = scene2::PolygonNode::allocWithTexture(enemyImage);
-    enemy->setSceneNode(enemySprite);
-    enemy->setDebugColor(Color4::RED);
-    enemySprite->setScale(0.15f);
-    addObstacle(enemy, enemySprite, true);
-    _enemies.push_back(enemy);
-
+//    Vec2 enemyPos = ENEMY_POS;
+//    std::shared_ptr<scene2::SceneNode> enemyNode = scene2::SceneNode::alloc();
+//    std::shared_ptr<Texture> enemyImage = _assets->get<Texture>(ENEMY_TEXTURE);
+//    std::shared_ptr<Lost> enemy = Lost::alloc(enemyPos, enemyImage->getSize() / _scale / 10, _scale);
+//    std::shared_ptr<scene2::PolygonNode> enemySprite = scene2::PolygonNode::allocWithTexture(enemyImage);
+//    enemy->setSceneNode(enemySprite);
+//    enemy->setDebugColor(Color4::RED);
+//    enemySprite->setScale(0.15f);
+//    addObstacle(enemy, enemySprite, true);
+//    _enemies.push_back(enemy);
+//
+//    Vec2 enemyPos2 = ENEMY_POS2;
+//    std::shared_ptr<scene2::SceneNode> specterNode = scene2::SceneNode::alloc();
+//    std::shared_ptr<Texture> specterImage = _assets->get<Texture>(ENEMY_TEXTURE2);
+//    std::shared_ptr<Specter> specter = Specter::alloc(enemyPos2, specterImage->getSize() / _scale / 15, _scale);
+//    std::shared_ptr<scene2::PolygonNode> specterSprite = scene2::PolygonNode::allocWithTexture(specterImage);
+//    specter->setSceneNode(specterSprite);
+//    specter->setDebugColor(Color4::BLUE);
+//    specterSprite->setScale(0.15f);
+//    addObstacle(specter, specterSprite, true);
+//    _enemies.push_back(specter);
+    
     Vec2 enemyPos2 = ENEMY_POS2;
     std::shared_ptr<scene2::SceneNode> specterNode = scene2::SceneNode::alloc();
     std::shared_ptr<Texture> specterImage = _assets->get<Texture>(ENEMY_TEXTURE2);
-    std::shared_ptr<Specter> specter = Specter::alloc(enemyPos2, specterImage->getSize() / _scale / 15, _scale);
+    std::shared_ptr<Seeker> specter = Seeker::alloc(enemyPos2, specterImage->getSize() / _scale / 15, _scale);
     std::shared_ptr<scene2::PolygonNode> specterSprite = scene2::PolygonNode::allocWithTexture(specterImage);
     specter->setSceneNode(specterSprite);
     specter->setDebugColor(Color4::BLUE);
