@@ -1,1 +1,1 @@
-{"name":"level","start_pos":[5,4],"biome":"cave","level_height":54,"spawn_order":[["specter","specter"],[],["specter","specter"]],"spawn_pos":[[[10,12],[11,11]],[],[[10,12],[11,11]]],"spawn_times":[0,0,0],"platforms":[[5,5,3],[30,5,5],[10,10,4],[20,12,3]]}
+{"name":"level","start_pos":[5,4],"biome":"cave","level_height":54,"spawn_order":[["specter","lost"],[],["lost","specter","specter"]],"spawn_pos":[[[10,12],[30,2]],[],[[30,5],[20,12],[10,12]]],"spawn_times":[0,5,15],"platforms":[[5,5,3],[30,5,5],[10,10,4],[20,12,3]]}

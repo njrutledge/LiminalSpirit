@@ -105,8 +105,12 @@ protected:
     std::vector<vector<string>> _spawn_order;
     std::vector<vector<Vec2>> _spawn_pos;
     std::vector<float> _spawn_times;
-    /** A countdown used to move the logo */
-    int _countdown;
+    /** Number of waves for this level */
+    int _numWaves;
+    /** Next wave number for spawning, starts at 0 */
+    int _nextWaveNum;
+    /** A game timer used for spawn times */
+    float _timer;
 
     /** Whether or not debug mode is active */
     bool _debug;
@@ -127,7 +131,7 @@ public:
      * This constructor does not allocate any objects or start the game.
      * This allows us to use the object without a heap pointer.
      */
-    GameScene() : cugl::Scene2(), _countdown(-1) {}
+    GameScene() : cugl::Scene2() {}
 
     /**
      * Disposes of all (non-static) resources allocated to this mode.
@@ -210,7 +214,7 @@ public:
     /**
      * Creates all enemies and adds to _enemies
      */
-    void createEnemies();
+    void createEnemies(int wave);
 
 };
 

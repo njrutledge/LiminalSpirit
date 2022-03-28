@@ -151,6 +151,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         _spawn_times.push_back(spawnTime->get(index)->asFloat());
         index++;
     }
+    _numWaves = index;
+    // Set enemy wave number
+    _nextWaveNum = 0;
+    
     // Create a scene graph the same size as the window
     //_scene = Scene2::alloc(dimen.width, dimen.height);
     auto scene = _assets->get<scene2::SceneNode>("game");
@@ -226,6 +230,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _text = TextLayout::allocWithText(msg, assets->get<Font>("marker"));
     _text->layout();
     
+    _timer = 0.0f;
+    
     return true;
 }
 
@@ -266,7 +272,6 @@ void GameScene::dispose()
  */
 void GameScene::update(float timestep)
 {
-
     // Update input controller
     _input.update();
     
@@ -389,6 +394,15 @@ void GameScene::update(float timestep)
         }
     }
     
+    // Move wave spawn times up if all enemies killed
+    if (!_enemies.size()) {
+        float nextSpawnTime = _spawn_times[_nextWaveNum];
+        float diff = nextSpawnTime - _timer;
+        for (int i = _nextWaveNum; i < _numWaves; i++) {
+            _spawn_times[i] -= diff;
+        }
+    }
+    
     if (_player->isRemoved()) {
         reset();
         _player->markRemoved(false);
@@ -406,6 +420,14 @@ void GameScene::update(float timestep)
     // Copy World's zoom and transform
     _debugnode->applyPan(-_debugnode->getPaneTransform().transform(Vec2()));
     _debugnode->applyPan(_worldnode->getPaneTransform().transform(Vec2()) / _scale);
+    
+    // Spawn new enemies if time for next wave
+    _timer += timestep;
+
+    if (_nextWaveNum < _numWaves && _timer >= _spawn_times[_nextWaveNum]){
+        createEnemies(_nextWaveNum);
+        _nextWaveNum += 1;
+    }
 }
 
 /**
@@ -428,28 +450,37 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     batch->end();
 }
 
-void GameScene::createEnemies() {
-    Vec2 enemyPos = ENEMY_POS;
-    std::shared_ptr<scene2::SceneNode> enemyNode = scene2::SceneNode::alloc();
-    std::shared_ptr<Texture> enemyImage = _assets->get<Texture>(ENEMY_TEXTURE);
-    std::shared_ptr<Lost> enemy = Lost::alloc(enemyPos, enemyImage->getSize() / _scale / 10, _scale);
-    std::shared_ptr<scene2::PolygonNode> enemySprite = scene2::PolygonNode::allocWithTexture(enemyImage);
-    enemy->setSceneNode(enemySprite);
-    enemy->setDebugColor(Color4::RED);
-    enemySprite->setScale(0.15f);
-    addObstacle(enemy, enemySprite, true);
-    _enemies.push_back(enemy);
+void GameScene::createEnemies(int wave) {
 
-    Vec2 enemyPos2 = ENEMY_POS2;
-    std::shared_ptr<scene2::SceneNode> specterNode = scene2::SceneNode::alloc();
-    std::shared_ptr<Texture> specterImage = _assets->get<Texture>(ENEMY_TEXTURE2);
-    std::shared_ptr<Specter> specter = Specter::alloc(enemyPos2, specterImage->getSize() / _scale / 15, _scale);
-    std::shared_ptr<scene2::PolygonNode> specterSprite = scene2::PolygonNode::allocWithTexture(specterImage);
-    specter->setSceneNode(specterSprite);
-    specter->setDebugColor(Color4::BLUE);
-    specterSprite->setScale(0.15f);
-    addObstacle(specter, specterSprite, true);
-    _enemies.push_back(specter);
+    std::vector<string> enemies = _spawn_order.at(wave);
+    std::vector<cugl::Vec2> positions = _spawn_pos.at(wave);
+    
+    for(int i = 0; i < enemies.size(); i++) {
+        Vec2 enemyPos = positions[i];
+        std::string enemyName = enemies[i];
+        if (!enemyName.compare("lost")) {
+            std::shared_ptr<Texture> lostImage = _assets->get<Texture>("enemy");
+            std::shared_ptr<Lost> lost = Lost::alloc(enemyPos, lostImage->getSize() / _scale / 10, _scale);
+            std::shared_ptr<scene2::PolygonNode> lostSprite = scene2::PolygonNode::allocWithTexture(lostImage);
+            lost->setSceneNode(lostSprite);
+            lost->setDebugColor(Color4::RED);
+            lostSprite->setScale(0.15f);
+            addObstacle(lost, lostSprite, true);
+            _enemies.push_back(lost);
+        }
+        else if(!enemyName.compare("specter")) {
+            std::shared_ptr<Texture> specterImage = _assets->get<Texture>(ENEMY_TEXTURE2);
+            std::shared_ptr<Specter> specter = Specter::alloc(enemyPos, specterImage->getSize() / _scale / 15, _scale);
+            std::shared_ptr<scene2::PolygonNode> specterSprite = scene2::PolygonNode::allocWithTexture(specterImage);
+            specter->setSceneNode(specterSprite);
+            specter->setDebugColor(Color4::BLUE);
+            specterSprite->setScale(0.15f);
+            addObstacle(specter, specterSprite, true);
+            _enemies.push_back(specter);
+        }
+        // TODO add more enemy types
+        // If the enemy name is incorrect, no enemy will be made
+    }
 }
 
 /**
@@ -569,10 +600,8 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     // Add the logo and button to the scene graph
     // TODO get rid of this
     scene->addChild(button);
-
-    //add enemies and player last
-    createEnemies();
     
+    // Add player last
     Vec2 playerPos = PLAYER_POS;
     std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
     std::shared_ptr<Texture> image = _assets->get<Texture>(PLAYER_TEXTURE);
@@ -587,9 +616,6 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     // We can only activate a button AFTER it is added to a scene
     button->activate();
 
-    // Start the logo countdown and C-style random number generator
-    _countdown = TIME_STEP;
-    std::srand((int)std::time(0));
 }
 
 /**
@@ -638,8 +664,13 @@ void GameScene::reset()
         eit = _enemies.erase(eit);
     }
     
-    // Make all enemies
-    createEnemies();
+    // Reset wave spawning
+    _timer = 0.0f;
+    _nextWaveNum = 0;
+    auto spawnTime = _constants->get("spawn_times");
+    for(int i = 0; i < _numWaves; i++) {
+        _spawn_times[i] = spawnTime->get(i)->asFloat();
+    }
 }
 
 /**
