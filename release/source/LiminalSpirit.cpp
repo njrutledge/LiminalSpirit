@@ -30,6 +30,7 @@ void LiminalSpirit::onStartup()
 {
     _assets = AssetManager::alloc();
     _batch = SpriteBatch::alloc();
+    _scene = State::LOADING;
 
     // Start-up basic input
 #ifdef CU_MOBILE
@@ -43,12 +44,12 @@ void LiminalSpirit::onStartup()
     _assets->attach<scene2::SceneNode>(Scene2Loader::alloc()->getHook());
 
     // Create a "loading" screen
-    _loaded = false;
+    //_loaded = false;
     _loading.init(_assets);
 
-    //TODO check this
+    // TODO check this
     _assets->attach<JsonValue>(JsonLoader::alloc()->getHook());
-    
+
     // Queue up the other assets
     _assets->loadDirectoryAsync("json/assets.json", nullptr);
     //_assets->loadDirectory("json/assets.json");
@@ -70,6 +71,7 @@ void LiminalSpirit::onShutdown()
 {
     _loading.dispose();
     _gameplay.dispose();
+    _home.dispose();
     _assets = nullptr;
     _batch = nullptr;
 
@@ -98,7 +100,19 @@ void LiminalSpirit::onShutdown()
  */
 void LiminalSpirit::update(float timestep)
 {
-    if (!_loaded && _loading.isActive())
+    switch (_scene)
+    {
+    case LOADING:
+        updateLoadingScene(timestep);
+        break;
+    case HOME:
+        updateHomeScene(timestep);
+        break;
+    case GAME:
+        updateGameScene(timestep);
+        break;
+    }
+    /*if (!_loaded && _loading.isActive())
     {
         _loading.update(0.01f);
     }
@@ -106,12 +120,63 @@ void LiminalSpirit::update(float timestep)
     {
         _loading.dispose(); // Disables the input listeners in this mode
         _gameplay.init(_assets);
+        _home.init(_assets);
         _loaded = true;
     }
     else
     {
         _gameplay.update(timestep);
+    }*/
+}
+
+/**
+ * Inidividualized update method for the loading scene.
+ *
+ * This method keeps the primary {@link #update} from being a mess of switch
+ * statements. It also handles the transition logic from the loading scene.
+ *
+ * @param timestep  The amount of time (in seconds) since the last frame
+ */
+void LiminalSpirit::updateLoadingScene(float timestep)
+{
+    if (_loading.isActive())
+    {
+        _loading.update(timestep);
     }
+    else
+    {
+        _loading.dispose(); // Permanently disables the input listeners in this mode
+        // TODO add other screens
+        _home.init(_assets);
+        _gameplay.init(_assets);
+        _scene = State::HOME;
+    }
+}
+
+/**
+ * Individualized update method for the home scene.
+ *
+ * This method keeps the primary {@link #update} from being a mess of switch
+ * statements. It also handles the transition logic from the home scene.
+ *
+ * @param timestep  The amount of time (in seconds) since the last frame
+ */
+void LiminalSpirit::updateHomeScene(float timestep)
+{
+    _home.update(timestep);
+}
+
+/**
+ * Individualized update method for the game scene.
+ *
+ * This method keeps the primary {@link #update} from being a mess of switch
+ * statements. It also handles the transition logic from the game scene.
+ *
+ * @param timestep  The amount of time (in seconds) since the last frame
+ */
+void LiminalSpirit::updateGameScene(float timestep)
+{
+    _gameplay.update(timestep);
 }
 
 /**
@@ -125,13 +190,24 @@ void LiminalSpirit::update(float timestep)
  */
 void LiminalSpirit::draw()
 {
-    if (!_loaded)
+    switch (_scene)
+    {
+    case LOADING:
+        _loading.render(_batch);
+        break;
+    case HOME:
+        _home.render(_batch);
+        break;
+    case GAME:
+        _gameplay.render(_batch);
+        break;
+    }
+    /*if (!_loaded)
     {
         _loading.render(_batch);
     }
     else
     {
         _gameplay.render(_batch);
-    }
-
+    }*/
 }

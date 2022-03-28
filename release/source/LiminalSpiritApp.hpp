@@ -28,6 +28,31 @@ protected:
     /** The global asset manager */
     std::shared_ptr<cugl::AssetManager> _assets;
 
+    /**
+     * The current active scene
+     */
+    enum State
+    {
+        /** The loading scene */
+        LOADING,
+        /** The home menu scene */
+        HOME,
+        /** The options menu*/
+        OPTIONS,
+        /** The world menu scene*/
+        WORLDS,
+        /** The cave level select screen*/
+        CAVE_LEVELS,
+        /** The fungi level select screen*/
+        FUNGI_LEVELS,
+        /** The forest level select screen*/
+        FOREST_LEVELS,
+        /** The pause menu*/
+        PAUSE,
+        /** The scene to play the game */
+        GAME
+    };
+
     // Player modes
     /** The primary controller for the game world */
     GameScene _gameplay;
@@ -37,6 +62,9 @@ protected:
     HomeScene _home;
     /** Whether or not we have finished loading all assets */
     bool _loaded;
+
+    /** The current active scene*/
+    State _scene;
 
 public:
     /**
@@ -96,6 +124,36 @@ public:
      * @param timestep  The amount of time (in seconds) since the last frame
      */
     virtual void update(float timestep) override;
+
+    /**
+     * Individualized update method for the loading scene.
+     *
+     * This method keeps the primary {@link #update} from being a mess of switch
+     * statements. It also handles the transition logic from the loading scene.
+     *
+     * @param timestep  The amount of time (in seconds) since the last frame
+     */
+    void updateLoadingScene(float timestep);
+
+    /**
+     * Individualized update method for the home scene.
+     *
+     * This method keeps the primary {@link #update} from being a mess of switch
+     * statements. It also handles the transition logic from the home scene.
+     *
+     * @param timestep  The amount of time (in seconds) since the last frame
+     */
+    void updateHomeScene(float timestep);
+
+    /**
+     * Individualized update method for the game scene.
+     *
+     * This method keeps the primary {@link #update} from being a mess of switch
+     * statements. It also handles the transition logic from the game scene.
+     *
+     * @param timestep  The amount of time (in seconds) since the last frame
+     */
+    void updateGameScene(float timestep);
 
     /**
      * The method called to draw the application to the screen.

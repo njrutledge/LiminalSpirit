@@ -59,14 +59,20 @@
 		},
 		"background": {
 			"file": "textures/backgrounds/forest_draft_no_platforms.png"
+		},
+		"home_background": {
+			"file": "textures/menus/home/home_background.png"
+		},
+		"home_tap_start": {
+			"file": "textures/menus/home/tap_start.png"
 		}
 	},
-    "fonts": {
-        "marker": {
-            "file":     "fonts/MarkerFelt.ttf",
-            "size":     32
-        }
-    },
+	"fonts": {
+		"marker": {
+			"file": "fonts/MarkerFelt.ttf",
+			"size": 32
+		}
+	},
 	"scene2s": {
 		"game": {
 			"type": "Node",
@@ -88,6 +94,55 @@
 					"layout": {
 						"x_anchor": "center",
 						"y_anchor": "middle"
+					}
+				}
+			}
+		},
+		"menu": {
+			"type": "Node",
+			"comment": "This is the root node of the menu scene",
+			"format": {
+				"type": "Anchored"
+			},
+			"children": {
+				"backdrop": {
+					"type": "Image",
+					"data": {
+						"texture": "home_background",
+						"anchor": [
+							0.5,
+							0.5
+						],
+						"scale": 0.75
+					},
+					"layout": {
+						"x_anchor": "center",
+						"y_anchor": "middle"
+					}
+				},
+				"start": {
+					"type": "Button",
+					"data": {
+						"upnode": "up",
+						"anchor": [
+							0.5,
+							0.4
+						],
+						"scale": 0.5
+					},
+					"children": {
+						"up": {
+							"type": "Image",
+							"data": {
+								"texture": "home_tap_start"
+							}
+						}
+					},
+					"layout": {
+						"x_anchor": "center",
+						"y_anchor": "bottom",
+						"y_offset": 0,
+						"x_offset": 0
 					}
 				}
 			}
