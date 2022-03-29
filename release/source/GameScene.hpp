@@ -221,6 +221,8 @@ public:
     */
     void createMirror(cugl::Vec2 enemyPos, Mirror::Type type);
 
+    std::shared_ptr<BaseEnemyModel> getNearestNonMirror(cugl::Vec2 pos);
+
 };
 
 #endif /* __Game_Scene_hpp__ */

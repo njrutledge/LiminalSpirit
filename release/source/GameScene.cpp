@@ -322,6 +322,14 @@ void GameScene::update(float timestep)
                 _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()));
             }
         }
+        if (Mirror* mirror = dynamic_cast<Mirror*>((*it).get())) {
+            if (mirror->getLinkedEnemy() == nullptr) {
+                mirror->setLinkedEnemy(getNearestNonMirror(mirror->getPosition()));
+                if (mirror->getLinkedEnemy() == nullptr) {
+                    mirror->markRemoved(true);
+                }
+            }
+        }
     }
 
     _swipes.update(_input);
@@ -431,6 +439,23 @@ void GameScene::update(float timestep)
     }
 }
 
+std::shared_ptr<BaseEnemyModel> GameScene::getNearestNonMirror(cugl::Vec2 pos) {
+    float distance(MAXINT);
+    std::shared_ptr<BaseEnemyModel> savedEnemy = nullptr;
+        for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
+        if (Mirror* mirror = dynamic_cast<Mirror*>((*it).get())) {
+            //Do nothing, but need to see if it can be casted
+        }
+        else {
+            if (pos.distance((*it)->getPosition()) <= distance) {
+                distance = pos.distance((*it)->getPosition());
+                savedEnemy = (*it);
+            }
+        }
+    }
+        return savedEnemy;
+}
+
 /**
  * The method called to draw the gameplay scene
  */
@@ -495,7 +520,7 @@ void GameScene::createEnemies(int wave) {
 
     void GameScene::createMirror(Vec2 enemyPos, Mirror::Type type) {
         std::shared_ptr<Texture> mirrorImage = _assets->get<Texture>("mirror");
-        std::shared_ptr<Mirror> mirror = Mirror::alloc(enemyPos, mirrorImage->getSize() / _scale / 15, _scale, type, _enemies[1]); // TODO this is not right, fix this to be closest enemy
+        std::shared_ptr<Mirror> mirror = Mirror::alloc(enemyPos, mirrorImage->getSize() / _scale / 15, _scale, type); // TODO this is not right, fix this to be closest enemy
         std::shared_ptr<scene2::PolygonNode> mirrorSprite = scene2::PolygonNode::allocWithTexture(mirrorImage);
         mirror->setSceneNode(mirrorSprite);
         mirror->setDebugColor(Color4::BLUE);
