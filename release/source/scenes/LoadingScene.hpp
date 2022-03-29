@@ -41,7 +41,7 @@ protected:
   /** The animated progress bar */
   std::shared_ptr<cugl::scene2::ProgressBar> _bar;
   /** The engine name */
-  std::shared_ptr<cugl::scene2::SceneNode> _brand;
+  // std::shared_ptr<cugl::scene2::SceneNode> _brand;
   /** The "play" button */
   std::shared_ptr<cugl::scene2::Button> _button;
 

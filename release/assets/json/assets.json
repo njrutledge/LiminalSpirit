@@ -73,6 +73,9 @@
 		"home_title": {
 			"file": "textures/menus/home/title_text.png"
 		},
+		"textbutton_base": {
+			"file": "textures/hud/text_highlight.png"
+		},
 		"world_select_background": {
 			"file": "textures/menus/world_select/world_select_background.png"
 		},
@@ -87,6 +90,10 @@
 		}
 	},
 	"fonts": {
+		"spectral": {
+			"file": "fonts/Spectral-Regular.ttf",
+			"size": 30
+		},
 		"marker": {
 			"file": "fonts/MarkerFelt.ttf",
 			"size": 32
