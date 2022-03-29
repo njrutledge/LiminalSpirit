@@ -41,6 +41,7 @@ void LiminalSpirit::onStartup()
     _assets->attach<Font>(FontLoader::alloc()->getHook());
     _assets->attach<Texture>(TextureLoader::alloc()->getHook());
     _assets->attach<scene2::SceneNode>(Scene2Loader::alloc()->getHook());
+    _assets->attach<Sound>(SoundLoader::alloc()->getHook());
 
     // Create a "loading" screen
     _loaded = false;
@@ -52,6 +53,12 @@ void LiminalSpirit::onStartup()
     // Queue up the other assets
     _assets->loadDirectoryAsync("json/assets.json", nullptr);
     //_assets->loadDirectory("json/assets.json");
+    
+    AudioEngine::start();
+    
+    _sound_controller = make_shared<SoundController>();
+    _sound_controller->init(_assets);
+    
     Application::onStartup(); // YOU MUST END with call to parent
 }
 
@@ -72,6 +79,7 @@ void LiminalSpirit::onShutdown()
     _gameplay.dispose();
     _assets = nullptr;
     _batch = nullptr;
+    _sound_controller = nullptr;
 
     // Shutdown input
 #ifdef CU_MOBILE
@@ -81,7 +89,7 @@ void LiminalSpirit::onShutdown()
 #else
     Input::deactivate<Mouse>();
 #endif
-
+    AudioEngine::stop();
     Application::onShutdown(); // YOU MUST END with call to parent
 }
 
@@ -105,7 +113,7 @@ void LiminalSpirit::update(float timestep)
     else if (!_loaded)
     {
         _loading.dispose(); // Disables the input listeners in this mode
-        _gameplay.init(_assets);
+        _gameplay.init(_assets, _sound_controller);
         _loaded = true;
     }
     else

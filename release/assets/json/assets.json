@@ -43,34 +43,34 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
-        "trianglemirror": {
-            "file": "textures/trianglemirror.png",
-            "minfilter": "nearest",
-            "magfilter": "linear",
-            "wrapS": "clamp",
-            "wrapT": "clamp"
-        },
-        "squaremirror": {
-            "file": "textures/squaremirror.png",
-            "minfilter": "nearest",
-            "magfilter": "linear",
-            "wrapS": "clamp",
-            "wrapT": "clamp"
-        },
-        "lost": {
-            "file": "textures/mirrortest.png",
-            "minfilter": "nearest",
-            "magfilter": "linear",
-            "wrapS": "clamp",
-            "wrapT": "clamp"
-        },
-        "glutton": {
-            "file": "textures/glutton.png",
-            "minfilter": "nearest",
-            "magfilter": "linear",
-            "wrapS": "clamp",
-            "wrapT": "clamp"
-        },
+		"trianglemirror": {
+			"file": "textures/trianglemirror.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"squaremirror": {
+			"file": "textures/squaremirror.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"lost": {
+			"file": "textures/mirrortest.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"glutton": {
+			"file": "textures/glutton.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
 		"player": {
 			"file": "textures/player.png",
 			"minfilter": "nearest",
@@ -103,12 +103,12 @@
 			"file": "textures/backgrounds/forest_background.png"
 		}
 	},
-    "fonts": {
-        "marker": {
-            "file":     "fonts/MarkerFelt.ttf",
-            "size":     32
-        }
-    },
+	"fonts": {
+		"marker": {
+			"file": "fonts/MarkerFelt.ttf",
+			"size": 32
+		}
+	},
 	"scene2s": {
 		"game": {
 			"type": "Node",
@@ -135,7 +135,21 @@
 			}
 		}
 	},
-    "jsons" : {
-        "constants" : "json/level.json"
-    }
+	"sounds": {
+		"cave1": {
+			"type": "sample",
+			"file": "sounds/cave/cave1.ogg",
+			"stream": true,
+			"volume": 0.5
+		},
+		"cave2": {
+			"type": "sample",
+			"file": "sounds/cave/cave2.ogg",
+			"stream": true,
+			"volume": 0.5
+		}
+	},
+	"jsons": {
+		"constants": "json/level.json"
+	}
 }

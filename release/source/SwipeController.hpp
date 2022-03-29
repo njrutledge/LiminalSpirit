@@ -62,13 +62,40 @@ protected:
         }
     };
     
+    /**
+     * Struct for the state of the right sided attacks
+     *
+     * direction is the direction of the right swipe
+     * isCharged is whether the attack is charged
+     */
+    struct RightSwipeState {
+        SwipeDirection direction;
+        bool isCharged;
+
+        /**
+         * Constructor to initialize the left side state
+         */
+        void construct() {
+            direction = none;
+            isCharged = false;
+        }
+    };
+    
     /** State of the left side swipes */
     LeftSwipeState _leftState;
     
-    /** Swipe attack completed on the right side */
-    SwipeAttack _rightSwipe;
     /** Swipe attack completed on the left side */
     SwipeAttack _leftSwipe;
+    /** Swipe angle in degrees on the left side */
+    float _leftAngle;
+    
+    /** State of the left side swipes */
+    RightSwipeState _rightState;
+    
+    /** Swipe attack completed on the right side */
+    SwipeAttack _rightSwipe;
+    /** Swipe angle in degrees on the right side */
+    float _rightAngle;
     
     /** Timestamp to get the current time for charge calculations */
     cugl::Timestamp _currTime;
@@ -80,6 +107,33 @@ protected:
      */
     void setLeftDirection(SwipeDirection d){
         _leftState.direction = d;
+    };
+    
+    /**
+     * Set the left sided swipe angle
+     *
+     * @param s the swipe angle completed on the left side
+     */
+    void setLeftAngle(float a){
+        _leftAngle = a;
+    };
+    
+    /**
+     * Set the right sided direction
+     *
+     * @param s the swipe direction completed on the right side
+     */
+    void setRightDirection(SwipeDirection d){
+        _rightState.direction = d;
+    };
+    
+    /**
+     * Set the right sided swipe angle
+     *
+     * @param s the swipe angle completed on the left side
+     */
+    void setRightAngle(float a){
+        _rightAngle = a;
     };
     
     /**
@@ -107,13 +161,20 @@ protected:
      * @param leftStartTime  the timestamp for when the left finger went down
      *
      */
-    void calculateChargeAttack(cugl::Timestamp leftStartTime);
+    void calculateChargeAttack(cugl::Timestamp startTime, bool isLeftSidedCharge);
     
     /**
      * Charge the attack for the left side state
      */
-    void chargeAttack() {
+    void chargeLeftAttack() {
         _leftState.isCharged = true;
+    }
+    
+    /**
+     * Charge the attack for the left side state
+     */
+    void chargeRightAttack() {
+        _rightState.isCharged = true;
     }
     
     /**
@@ -138,6 +199,20 @@ protected:
     void resetLeftState() {
         _leftState.direction = none;
         _leftState.isCharged = false;
+    }
+    
+    /**
+     * Processes the type of swipe attack that was just completed on the right side
+     * and resets the right side state
+     */
+    void processRightState();
+    
+    /**
+     * Resets the left side state to no direction and not charged
+     */
+    void resetRightState() {
+        _rightState.direction = none;
+        _rightState.isCharged = false;
     }
     
     /**
@@ -166,15 +241,6 @@ public:
     void update(InputController& input);
     
     /**
-     * Returns the type of swipe attack that was just completed on the right side
-     *
-     * @return the right-sided swipe attack
-     */
-    SwipeAttack getRightSwipe() {
-        return _rightSwipe;
-    };
-    
-    /**
      * Returns the type of swipe attack that was just completed on the left side
      *
      * @return the left-sided swipe attack
@@ -184,12 +250,54 @@ public:
     };
     
     /**
+     * Returns the angle of the swipe attack that was just completed on the left side
+     *
+     * @return the left-sided swipe angle
+     */
+    float getLeftAngle() {
+        return _leftAngle;
+    };
+    
+    /**
+     * Returns the type of swipe attack that was just completed on the right side
+     *
+     * @return the right-sided swipe attack
+     */
+    SwipeAttack getRightSwipe() {
+        return _rightSwipe;
+    };
+    
+    /**
+     * Returns the angle of the swipe attack that was just completed on the right side
+     *
+     * @return the right-sided swipe angle
+     */
+    float getRightAngle() {
+        return _rightAngle;
+    };
+    
+    /**
      * Returns whether the left attack is charged
      *
      * @return whether the left attack is charged
      */
-    bool hasChargedAttack() {
+    bool hasLeftChargedAttack() {
         return _leftState.isCharged;
+    }
+    
+    /**
+     * Returns whether the right attack is charged
+     *
+     * @return whether the right attack is charged
+     */
+    bool hasRightChargedAttack() {
+        return _rightState.isCharged;
+    }
+    
+    bool isRightAttackCharged() {
+        return _rightSwipe == chargedUp ||
+        _rightSwipe == chargedRight ||
+        _rightSwipe == chargedLeft;
     }
     
     /**

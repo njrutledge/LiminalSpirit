@@ -37,6 +37,7 @@ public:
 
     enum Type {
         p_melee,
+        p_dash,
         p_range,
         p_exp_package,
         p_exp,
@@ -256,12 +257,12 @@ public:
     /**
      *  Creates an attack for a right sided swipe.
      */
-    void attackRight(cugl::Vec2 p, SwipeController::SwipeAttack attack, bool grounded);
+    void attackRight(cugl::Vec2 p, SwipeController::SwipeAttack attack, float angle, bool grounded);
     
     /**
      *  Creates an attack for a left sided swipe.
      */
-    void attackLeft(cugl::Vec2 p, SwipeController::SwipeAttack attack, bool grounded);
+    void attackLeft(cugl::Vec2 p, SwipeController::SwipeAttack attack, float angle, bool grounded);
     
     /**
      *  Creates an attack with the designated parameters. This is mostly to create enemy attacks, but also any explosion attacks for the player. There is no parameter. This must be calculated in the position. The attack will be splitable

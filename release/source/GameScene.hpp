@@ -44,6 +44,7 @@
 #include "Platform.hpp"
 #include "Glow.hpp"
 #include "Particle.hpp"
+#include "SoundController.hpp"
 /**
  * Class for a simple Hello World style application
  *
@@ -88,6 +89,8 @@ protected:
     std::shared_ptr<cugl::TextLayout> _text;    
     /** Text font */
     std::shared_ptr<cugl::Font> _font;
+    
+    std::shared_ptr<SoundController> _sound;
 
     float _platform_attr;
     /** Particle Pool */
@@ -138,6 +141,13 @@ protected:
 
     /** Whether or not debug mode is active */
     bool _debug;
+    
+    /** How long current melee dash has lasted */
+    float _dashTime;
+    /** XVel for this current melee dash */
+    int _dashXVel;
+    /** YVel for the current melee dash */
+    int _dashYVel;
 
     /**
      * Internal helper to build the scene graph.
@@ -181,7 +191,7 @@ public:
      *
      * @return true if the controller is initialized properly, false otherwise.
      */
-    bool init(const std::shared_ptr<cugl::AssetManager> &assets);
+    bool init(const std::shared_ptr<cugl::AssetManager> &assets, const std::shared_ptr<SoundController> sound);
 
 #pragma mark -
 #pragma mark Gameplay Handling

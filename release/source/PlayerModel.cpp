@@ -153,6 +153,10 @@ void PlayerModel::setVX(float value) {
     _body->SetLinearVelocity(b2Vec2(value, _body->GetLinearVelocity().y));
 }
 
+float PlayerModel::getVX() {
+    return _body->GetLinearVelocity().x;
+}
+
 void PlayerModel::applyForce() {
     if (!isEnabled()) {
         return;

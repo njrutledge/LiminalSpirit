@@ -64,6 +64,9 @@ protected:
 
 	/** flag for if this is the first frame of velocity 0 */
 	bool _isFirstFrame;
+    
+    /** if player is invincible */
+    bool _isInvincible;
 
 	/** Redraws outline of physics fixtures */
 	virtual void resetDebug() override;
@@ -171,7 +174,13 @@ public:
 
 	/** Set X velocity */
 	void setVX(float value) override;
+    
+    /** Get X velocity */
+    float getVX();
 
+    void setIsInvincible(bool invincibility) { _isInvincible = invincibility; }
+    
+    bool isInvincible() { return _isInvincible; }
 
 	/**
 	 * Returns how much force to apply to get the player moving

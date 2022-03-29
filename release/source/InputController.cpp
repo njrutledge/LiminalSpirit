@@ -185,6 +185,7 @@ void InputController::fingerDownCB(const cugl::TouchEvent& event, bool focus) {
             _rightFingerDown = true;
             _rightFingerID = event.touch;
             _rightStartPos = event.position;
+            _rightStartTime.mark();
         }
     }
 }

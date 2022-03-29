@@ -66,7 +66,7 @@ float DEFAULT_HEIGHT = DEFAULT_WIDTH/SCENE_WIDTH*SCENE_HEIGHT;
 #define PLATFORMTEXTURE "platform"
 
 /** The initial position of the enemies */
-float ENEMY_POS[] = {18.0f, 15.0f};
+float ENEMY_POS[] = { 30.0f, 15.0f};
 float ENEMY_POS2[] = { 28.0f, 10.0f };
 float ENEMY_POS3[] = { 15.0f, 2.0f };
 float ENEMY_POS4[] = {5.0f, 20.0f};
@@ -91,7 +91,7 @@ float PLATFORMS[PLATFORM_COUNT][PLATFORM_ATT] = {{5,5,3}, {30,5,5}, {10,10,4}, {
  *
  * @return true if the controller is initialized properly, false otherwise.
  */
-bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
+bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const std::shared_ptr<SoundController> sound)
 {
 
     Size dimen = Application::get()->getDisplaySize();
@@ -134,6 +134,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         _platforms_attr.push_back(attr);
     }
 
+    // Sound controller
+    _sound = sound;
+
     auto spawn = _constants->get("spawn_order")->children();
     auto spawnPos = _constants->get("spawn_pos");
     auto spawnTime = _constants->get("spawn_times");
@@ -167,8 +170,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     // Application::get()->setClearColor(Color4(229, 229, 229, 255));
 
     // You have to attach the individual loaders for each asset type
-    _assets->attach<Texture>(TextureLoader::alloc()->getHook());
-    _assets->attach<Font>(FontLoader::alloc()->getHook());
 
     // This reads the given JSON file and uses it to load all other assets
     //_assets->loadDirectory("json/assets.json");
@@ -216,6 +217,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _pMeleeTexture = _assets->get<Texture>(PATTACK_TEXTURE);
     _attacks = std::make_shared<AttackController>();
     _attacks->init(_scale, 1.5, cugl::Vec2::UNIT_Y, cugl::Vec2(0,0.5), 0.5, 1, 0.5, 0.1);
+    _dashTime = 0;
+    _dashXVel = 0;
+    _dashYVel = 0;
 
     _ai = AIController();
 
@@ -254,6 +258,7 @@ void GameScene::dispose()
     _worldnode = nullptr;
     _debugnode = nullptr;
     _vertbuff = nullptr;
+    _sound = nullptr;
     
     //TODO: CHECK IF THIS IS RIGHT FOR DISPOSING
 //    for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
@@ -277,6 +282,12 @@ void GameScene::dispose()
  */
 void GameScene::update(float timestep)
 {
+    // _sound->play_level_music();
+    if (AudioEngine::get()->getMusicQueue()->getState() == cugl::AudioEngine::State::INACTIVE) {
+        std::shared_ptr<Sound> source = _assets->get<Sound>("cave2");
+        AudioEngine::get()->getMusicQueue()->play(source, true, 1.0f);
+    }
+    
     // Update input controller
     _input.update();
     
@@ -292,15 +303,6 @@ void GameScene::update(float timestep)
         setDebug(!isDebug());
     }
 
-    // FLIPPING LOGIC
-    if (xPos > 0)
-    {
-        _player->setFacingRight(true);
-    }
-    else if (xPos < 0)
-    {
-        _player->setFacingRight(false);
-    }
     scene2::TexturedNode *image = dynamic_cast<scene2::TexturedNode *>(_player->getSceneNode().get());
     if (image != nullptr)
     {
@@ -354,8 +356,64 @@ void GameScene::update(float timestep)
     
     _swipes.update(_input);
     b2Vec2 playerPos = _player->getBody()->GetPosition();
-    _attacks->attackLeft(Vec2(playerPos.x, playerPos.y), _swipes.getLeftSwipe(), _player->isGrounded());
-    _attacks->attackRight(Vec2(playerPos.x, playerPos.y), _swipes.getRightSwipe(),_player->isGrounded());
+    _attacks->attackLeft(Vec2(playerPos.x, playerPos.y), _swipes.getLeftSwipe(), _swipes.getLeftAngle(), _player->isGrounded());
+    _attacks->attackRight(Vec2(playerPos.x, playerPos.y), _swipes.getRightSwipe(), _swipes.getRightAngle(), _player->isGrounded());
+    if (_swipes.getRightSwipe() == SwipeController::chargedRight) {
+        _dashXVel = 20;
+        _dashTime = 0;
+    }
+    else if (_swipes.getRightSwipe() == SwipeController::chargedLeft) {
+        _dashXVel = -20;
+        _dashTime = 0;
+    }
+    else if (_swipes.getRightSwipe() == SwipeController::chargedUp) {
+        _dashYVel = 20;
+        _dashTime = 0;
+    }
+    else if (_swipes.getRightSwipe() == SwipeController::chargedDown) {
+        _dashYVel = -20;
+        _dashTime = 0;
+    }
+    // If the dash velocities are set, change player velocity if dash time is not complete
+    if (_dashXVel || _dashYVel) {
+        if (_dashTime < 0.5f) {
+            if (_dashXVel > 0) {
+                _player->setVX(_dashXVel);
+                _player->setFacingRight(true);
+            } else if (_dashXVel < 0) {
+                _player->setVX(_dashXVel);
+                _player->setFacingRight(false);
+            }
+            // Always want to set x velocity to 0 for up/down charge attacks
+            if (_dashYVel > 0) {
+                _player->setVY(_dashYVel);
+                _player->setVX(_dashXVel);
+            }
+            else if (_dashYVel < 0 && !_player->isGrounded()) {
+                _player->setVY(_dashYVel);
+                _player->setVX(_dashXVel);
+            }
+            // Invincibility, maintain same health throughout dash
+            _player->setIsInvincible(true);
+            _dashTime += timestep;
+        }
+        else {
+            _dashXVel = 0;
+            _dashYVel = 0;
+            _player->setIsInvincible(false);
+        }
+    } else {
+        // Flipping logic based on tilt
+        if (xPos > 0)
+        {
+            _player->setFacingRight(true);
+        }
+        else if (xPos < 0)
+        {
+            _player->setFacingRight(false);
+        }
+    }
+    
     _world->update(timestep);
     
     for (auto it = _attacks->_pending.begin(); it != _attacks->_pending.end(); ++it) {
@@ -490,8 +548,10 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     // This takes care of begin/end
 
     //_scene->render(batch);
-    if(_swipes.hasChargedAttack()){
+    if(_swipes.hasLeftChargedAttack()){
         _player->getSceneNode()->setColor(Color4::RED);
+    } else if(_swipes.hasRightChargedAttack()){
+        _player->getSceneNode()->setColor(Color4::BLUE);
     } else {
         _player->getSceneNode()->setColor(Color4::WHITE);
     }
@@ -585,7 +645,6 @@ void GameScene::createEnemies(int wave) {
             addObstacle(glutton, gluttonSprite, true);
             _enemies.push_back(glutton);
         }
-
         // TODO add more enemy types
         // If the enemy name is incorrect, no enemy will be made
     }

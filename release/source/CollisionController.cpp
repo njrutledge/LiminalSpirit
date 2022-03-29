@@ -171,7 +171,9 @@ void CollisionController::handlePlayerCollision(PlayerModel* player, physics2::O
 	if (AttackController::Attack* attack = dynamic_cast<AttackController::Attack*>(bd)) {
 		//TODO: Make "enemyattacksensor" a constant somewhere
 		if (*(attack->getSensorName()) == "enemyattacksensor") {
-			player->setHealth(player->getHealth() - attack->getDamage());
+            if (!player->isInvincible()) {
+                player->setHealth(player->getHealth() - attack->getDamage());
+            }
             attack->setInactive();
 			if (player->getHealth() <= 0) {
 				player->markRemoved(true);
