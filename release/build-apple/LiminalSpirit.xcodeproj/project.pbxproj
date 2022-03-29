@@ -120,6 +120,9 @@
 		F05176E227D080DF00C0617F /* CollisionController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F05176D727D071D900C0617F /* CollisionController.cpp */; };
 		F05176E327D080E600C0617F /* InputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F025103B27D02C6C00AB80AA /* InputController.cpp */; };
 		F05176E427D080E700C0617F /* InputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F025103B27D02C6C00AB80AA /* InputController.cpp */; };
+		F05BD2B327F29AB8005D1F38 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = F05BD2AF27F29AB8005D1F38 /* sounds */; };
+		F05BD2B427F29AB8005D1F38 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = F05BD2AF27F29AB8005D1F38 /* sounds */; };
+		F05BD2B527F29AB8005D1F38 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = F05BD2AF27F29AB8005D1F38 /* sounds */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -221,6 +224,7 @@
 		F05176D627D071D800C0617F /* CollisionController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CollisionController.hpp; sourceTree = "<group>"; };
 		F05176D727D071D900C0617F /* CollisionController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CollisionController.cpp; sourceTree = "<group>"; };
 		F05176D827D071D900C0617F /* PlayerModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayerModel.cpp; sourceTree = "<group>"; };
+		F05BD2AF27F29AB8005D1F38 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -308,6 +312,7 @@
 		EB2BE9B71D749870002FE78B /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				F05BD2AF27F29AB8005D1F38 /* sounds */,
 				857201C727E25619006D48C6 /* fonts */,
 				EBFE7C041E19B496001007C2 /* json */,
 				EB2BE9BA1D7498D2002FE78B /* textures */,
@@ -578,6 +583,7 @@
 			files = (
 				EB22BF9B25D0EA5C002ACE41 /* DeviceMargins.plist in Resources */,
 				EB22BF9625D0EA50002ACE41 /* json in Resources */,
+				F05BD2B527F29AB8005D1F38 /* sounds in Resources */,
 				EB22BF9725D0EA51002ACE41 /* textures in Resources */,
 				857201CA27E25619006D48C6 /* fonts in Resources */,
 				EB22BF9025D0EA49002ACE41 /* iOS.xcassets in Resources */,
@@ -592,6 +598,7 @@
 			files = (
 				EB7454D01D750623002FBAE6 /* textures in Resources */,
 				EB7454AB1D74D846002FBAE6 /* iOS.xcassets in Resources */,
+				F05BD2B427F29AB8005D1F38 /* sounds in Resources */,
 				EB7454AC1D74D846002FBAE6 /* Landscape.storyboard in Resources */,
 				857201C927E25619006D48C6 /* fonts in Resources */,
 				EBFE7C051E19B496001007C2 /* json in Resources */,
@@ -604,6 +611,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F05BD2B327F29AB8005D1F38 /* sounds in Resources */,
 				EBFE7C091E19B4AC001007C2 /* json in Resources */,
 				EB2BE9BB1D7498D2002FE78B /* textures in Resources */,
 				EBBF189B1D74904A008E2001 /* Mac.xcassets in Resources */,

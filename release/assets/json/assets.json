@@ -92,5 +92,19 @@
 				}
 			}
 		}
-	}
+	},
+    "sounds": {
+        "cave1": {
+            "type": "sample",
+            "file": "sounds/cave/cave1.ogg",
+            "stream": true,
+            "volume": 0.5
+        },
+        "cave2": {
+            "type": "sample",
+            "file": "sounds/cave/cave2.ogg",
+            "stream": true,
+            "volume": 0.5
+        }
+    }
 }

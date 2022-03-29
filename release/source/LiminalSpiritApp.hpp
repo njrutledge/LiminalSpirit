@@ -15,6 +15,7 @@
 #include <cugl/cugl.h>
 #include "GameScene.hpp"
 #include "LoadingScene.hpp"
+#include "SoundController.hpp"
 
 /**
  * This class represents the application root for the ship demo.
@@ -26,6 +27,8 @@ protected:
     std::shared_ptr<cugl::SpriteBatch> _batch;
     /** The global asset manager */
     std::shared_ptr<cugl::AssetManager> _assets;
+    
+    std::shared_ptr<SoundController> _sound_controller;
 
     // Player modes
     /** The primary controller for the game world */

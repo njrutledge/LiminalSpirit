@@ -38,6 +38,7 @@
 #include "TiltController.hpp"
 #include "CollisionController.hpp"
 #include "Platform.hpp"
+#include "SoundController.hpp"
 /**
  * Class for a simple Hello World style application
  *
@@ -68,6 +69,8 @@ protected:
     std::shared_ptr<cugl::TextLayout> _text;    
     /** Text font */
     std::shared_ptr<cugl::Font> _font;
+    
+    std::shared_ptr<SoundController> _sound;
 
 
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
@@ -148,7 +151,7 @@ public:
      *
      * @return true if the controller is initialized properly, false otherwise.
      */
-    bool init(const std::shared_ptr<cugl::AssetManager> &assets);
+    bool init(const std::shared_ptr<cugl::AssetManager> &assets, const std::shared_ptr<SoundController> sound);
 
 #pragma mark -
 #pragma mark Gameplay Handling

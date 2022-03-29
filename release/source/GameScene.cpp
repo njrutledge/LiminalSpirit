@@ -88,7 +88,7 @@ float PLATFORMS[PLATFORM_COUNT][PLATFORM_ATT] = {
  *
  * @return true if the controller is initialized properly, false otherwise.
  */
-bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
+bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const std::shared_ptr<SoundController> sound)
 {
 
     Size dimen = Application::get()->getDisplaySize();
@@ -113,6 +113,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     // set assets
     _assets = assets;
+    
+    _sound = sound;
 
     // Create a scene graph the same size as the window
     //_scene = Scene2::alloc(dimen.width, dimen.height);
@@ -123,8 +125,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     // Application::get()->setClearColor(Color4(229, 229, 229, 255));
 
     // You have to attach the individual loaders for each asset type
-    _assets->attach<Texture>(TextureLoader::alloc()->getHook());
-    _assets->attach<Font>(FontLoader::alloc()->getHook());
 
     // This reads the given JSON file and uses it to load all other assets
     //_assets->loadDirectory("json/assets.json");
@@ -206,6 +206,7 @@ void GameScene::dispose()
     _world = nullptr;
     _worldnode = nullptr;
     _debugnode = nullptr;
+    _sound = nullptr;
     
     //TODO: CHECK IF THIS IS RIGHT FOR DISPOSING
 //    for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
@@ -229,7 +230,16 @@ void GameScene::dispose()
  */
 void GameScene::update(float timestep)
 {
-
+    
+   // _sound->play_level_music();
+    
+    if (AudioEngine::get()->getMusicQueue()->getState() == cugl::AudioEngine::State::INACTIVE) {
+        std::shared_ptr<Sound> source = _assets->get<Sound>("cave2");
+        AudioEngine::get()->getMusicQueue()->play(source, true, 1.0f);
+    }
+    
+    
+    
     // Update input controller
     _input.update();
     
