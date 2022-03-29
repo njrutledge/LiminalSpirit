@@ -23,7 +23,7 @@ void SoundController::LevelMusic::init(string biome, std::shared_ptr<cugl::Asset
     
     _mixer->alloc(8);
     
-    _mixer->attach(1, _themeAsset->createNode());
+//    _mixer->attach(1, _themeAsset->createNode());
 };
 
 /**
