@@ -46,6 +46,8 @@
     <ClCompile Include="..\..\source\LoadingScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\Particle.cpp" />
+    <ClCompile Include="..\..\source\Glow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\LSCharacter.h" />
@@ -95,6 +97,8 @@
     <ClInclude Include="..\..\source\LoadingScene.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\Particle.hpp" />
+    <ClInclude Include="..\..\source\Glow.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LiminalSpirit.rc" />
@@ -109,5 +113,10 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{dd1e530c-ba94-453e-90fb-45d2841521e9}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\.gitignore" />
+    <None Include="..\..\source\shaders\Fragment.frag" />
+    <None Include="..\..\source\shaders\Vertex.vert" />
   </ItemGroup>
 </Project>

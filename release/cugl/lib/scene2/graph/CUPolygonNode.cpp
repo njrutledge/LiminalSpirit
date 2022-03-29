@@ -336,10 +336,10 @@ void PolygonNode::updateTextureCoords() {
     
         if (_gradient) {
             s = (it->position.x+off.x)/_polygon.getBounds().size.width;
-            t = (it->position.x+off.x)/_polygon.getBounds().size.height;
+            t = (it->position.y+off.y)/_polygon.getBounds().size.height;
 
             if (_flipHorizontal) { s = 1-s; }
-            if (!_flipVertical)  { t = 1-t; }
+            if (_flipVertical)  { t = 1-t; }
             it->gradcoord.x = s;
             it->gradcoord.y = t;
         }

@@ -92,8 +92,15 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
+		"whiteGrad": {
+			"file": "textures/circle.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
 		"background": {
-			"file": "textures/backgrounds/forest_draft_no_platforms.png"
+			"file": "textures/backgrounds/forest_background.png"
 		}
 	},
     "fonts": {

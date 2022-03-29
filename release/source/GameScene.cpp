@@ -36,6 +36,8 @@
 #include "PlayerModel.h"
 #include "CollisionController.hpp"
 #include "Platform.hpp"
+#include "Glow.hpp"
+#include "Particle.hpp"
 
 // Add support for simple random number generation
 #include <cstdlib>
@@ -222,6 +224,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     setDebug(false);
     buildScene(scene);
     addChild(scene);
+
     
     // Get font
     _font = assets->get<Font>("marker");
@@ -250,6 +253,7 @@ void GameScene::dispose()
     _world = nullptr;
     _worldnode = nullptr;
     _debugnode = nullptr;
+    _vertbuff = nullptr;
     
     //TODO: CHECK IF THIS IS RIGHT FOR DISPOSING
 //    for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
@@ -281,6 +285,7 @@ void GameScene::update(float timestep)
     float xPos = _tilt.getXpos();
     _player->setVX(xPos);
 
+
     // Debug Mode on/off
     if (_input.getDebugKeyPressed())
     {
@@ -308,6 +313,7 @@ void GameScene::update(float timestep)
         Vec2 direction = _ai.getMovement(*it, _player->getPosition(), timestep);
         (*it)->setVX(direction.x);
         (*it)->setVY(direction.y);
+        (*it)->getGlow()->setPosition((*it)->getPosition());
         if ((*it)->isAttacking()) {
             Vec2 play_p = _player->getPosition();
             Vec2 en_p = (*it)->getPosition();
@@ -405,7 +411,10 @@ void GameScene::update(float timestep)
     while (eit != _enemies.end()) {
         if ((*eit)->isRemoved()) {
             //int log1 = _world->getObstacles().size();
+            cugl::physics2::Obstacle* glowObj = dynamic_cast<cugl::physics2::Obstacle*>(&*(*eit)->getGlow());
             cugl::physics2::Obstacle* obj = dynamic_cast<cugl::physics2::Obstacle*>(&**eit);
+            _world->removeObstacle(glowObj);
+            _worldnode->removeChild(glowObj->_node);
             _world->removeObstacle(obj);
             _worldnode->removeChild(obj->_node);
 
@@ -451,6 +460,9 @@ void GameScene::update(float timestep)
         createEnemies(_nextWaveNum);
         _nextWaveNum += 1;
     }
+
+    
+    _playerGlow->setPosition(_player->getPosition());
 }
 
 std::shared_ptr<BaseEnemyModel> GameScene::getNearestNonMirror(cugl::Vec2 pos) {
@@ -485,15 +497,17 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     }
     Scene2::render(batch);
     batch->begin(getCamera()->getCombined());
+
     //_attacks.draw(batch);
     batch->drawText(_text,Vec2(20,getSize().height-_text->getBounds().size.height-10));
     batch->end();
 }
 
-void GameScene::createMirror(Vec2 enemyPos, Mirror::Type type, std::string assetName) {
+void GameScene::createMirror(Vec2 enemyPos, Mirror::Type type, std::string assetName, Glow enemyGlow) {
     std::shared_ptr<Texture> mirrorImage = _assets->get<Texture>(assetName);
     std::shared_ptr<Mirror> mirror = Mirror::alloc(enemyPos, mirrorImage->getSize() / _scale / 15, _scale, type); // TODO this is not right, fix this to be closest enemy
     std::shared_ptr<scene2::PolygonNode> mirrorSprite = scene2::PolygonNode::allocWithTexture(mirrorImage);
+    mirror->setGlow(enemyGlow);
     mirror->setSceneNode(mirrorSprite);
     mirror->setDebugColor(Color4::BLUE);
     mirrorSprite->setScale(0.15f);
@@ -509,10 +523,20 @@ void GameScene::createEnemies(int wave) {
     for (int i = 0; i < enemies.size(); i++) {
         Vec2 enemyPos = positions[i];
         std::string enemyName = enemies[i];
+        std::shared_ptr<Texture> enemyGlowImage = _assets->get<Texture>(GLOW_TEXTURE);
+        std::shared_ptr<Glow> enemyGlow = Glow::alloc(enemyPos, enemyGlowImage->getSize() / _scale, _scale);
+        std::shared_ptr<scene2::PolygonNode> enemyGlowSprite = scene2::PolygonNode::allocWithTexture(enemyGlowImage);
+        enemyGlow->setSceneNode(enemyGlowSprite);
+        std::shared_ptr<Gradient> grad = Gradient::allocRadial(Color4(255, 255, 255, 85), Color4(111, 111, 111, 0), Vec2(0.5, 0.5), .2f);
+        enemyGlowSprite->setGradient(grad);
+        enemyGlowSprite->setRelativeColor(false);
+        enemyGlowSprite->setScale(.65f);
+        addObstacle(enemyGlow, enemyGlowSprite, true);
         if (!enemyName.compare("lost")) {
             std::shared_ptr<Texture> lostImage = _assets->get<Texture>("lost");
             std::shared_ptr<Lost> lost = Lost::alloc(enemyPos, lostImage->getSize() / _scale / 10, _scale);
             std::shared_ptr<scene2::PolygonNode> lostSprite = scene2::PolygonNode::allocWithTexture(lostImage);
+            lost->setGlow(enemyGlow);
             lost->setSceneNode(lostSprite);
             lost->setDebugColor(Color4::RED);
             lostSprite->setScale(0.15f);
@@ -525,6 +549,7 @@ void GameScene::createEnemies(int wave) {
             std::shared_ptr<scene2::PolygonNode> specterSprite = scene2::PolygonNode::allocWithTexture(specterImage);
             specter->setSceneNode(specterSprite);
             specter->setDebugColor(Color4::BLUE);
+            specter->setGlow(enemyGlow);
             specterSprite->setScale(0.15f);
             addObstacle(specter, specterSprite, true);
             _enemies.push_back(specter);
@@ -544,6 +569,7 @@ void GameScene::createEnemies(int wave) {
             std::shared_ptr<scene2::PolygonNode> seekerSprite = scene2::PolygonNode::allocWithTexture(seekerImage);
             seeker->setSceneNode(seekerSprite);
             seeker->setDebugColor(Color4::GREEN);
+            seeker->setGlow(enemyGlow);
             seekerSprite->setScale(0.15f);
             addObstacle(seeker, seekerSprite, true);
             _enemies.push_back(seeker);
@@ -554,6 +580,7 @@ void GameScene::createEnemies(int wave) {
             std::shared_ptr<scene2::PolygonNode> gluttonSprite = scene2::PolygonNode::allocWithTexture(gluttonImage);
             glutton->setSceneNode(gluttonSprite);
             glutton->setDebugColor(Color4::BLUE);
+            glutton->setGlow(enemyGlow);
             gluttonSprite->setScale(0.12f);
             addObstacle(glutton, gluttonSprite, true);
             _enemies.push_back(glutton);
@@ -562,6 +589,21 @@ void GameScene::createEnemies(int wave) {
         // TODO add more enemy types
         // If the enemy name is incorrect, no enemy will be made
     }
+}
+
+void GameScene::createParticles() {
+    // deprecated for now as it lags the game
+    //for (int i = 0; i < 9; i++) {
+    //    std::shared_ptr<Texture> particleTexture = _assets->get<Texture>(GLOW_TEXTURE);
+    //    std::shared_ptr<Particle> party = Particle::alloc(Vec2(10,10), particleTexture->getSize() / _scale / 10, _scale);
+    //    std::shared_ptr<scene2::PolygonNode> particleSprite = scene2::PolygonNode::allocWithTexture(particleTexture);
+    //    party->setSceneNode(particleSprite);
+    //    party->setDebugColor(Color4::RED);
+    //    particleSprite->setScale(0.1f);
+    //    //particleSprite->setVisible(false);
+    //    addObstacle(party, particleSprite, true);
+    //    _particlePool.push_back(party);
+    //}
 }
 
 /**
@@ -681,8 +723,23 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     // Add the logo and button to the scene graph
     // TODO get rid of this
     scene->addChild(button);
-    
-    // Add player last
+
+    // Create particles
+    createParticles();
+
+    // Glow effect on player
+    Vec2 testPos = PLAYER_POS;
+    std::shared_ptr<Texture> imaget = _assets->get<Texture>(GLOW_TEXTURE);
+    _playerGlow = Glow::alloc(testPos, imaget->getSize() / _scale, _scale);
+    std::shared_ptr<scene2::PolygonNode> spritet = scene2::PolygonNode::allocWithTexture(imaget);
+    _playerGlow->setSceneNode(spritet);
+    std::shared_ptr<Gradient> grad = Gradient::allocRadial(Color4(255, 255, 255, 55), Color4(111,111,111, 0), Vec2(0.5, 0.5), .3f);
+    spritet->setGradient(grad);
+    spritet->setRelativeColor(false);
+    spritet->setScale(.65f);
+    addObstacle(_playerGlow, spritet, true);
+
+    // Player creation
     Vec2 playerPos = PLAYER_POS;
     std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
     std::shared_ptr<Texture> image = _assets->get<Texture>(PLAYER_TEXTURE);
@@ -739,6 +796,9 @@ void GameScene::reset()
     auto eit = _enemies.begin();
     while (eit != _enemies.end()) {
         cugl::physics2::Obstacle* obj = dynamic_cast<cugl::physics2::Obstacle*>(&**eit);
+        cugl::physics2::Obstacle* glowObj = dynamic_cast<cugl::physics2::Obstacle*>(&*(*eit)->getGlow());
+        _world->removeObstacle(glowObj);
+        _worldnode->removeChild(glowObj->_node);
         _world->removeObstacle(obj);
         _worldnode->removeChild(obj->_node);
 

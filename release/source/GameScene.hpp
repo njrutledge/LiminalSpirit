@@ -42,7 +42,8 @@
 #include "TiltController.hpp"
 #include "CollisionController.hpp"
 #include "Platform.hpp"
-
+#include "Glow.hpp"
+#include "Particle.hpp"
 /**
  * Class for a simple Hello World style application
  *
@@ -62,12 +63,26 @@ protected:
     std::shared_ptr<cugl::SpriteBatch> _batch; //check this 
     /** A reference to the logo, so that we can move it around */
     std::shared_ptr<cugl::scene2::SceneNode> _logo;
+
     /** The physics world */
     std::shared_ptr<cugl::physics2::ObstacleWorld> _world;
     /** Reference to the physics root of the scene graph */
     std::shared_ptr<cugl::scene2::ScrollPane> _worldnode;
     /** Reference to the debug root of the scene graph */
     std::shared_ptr<cugl::scene2::ScrollPane> _debugnode;
+
+    /** Graphics related*/
+    std::shared_ptr<Glow> _playerGlow;
+    /** A shader */
+    std::shared_ptr<cugl::Shader> _shader;
+    /** A vertex buffer */
+    std::shared_ptr<cugl::VertexBuffer> _vertbuff;
+    /** A mesh for drawing */
+    cugl::Mesh<cugl::SpriteVertex2> _mesh;
+    /** Test texture */
+    std::shared_ptr<cugl::Texture> _textureGraphics;
+    /** The type*/
+    int _type;
     
     /** The text with the current health */
     std::shared_ptr<cugl::TextLayout> _text;    
@@ -75,6 +90,10 @@ protected:
     std::shared_ptr<cugl::Font> _font;
 
     float _platform_attr;
+    /** Particle Pool */
+    std::vector<std::shared_ptr<Particle>> _particlePool;
+
+
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
     float _scale;
     
@@ -227,6 +246,9 @@ public:
     void createMirror(cugl::Vec2 enemyPos, Mirror::Type type, std::string asset);
 
     std::shared_ptr<BaseEnemyModel> getNearestNonMirror(cugl::Vec2 pos);
+
+    /** Creates the intial particle pool */
+    void createParticles();
 
 };
 
