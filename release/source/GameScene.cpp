@@ -65,7 +65,7 @@ float DEFAULT_HEIGHT = DEFAULT_WIDTH/SCENE_WIDTH*SCENE_HEIGHT;
 #define PLATFORMTEXTURE "platform"
 
 /** The initial position of the enemies */
-float ENEMY_POS[] = {18.0f, 15.0f};
+float ENEMY_POS[] = { 30.0f, 15.0f};
 float ENEMY_POS2[] = { 28.0f, 10.0f };
 
 /** The initial position of the player*/
@@ -172,6 +172,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _pMeleeTexture = _assets->get<Texture>(PATTACK_TEXTURE);
     _attacks = std::make_shared<AttackController>();
     _attacks->init(_scale, 1.5, cugl::Vec2::UNIT_Y, cugl::Vec2(0,0.5), 0.5, 1, 0.5, 0.1);
+    _dashTime = 0;
+    _dashXVel = 0;
+    _dashYVel = 0;
 
     _ai = AIController();
 
@@ -244,15 +247,6 @@ void GameScene::update(float timestep)
         setDebug(!isDebug());
     }
 
-    // FLIPPING LOGIC
-    if (xPos > 0)
-    {
-        _player->setFacingRight(true);
-    }
-    else if (xPos < 0)
-    {
-        _player->setFacingRight(false);
-    }
     scene2::TexturedNode *image = dynamic_cast<scene2::TexturedNode *>(_player->getSceneNode().get());
     if (image != nullptr)
     {
@@ -284,7 +278,63 @@ void GameScene::update(float timestep)
     _swipes.update(_input);
     b2Vec2 playerPos = _player->getBody()->GetPosition();
     _attacks->attackLeft(Vec2(playerPos.x, playerPos.y), _swipes.getLeftSwipe(), _swipes.getLeftAngle(), _player->isGrounded());
-    _attacks->attackRight(Vec2(playerPos.x, playerPos.y),_swipes.getRightSwipe(),_swipes.getRightAngle(),_player->isGrounded());
+    _attacks->attackRight(Vec2(playerPos.x, playerPos.y), _swipes.getRightSwipe(), _swipes.getRightAngle(), _player->isGrounded());
+    if (_swipes.getRightSwipe() == SwipeController::chargedRight) {
+        _dashXVel = 20;
+        _dashTime = 0;
+    }
+    else if (_swipes.getRightSwipe() == SwipeController::chargedLeft) {
+        _dashXVel = -20;
+        _dashTime = 0;
+    }
+    else if (_swipes.getRightSwipe() == SwipeController::chargedUp) {
+        _dashYVel = 20;
+        _dashTime = 0;
+    }
+    else if (_swipes.getRightSwipe() == SwipeController::chargedDown) {
+        _dashYVel = -20;
+        _dashTime = 0;
+    }
+    // If the dash velocities are set, change player velocity if dash time is not complete
+    if (_dashXVel || _dashYVel) {
+        if (_dashTime < 0.5f) {
+            if (_dashXVel > 0) {
+                _player->setVX(_dashXVel);
+                _player->setFacingRight(true);
+            } else if (_dashXVel < 0) {
+                _player->setVX(_dashXVel);
+                _player->setFacingRight(false);
+            }
+            // Always want to set x velocity to 0 for up/down charge attacks
+            if (_dashYVel > 0) {
+                _player->setVY(_dashYVel);
+                _player->setVX(_dashXVel);
+            }
+            else if (_dashYVel < 0 && !_player->isGrounded()) {
+                _player->setVY(_dashYVel);
+                _player->setVX(_dashXVel);
+            }
+            // Invincibility, maintain same health throughout dash
+            _player->setIsInvincible(true);
+            _dashTime += timestep;
+        }
+        else {
+            _dashXVel = 0;
+            _dashYVel = 0;
+            _player->setIsInvincible(false);
+        }
+    } else {
+        // Flipping logic based on tilt
+        if (xPos > 0)
+        {
+            _player->setFacingRight(true);
+        }
+        else if (xPos < 0)
+        {
+            _player->setFacingRight(false);
+        }
+    }
+    
     _world->update(timestep);
     
     for (auto it = _attacks->_pending.begin(); it != _attacks->_pending.end(); ++it) {
@@ -379,8 +429,10 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     // This takes care of begin/end
 
     //_scene->render(batch);
-    if(_swipes.hasChargedAttack()){
+    if(_swipes.hasLeftChargedAttack()){
         _player->getSceneNode()->setColor(Color4::RED);
+    } else if(_swipes.hasRightChargedAttack()){
+        _player->getSceneNode()->setColor(Color4::BLUE);
     } else {
         _player->getSceneNode()->setColor(Color4::WHITE);
     }
@@ -402,6 +454,16 @@ void GameScene::createEnemies() {
     enemySprite->setScale(0.15f);
     addObstacle(enemy, enemySprite, true);
     _enemies.push_back(enemy);
+    
+    std::shared_ptr<scene2::SceneNode> enemyNode2 = scene2::SceneNode::alloc();
+    std::shared_ptr<Texture> enemyImage2 = _assets->get<Texture>(ENEMY_TEXTURE);
+    std::shared_ptr<Lost> enemy2 = Lost::alloc({ 27.0f, 14.0f}, enemyImage2->getSize() / _scale / 10, _scale);
+    std::shared_ptr<scene2::PolygonNode> enemySprite2 = scene2::PolygonNode::allocWithTexture(enemyImage2);
+    enemy2->setSceneNode(enemySprite2);
+    enemy2->setDebugColor(Color4::RED);
+    enemySprite2->setScale(0.15f);
+    addObstacle(enemy2, enemySprite2, true);
+    _enemies.push_back(enemy2);
 
     Vec2 enemyPos2 = ENEMY_POS2;
     std::shared_ptr<scene2::SceneNode> specterNode = scene2::SceneNode::alloc();

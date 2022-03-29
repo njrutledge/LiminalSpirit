@@ -105,6 +105,13 @@ protected:
 
     /** Whether or not debug mode is active */
     bool _debug;
+    
+    /** How long current melee dash has lasted */
+    float _dashTime;
+    /** XVel for this current melee dash */
+    int _dashXVel;
+    /** YVel for the current melee dash */
+    int _dashYVel;
 
     /**
      * Internal helper to build the scene graph.
