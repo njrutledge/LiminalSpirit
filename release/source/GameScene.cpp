@@ -503,7 +503,7 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     batch->end();
 }
 
-void GameScene::createMirror(Vec2 enemyPos, Mirror::Type type, std::string assetName, Glow enemyGlow) {
+void GameScene::createMirror(Vec2 enemyPos, Mirror::Type type, std::string assetName, std::shared_ptr<Glow> enemyGlow) {
     std::shared_ptr<Texture> mirrorImage = _assets->get<Texture>(assetName);
     std::shared_ptr<Mirror> mirror = Mirror::alloc(enemyPos, mirrorImage->getSize() / _scale / 15, _scale, type); // TODO this is not right, fix this to be closest enemy
     std::shared_ptr<scene2::PolygonNode> mirrorSprite = scene2::PolygonNode::allocWithTexture(mirrorImage);
@@ -555,13 +555,13 @@ void GameScene::createEnemies(int wave) {
             _enemies.push_back(specter);
         }
         else if (!enemyName.compare("square")) {
-            createMirror(enemyPos, Mirror::Type::square, "squaremirror");
+            createMirror(enemyPos, Mirror::Type::square, "squaremirror", enemyGlow);
         }
         else if (!enemyName.compare("triangle")) {
-            createMirror(enemyPos, Mirror::Type::triangle, "trianglemirror");
+            createMirror(enemyPos, Mirror::Type::triangle, "trianglemirror", enemyGlow);
         }
         else if (!enemyName.compare("circle")) {
-            createMirror(enemyPos, Mirror::Type::circle, "circlemirror");
+            createMirror(enemyPos, Mirror::Type::circle, "circlemirror", enemyGlow);
         }
         else if (!enemyName.compare("seeker")) {
             std::shared_ptr<Texture> seekerImage = _assets->get<Texture>("seeker");

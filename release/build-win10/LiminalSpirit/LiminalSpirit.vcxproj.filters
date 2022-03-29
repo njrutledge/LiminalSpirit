@@ -48,6 +48,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\Particle.cpp" />
     <ClCompile Include="..\..\source\Glow.cpp" />
+    <ClCompile Include="..\..\source\Mirror.cpp" />
+    <ClCompile Include="..\..\source\Seeker.cpp" />
+    <ClCompile Include="..\..\source\Glutton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\LSCharacter.h" />
@@ -99,6 +102,9 @@
     </ClInclude>
     <ClInclude Include="..\..\source\Particle.hpp" />
     <ClInclude Include="..\..\source\Glow.hpp" />
+    <ClInclude Include="..\..\source\Mirror.hpp" />
+    <ClInclude Include="..\..\source\Seeker.hpp" />
+    <ClInclude Include="..\..\source\Glutton.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LiminalSpirit.rc" />

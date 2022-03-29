@@ -194,6 +194,7 @@
     <ClInclude Include="..\..\source\CollisionController.hpp" />
     <ClInclude Include="..\..\source\GameScene.hpp" />
     <ClInclude Include="..\..\source\Glow.hpp" />
+    <ClInclude Include="..\..\source\Glutton.hpp" />
     <ClInclude Include="..\..\source\InputController.hpp" />
     <ClInclude Include="..\..\source\LiminalSpiritApp.hpp" />
     <ClInclude Include="..\..\source\LoadingScene.hpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="..\..\source\Mirror.hpp" />
     <ClInclude Include="..\..\source\Particle.hpp" />
     <ClInclude Include="..\..\source\Platform.hpp" />
+    <ClInclude Include="..\..\source\Seeker.hpp" />
     <ClInclude Include="..\..\source\Specter.hpp" />
     <ClInclude Include="..\..\source\SwipeController.hpp" />
     <ClInclude Include="..\..\source\TiltController.hpp" />
@@ -216,6 +218,7 @@
     <ClCompile Include="..\..\source\CollisionController.cpp" />
     <ClCompile Include="..\..\source\GameScene.cpp" />
     <ClCompile Include="..\..\source\Glow.cpp" />
+    <ClCompile Include="..\..\source\Glutton.cpp" />
     <ClCompile Include="..\..\source\InputController.cpp" />
     <ClCompile Include="..\..\source\LiminalSpirit.cpp" />
     <ClCompile Include="..\..\source\LoadingScene.cpp" />
@@ -224,6 +227,7 @@
     <ClCompile Include="..\..\source\Mirror.cpp" />
     <ClCompile Include="..\..\source\Particle.cpp" />
     <ClCompile Include="..\..\source\Platform.cpp" />
+    <ClCompile Include="..\..\source\Seeker.cpp" />
     <ClCompile Include="..\..\source\Specter.cpp" />
     <ClCompile Include="..\..\source\SwipeController.cpp" />
     <ClCompile Include="..\..\source\PlayerModel.cpp" />
