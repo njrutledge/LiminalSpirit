@@ -37,6 +37,7 @@ public:
 
     enum Type {
         p_melee,
+        p_dash,
         p_range,
         p_exp_package,
         p_exp,

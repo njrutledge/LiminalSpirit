@@ -32,6 +32,7 @@ bool AttackController::Attack::init(const cugl::Vec2 p, float radius, float a, f
         switch (_type) {
             case Type::p_range:
             case Type::p_melee:
+            case Type::p_dash:
             case Type::p_exp:
             case Type::p_exp_package:
                 _sensorName = "player" + _sensorName;
@@ -142,6 +143,8 @@ void AttackController::update(const cugl::Vec2 p, b2Vec2 VX, float dt) {
     auto it = _current.begin();
     while(it != _current.end()) {
         if ((*it)->getType() == Type::p_melee) {
+            (*it)->update(p, true, dt, VX);
+        } else if ((*it)->getType() == Type::p_dash) {
             (*it)->update(p, true, dt, VX);
         } else {
             (*it)->update(p, false, dt, VX);
@@ -269,10 +272,31 @@ void AttackController::attackRight(cugl::Vec2 p, SwipeController::SwipeAttack at
             case SwipeController::downAttack:
                 if(!grounded){
                 _pending.emplace(Attack::alloc(p, 1, 0.08, 9001, _scale, Type::p_melee, _downOff, ballMakyr, cugl::Vec2::ZERO, down));
-                } else{
+                } else {
                     _pending.emplace(Attack::alloc(p, 1, 0.05, 9001, _scale, Type::p_melee, _leftOff, ballMakyr, cugl::Vec2::ZERO, left));
                     _pending.emplace(Attack::alloc(p, 1, 0.05, 9001, _scale,  Type::p_melee, _rightOff, ballMakyr, cugl::Vec2::ZERO, right));
                 }
+                break;
+            case SwipeController::chargedLeft:
+                _pending.emplace(Attack::alloc(p, 1.25, 0.5, 9001, _scale, Type::p_dash, _leftOff + Vec2(-0.5,0), ballMakyr, cugl::Vec2(-20,0), left));
+                _melee = cool;
+                break;
+            case SwipeController::chargedRight:
+                _pending.emplace(Attack::alloc(p, 1.25, 0.5, 9001, _scale, Type::p_dash, _rightOff + Vec2(0.5,0), ballMakyr, cugl::Vec2(20,0), right));
+                _melee = cool;
+                break;
+            case SwipeController::chargedUp:
+                _pending.emplace(Attack::alloc(p, 1.25, 0.5, 9001, _scale, Type::p_dash, _upOff + Vec2(0,0.5), ballMakyr, cugl::Vec2(0,20), up));
+                _melee = cool;
+                break;
+            case SwipeController::chargedDown:
+                if(!grounded){
+                _pending.emplace(Attack::alloc(p, 1.25, 0.5, 9001, _scale, Type::p_dash, _downOff + Vec2(0,-0.5), ballMakyr, cugl::Vec2(0,-20), down));
+                } else {
+                    _pending.emplace(Attack::alloc(p, 2, 0.05, 9001, _scale, Type::p_melee, _leftOff, ballMakyr, cugl::Vec2::ZERO, left));
+                    _pending.emplace(Attack::alloc(p, 2, 0.05, 9001, _scale,  Type::p_melee, _rightOff, ballMakyr, cugl::Vec2::ZERO, right));
+                }
+                _melee = cool;
                 break;
             default:
                 break;
