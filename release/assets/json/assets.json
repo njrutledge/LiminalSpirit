@@ -50,6 +50,13 @@
             "wrapS": "clamp",
             "wrapT": "clamp"
         },
+        "glutton": {
+            "file": "textures/glutton.png",
+            "minfilter": "nearest",
+            "magfilter": "linear",
+            "wrapS": "clamp",
+            "wrapT": "clamp"
+        },
 		"player": {
 			"file": "textures/player.png",
 			"minfilter": "nearest",

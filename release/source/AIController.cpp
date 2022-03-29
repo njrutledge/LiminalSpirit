@@ -33,9 +33,32 @@ Vec2 AIController::getMovement(shared_ptr<BaseEnemyModel> e, Vec2 player_pos, fl
 	else if (name == "Seeker") {
 		return getSeekerMovement(dynamic_pointer_cast<Seeker>(e), player_pos, timestep);
 	} 
+	else if (name == "Glutton"){
+    return Vec2(getGluttonMovement(e, player_pos, timestep), e->getVY());
+  }
 	else {
 		return Vec2();
 	}
+}
+
+float AIController::getGluttonMovement(shared_ptr<BaseEnemyModel> glutton, Vec2 player_pos, float timestep) {
+    glutton->setTimePast(glutton->getTimePast() + timestep);
+    if (!glutton->isAttacking()) {
+        if (glutton->getAttackCooldown() < glutton->getTimePast()
+            && rand() % 100 <= 2.5) {
+            glutton->setIsAttacking(true);
+            glutton->setTimePast(0.0f);
+        } else
+            if ((abs(player_pos.x - glutton->getPosition().x) < glutton->getAttackRadius())) {
+                if (player_pos.x > glutton->getPosition().x) {
+                    return -1* glutton->getHorizontalSpeed();
+                }
+                else {
+                    return glutton->getHorizontalSpeed();
+                }
+            }
+    }
+    return 0;
 }
 
 float AIController::getLostMovement(shared_ptr<BaseEnemyModel> lost, Vec2 player_pos, float timestep) {
@@ -104,7 +127,7 @@ Vec2 AIController::getSpecterMovement(shared_ptr<BaseEnemyModel> specter, Vec2 p
                 specter->setIsAttacking(true);
                 specter->setTimePast(0.0f);
             }
-			return Vec2(); // Specterstops moving
+			return Vec2(); // Specter stops moving
 		}
 		else if (specter->getVY() == 0) {
 			return Vec2(specter->getHorizontalSpeed(), -1 * specter->getVerticalSpeed());

@@ -114,7 +114,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
 					}
 				}
 				if (attack->getType() == AttackController::p_exp_package) {
-					AC->createAttack(cugl::Vec2(bd->getPosition().x, bd->getPosition().y), 3, 0.1, 9000, AttackController::p_exp, cugl::Vec2::ZERO);
+					AC->createAttack(cugl::Vec2(bd->getPosition().x, bd->getPosition().y), 3, 0.1, 4, AttackController::p_exp, cugl::Vec2::ZERO);
 				}
 				switch (attack->getType()) {
 				case AttackController::p_range:

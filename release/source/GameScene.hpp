@@ -34,6 +34,7 @@
 #include "Seeker.hpp"
 #include "Specter.hpp"
 #include "Mirror.hpp"
+#include "Glutton.hpp"
 #include "PlayerModel.h"
 #include "AttackController.hpp"
 #include "AIController.hpp"

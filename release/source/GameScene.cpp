@@ -68,6 +68,7 @@ float ENEMY_POS[] = {18.0f, 15.0f};
 float ENEMY_POS2[] = { 28.0f, 10.0f };
 float ENEMY_POS3[] = { 15.0f, 2.0f };
 float ENEMY_POS4[] = {5.0f, 20.0f};
+float ENEMY_POS5[] = { 31.0f, 6.0f};
 
 /** The initial position of the player*/
 float PLAYER_POS[] = { 5.0f, 4.0f };
@@ -330,6 +331,10 @@ void GameScene::update(float timestep)
                 _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()));
             }
 
+            else if ((*it)->getName() == "Glutton") {
+                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()));
+            }
+
         }
         if (Mirror* mirror = dynamic_cast<Mirror*>((*it).get())) {
             if (mirror->getLinkedEnemy() == nullptr) {
@@ -340,7 +345,7 @@ void GameScene::update(float timestep)
             }
         }
     }
-
+    
     _swipes.update(_input);
     b2Vec2 playerPos = _player->getBody()->GetPosition();
     _attacks->attackLeft(Vec2(playerPos.x, playerPos.y), _swipes.getLeftSwipe(), _player->isGrounded());
@@ -538,85 +543,26 @@ void GameScene::createEnemies(int wave) {
             std::shared_ptr<Seeker> seeker = Seeker::alloc(enemyPos, seekerImage->getSize() / _scale / 15, _scale);
             std::shared_ptr<scene2::PolygonNode> seekerSprite = scene2::PolygonNode::allocWithTexture(seekerImage);
             seeker->setSceneNode(seekerSprite);
-            seeker->setDebugColor(Color4::BLUE);
+            seeker->setDebugColor(Color4::GREEN);
             seekerSprite->setScale(0.15f);
             addObstacle(seeker, seekerSprite, true);
             _enemies.push_back(seeker);
+        } 
+        else if (!enemyName.compare("glutton")) {
+            std::shared_ptr<Texture> gluttonImage = _assets->get<Texture>("glutton");
+            std::shared_ptr<Glutton> glutton = Glutton::alloc(enemyPos, gluttonImage->getSize() / _scale / 10, _scale);
+            std::shared_ptr<scene2::PolygonNode> gluttonSprite = scene2::PolygonNode::allocWithTexture(gluttonImage);
+            glutton->setSceneNode(gluttonSprite);
+            glutton->setDebugColor(Color4::BLUE);
+            gluttonSprite->setScale(0.12f);
+            addObstacle(glutton, gluttonSprite, true);
+            _enemies.push_back(glutton);
         }
+
         // TODO add more enemy types
         // If the enemy name is incorrect, no enemy will be made
     }
 }
-// void GameScene::createEnemies() {
-//     Vec2 enemyPos = ENEMY_POS;
-//     std::shared_ptr<scene2::SceneNode> enemyNode = scene2::SceneNode::alloc();
-//     std::shared_ptr<Texture> enemyImage = _assets->get<Texture>(ENEMY_TEXTURE);
-//     std::shared_ptr<Lost> enemy = Lost::alloc(enemyPos, enemyImage->getSize() / _scale / 10, _scale);
-//     std::shared_ptr<scene2::PolygonNode> enemySprite = scene2::PolygonNode::allocWithTexture(enemyImage);
-//     enemy->setSceneNode(enemySprite);
-//     enemy->setDebugColor(Color4::RED);
-//     enemySprite->setScale(0.15f);
-//     addObstacle(enemy, enemySprite, true);
-//     _enemies.push_back(enemy);
-//
-//    Vec2 enemyPos2 = ENEMY_POS2;
-//    std::shared_ptr<scene2::SceneNode> specterNode = scene2::SceneNode::alloc();
-//    std::shared_ptr<Texture> specterImage = _assets->get<Texture>(ENEMY_TEXTURE2);
-//    std::shared_ptr<Specter> specter = Specter::alloc(enemyPos2, specterImage->getSize() / _scale / 15, _scale);
-//    std::shared_ptr<scene2::PolygonNode> specterSprite = scene2::PolygonNode::allocWithTexture(specterImage);
-//    specter->setSceneNode(specterSprite);
-//    specter->setDebugColor(Color4::BLUE);
-//    specterSprite->setScale(0.15f);
-//    addObstacle(specter, specterSprite, true);
-//    _enemies.push_back(specter);
-//
-    // Vec2 enemyPos3 = ENEMY_POS3;
-    // std::shared_ptr<scene2::SceneNode> seekerNode = scene2::SceneNode::alloc();
-    // std::shared_ptr<Texture> seekerImage = _assets->get<Texture>(ENEMY_TEXTURE2);
-    // std::shared_ptr<Seeker> seeker = Seeker::alloc(enemyPos3, seekerImage->getSize() / _scale / 15, _scale);
-    // std::shared_ptr<scene2::PolygonNode> seekerSprite = scene2::PolygonNode::allocWithTexture(seekerImage);
-    // seeker->setSceneNode(seekerSprite);
-    // seeker->setDebugColor(Color4::BLUE);
-    // seekerSprite->setScale(0.15f);
-    // addObstacle(seeker, seekerSprite, true);
-    // _enemies.push_back(seeker);
-// }
-
-
-// void GameScene::createEnemies() {
-//     Vec2 enemyPos = ENEMY_POS;
-//     std::shared_ptr<scene2::SceneNode> enemyNode = scene2::SceneNode::alloc();
-//     std::shared_ptr<Texture> enemyImage = _assets->get<Texture>(ENEMY_TEXTURE);
-//     std::shared_ptr<Lost> enemy = Lost::alloc(enemyPos, enemyImage->getSize() / _scale / 10, _scale);
-//     std::shared_ptr<scene2::PolygonNode> enemySprite = scene2::PolygonNode::allocWithTexture(enemyImage);
-//     enemy->setSceneNode(enemySprite);
-//     enemy->setDebugColor(Color4::RED);
-//     enemySprite->setScale(0.15f);
-//     addObstacle(enemy, enemySprite, true);
-//     _enemies.push_back(enemy);
-
-//     Vec2 enemyPos2 = ENEMY_POS2;
-//     std::shared_ptr<scene2::SceneNode> specterNode = scene2::SceneNode::alloc();
-//     std::shared_ptr<Texture> specterImage = _assets->get<Texture>(ENEMY_TEXTURE2);
-//     std::shared_ptr<Specter> specter = Specter::alloc(enemyPos2, specterImage->getSize() / _scale / 15, _scale);
-//     std::shared_ptr<scene2::PolygonNode> specterSprite = scene2::PolygonNode::allocWithTexture(specterImage);
-//     specter->setSceneNode(specterSprite);
-//     specter->setDebugColor(Color4::BLUE);
-//     specterSprite->setScale(0.15f);
-//     addObstacle(specter, specterSprite, true);
-//     _enemies.push_back(specter);
-
-//     Vec2 enemyPos3 = ENEMY_POS3;
-//     std::shared_ptr<scene2::SceneNode> mirrorNode = scene2::SceneNode::alloc();
-//     std::shared_ptr<Texture> mirrorImage = _assets->get<Texture>(ENEMY_TEXTURE2);
-//     std::shared_ptr<Mirror> mirror = Mirror::alloc(enemyPos3, specterImage->getSize() / _scale / 15, _scale, Mirror::Type::square, specter);
-//     std::shared_ptr<scene2::PolygonNode> mirrorSprite = scene2::PolygonNode::allocWithTexture(specterImage);
-//     mirror->setSceneNode(mirrorSprite);
-//     mirror->setDebugColor(Color4::BLUE);
-//     mirrorSprite->setScale(0.15f);
-//     addObstacle(mirror, mirrorSprite, true);
-//     _enemies.push_back(mirror);
-// }
 
 /**
  * Internal helper to build the scene graph.
