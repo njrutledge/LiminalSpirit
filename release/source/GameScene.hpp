@@ -224,7 +224,7 @@ public:
     /** 
     * helper to create mirror enemies, adding them to _enemmies
     */
-    void createMirror(cugl::Vec2 enemyPos, Mirror::Type type);
+    void createMirror(cugl::Vec2 enemyPos, Mirror::Type type, std::string asset);
 
     std::shared_ptr<BaseEnemyModel> getNearestNonMirror(cugl::Vec2 pos);
 

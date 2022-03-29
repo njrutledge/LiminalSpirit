@@ -34,8 +34,8 @@ Vec2 AIController::getMovement(shared_ptr<BaseEnemyModel> e, Vec2 player_pos, fl
 		return getSeekerMovement(dynamic_pointer_cast<Seeker>(e), player_pos, timestep);
 	} 
 	else if (name == "Glutton"){
-    return Vec2(getGluttonMovement(e, player_pos, timestep), e->getVY());
-  }
+        return Vec2(getGluttonMovement(e, player_pos, timestep), e->getVY());
+    }
 	else {
 		return Vec2();
 	}
@@ -49,9 +49,9 @@ float AIController::getGluttonMovement(shared_ptr<BaseEnemyModel> glutton, Vec2 
             glutton->setIsAttacking(true);
             glutton->setTimePast(0.0f);
         } else
-            if ((abs(player_pos.x - glutton->getPosition().x) < glutton->getAttackRadius())) {
+            if (std::sqrt(std::pow(player_pos.x - glutton->getPosition().x, 2) + std::pow(player_pos.y - glutton->getPosition().y, 2)) < glutton->getAttackRadius() / 2) {
                 if (player_pos.x > glutton->getPosition().x) {
-                    return -1* glutton->getHorizontalSpeed();
+                    return -1 * glutton->getHorizontalSpeed();
                 }
                 else {
                     return glutton->getHorizontalSpeed();
@@ -60,6 +60,9 @@ float AIController::getGluttonMovement(shared_ptr<BaseEnemyModel> glutton, Vec2 
     }
     return 0;
 }
+
+//(abs(player_pos.x - glutton->getPosition().x) < glutton->getAttackRadius() / 3) &&
+//(abs(player_pos.y - glutton->getPosition().y) < glutton->getAttackRadius() / 3)
 
 float AIController::getLostMovement(shared_ptr<BaseEnemyModel> lost, Vec2 player_pos, float timestep) {
 	//TODO: - check if grounded -> don't move if falling (unless flying enemy)

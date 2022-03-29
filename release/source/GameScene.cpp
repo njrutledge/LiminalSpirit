@@ -490,8 +490,8 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     batch->end();
 }
 
-void GameScene::createMirror(Vec2 enemyPos, Mirror::Type type) {
-    std::shared_ptr<Texture> mirrorImage = _assets->get<Texture>("mirror");
+void GameScene::createMirror(Vec2 enemyPos, Mirror::Type type, std::string assetName) {
+    std::shared_ptr<Texture> mirrorImage = _assets->get<Texture>(assetName);
     std::shared_ptr<Mirror> mirror = Mirror::alloc(enemyPos, mirrorImage->getSize() / _scale / 15, _scale, type); // TODO this is not right, fix this to be closest enemy
     std::shared_ptr<scene2::PolygonNode> mirrorSprite = scene2::PolygonNode::allocWithTexture(mirrorImage);
     mirror->setSceneNode(mirrorSprite);
@@ -510,7 +510,7 @@ void GameScene::createEnemies(int wave) {
         Vec2 enemyPos = positions[i];
         std::string enemyName = enemies[i];
         if (!enemyName.compare("lost")) {
-            std::shared_ptr<Texture> lostImage = _assets->get<Texture>("enemy");
+            std::shared_ptr<Texture> lostImage = _assets->get<Texture>("lost");
             std::shared_ptr<Lost> lost = Lost::alloc(enemyPos, lostImage->getSize() / _scale / 10, _scale);
             std::shared_ptr<scene2::PolygonNode> lostSprite = scene2::PolygonNode::allocWithTexture(lostImage);
             lost->setSceneNode(lostSprite);
@@ -520,7 +520,7 @@ void GameScene::createEnemies(int wave) {
             _enemies.push_back(lost);
         }
         else if (!enemyName.compare("specter")) {
-            std::shared_ptr<Texture> specterImage = _assets->get<Texture>(ENEMY_TEXTURE2);
+            std::shared_ptr<Texture> specterImage = _assets->get<Texture>("specter");
             std::shared_ptr<Specter> specter = Specter::alloc(enemyPos, specterImage->getSize() / _scale / 15, _scale);
             std::shared_ptr<scene2::PolygonNode> specterSprite = scene2::PolygonNode::allocWithTexture(specterImage);
             specter->setSceneNode(specterSprite);
@@ -530,13 +530,13 @@ void GameScene::createEnemies(int wave) {
             _enemies.push_back(specter);
         }
         else if (!enemyName.compare("square")) {
-            createMirror(enemyPos, Mirror::Type::square);
+            createMirror(enemyPos, Mirror::Type::square, "squaremirror");
         }
         else if (!enemyName.compare("triangle")) {
-            createMirror(enemyPos, Mirror::Type::triangle);
+            createMirror(enemyPos, Mirror::Type::triangle, "trianglemirror");
         }
         else if (!enemyName.compare("circle")) {
-            createMirror(enemyPos, Mirror::Type::triangle);
+            createMirror(enemyPos, Mirror::Type::circle, "circlemirror");
         }
         else if (!enemyName.compare("seeker")) {
             std::shared_ptr<Texture> seekerImage = _assets->get<Texture>("seeker");
