@@ -43,6 +43,13 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
+        "seeker": {
+            "file": "textures/mirrortest.png",
+            "minfilter": "nearest",
+            "magfilter": "linear",
+            "wrapS": "clamp",
+            "wrapT": "clamp"
+        },
 		"player": {
 			"file": "textures/player.png",
 			"minfilter": "nearest",

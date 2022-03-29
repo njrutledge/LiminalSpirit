@@ -31,6 +31,9 @@
 #include <cugl/cugl.h>
 #include "BaseEnemyModel.h"
 #include "Lost.hpp"
+#include "Seeker.hpp"
+#include "Specter.hpp"
+#include "Mirror.hpp"
 #include "PlayerModel.h"
 #include "AttackController.hpp"
 #include "AIController.hpp"
@@ -38,6 +41,7 @@
 #include "TiltController.hpp"
 #include "CollisionController.hpp"
 #include "Platform.hpp"
+
 /**
  * Class for a simple Hello World style application
  *
