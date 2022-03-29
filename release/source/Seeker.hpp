@@ -31,6 +31,10 @@ public:
         return (result->init(pos, size, scale, SEEKER_PROPS) ? result : nullptr);
     }
 
+    float velScale = 2.5;
+    cugl::Vec2 targetPosition;
+    bool justAttacked = false;
+
 };
 
 #endif /* Seeker_hpp */

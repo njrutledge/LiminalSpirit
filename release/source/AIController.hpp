@@ -11,6 +11,7 @@
 
 #include <cugl/cugl.h>
 #include "BaseEnemyModel.h"
+#include "Seeker.hpp"
 #include "Lost.hpp"
 
 class AIController {
@@ -33,8 +34,9 @@ public:
 	cugl::Vec2 getSpecterMovement(shared_ptr<BaseEnemyModel> specter, cugl::Vec2 player_pos, float timestep);
     
     // Gets movement for the seeker based on player position
-    cugl::Vec2 getSeekerMovement(shared_ptr<BaseEnemyModel> seeker, cugl::Vec2 player_pos, float timestep);
+    cugl::Vec2 getSeekerMovement(shared_ptr<Seeker> seeker, cugl::Vec2 player_pos, float timestep);
     
+    cugl::Vec2 movementHelper(cugl::Vec2 targetPos, cugl::Vec2 enemyPos, float horiSpeed, float vertSpeed, float scale);
 	/** Remove any unwanted assets and clean up */
 	void dispose() {};
     

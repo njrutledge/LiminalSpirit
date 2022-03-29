@@ -12,9 +12,9 @@ EnemyProperties SEEKER_PROPS{
     /** Starting health of the seeker */
     4,
     /** Vertical speed of the seeker */
-    2.0f,
+    3.0f,
     /** Horizontal speed of the seeker*/
-    4.0f,
+    6.0f,
     /** Cooldown for attack(s) in seconds*/
     1,
     /** Attack radius of the seeker*/

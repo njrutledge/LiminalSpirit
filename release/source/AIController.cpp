@@ -26,7 +26,7 @@ Vec2 AIController::getMovement(shared_ptr<BaseEnemyModel> e, Vec2 player_pos, fl
 	} else if (name == "Specter") {
 		return getSpecterMovement(e, player_pos, timestep);
     } else if (name == "Seeker") {
-        return getSeekerMovement(e, player_pos, timestep);
+        return getSeekerMovement(dynamic_pointer_cast<Seeker>(e), player_pos, timestep);
     } else {
 		return Vec2();
 	}
@@ -36,7 +36,6 @@ float AIController::getLostMovement(shared_ptr<BaseEnemyModel> lost, Vec2 player
 	//TODO: - check if grounded -> don't move if falling (unless flying enemy)
 	// - set states for the enemy -> more interesting ai
     lost->setTimePast(lost->getTimePast() + timestep);
-
 	//Check if enemy is already attacking
 	if (!lost->isAttacking()) {
 		// Check if in range to attack (checking closer than max range so enemy has an actual chance to hit)
@@ -133,52 +132,87 @@ Vec2 AIController::getSpecterMovement(shared_ptr<BaseEnemyModel> specter, Vec2 p
 	}
 }
 
-Vec2 AIController::getSeekerMovement(shared_ptr<BaseEnemyModel> specter, Vec2 player_pos, float timestep) {
-    //TODO:
-    // Use line of sight to determine ranged attacks
-    specter->setTimePast(specter->getTimePast() + timestep);
+Vec2 AIController::getSeekerMovement(shared_ptr<Seeker> seeker, Vec2 player_pos, float timestep) {
+    seeker->setTimePast(seeker->getTimePast() + timestep);
 //    int flip = 1; // flips y direction
-
     //Check if enemy is already attacking
-    if (!specter->isAttacking()) {
-        if (player_pos.x <= specter->getPosition().x + specter->getAttackRadius()/4
-            && player_pos.x >= specter->getPosition().x - specter->getAttackRadius()/4
-            && player_pos.y <= specter->getPosition().y + specter->getAttackRadius()/4
-            && player_pos.y >= specter->getPosition().y - specter->getAttackRadius()/4) {
-            if (specter->getAttackCooldown() < specter->getTimePast()) {
-                specter->setIsAttacking(true);
-                specter->setTimePast(0.0f);
+    if (!seeker->isAttacking()) {
+        if (player_pos.x <= seeker->getPosition().x + seeker->getAttackRadius()/4
+            && player_pos.x >= seeker->getPosition().x - seeker->getAttackRadius()/4
+            && player_pos.y <= seeker->getPosition().y + seeker->getAttackRadius()/4
+            && player_pos.y >= seeker->getPosition().y - seeker->getAttackRadius()/4) {
+            if (seeker->getAttackCooldown() < seeker->getTimePast()) {
+                seeker->setIsAttacking(true);
+                seeker->justAttacked = true;
+                seeker->setTimePast(0.0f);
             }
-            return Vec2(); // Specterstops moving
+            return Vec2(); // Seeker stops moving
         }
-        else if (specter->getVY() == 0) {
-            return Vec2(specter->getHorizontalSpeed(), -1 * specter->getVerticalSpeed());
+
+        if (player_pos.distance(seeker->getPosition())>6 && !seeker->getHasSeenPlayer()) {
+            if(seeker->targetPosition.distance(seeker->getPosition()) <= 1) {
+                seeker->targetPosition = Vec2(0,0);
+                while (seeker->targetPosition.x < 2 || seeker->targetPosition.x > 30 || seeker->targetPosition.y < 2 || seeker->targetPosition.y > 22) {
+                    float r = 10 + 10 * std::sqrt(static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
+                    float alpha = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2 * M_PI;
+                    seeker->targetPosition = Vec2(r * std::cos(alpha), r * std::sin(alpha)) + seeker->getPosition();
+                }
+            }
+            return movementHelper(seeker->targetPosition, seeker->getPosition(), seeker->getHorizontalSpeed(), seeker->getVerticalSpeed(), seeker->velScale);
+        
         }
-        else if (player_pos.x > specter->getPosition().x) {
-            if (player_pos.y >= specter->getPosition().y) {
-                return Vec2(specter->getHorizontalSpeed(), specter->getVerticalSpeed());
-            }
-            else {
-                return Vec2(specter->getHorizontalSpeed(), -1 * specter->getVerticalSpeed());
-            }
+        
+        else if (player_pos.distance(seeker->getPosition())>4) {
+            return movementHelper(player_pos, seeker->getPosition(), seeker->getHorizontalSpeed(), seeker->getVerticalSpeed(), 1);
         }
         else {
-            if (player_pos.y >= specter->getPosition().y) {
-                return Vec2(-1 * specter->getHorizontalSpeed(), specter->getVerticalSpeed());
-            }
-            else {
-                return Vec2(-1 * specter->getHorizontalSpeed(), -1 * specter->getVerticalSpeed());
-            }
+            return movementHelper(player_pos, seeker->getPosition(), seeker->getHorizontalSpeed(), seeker->getVerticalSpeed(), 3);
         }
     }
     else {
         // Check if attack timer should be reset
-        if (specter->getAttackCooldown() < specter->getTimePast()) {
-            specter->setIsAttacking(false);
-            specter->setTimePast(0.0f);
-        }
-        
+        if (seeker->getAttackCooldown() < seeker->getTimePast()) {
+            seeker->setIsAttacking(false);
+            seeker->setTimePast(0.0f);
             
+        }
+        seeker->justAttacked = false;
         return Vec2();
+    }
+}
+
+Vec2 AIController::movementHelper(Vec2 targetPos, Vec2 enemyPos, float horiSpeed, float vertSpeed, float scale) {
+    if (abs(targetPos.x - enemyPos.x) < 0.2) {
+        if (targetPos.y >= enemyPos.y ) {
+            return Vec2(0, vertSpeed) * scale * sqrt(horiSpeed*horiSpeed + vertSpeed*vertSpeed)/vertSpeed;
+        }
+        else {
+            return Vec2(0, -1 * vertSpeed) * scale * sqrt(horiSpeed*horiSpeed + vertSpeed*vertSpeed)/vertSpeed;
+        }
+    }
+    else if (abs(targetPos.y - enemyPos.y)<0.2) {
+        if (targetPos.x >= enemyPos.x ) {
+            return Vec2(horiSpeed, 0) * scale * sqrt(horiSpeed*horiSpeed + vertSpeed*vertSpeed)/horiSpeed;
+        }
+        else {
+            return Vec2(-1*horiSpeed, 0) * scale * sqrt(horiSpeed*horiSpeed + vertSpeed*vertSpeed)/horiSpeed;
+        }
+    }
+
+    else if (targetPos.x > enemyPos.x) {
+        if (targetPos.y >= enemyPos.y) {
+            return Vec2(horiSpeed, vertSpeed) * scale;
+        }
+        else {
+            return Vec2(horiSpeed, -1 * vertSpeed) * scale;
+        }
+    }
+    else {
+        if (targetPos.y >= enemyPos.y) {
+            return Vec2(-1 * horiSpeed, vertSpeed) * scale;
+        }
+        else {
+            return Vec2(-1 * horiSpeed, -1 * vertSpeed) * scale;
+        }
     }
 }
