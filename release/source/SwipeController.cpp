@@ -30,7 +30,7 @@ SwipeController::~SwipeController()
 /**
  * Updates the swipe controller based on the latest inputs.
  */
-void SwipeController::update(InputController &input)
+void SwipeController::update(InputController &input, bool grounded)
 {
 #ifdef CU_TOUCH_SCREEN
 
@@ -42,7 +42,7 @@ void SwipeController::update(InputController &input)
     // If left finger lifted, process left swipe
     else if (input.didLeftRelease())
     {
-        calculateSwipeDirection(input.getLeftStartPosition(), input.getLeftEndPosition(), true);
+        calculateSwipeDirection(input.getLeftStartPosition(), input.getLeftEndPosition(), true, grounded);
     }
     // Otherwise note that no left swipe was completed this frame
     else
@@ -57,7 +57,7 @@ void SwipeController::update(InputController &input)
     }
     // If right finger lifted, process right swipe
     else if(input.didRightRelease()) {
-        calculateSwipeDirection(input.getRightStartPosition(), input.getRightEndPosition(), false);
+        calculateSwipeDirection(input.getRightStartPosition(), input.getRightEndPosition(), false, grounded);
     }
     // Otherwise note that no right swipe was completed this frame
     else
@@ -139,7 +139,7 @@ void SwipeController::calculateChargeAttack(cugl::Timestamp startTime, bool isLe
  * @param isLeftSidedSwipe  if the swipe was on the left side of the screen
  *
  */
-void SwipeController::calculateSwipeDirection(cugl::Vec2 startPos, cugl::Vec2 endPos, bool isLeftSidedSwipe)
+void SwipeController::calculateSwipeDirection(cugl::Vec2 startPos, cugl::Vec2 endPos, bool isLeftSidedSwipe, bool grounded)
 {
 
     float startx = startPos.x;
@@ -280,7 +280,7 @@ void SwipeController::calculateSwipeDirection(cugl::Vec2 startPos, cugl::Vec2 en
 //        printSwipe(getLeftSwipe(), true);
     }
     else {
-        processRightState();
+        processRightState(grounded);
 //        printSwipe(getRightSwipe(),false);
     }
 }
@@ -343,10 +343,13 @@ void SwipeController::processLeftState(){
  * Processes the type of swipe attack that was just completed on the left side
  * and resets the left side state
  */
-void SwipeController::processRightState(){
+void SwipeController::processRightState(bool grounded){
     
     bool charged = hasRightChargedAttack();
     SwipeDirection dir = _rightState.direction;
+    if (!grounded && charged && dir == up) {
+        return;
+    }
     resetRightState();
     
     if(charged) {
@@ -475,7 +478,6 @@ void SwipeController::printSwipe(SwipeAttack s, bool isLeftSidedSwipe)
 
 void SwipeController::reset()
 {
-
     resetLeftState();
     resetRightState();
     _leftSwipe = noAttack;
