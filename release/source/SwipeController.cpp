@@ -277,11 +277,11 @@ void SwipeController::calculateSwipeDirection(cugl::Vec2 startPos, cugl::Vec2 en
     if (isLeftSidedSwipe)
     {
         processLeftState();
-        printSwipe(getLeftSwipe(), true);
+//        printSwipe(getLeftSwipe(), true);
     }
     else {
         processRightState();
-        printSwipe(getRightSwipe(),false);
+//        printSwipe(getRightSwipe(),false);
     }
 }
 
