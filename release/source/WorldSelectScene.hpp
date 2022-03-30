@@ -30,13 +30,23 @@
 #ifndef World_Select_Scene_hpp
 #define World_Select_Scene_hpp
 #include <cugl/cugl.h>
-#include "controllers/InputController.hpp"
+#include "InputController.hpp"
 
 /**
  * Class representing the Home screen. It links to world select and options menu.
  */
 class WorldSelectScene : public cugl::Scene2
 {
+public:
+	enum class Choice {
+		MENU,
+		CAVE_PREP,
+		CAVE,
+		SHROOM_PREP,
+		SHROOM,
+		FOREST_PREP,
+		FOREST,
+	};
 protected:
   /** The loaders to (synchronously) load in assets */
   std::shared_ptr<cugl::AssetManager> _assets;
@@ -46,6 +56,14 @@ protected:
   std::shared_ptr<cugl::SpriteBatch> _batch; // check this
 
   InputController _input;
+
+  /** buttons for the world selection */
+  std::shared_ptr<cugl::scene2::Button> _caveButton;
+  std::shared_ptr<cugl::scene2::Button> _shroomButton;
+  std::shared_ptr<cugl::scene2::Button> _forestButton;
+
+  /** the player choice of the world select menu */
+  Choice _choice = Choice::MENU;
 
 public:
   /**
@@ -81,6 +99,8 @@ public:
    * @return true if the controller is initialized properly, false otherwise.
    */
   bool init(const std::shared_ptr<cugl::AssetManager> &assets);
+
+  Choice getChoice() { return _choice; }
 
 #pragma mark -
 #pragma mark Screen Handling

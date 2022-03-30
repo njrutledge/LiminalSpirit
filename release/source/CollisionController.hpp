@@ -5,8 +5,8 @@
 
 #include "AttackController.hpp"
 
-#include "models/BaseEnemyModel.h"
-#include "models/PlayerModel.h"
+#include "BaseEnemyModel.h"
+#include "PlayerModel.h"
 
 class CollisionController
 {

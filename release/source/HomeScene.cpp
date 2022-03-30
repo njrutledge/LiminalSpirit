@@ -29,7 +29,7 @@
 //
 #include "HomeScene.hpp"
 #include <cugl/cugl.h>
-#include "controllers/InputController.hpp"
+#include "InputController.hpp"
 
 using namespace cugl;
 

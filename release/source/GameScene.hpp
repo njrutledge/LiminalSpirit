@@ -29,16 +29,16 @@
 #ifndef GameScene_hpp
 #define GameScene_hpp
 #include <cugl/cugl.h>
-#include "models/BaseEnemyModel.h"
-#include "models/Lost.hpp"
-#include "models/PlayerModel.h"
-#include "models/Platform.hpp"
+#include "BaseEnemyModel.h"
+#include "Lost.hpp"
+#include "PlayerModel.h"
+#include "Platform.hpp"
 
-#include "controllers/AttackController.hpp"
-#include "controllers/AIController.hpp"
-#include "controllers/InputController.hpp"
-#include "controllers/TiltController.hpp"
-#include "controllers/CollisionController.hpp"
+#include "AttackController.hpp"
+#include "AIController.hpp"
+#include "InputController.hpp"
+#include "TiltController.hpp"
+#include "CollisionController.hpp"
 
 /**
  * Class for a simple Hello World style application

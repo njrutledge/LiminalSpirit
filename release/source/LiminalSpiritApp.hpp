@@ -13,10 +13,10 @@
 #ifndef LiminalSpirit_hpp
 #define LiminalSpirit_hpp
 #include <cugl/cugl.h>
-#include "scenes/GameScene.hpp"
-#include "scenes/LoadingScene.hpp"
-#include "scenes/HomeScene.hpp"
-#include "scenes/WorldSelectScene.hpp"
+#include "GameScene.hpp"
+#include "LoadingScene.hpp"
+#include "HomeScene.hpp"
+#include "WorldSelectScene.hpp"
 
 /**
  * This class represents the application root for the ship demo.

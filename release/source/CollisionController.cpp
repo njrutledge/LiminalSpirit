@@ -1,6 +1,6 @@
 #include "CollisionController.hpp"
 #include <box2d/b2_contact.h>
-#include "models/PlayerModel.h"
+#include "PlayerModel.h"
 #include "AttackController.hpp"
 using namespace cugl;
 

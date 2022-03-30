@@ -31,15 +31,15 @@
 #include <cugl/base/CUBase.h>
 #include <box2d/b2_contact.h>
 
-#include "models/BaseEnemyModel.h"
-#include "models/Lost.hpp"
-#include "models/Specter.hpp"
-#include "models/PlayerModel.h"
-#include "models/Platform.hpp"
+#include "BaseEnemyModel.h"
+#include "Lost.hpp"
+#include "Specter.hpp"
+#include "PlayerModel.h"
+#include "Platform.hpp"
 
-#include "controllers/AttackController.hpp"
-#include "controllers/AIController.hpp"
-#include "controllers/CollisionController.hpp"
+#include "AttackController.hpp"
+#include "AIController.hpp"
+#include "CollisionController.hpp"
 
 // Add support for simple random number generation
 #include <cstdlib>

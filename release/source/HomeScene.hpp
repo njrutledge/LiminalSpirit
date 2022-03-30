@@ -1,5 +1,5 @@
 //
-//  WorldSelectScene.hpp
+//  HomeScene.hpp
 //  Cornell University Game Library (CUGL)
 //
 //  This class manages the home screen, which can switch to the world select or
@@ -27,25 +27,23 @@
 //  Author: Walker White
 //  Version: 1/8/17
 //
-#ifndef World_Select_Scene_hpp
-#define World_Select_Scene_hpp
+#ifndef HomeScene_hpp
+#define HomeScene_hpp
 #include <cugl/cugl.h>
-#include "controllers/InputController.hpp"
+#include "InputController.hpp"
 
 /**
  * Class representing the Home screen. It links to world select and options menu.
  */
-class WorldSelectScene : public cugl::Scene2
+class HomeScene : public cugl::Scene2
 {
 public:
 	enum class Choice {
 		MENU,
-		CAVE_PREP,
-		CAVE,
-		SHROOM_PREP,
-		SHROOM,
-		FOREST_PREP,
-		FOREST,
+		PLAY_PREP,
+		PLAY,
+		OPTIONS_PREP,
+		OPTIONS,
 	};
 protected:
   /** The loaders to (synchronously) load in assets */
@@ -57,12 +55,10 @@ protected:
 
   InputController _input;
 
-  /** buttons for the world selection */
-  std::shared_ptr<cugl::scene2::Button> _caveButton;
-  std::shared_ptr<cugl::scene2::Button> _shroomButton;
-  std::shared_ptr<cugl::scene2::Button> _forestButton;
+  std::shared_ptr<cugl::scene2::Button> _playButton;
+  std::shared_ptr<cugl::scene2::Button> _optionsButton;
 
-  /** the player choice of the world select menu */
+  /** the player choice of this menu */
   Choice _choice = Choice::MENU;
 
 public:
@@ -72,7 +68,7 @@ public:
    * This constructor does not allocate any objects or start the game.
    * This allows us to use the object without a heap pointer.
    */
-  WorldSelectScene() : cugl::Scene2() {}
+  HomeScene() : cugl::Scene2() {}
 
   /**
    * Disposes of all (non-static) resources allocated to this mode.
@@ -80,7 +76,7 @@ public:
    * This method is different from dispose() in that it ALSO shuts off any
    * static resources, like the input controller.
    */
-  ~WorldSelectScene() { dispose(); }
+  ~HomeScene() { dispose(); }
 
   /**
    * Disposes of all (non-static) resources allocated to this mode.
@@ -100,7 +96,7 @@ public:
    */
   bool init(const std::shared_ptr<cugl::AssetManager> &assets);
 
-  Choice getChoice() { return _choice; }
+  Choice getChoice() { return _choice; };
 
 #pragma mark -
 #pragma mark Screen Handling
@@ -121,4 +117,4 @@ public:
   void render(const std::shared_ptr<cugl::SpriteBatch> &batch);
 };
 
-#endif /* __World_Select_Scene_hpp__ */
+#endif /* __Home_Scene_hpp__ */
