@@ -12,7 +12,7 @@ using namespace cugl;
     * @param  contact  The two bodies that collided
     * @param  player   The player pointer
     */
-void CollisionController::beginContact(b2Contact* contact, std::shared_ptr<PlayerModel> player, std::shared_ptr<AttackController> AC) {
+void CollisionController::beginContact(b2Contact* contact, std::shared_ptr<PlayerModel> player, std::shared_ptr<AttackController> AC, float timer) {
     //setup
     b2Fixture* fix1 = contact->GetFixtureA();
     b2Fixture* fix2 = contact->GetFixtureB();
@@ -28,10 +28,10 @@ void CollisionController::beginContact(b2Contact* contact, std::shared_ptr<Playe
 
     //handle enemy collision
     if (BaseEnemyModel* enemy = dynamic_cast<BaseEnemyModel*>(bd1)) {
-        handleEnemyCollision(enemy, bd2, fd2, AC);
+        handleEnemyCollision(enemy, bd2, fd2, AC, timer);
     }
     else if (BaseEnemyModel* enemy = dynamic_cast<BaseEnemyModel*>(bd2)) {
-        handleEnemyCollision(enemy, bd1, fd1, AC);
+        handleEnemyCollision(enemy, bd1, fd1, AC, timer);
     }
 
     //handlePlayerCollision
@@ -48,7 +48,7 @@ void CollisionController::beginContact(b2Contact* contact, std::shared_ptr<Playe
 /**
 * helper method for handling beginning of enemy collision
 */
-void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::Obstacle* bd, std::string* fd, std::shared_ptr<AttackController> AC) {
+void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::Obstacle* bd, std::string* fd, std::shared_ptr<AttackController> AC, float timer) {
     if (AttackController::Attack* attack = dynamic_cast<AttackController::Attack*>(bd)) {
         if (!enemy) {
             //makes the compiler happy
@@ -64,14 +64,14 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                     //attack->markRemoved();
                     attack->setInactive();
                     float angle_change;
-                    cugl::Vec2 linvel = attack->getLinearVelocity().normalize();
+                    cugl::Vec2 linvel = attack->getVel();//getLinearVelocity().normalize();
                     
                     switch (mirror->getType()) {
                     case Mirror::Type::square:
                         //just reflect the attack
                         AC->createAttack(attack->getPosition(), attack->getRadius()*MIRROR_AMPLIFY, attack->getMaxAge(),
                             attack->getDamage(), AttackController::Type::e_range,
-                            linvel.rotate(M_PI), false);
+                            linvel.rotate(M_PI), timer, false);
                         break;
                     case Mirror::Type::triangle:
                         //reflect three back at you
@@ -80,7 +80,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                         for (int i = 0; i < 3; i++) {
                             AC->createAttack(attack->getPosition(), attack->getRadius(), attack->getMaxAge(),
                                 attack->getDamage(), AttackController::Type::e_range,
-                                linvel.rotate(angle_change)*.66f, false);
+                                linvel.rotate(angle_change)*.66f, timer, false);
                         }
                         break;
                     case Mirror::Type::circle:
@@ -89,24 +89,28 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                         for (float i = 0; i < 8; i++) {
                             AC->createAttack(attack->getPosition(), attack->getRadius(), attack->getMaxAge(),
                                 attack->getDamage(), AttackController::Type::e_range,
-                                linvel.rotate(angle_change)*.5f, false);
+                                linvel.rotate(angle_change)*.5f, timer, false);
                         }
                         break;
                     }
                     
                 }
                 else if (attack->getType() == AttackController::Type::p_melee) {
-                    if (mirror->getLastMelee() != attack) {
+                    if (!mirror->getLastMelee()->isSame(attack)) {
                         mirror->setHealth(mirror->getHealth() - attack->getDamage());
                         mirror->setLastMelee(attack);
+                        CULog("NEW ATTACK~~~~~~~~~~~~~~~~~~");
                         if (mirror->getHealth() <= 0) {
                             mirror->markRemoved(true);
                         }
                     }
+                    else {
+                        CULog("SAME ATTACK");
+                    }
                 }
             }
             else{
-                if (enemy->getLastMelee() != attack) {
+                if (!enemy->getLastMelee()->isSame(attack)) {
                     enemy->setHealth(enemy->getHealth() - attack->getDamage());
                     if (attack->getType() == AttackController::Type::p_melee) enemy->setLastMelee(attack);
                     if (enemy->getHealth() <= 0) {
@@ -114,7 +118,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                     }
                 }
                 if (attack->getType() == AttackController::p_exp_package) {
-                    AC->createAttack(cugl::Vec2(bd->getPosition().x, bd->getPosition().y), 3, 0.1, 4, AttackController::p_exp, cugl::Vec2::ZERO);
+                    AC->createAttack(cugl::Vec2(bd->getPosition().x, bd->getPosition().y), 3, 0.1, 4, AttackController::p_exp, cugl::Vec2::ZERO, timer);
                 }
                 switch (attack->getType()) {
                 case AttackController::p_range:
@@ -137,7 +141,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                     //just amplify the attack
                     AC->createAttack(attack->getPosition(), attack->getRadius()*MIRROR_AMPLIFY, attack->getMaxAge(),
                         attack->getDamage()*MIRROR_AMPLIFY, AttackController::Type::e_range,
-                        linvel, false);
+                        linvel, timer, false);
                     break;
                 case Mirror::Type::triangle:
                     //split into three
@@ -146,7 +150,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                     for (int i = 0; i < 3; i++) {
                         AC->createAttack(attack->getPosition(), attack->getRadius(), attack->getMaxAge(),
                             attack->getDamage(), AttackController::Type::e_range,
-                            linvel.rotate(angle_change)*.66f, false);
+                            linvel.rotate(angle_change)*.66f, timer, false);
                     }
                     break;
                 case Mirror::Type::circle:
@@ -155,7 +159,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                     for (float i = 0; i < 8; i++) {
                         AC->createAttack(attack->getPosition(), attack->getRadius(), attack->getMaxAge(),
                             attack->getDamage(), AttackController::Type::e_range,
-                            linvel.rotate(angle_change)*.5f, false);
+                            linvel.rotate(angle_change)*.5f, timer, false);
                     }
                     break;
                 }

@@ -180,7 +180,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     //    };
     _world->onBeginContact = [this](b2Contact *contact)
     {
-        _collider.beginContact(contact, _player, _attacks);
+        _collider.beginContact(contact, _player, _attacks, _timer);
     };
     _world->onEndContact = [this](b2Contact *contact)
     {
@@ -325,21 +325,21 @@ void GameScene::update(float timestep)
             else {
                 shared_ptr<Seeker> seeker = dynamic_pointer_cast<Seeker>(*it);
                 if (seeker->justAttacked) {
-                    _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 1.0f, 0.2f, 2.0f, AttackController::Type::e_melee, (vel.scale(0.2)).rotate((play_p - en_p).getAngle()));
+                    _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 1.0f, 0.2f, 2.0f, AttackController::Type::e_melee, (vel.scale(0.2)).rotate((play_p - en_p).getAngle()), _timer);
                 }
             }
   
             if ((*it)->getName() == "Lost") {
-                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 1.0f, 0.2f, 1.0f, AttackController::Type::e_melee, vel.rotate((play_p - en_p).getAngle()));
+                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 1.0f, 0.2f, 1.0f, AttackController::Type::e_melee, vel.rotate((play_p - en_p).getAngle()), _timer);
                 
             }
             else if ((*it)->getName() == "Specter")
             {
-                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()));
+                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()), _timer);
             }
 
             else if ((*it)->getName() == "Glutton") {
-                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()));
+                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()), _timer);
             }
 
         }
@@ -355,8 +355,8 @@ void GameScene::update(float timestep)
     
     _swipes.update(_input);
     b2Vec2 playerPos = _player->getBody()->GetPosition();
-    _attacks->attackLeft(Vec2(playerPos.x, playerPos.y), _swipes.getLeftSwipe(), _swipes.getLeftAngle(), _player->isGrounded());
-    _attacks->attackRight(Vec2(playerPos.x, playerPos.y), _swipes.getRightSwipe(), _swipes.getRightAngle(), _player->isGrounded());
+    _attacks->attackLeft(Vec2(playerPos.x, playerPos.y), _swipes.getLeftSwipe(), _swipes.getLeftAngle(), _player->isGrounded(), _timer);
+    _attacks->attackRight(Vec2(playerPos.x, playerPos.y), _swipes.getRightSwipe(), _swipes.getRightAngle(), _player->isGrounded(), _timer);
     if (_swipes.getRightSwipe() == SwipeController::chargedRight) {
         _dashXVel = 20;
         _dashTime = 0;

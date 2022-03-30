@@ -16,13 +16,13 @@ public:
     ~CollisionController() {}
 
 
-    void beginContact(b2Contact* contact, std::shared_ptr<PlayerModel> player, std::shared_ptr<AttackController> AC);
+    void beginContact(b2Contact* contact, std::shared_ptr<PlayerModel> player, std::shared_ptr<AttackController> AC, float timer);
 
     void endContact(b2Contact* contact, std::shared_ptr<PlayerModel> player);
 
 private:
     /** handle collision between enemy and an obstacle */
-    void handleEnemyCollision(BaseEnemyModel* enemy, cugl::physics2::Obstacle* bd, string* fd, std::shared_ptr<AttackController> AC);
+    void handleEnemyCollision(BaseEnemyModel* enemy, cugl::physics2::Obstacle* bd, string* fd, std::shared_ptr<AttackController> AC, float timer);
 
     /**handle collision between player and an obstacle */
     void handlePlayerCollision(PlayerModel* player, cugl::physics2::Obstacle* bd, std::string* fd);

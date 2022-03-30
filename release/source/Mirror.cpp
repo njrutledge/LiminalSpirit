@@ -9,7 +9,7 @@
 
 EnemyProperties MIRROR_PROPS{
 	/** Starting health of the Mirror */
-	10,
+	3,
 	/** Vertical speed of the Mirror */
 	5.0f,
 	/** Horizontal speed of the Mirror*/

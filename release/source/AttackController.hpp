@@ -79,7 +79,10 @@ public:
         
         //The damage of the hitbox
         float _damage;
-        
+
+        //ID of this attack
+        float _UID;
+
         //A velocity vector to update the projectile
         cugl::Vec2 _vel;
         
@@ -118,7 +121,7 @@ public:
 
         void dispose();
 
-        bool init(const cugl::Vec2 p, float radius, float a, float dmg, float scale, Type s, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel);
+        bool init(const cugl::Vec2 p, float radius, float a, float dmg, float scale, Type s, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel, float timer);
         
         
         /**
@@ -149,6 +152,10 @@ public:
 
         void setSplitable(bool val) { _splitable = val; }
 
+        bool isSame(Attack* a);
+
+        cugl::Vec2 getVel() { return _vel; }
+
 #pragma mark - 
 #pragma mark Physics Methods
         /**Creates and adds the physics body(s) to the world */
@@ -157,13 +164,14 @@ public:
         /** Releases the fixtures of this body(s) from the world */
         void releaseFixtures() override;
 
+
  public:
 
 #pragma mark -
 #pragma mark Static Constructors
         static std::shared_ptr<Attack> alloc(cugl::Vec2 p, float radius, float age, float dmg, float scale,
                                              Type t, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel,
-                                             Side s) {
+                                             Side s, float timer) {
             float off = 1.5f;
             if (p.x + radius + off > 32.0f && s == right) {
                 p.x = 31.9f - radius - off;
@@ -179,13 +187,9 @@ public:
             }
 
             std::shared_ptr<Attack> result = std::make_shared<Attack>();
-            return (result->init(p, radius, age, dmg, scale, t, oof, b, vel) ? result : nullptr);
+            return (result->init(p, radius, age, dmg, scale, t, oof, b, vel, timer) ? result : nullptr);
         }
         
-        static std::shared_ptr<Attack> alloc2(const cugl::Vec2 p, float radius, float age, float dmg, float scale, Type t, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel) {
-            std::shared_ptr<Attack> result = std::make_shared<Attack>();
-            return (result->init(p, radius, age, dmg, scale, t, oof, b, vel) ? result : nullptr);
-        }
     };
     
     std::unordered_set<std::shared_ptr<Attack>> _pending;
@@ -257,22 +261,22 @@ public:
     /**
      *  Creates an attack for a right sided swipe.
      */
-    void attackRight(cugl::Vec2 p, SwipeController::SwipeAttack attack, float angle, bool grounded);
+    void attackRight(cugl::Vec2 p, SwipeController::SwipeAttack attack, float angle, bool grounded, float timer);
     
     /**
      *  Creates an attack for a left sided swipe.
      */
-    void attackLeft(cugl::Vec2 p, SwipeController::SwipeAttack attack, float angle, bool grounded);
+    void attackLeft(cugl::Vec2 p, SwipeController::SwipeAttack attack, float angle, bool grounded, float timer);
     
     /**
      *  Creates an attack with the designated parameters. This is mostly to create enemy attacks, but also any explosion attacks for the player. There is no parameter. This must be calculated in the position. The attack will be splitable
      */
-    void createAttack(cugl::Vec2 p, float radius, float age, float damage, Type s, cugl::Vec2 vel);
+    void createAttack(cugl::Vec2 p, float radius, float age, float damage, Type s, cugl::Vec2 vel, float timer);
 
     /**
      *  Creates an attack with the designated parameters. This is mostly to create enemy attacks, but also any explosion attacks for the player. There is no parameter. This must be calculated in the position.
      */
-    void createAttack(cugl::Vec2 p, float radius, float age, float damage, Type s, cugl::Vec2 vel, bool splitable);
+    void createAttack(cugl::Vec2 p, float radius, float age, float damage, Type s, cugl::Vec2 vel, float timer, bool splitable);
 
     /** Get left offset */
     cugl::Vec2 getLeftOff() { return _leftOff; }
