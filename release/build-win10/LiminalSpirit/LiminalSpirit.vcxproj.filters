@@ -51,6 +51,7 @@
     <ClCompile Include="..\..\source\Mirror.cpp" />
     <ClCompile Include="..\..\source\Seeker.cpp" />
     <ClCompile Include="..\..\source\Glutton.cpp" />
+    <ClCompile Include="..\..\source\SoundController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\LSCharacter.h" />
@@ -105,6 +106,7 @@
     <ClInclude Include="..\..\source\Mirror.hpp" />
     <ClInclude Include="..\..\source\Seeker.hpp" />
     <ClInclude Include="..\..\source\Glutton.hpp" />
+    <ClInclude Include="..\..\source\SoundController.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LiminalSpirit.rc" />
