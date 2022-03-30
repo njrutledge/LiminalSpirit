@@ -52,9 +52,10 @@
     <ClCompile Include="..\..\source\Seeker.cpp" />
     <ClCompile Include="..\..\source\Glutton.cpp" />
     <ClCompile Include="..\..\source\SoundController.cpp" />
+    <ClCompile Include="..\..\source\HomeScene.cpp" />
+    <ClCompile Include="..\..\source\WorldSelectScene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\source\LSCharacter.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="..\..\source\AIController.hpp">
       <Filter>Header Files</Filter>
@@ -107,6 +108,8 @@
     <ClInclude Include="..\..\source\Seeker.hpp" />
     <ClInclude Include="..\..\source\Glutton.hpp" />
     <ClInclude Include="..\..\source\SoundController.hpp" />
+    <ClInclude Include="..\..\source\HomeScene.hpp" />
+    <ClInclude Include="..\..\source\WorldSelectScene.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LiminalSpirit.rc" />

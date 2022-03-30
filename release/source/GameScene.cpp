@@ -30,10 +30,14 @@
 #include "GameScene.hpp"
 #include <cugl/base/CUBase.h>
 #include <box2d/b2_contact.h>
+
 #include "BaseEnemyModel.h"
+#include "Lost.hpp"
+#include "Specter.hpp"
+#include "PlayerModel.h"
+#include "Platform.hpp"
 #include "AttackController.hpp"
 #include "AIController.hpp"
-#include "PlayerModel.h"
 #include "CollisionController.hpp"
 #include "Platform.hpp"
 #include "Glow.hpp"
@@ -56,7 +60,7 @@ using namespace cugl;
 /** Width of the game world in Box2d units */
 #define DEFAULT_WIDTH 32.0f
 /** Height of the game world in Box2d units */
-float DEFAULT_HEIGHT = DEFAULT_WIDTH/SCENE_WIDTH*SCENE_HEIGHT;
+float DEFAULT_HEIGHT = DEFAULT_WIDTH / SCENE_WIDTH * SCENE_HEIGHT;
 
 /** The constant for gravity in the physics world. */
 #define GRAVITY 30
@@ -65,20 +69,12 @@ float DEFAULT_HEIGHT = DEFAULT_WIDTH/SCENE_WIDTH*SCENE_HEIGHT;
 #define PLATFORM_HEIGHT 0.5
 #define PLATFORMTEXTURE "platform"
 
-/** The initial position of the enemies */
-float ENEMY_POS[] = { 30.0f, 15.0f};
-float ENEMY_POS2[] = { 28.0f, 10.0f };
-float ENEMY_POS3[] = { 15.0f, 2.0f };
-float ENEMY_POS4[] = {5.0f, 20.0f};
-float ENEMY_POS5[] = { 31.0f, 6.0f};
-
 /** The initial position of the player*/
 float PLAYER_POS[] = { 5.0f, 4.0f };
 
 string BIOME = "cave";
 float LEVEL_HEIGHT = 54;
 
-float PLATFORMS[PLATFORM_COUNT][PLATFORM_ATT] = {{5,5,3}, {30,5,5}, {10,10,4}, {20,12,3}};
 
 /**
  * Initializes the controller contents, and starts the game
@@ -97,7 +93,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     Size dimen = Application::get()->getDisplaySize();
     float boundScale = SCENE_WIDTH / dimen.width;
     dimen *= boundScale;
-    
+
     if (assets == nullptr)
     {
         return false;
@@ -106,7 +102,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     {
         return false;
     }
-    
+
     // Start up the input handler
 #if defined(CU_TOUCH_SCREEN)
     Input::activate<Touchscreen>();
@@ -179,40 +175,42 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     // Enable physics -jdg274
     _world = physics2::ObstacleWorld::alloc(Rect(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT), Vec2(0, -GRAVITY));
     _world->activateCollisionCallbacks(true);
-   //    _world->PreSolve = [this](b2Contact* contact, const b2Manifold *oldManifold) {
-//        preSolve(contact, oldManifold);
-//    };
-    _world->onBeginContact = [this](b2Contact* contact) {
+    //    _world->PreSolve = [this](b2Contact* contact, const b2Manifold *oldManifold) {
+    //        preSolve(contact, oldManifold);
+    //    };
+    _world->onBeginContact = [this](b2Contact *contact)
+    {
         _collider.beginContact(contact, _player, _attacks);
     };
-    _world->onEndContact = [this](b2Contact* contact) {
+    _world->onEndContact = [this](b2Contact *contact)
+    {
         _collider.endContact(contact, _player);
     };
-    
+
     // Only want to get swipes within safe bounds
     Rect bounds = Application::get()->getSafeBounds();
     _input.init(bounds.getMinX(), bounds.size.width);
-    
+
     bounds.origin *= boundScale;
     bounds.size *= boundScale;
 
     _scale = bounds.size.width / DEFAULT_WIDTH;
-    Vec2 offset(bounds.getMinX(),0);
-    
+    Vec2 offset(bounds.getMinX(), 0);
+
     // Create the scene graph
     // Bounds do not matter when constraint is false
     _worldnode = scene2::ScrollPane::allocWithBounds(bounds.size);
     _worldnode->setPosition(offset);
-    _worldnode->setInterior(Rect(0,0,bounds.size.width,SCENE_HEIGHT));
+    _worldnode->setInterior(Rect(0, 0, bounds.size.width, SCENE_HEIGHT));
     _worldnode->setConstrained(true);
     scene->addChild(_worldnode);
-    
+
     // Bounds do not matter when constraint is false
     _debugnode = scene2::ScrollPane::allocWithBounds(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     _debugnode->setScale(_scale); // Debug node draws in PHYSICS coordinates
     _debugnode->setPosition(offset);
     scene->addChild(_debugnode);
-    
+
     // TODO this init might be wrong, Nick had _scale/2.0f
     _pMeleeTexture = _assets->get<Texture>(PATTACK_TEXTURE);
     _attacks = std::make_shared<AttackController>();
@@ -229,10 +227,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     buildScene(scene);
     addChild(scene);
 
-    
     // Get font
     _font = assets->get<Font>("marker");
-    
+
     // Create and layout the health meter
     std::string msg = strtool::format("Health %d", (int)_player->getHealth());
     _text = TextLayout::allocWithText(msg, assets->get<Font>("marker"));
@@ -250,7 +247,7 @@ void GameScene::dispose()
 {
     // Delete all smart pointers
     _logo = nullptr;
-//    scene = nullptr;
+    //    scene = nullptr;
     _batch = nullptr;
     _assets = nullptr;
     _constants = nullptr;
@@ -266,7 +263,7 @@ void GameScene::dispose()
 //    }
     // This should work because smart pointers free themselves when vector is cleared
     _enemies.clear();
-    
+
     _player = nullptr;
     _attacks = nullptr;
 
@@ -290,7 +287,7 @@ void GameScene::update(float timestep)
     
     // Update input controller
     _input.update();
-    
+
     // Update tilt controller
     _tilt.update(_input, SCENE_WIDTH);
     float xPos = _tilt.getXpos();
@@ -311,7 +308,8 @@ void GameScene::update(float timestep)
 
     // Enemy AI logic
     // For each enemy
-    for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
+    for (auto it = _enemies.begin(); it != _enemies.end(); ++it)
+    {
         Vec2 direction = _ai.getMovement(*it, _player->getPosition(), timestep);
         (*it)->setVX(direction.x);
         (*it)->setVY(direction.y);
@@ -335,8 +333,9 @@ void GameScene::update(float timestep)
                 _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 1.0f, 0.2f, 1.0f, AttackController::Type::e_melee, vel.rotate((play_p - en_p).getAngle()));
                 
             }
-            else if ((*it)->getName() == "Specter") {
-                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()));
+            else if ((*it)->getName() == "Specter")
+            {
+                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()));
             }
 
             else if ((*it)->getName() == "Glutton") {
@@ -415,56 +414,66 @@ void GameScene::update(float timestep)
     }
     
     _world->update(timestep);
-    
-    for (auto it = _attacks->_pending.begin(); it != _attacks->_pending.end(); ++it) {
-        //FIX WHEN TEXTURE EXISTS
+
+    for (auto it = _attacks->_pending.begin(); it != _attacks->_pending.end(); ++it)
+    {
+        // FIX WHEN TEXTURE EXISTS
         std::shared_ptr<scene2::PolygonNode> attackSprite = scene2::PolygonNode::allocWithTexture(_pMeleeTexture);
         attackSprite->setScale(.85f * (*it)->getRadius());
         (*it)->setDebugColor(Color4::YELLOW);
         addObstacle((*it), attackSprite, true);
     }
-    //DO NOT MOVE THIS LINE
+    // DO NOT MOVE THIS LINE
     _attacks->update(_player->getPosition(), _player->getBody()->GetLinearVelocity(), timestep);
-    if(_swipes.getRightSwipe() == _swipes.upAttack){
+    if (_swipes.getRightSwipe() == _swipes.upAttack)
+    {
         _player->setJumping(true);
         _player->setIsFirstFrame(true);
-    } else {
+    }
+    else
+    {
         _player->setJumping(false);
     }
-    if (_player->getVY() < -.2 || _player->getVY() > .2) {
+    if (_player->getVY() < -.2 || _player->getVY() > .2)
+    {
         _player->setGrounded(false);
     }
-    else if (_player->getVY() >= -.2 && _player->getVY() <= .2) {
-        //check if this is the first "0" velocity frame, as this should not make the player grounded just yet. Might be height of jump. 
-        if (_player->isFirstFrame()) {
+    else if (_player->getVY() >= -.2 && _player->getVY() <= .2)
+    {
+        // check if this is the first "0" velocity frame, as this should not make the player grounded just yet. Might be height of jump.
+        if (_player->isFirstFrame())
+        {
             _player->setIsFirstFrame(false);
         }
-        else {
+        else
+        {
             _player->setGrounded(true);
         }
     }
-    
+
     _player->applyForce();
 
-    
-    //Remove attacks
+    // Remove attacks
     auto ait = _attacks->_current.begin();
-    while(ait != _attacks->_current.end()) {
-        if ((*ait)->isRemoved()) {
-            //int log1 = _world->getObstacles().size();
-            cugl::physics2::Obstacle* obj = dynamic_cast<cugl::physics2::Obstacle*>(&**ait);
+    while (ait != _attacks->_current.end())
+    {
+        if ((*ait)->isRemoved())
+        {
+            // int log1 = _world->getObstacles().size();
+            cugl::physics2::Obstacle *obj = dynamic_cast<cugl::physics2::Obstacle *>(&**ait);
             _world->removeObstacle(obj);
             _worldnode->removeChild(obj->_node);
 
-            //int log2 = _world->getObstacles().size();
+            // int log2 = _world->getObstacles().size();
             ait = _attacks->_current.erase(ait);
         }
-        else {
+        else
+        {
             ait++;
         }
     }
 
-    //Remove enemies
+    // Remove enemies
     auto eit = _enemies.begin();
     while (eit != _enemies.end()) {
         if ((*eit)->isRemoved()) {
@@ -476,10 +485,11 @@ void GameScene::update(float timestep)
             _world->removeObstacle(obj);
             _worldnode->removeChild(obj->_node);
 
-            //int log2 = _world->getObstacles().size();
+            // int log2 = _world->getObstacles().size();
             eit = _enemies.erase(eit);
         }
-        else {
+        else
+        {
             eit++;
         }
     }
@@ -497,11 +507,11 @@ void GameScene::update(float timestep)
         reset();
         _player->markRemoved(false);
     }
-    
+
     // Update the health meter
     _text->setText(strtool::format("Health %d", (int)_player->getHealth()));
     _text->layout();
-    
+
     // Camera following player, with some non-linear smoothing
     float dy = getChild(0)->getContentSize().height / 2 - _worldnode->getPaneTransform().transform(_player->getSceneNode()->getPosition()).y;
     Vec2 pan = Vec2(0, dy);
@@ -559,7 +569,7 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     batch->begin(getCamera()->getCombined());
 
     //_attacks.draw(batch);
-    batch->drawText(_text,Vec2(20,getSize().height-_text->getBounds().size.height-10));
+    batch->drawText(_text, Vec2(20, getSize().height - _text->getBounds().size.height - 10));
     batch->end();
 }
 
@@ -678,7 +688,6 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     float scale = SCENE_WIDTH / size.width;
     size *= scale;
 
-
     // Create a button.  A button has an up image and a down image
     std::shared_ptr<Texture> up = _assets->get<Texture>("close-normal");
     std::shared_ptr<Texture> down = _assets->get<Texture>("close-selected");
@@ -709,23 +718,23 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     Rect floorRect = Rect(0, 0, DEFAULT_WIDTH, 0.5);
     std::shared_ptr<physics2::PolygonObstacle> floor = physics2::PolygonObstacle::allocWithAnchor(floorRect, Vec2::ANCHOR_CENTER);
     floor->setBodyType(b2_staticBody);
-    
-    std::shared_ptr<scene2::PolygonNode> floorNode = scene2::PolygonNode::allocWithPoly(floorRect*_scale);
+
+    std::shared_ptr<scene2::PolygonNode> floorNode = scene2::PolygonNode::allocWithPoly(floorRect * _scale);
     floorNode->setColor(Color4::BLACK);
     floor->setName("floor");
     b2Filter filter = b2Filter();
     filter.categoryBits = 0b1000;
-    //filter.maskBits = 0b1100;
+    // filter.maskBits = 0b1100;
     floor->setFilterData(filter);
     addObstacle(floor, floorNode, 1);
 
     // Making the ceiling -jdg274
     Rect ceilingRect = Rect(0, DEFAULT_HEIGHT - 0.5, DEFAULT_WIDTH, 0.5);
     std::shared_ptr<physics2::PolygonObstacle> ceiling = physics2::PolygonObstacle::allocWithAnchor(ceilingRect, Vec2::ANCHOR_CENTER);
-    //filter.maskBits = 0b1100;
+    // filter.maskBits = 0b1100;
     ceiling->setFilterData(filter);
-    
-    std::shared_ptr<scene2::PolygonNode> ceilingNode = scene2::PolygonNode::allocWithPoly(ceilingRect*_scale);
+
+    std::shared_ptr<scene2::PolygonNode> ceilingNode = scene2::PolygonNode::allocWithPoly(ceilingRect * _scale);
     ceilingNode->setColor(Color4::CLEAR);
     addObstacle(ceiling, ceilingNode, 1);
 
@@ -734,18 +743,18 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     std::shared_ptr<physics2::PolygonObstacle> left = physics2::PolygonObstacle::allocWithAnchor(leftRect, Vec2::ANCHOR_CENTER);
     left->setBodyType(b2_staticBody);
     left->setFilterData(filter);
-    
-    std::shared_ptr<scene2::PolygonNode> leftNode = scene2::PolygonNode::allocWithPoly(leftRect*_scale);
+
+    std::shared_ptr<scene2::PolygonNode> leftNode = scene2::PolygonNode::allocWithPoly(leftRect * _scale);
     leftNode->setName("leftwall");
     leftNode->setColor(Color4::CLEAR);
     addObstacle(left, leftNode, 1);
 
     // Making the right wall -jdg274
-    Rect rightRect = Rect(DEFAULT_WIDTH-0.5, 0, 0.5, DEFAULT_HEIGHT);
+    Rect rightRect = Rect(DEFAULT_WIDTH - 0.5, 0, 0.5, DEFAULT_HEIGHT);
     std::shared_ptr<physics2::PolygonObstacle> right = physics2::PolygonObstacle::allocWithAnchor(rightRect, Vec2::ANCHOR_CENTER);
     right->setBodyType(b2_staticBody);
     right->setFilterData(filter);
-    std::shared_ptr<scene2::PolygonNode> rightNode = scene2::PolygonNode::allocWithPoly(rightRect*_scale);
+    std::shared_ptr<scene2::PolygonNode> rightNode = scene2::PolygonNode::allocWithPoly(rightRect * _scale);
     rightNode->setName("rightwall");
     rightNode->setColor(Color4::CLEAR);
     addObstacle(right, rightNode, 1);
@@ -824,33 +833,35 @@ void GameScene::reset()
     _swipes.reset();
     _tilt.reset();
     auto ac_it = _attacks->_current.begin();
-    while (ac_it != _attacks->_current.end()) {
-        //int log1 = _world->getObstacles().size();
-        cugl::physics2::Obstacle* obj = dynamic_cast<cugl::physics2::Obstacle*>(&**ac_it);
+    while (ac_it != _attacks->_current.end())
+    {
+        // int log1 = _world->getObstacles().size();
+        cugl::physics2::Obstacle *obj = dynamic_cast<cugl::physics2::Obstacle *>(&**ac_it);
         _world->removeObstacle(obj);
         _worldnode->removeChild(obj->_node);
 
-        //int log2 = _world->getObstacles().size();
+        // int log2 = _world->getObstacles().size();
         ac_it = _attacks->_current.erase(ac_it);
     }
     auto ap_it = _attacks->_current.begin();
-    while (ap_it != _attacks->_current.end()) {
-        //int log1 = _world->getObstacles().size();
-        cugl::physics2::Obstacle* obj = dynamic_cast<cugl::physics2::Obstacle*>(&**ap_it);
+    while (ap_it != _attacks->_current.end())
+    {
+        // int log1 = _world->getObstacles().size();
+        cugl::physics2::Obstacle *obj = dynamic_cast<cugl::physics2::Obstacle *>(&**ap_it);
         _world->removeObstacle(obj);
         _worldnode->removeChild(obj->_node);
 
-        //int log2 = _world->getObstacles().size();
+        // int log2 = _world->getObstacles().size();
         ac_it = _attacks->_current.erase(ap_it);
     }
     //_attacks->reset();  Shouldn't be needed now
     // Does nothing right now
     _ai.reset();
-    
+
     // Reset player position & health & other member fields
     Vec2 playerPos = PLAYER_POS;
     _player->reset(playerPos);
-    
+
     // Remove all enemies
     auto eit = _enemies.begin();
     while (eit != _enemies.end()) {
@@ -897,15 +908,16 @@ void GameScene::addObstacle(const std::shared_ptr<cugl::physics2::Obstacle> &obj
     {
         node->setPosition(obj->getPosition() * _scale);
     }
-   _worldnode->addChild(node);
+    _worldnode->addChild(node);
     obj->setNode(node);
 
     // Dynamic objects need constant updating
-    if (obj->getBodyType() == b2_dynamicBody) {
-        scene2::SceneNode* weak = node.get(); // No need for smart pointer in callback
-        obj->setListener([=](physics2::Obstacle* obs){
+    if (obj->getBodyType() == b2_dynamicBody)
+    {
+        scene2::SceneNode *weak = node.get(); // No need for smart pointer in callback
+        obj->setListener([=](physics2::Obstacle *obs)
+                         {
             weak->setPosition(obs->getPosition()*_scale);
-            weak->setAngle(obs->getAngle());
-        });
+            weak->setAngle(obs->getAngle()); });
     }
 }

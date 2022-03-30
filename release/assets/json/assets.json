@@ -92,6 +92,44 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
+		"home_play": {
+			"file": "textures/menus/home/tap_start.png",
+			"wrapS": "clamp",
+			"wrapT": "clamp",
+			"minfilter": "linear",
+			"magfilter": "linear"
+		},
+		"home_options": {
+			"file": "textures/menus/home/home_options.png",
+			"wrapS": "clamp",
+			"wrapT": "clamp",
+			"minfilter": "linear",
+			"magfilter": "linear"
+		},
+		"forest_background": {
+			"file": "textures/backgrounds/forest_draft_no_platforms.png"
+		},
+		"home_background": {
+			"file": "textures/menus/home/home_background.png"
+		},
+		"home_title": {
+			"file": "textures/menus/home/title_text.png"
+		},
+		"textbutton_base": {
+			"file": "textures/hud/text_highlight.png"
+		},
+		"world_select_background": {
+			"file": "textures/menus/world_select/world_select_background.png"
+		},
+		"world_select_cave": {
+			"file": "textures/menus/world_select/world_select_cave.png"
+		},
+		"world_select_shroom": {
+			"file": "textures/menus/world_select/world_select_fungi.png"
+		},
+		"world_select_forest": {
+			"file": "textures/menus/world_select/world_select_forest.png"
+		},
 		"whiteGrad": {
 			"file": "textures/circle.png",
 			"minfilter": "nearest",
@@ -104,6 +142,10 @@
 		}
 	},
 	"fonts": {
+		"spectral": {
+			"file": "fonts/Spectral-Regular.ttf",
+			"size": 30
+		},
 		"marker": {
 			"file": "fonts/MarkerFelt.ttf",
 			"size": 32
@@ -120,7 +162,7 @@
 				"backdrop": {
 					"type": "Image",
 					"data": {
-						"texture": "background",
+						"texture": "forest_background",
 						"anchor": [
 							0.5,
 							0.5
@@ -130,6 +172,202 @@
 					"layout": {
 						"x_anchor": "center",
 						"y_anchor": "middle"
+					}
+				}
+			}
+		},
+		"main_menu": {
+			"type": "Node",
+			"comment": "This is the root node of the menu scene",
+			"format": {
+				"type": "Anchored"
+			},
+			"children": {
+				"backdrop": {
+					"type": "Image",
+					"data": {
+						"texture": "home_background",
+						"anchor": [
+							0.5,
+							0.5
+						],
+						"scale": 0.75
+					},
+					"layout": {
+						"x_anchor": "center",
+						"y_anchor": "middle"
+					}
+				},
+				"title": {
+					"type": "Image",
+					"data": {
+						"texture": "home_title",
+						"anchor": [
+							0.5,
+							0.5
+						],
+						"scale": 0.66
+					},
+					"layout": {
+						"x_anchor": "center",
+						"y_anchor": "middle",
+						"y_offset": 0.15,
+						"x_offset": 0,
+						"absolute": false
+					}
+				},
+				"start": {
+					"type": "Button",
+					"data": {
+						"upnode": "up",
+						"anchor": [
+							0.5,
+							0.4
+						],
+						"scale": 0.5
+					},
+					"children": {
+						"up": {
+							"type": "Image",
+							"data": {
+								"texture": "home_play"
+							}
+						}
+					},
+					"layout": {
+						"x_anchor": "center",
+						"y_anchor": "middle",
+						"y_offset": -0.25,
+						"x_offset": 0,
+						"absolute": false
+					}
+				},
+				"options": {
+					"type": "Button",
+					"data": {
+						"upnode": "up",
+						"anchor": [
+							0.5,
+							0.4
+						],
+						"scale": 0.5
+					},
+					"children": {
+						"up": {
+							"type": "Image",
+							"data": {
+								"texture": "home_options"
+							}
+						}
+					},
+					"layout": {
+						"x_anchor": "center",
+						"y_anchor": "middle",
+						"y_offset": -0.33,
+						"x_offset": 0,
+						"absolute": false
+					}
+				}
+			}
+		},
+		"world_select": {
+			"type": "Node",
+			"comment": "The root node for level select",
+			"format": {
+				"type": "Anchored"
+			},
+			"children": {
+				"backdrop": {
+					"type": "Image",
+					"data": {
+						"texture": "world_select_background",
+						"anchor": [
+							0.5,
+							0.5
+						],
+						"scale": 0.66
+					},
+					"layout": {
+						"x_anchor": "center",
+						"y_anchor": "middle"
+					}
+				},
+				"cave": {
+					"type": "Button",
+					"data": {
+						"upnode": "up",
+						"anchor": [
+							0.5,
+							0.4
+						],
+						"scale": 0.66
+					},
+					"children": {
+						"up": {
+							"type": "Image",
+							"data": {
+								"texture": "world_select_cave"
+							}
+						}
+					},
+					"layout": {
+						"x_anchor": "center",
+						"y_anchor": "middle",
+						"y_offset": -0.055,
+						"x_offset": -0.385,
+						"absolute": false
+					}
+				},
+				"shroom": {
+					"type": "Button",
+					"data": {
+						"upnode": "up",
+						"anchor": [
+							0.5,
+							0.4
+						],
+						"scale": 0.66
+					},
+					"children": {
+						"up": {
+							"type": "Image",
+							"data": {
+								"texture": "world_select_shroom"
+							}
+						}
+					},
+					"layout": {
+						"x_anchor": "center",
+						"y_anchor": "middle",
+						"y_offset": 0.215,
+						"x_offset": 0.025,
+						"absolute": false
+					}
+				},
+				"forest": {
+					"type": "Button",
+					"data": {
+						"upnode": "up",
+						"anchor": [
+							0.5,
+							0.4
+						],
+						"scale": 0.66
+					},
+					"children": {
+						"up": {
+							"type": "Image",
+							"data": {
+								"texture": "world_select_forest"
+							}
+						}
+					},
+					"layout": {
+						"x_anchor": "center",
+						"y_anchor": "middle",
+						"y_offset": -0.275,
+						"x_offset": 0.377,
+						"absolute": false
 					}
 				}
 			}

@@ -208,8 +208,10 @@
     <ClInclude Include="..\..\source\Specter.hpp" />
     <ClInclude Include="..\..\source\SwipeController.hpp" />
     <ClInclude Include="..\..\source\TiltController.hpp" />
+    <ClInclude Include="..\..\source\LoadingScene.hpp" />
+    <ClInclude Include="..\..\source\HomeScene.hpp" />
+    <ClInclude Include="..\..\source\WorldSelectScene.hpp" />
     <ClInclude Include="resource.hpp" />
-    <ClInclude Include="..\..\source\PlayerModel.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
@@ -222,6 +224,7 @@
     <ClCompile Include="..\..\source\Glutton.cpp" />
     <ClCompile Include="..\..\source\InputController.cpp" />
     <ClCompile Include="..\..\source\LiminalSpirit.cpp" />
+    <ClCompile Include="..\..\source\HomeScene.cpp" />
     <ClCompile Include="..\..\source\LoadingScene.cpp" />
     <ClCompile Include="..\..\source\Lost.cpp" />
     <ClCompile Include="..\..\source\main.cpp" />
@@ -234,6 +237,7 @@
     <ClCompile Include="..\..\source\SwipeController.cpp" />
     <ClCompile Include="..\..\source\PlayerModel.cpp" />
     <ClCompile Include="..\..\source\TiltController.cpp" />
+    <ClCompile Include="..\..\source\WorldSelectScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LiminalSpirit.rc" />

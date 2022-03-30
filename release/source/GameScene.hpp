@@ -36,6 +36,8 @@
 #include "Mirror.hpp"
 #include "Glutton.hpp"
 #include "PlayerModel.h"
+#include "Platform.hpp"
+
 #include "AttackController.hpp"
 #include "AIController.hpp"
 #include "InputController.hpp"
@@ -54,14 +56,14 @@
 class GameScene : public cugl::Scene2
 {
 protected:
-/** The loaders to (synchronously) load in assets */
+    /** The loaders to (synchronously) load in assets */
     std::shared_ptr<cugl::AssetManager> _assets;
     /** The JSON value with all of the constants */
     std::shared_ptr<cugl::JsonValue> _constants;
     /** A scene graph, used to display our 2D scenes */
     // std::shared_ptr<cugl::Scene2> _scene;
     /** A 3152 style SpriteBatch to render the scene */
-    std::shared_ptr<cugl::SpriteBatch> _batch; //check this 
+    std::shared_ptr<cugl::SpriteBatch> _batch; // check this
     /** A reference to the logo, so that we can move it around */
     std::shared_ptr<cugl::scene2::SceneNode> _logo;
 
@@ -86,7 +88,7 @@ protected:
     int _type;
     
     /** The text with the current health */
-    std::shared_ptr<cugl::TextLayout> _text;    
+    std::shared_ptr<cugl::TextLayout> _text;
     /** Text font */
     std::shared_ptr<cugl::Font> _font;
     
@@ -96,10 +98,9 @@ protected:
     /** Particle Pool */
     std::vector<std::shared_ptr<Particle>> _particlePool;
 
-
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
     float _scale;
-    
+
     InputController _input;
 
     std::shared_ptr<AttackController> _attacks;
@@ -111,15 +112,15 @@ protected:
 
     /** AI Controller */
     AIController _ai;
-    
+
     /** Tilt Controller */
     TiltController _tilt;
-    
+
     /** Collision Controller */
     CollisionController _collider;
 
     /** Enemies set */
-    std::vector <std::shared_ptr<BaseEnemyModel>> _enemies;
+    std::vector<std::shared_ptr<BaseEnemyModel>> _enemies;
 
     /** Player character */
     std::shared_ptr<PlayerModel> _player;
@@ -226,8 +227,8 @@ public:
     virtual void addObstacle(const std::shared_ptr<cugl::physics2::Obstacle> &obj,
                              const std::shared_ptr<cugl::scene2::SceneNode> &node,
                              bool useObjPosition);
-    
-     /**
+
+    /**
      * Returns true if debug mode is active.
      *
      * If true, all objects will display their physics bodies.
@@ -243,7 +244,11 @@ public:
      *
      * @param value whether debug mode is active.
      */
-    void setDebug(bool value) { _debug = value; _debugnode->setVisible(value); }
+    void setDebug(bool value)
+    {
+        _debug = value;
+        _debugnode->setVisible(value);
+    }
 
     /**
      * Creates all enemies and adds to _enemies

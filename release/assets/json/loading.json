@@ -1,5 +1,8 @@
 {
     "textures": {
+        "background": {
+            "file": "textures/loading/loading_background.png"
+        },
         "logo": {
             "file": "textures/loading/cugl-logo.png",
             "wrapS": "clamp",
@@ -22,7 +25,7 @@
             "magfilter": "linear"
         },
         "progress": {
-            "file": "textures/loading/progress.png",
+            "file": "textures/loading/loading_bar.png",
             "wrapS": "clamp",
             "wrapT": "clamp",
             "minfilter": "linear",
@@ -31,14 +34,14 @@
                 "background": [
                     0,
                     0,
-                    320,
-                    45
+                    1564,
+                    459
                 ],
                 "foreground": [
-                    24,
-                    45,
-                    296,
-                    90
+                    19,
+                    453,
+                    1564,
+                    906
                 ],
                 "leftcap": [
                     0,
@@ -57,59 +60,14 @@
     },
     "scene2s": {
         "load": {
-            "type": "Solid",
+            "type": "Image",
             "format": {
                 "type": "Anchored"
             },
             "data": {
-                "color": [
-                    239,
-                    61,
-                    49,
-                    255
-                ]
+                "texture": "background"
             },
             "children": {
-                "logo": {
-                    "type": "Image",
-                    "format": {
-                        "type": "Anchored"
-                    },
-                    "data": {
-                        "texture": "logo",
-                        "anchor": [
-                            0.5,
-                            0.5
-                        ],
-                        "scale": 0.75
-                    },
-                    "layout": {
-                        "x_anchor": "center",
-                        "y_anchor": "middle",
-                        "y_offset": 115,
-                        "absolute": true
-                    }
-                },
-                "name": {
-                    "type": "Image",
-                    "format": {
-                        "type": "Anchored"
-                    },
-                    "data": {
-                        "texture": "name",
-                        "anchor": [
-                            0.5,
-                            0.5
-                        ],
-                        "scale": 0.75
-                    },
-                    "layout": {
-                        "x_anchor": "center",
-                        "y_anchor": "middle",
-                        "y_offset": -55,
-                        "absolute": true
-                    }
-                },
                 "play": {
                     "type": "Button",
                     "data": {
@@ -165,13 +123,15 @@
                         "background": "progress_background",
                         "foreground": "progress_foreground",
                         "left_cap": "progress_leftcap",
-                        "right_cap": "progress_rightcap"
+                        "right_cap": "progress_rightcap",
+                        "scale": 0.5
                     },
                     "layout": {
                         "x_anchor": "center",
                         "y_anchor": "middle",
-                        "y_offset": -175,
-                        "absolute": true
+                        "x_offset": 0.15,
+                        "y_offset": 0.15,
+                        "absolute": false
                     }
                 }
             }
