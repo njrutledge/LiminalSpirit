@@ -23,14 +23,14 @@
 			"wrapT": "clamp"
 		},
 		"seeker": {
-			"file": "textures/enemy.png",
+			"file": "textures/specturtest.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
 		"specter": {
-			"file": "textures/specturtest.png",
+			"file": "textures/specter.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
@@ -58,7 +58,7 @@
 			"wrapT": "clamp"
 		},
 		"lost": {
-			"file": "textures/mirrortest.png",
+			"file": "textures/enemy.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
@@ -107,7 +107,7 @@
 			"magfilter": "linear"
 		},
 		"forest_background": {
-			"file": "textures/backgrounds/forest_draft_no_platforms.png"
+			"file": "textures/backgrounds/forest_background.png"
 		},
 		"home_background": {
 			"file": "textures/menus/home/home_background.png"
