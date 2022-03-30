@@ -55,7 +55,7 @@ using namespace cugl;
 /** This is the size of the active portion of the screen */
 #define SCENE_WIDTH 1024
 // #define SCENE_HEIGHT 576
-#define SCENE_HEIGHT 768
+#define SCENE_HEIGHT 1728
 
 /** Width of the game world in Box2d units */
 #define DEFAULT_WIDTH 32.0f
@@ -495,7 +495,7 @@ void GameScene::update(float timestep)
     }
     
     // Move wave spawn times up if all enemies killed
-    if (!_enemies.size()) {
+    if (_nextWaveNum < _numWaves && !_enemies.size()) {
         float nextSpawnTime = _spawn_times[_nextWaveNum];
         float diff = nextSpawnTime - _timer;
         for (int i = _nextWaveNum; i < _numWaves; i++) {
