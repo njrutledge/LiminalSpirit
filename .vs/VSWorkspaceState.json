@@ -3,7 +3,9 @@
     "",
     "\\release",
     "\\release\\build-win10",
-    "\\release\\source"
+    "\\release\\source",
+    "\\release\\source\\scenes"
   ],
+  "SelectedNode": "\\release\\source\\scenes\\HomeScene.hpp",
   "PreviewInSolutionExplorer": false
 }

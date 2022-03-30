@@ -64,6 +64,13 @@
 			"minfilter": "linear",
 			"magfilter": "linear"
 		},
+		"home_options": {
+			"file": "textures/menus/home/home_options.png",
+			"wrapS": "clamp",
+			"wrapT": "clamp",
+			"minfilter": "linear",
+			"magfilter": "linear"
+		},
 		"forest_background": {
 			"file": "textures/backgrounds/forest_draft_no_platforms.png"
 		},
@@ -204,7 +211,7 @@
 						"up": {
 							"type": "Image",
 							"data": {
-								"texture": "home_play"
+								"texture": "home_options"
 							}
 						}
 					},

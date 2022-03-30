@@ -130,7 +130,7 @@
                         "x_anchor": "center",
                         "y_anchor": "middle",
                         "x_offset": 0.15,
-                        "y_offset": 0,
+                        "y_offset": 0.15,
                         "absolute": false
                     }
                 }
