@@ -14,7 +14,7 @@
 
 
 //distance from linked Enemy
-#define MIRROR_DISTANCE 2.0f
+#define MIRROR_DISTANCE 2.5f
 //amplification power
 #define MIRROR_AMPLIFY 2.0f
 
