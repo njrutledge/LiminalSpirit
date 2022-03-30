@@ -87,6 +87,9 @@
 		},
 		"world_select_forest": {
 			"file": "textures/menus/world_select/world_select_forest.png"
+		},
+		"text_highlight": {
+			"file": "textures/hud/text_highlight.png"
 		}
 	},
 	"fonts": {
@@ -196,7 +199,7 @@
 						"upnode": "up",
 						"anchor": [
 							0.5,
-							0.4
+							0.5
 						],
 						"scale": 0.5
 					},
@@ -204,7 +207,34 @@
 						"up": {
 							"type": "Image",
 							"data": {
-								"texture": "home_play"
+								"texture": "text_highlight"
+							}
+						},
+						"text": {
+							"type": "Label",
+							"format": {
+								"type": "Anchored"
+							},
+							"data": {
+								"font": "spectral",
+								"anchor": [
+									-0.75,
+									0
+								],
+								"text": "               Options",
+								"foreground": [
+									255,
+									255,
+									0,
+									255
+								],
+								"halign": "center",
+								"valign": "true middle"
+							},
+							"layout": {
+								"x_anchor": "center",
+								"y_anchor": "true middle",
+								"absolute": false
 							}
 						}
 					},
