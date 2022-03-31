@@ -353,7 +353,7 @@ void GameScene::update(float timestep)
         }
     }
     
-    _swipes.update(_input);
+    _swipes.update(_input, _player->isGrounded());
     b2Vec2 playerPos = _player->getBody()->GetPosition();
     _attacks->attackLeft(Vec2(playerPos.x, playerPos.y), _swipes.getLeftSwipe(), _swipes.getLeftAngle(), _player->isGrounded(), _timer);
     _attacks->attackRight(Vec2(playerPos.x, playerPos.y), _swipes.getRightSwipe(), _swipes.getRightAngle(), _player->isGrounded(), _timer);
