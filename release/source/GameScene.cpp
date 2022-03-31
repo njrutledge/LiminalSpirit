@@ -180,11 +180,11 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     //    };
     _world->onBeginContact = [this](b2Contact *contact)
     {
-        _collider.beginContact(contact, _player, _attacks, _timer);
+        _collider.beginContact(contact, _attacks, _timer);
     };
     _world->onEndContact = [this](b2Contact *contact)
     {
-        _collider.endContact(contact, _player);
+        _collider.endContact(contact);
     };
 
     // Only want to get swipes within safe bounds
@@ -721,7 +721,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
 
     std::shared_ptr<scene2::PolygonNode> floorNode = scene2::PolygonNode::allocWithPoly(floorRect * _scale);
     floorNode->setColor(Color4::BLACK);
-    floor->setName("floor");
+    floor->setName("bottomwall");
     b2Filter filter = b2Filter();
     filter.categoryBits = 0b1000;
     // filter.maskBits = 0b1100;
@@ -731,6 +731,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     // Making the ceiling -jdg274
     Rect ceilingRect = Rect(0, DEFAULT_HEIGHT - 0.5, DEFAULT_WIDTH, 0.5);
     std::shared_ptr<physics2::PolygonObstacle> ceiling = physics2::PolygonObstacle::allocWithAnchor(ceilingRect, Vec2::ANCHOR_CENTER);
+    ceiling->setName("topwall");
     // filter.maskBits = 0b1100;
     ceiling->setFilterData(filter);
 

@@ -12,7 +12,7 @@ using namespace cugl;
     * @param  contact  The two bodies that collided
     * @param  player   The player pointer
     */
-void CollisionController::beginContact(b2Contact* contact, std::shared_ptr<PlayerModel> player, std::shared_ptr<AttackController> AC, float timer) {
+void CollisionController::beginContact(b2Contact* contact, std::shared_ptr<AttackController> AC, float timer) {
     //setup
     b2Fixture* fix1 = contact->GetFixtureA();
     b2Fixture* fix2 = contact->GetFixtureB();
@@ -25,6 +25,15 @@ void CollisionController::beginContact(b2Contact* contact, std::shared_ptr<Playe
 
     physics2::Obstacle* bd1 = reinterpret_cast<physics2::Obstacle*>(body1->GetUserData().pointer);
     physics2::Obstacle* bd2 = reinterpret_cast<physics2::Obstacle*>(body2->GetUserData().pointer);
+
+
+
+    if (AttackController::Attack* attack = dynamic_cast<AttackController::Attack*>(bd1)) {
+        handleAttackCollision(attack, bd2, fd2, AC, timer);
+    }
+    else if (AttackController::Attack* attack = dynamic_cast<AttackController::Attack*>(bd2)) {
+        handleAttackCollision(attack, bd1, fd1, AC, timer);
+    }
 
     //handle enemy collision
     if (BaseEnemyModel* enemy = dynamic_cast<BaseEnemyModel*>(bd1)) {
@@ -118,7 +127,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                     }
                 }
                 if (attack->getType() == AttackController::p_exp_package) {
-                    AC->createAttack(cugl::Vec2(bd->getPosition().x, bd->getPosition().y), 3, 0.1, 4, AttackController::p_exp, cugl::Vec2::ZERO, timer);
+                    AC->createAttack(attack->getPosition() /*cugl::Vec2(bd->getPosition().x, bd->getPosition().y)*/, 3, 0.1, 4, AttackController::p_exp, cugl::Vec2::ZERO, timer);
                 }
                 switch (attack->getType()) {
                 case AttackController::p_range:
@@ -186,12 +195,42 @@ void CollisionController::handlePlayerCollision(PlayerModel* player, physics2::O
     }
 }
 
+void CollisionController::handleAttackCollision(AttackController::Attack* attack, physics2::Obstacle* bd, std::string* fd, std::shared_ptr<AttackController> AC, float timer) {
+    if (!attack->isActive()) {
+        return;
+    }
+
+    if (AttackController::Attack* attack2 = dynamic_cast<AttackController::Attack*>(bd)) {
+        if (!attack2->isActive()) {
+            return;
+        }
+        //both attacks, see if cancellation can occur
+        if ((attack->getType() == AttackController::p_range && attack2->getType() == AttackController::e_range) || (attack->getType() == AttackController::e_range && attack2->getType() == AttackController::p_range)) {
+            //both different range attacks, cancel both
+            attack->setInactive();
+            attack2->setInactive();
+        }
+        else if ((attack->getType() == AttackController::p_melee && attack2->getType() == AttackController::e_melee) || (attack->getType() == AttackController::e_melee && attack2->getType() == AttackController::p_melee)) {
+            attack->setInactive();
+            attack2->setInactive();
+            //TODO: stun both player and enemy?
+        }
+    }
+    else if ((bd && (bd->getName() == "platform" || bd->getName().find("wall")!= std::string::npos)) && attack->getType() == AttackController::p_exp_package) {
+        AC->createAttack(attack->getPosition(), 3, 0.1, 4, AttackController::p_exp, cugl::Vec2::ZERO, timer);
+            attack->setInactive();
+    }
+    if (bd && bd->getName() == "bottomwall") {
+        int breaking = 1;
+    }
+}
+
 /**
  * Callback method for the end of a collision
  *
  * This method is called when two objects cease to touch.
  */
-void CollisionController::endContact(b2Contact* contact, std::shared_ptr<PlayerModel> player) {
+void CollisionController::endContact(b2Contact* contact) {
     //setup
     b2Fixture* fix1 = contact->GetFixtureA();
     b2Fixture* fix2 = contact->GetFixtureB();
