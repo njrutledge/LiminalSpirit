@@ -126,6 +126,27 @@
 		F05BD2B327F29AB8005D1F38 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = F05BD2AF27F29AB8005D1F38 /* sounds */; };
 		F05BD2B427F29AB8005D1F38 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = F05BD2AF27F29AB8005D1F38 /* sounds */; };
 		F05BD2B527F29AB8005D1F38 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = F05BD2AF27F29AB8005D1F38 /* sounds */; };
+		F09AF65027F64ACA003C6EA2 /* Seeker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64727F64ACA003C6EA2 /* Seeker.cpp */; };
+		F09AF65127F64ACA003C6EA2 /* Seeker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64727F64ACA003C6EA2 /* Seeker.cpp */; };
+		F09AF65227F64ACA003C6EA2 /* Seeker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64727F64ACA003C6EA2 /* Seeker.cpp */; };
+		F09AF65327F64ACA003C6EA2 /* Mirror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64927F64ACA003C6EA2 /* Mirror.cpp */; };
+		F09AF65427F64ACA003C6EA2 /* Mirror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64927F64ACA003C6EA2 /* Mirror.cpp */; };
+		F09AF65527F64ACA003C6EA2 /* Mirror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64927F64ACA003C6EA2 /* Mirror.cpp */; };
+		F09AF65627F64ACA003C6EA2 /* WorldSelectScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64A27F64ACA003C6EA2 /* WorldSelectScene.cpp */; };
+		F09AF65727F64ACA003C6EA2 /* WorldSelectScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64A27F64ACA003C6EA2 /* WorldSelectScene.cpp */; };
+		F09AF65827F64ACA003C6EA2 /* WorldSelectScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64A27F64ACA003C6EA2 /* WorldSelectScene.cpp */; };
+		F09AF65927F64ACA003C6EA2 /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64B27F64ACA003C6EA2 /* Particle.cpp */; };
+		F09AF65A27F64ACA003C6EA2 /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64B27F64ACA003C6EA2 /* Particle.cpp */; };
+		F09AF65B27F64ACA003C6EA2 /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64B27F64ACA003C6EA2 /* Particle.cpp */; };
+		F09AF65C27F64ACA003C6EA2 /* Glow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64C27F64ACA003C6EA2 /* Glow.cpp */; };
+		F09AF65D27F64ACA003C6EA2 /* Glow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64C27F64ACA003C6EA2 /* Glow.cpp */; };
+		F09AF65E27F64ACA003C6EA2 /* Glow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64C27F64ACA003C6EA2 /* Glow.cpp */; };
+		F09AF65F27F64ACA003C6EA2 /* HomeScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64D27F64ACA003C6EA2 /* HomeScene.cpp */; };
+		F09AF66027F64ACA003C6EA2 /* HomeScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64D27F64ACA003C6EA2 /* HomeScene.cpp */; };
+		F09AF66127F64ACA003C6EA2 /* HomeScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64D27F64ACA003C6EA2 /* HomeScene.cpp */; };
+		F09AF66227F64ACA003C6EA2 /* shaders in Resources */ = {isa = PBXBuildFile; fileRef = F09AF64F27F64ACA003C6EA2 /* shaders */; };
+		F09AF66327F64ACA003C6EA2 /* shaders in Resources */ = {isa = PBXBuildFile; fileRef = F09AF64F27F64ACA003C6EA2 /* shaders */; };
+		F09AF66427F64ACA003C6EA2 /* shaders in Resources */ = {isa = PBXBuildFile; fileRef = F09AF64F27F64ACA003C6EA2 /* shaders */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -230,6 +251,19 @@
 		F05176D727D071D900C0617F /* CollisionController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CollisionController.cpp; sourceTree = "<group>"; };
 		F05176D827D071D900C0617F /* PlayerModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayerModel.cpp; sourceTree = "<group>"; };
 		F05BD2AF27F29AB8005D1F38 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
+		F09AF64027F64ACA003C6EA2 /* Mirror.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Mirror.hpp; sourceTree = "<group>"; };
+		F09AF64427F64ACA003C6EA2 /* Particle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Particle.hpp; sourceTree = "<group>"; };
+		F09AF64527F64ACA003C6EA2 /* HomeScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HomeScene.hpp; sourceTree = "<group>"; };
+		F09AF64627F64ACA003C6EA2 /* Glow.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Glow.hpp; sourceTree = "<group>"; };
+		F09AF64727F64ACA003C6EA2 /* Seeker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Seeker.cpp; sourceTree = "<group>"; };
+		F09AF64827F64ACA003C6EA2 /* Seeker.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Seeker.hpp; sourceTree = "<group>"; };
+		F09AF64927F64ACA003C6EA2 /* Mirror.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Mirror.cpp; sourceTree = "<group>"; };
+		F09AF64A27F64ACA003C6EA2 /* WorldSelectScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WorldSelectScene.cpp; sourceTree = "<group>"; };
+		F09AF64B27F64ACA003C6EA2 /* Particle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Particle.cpp; sourceTree = "<group>"; };
+		F09AF64C27F64ACA003C6EA2 /* Glow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Glow.cpp; sourceTree = "<group>"; };
+		F09AF64D27F64ACA003C6EA2 /* HomeScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HomeScene.cpp; sourceTree = "<group>"; };
+		F09AF64E27F64ACA003C6EA2 /* WorldSelectScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WorldSelectScene.hpp; sourceTree = "<group>"; };
+		F09AF64F27F64ACA003C6EA2 /* shaders */ = {isa = PBXFileReference; lastKnownFileType = folder; path = shaders; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -417,6 +451,19 @@
 		EBBF18B11D749176008E2001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				F09AF64C27F64ACA003C6EA2 /* Glow.cpp */,
+				F09AF64627F64ACA003C6EA2 /* Glow.hpp */,
+				F09AF64D27F64ACA003C6EA2 /* HomeScene.cpp */,
+				F09AF64527F64ACA003C6EA2 /* HomeScene.hpp */,
+				F09AF64927F64ACA003C6EA2 /* Mirror.cpp */,
+				F09AF64027F64ACA003C6EA2 /* Mirror.hpp */,
+				F09AF64B27F64ACA003C6EA2 /* Particle.cpp */,
+				F09AF64427F64ACA003C6EA2 /* Particle.hpp */,
+				F09AF64727F64ACA003C6EA2 /* Seeker.cpp */,
+				F09AF64827F64ACA003C6EA2 /* Seeker.hpp */,
+				F09AF64F27F64ACA003C6EA2 /* shaders */,
+				F09AF64A27F64ACA003C6EA2 /* WorldSelectScene.cpp */,
+				F09AF64E27F64ACA003C6EA2 /* WorldSelectScene.hpp */,
 				578388FC27E1156D000CB5B9 /* Platform.cpp */,
 				578388F827E1156D000CB5B9 /* Platform.hpp */,
 				85B0004027E00AD600DAC3F2 /* TiltController.cpp */,
@@ -594,6 +641,7 @@
 				EB22BF9725D0EA51002ACE41 /* textures in Resources */,
 				857201CA27E25619006D48C6 /* fonts in Resources */,
 				EB22BF9025D0EA49002ACE41 /* iOS.xcassets in Resources */,
+				F09AF66427F64ACA003C6EA2 /* shaders in Resources */,
 				EB22BF9125D0EA49002ACE41 /* Landscape.storyboard in Resources */,
 				EB22BF9225D0EA49002ACE41 /* Portrait.storyboard in Resources */,
 			);
@@ -609,6 +657,7 @@
 				EB7454AC1D74D846002FBAE6 /* Landscape.storyboard in Resources */,
 				857201C927E25619006D48C6 /* fonts in Resources */,
 				EBFE7C051E19B496001007C2 /* json in Resources */,
+				F09AF66327F64ACA003C6EA2 /* shaders in Resources */,
 				EB7454AD1D74D846002FBAE6 /* Portrait.storyboard in Resources */,
 				EB07CFB621EFF3F8000CB3A3 /* DeviceMargins.plist in Resources */,
 			);
@@ -621,6 +670,7 @@
 				F05BD2B327F29AB8005D1F38 /* sounds in Resources */,
 				EBFE7C091E19B4AC001007C2 /* json in Resources */,
 				EB2BE9BB1D7498D2002FE78B /* textures in Resources */,
+				F09AF66227F64ACA003C6EA2 /* shaders in Resources */,
 				EBBF189B1D74904A008E2001 /* Mac.xcassets in Resources */,
 				857201C827E25619006D48C6 /* fonts in Resources */,
 			);
@@ -635,9 +685,15 @@
 			files = (
 				85B0001927DFAC8500DAC3F2 /* Lost.cpp in Sources */,
 				F00746F527E91B2600AF5D7C /* SoundController.cpp in Sources */,
+				F09AF65E27F64ACA003C6EA2 /* Glow.cpp in Sources */,
+				F09AF65227F64ACA003C6EA2 /* Seeker.cpp in Sources */,
 				F05176DE27D080C900C0617F /* SwipeController.cpp in Sources */,
+				F09AF65527F64ACA003C6EA2 /* Mirror.cpp in Sources */,
 				85B0001C27DFAC8500DAC3F2 /* Specter.cpp in Sources */,
 				F05176DC27D0808B00C0617F /* AttackController.cpp in Sources */,
+				F09AF65B27F64ACA003C6EA2 /* Particle.cpp in Sources */,
+				F09AF66127F64ACA003C6EA2 /* HomeScene.cpp in Sources */,
+				F09AF65827F64ACA003C6EA2 /* WorldSelectScene.cpp in Sources */,
 				85B0004327E00AD600DAC3F2 /* TiltController.cpp in Sources */,
 				F05176E227D080DF00C0617F /* CollisionController.cpp in Sources */,
 				F05176E427D080E700C0617F /* InputController.cpp in Sources */,
@@ -659,9 +715,15 @@
 			files = (
 				5783892727E2369B000CB5B9 /* SwipeController.cpp in Sources */,
 				F00746F427E91B2600AF5D7C /* SoundController.cpp in Sources */,
+				F09AF65D27F64ACA003C6EA2 /* Glow.cpp in Sources */,
+				F09AF65127F64ACA003C6EA2 /* Seeker.cpp in Sources */,
 				5783892827E2369B000CB5B9 /* Platform.cpp in Sources */,
+				F09AF65427F64ACA003C6EA2 /* Mirror.cpp in Sources */,
 				F05176DB27D0808A00C0617F /* AttackController.cpp in Sources */,
 				85B0002127DFAC8500DAC3F2 /* LoadingScene.cpp in Sources */,
+				F09AF65A27F64ACA003C6EA2 /* Particle.cpp in Sources */,
+				F09AF66027F64ACA003C6EA2 /* HomeScene.cpp in Sources */,
+				F09AF65727F64ACA003C6EA2 /* WorldSelectScene.cpp in Sources */,
 				85B0004227E00AD600DAC3F2 /* TiltController.cpp in Sources */,
 				F05176E127D080DF00C0617F /* CollisionController.cpp in Sources */,
 				5783892E27E23F49000CB5B9 /* AIController.cpp in Sources */,
@@ -683,9 +745,15 @@
 			files = (
 				F025104127D02C6C00AB80AA /* SwipeController.cpp in Sources */,
 				F00746F327E91B2600AF5D7C /* SoundController.cpp in Sources */,
+				F09AF65C27F64ACA003C6EA2 /* Glow.cpp in Sources */,
+				F09AF65027F64ACA003C6EA2 /* Seeker.cpp in Sources */,
 				578388FD27E1156D000CB5B9 /* Platform.cpp in Sources */,
+				F09AF65327F64ACA003C6EA2 /* Mirror.cpp in Sources */,
 				85B0002327DFAC8500DAC3F2 /* AIController.cpp in Sources */,
 				F025104027D02C6C00AB80AA /* InputController.cpp in Sources */,
+				F09AF65927F64ACA003C6EA2 /* Particle.cpp in Sources */,
+				F09AF65F27F64ACA003C6EA2 /* HomeScene.cpp in Sources */,
+				F09AF65627F64ACA003C6EA2 /* WorldSelectScene.cpp in Sources */,
 				85B0002027DFAC8500DAC3F2 /* LoadingScene.cpp in Sources */,
 				85B0004127E00AD600DAC3F2 /* TiltController.cpp in Sources */,
 				EB2BE9B61D74952A002FE78B /* main.cpp in Sources */,

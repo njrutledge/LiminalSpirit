@@ -279,11 +279,11 @@ void GameScene::dispose()
  */
 void GameScene::update(float timestep)
 {
-    // _sound->play_level_music();
-    if (AudioEngine::get()->getMusicQueue()->getState() == cugl::AudioEngine::State::INACTIVE) {
-        std::shared_ptr<Sound> source = _assets->get<Sound>("cave2");
-        AudioEngine::get()->getMusicQueue()->play(source, true, 1.0f);
-    }
+    _sound->play_level_music();
+   // if (AudioEngine::get()->getMusicQueue()->getState() == cugl::AudioEngine::State::INACTIVE) {
+    //    std::shared_ptr<Sound> source = _assets->get<Sound>("cave2");
+    //   AudioEngine::get()->getMusicQueue()->play(source, true, 1.0f);
+   // }
     
     // Update input controller
     _input.update();

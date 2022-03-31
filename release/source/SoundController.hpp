@@ -30,7 +30,7 @@ public:
         
         LevelMusic();
         
-        void init(string biome, std::shared_ptr<cugl::AssetManager> assets);
+        void init(string biome, std::shared_ptr<cugl::AssetManager> &assets);
         
         void play_music();
         
@@ -71,7 +71,7 @@ public:
     
     SoundController();
     
-    void init(std::shared_ptr<cugl::AssetManager> assets);
+    void init(std::shared_ptr<cugl::AssetManager> &assets);
     
     void play_level_music();
 };

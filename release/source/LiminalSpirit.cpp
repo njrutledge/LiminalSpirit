@@ -57,9 +57,6 @@ void LiminalSpirit::onStartup()
     
     AudioEngine::start();
     
-    _sound_controller = make_shared<SoundController>();
-    _sound_controller->init(_assets);
-    
     Application::onStartup(); // YOU MUST END with call to parent
 }
 
@@ -160,6 +157,8 @@ void LiminalSpirit::updateLoadingScene(float timestep)
         _loading.dispose(); // Permanently disables the input listeners in this mode
         // TODO add other screens
         _home.init(_assets);
+        _sound_controller = make_shared<SoundController>();
+        _sound_controller->init(_assets);
         _gameplay.init(_assets, _sound_controller);
         _worldSelect.init(_assets);
         _scene = State::HOME;

@@ -16,14 +16,13 @@ SoundController::LevelMusic::LevelMusic() {};
  * @param biome     The name of the biome along with a number representing which track it is
  * @param assets   The Asset manager to get the appropriate sound files
  */
-void SoundController::LevelMusic::init(string biome, std::shared_ptr<cugl::AssetManager> assets) {
+void SoundController::LevelMusic::init(string biome, std::shared_ptr<cugl::AssetManager> &assets) {
     _biome = biome;
-    
     _themeAsset = assets->get<cugl::Sound>(biome);
     
-    _mixer->alloc(8);
+    _mixer = cugl::audio::AudioMixer::alloc(8);
     
-//    _mixer->attach(1, _themeAsset->createNode());
+    _mixer->attach(1, _themeAsset->createNode());
 };
 
 /**
@@ -41,11 +40,11 @@ void SoundController::LevelMusic::play_music() {
 
 SoundController::SoundController(){};
 
-void SoundController::init(std::shared_ptr<cugl::AssetManager> assets) {
+void SoundController::init(std::shared_ptr<cugl::AssetManager> &assets) {
     _assets = assets;
     
     _cave1 = make_shared<LevelMusic>();
-    _cave1->init("cave1", _assets);
+    _cave1->init("cave2", _assets);
     
     _cave2 = make_shared<LevelMusic>();
     _cave2->init("cave2", _assets);
