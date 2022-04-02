@@ -187,40 +187,50 @@ void SwipeController::calculateSwipeDirection(cugl::Vec2 startPos, cugl::Vec2 en
     }
     
     // Convert the swipe angle to one of 16 directions
-    if (swipeAngle <= 11.25 || swipeAngle > 348.75) {
+//    if (swipeAngle <= 11.25 || swipeAngle > 348.75) {
+//        swipeAngle = 0;
+//    } else if (swipeAngle > 11.25 && swipeAngle <= 33.75) {
+//        swipeAngle = 22.5;
+//    } else if (swipeAngle > 33.75 && swipeAngle <= 56.25) {
+//        swipeAngle = 45;
+//    } else if (swipeAngle > 56.25 && swipeAngle <= 78.75) {
+//        swipeAngle = 67.5;
+//    } else if (swipeAngle > 78.75 && swipeAngle <= 101.25) {
+//        swipeAngle = 90;
+//    } else if (swipeAngle > 101.25 && swipeAngle <= 123.75) {
+//        swipeAngle = 112.5;
+//    } else if (swipeAngle > 123.75 && swipeAngle <= 146.25) {
+//        swipeAngle = 135;
+//    } else if (swipeAngle > 146.25 && swipeAngle <= 168.75) {
+//        swipeAngle = 157.5;
+//    } else if (swipeAngle > 168.75 && swipeAngle <= 191.25) {
+//        swipeAngle = 180;
+//    } else if (swipeAngle > 191.25 && swipeAngle <= 213.75) {
+//        swipeAngle = 202.5;
+//    } else if (swipeAngle > 213.75 && swipeAngle <= 236.25) {
+//        swipeAngle = 225;
+//    } else if (swipeAngle > 236.25 && swipeAngle <= 258.75) {
+//        swipeAngle = 247.5;
+//    } else if (swipeAngle > 258.75 && swipeAngle <= 281.25) {
+//        swipeAngle = 270;
+//    } else if (swipeAngle > 281.25 && swipeAngle <= 303.75) {
+//        swipeAngle = 292.5;
+//    } else if (swipeAngle > 303.75 && swipeAngle <= 326.25) {
+//        swipeAngle = 315;
+//    } else if (swipeAngle > 326.25 && swipeAngle <= 348.75) {
+//        swipeAngle = 337.5;
+//    }
+    
+    CULog("before angle: %f", swipeAngle);
+    // if swipe angle is close to 0, set to 0
+    if (swipeAngle > 355) {
         swipeAngle = 0;
-    } else if (swipeAngle > 11.25 && swipeAngle <= 33.75) {
-        swipeAngle = 22.5;
-    } else if (swipeAngle > 33.75 && swipeAngle <= 56.25) {
-        swipeAngle = 45;
-    } else if (swipeAngle > 56.25 && swipeAngle <= 78.75) {
-        swipeAngle = 67.5;
-    } else if (swipeAngle > 78.75 && swipeAngle <= 101.25) {
-        swipeAngle = 90;
-    } else if (swipeAngle > 101.25 && swipeAngle <= 123.75) {
-        swipeAngle = 112.5;
-    } else if (swipeAngle > 123.75 && swipeAngle <= 146.25) {
-        swipeAngle = 135;
-    } else if (swipeAngle > 146.25 && swipeAngle <= 168.75) {
-        swipeAngle = 157.5;
-    } else if (swipeAngle > 168.75 && swipeAngle <= 191.25) {
-        swipeAngle = 180;
-    } else if (swipeAngle > 191.25 && swipeAngle <= 213.75) {
-        swipeAngle = 202.5;
-    } else if (swipeAngle > 213.75 && swipeAngle <= 236.25) {
-        swipeAngle = 225;
-    } else if (swipeAngle > 236.25 && swipeAngle <= 258.75) {
-        swipeAngle = 247.5;
-    } else if (swipeAngle > 258.75 && swipeAngle <= 281.25) {
-        swipeAngle = 270;
-    } else if (swipeAngle > 281.25 && swipeAngle <= 303.75) {
-        swipeAngle = 292.5;
-    } else if (swipeAngle > 303.75 && swipeAngle <= 326.25) {
-        swipeAngle = 315;
-    } else if (swipeAngle > 326.25 && swipeAngle <= 348.75) {
-        swipeAngle = 337.5;
     }
-
+    // Set swipe angle to angle divisible by 15
+//    swipeAngle = (int)(swipeAngle + 5) / 10 * 10;
+    swipeAngle = (int)(swipeAngle + 7.5) / 15 * 15;
+    CULog("angle: %f", swipeAngle);
+    
     // x increases from left to right
     // y increases from top to bottom
     

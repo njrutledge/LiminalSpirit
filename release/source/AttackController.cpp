@@ -186,23 +186,23 @@ void AttackController::attackLeft(cugl::Vec2 p, SwipeController::SwipeAttack att
     if (_rangedCounter > _reload) {
         switch (attack) {
             case SwipeController::leftAttack:
-                _pending.emplace(Attack::alloc(p, 0.5, 0.5, 2, _scale, Type::p_range, _leftOff, ballMakyr, cugl::Vec2(_p_vel).rotate(M_PI * 0.5), left, timer));
+                _pending.emplace(Attack::alloc(p, 0.6, 0.5, 2, _scale, Type::p_range, _leftOff, ballMakyr, cugl::Vec2(_p_vel).rotate(angle * M_PI / 180), left, timer));
                 _rangedCounter = 0;
                 break;
             case SwipeController::rightAttack:
-                _pending.emplace(Attack::alloc(p, 0.5, 0.5, 2, _scale, Type::p_range, _rightOff, ballMakyr, cugl::Vec2(_p_vel).rotate(M_PI * 1.5), right, timer));
+                _pending.emplace(Attack::alloc(p, 0.6, 0.5, 2, _scale, Type::p_range, _rightOff, ballMakyr, cugl::Vec2(_p_vel).rotate(angle * M_PI / 180), right, timer));
                 _rangedCounter = 0;
                 break;
             case SwipeController::upAttack:
-                _pending.emplace(Attack::alloc(p, 0.5, 0.5, 2, _scale, Type::p_range, _upOff, ballMakyr, _p_vel, up, timer));
+                _pending.emplace(Attack::alloc(p, 0.6, 0.5, 2, _scale, Type::p_range, _upOff, ballMakyr, cugl::Vec2(_p_vel).rotate(angle * M_PI / 180), up, timer));
                 _rangedCounter = 0;
                 break;
             case SwipeController::downAttack:
                 if(!grounded){
-                _pending.emplace(Attack::alloc(p, 0.5, 0.5, 2, _scale, Type::p_range, _downOff, ballMakyr, cugl::Vec2(_p_vel).rotate(M_PI), down, timer));
+                _pending.emplace(Attack::alloc(p, 0.6, 0.5, 2, _scale, Type::p_range, _downOff, ballMakyr, cugl::Vec2(_p_vel).rotate(angle * M_PI / 180), down, timer));
                 } else{
-                    _pending.emplace(Attack::alloc(p, 0.5, 0.1, 2, _scale, Type::p_range, _leftOff, ballMakyr, cugl::Vec2(_p_vel).rotate(M_PI * 0.5), left, timer));
-                    _pending.emplace(Attack::alloc(p, 0.5, 0.1, 2, _scale, Type::p_range, _rightOff, ballMakyr, cugl::Vec2(_p_vel).rotate(M_PI * 1.5), right, timer));
+                    _pending.emplace(Attack::alloc(p, 0.6, 0.1, 2, _scale, Type::p_range, _leftOff, ballMakyr, cugl::Vec2(_p_vel).rotate(M_PI * 0.5), left, timer));
+                    _pending.emplace(Attack::alloc(p, 0.6, 0.1, 2, _scale, Type::p_range, _rightOff, ballMakyr, cugl::Vec2(_p_vel).rotate(M_PI * 1.5), right, timer));
                 }
                 _rangedCounter = 0;
                 break;
