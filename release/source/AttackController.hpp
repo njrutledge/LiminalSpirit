@@ -53,6 +53,12 @@ public:
         neither
     };
     
+protected:
+    // Used to make attacks in bounds
+    static float _worldWidth;
+    static float _worldHeight;
+    
+public:
     class Attack : public cugl::physics2::CapsuleObstacle{
         
     protected:
@@ -173,15 +179,15 @@ public:
                                              Type t, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel,
                                              Side s, float timer) {
             float off = 1.5f;
-            if (p.x + radius + off > 32.0f && s == right) {
-                p.x = 31.9f - radius - off;
+            if (p.x + radius + off > _worldWidth && s == right) {
+                p.x = _worldWidth - 0.1f - radius - off;
             }
             else if (p.x - radius - off < 0.0f && s == left) {
                 p.x = 0.1f + radius + off;
             }
 
-            if (p.y + radius > 24.0f && s == up) {
-                p.y = 23.9f - radius;
+            if (p.y + radius > _worldHeight && s == up) {
+                p.y = _worldHeight - 0.1f - radius;
             } else if (p.y - radius < 0.0f && s == down) {
                 p.y = 0.1f + radius;
             }
@@ -241,7 +247,7 @@ public:
      *  Initializes the attack controller. Currently greyed out because we only have basic attack hitboxes. Can use a json to set predetermined attack shapes, designs, and damage if we have more complicated moves and attacks.
      *  Projectile velocities are vectors facing the +y direction. They are rotated accordingly when initializing different direction attacks.
      */
-    void init(float scale, float oof, cugl::Vec2 p_vel, cugl::Vec2 c_vel, float hit_wind, float hit_cooldown, float reload, float swingSpeed);
+    void init(float scale, float oof, cugl::Vec2 p_vel, cugl::Vec2 c_vel, float hit_wind, float hit_cooldown, float reload, float swingSpeed, float worldWidth, float worldHeight);
     
     /**
      *  Update function for attack controller. Updates all attacks and removes inactive attacks from queue.
@@ -289,10 +295,6 @@ public:
 
     /** Get right offset */
     cugl::Vec2 getDownOff() { return _downOff; }
-
-   // void createEnemyAttack(cugl::Vec2 pos, float radius, float age, int damage, float scale, cugl::Size size, cugl::Vec2 offset, cugl::Vec2 vel);
-    
-//    void draw(const std::shared_ptr<cugl::SpriteBatch>& batch);
     
     void reset();
     

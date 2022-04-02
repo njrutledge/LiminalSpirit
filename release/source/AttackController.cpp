@@ -13,6 +13,10 @@
 #define DEBUG_COLOR Color4::RED
 using namespace cugl;
 
+// Declare static variables so they can be allocated
+float AttackController::_worldHeight;
+float AttackController::_worldWidth;
+
 bool AttackController::Attack::init(const cugl::Vec2 p, float radius, float a, float dmg, float scale, Type s, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel, float timer) {
     
     _position = (p + oof);
@@ -123,7 +127,7 @@ AttackController::AttackController() {
     //need to add initialization for left and right offsets
 }
 
-void AttackController::init(float scale, float oof, cugl::Vec2 p_vel, cugl::Vec2 c_vel, float hit_wind, float hit_cooldown, float reload, float swingSpeed) {
+void AttackController::init(float scale, float oof, cugl::Vec2 p_vel, cugl::Vec2 c_vel, float hit_wind, float hit_cooldown, float reload, float swingSpeed, float worldWidth, float worldHeight) {
     _scale = scale;
     _leftOff = cugl::Vec2(-oof, 0.0f);
     _rightOff = cugl::Vec2(oof, 0.0f);
@@ -139,6 +143,8 @@ void AttackController::init(float scale, float oof, cugl::Vec2 p_vel, cugl::Vec2
     _reload = reload;
     _swing = swingSpeed;
     _melee = first;
+    _worldWidth = worldWidth;
+    _worldHeight = worldHeight;
 }
 
 void AttackController::update(const cugl::Vec2 p, b2Vec2 VX, float dt) {

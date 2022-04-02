@@ -221,15 +221,14 @@ void SwipeController::calculateSwipeDirection(cugl::Vec2 startPos, cugl::Vec2 en
 //        swipeAngle = 337.5;
 //    }
     
-    CULog("before angle: %f", swipeAngle);
     // if swipe angle is close to 0, set to 0
     if (swipeAngle > 355) {
         swipeAngle = 0;
     }
-    // Set swipe angle to angle divisible by 15
-//    swipeAngle = (int)(swipeAngle + 5) / 10 * 10;
+    // Set swipe angle to angle divisible by 15 (24 directions)
     swipeAngle = (int)(swipeAngle + 7.5) / 15 * 15;
-    CULog("angle: %f", swipeAngle);
+    // Set swipe angle to angle divisible by 10
+    //    swipeAngle = (int)(swipeAngle + 5) / 10 * 10;
     
     // x increases from left to right
     // y increases from top to bottom
