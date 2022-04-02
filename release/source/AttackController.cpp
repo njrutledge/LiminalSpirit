@@ -316,47 +316,6 @@ void AttackController::createAttack(cugl::Vec2 p, float radius, float age, float
     _pending.emplace(attack);
 }
 
-//void AttackController::createEnemyAttack(cugl::Vec2 pos, float radius, float age, int damage, float scale, cugl::Size size, //cugl::Vec2 offset, cugl::Vec2 vel) {
-  //  _pending.emplace(Attack::alloc(pos, radius, age, damage, scale, size, Type::enemy, offset, ballMakyr, vel));
-//}
-
-//void AttackController::draw(const std::shared_ptr<cugl::SpriteBatch>& batch) {
-//    for(auto it = _current.begin(); it != _current.end(); ++it) {
-//        //cugl::Vec2 center = cugl::Vec2((*it)->getRadius(),(*it)->getRadius());
-//        cugl::Affine2 trans;
-        
-                //trans.scale(_scale);
-                //trans.translate((*it)->getPosition()*_scale);
-//                if ((*it)->getSide() == Side::left) {
-//                    batch->setColor(cugl::Color4::GREEN);
-//                    batch->fill((*it)->getBall(), cugl::Vec2::ZERO, cugl::Vec2(_scale, _scale), 0, (*it)->getPosition()*_scale);
-//                } else {
-//                    batch->setColor(cugl::Color4::RED);
-//                    batch->fill((*it)->getBall(), cugl::Vec2::ZERO, cugl::Vec2(_scale, _scale), 0, (*it)->getPosition()*_scale);
-//                }
-        
-        //trans.scale(_scale);
-        //trans.translate((*it)->getPosition()*_scale);
-//        b2Vec2 pos = (*it)->getBody()->GetPosition();
-//        cugl::Vec2 pos2 = (*it)->getPosition();
-
-//        if ((*it)->isPlayerAttack()) {
-//            if ((*it)->getSide() == Side::left) {
-//                batch->setColor(cugl::Color4::GREEN);
-//                batch->fill((*it)->getBall(), cugl::Vec2::ZERO, cugl::Vec2(_scale, _scale), 0, (*it)->getPosition() * _scale);
-//            }
-//            else {
-//                batch->setColor(cugl::Color4::RED);
-//                batch->fill((*it)->getBall(), cugl::Vec2::ZERO, cugl::Vec2(_scale, _scale), 0, cugl::Vec2(pos.x, pos.y) * _scale);
-//            }
-//        }
-//        else {
-//            batch->setColor(cugl::Color4::YELLOW);
-//            batch->fill((*it)->getBall(), cugl::Vec2::ZERO, cugl::Vec2(_scale, _scale), 0, (*it)->getPosition() * _scale);
-//        }
-//    }
-//}
-
 void AttackController::Attack::resetDebug() {
     CapsuleObstacle::resetDebug();
     //Poly2 poly = _ball;
