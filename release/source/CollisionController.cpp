@@ -104,7 +104,8 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                     }
                     
                 }
-                else if (attack->getType() == AttackController::Type::p_melee) {
+                else if (attack->getType() == AttackController::Type::p_melee ||
+                         attack->getType() == AttackController::Type::p_dash) {
                     if (!mirror->getLastMelee()->isSame(attack)) {
                         mirror->setHealth(mirror->getHealth() - attack->getDamage());
                         mirror->setLastMelee(attack);
@@ -121,7 +122,10 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
             else{
                 if (!enemy->getLastMelee()->isSame(attack)) {
                     enemy->setHealth(enemy->getHealth() - attack->getDamage());
-                    if (attack->getType() == AttackController::Type::p_melee) enemy->setLastMelee(attack);
+                    if (attack->getType() == AttackController::Type::p_melee ||
+                        attack->getType() == AttackController::Type::p_dash) {
+                        enemy->setLastMelee(attack);
+                    }
                     if (enemy->getHealth() <= 0) {
                         enemy->markRemoved(true);
                     }
