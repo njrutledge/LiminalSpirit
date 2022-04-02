@@ -370,12 +370,21 @@ void GameScene::update(float timestep)
         _dashTime = 0;
     }
     else if (_swipes.getRightSwipe() == SwipeController::chargedDown) {
-        _dashYVel = -20;
+        _dashYVel = -23;
         _dashTime = 0;
     }
     // If the dash velocities are set, change player velocity if dash time is not complete
     if (_dashXVel || _dashYVel) {
-        if (_dashTime < 0.5f) {
+        if (_dashTime < 0.6f) {
+            // Slow down for last 0.25 seconds at the end of right/left dash
+            // This might be jank but its 1am
+            float slowDownTime = 0.6f - 0.25f;
+            if (_dashTime > slowDownTime && _dashXVel > 0) {
+                _dashXVel = 20 - (_dashTime - slowDownTime) * 80;
+            } else if (_dashTime > slowDownTime && _dashXVel < 0) {
+                _dashXVel = -20 + (_dashTime - slowDownTime) * 80;
+            }
+            // Set velocity for right/left dash
             if (_dashXVel > 0) {
                 _player->setVX(_dashXVel);
                 _player->setFacingRight(true);
@@ -384,13 +393,16 @@ void GameScene::update(float timestep)
                 _player->setFacingRight(false);
             }
             // Always want to set x velocity to 0 for up/down charge attacks
-            if (_dashYVel > 0) {
-                _player->setVY(_dashYVel);
-                _player->setVX(_dashXVel);
-            }
-            else if (_dashYVel < 0 && !_player->isGrounded()) {
-                _player->setVY(_dashYVel);
-                _player->setVX(_dashXVel);
+            // Up down dash is only 0.5 seconds
+            if (_dashTime < 0.5f) {
+                if (_dashYVel > 0) {
+                    _player->setVY(_dashYVel);
+                    _player->setVX(_dashXVel);
+                }
+                else if (_dashYVel < 0 && !_player->isGrounded()) {
+                    _player->setVY(_dashYVel);
+                    _player->setVX(_dashXVel);
+                }
             }
             // Invincibility, maintain same health throughout dash
             _player->setIsInvincible(true);
