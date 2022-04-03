@@ -256,6 +256,9 @@ void GameScene::dispose()
     _debugnode = nullptr;
     _vertbuff = nullptr;
     _sound = nullptr;
+    _text = nullptr;
+    _font = nullptr;
+    _endText = nullptr;
     
     //TODO: CHECK IF THIS IS RIGHT FOR DISPOSING
 //    for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
