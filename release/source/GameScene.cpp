@@ -314,6 +314,10 @@ void GameScene::update(float timestep)
         (*it)->setVX(direction.x);
         (*it)->setVY(direction.y);
         (*it)->getGlow()->setPosition((*it)->getPosition());
+        (*it)->setInvincibilityTimer((*it)->getInvincibilityTimer() - timestep);
+        if((*it)->getInvincibilityTimer() <= 0){
+            (*it)->setInvincibility(false);
+        }
         if ((*it)->isAttacking()) {
             Vec2 play_p = _player->getPosition();
             Vec2 en_p = (*it)->getPosition();
@@ -337,7 +341,6 @@ void GameScene::update(float timestep)
             {
                 _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()), _timer);
             }
-
             else if ((*it)->getName() == "Glutton") {
                 _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()), _timer);
             }
@@ -411,7 +414,6 @@ void GameScene::update(float timestep)
         else {
             _dashXVel = 0;
             _dashYVel = 0;
-            _player->setIsInvincible(false);
         }
     } else {
         // Flipping logic based on tilt
@@ -423,6 +425,10 @@ void GameScene::update(float timestep)
         {
             _player->setFacingRight(false);
         }
+    }
+    _player->setInvincibilityTimer(_player->getInvincibilityTimer() - timestep);
+    if(_dashXVel == 0 && _dashYVel == 0 && _player->getInvincibilityTimer() <= 0){
+        _player->setIsInvincible(false);
     }
     
     _world->update(timestep);
@@ -574,8 +580,18 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
         _player->getSceneNode()->setColor(Color4::RED);
     } else if(_swipes.hasRightChargedAttack()){
         _player->getSceneNode()->setColor(Color4::BLUE);
+    } else if (_player->isInvincible()){
+        _player->getSceneNode()->setColor(Color4::MAGENTA);
     } else {
         _player->getSceneNode()->setColor(Color4::WHITE);
+    }
+    // Make enemies flash red when invincible
+    for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
+        if((*it)->getInvincibility()){
+            (*it)->getSceneNode()->setColor(Color4::RED);
+        } else {
+            (*it)->getSceneNode()->setColor(Color4::WHITE);
+        }
     }
     Scene2::render(batch);
     batch->begin(getCamera()->getCombined());

@@ -67,6 +67,9 @@ protected:
     
     /** if player is invincible */
     bool _isInvincible;
+    
+    /** Duration of enemy invincibility */
+    float _invincibilityTime;
 
 	/** Redraws outline of physics fixtures */
 	virtual void resetDebug() override;
@@ -181,6 +184,12 @@ public:
     void setIsInvincible(bool invincibility) { _isInvincible = invincibility; }
     
     bool isInvincible() { return _isInvincible; }
+    
+    /** Returns amount of invincibility time remaining */
+    float getInvincibilityTimer() { return _invincibilityTime; }
+    
+    /** Sets invincibility time (for after getting hit) */
+    void setInvincibilityTimer(float value) { _invincibilityTime = value; }
 
 	/**
 	 * Returns how much force to apply to get the player moving

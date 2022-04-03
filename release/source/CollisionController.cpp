@@ -109,6 +109,8 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                     if (!mirror->getLastMelee()->isSame(attack)) {
                         mirror->setHealth(mirror->getHealth() - attack->getDamage());
                         mirror->setLastMelee(attack);
+                        mirror->setInvincibility(true);
+                        mirror->setInvincibilityTimer(0.1f);
                         CULog("NEW ATTACK~~~~~~~~~~~~~~~~~~");
                         if (mirror->getHealth() <= 0) {
                             mirror->markRemoved(true);
@@ -120,8 +122,12 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                 }
             }
             else{
-                if (!enemy->getLastMelee()->isSame(attack)) {
+                if (!enemy->getLastMelee()->isSame(attack) && !enemy->getInvincibility()) {
                     enemy->setHealth(enemy->getHealth() - attack->getDamage());
+                    if(attack->getDamage() > 0){
+                        enemy->setInvincibility(true);
+                        enemy->setInvincibilityTimer(0.1f);
+                    }
                     if (attack->getType() == AttackController::Type::p_melee ||
                         attack->getType() == AttackController::Type::p_dash) {
                         enemy->setLastMelee(attack);
@@ -190,6 +196,8 @@ void CollisionController::handlePlayerCollision(PlayerModel* player, physics2::O
         if (*(attack->getSensorName()) == "enemyattacksensor") {
             if (!player->isInvincible()) {
                 player->setHealth(player->getHealth() - attack->getDamage());
+                player->setIsInvincible(true);
+                player->setInvincibilityTimer(0.2f);
             }
             attack->setInactive();
             if (player->getHealth() <= 0) {

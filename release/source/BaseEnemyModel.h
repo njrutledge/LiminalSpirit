@@ -74,6 +74,12 @@ protected:
 
 	/** True if the enemy has had line of sight of the player */
 	bool _hasSeenPlayer;
+    
+    /** True if the enemy is invincible */
+    bool _hasInvincibility;
+    
+    /** Duration of enemy invincibility */
+    float _invincibilityTime;
 
 	/** Enemy name*/
 	std::string _enemyName;
@@ -198,6 +204,18 @@ public:
 
 	/** Sets to true if the enemy has seen the player */
 	void setHasSeenPlayer(bool value) { _hasSeenPlayer = value; }
+    
+    /** Returns true if this enemy has invincibility */
+    bool getInvincibility() { return _hasInvincibility; }
+
+    /** Sets to true if the enemy is invincible */
+    void setInvincibility(bool value) { _hasInvincibility = value; }
+    
+    /** Returns amount of invincibility time remaining */
+    float getInvincibilityTimer() { return _invincibilityTime; }
+    
+    /** Sets invincibility time (for after getting hit) */
+    void setInvincibilityTimer(float value) { _invincibilityTime = value; }
 
 	/** Returns the pointer to the enemy's glow */
 	std::shared_ptr<Glow> getGlow() { return _glow; }
