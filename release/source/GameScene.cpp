@@ -547,6 +547,15 @@ void GameScene::update(float timestep)
         _nextWaveNum += 1;
     }
 
+    // All waves created and all enemies cleared
+    if (_nextWaveNum >= _numWaves && !_enemies.size()) {
+        // Create and layout win text
+        std::string msg = strtool::format("YOU WIN!");
+        _endText = TextLayout::allocWithText(msg, _font);
+        _endText->setVerticalAlignment(VerticalAlign::MIDDLE);
+        _endText->setHorizontalAlignment(HorizontalAlign::CENTER);
+        _endText->layout();
+    }
     
     _playerGlow->setPosition(_player->getPosition());
 }
@@ -598,6 +607,20 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
 
     //_attacks.draw(batch);
     batch->drawText(_text, Vec2(20, getSize().height - _text->getBounds().size.height - 10));
+    
+    batch->setColor(Color4::GREEN);
+    Affine2 trans;
+    trans.scale(3);
+    trans.translate(Vec2(getSize().width/2,getSize().height/2));
+    
+    if(_endText && !_endText->getText().compare("YOU WIN!")) {
+        batch->setColor(Color4::GREEN);
+        Affine2 trans;
+        trans.scale(3);
+        trans.translate(Vec2(getSize().width/2,getSize().height/2));
+        batch->drawText(_endText, trans);
+    }
+    
     batch->end();
 }
 
@@ -911,6 +934,8 @@ void GameScene::reset()
     for(int i = 0; i < _numWaves; i++) {
         _spawn_times[i] = spawnTime->get(i)->asFloat();
     }
+    
+    _endText = nullptr;
 }
 
 /**

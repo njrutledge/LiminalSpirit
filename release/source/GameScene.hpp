@@ -91,6 +91,8 @@ protected:
     std::shared_ptr<cugl::TextLayout> _text;
     /** Text font */
     std::shared_ptr<cugl::Font> _font;
+    /** The text with the ending win message */
+    std::shared_ptr<cugl::TextLayout> _endText;
     
     std::shared_ptr<SoundController> _sound;
 
