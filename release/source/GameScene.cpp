@@ -358,79 +358,84 @@ void GameScene::update(float timestep)
     
     _swipes.update(_input, _player->isGrounded());
     b2Vec2 playerPos = _player->getBody()->GetPosition();
-    _attacks->attackLeft(Vec2(playerPos.x, playerPos.y), _swipes.getLeftSwipe(), _swipes.getLeftAngle(), _player->isGrounded(), _timer);
-    _attacks->attackRight(Vec2(playerPos.x, playerPos.y), _swipes.getRightSwipe(), _swipes.getRightAngle(), _player->isGrounded(), _timer);
-    if (_swipes.getRightSwipe() == SwipeController::chargedRight) {
-        _dashXVel = 20;
-        _dashTime = 0;
-    }
-    else if (_swipes.getRightSwipe() == SwipeController::chargedLeft) {
-        _dashXVel = -20;
-        _dashTime = 0;
-    }
-    else if (_swipes.getRightSwipe() == SwipeController::chargedUp) {
-        _dashYVel = 20;
-        _dashTime = 0;
-    }
-    else if (_swipes.getRightSwipe() == SwipeController::chargedDown) {
-        _dashYVel = -23;
-        _dashTime = 0;
-    }
-    // If the dash velocities are set, change player velocity if dash time is not complete
-    if (_dashXVel || _dashYVel) {
-        if (_dashTime < 0.6f) {
-            // Slow down for last 0.25 seconds at the end of right/left dash
-            // This might be jank but its 1am
-            float slowDownTime = 0.6f - 0.25f;
-            if (_dashTime > slowDownTime && _dashXVel > 0) {
-                _dashXVel = 20 - (_dashTime - slowDownTime) * 80;
-            } else if (_dashTime > slowDownTime && _dashXVel < 0) {
-                _dashXVel = -20 + (_dashTime - slowDownTime) * 80;
-            }
-            // Set velocity for right/left dash
-            if (_dashXVel > 0) {
-                _player->setVX(_dashXVel);
-                _player->setFacingRight(true);
-            } else if (_dashXVel < 0) {
-                _player->setVX(_dashXVel);
-                _player->setFacingRight(false);
-            }
-            // Always want to set x velocity to 0 for up/down charge attacks
-            // Up down dash is only 0.5 seconds
-            if (_dashTime < 0.5f) {
-                if (_dashYVel > 0) {
-                    _player->setVY(_dashYVel);
-                    _player->setVX(_dashXVel);
+    if (_player->getInvincibilityTimer() <= 0) {
+        _attacks->attackLeft(Vec2(playerPos.x, playerPos.y), _swipes.getLeftSwipe(), _swipes.getLeftAngle(), _player->isGrounded(), _timer);
+        _attacks->attackRight(Vec2(playerPos.x, playerPos.y), _swipes.getRightSwipe(), _swipes.getRightAngle(), _player->isGrounded(), _timer);
+        if (_swipes.getRightSwipe() == SwipeController::chargedRight) {
+            _dashXVel = 20;
+            _dashTime = 0;
+        }
+        else if (_swipes.getRightSwipe() == SwipeController::chargedLeft) {
+            _dashXVel = -20;
+            _dashTime = 0;
+        }
+        else if (_swipes.getRightSwipe() == SwipeController::chargedUp) {
+            _dashYVel = 20;
+            _dashTime = 0;
+        }
+        else if (_swipes.getRightSwipe() == SwipeController::chargedDown) {
+            _dashYVel = -23;
+            _dashTime = 0;
+        }
+        // If the dash velocities are set, change player velocity if dash time is not complete
+        if (_dashXVel || _dashYVel) {
+            if (_dashTime < 0.6f) {
+                // Slow down for last 0.25 seconds at the end of right/left dash
+                // This might be jank but its 1am
+                float slowDownTime = 0.6f - 0.25f;
+                if (_dashTime > slowDownTime && _dashXVel > 0) {
+                    _dashXVel = 20 - (_dashTime - slowDownTime) * 80;
                 }
-                else if (_dashYVel < 0 && !_player->isGrounded()) {
-                    _player->setVY(_dashYVel);
-                    _player->setVX(_dashXVel);
+                else if (_dashTime > slowDownTime && _dashXVel < 0) {
+                    _dashXVel = -20 + (_dashTime - slowDownTime) * 80;
                 }
+                // Set velocity for right/left dash
+                if (_dashXVel > 0) {
+                    _player->setVX(_dashXVel);
+                    _player->setFacingRight(true);
+                }
+                else if (_dashXVel < 0) {
+                    _player->setVX(_dashXVel);
+                    _player->setFacingRight(false);
+                }
+                // Always want to set x velocity to 0 for up/down charge attacks
+                // Up down dash is only 0.5 seconds
+                if (_dashTime < 0.5f) {
+                    if (_dashYVel > 0) {
+                        _player->setVY(_dashYVel);
+                        _player->setVX(_dashXVel);
+                    }
+                    else if (_dashYVel < 0 && !_player->isGrounded()) {
+                        _player->setVY(_dashYVel);
+                        _player->setVX(_dashXVel);
+                    }
+                }
+                // Invincibility, maintain same health throughout dash
+                _player->setIsInvincible(true);
+                _dashTime += timestep;
             }
-            // Invincibility, maintain same health throughout dash
-            _player->setIsInvincible(true);
-            _dashTime += timestep;
+            else {
+                _dashXVel = 0;
+                _dashYVel = 0;
+            }
         }
         else {
-            _dashXVel = 0;
-            _dashYVel = 0;
+            // Flipping logic based on tilt
+            if (xPos > 0)
+            {
+                _player->setFacingRight(true);
+            }
+            else if (xPos < 0)
+            {
+                _player->setFacingRight(false);
+            }
         }
-    } else {
-        // Flipping logic based on tilt
-        if (xPos > 0)
-        {
-            _player->setFacingRight(true);
-        }
-        else if (xPos < 0)
-        {
-            _player->setFacingRight(false);
+        if (_dashXVel == 0 && _dashYVel == 0 && _player->getInvincibilityTimer() <= 0) {
+            _player->setIsInvincible(false);
         }
     }
+
     _player->setInvincibilityTimer(_player->getInvincibilityTimer() - timestep);
-    if(_dashXVel == 0 && _dashYVel == 0 && _player->getInvincibilityTimer() <= 0){
-        _player->setIsInvincible(false);
-    }
-    
     _world->update(timestep);
 
     for (auto it = _attacks->_pending.begin(); it != _attacks->_pending.end(); ++it)

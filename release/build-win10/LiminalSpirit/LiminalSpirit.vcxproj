@@ -203,6 +203,7 @@
     <ClInclude Include="..\..\source\Mirror.hpp" />
     <ClInclude Include="..\..\source\Particle.hpp" />
     <ClInclude Include="..\..\source\Platform.hpp" />
+    <ClInclude Include="..\..\source\PlayerModel.h" />
     <ClInclude Include="..\..\source\Seeker.hpp" />
     <ClInclude Include="..\..\source\SoundController.hpp" />
     <ClInclude Include="..\..\source\Specter.hpp" />

@@ -75,9 +75,6 @@
     <ClInclude Include="..\..\source\LiminalSpiritApp.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\PlayerModel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="resource.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -110,6 +107,8 @@
     <ClInclude Include="..\..\source\SoundController.hpp" />
     <ClInclude Include="..\..\source\HomeScene.hpp" />
     <ClInclude Include="..\..\source\WorldSelectScene.hpp" />
+    <ClInclude Include="..\..\source\LSCharacter.h" />
+    <ClInclude Include="..\..\source\PlayerModel.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LiminalSpirit.rc" />
