@@ -16,8 +16,12 @@
 
 #pragma mark - 
 #pragma mark Drawing Constants
+
+
 /** Texture for the enemy*/
 #define PLAYER_TEXTURE "player"
+/** Texture for the enemy*/
+#define PLAYER_WALK_TEXTURE "player_walk"
 /** ID for the sensor*/
 #define PLAYER_SENSOR_NAME "playersensor"
 

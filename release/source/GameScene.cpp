@@ -296,6 +296,12 @@ void GameScene::update(float timestep)
     float xPos = _tilt.getXpos();
     _player->setVX(xPos);
 
+    if (xPos != 0) {
+        scene2::SpriteNode *sprite = dynamic_cast<scene2::SpriteNode *>(_player->getSceneNode().get());
+        int nextFrame = (sprite->getFrame() + 1) % 8;
+        sprite->setFrame(nextFrame);
+    }
+
 
     // Debug Mode on/off
     if (_input.getDebugKeyPressed())
@@ -720,7 +726,7 @@ void GameScene::createEnemies(int wave) {
 }
 
 void GameScene::createParticles() {
-    // deprecated for now as it lags the game
+    // deprecated for now as it lags the game // try bitmasking then custom node
     //for (int i = 0; i < 9; i++) {
     //    std::shared_ptr<Texture> particleTexture = _assets->get<Texture>(GLOW_TEXTURE);
     //    std::shared_ptr<Particle> party = Particle::alloc(Vec2(10,10), particleTexture->getSize() / _scale / 10, _scale);
@@ -870,10 +876,12 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     // Player creation
     Vec2 playerPos = PLAYER_POS;
     std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
-    std::shared_ptr<Texture> image = _assets->get<Texture>(PLAYER_TEXTURE);
-    _player = PlayerModel::alloc(playerPos, image->getSize() / _scale / 8, _scale);
+    std::shared_ptr<Texture> image = _assets->get<Texture>(PLAYER_WALK_TEXTURE);
+    std::shared_ptr<Texture> hitboxImage = _assets->get<Texture>(PLAYER_TEXTURE);
+    _player = PlayerModel::alloc(playerPos, hitboxImage->getSize() / _scale / 8, _scale);
     _player->setMovement(0);
-    std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
+    std::shared_ptr<scene2::SpriteNode> sprite = scene2::SpriteNode::alloc(image, 1, 8);
+    sprite->setFrame(0);
     _player->setSceneNode(sprite);
     _player->setDebugColor(Color4::RED);
     sprite->setScale(0.175f);

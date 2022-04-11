@@ -78,6 +78,13 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
+		"player_walk": {
+			"file": "textures/animations/interloper_run_spritesheet.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
 		"pattack": {
 			"file": "textures/nugget.png",
 			"minfilter": "nearest",
