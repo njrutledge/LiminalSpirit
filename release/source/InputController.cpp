@@ -119,6 +119,20 @@ void InputController::readInput()
     {
         _debugKeyPressed = false;
     }
+    if (keys->keyPressed(KeyCode::Q))
+    {
+        _leftCharged = true;
+    }
+    else {
+        _leftCharged = false;
+    }
+    if (keys->keyPressed(KeyCode::U))
+    {
+        _rightCharged = true;
+    }
+    else {
+        _rightCharged = false;
+    }
 }
 
 /**

@@ -593,12 +593,15 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     // This takes care of begin/end
 
     //_scene->render(batch);
-    if(_swipes.hasLeftChargedAttack()){
+    if (_player->isInvincible()){
+        _player->getSceneNode()->setColor(Color4::MAGENTA);
+    }
+    else if(_swipes.hasLeftChargedAttack() && _swipes.hasRightChargedAttack()){
+        _player->getSceneNode()->setColor(Color4(125,0,255,255));
+    } else if(_swipes.hasLeftChargedAttack()) {
         _player->getSceneNode()->setColor(Color4::RED);
     } else if(_swipes.hasRightChargedAttack()){
         _player->getSceneNode()->setColor(Color4::BLUE);
-    } else if (_player->isInvincible()){
-        _player->getSceneNode()->setColor(Color4::MAGENTA);
     } else {
         _player->getSceneNode()->setColor(Color4::WHITE);
     }
