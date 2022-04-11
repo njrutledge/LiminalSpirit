@@ -31,7 +31,7 @@
 #include <cugl/cugl.h>
 #include "BaseEnemyModel.h"
 #include "Lost.hpp"
-#include "Seeker.hpp"
+#include "Fantome.hpp"
 #include "Specter.hpp"
 #include "Mirror.hpp"
 #include "Glutton.hpp"

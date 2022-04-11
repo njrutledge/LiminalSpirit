@@ -13,7 +13,7 @@
 #include "BaseEnemyModel.h"
 #include "Lost.hpp"
 #include "Mirror.hpp"
-#include "Seeker.hpp"
+#include "Fantome.hpp"
 
 class AIController {
 	enum States {
@@ -40,8 +40,8 @@ public:
 	//Gets movement for the mirror
 	cugl::Vec2 getMirrorMovement(Mirror* mirror, cugl::Vec2 player_pos, float timestep);
 
-	// Gets movement for the seeker based on player position
-	cugl::Vec2 getSeekerMovement(shared_ptr<Seeker> seeker, cugl::Vec2 player_pos, float timestep);
+	// Gets movement for the fantome based on player position
+	cugl::Vec2 getFantomeMovement(shared_ptr<Fantome> fantome, cugl::Vec2 player_pos, float timestep);
 	
 	cugl::Vec2 movementHelper(cugl::Vec2 targetPos, cugl::Vec2 enemyPos, float horiSpeed, float vertSpeed, float scale);
 

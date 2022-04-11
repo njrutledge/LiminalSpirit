@@ -22,7 +22,7 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
-		"seeker": {
+		"fantome": {
 			"file": "textures/specturtest.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
