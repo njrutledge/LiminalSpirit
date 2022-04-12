@@ -33,7 +33,7 @@
 
 #include "BaseEnemyModel.h"
 #include "Lost.hpp"
-#include "Specter.hpp"
+#include "Phantom.hpp"
 #include "PlayerModel.h"
 #include "Platform.hpp"
 #include "AttackController.hpp"
@@ -326,12 +326,12 @@ void GameScene::update(float timestep)
             Vec2 en_p = (*it)->getPosition();
             Vec2 vel = Vec2(0.5, 0);
             //TODO: Need to variablize attack variables based on enemy type
-            if ((*it)->getName() != "Fantome") {
+            if ((*it)->getName() != "Seeker") {
                 (*it)->setIsAttacking(false);
             }
             else {
-                shared_ptr<Fantome> fantome = dynamic_pointer_cast<Fantome>(*it);
-                if (fantome->justAttacked) {
+                shared_ptr<Seeker> seeker = dynamic_pointer_cast<Seeker>(*it);
+                if (seeker->justAttacked) {
                     _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 1.0f, 0.2f, 2.0f, AttackController::Type::e_melee, (vel.scale(0.2)).rotate((play_p - en_p).getAngle()), _timer);
                 }
             }
@@ -340,7 +340,7 @@ void GameScene::update(float timestep)
                 _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 1.0f, 0.2f, 1.0f, AttackController::Type::e_melee, vel.rotate((play_p - en_p).getAngle()), _timer);
                 
             }
-            else if ((*it)->getName() == "Specter")
+            else if ((*it)->getName() == "Phantom")
             {
                 _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()), _timer);
             }
@@ -675,16 +675,16 @@ void GameScene::createEnemies(int wave) {
             addObstacle(lost, lostSprite, true);
             _enemies.push_back(lost);
         }
-        else if (!enemyName.compare("specter")) {
-            std::shared_ptr<Texture> specterImage = _assets->get<Texture>("specter");
-            std::shared_ptr<Specter> specter = Specter::alloc(enemyPos, specterImage->getSize() / _scale / 15, _scale);
-            std::shared_ptr<scene2::PolygonNode> specterSprite = scene2::PolygonNode::allocWithTexture(specterImage);
-            specter->setSceneNode(specterSprite);
-            specter->setDebugColor(Color4::BLUE);
-            specter->setGlow(enemyGlow);
-            specterSprite->setScale(0.15f);
-            addObstacle(specter, specterSprite, true);
-            _enemies.push_back(specter);
+        else if (!enemyName.compare("phantom")) {
+            std::shared_ptr<Texture> phantomImage = _assets->get<Texture>("phantom");
+            std::shared_ptr<Phantom> phantom = Phantom::alloc(enemyPos, phantomImage->getSize() / _scale / 15, _scale);
+            std::shared_ptr<scene2::PolygonNode> phantomSprite = scene2::PolygonNode::allocWithTexture(phantomImage);
+            phantom->setSceneNode(phantomSprite);
+            phantom->setDebugColor(Color4::BLUE);
+            phantom->setGlow(enemyGlow);
+            phantomSprite->setScale(0.15f);
+            addObstacle(phantom, phantomSprite, true);
+            _enemies.push_back(phantom);
         }
         else if (!enemyName.compare("square")) {
             createMirror(enemyPos, Mirror::Type::square, "squaremirror", enemyGlow);
@@ -695,16 +695,16 @@ void GameScene::createEnemies(int wave) {
         else if (!enemyName.compare("circle")) {
             createMirror(enemyPos, Mirror::Type::circle, "circlemirror", enemyGlow);
         }
-        else if (!enemyName.compare("fantome")) {
-            std::shared_ptr<Texture> fantomeImage = _assets->get<Texture>("fantome");
-            std::shared_ptr<Fantome> fantome = Fantome::alloc(enemyPos, fantomeImage->getSize() / _scale / 15, _scale);
-            std::shared_ptr<scene2::PolygonNode> fantomeSprite = scene2::PolygonNode::allocWithTexture(fantomeImage);
-            fantome->setSceneNode(fantomeSprite);
-            fantome->setDebugColor(Color4::GREEN);
-            fantome->setGlow(enemyGlow);
-            fantomeSprite->setScale(0.15f);
-            addObstacle(fantome, fantomeSprite, true);
-            _enemies.push_back(fantome);
+        else if (!enemyName.compare("seeker")) {
+            std::shared_ptr<Texture> seekerImage = _assets->get<Texture>("seeker");
+            std::shared_ptr<Seeker> seeker = Seeker::alloc(enemyPos, seekerImage->getSize() / _scale / 15, _scale);
+            std::shared_ptr<scene2::PolygonNode> seekerSprite = scene2::PolygonNode::allocWithTexture(seekerImage);
+            seeker->setSceneNode(seekerSprite);
+            seeker->setDebugColor(Color4::GREEN);
+            seeker->setGlow(enemyGlow);
+            seekerSprite->setScale(0.15f);
+            addObstacle(seeker, seekerSprite, true);
+            _enemies.push_back(seeker);
         } 
         else if (!enemyName.compare("glutton")) {
             std::shared_ptr<Texture> gluttonImage = _assets->get<Texture>("glutton");

@@ -22,15 +22,15 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
-		"fantome": {
+		"seeker": {
 			"file": "textures/specturtest.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
-		"specter": {
-			"file": "textures/specter.png",
+		"phantom": {
+			"file": "textures/phantom.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
