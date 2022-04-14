@@ -24,14 +24,14 @@ Vec2 AIController::getMovement(shared_ptr<BaseEnemyModel> e, Vec2 player_pos, fl
 	if (name == "Lost") {
 		return Vec2(getLostMovement(e, player_pos, timestep), -9.8f);
 	} 
-	else if (name == "Specter") {
-		return getSpecterMovement(e, player_pos, timestep);
+	else if (name == "Phantom") {
+		return getPhantomMovement(e, player_pos, timestep);
 	}
 	else if (name == "Mirror") {
 		return getMirrorMovement(dynamic_cast<Mirror*>(e.get()), player_pos, timestep);
 	}
-	else if (name == "Fantome") {
-		return getFantomeMovement(dynamic_pointer_cast<Fantome>(e), player_pos, timestep);
+	else if (name == "Seeker") {
+		return getSeekerMovement(dynamic_pointer_cast<Seeker>(e), player_pos, timestep);
 	} 
 	else if (name == "Glutton"){
         return Vec2(getGluttonMovement(e, player_pos, timestep), e->getVY());
@@ -114,49 +114,49 @@ float AIController::getLostMovement(shared_ptr<BaseEnemyModel> lost, Vec2 player
 	}
 }
 
-Vec2 AIController::getSpecterMovement(shared_ptr<BaseEnemyModel> specter, Vec2 player_pos, float timestep) {
+Vec2 AIController::getPhantomMovement(shared_ptr<BaseEnemyModel> phantom, Vec2 player_pos, float timestep) {
 	//TODO: 
 	// Use line of sight to determine ranged attacks
-    specter->setTimePast(specter->getTimePast() + timestep);
+    phantom->setTimePast(phantom->getTimePast() + timestep);
 //	int flip = 1; // flips y direction
 
 	//Check if enemy is already attacking
-	if (!specter->isAttacking()) {
-		if (player_pos.x <= specter->getPosition().x + specter->getAttackRadius()
-			&& player_pos.x >= specter->getPosition().x - specter->getAttackRadius()
-			&& player_pos.y <= specter->getPosition().y + specter->getAttackRadius()
-			&& player_pos.y >= specter->getPosition().y - specter->getAttackRadius()) {
-            if (specter->getAttackCooldown() < specter->getTimePast()) {
-                specter->setIsAttacking(true);
-                specter->setTimePast(0.0f);
+	if (!phantom->isAttacking()) {
+		if (player_pos.x <= phantom->getPosition().x + phantom->getAttackRadius()
+			&& player_pos.x >= phantom->getPosition().x - phantom->getAttackRadius()
+			&& player_pos.y <= phantom->getPosition().y + phantom->getAttackRadius()
+			&& player_pos.y >= phantom->getPosition().y - phantom->getAttackRadius()) {
+            if (phantom->getAttackCooldown() < phantom->getTimePast()) {
+                phantom->setIsAttacking(true);
+                phantom->setTimePast(0.0f);
             }
-			return Vec2(); // Specter stops moving
+			return Vec2(); // Phantom stops moving
 		}
-		else if (specter->getVY() == 0) {
-			return Vec2(specter->getHorizontalSpeed(), -1 * specter->getVerticalSpeed());
+		else if (phantom->getVY() == 0) {
+			return Vec2(phantom->getHorizontalSpeed(), -1 * phantom->getVerticalSpeed());
 		}
-		else if (player_pos.x > specter->getPosition().x) {
-			if (player_pos.y >= specter->getPosition().y) {
-				return Vec2(specter->getHorizontalSpeed(), specter->getVerticalSpeed());
+		else if (player_pos.x > phantom->getPosition().x) {
+			if (player_pos.y >= phantom->getPosition().y) {
+				return Vec2(phantom->getHorizontalSpeed(), phantom->getVerticalSpeed());
 			}
 			else {
-				return Vec2(specter->getHorizontalSpeed(), -1 * specter->getVerticalSpeed());
+				return Vec2(phantom->getHorizontalSpeed(), -1 * phantom->getVerticalSpeed());
 			}
 		}
 		else {
-			if (player_pos.y >= specter->getPosition().y) {
-				return Vec2(-1 * specter->getHorizontalSpeed(), specter->getVerticalSpeed());
+			if (player_pos.y >= phantom->getPosition().y) {
+				return Vec2(-1 * phantom->getHorizontalSpeed(), phantom->getVerticalSpeed());
 			}
 			else {
-				return Vec2(-1 * specter->getHorizontalSpeed(), -1 * specter->getVerticalSpeed());
+				return Vec2(-1 * phantom->getHorizontalSpeed(), -1 * phantom->getVerticalSpeed());
 			}
 		}
 	} 
 	else {
 		// Check if attack timer should be reset
-		if (specter->getAttackCooldown() < specter->getTimePast()) {
-			specter->setIsAttacking(false);
-			specter->setTimePast(0.0f);
+		if (phantom->getAttackCooldown() < phantom->getTimePast()) {
+			phantom->setIsAttacking(false);
+			phantom->setTimePast(0.0f);
 		}
 		
 			
@@ -188,51 +188,51 @@ Vec2 AIController::getMirrorMovement(Mirror* mirror, cugl::Vec2 player_pos, floa
 }
 	
 
-Vec2 AIController::getFantomeMovement(shared_ptr<Fantome> fantome, Vec2 player_pos, float timestep) {
-    fantome->setTimePast(fantome->getTimePast() + timestep);
+Vec2 AIController::getSeekerMovement(shared_ptr<Seeker> seeker, Vec2 player_pos, float timestep) {
+    seeker->setTimePast(seeker->getTimePast() + timestep);
 //    int flip = 1; // flips y direction
     //Check if enemy is already attacking
-    if (!fantome->isAttacking()) {
-        if (player_pos.x <= fantome->getPosition().x + fantome->getAttackRadius()/4
-            && player_pos.x >= fantome->getPosition().x - fantome->getAttackRadius()/4
-            && player_pos.y <= fantome->getPosition().y + fantome->getAttackRadius()/4
-            && player_pos.y >= fantome->getPosition().y - fantome->getAttackRadius()/4) {
-            if (fantome->getAttackCooldown() < fantome->getTimePast()) {
-                fantome->setIsAttacking(true);
-                fantome->justAttacked = true;
-                fantome->setTimePast(0.0f);
+    if (!seeker->isAttacking()) {
+        if (player_pos.x <= seeker->getPosition().x + seeker->getAttackRadius()/4
+            && player_pos.x >= seeker->getPosition().x - seeker->getAttackRadius()/4
+            && player_pos.y <= seeker->getPosition().y + seeker->getAttackRadius()/4
+            && player_pos.y >= seeker->getPosition().y - seeker->getAttackRadius()/4) {
+            if (seeker->getAttackCooldown() < seeker->getTimePast()) {
+                seeker->setIsAttacking(true);
+                seeker->justAttacked = true;
+                seeker->setTimePast(0.0f);
             }
-            return Vec2(); // Fantome stops moving
+            return Vec2(); // Seeker stops moving
         }
 
-        if (player_pos.distance(fantome->getPosition())>6 && !fantome->getHasSeenPlayer()) {
-            if(fantome->targetPosition.distance(fantome->getPosition()) <= 1) {
-                fantome->targetPosition = Vec2(0,0);
-                while (fantome->targetPosition.x < 2 || fantome->targetPosition.x > 30 || fantome->targetPosition.y < 2 || fantome->targetPosition.y > 22) {
+        if (player_pos.distance(seeker->getPosition())>6 && !seeker->getHasSeenPlayer()) {
+            if(seeker->targetPosition.distance(seeker->getPosition()) <= 1) {
+                seeker->targetPosition = Vec2(0,0);
+                while (seeker->targetPosition.x < 2 || seeker->targetPosition.x > 30 || seeker->targetPosition.y < 2 || seeker->targetPosition.y > 22) {
                     float r = 10 + 10 * std::sqrt(static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
                     float alpha = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2 * M_PI;
-                    fantome->targetPosition = Vec2(r * std::cos(alpha), r * std::sin(alpha)) + fantome->getPosition();
+                    seeker->targetPosition = Vec2(r * std::cos(alpha), r * std::sin(alpha)) + seeker->getPosition();
                 }
             }
-            return movementHelper(fantome->targetPosition, fantome->getPosition(), fantome->getHorizontalSpeed(), fantome->getVerticalSpeed(), fantome->velScale);
+            return movementHelper(seeker->targetPosition, seeker->getPosition(), seeker->getHorizontalSpeed(), seeker->getVerticalSpeed(), seeker->velScale);
         
         }
         
-        else if (player_pos.distance(fantome->getPosition())>4) {
-            return movementHelper(player_pos, fantome->getPosition(), fantome->getHorizontalSpeed(), fantome->getVerticalSpeed(), 1);
+        else if (player_pos.distance(seeker->getPosition())>4) {
+            return movementHelper(player_pos, seeker->getPosition(), seeker->getHorizontalSpeed(), seeker->getVerticalSpeed(), 1);
         }
         else {
-            return movementHelper(player_pos, fantome->getPosition(), fantome->getHorizontalSpeed(), fantome->getVerticalSpeed(), 3);
+            return movementHelper(player_pos, seeker->getPosition(), seeker->getHorizontalSpeed(), seeker->getVerticalSpeed(), 3);
         }
     }
     else {
         // Check if attack timer should be reset
-        if (fantome->getAttackCooldown() < fantome->getTimePast()) {
-            fantome->setIsAttacking(false);
-            fantome->setTimePast(0.0f);
+        if (seeker->getAttackCooldown() < seeker->getTimePast()) {
+            seeker->setIsAttacking(false);
+            seeker->setTimePast(0.0f);
             
         }
-        fantome->justAttacked = false;
+        seeker->justAttacked = false;
         return Vec2();
     }
 }

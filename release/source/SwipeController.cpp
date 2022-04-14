@@ -76,7 +76,6 @@ void SwipeController::update(InputController &input, bool grounded)
         {
             setLeftDirection(up);
             setLeftAngle(90);
-            printSwipe(getLeftSwipe(), true);
             processLeftState();
             break;
         }
@@ -389,7 +388,6 @@ void SwipeController::processLeftState(){
             break;
         }
     }
-    printSwipe(getLeftSwipe(), true);
 };
 
 /**
@@ -442,8 +440,6 @@ void SwipeController::processRightState(bool grounded){
                 break;
         }
     }
-    printSwipe(getRightSwipe(),false);
-
 };
 
 /**
