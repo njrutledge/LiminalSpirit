@@ -49,11 +49,11 @@
     <ClCompile Include="..\..\source\Particle.cpp" />
     <ClCompile Include="..\..\source\Glow.cpp" />
     <ClCompile Include="..\..\source\Mirror.cpp" />
-    <ClCompile Include="..\..\source\Seeker.cpp" />
     <ClCompile Include="..\..\source\Glutton.cpp" />
     <ClCompile Include="..\..\source\SoundController.cpp" />
     <ClCompile Include="..\..\source\HomeScene.cpp" />
     <ClCompile Include="..\..\source\WorldSelectScene.cpp" />
+    <ClCompile Include="..\..\source\Fantome.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -102,13 +102,13 @@
     <ClInclude Include="..\..\source\Particle.hpp" />
     <ClInclude Include="..\..\source\Glow.hpp" />
     <ClInclude Include="..\..\source\Mirror.hpp" />
-    <ClInclude Include="..\..\source\Seeker.hpp" />
     <ClInclude Include="..\..\source\Glutton.hpp" />
     <ClInclude Include="..\..\source\SoundController.hpp" />
     <ClInclude Include="..\..\source\HomeScene.hpp" />
     <ClInclude Include="..\..\source\WorldSelectScene.hpp" />
     <ClInclude Include="..\..\source\LSCharacter.h" />
     <ClInclude Include="..\..\source\PlayerModel.h" />
+    <ClInclude Include="..\..\source\Fantome.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LiminalSpirit.rc" />

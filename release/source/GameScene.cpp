@@ -296,12 +296,15 @@ void GameScene::update(float timestep)
     float xPos = _tilt.getXpos();
     _player->setVX(xPos);
 
-    if (xPos != 0) {
+    if (xPos != 0 && _player->getWalkAnimationTimer() > 0.065f) {
         scene2::SpriteNode *sprite = dynamic_cast<scene2::SpriteNode *>(_player->getSceneNode().get());
         int nextFrame = (sprite->getFrame() + 1) % 8;
         sprite->setFrame(nextFrame);
+        _player->setWalkAnimationTimer(0);
     }
-
+    _player->setWalkAnimationTimer(_player->getWalkAnimationTimer() + timestep);
+    _rangedArm->setGlowTimer(_rangedArm->getGlowTimer() + timestep);
+    _meleeArm->setGlowTimer(_meleeArm->getGlowTimer() + timestep);
 
     // Debug Mode on/off
     if (_input.getDebugKeyPressed())
@@ -310,9 +313,18 @@ void GameScene::update(float timestep)
     }
 
     scene2::TexturedNode *image = dynamic_cast<scene2::TexturedNode *>(_player->getSceneNode().get());
+    scene2::TexturedNode* arm1Image = dynamic_cast<scene2::TexturedNode*>(_rangedArm->getSceneNode().get());
+    scene2::TexturedNode* arm2Image = dynamic_cast<scene2::TexturedNode*>(_meleeArm->getSceneNode().get());
+
     if (image != nullptr)
     {
         image->flipHorizontal(_player->isFacingRight());
+    }
+    if (arm1Image != nullptr) {
+        arm1Image->flipHorizontal(_player->isFacingRight());
+    }
+    if (arm2Image != nullptr) {
+        arm2Image->flipHorizontal(_player->isFacingRight());
     }
 
     // Enemy AI logic
@@ -572,6 +584,26 @@ void GameScene::update(float timestep)
     }
     
     _playerGlow->setPosition(_player->getPosition());
+
+    // Determining arm positions and offsets
+    float offsetArm = -1.f;
+    float offsetArm2 = -1.25f;
+    if (!_player->isFacingRight()) {
+        offsetArm = -1 * offsetArm;
+        offsetArm2 = -1 * offsetArm2;
+    }
+
+    float upDown = _rangedArm->getGlowTimer();
+    float spacing = 2;
+    float upDownY = fmod(upDown, spacing);
+    if (upDownY > spacing/4 && upDownY <= 3*spacing/4) {
+        upDownY = spacing/2 - upDownY;
+    }
+    else if (upDownY > 3*spacing/4) {
+        upDownY = -1*spacing + upDownY;
+    }
+    _rangedArm->setPosition(_player->getPosition().x + offsetArm, _player->getPosition().y + (upDownY/spacing));
+    _meleeArm->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY/spacing));
 }
 
 std::shared_ptr<BaseEnemyModel> GameScene::getNearestNonMirror(cugl::Vec2 pos) {
@@ -876,6 +908,26 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     spritet->setScale(.65f);
     addObstacle(_playerGlow, spritet, true);
 
+    // Ranged Arm for the player
+    Vec2 rangeArmPos = PLAYER_POS;
+    std::shared_ptr<Texture> rangeImage = _assets->get<Texture>(PLAYER_RANGE_TEXTURE);
+    _rangedArm = Glow::alloc(rangeArmPos, rangeImage->getSize() / _scale, _scale);
+    _rangedArm->setGlowTimer(0);
+    std::shared_ptr<scene2::PolygonNode> rangeArmSprite = scene2::PolygonNode::allocWithTexture(rangeImage);
+    _rangedArm->setSceneNode(rangeArmSprite);
+    rangeArmSprite->setScale(0.2);
+    addObstacle(_rangedArm, rangeArmSprite, true);
+
+    //Melee Arm for the player
+    Vec2 meleeArmPos = PLAYER_POS;
+    std::shared_ptr<Texture> meleeImage = _assets->get<Texture>(PLAYER_MELEE_TEXTURE);
+    _meleeArm = Glow::alloc(meleeArmPos, meleeImage->getSize() / _scale, _scale);
+    _meleeArm->setGlowTimer(0);
+    std::shared_ptr<scene2::PolygonNode> meleeArmSprite = scene2::PolygonNode::allocWithTexture(meleeImage);
+    _meleeArm->setSceneNode(meleeArmSprite);
+    meleeArmSprite->setScale(0.2);
+    addObstacle(_meleeArm, meleeArmSprite, true);
+
     // Player creation
     Vec2 playerPos = PLAYER_POS;
     std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
@@ -883,6 +935,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     std::shared_ptr<Texture> hitboxImage = _assets->get<Texture>(PLAYER_TEXTURE);
     _player = PlayerModel::alloc(playerPos, hitboxImage->getSize() / _scale / 8, _scale);
     _player->setMovement(0);
+    _player->setWalkAnimationTimer(0);
     std::shared_ptr<scene2::SpriteNode> sprite = scene2::SpriteNode::alloc(image, 1, 8);
     sprite->setFrame(0);
     _player->setSceneNode(sprite);

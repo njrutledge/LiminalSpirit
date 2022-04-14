@@ -85,6 +85,27 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
+		"player_idle": {
+			"file": "textures/animations/interloper_idle_spritesheet.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"player_range_arm": {
+			"file": "textures/range_arm_static.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"player_melee_arm": {
+			"file": "textures/sword_arm_static.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
 		"pattack": {
 			"file": "textures/nugget.png",
 			"minfilter": "nearest",
