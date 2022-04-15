@@ -74,12 +74,17 @@ protected:
 
 #pragma mark Input Control
 public:
+    // Variables for keyboard input
     int _leftCode;
     int _rightCode;
     int _moveCode;
 
     /** debug key is pressed */
     bool _debugKeyPressed;
+    
+    bool _leftCharged;
+    bool _rightCharged;
+    
 
     /** TESTING ONLY: reads keyboard input on PC*/
     void readInput();

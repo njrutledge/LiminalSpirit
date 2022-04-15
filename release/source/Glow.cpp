@@ -38,7 +38,10 @@ bool Glow::init(const cugl::Vec2& pos, const cugl::Size& size, float scale) {
 		setDensity(0);
 		setFriction(0.0f);
 		setFixedRotation(true);
-
+		b2Filter filter = b2Filter();
+		filter.categoryBits = 0b0;
+		filter.maskBits = 0b000000;
+		setFilterData(filter);
 		return true;
 	}
 	return false;

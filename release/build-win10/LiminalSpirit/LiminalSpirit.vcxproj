@@ -202,11 +202,11 @@
     <ClInclude Include="..\..\source\LSCharacter.h" />
     <ClInclude Include="..\..\source\Mirror.hpp" />
     <ClInclude Include="..\..\source\Particle.hpp" />
+    <ClInclude Include="..\..\source\Phantom.hpp" />
     <ClInclude Include="..\..\source\Platform.hpp" />
     <ClInclude Include="..\..\source\PlayerModel.h" />
     <ClInclude Include="..\..\source\Seeker.hpp" />
     <ClInclude Include="..\..\source\SoundController.hpp" />
-    <ClInclude Include="..\..\source\Specter.hpp" />
     <ClInclude Include="..\..\source\SwipeController.hpp" />
     <ClInclude Include="..\..\source\TiltController.hpp" />
     <ClInclude Include="..\..\source\HomeScene.hpp" />
@@ -230,10 +230,10 @@
     <ClCompile Include="..\..\source\main.cpp" />
     <ClCompile Include="..\..\source\Mirror.cpp" />
     <ClCompile Include="..\..\source\Particle.cpp" />
+    <ClCompile Include="..\..\source\Phantom.cpp" />
     <ClCompile Include="..\..\source\Platform.cpp" />
     <ClCompile Include="..\..\source\Seeker.cpp" />
     <ClCompile Include="..\..\source\SoundController.cpp" />
-    <ClCompile Include="..\..\source\Specter.cpp" />
     <ClCompile Include="..\..\source\SwipeController.cpp" />
     <ClCompile Include="..\..\source\PlayerModel.cpp" />
     <ClCompile Include="..\..\source\TiltController.cpp" />

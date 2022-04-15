@@ -31,11 +31,13 @@ using namespace cugl;
 
 /** Initializes the enemy at the given position, with size, scale, health and horizontal/vertical speed. */
 bool BaseEnemyModel::init(const cugl::Vec2& pos, const cugl::Size& size, float scale, EnemyProperties props) {
+	_size = size;
 	Size nsize = size;
 	nsize.width *= ENEMY_HSHRINK;
 	nsize.height *= ENEMY_VSHRINK;
 	_drawScale = scale;
 	_health = props.health;
+	_maxhealth = props.health;
 	_verticalSpeed = props.vspeed;
 	_horizontalSpeed = props.hspeed;
 	_attackCooldown = props.attackCooldown;
@@ -52,7 +54,6 @@ bool BaseEnemyModel::init(const cugl::Vec2& pos, const cugl::Size& size, float s
 		filter.categoryBits = 0b10;
 		filter.maskBits = 0b011100;
 		setFilterData(filter);
-
 		return true;
 	}
 	return false;
@@ -89,6 +90,17 @@ void BaseEnemyModel::createFixtures() {
 	sensorDef.userData.pointer = reinterpret_cast<uintptr_t>(getSensorName());
 	_sensorFixture = _body->CreateFixture(&sensorDef);
 
+	//add health bars
+	std::shared_ptr<scene2::PolygonNode> healthBarBack = scene2::PolygonNode::allocWithPoly(Rect(0, 0, _maxhealth*2, .25) * _drawScale);
+	healthBarBack->setColor(Color4::RED);
+	healthBarBack->setPosition(Vec2(_size.width/2, _size.height) * _drawScale * 10);
+	_node->addChildWithName(healthBarBack, "healthbarback");
+
+	std::shared_ptr<scene2::PolygonNode> healthBar = scene2::PolygonNode::allocWithPoly(Rect(0, 0, _health * 2, .25) * _drawScale);
+	healthBar->setColor(Color4::GREEN);
+	healthBar->setPosition(Vec2(_size.width / 2, _size.height) * _drawScale * 10);
+	_node->addChildWithName(healthBar, "healthbar");
+
 }
 
 /** Releases the fixtures for this body, reseting the shape */
@@ -107,6 +119,7 @@ void BaseEnemyModel::releaseFixtures() {
 /** Disposes all resources and assets of this enemy model */
 void BaseEnemyModel::dispose() {
 	_core = nullptr;
+	_node->removeAllChildren();
 	_node = nullptr;
 	_sensorNode = nullptr;
 }
@@ -129,7 +142,14 @@ void BaseEnemyModel::update(float dt) {
 	if (_node != nullptr) {
 		_node->setPosition(getPosition() * _drawScale);
 		_node->setAngle(getAngle());
+		//update healthbar
+		_node->removeChildByName("healthbar");
+		std::shared_ptr<scene2::PolygonNode> healthBar = scene2::PolygonNode::allocWithPoly(Rect(0, 0, _health * 2, .25) * _drawScale);
+		healthBar->setColor(Color4::GREEN);
+		healthBar->setPosition(Vec2(_size.width / 2, _size.height) * _drawScale * 10 - Vec2((_maxhealth - _health)*_drawScale, 0));
+		_node->addChildWithName(healthBar, "healthbar");
 	}
+
 }
 
 #pragma mark -

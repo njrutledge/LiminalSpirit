@@ -33,7 +33,7 @@
 
 #include "BaseEnemyModel.h"
 #include "Lost.hpp"
-#include "Specter.hpp"
+#include "Phantom.hpp"
 #include "PlayerModel.h"
 #include "Platform.hpp"
 #include "AttackController.hpp"
@@ -296,6 +296,40 @@ void GameScene::update(float timestep)
     float xPos = _tilt.getXpos();
     _player->setVX(xPos);
 
+    int nextFrame;
+
+    scene2::SpriteNode* sprite = dynamic_cast<scene2::SpriteNode*>(_player->getSceneNode().get());
+    if (xPos != 0 && _player->getWalkAnimationTimer() > 0.065f) {
+        nextFrame = (sprite->getFrame() + 1) % 8;
+        sprite->setFrame(nextFrame);
+        _player->setWalkAnimationTimer(0);
+    }
+    else if (xPos == 0 && ((_player->getIdleAnimationTimer() > 1.f) || !(sprite->getFrame() == 13 || sprite->getFrame() == 8 || sprite->getFrame() == 10 || sprite->getFrame() == 15) && _player->getIdleAnimationTimer() < 0.2f)) {
+        if (sprite->getFrame() < 8) {
+            if (_player->isFacingRight()) {
+                nextFrame = 12;
+            }
+            else {
+
+                nextFrame = 8;
+            }
+        }
+        else {
+            // cause flipHorizontal flips the whole spritesheet >.>
+            if (_player->isFacingRight()) {
+                nextFrame = ((sprite->getFrame() + 1) % 4) + 12;
+            }
+            else {
+                nextFrame = ((sprite->getFrame() + 1) % 4) + 8;
+            }
+        }
+        sprite->setFrame(nextFrame);
+        _player->setIdleAnimationTimer(0);
+    }
+    _player->setWalkAnimationTimer(_player->getWalkAnimationTimer() + timestep);
+    _player->setIdleAnimationTimer(_player->getIdleAnimationTimer() + timestep);
+    _rangedArm->setGlowTimer(_rangedArm->getGlowTimer() + timestep);
+    _meleeArm->setGlowTimer(_meleeArm->getGlowTimer() + timestep);
 
     // Debug Mode on/off
     if (_input.getDebugKeyPressed())
@@ -304,9 +338,18 @@ void GameScene::update(float timestep)
     }
 
     scene2::TexturedNode *image = dynamic_cast<scene2::TexturedNode *>(_player->getSceneNode().get());
+    scene2::TexturedNode* arm1Image = dynamic_cast<scene2::TexturedNode*>(_rangedArm->getSceneNode().get());
+    scene2::TexturedNode* arm2Image = dynamic_cast<scene2::TexturedNode*>(_meleeArm->getSceneNode().get());
+
     if (image != nullptr)
     {
         image->flipHorizontal(_player->isFacingRight());
+    }
+    if (arm1Image != nullptr) {
+        arm1Image->flipHorizontal(_player->isFacingRight());
+    }
+    if (arm2Image != nullptr) {
+        arm2Image->flipHorizontal(_player->isFacingRight());
     }
 
     // Enemy AI logic
@@ -340,7 +383,7 @@ void GameScene::update(float timestep)
                 _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 1.0f, 0.2f, 1.0f, AttackController::Type::e_melee, vel.rotate((play_p - en_p).getAngle()), _timer);
                 
             }
-            else if ((*it)->getName() == "Specter")
+            else if ((*it)->getName() == "Phantom")
             {
                 _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()), _timer);
             }
@@ -566,6 +609,26 @@ void GameScene::update(float timestep)
     }
     
     _playerGlow->setPosition(_player->getPosition());
+
+    // Determining arm positions and offsets
+    float offsetArm = -1.f;
+    float offsetArm2 = -1.25f;
+    if (!_player->isFacingRight()) {
+        offsetArm = -1 * offsetArm;
+        offsetArm2 = -1 * offsetArm2;
+    }
+
+    float upDown = _rangedArm->getGlowTimer();
+    float spacing = 2;
+    float upDownY = fmod(upDown, spacing);
+    if (upDownY > spacing/4 && upDownY <= 3*spacing/4) {
+        upDownY = spacing/2 - upDownY;
+    }
+    else if (upDownY > 3*spacing/4) {
+        upDownY = -1*spacing + upDownY;
+    }
+    _rangedArm->setPosition(_player->getPosition().x + offsetArm, _player->getPosition().y + (upDownY/spacing));
+    _meleeArm->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY/spacing));
 }
 
 std::shared_ptr<BaseEnemyModel> GameScene::getNearestNonMirror(cugl::Vec2 pos) {
@@ -593,12 +656,15 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     // This takes care of begin/end
 
     //_scene->render(batch);
-    if(_swipes.hasLeftChargedAttack()){
+    if (_player->isInvincible()){
+        _player->getSceneNode()->setColor(Color4::MAGENTA);
+    }
+    else if(_swipes.hasLeftChargedAttack() && _swipes.hasRightChargedAttack()){
+        _player->getSceneNode()->setColor(Color4(125,0,255,255));
+    } else if(_swipes.hasLeftChargedAttack()) {
         _player->getSceneNode()->setColor(Color4::RED);
     } else if(_swipes.hasRightChargedAttack()){
         _player->getSceneNode()->setColor(Color4::BLUE);
-    } else if (_player->isInvincible()){
-        _player->getSceneNode()->setColor(Color4::MAGENTA);
     } else {
         _player->getSceneNode()->setColor(Color4::WHITE);
     }
@@ -672,16 +738,16 @@ void GameScene::createEnemies(int wave) {
             addObstacle(lost, lostSprite, true);
             _enemies.push_back(lost);
         }
-        else if (!enemyName.compare("specter")) {
-            std::shared_ptr<Texture> specterImage = _assets->get<Texture>("specter");
-            std::shared_ptr<Specter> specter = Specter::alloc(enemyPos, specterImage->getSize() / _scale / 15, _scale);
-            std::shared_ptr<scene2::PolygonNode> specterSprite = scene2::PolygonNode::allocWithTexture(specterImage);
-            specter->setSceneNode(specterSprite);
-            specter->setDebugColor(Color4::BLUE);
-            specter->setGlow(enemyGlow);
-            specterSprite->setScale(0.15f);
-            addObstacle(specter, specterSprite, true);
-            _enemies.push_back(specter);
+        else if (!enemyName.compare("phantom")) {
+            std::shared_ptr<Texture> phantomImage = _assets->get<Texture>("phantom");
+            std::shared_ptr<Phantom> phantom = Phantom::alloc(enemyPos, phantomImage->getSize() / _scale / 15, _scale);
+            std::shared_ptr<scene2::PolygonNode> phantomSprite = scene2::PolygonNode::allocWithTexture(phantomImage);
+            phantom->setSceneNode(phantomSprite);
+            phantom->setDebugColor(Color4::BLUE);
+            phantom->setGlow(enemyGlow);
+            phantomSprite->setScale(0.15f);
+            addObstacle(phantom, phantomSprite, true);
+            _enemies.push_back(phantom);
         }
         else if (!enemyName.compare("square")) {
             createMirror(enemyPos, Mirror::Type::square, "squaremirror", enemyGlow);
@@ -720,7 +786,7 @@ void GameScene::createEnemies(int wave) {
 }
 
 void GameScene::createParticles() {
-    // deprecated for now as it lags the game
+    // deprecated for now as it lags the game // try bitmasking then custom node
     //for (int i = 0; i < 9; i++) {
     //    std::shared_ptr<Texture> particleTexture = _assets->get<Texture>(GLOW_TEXTURE);
     //    std::shared_ptr<Particle> party = Particle::alloc(Vec2(10,10), particleTexture->getSize() / _scale / 10, _scale);
@@ -867,13 +933,37 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     spritet->setScale(.65f);
     addObstacle(_playerGlow, spritet, true);
 
+    // Ranged Arm for the player
+    Vec2 rangeArmPos = PLAYER_POS;
+    std::shared_ptr<Texture> rangeImage = _assets->get<Texture>(PLAYER_RANGE_TEXTURE);
+    _rangedArm = Glow::alloc(rangeArmPos, rangeImage->getSize() / _scale, _scale);
+    _rangedArm->setGlowTimer(0);
+    std::shared_ptr<scene2::PolygonNode> rangeArmSprite = scene2::PolygonNode::allocWithTexture(rangeImage);
+    _rangedArm->setSceneNode(rangeArmSprite);
+    rangeArmSprite->setScale(0.2);
+    addObstacle(_rangedArm, rangeArmSprite, true);
+
+    //Melee Arm for the player
+    Vec2 meleeArmPos = PLAYER_POS;
+    std::shared_ptr<Texture> meleeImage = _assets->get<Texture>(PLAYER_MELEE_TEXTURE);
+    _meleeArm = Glow::alloc(meleeArmPos, meleeImage->getSize() / _scale, _scale);
+    _meleeArm->setGlowTimer(0);
+    std::shared_ptr<scene2::PolygonNode> meleeArmSprite = scene2::PolygonNode::allocWithTexture(meleeImage);
+    _meleeArm->setSceneNode(meleeArmSprite);
+    meleeArmSprite->setScale(0.2);
+    addObstacle(_meleeArm, meleeArmSprite, true);
+
     // Player creation
     Vec2 playerPos = PLAYER_POS;
     std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
-    std::shared_ptr<Texture> image = _assets->get<Texture>(PLAYER_TEXTURE);
-    _player = PlayerModel::alloc(playerPos, image->getSize() / _scale / 8, _scale);
+    std::shared_ptr<Texture> image = _assets->get<Texture>(PLAYER_WALK_TEXTURE);
+    std::shared_ptr<Texture> hitboxImage = _assets->get<Texture>(PLAYER_TEXTURE);
+    _player = PlayerModel::alloc(playerPos, hitboxImage->getSize() / _scale / 8, _scale);
     _player->setMovement(0);
-    std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
+    _player->setWalkAnimationTimer(0);
+    _player->setIdleAnimationTimer(0);
+    std::shared_ptr<scene2::SpriteNode> sprite = scene2::SpriteNode::alloc(image, 2, 8);
+    sprite->setFrame(0);
     _player->setSceneNode(sprite);
     _player->setDebugColor(Color4::RED);
     sprite->setScale(0.175f);

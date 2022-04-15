@@ -39,6 +39,9 @@ protected:
 	/** Draw Scale*/
 	float _drawScale;
 
+	/** Time passed since glow initialized */
+	float _glowTime;
+
 	/** Redraws outline of physics fixtures */
 	virtual void resetDebug() override;
 
@@ -78,6 +81,12 @@ public:
 #pragma mark Attribute Properties
 	/** Returns the name of the ground sensor */
 	std::string* getSensorName() { return &_sensorName; }
+
+	/** Returns the amount of time past since the glow was initialized */
+	float getGlowTimer() { return _glowTime; }
+
+	/** Sets the amount of time past since the glow was initialized */
+	void setGlowTimer(float value) { _glowTime = value; }
 
 #pragma mark - 
 #pragma mark Physics Methods

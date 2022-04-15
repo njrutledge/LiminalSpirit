@@ -32,7 +32,7 @@
 #include "BaseEnemyModel.h"
 #include "Lost.hpp"
 #include "Seeker.hpp"
-#include "Specter.hpp"
+#include "Phantom.hpp"
 #include "Mirror.hpp"
 #include "Glutton.hpp"
 #include "PlayerModel.h"
@@ -76,6 +76,11 @@ protected:
 
     /** Graphics related*/
     std::shared_ptr<Glow> _playerGlow;
+
+    /** Ranged arm texture*/
+    std::shared_ptr<Glow> _rangedArm;
+    /** Melee arm texture */
+    std::shared_ptr<Glow> _meleeArm;
     /** A shader */
     std::shared_ptr<cugl::Shader> _shader;
     /** A vertex buffer */

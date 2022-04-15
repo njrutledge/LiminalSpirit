@@ -29,8 +29,8 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
-		"specter": {
-			"file": "textures/specter.png",
+		"phantom": {
+			"file": "textures/phantom.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
@@ -73,6 +73,27 @@
 		},
 		"player": {
 			"file": "textures/player.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"player_walk": {
+			"file": "textures/animations/run_idle_spritesheet.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"player_range_arm": {
+			"file": "textures/range_arm_static.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"player_melee_arm": {
+			"file": "textures/sword_arm_static.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
@@ -451,6 +472,6 @@
 		}
 	},
 	"jsons": {
-		"constants": "json/LAGTEST.json"
+		"constants": "json/level2.json"
 	}
 }

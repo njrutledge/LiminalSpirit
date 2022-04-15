@@ -16,8 +16,16 @@
 
 #pragma mark - 
 #pragma mark Drawing Constants
-/** Texture for the enemy*/
+
+
+/** Texture for the player*/
 #define PLAYER_TEXTURE "player"
+/** Texture for the player walking*/
+#define PLAYER_WALK_TEXTURE "player_walk"
+/** Texture for the player ranged arm*/
+#define PLAYER_RANGE_TEXTURE "player_range_arm"
+/** Texture for the player sword arm*/
+#define PLAYER_MELEE_TEXTURE "player_melee_arm"
 /** ID for the sensor*/
 #define PLAYER_SENSOR_NAME "playersensor"
 
@@ -70,6 +78,12 @@ protected:
     
     /** Duration of enemy invincibility */
     float _invincibilityTime;
+
+	/** Time passed since last walk */
+	float _walkTime;
+
+	/** Time passed since last idle frame*/
+	float _idleTime;
 
 	/** Redraws outline of physics fixtures */
 	virtual void resetDebug() override;
@@ -190,6 +204,18 @@ public:
     
     /** Sets invincibility time (for after getting hit) */
     void setInvincibilityTimer(float value) { _invincibilityTime = value; }
+
+	/** Returns the amount of time remaining for next walk animation frame */
+	float getWalkAnimationTimer() { return _walkTime; }
+
+	/** Sets the walk animation time */
+	void setWalkAnimationTimer(float value) { _walkTime = value; }
+
+	/** Returns the amount of time remaining for next idle animation frame */
+	float getIdleAnimationTimer() { return _idleTime; }
+
+	/** Sets the walk animation time */
+	void setIdleAnimationTimer(float value) { _idleTime = value; }
 
 	/**
 	 * Returns how much force to apply to get the player moving

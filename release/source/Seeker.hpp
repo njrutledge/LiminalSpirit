@@ -20,7 +20,7 @@ extern struct EnemyProperties SEEKER_PROPS;
 
 class Seeker : public BaseEnemyModel {
 public:
-    /** Inheriting all constructors exactly as is since specter does not need more initializers*/
+    /** Inheriting all constructors exactly as is since phantom does not need more initializers*/
     using BaseEnemyModel::BaseEnemyModel;
 
 #pragma mark -

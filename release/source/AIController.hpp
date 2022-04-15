@@ -34,8 +34,8 @@ public:
     // Gets movement for the glutton based on player position
     float getGluttonMovement(shared_ptr<BaseEnemyModel> glutton, cugl::Vec2 player_pos, float timestep);
 
-	// Gets movement for the specter based on player position
-	cugl::Vec2 getSpecterMovement(shared_ptr<BaseEnemyModel> specter, cugl::Vec2 player_pos, float timestep);
+	// Gets movement for the phantom based on player position
+	cugl::Vec2 getPhantomMovement(shared_ptr<BaseEnemyModel> phantom, cugl::Vec2 player_pos, float timestep);
 
 	//Gets movement for the mirror
 	cugl::Vec2 getMirrorMovement(Mirror* mirror, cugl::Vec2 player_pos, float timestep);

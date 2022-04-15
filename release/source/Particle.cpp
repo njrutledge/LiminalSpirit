@@ -43,6 +43,10 @@ bool Particle::init(const Vec2& pos, const Size& size, float scale) {
 		setDensity(density);
 		setFriction(0.0f);
 		setFixedRotation(true);
+		b2Filter filter = b2Filter();
+		filter.categoryBits = 0b0;
+		filter.maskBits = 0b000000;
+		setFilterData(filter);
 		
 		return true;
 	}

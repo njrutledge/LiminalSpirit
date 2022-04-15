@@ -48,6 +48,9 @@ protected:
 	/** Health */
 	int _health;
 
+	/** max health of this enemy */
+	int _maxhealth;
+
 	/** True if the enemy is on the ground */
 	bool _isGrounded;
 
@@ -108,6 +111,11 @@ protected:
 	/** Melee attack that last hit this enemy (avoids multiple hits) */
 	AttackController::Attack* _lastMelee;
 
+	/** Size of the enemy image */
+	cugl::Size _size;
+
+
+
 public:
 
 #pragma mark Hidden Constructors
@@ -130,6 +138,7 @@ public:
 	AttackController::Attack* getLastMelee() { return _lastMelee; }
 
 	void setLastMelee(AttackController::Attack* attack) { _lastMelee = attack; }
+
 
 
 #pragma mark - 

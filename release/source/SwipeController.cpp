@@ -68,38 +68,80 @@ void SwipeController::update(InputController &input, bool grounded)
     switch (input._leftCode)
     {
     case 0:
-        setLeftSwipe(noAttack);
-        break;
-    case 1:
-        setLeftSwipe(upAttack);
-        break;
+        {
+            setLeftSwipe(noAttack);
+            break;
+        }
+        case 1:
+        {
+            setLeftDirection(up);
+            setLeftAngle(90);
+            processLeftState();
+            break;
+        }
     case 2:
-        setLeftSwipe(leftAttack);
-        break;
+        {
+            setLeftDirection(left);
+            setLeftAngle(180);
+            processLeftState();
+            break;
+        }
     case 3:
-        setLeftSwipe(downAttack);
-        break;
+        {
+            setLeftDirection(down);
+            setLeftAngle(270);
+            processLeftState();
+            break;
+        }
     case 4:
-        setLeftSwipe(rightAttack);
-        break;
+        {
+            setLeftDirection(right);
+            setLeftAngle(0);
+            processLeftState();
+            break;
+        }
     }
     switch (input._rightCode)
     {
     case 0:
-        setRightSwipe(noAttack);
-        break;
+        {
+            setRightSwipe(noAttack);
+            break;
+        }
     case 1:
-        setRightSwipe(upAttack);
-        break;
+        {
+            setRightDirection(up);
+            setRightAngle(90);
+            processRightState(grounded);
+            break;
+        }
     case 2:
-        setRightSwipe(leftAttack);
-        break;
+        {
+            setRightDirection(left);
+            setRightAngle(180);
+            processRightState(grounded);
+            break;
+        }
     case 3:
-        setRightSwipe(downAttack);
-        break;
+        {
+            setRightDirection(down);
+            setRightAngle(270);
+            processRightState(grounded);
+            break;
+        }
     case 4:
-        setRightSwipe(rightAttack);
-        break;
+        {
+            setRightDirection(right);
+            setRightAngle(0);
+            processRightState(grounded);
+            break;
+        }
+    }
+    if (input._leftCharged) {
+        chargeLeftAttack();
+    }
+    if (input._rightCharged) {
+        chargeRightAttack();
     }
 #endif
 }
@@ -121,7 +163,7 @@ void SwipeController::calculateChargeAttack(cugl::Timestamp startTime, bool isLe
 
     Uint64 chargeTime = cugl::Timestamp::ellapsedMillis(startTime, _currTime);
     
-    // This is currently 500 for easier testing, change it back to 1000 when done testing
+    // TODO This is currently 500 for easier testing, change it back to 1000 when done testing
     if (chargeTime >= 500) { //1000) {
         if (isLeftSidedCharge) {
             chargeLeftAttack();
@@ -398,7 +440,6 @@ void SwipeController::processRightState(bool grounded){
                 break;
         }
     }
-
 };
 
 /**
