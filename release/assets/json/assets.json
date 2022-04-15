@@ -472,6 +472,6 @@
 		}
 	},
 	"jsons": {
-		"constants": "json/level2.json"
+		"constants": "json/level.json"
 	}
 }
