@@ -82,6 +82,9 @@ protected:
 	/** Time passed since last walk */
 	float _walkTime;
 
+	/** Time passed since last idle frame*/
+	float _idleTime;
+
 	/** Redraws outline of physics fixtures */
 	virtual void resetDebug() override;
 
@@ -207,6 +210,12 @@ public:
 
 	/** Sets the walk animation time */
 	void setWalkAnimationTimer(float value) { _walkTime = value; }
+
+	/** Returns the amount of time remaining for next idle animation frame */
+	float getIdleAnimationTimer() { return _idleTime; }
+
+	/** Sets the walk animation time */
+	void setIdleAnimationTimer(float value) { _idleTime = value; }
 
 	/**
 	 * Returns how much force to apply to get the player moving

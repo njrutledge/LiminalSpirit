@@ -296,13 +296,38 @@ void GameScene::update(float timestep)
     float xPos = _tilt.getXpos();
     _player->setVX(xPos);
 
+    int nextFrame;
+
+    scene2::SpriteNode* sprite = dynamic_cast<scene2::SpriteNode*>(_player->getSceneNode().get());
     if (xPos != 0 && _player->getWalkAnimationTimer() > 0.065f) {
-        scene2::SpriteNode *sprite = dynamic_cast<scene2::SpriteNode *>(_player->getSceneNode().get());
-        int nextFrame = (sprite->getFrame() + 1) % 8;
+        nextFrame = (sprite->getFrame() + 1) % 8;
         sprite->setFrame(nextFrame);
         _player->setWalkAnimationTimer(0);
     }
+    else if (xPos == 0 && ((_player->getIdleAnimationTimer() > 1.f) || !(sprite->getFrame() == 13 || sprite->getFrame() == 8 || sprite->getFrame() == 10 || sprite->getFrame() == 15) && _player->getIdleAnimationTimer() < 0.2f)) {
+        if (sprite->getFrame() < 8) {
+            if (_player->isFacingRight()) {
+                nextFrame = 12;
+            }
+            else {
+
+                nextFrame = 8;
+            }
+        }
+        else {
+            // cause flipHorizontal flips the whole spritesheet >.>
+            if (_player->isFacingRight()) {
+                nextFrame = ((sprite->getFrame() + 1) % 4) + 12;
+            }
+            else {
+                nextFrame = ((sprite->getFrame() + 1) % 4) + 8;
+            }
+        }
+        sprite->setFrame(nextFrame);
+        _player->setIdleAnimationTimer(0);
+    }
     _player->setWalkAnimationTimer(_player->getWalkAnimationTimer() + timestep);
+    _player->setIdleAnimationTimer(_player->getIdleAnimationTimer() + timestep);
     _rangedArm->setGlowTimer(_rangedArm->getGlowTimer() + timestep);
     _meleeArm->setGlowTimer(_meleeArm->getGlowTimer() + timestep);
 
@@ -936,7 +961,8 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     _player = PlayerModel::alloc(playerPos, hitboxImage->getSize() / _scale / 8, _scale);
     _player->setMovement(0);
     _player->setWalkAnimationTimer(0);
-    std::shared_ptr<scene2::SpriteNode> sprite = scene2::SpriteNode::alloc(image, 1, 8);
+    _player->setIdleAnimationTimer(0);
+    std::shared_ptr<scene2::SpriteNode> sprite = scene2::SpriteNode::alloc(image, 2, 8);
     sprite->setFrame(0);
     _player->setSceneNode(sprite);
     _player->setDebugColor(Color4::RED);
