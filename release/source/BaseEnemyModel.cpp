@@ -92,12 +92,12 @@ void BaseEnemyModel::createFixtures() {
 
 	//add health bars
 	std::shared_ptr<scene2::PolygonNode> healthBarBack = scene2::PolygonNode::allocWithPoly(Rect(0, 0, _maxhealth*2, .25) * _drawScale);
-	healthBarBack->setColor(Color4::RED);
+	healthBarBack->setColor(Color4::GRAY);
 	healthBarBack->setPosition(Vec2(_size.width/2, _size.height) * _drawScale * 10);
 	_node->addChildWithName(healthBarBack, "healthbarback");
 
 	std::shared_ptr<scene2::PolygonNode> healthBar = scene2::PolygonNode::allocWithPoly(Rect(0, 0, _health * 2, .25) * _drawScale);
-	healthBar->setColor(Color4::GREEN);
+	healthBar->setColor(Color4::WHITE);
 	healthBar->setPosition(Vec2(_size.width / 2, _size.height) * _drawScale * 10);
 	_node->addChildWithName(healthBar, "healthbar");
 
@@ -145,7 +145,7 @@ void BaseEnemyModel::update(float dt) {
 		//update healthbar
 		_node->removeChildByName("healthbar");
 		std::shared_ptr<scene2::PolygonNode> healthBar = scene2::PolygonNode::allocWithPoly(Rect(0, 0, _health * 2, .25) * _drawScale);
-		healthBar->setColor(Color4::GREEN);
+		healthBar->setColor(Color4::WHITE);
 		healthBar->setPosition(Vec2(_size.width / 2, _size.height) * _drawScale * 10 - Vec2((_maxhealth - _health)*_drawScale, 0));
 		_node->addChildWithName(healthBar, "healthbar");
 	}
