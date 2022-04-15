@@ -657,7 +657,8 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
 
     //_scene->render(batch);
     if (_player->isInvincible()){
-        _player->getSceneNode()->setColor(Color4::MAGENTA);
+        // TODO Change this
+        _player->getSceneNode()->setColor(Color4::GREEN);
     }
     else if(_swipes.hasLeftChargedAttack() && _swipes.hasRightChargedAttack()){
         _player->getSceneNode()->setColor(Color4(125,0,255,255));
