@@ -708,30 +708,23 @@ bool AudioOutput::completed() {
  */
 Uint32 AudioOutput::read(float* buffer, Uint32 frames) {
     Timestamp start;
-
-    // Fix this in a sec.
-    Uint32 realchan = _audiospec.channels;
-    if (_channels != realchan) {		
-        frames *= _channels;		
-        frames /= realchan;		
-    }
     
     std::shared_ptr<AudioNode> input = std::atomic_load_explicit(&_input,std::memory_order_relaxed);
     Uint32 take = 0;
     if (input == nullptr || _paused.load(std::memory_order_relaxed)) {
-        std::memset(buffer,0,frames*_channels*_bitrate);
+        std::memset(buffer,0,frames*_audiospec.channels*_bitrate);
         take = frames;
-    } else if (_resampler != nullptr) {
-        take = _resampler->read(buffer,frames);
     } else if (_distributor != nullptr) {
         take = _distributor->read(buffer,frames);
+    } else if (_resampler != nullptr) {
+        take = _resampler->read(buffer,frames);
     } else {
         take = input->read(buffer,frames);
     }
     
     // Buck stops here.  Fill remainder with 0s.
     if (take < frames) {
-        std::memset(buffer+take*_channels,0,(frames-take)*_channels);
+        std::memset(buffer+take*_audiospec.channels,0,(frames-take)*_audiospec.channels);
     }
 
     Timestamp end;
