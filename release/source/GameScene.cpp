@@ -659,7 +659,8 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
 
     //_scene->render(batch);
     if (_player->isInvincible()){
-        _player->getSceneNode()->setColor(Color4::MAGENTA);
+        // TODO Change this
+        _player->getSceneNode()->setColor(Color4::GREEN);
     }
     else if(_swipes.hasLeftChargedAttack() && _swipes.hasRightChargedAttack()){
         _player->getSceneNode()->setColor(Color4(125,0,255,255));
@@ -742,7 +743,7 @@ void GameScene::createEnemies(int wave) {
         }
         else if (!enemyName.compare("phantom")) {
             std::shared_ptr<Texture> phantomImage = _assets->get<Texture>("phantom");
-            std::shared_ptr<Phantom> phantom = Phantom::alloc(enemyPos, phantomImage->getSize() / _scale / 15, _scale);
+            std::shared_ptr<Phantom> phantom = Phantom::alloc(enemyPos, phantomImage->getSize() / _scale / 10, _scale);
             std::shared_ptr<scene2::PolygonNode> phantomSprite = scene2::PolygonNode::allocWithTexture(phantomImage);
             phantom->setSceneNode(phantomSprite);
             phantom->setDebugColor(Color4::BLUE);
@@ -762,7 +763,7 @@ void GameScene::createEnemies(int wave) {
         }
         else if (!enemyName.compare("seeker")) {
             std::shared_ptr<Texture> seekerImage = _assets->get<Texture>("seeker");
-            std::shared_ptr<Seeker> seeker = Seeker::alloc(enemyPos, seekerImage->getSize() / _scale / 15, _scale);
+            std::shared_ptr<Seeker> seeker = Seeker::alloc(enemyPos, seekerImage->getSize() / _scale / 10, _scale);
             std::shared_ptr<scene2::PolygonNode> seekerSprite = scene2::PolygonNode::allocWithTexture(seekerImage);
             seeker->setSceneNode(seekerSprite);
             seeker->setDebugColor(Color4::GREEN);

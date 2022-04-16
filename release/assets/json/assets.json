@@ -158,6 +158,15 @@
 		"world_select_forest": {
 			"file": "textures/menus/world_select/world_select_forest.png"
 		},
+		"world_select_caveback": {
+			"file": "textures/menus/world_select/world_select_cave_back.png"
+		},
+		"world_select_shroomback": {
+			"file": "textures/menus/world_select/world_select_fungi_back.png"
+		},
+		"world_select_forestback": {
+			"file": "textures/menus/world_select/world_select_forest_back.png"
+		},
 		"whiteGrad": {
 			"file": "textures/circle.png",
 			"minfilter": "nearest",
@@ -313,11 +322,29 @@
 							0.5,
 							0.5
 						],
-						"scale": 0.66
+						"scale": 0.55
 					},
 					"layout": {
 						"x_anchor": "center",
 						"y_anchor": "middle"
+					}
+				},
+				"caveback": {
+					"type": "Image",
+					"data": {
+						"texture": "world_select_caveback",
+						"anchor": [
+							0.5,
+							0.5
+						],
+						"scale": 0.55
+					},
+					"layout": {
+						"x_anchor": "center",
+						"y_anchor": "middle",
+						"y_offset": -0.055,
+						"x_offset": -0.385,
+						"absolute": false
 					}
 				},
 				"cave": {
@@ -328,7 +355,7 @@
 							0.5,
 							0.4
 						],
-						"scale": 0.66
+						"scale": 0.55
 					},
 					"children": {
 						"up": {
@@ -341,8 +368,26 @@
 					"layout": {
 						"x_anchor": "center",
 						"y_anchor": "middle",
-						"y_offset": -0.055,
-						"x_offset": -0.385,
+						"y_offset": -0.060,
+						"x_offset": -0.380,
+						"absolute": false
+					}
+				},
+				"shroomback": {
+					"type": "Image",
+					"data": {
+						"texture": "world_select_shroomback",
+						"anchor": [
+							0.5,
+							0.5
+						],
+						"scale": 0.55
+					},
+					"layout": {
+						"x_anchor": "center",
+						"y_anchor": "middle",
+						"y_offset": 0.215,
+						"x_offset": 0.025,
 						"absolute": false
 					}
 				},
@@ -354,7 +399,7 @@
 							0.5,
 							0.4
 						],
-						"scale": 0.66
+						"scale": 0.55
 					},
 					"children": {
 						"up": {
@@ -367,8 +412,26 @@
 					"layout": {
 						"x_anchor": "center",
 						"y_anchor": "middle",
-						"y_offset": 0.215,
-						"x_offset": 0.025,
+						"y_offset": 0.205,
+						"x_offset": 0.030,
+						"absolute": false
+					}
+				},
+				"forestback": {
+					"type": "Image",
+					"data": {
+						"texture": "world_select_forestback",
+						"anchor": [
+							0.5,
+							0.5
+						],
+						"scale": 0.55
+					},
+					"layout": {
+						"x_anchor": "center",
+						"y_anchor": "middle",
+						"y_offset": -0.265,
+						"x_offset": 0.377,
 						"absolute": false
 					}
 				},
@@ -380,7 +443,7 @@
 							0.5,
 							0.4
 						],
-						"scale": 0.66
+						"scale": 0.55
 					},
 					"children": {
 						"up": {
@@ -394,7 +457,7 @@
 						"x_anchor": "center",
 						"y_anchor": "middle",
 						"y_offset": -0.275,
-						"x_offset": 0.377,
+						"x_offset": 0.380,
 						"absolute": false
 					}
 				}
@@ -416,6 +479,6 @@
 		}
 	},
 	"jsons": {
-		"constants": "json/level2.json"
+		"constants": "json/level.json"
 	}
 }

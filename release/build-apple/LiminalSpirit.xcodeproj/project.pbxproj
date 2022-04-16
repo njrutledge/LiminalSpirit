@@ -17,12 +17,11 @@
 		857201C827E25619006D48C6 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 857201C727E25619006D48C6 /* fonts */; };
 		857201C927E25619006D48C6 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 857201C727E25619006D48C6 /* fonts */; };
 		857201CA27E25619006D48C6 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 857201C727E25619006D48C6 /* fonts */; };
+		85841F412809F09300169F44 /* shaders in Resources */ = {isa = PBXBuildFile; fileRef = 85841F3E2809F09300169F44 /* shaders */; };
+		85841F422809F09300169F44 /* Phantom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85841F402809F09300169F44 /* Phantom.cpp */; };
 		85B0001727DFAC8500DAC3F2 /* Lost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001127DFAC8500DAC3F2 /* Lost.cpp */; };
 		85B0001827DFAC8500DAC3F2 /* Lost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001127DFAC8500DAC3F2 /* Lost.cpp */; };
 		85B0001927DFAC8500DAC3F2 /* Lost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001127DFAC8500DAC3F2 /* Lost.cpp */; };
-		85B0001A27DFAC8500DAC3F2 /* Specter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001227DFAC8500DAC3F2 /* Specter.cpp */; };
-		85B0001B27DFAC8500DAC3F2 /* Specter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001227DFAC8500DAC3F2 /* Specter.cpp */; };
-		85B0001C27DFAC8500DAC3F2 /* Specter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001227DFAC8500DAC3F2 /* Specter.cpp */; };
 		85B0001D27DFAC8500DAC3F2 /* GameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001427DFAC8500DAC3F2 /* GameScene.cpp */; };
 		85B0001E27DFAC8500DAC3F2 /* GameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001427DFAC8500DAC3F2 /* GameScene.cpp */; };
 		85B0001F27DFAC8500DAC3F2 /* GameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001427DFAC8500DAC3F2 /* GameScene.cpp */; };
@@ -144,9 +143,6 @@
 		F09AF65F27F64ACA003C6EA2 /* HomeScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64D27F64ACA003C6EA2 /* HomeScene.cpp */; };
 		F09AF66027F64ACA003C6EA2 /* HomeScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64D27F64ACA003C6EA2 /* HomeScene.cpp */; };
 		F09AF66127F64ACA003C6EA2 /* HomeScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64D27F64ACA003C6EA2 /* HomeScene.cpp */; };
-		F09AF66227F64ACA003C6EA2 /* shaders in Resources */ = {isa = PBXBuildFile; fileRef = F09AF64F27F64ACA003C6EA2 /* shaders */; };
-		F09AF66327F64ACA003C6EA2 /* shaders in Resources */ = {isa = PBXBuildFile; fileRef = F09AF64F27F64ACA003C6EA2 /* shaders */; };
-		F09AF66427F64ACA003C6EA2 /* shaders in Resources */ = {isa = PBXBuildFile; fileRef = F09AF64F27F64ACA003C6EA2 /* shaders */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -177,13 +173,14 @@
 		578388F827E1156D000CB5B9 /* Platform.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Platform.hpp; sourceTree = "<group>"; };
 		578388FC27E1156D000CB5B9 /* Platform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Platform.cpp; sourceTree = "<group>"; };
 		857201C727E25619006D48C6 /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
+		85841F3E2809F09300169F44 /* shaders */ = {isa = PBXFileReference; lastKnownFileType = folder; path = shaders; sourceTree = "<group>"; };
+		85841F3F2809F09300169F44 /* Phantom.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Phantom.hpp; sourceTree = "<group>"; };
+		85841F402809F09300169F44 /* Phantom.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Phantom.cpp; sourceTree = "<group>"; };
 		85B0000D27DFAC8500DAC3F2 /* AIController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AIController.hpp; sourceTree = "<group>"; };
 		85B0000E27DFAC8500DAC3F2 /* GameScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameScene.hpp; sourceTree = "<group>"; };
 		85B0000F27DFAC8500DAC3F2 /* Lost.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Lost.hpp; sourceTree = "<group>"; };
 		85B0001027DFAC8500DAC3F2 /* LoadingScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LoadingScene.hpp; sourceTree = "<group>"; };
 		85B0001127DFAC8500DAC3F2 /* Lost.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Lost.cpp; sourceTree = "<group>"; };
-		85B0001227DFAC8500DAC3F2 /* Specter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Specter.cpp; sourceTree = "<group>"; };
-		85B0001327DFAC8500DAC3F2 /* Specter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Specter.hpp; sourceTree = "<group>"; };
 		85B0001427DFAC8500DAC3F2 /* GameScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameScene.cpp; sourceTree = "<group>"; };
 		85B0001527DFAC8500DAC3F2 /* LoadingScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoadingScene.cpp; sourceTree = "<group>"; };
 		85B0001627DFAC8500DAC3F2 /* AIController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AIController.cpp; sourceTree = "<group>"; };
@@ -263,7 +260,6 @@
 		F09AF64C27F64ACA003C6EA2 /* Glow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Glow.cpp; sourceTree = "<group>"; };
 		F09AF64D27F64ACA003C6EA2 /* HomeScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HomeScene.cpp; sourceTree = "<group>"; };
 		F09AF64E27F64ACA003C6EA2 /* WorldSelectScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WorldSelectScene.hpp; sourceTree = "<group>"; };
-		F09AF64F27F64ACA003C6EA2 /* shaders */ = {isa = PBXFileReference; lastKnownFileType = folder; path = shaders; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -451,6 +447,9 @@
 		EBBF18B11D749176008E2001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				85841F402809F09300169F44 /* Phantom.cpp */,
+				85841F3F2809F09300169F44 /* Phantom.hpp */,
+				85841F3E2809F09300169F44 /* shaders */,
 				F09AF64C27F64ACA003C6EA2 /* Glow.cpp */,
 				F09AF64627F64ACA003C6EA2 /* Glow.hpp */,
 				F09AF64D27F64ACA003C6EA2 /* HomeScene.cpp */,
@@ -461,7 +460,6 @@
 				F09AF64427F64ACA003C6EA2 /* Particle.hpp */,
 				F09AF64727F64ACA003C6EA2 /* Seeker.cpp */,
 				F09AF64827F64ACA003C6EA2 /* Seeker.hpp */,
-				F09AF64F27F64ACA003C6EA2 /* shaders */,
 				F09AF64A27F64ACA003C6EA2 /* WorldSelectScene.cpp */,
 				F09AF64E27F64ACA003C6EA2 /* WorldSelectScene.hpp */,
 				578388FC27E1156D000CB5B9 /* Platform.cpp */,
@@ -476,8 +474,6 @@
 				85B0001027DFAC8500DAC3F2 /* LoadingScene.hpp */,
 				85B0001127DFAC8500DAC3F2 /* Lost.cpp */,
 				85B0000F27DFAC8500DAC3F2 /* Lost.hpp */,
-				85B0001227DFAC8500DAC3F2 /* Specter.cpp */,
-				85B0001327DFAC8500DAC3F2 /* Specter.hpp */,
 				F05176D727D071D900C0617F /* CollisionController.cpp */,
 				F05176D627D071D800C0617F /* CollisionController.hpp */,
 				F05176D827D071D900C0617F /* PlayerModel.cpp */,
@@ -641,7 +637,6 @@
 				EB22BF9725D0EA51002ACE41 /* textures in Resources */,
 				857201CA27E25619006D48C6 /* fonts in Resources */,
 				EB22BF9025D0EA49002ACE41 /* iOS.xcassets in Resources */,
-				F09AF66427F64ACA003C6EA2 /* shaders in Resources */,
 				EB22BF9125D0EA49002ACE41 /* Landscape.storyboard in Resources */,
 				EB22BF9225D0EA49002ACE41 /* Portrait.storyboard in Resources */,
 			);
@@ -657,7 +652,6 @@
 				EB7454AC1D74D846002FBAE6 /* Landscape.storyboard in Resources */,
 				857201C927E25619006D48C6 /* fonts in Resources */,
 				EBFE7C051E19B496001007C2 /* json in Resources */,
-				F09AF66327F64ACA003C6EA2 /* shaders in Resources */,
 				EB7454AD1D74D846002FBAE6 /* Portrait.storyboard in Resources */,
 				EB07CFB621EFF3F8000CB3A3 /* DeviceMargins.plist in Resources */,
 			);
@@ -667,10 +661,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				85841F412809F09300169F44 /* shaders in Resources */,
 				F05BD2B327F29AB8005D1F38 /* sounds in Resources */,
 				EBFE7C091E19B4AC001007C2 /* json in Resources */,
 				EB2BE9BB1D7498D2002FE78B /* textures in Resources */,
-				F09AF66227F64ACA003C6EA2 /* shaders in Resources */,
 				EBBF189B1D74904A008E2001 /* Mac.xcassets in Resources */,
 				857201C827E25619006D48C6 /* fonts in Resources */,
 			);
@@ -689,7 +683,6 @@
 				F09AF65227F64ACA003C6EA2 /* Seeker.cpp in Sources */,
 				F05176DE27D080C900C0617F /* SwipeController.cpp in Sources */,
 				F09AF65527F64ACA003C6EA2 /* Mirror.cpp in Sources */,
-				85B0001C27DFAC8500DAC3F2 /* Specter.cpp in Sources */,
 				F05176DC27D0808B00C0617F /* AttackController.cpp in Sources */,
 				F09AF65B27F64ACA003C6EA2 /* Particle.cpp in Sources */,
 				F09AF66127F64ACA003C6EA2 /* HomeScene.cpp in Sources */,
@@ -727,7 +720,6 @@
 				85B0004227E00AD600DAC3F2 /* TiltController.cpp in Sources */,
 				F05176E127D080DF00C0617F /* CollisionController.cpp in Sources */,
 				5783892E27E23F49000CB5B9 /* AIController.cpp in Sources */,
-				85B0001B27DFAC8500DAC3F2 /* Specter.cpp in Sources */,
 				F05176E327D080E600C0617F /* InputController.cpp in Sources */,
 				85DA524227EE3B93006DA122 /* Glutton.cpp in Sources */,
 				EB7454AE1D74D891002FBAE6 /* main.cpp in Sources */,
@@ -754,10 +746,10 @@
 				F09AF65927F64ACA003C6EA2 /* Particle.cpp in Sources */,
 				F09AF65F27F64ACA003C6EA2 /* HomeScene.cpp in Sources */,
 				F09AF65627F64ACA003C6EA2 /* WorldSelectScene.cpp in Sources */,
+				85841F422809F09300169F44 /* Phantom.cpp in Sources */,
 				85B0002027DFAC8500DAC3F2 /* LoadingScene.cpp in Sources */,
 				85B0004127E00AD600DAC3F2 /* TiltController.cpp in Sources */,
 				EB2BE9B61D74952A002FE78B /* main.cpp in Sources */,
-				85B0001A27DFAC8500DAC3F2 /* Specter.cpp in Sources */,
 				F025104227D02C6C00AB80AA /* AttackController.cpp in Sources */,
 				85DA524127EE3B93006DA122 /* Glutton.cpp in Sources */,
 				F05176D927D071D900C0617F /* CollisionController.cpp in Sources */,
