@@ -99,6 +99,13 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
+		"player_melee_three": {
+			"file": "textures/animations/sword_combo_spritesheet.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
 		"pattack": {
 			"file": "textures/nugget.png",
 			"minfilter": "nearest",

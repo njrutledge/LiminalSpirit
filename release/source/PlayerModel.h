@@ -26,6 +26,8 @@
 #define PLAYER_RANGE_TEXTURE "player_range_arm"
 /** Texture for the player sword arm*/
 #define PLAYER_MELEE_TEXTURE "player_melee_arm"
+/** Texture for the melee animation */
+#define PLAYER_MELEE_THREE_TEXTURE "player_melee_three"
 /** ID for the sensor*/
 #define PLAYER_SENSOR_NAME "playersensor"
 

@@ -622,6 +622,8 @@ void GameScene::update(float timestep)
     float spacing = 2;
     float upDownY = fmod(upDown, spacing);
     if (upDownY > spacing/4 && upDownY <= 3*spacing/4) {
+        scene2::SpriteNode* meleeSprite = dynamic_cast<scene2::SpriteNode*>(_meleeArm->getSceneNode().get());
+        meleeSprite->setFrame((meleeSprite->getFrame() + 1) % 12);
         upDownY = spacing/2 - upDownY;
     }
     else if (upDownY > 3*spacing/4) {
@@ -787,17 +789,17 @@ void GameScene::createEnemies(int wave) {
 
 void GameScene::createParticles() {
     // deprecated for now as it lags the game // try bitmasking then custom node
-    //for (int i = 0; i < 9; i++) {
-    //    std::shared_ptr<Texture> particleTexture = _assets->get<Texture>(GLOW_TEXTURE);
-    //    std::shared_ptr<Particle> party = Particle::alloc(Vec2(10,10), particleTexture->getSize() / _scale / 10, _scale);
-    //    std::shared_ptr<scene2::PolygonNode> particleSprite = scene2::PolygonNode::allocWithTexture(particleTexture);
-    //    party->setSceneNode(particleSprite);
-    //    party->setDebugColor(Color4::RED);
-    //    particleSprite->setScale(0.1f);
-    //    //particleSprite->setVisible(false);
-    //    addObstacle(party, particleSprite, true);
-    //    _particlePool.push_back(party);
-    //}
+    for (int i = 0; i < 99; i++) {
+        std::shared_ptr<Texture> particleTexture = _assets->get<Texture>(GLOW_TEXTURE);
+        std::shared_ptr<Particle> party = Particle::alloc(Vec2(10,10), particleTexture->getSize() / _scale / 10, _scale);
+        std::shared_ptr<scene2::PolygonNode> particleSprite = scene2::PolygonNode::allocWithTexture(particleTexture);
+        party->setSceneNode(particleSprite);
+        party->setDebugColor(Color4::RED);
+        particleSprite->setScale(0.1f);
+        particleSprite->setVisible(false);
+        addObstacle(party, particleSprite, true);
+        _particlePool.push_back(party);
+    }
 }
 
 /**
@@ -945,11 +947,13 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
 
     //Melee Arm for the player
     Vec2 meleeArmPos = PLAYER_POS;
-    std::shared_ptr<Texture> meleeImage = _assets->get<Texture>(PLAYER_MELEE_TEXTURE);
-    _meleeArm = Glow::alloc(meleeArmPos, meleeImage->getSize() / _scale, _scale);
+    std::shared_ptr<Texture> meleeHitboxImage = _assets->get<Texture>(PLAYER_MELEE_TEXTURE);
+    std::shared_ptr<Texture> meleeImage = _assets->get<Texture>(PLAYER_MELEE_THREE_TEXTURE);
+    _meleeArm = Glow::alloc(meleeArmPos, meleeHitboxImage->getSize() / _scale, _scale);
     _meleeArm->setGlowTimer(0);
-    std::shared_ptr<scene2::PolygonNode> meleeArmSprite = scene2::PolygonNode::allocWithTexture(meleeImage);
+    std::shared_ptr<scene2::SpriteNode> meleeArmSprite = scene2::SpriteNode::alloc(meleeImage, 1, 12);
     _meleeArm->setSceneNode(meleeArmSprite);
+    meleeArmSprite->setFrame(0);
     meleeArmSprite->setScale(0.2);
     addObstacle(_meleeArm, meleeArmSprite, true);
 
