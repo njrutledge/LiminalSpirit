@@ -24,10 +24,12 @@
 
 class AttackController {
     
-    enum State {
+    enum MeleeState {
         first,
+        h1_right,
         h2_right,
         h3_right,
+        h1_left,
         h2_left,
         h3_left,
         cool
@@ -92,8 +94,10 @@ public:
         //A velocity vector to update the projectile
         cugl::Vec2 _vel;
         
-        //Which type of swipe this is
+        //Which type of attack this is
         Type _type;
+        
+        MeleeState _meleeState;
         
         cugl::Poly2 _ball;
 
@@ -127,7 +131,8 @@ public:
 
         void dispose();
 
-        bool init(const cugl::Vec2 p, float radius, float a, float dmg, float scale, Type s, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel, float timer);
+        bool init(const cugl::Vec2 p, float radius, float a, float dmg, float scale, Type s, MeleeState m,
+                  cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel, float timer);
         
         
         /**
@@ -149,7 +154,8 @@ public:
         cugl::Poly2 getBall() {return _ball;}
         cugl::Vec2 getPosition() { return cugl::Vec2(_body->GetPosition().x, _body->GetPosition().y); }
         int getDamage() { return _damage; }
-        Type getType(){return _type;}
+        Type getType(){ return _type; }
+        MeleeState getMeleeState(){ return _meleeState; }
 
         std::string* getSensorName() { return &_sensorName; }
         void setSensorName(string s) { _sensorName = s; }
@@ -176,8 +182,8 @@ public:
 #pragma mark -
 #pragma mark Static Constructors
         static std::shared_ptr<Attack> alloc(cugl::Vec2 p, float radius, float age, float dmg, float scale,
-                                             Type t, cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel,
-                                             Side s, float timer) {
+                                             Type t, MeleeState m, cugl::Vec2 oof, cugl::PolyFactory b,
+                                             cugl::Vec2 vel, Side s, float timer) {
             float off = 1.5f;
             if (p.x + radius + off > _worldWidth && s == right) {
                 p.x = _worldWidth - 0.1f - radius - off;
@@ -193,7 +199,7 @@ public:
             }
 
             std::shared_ptr<Attack> result = std::make_shared<Attack>();
-            return (result->init(p, radius, age, dmg, scale, t, oof, b, vel, timer) ? result : nullptr);
+            return (result->init(p, radius, age, dmg, scale, t, m, oof, b, vel, timer) ? result : nullptr);
         }
         
     };
@@ -234,7 +240,7 @@ public:
     
     float _swing;
     
-    State _melee;
+    MeleeState _melee;
     
     
     /**
