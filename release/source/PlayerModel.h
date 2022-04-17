@@ -74,6 +74,9 @@ protected:
 
 	/** flag for if this is the first frame of velocity 0 */
 	bool _isFirstFrame;
+
+	/** if player is stunned */
+	bool _isStunned;
     
     /** if player is invincible */
     bool _isInvincible;
@@ -197,9 +200,17 @@ public:
     /** Get X velocity */
     float getVX();
 
+	/** Sets the player to invincible */
     void setIsInvincible(bool invincibility) { _isInvincible = invincibility; }
     
+	/** True if the player is invincible*/
     bool isInvincible() { return _isInvincible; }
+
+	/** Sets the player to stunned */
+	void setIsStunned(bool stunned) { _isStunned = stunned; }
+
+	/** True if the player is stunned*/
+	bool isStunned() { return _isStunned; }
     
     /** Returns amount of invincibility time remaining */
     float getInvincibilityTimer() { return _invincibilityTime; }

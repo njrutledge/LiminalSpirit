@@ -197,6 +197,7 @@ void CollisionController::handlePlayerCollision(PlayerModel* player, physics2::O
             if (!player->isInvincible()) {
                 player->setHealth(player->getHealth() - attack->getDamage());
                 player->setIsInvincible(true);
+                player->setIsStunned(true);
                 player->setInvincibilityTimer(0.2f);
             }
             attack->setInactive();

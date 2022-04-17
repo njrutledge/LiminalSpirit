@@ -294,7 +294,12 @@ void GameScene::update(float timestep)
     // Update tilt controller
     _tilt.update(_input, SCENE_WIDTH);
     float xPos = _tilt.getXpos();
-    _player->setVX(xPos);
+    if (_player->isStunned()) {
+        _player->setVX(0);
+    }
+    else {
+        _player->setVX(xPos);
+    }
 
     int nextFrame;
 
@@ -478,6 +483,7 @@ void GameScene::update(float timestep)
         }
         if (_dashXVel == 0 && _dashYVel == 0 && _player->getInvincibilityTimer() <= 0) {
             _player->setIsInvincible(false);
+            _player->setIsStunned(false);
         }
     }
 
