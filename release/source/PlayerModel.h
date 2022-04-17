@@ -87,8 +87,11 @@ protected:
 	/** Time passed since last walk */
 	float _walkTime;
 
-	/** Time passed since last idle frame*/
+	/** Time passed since last idle frame */
 	float _idleTime;
+
+	/** Time passed since last jump frame */
+	float _jumpTime;
 
 	/** Redraws outline of physics fixtures */
 	virtual void resetDebug() override;
@@ -227,8 +230,14 @@ public:
 	/** Returns the amount of time remaining for next idle animation frame */
 	float getIdleAnimationTimer() { return _idleTime; }
 
-	/** Sets the walk animation time */
+	/** Sets the idle animation time */
 	void setIdleAnimationTimer(float value) { _idleTime = value; }
+
+	/** Returns the amount of time remaining for next jump animation frame */
+	float getJumpAnimationTimer() { return _jumpTime; }
+
+	/** Sets the jump animation time */
+	void setJumpAnimationTimer(float value) { _jumpTime = value; }
 
 	/**
 	 * Returns how much force to apply to get the player moving

@@ -304,7 +304,19 @@ void GameScene::update(float timestep)
     int nextFrame;
 
     scene2::SpriteNode* sprite = dynamic_cast<scene2::SpriteNode*>(_player->getSceneNode().get());
-    if (xPos != 0 && _player->getWalkAnimationTimer() > 0.065f) {
+    if (_player->isStunned()) {
+        if (_player->isFacingRight()) {
+            sprite->setFrame(31);
+        }
+        else {
+            sprite->setFrame(24);
+        }
+    } else if (!_player->isGrounded()) {
+            nextFrame = (sprite->getFrame() + 1) % 8 + 15;
+            sprite->setFrame(nextFrame);
+            _player->setJumpAnimationTimer(0);
+    }
+    else if (xPos != 0 && _player->getWalkAnimationTimer() > 0.065f) {
         nextFrame = (sprite->getFrame() + 1) % 8;
         sprite->setFrame(nextFrame);
         _player->setWalkAnimationTimer(0);
@@ -331,6 +343,7 @@ void GameScene::update(float timestep)
         sprite->setFrame(nextFrame);
         _player->setIdleAnimationTimer(0);
     }
+    _player->setJumpAnimationTimer(_player->getIdleAnimationTimer() + timestep);
     _player->setWalkAnimationTimer(_player->getWalkAnimationTimer() + timestep);
     _player->setIdleAnimationTimer(_player->getIdleAnimationTimer() + timestep);
     _rangedArm->setGlowTimer(_rangedArm->getGlowTimer() + timestep);
@@ -664,11 +677,10 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     // This takes care of begin/end
 
     //_scene->render(batch);
-    if (_player->isInvincible()){
+    if (_player->isInvincible() && !_player->isStunned()){
         // TODO Change this
         _player->getSceneNode()->setColor(Color4::GREEN);
-    }
-    else if(_swipes.hasLeftChargedAttack() && _swipes.hasRightChargedAttack()){
+    } else if(_swipes.hasLeftChargedAttack() && _swipes.hasRightChargedAttack()){
         _player->getSceneNode()->setColor(Color4(125,0,255,255));
     } else if(_swipes.hasLeftChargedAttack()) {
         _player->getSceneNode()->setColor(Color4::RED);
@@ -973,7 +985,8 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     _player->setMovement(0);
     _player->setWalkAnimationTimer(0);
     _player->setIdleAnimationTimer(0);
-    std::shared_ptr<scene2::SpriteNode> sprite = scene2::SpriteNode::alloc(image, 2, 8);
+    _player->setJumpAnimationTimer(0);
+    std::shared_ptr<scene2::SpriteNode> sprite = scene2::SpriteNode::alloc(image, 4, 8);
     sprite->setFrame(0);
     _player->setSceneNode(sprite);
     _player->setDebugColor(Color4::RED);

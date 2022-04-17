@@ -79,7 +79,7 @@
 			"wrapT": "clamp"
 		},
 		"player_walk": {
-			"file": "textures/animations/run_idle_spritesheet.png",
+			"file": "textures/animations/interloper_spritesheet.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
@@ -479,6 +479,6 @@
 		}
 	},
 	"jsons": {
-		"constants": "json/level.json"
+		"constants": "json/level2.json"
 	}
 }
