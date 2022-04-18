@@ -1,2 +1,2 @@
-{"name":"level","start_pos":[5,4],"biome":"cave","level_height":54,"spawn_order":[["spawner"]],"spawn_pos":[[[5,4]]],"spawn_times":[0],"spawner_types":[["lost","phantom"],["phantom"]],"platforms":[[5,5,3]]}
+{"name":"level","start_pos":[5,4],"biome":"cave","level_height":54,"spawn_order":[["spawner","seeker"],["phantom"]],"spawn_pos":[[[5,4], [10,10]],[[20,5]]],"spawn_times":[0,6],"spawner_types":[["lost","phantom"],["phantom"]],"platforms":[[5,5,3]]}
 
