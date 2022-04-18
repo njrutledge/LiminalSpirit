@@ -129,8 +129,7 @@ void HomeScene::dispose()
  */
 void HomeScene::update(float timestep)
 {
-    // Update input controller
-    _input.update();
+
     _playButton->setVisible(true);
     _playButton->activate();
     _optionsButton->setVisible(true);

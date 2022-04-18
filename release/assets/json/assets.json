@@ -543,6 +543,8 @@
         }
 	},
 	"jsons": {
-		"constants": "json/surround.json"
+		"surround": "json/surround.json",
+		"battlefield": "json/battlefield.json",
+		"levelt":  "json/levelt.json"
 	}
 }

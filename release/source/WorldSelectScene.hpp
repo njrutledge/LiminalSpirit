@@ -55,8 +55,6 @@ protected:
   /** A 3152 style SpriteBatch to render the scene */
   std::shared_ptr<cugl::SpriteBatch> _batch; // check this
 
-  InputController _input;
-
   /** buttons for the world selection */
   std::shared_ptr<cugl::scene2::Button> _caveButton;
   std::shared_ptr<cugl::scene2::Button> _shroomButton;

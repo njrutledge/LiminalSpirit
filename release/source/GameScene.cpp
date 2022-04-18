@@ -90,7 +90,7 @@ float LEVEL_HEIGHT = 54;
  *
  * @return true if the controller is initialized properly, false otherwise.
  */
-bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const std::shared_ptr<SoundController> sound)
+bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const std::shared_ptr<SoundController> sound, string json)
 {
 
     Size dimen = Application::get()->getDisplaySize();
@@ -117,7 +117,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _assets = assets;
     
     // Get constant values from assets/level.json
-    _constants = assets->get<JsonValue>("constants");
+    _constants = assets->get<JsonValue>(json);
     BIOME = _constants->getString("biome");
     LEVEL_HEIGHT = _constants->getFloat("level_height");
     PLAYER_POS[0] = _constants->get("start_pos")->get(0)->asFloat();
