@@ -23,6 +23,8 @@
 #define ENEMY_TEXTURE2 "enemy2"
 /** ID for the sensor*/
 #define ENEMY_SENSOR_NAME "enemysensor"
+/** healthbar show time */
+#define HEALTH_SHOWTIME 3.0f
 
 #pragma mark -
 #pragma mark Enemy Properties
@@ -114,7 +116,7 @@ protected:
 	/** Size of the enemy image */
 	cugl::Size _size;
 
-
+	float _healthTimer;
 
 public:
 
@@ -166,8 +168,8 @@ public:
 	/**Returns the health of the enemy */
 	int getHealth() const { return _health; }
 
-	/** Sets the enemy health */
-	void setHealth(int value) { _health = value; }
+	/** Sets the enemy health, reset healthbar timer */
+	void setHealth(int value) { _health = value; _healthTimer = HEALTH_SHOWTIME; }
 
 	/** Returns true if the enemy is on the ground*/
 	bool isGrounded() const { return _isGrounded; }
