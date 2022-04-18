@@ -480,12 +480,17 @@
         "playerStep": {
             "type": "sample",
             "file": "sounds/playerSFX/Player_Step.wav",
-            "volume": 0.5
+            "volume": 0.3
         },
         "playerShoot": {
             "type": "sample",
             "file": "sounds/playerSFX/Player_Shoot.wav",
-            "volume": 0.8
+            "volume": 0.6
+        },
+        "playerSlash": {
+            "type": "sample",
+            "file": "sounds/playerSFX/Player_Slash.wav",
+            "volume": 0.6
         }
 	},
 	"jsons": {
