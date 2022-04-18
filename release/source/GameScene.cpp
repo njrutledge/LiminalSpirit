@@ -34,12 +34,15 @@
 #include "BaseEnemyModel.h"
 #include "Lost.hpp"
 #include "Phantom.hpp"
+#include "Mirror.hpp"
+
 #include "PlayerModel.h"
 #include "Platform.hpp"
+
 #include "AttackController.hpp"
 #include "AIController.hpp"
 #include "CollisionController.hpp"
-#include "Platform.hpp"
+
 #include "Glow.hpp"
 #include "Particle.hpp"
 
@@ -717,14 +720,45 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
 
 void GameScene::createMirror(Vec2 enemyPos, Mirror::Type type, std::string assetName, std::shared_ptr<Glow> enemyGlow) {
     std::shared_ptr<Texture> mirrorImage = _assets->get<Texture>(assetName);
+    std::shared_ptr<Texture> mirror_reflectattackImage = _assets->get<Texture>(MIRROR_REFLECT_TEXTURE);
+    //shards
+    std::shared_ptr<scene2::PolygonNode> mirrorShards[6];
+    mirrorShards[0] = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_1));
+    mirrorShards[1] = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_2));
+    mirrorShards[2] = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_3));
+    mirrorShards[3] = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_4));
+    mirrorShards[4] = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_5));
+    mirrorShards[5] = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_6));
+
+
     std::shared_ptr<Mirror> mirror = Mirror::alloc(enemyPos, mirrorImage->getSize() / _scale / 15, _scale, type); // TODO this is not right, fix this to be closest enemy
     std::shared_ptr<scene2::PolygonNode> mirrorSprite = scene2::PolygonNode::allocWithTexture(mirrorImage);
     mirror->setGlow(enemyGlow);
+    mirror->setAttackAnimationTimer(0);
+    std::shared_ptr<scene2::SpriteNode> attackSprite = scene2::SpriteNode::alloc(mirror_reflectattackImage, MIRROR_REFLECT_ROWS, MIRROR_REFLECT_COLS);
+    attackSprite->setFrame(0);
+    attackSprite->setScale(1.15f);
+    mirror->setAttackSprite(attackSprite);
+    mirror->showAttack(false);
+
+
+    std::shared_ptr<scene2::PolygonNode> mirrorShard1 = mirrorShards[1];
+    mirrorShards[rand() % 6]->copy(mirrorShard1);
+    std::shared_ptr<scene2::PolygonNode> mirrorShard2 = mirrorShards[2];
+    mirrorShards[rand() % 6]->copy(mirrorShard2);
+    std::shared_ptr<scene2::PolygonNode> mirrorShard3 = mirrorShards[3];
+    mirrorShards[rand() % 6]->copy(mirrorShard3);
+
+    mirror->setThreeShards(mirrorShard1, mirrorShard2, mirrorShard3);
     mirror->setSceneNode(mirrorSprite);
+    //mirrorSprite->addChildWithName(mirrorShard1, "shard1");
+    //mirrorSprite->addChildWithName(mirrorShard2, "shard2");
+    //mirrorSprite->addChildWithName(mirrorShard3, "shard3");
     mirror->setDebugColor(Color4::BLUE);
     mirrorSprite->setScale(0.15f);
     addObstacle(mirror, mirrorSprite, true);
     _enemies.push_back(mirror);
+
 }
 
 void GameScene::createEnemies(int wave) {

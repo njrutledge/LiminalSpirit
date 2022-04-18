@@ -37,21 +37,70 @@
 			"wrapT": "clamp"
 		},
 		"circlemirror": {
-			"file": "textures/circlemirror.png",
+			"file": "textures/mirror/circlemirror.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
 		"trianglemirror": {
-			"file": "textures/trianglemirror.png",
+			"file": "textures/mirror/trianglemirror.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
 		"squaremirror": {
-			"file": "textures/squaremirror.png",
+			"file": "textures/mirror/squaremirror.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"mirror_reflectattack": {
+			"file": "textures/animations/mirror_reflectattack_spritesheet.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"mirror_shard1": {
+			"file": "textures/mirror/mirrorshard1.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"mirror_shard2": {
+			"file": "textures/mirror/mirrorshard2.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"mirror_shard3": {
+			"file": "textures/mirror/mirrorshard3.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"mirror_shard4": {
+			"file": "textures/mirror/mirrorshard4.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"mirror_shard5": {
+			"file": "textures/mirror/mirrorshard5.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"mirror_shard6": {
+			"file": "textures/mirror/mirrorshard6.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
@@ -489,6 +538,6 @@
         }
 	},
 	"jsons": {
-		"constants": "json/level.json"
+		"constants": "json/levelt.json"
 	}
 }
