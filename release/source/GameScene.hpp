@@ -162,6 +162,9 @@ protected:
 
     /** true if going back to world select */
     bool _back;
+    
+    /** Boolean check for walking sound effect timing*/
+    bool _step;
 
     /**
      * Internal helper to build the scene graph.

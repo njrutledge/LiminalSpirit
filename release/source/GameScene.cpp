@@ -93,6 +93,7 @@ float LEVEL_HEIGHT = 54;
 bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const std::shared_ptr<SoundController> sound, string json)
 {
     _back = false;
+    _step = false;
     Size dimen = Application::get()->getDisplaySize();
     float boundScale = SCENE_WIDTH / dimen.width;
     dimen *= boundScale;
@@ -420,7 +421,12 @@ void GameScene::update(float timestep)
     _meleeArm->setGlowTimer(_meleeArm->getGlowTimer() + timestep);
 
     if (sprite->getFrame() == 0 || sprite->getFrame() == 4) {
-        _sound->play_player_sound(SoundController::playerSType::step);
+        if (!_step) {
+            _sound->play_player_sound(SoundController::playerSType::step);
+        }
+        
+    } else {
+        _step = false;
     }
     
     // Debug Mode on/off
