@@ -100,6 +100,8 @@ public:
 
   Choice getChoice() { return _choice; }
 
+  void setDefaultChoice() { _choice = Choice::MENU; }
+
 #pragma mark -
 #pragma mark Screen Handling
   /**

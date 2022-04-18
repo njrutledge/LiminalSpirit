@@ -220,6 +220,11 @@ void LiminalSpirit::updateWorldSelectScene(float timestep)
 void LiminalSpirit::updateGameScene(float timestep)
 {
     _gameplay.update(timestep);
+    if (_gameplay.goingBack()) {
+        _scene = State::WORLDS;
+        _gameplay.dispose();
+        _worldSelect.setDefaultChoice();
+    }
 }
 
 /**

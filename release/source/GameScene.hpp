@@ -160,6 +160,9 @@ protected:
     /** jump frame for paused jump*/
     int _jumpFrame;
 
+    /** true if going back to world select */
+    bool _back;
+
     /**
      * Internal helper to build the scene graph.
      *
@@ -203,6 +206,8 @@ public:
      * @return true if the controller is initialized properly, false otherwise.
      */
     bool init(const std::shared_ptr<cugl::AssetManager> &assets, const std::shared_ptr<SoundController> sound, string json);
+
+    bool goingBack() { return _back; }
 
 #pragma mark -
 #pragma mark Gameplay Handling
