@@ -494,6 +494,6 @@
         }
 	},
 	"jsons": {
-		"constants": "json/level.json"
+		"constants": "json/battlefield.json"
 	}
 }
