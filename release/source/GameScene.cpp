@@ -359,13 +359,13 @@ void GameScene::update(float timestep)
                 }
             }
         }
-        if ((*it)->getName() == "Spawner") {
-            if ((*it)->getHealth() == 0) {
-                _has_spawner = 0;
-            }
+    }
+    // update spawner
+    if(_has_spawner) {
+        if(_collider.getSpawnerKilled() == 1) {
+            _has_spawner = 0;
         }
     }
-    
     _swipes.update(_input, _player->isGrounded());
     b2Vec2 playerPos = _player->getBody()->GetPosition();
     if (_player->getInvincibilityTimer() <= 0) {
@@ -564,9 +564,9 @@ void GameScene::update(float timestep)
     
     if(_has_spawner) {
         _spawner_timer += timestep;
-        if (_nextWaveNumSpawner < _numWavesSpawner && _spawner_timer >= 5){
-            createEnemies(_nextWaveNum, 0);
-            _nextWaveNum += 1;
+        if (_nextWaveNumSpawner < _numWavesSpawner && _spawner_timer >= 10){
+            createEnemies(_nextWaveNumSpawner, 1);
+            _nextWaveNumSpawner += 1;
         }
     }
     // All waves created and all enemies cleared
@@ -668,7 +668,6 @@ void GameScene::createEnemies(int wave, int spawnerInd) {
         enemies = _spawner_types.at(wave);
     }
     
-    
     for (int i = 0; i < enemies.size(); i++) {
         Vec2 enemyPos;
         if (!spawnerInd) {
@@ -696,6 +695,7 @@ void GameScene::createEnemies(int wave, int spawnerInd) {
             lostSprite->setScale(0.15f);
             addObstacle(lost, lostSprite, true);
             _enemies.push_back(lost);
+            cout << enemyName << endl;
         }
         else if (!enemyName.compare("specter")) {
             std::shared_ptr<Texture> specterImage = _assets->get<Texture>("specter");
@@ -740,10 +740,9 @@ void GameScene::createEnemies(int wave, int spawnerInd) {
             _enemies.push_back(glutton);
         }
         else if (!enemyName.compare("spawner")) {
-            cout << "there is a spawner" << endl;
             _has_spawner = 1;
             _spawner_timer = 0;
-            std::shared_ptr<Texture> spawnerImage = _assets->get<Texture>("lost");
+            std::shared_ptr<Texture> spawnerImage = _assets->get<Texture>("glutton");
             std::shared_ptr<Spawner> spawner = Spawner::alloc(enemyPos, spawnerImage->getSize() / _scale / 10, _scale);
             std::shared_ptr<scene2::PolygonNode> spawnerSprite = scene2::PolygonNode::allocWithTexture(spawnerImage);
             spawner->setSceneNode(spawnerSprite);

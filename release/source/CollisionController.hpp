@@ -5,12 +5,13 @@
 #include <box2d/b2_contact.h>
 #include "BaseEnemyModel.h"
 #include "Mirror.hpp"
+#include "Spawner.hpp"
 #include "PlayerModel.h"
 
 class CollisionController {
 public:
     /** Creates a new collision Controller */
-    CollisionController() {}
+    CollisionController() {_spawner_killed = 0;}
 
     /**Deletes the collision controller */
     ~CollisionController() {}
@@ -19,8 +20,12 @@ public:
     void beginContact(b2Contact* contact, std::shared_ptr<AttackController> AC, float timer);
 
     void endContact(b2Contact* contact);
+    
+    float getSpawnerKilled() {return _spawner_killed;};
 
 private:
+    /** if a spawner exists, 1 if it is killed, 0 if it is not. It is 0 if spawner does not exits. */
+    float _spawner_killed;
     /** handle collision between enemy and an obstacle */
     void handleEnemyCollision(BaseEnemyModel* enemy, cugl::physics2::Obstacle* bd, string* fd, std::shared_ptr<AttackController> AC, float timer);
 
