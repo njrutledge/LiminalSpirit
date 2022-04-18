@@ -294,7 +294,7 @@ void GameScene::dispose()
  */
 void GameScene::update(float timestep)
 {
-    _sound->play_level_music();
+    _sound->play_level_music("cave");
     
     // Update input controller
     _input.update();

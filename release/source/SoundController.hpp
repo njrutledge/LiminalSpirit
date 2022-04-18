@@ -72,6 +72,15 @@ public:
     };
     
 protected:
+    
+    enum GameState {
+        LOAD,
+        MENU,
+        PAUSE,
+        LEVEL
+    };
+    
+    GameState _state;
 
     /** Reference to Asset Manager to load sounds */
     std::shared_ptr<cugl::AssetManager> _assets;
@@ -79,6 +88,8 @@ protected:
     std::shared_ptr<LevelMusic> _cave1;
     
     std::shared_ptr<LevelMusic> _cave2;
+    
+    std::shared_ptr<cugl::Sound> _menu;
     
     // Player Sounds
     
@@ -93,7 +104,9 @@ public:
     
     void init(std::shared_ptr<cugl::AssetManager> &assets);
     
-    void play_level_music();
+    void play_menu_music();
+    
+    void play_level_music(string biome);
     
     void play_player_sound(playerSType sound);
 };
