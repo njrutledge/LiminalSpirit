@@ -300,6 +300,7 @@ void GameScene::update(float timestep)
     int nextFrame;
 
     scene2::SpriteNode* sprite = dynamic_cast<scene2::SpriteNode*>(_player->getSceneNode().get());
+    
     if (_player->isStunned()) {
         if (_player->isFacingRight()) {
             sprite->setFrame(31);
@@ -345,6 +346,10 @@ void GameScene::update(float timestep)
     _rangedArm->setGlowTimer(_rangedArm->getGlowTimer() + timestep);
     _meleeArm->setGlowTimer(_meleeArm->getGlowTimer() + timestep);
 
+    if (sprite->getFrame() == 0 || sprite->getFrame() == 4) {
+        _sound->play_player_sound(SoundController::playerSType::step);
+    }
+    
     // Debug Mode on/off
     if (_input.getDebugKeyPressed())
     {
