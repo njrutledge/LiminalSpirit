@@ -881,8 +881,8 @@ void GameScene::update(float timestep)
     _playerGlow->setPosition(_player->getPosition());
 
     // Determining arm positions and offsets
-    float offsetArm = -1.f;
-    float offsetArm2 = -3.f;
+    float offsetArm = -0.85f;
+    float offsetArm2 = -2.65f;
     if (!_player->isFacingRight()) {
         offsetArm = -1 * offsetArm;
     }
@@ -903,16 +903,26 @@ void GameScene::update(float timestep)
     }
 
     float upDown = _rangedArm->getGlowTimer();
-    float spacing = 2;
-    float upDownY = fmod(upDown, spacing);
-    if (upDownY > spacing/4 && upDownY <= 3*spacing/4) {
-        upDownY = spacing/2 - upDownY;
+    float upDown2 = _rangedArm->getGlowTimer() + 0.5f;
+    float spacing = 1.f;
+    float upDownY1 = fmod(upDown/2, spacing);
+    float upDownY2 = fmod(upDown2/2, spacing);
+    if (upDownY1 > spacing/4 && upDownY1 <= 3*spacing/4) {
+        upDownY1 = spacing/2 - upDownY1;
     }
-    else if (upDownY > 3*spacing/4) {
-        upDownY = -1*spacing + upDownY;
+    else if (upDownY1 > 3*spacing/4) {
+        upDownY1 = -1*spacing + upDownY1;
     }
-    _rangedArm->setPosition(_player->getPosition().x + offsetArm, _player->getPosition().y + (upDownY/spacing));
-    _meleeArm->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY/spacing));
+    if (upDownY2 > spacing / 4 && upDownY2 <= 3 * spacing / 4) {
+        upDownY2 = spacing / 2 - upDownY2;
+    }
+    else if (upDownY2 > 3 * spacing / 4) {
+        upDownY2 = -1 * spacing + upDownY2;
+    }
+
+
+    _rangedArm->setPosition(_player->getPosition().x + offsetArm, _player->getPosition().y + (upDownY1/spacing/3) + 0.5f);
+    _meleeArm->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY2/spacing/3) + 0.5f);
 }
 
 std::shared_ptr<BaseEnemyModel> GameScene::getNearestNonMirror(cugl::Vec2 pos) {
@@ -1254,13 +1264,15 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
 
     // Ranged Arm for the player
     Vec2 rangeArmPos = PLAYER_POS;
-    std::shared_ptr<Texture> rangeImage = _assets->get<Texture>(PLAYER_RANGE_TEXTURE);
-    _rangedArm = Glow::alloc(rangeArmPos, rangeImage->getSize() / _scale, _scale);
+    std::shared_ptr<Texture> rangeHitboxImage = _assets->get<Texture>(PLAYER_RANGE_TEXTURE);
+    std::shared_ptr<Texture> rangeImage = _assets->get<Texture>("player_range_arm_ani");
+    _rangedArm = Glow::alloc(rangeArmPos, rangeHitboxImage->getSize() / _scale, _scale);
     _rangedArm->setGlowTimer(0);
     _rangedArm->setAnimeTimer(0);
-    std::shared_ptr<scene2::PolygonNode> rangeArmSprite = scene2::PolygonNode::allocWithTexture(rangeImage);
+    std::shared_ptr<scene2::SpriteNode> rangeArmSprite = scene2::SpriteNode::alloc(rangeImage, 2, 6);
     _rangedArm->setSceneNode(rangeArmSprite);
-    rangeArmSprite->setScale(0.2);
+    rangeArmSprite->setFrame(0);
+    rangeArmSprite->setScale(0.22);
     addObstacle(_rangedArm, rangeArmSprite, true);
 
     //Melee Arm for the player
