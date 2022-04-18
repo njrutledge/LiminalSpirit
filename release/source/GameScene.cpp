@@ -611,9 +611,9 @@ void GameScene::update(float timestep)
             }
             else {
                 shared_ptr<Seeker> seeker = dynamic_pointer_cast<Seeker>(*it);
-                if (seeker->justAttacked) {
-                    _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 1.0f, 0.2f, 2.0f, AttackController::Type::e_melee, (vel.scale(0.2)).rotate((play_p - en_p).getAngle()), _timer);
-                }
+                
+                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 1.0f, 0.2f, 2.0f, AttackController::Type::e_melee, (vel.scale(0.2)).rotate((play_p - en_p).getAngle()), _timer);
+                
             }
   
             if ((*it)->getName() == "Lost") {
