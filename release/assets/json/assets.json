@@ -555,6 +555,12 @@
 			"stream": true,
 			"volume": 0.5
 		},
+        "mushroom1": {
+            "type": "sample",
+            "file": "sounds/mushroom/mushroom1.ogg",
+            "stream": true,
+            "volume": 0.5
+        },
         "menu": {
             "type": "sample",
             "file": "sounds/LiminalMenu.ogg",

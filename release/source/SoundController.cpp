@@ -46,10 +46,13 @@ void SoundController::init(std::shared_ptr<cugl::AssetManager> &assets) {
     _menu = assets->get<cugl::Sound>("menu");
     
     _cave1 = make_shared<LevelMusic>();
-    _cave1->init("cave2", _assets);
+    _cave1->init("cave1", _assets);
     
     _cave2 = make_shared<LevelMusic>();
     _cave2->init("cave2", _assets);
+    
+    _mushroom1 = make_shared<LevelMusic>();
+    _mushroom1->init("mushroom1", _assets);
     
     _playerStep = assets->get<cugl::Sound>("playerStep");
     _playerShoot = assets->get<cugl::Sound>("playerShoot");
@@ -68,12 +71,19 @@ void SoundController::play_menu_music() {
 
 void SoundController::play_level_music(string biome) {
     
+    int r = rand()%3;
+    
     if (_state != LEVEL) {
         _state = LEVEL;
-        _cave2->play_music();
+        if (r == 0) {
+            _cave1->play_music();
+        } else if (r == 1) {
+            _cave2->play_music();
+        }else {
+            _mushroom1->play_music();
+        }
+        
     }
-    
-    
     
 };
 
