@@ -142,7 +142,6 @@ bool WorldSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
  */
 void WorldSelectScene::update(float timestep)
 {
-    _input.update();
     _caveButton->setVisible(true);
     _caveButton->activate();
     _shroomButton->setVisible(true);

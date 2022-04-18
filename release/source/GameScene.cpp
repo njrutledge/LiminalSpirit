@@ -90,9 +90,9 @@ float LEVEL_HEIGHT = 54;
  *
  * @return true if the controller is initialized properly, false otherwise.
  */
-bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const std::shared_ptr<SoundController> sound)
+bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const std::shared_ptr<SoundController> sound, string json)
 {
-
+    _back = false;
     Size dimen = Application::get()->getDisplaySize();
     float boundScale = SCENE_WIDTH / dimen.width;
     dimen *= boundScale;
@@ -117,12 +117,13 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _assets = assets;
     
     // Get constant values from assets/level.json
-    _constants = assets->get<JsonValue>("constants");
+    _constants = assets->get<JsonValue>(json);
     BIOME = _constants->getString("biome");
     LEVEL_HEIGHT = _constants->getFloat("level_height");
     PLAYER_POS[0] = _constants->get("start_pos")->get(0)->asFloat();
     PLAYER_POS[1] = _constants->get("start_pos")->get(1)->asFloat();
     auto platformsAttr = _constants->get("platforms")->children();
+    _platforms_attr.clear();
     for(auto it = platformsAttr.begin(); it != platformsAttr.end(); ++it) {
         std::shared_ptr<JsonValue> entry = (*it);
         float* attr = new float[3];
@@ -141,6 +142,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     auto spawnTime = _constants->get("spawn_times");
     int index = 0;
     Vec2 pos;
+    _spawn_order.clear();
+    _spawn_pos.clear();
+    _spawn_times.clear();
     for(auto it = spawn.begin(); it != spawn.end(); ++it) {
         std::shared_ptr<JsonValue> entry = (*it);
         std::vector<string> enemies;
@@ -255,6 +259,7 @@ void GameScene::dispose()
     _assets = nullptr;
     _constants = nullptr;
     _world = nullptr;
+    if(_worldnode)_worldnode->removeAllChildren();
     _worldnode = nullptr;
     _debugnode = nullptr;
     _vertbuff = nullptr;
@@ -269,11 +274,11 @@ void GameScene::dispose()
 //    }
     // This should work because smart pointers free themselves when vector is cleared
     _enemies.clear();
-
     _player = nullptr;
     _attacks = nullptr;
 
     _ai.dispose();
+    removeAllChildren();
 }
 
 /**
@@ -1136,7 +1141,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
                         {
         // Only quit when the button is released
         if (!down) {
-            reset();
+            _back = true;
         } });
 
     // Find the safe area, adapting to the iPhone X

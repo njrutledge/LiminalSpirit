@@ -53,8 +53,6 @@ protected:
   /** A 3152 style SpriteBatch to render the scene */
   std::shared_ptr<cugl::SpriteBatch> _batch; // check this
 
-  InputController _input;
-
   std::shared_ptr<cugl::scene2::Button> _playButton;
   std::shared_ptr<cugl::scene2::Button> _optionsButton;
 

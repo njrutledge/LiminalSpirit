@@ -565,6 +565,8 @@
         }
 	},
 	"jsons": {
-		"constants": "json/level2.json"
+		"surround": "json/surround.json",
+		"battlefield": "json/battlefield.json",
+		"levelt":  "json/scaffold.json"
 	}
 }
