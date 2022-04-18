@@ -301,9 +301,7 @@ void GameScene::update(float timestep)
     }
 
     int nextFrame;
-
     scene2::SpriteNode* sprite = dynamic_cast<scene2::SpriteNode*>(_player->getSceneNode().get());
-    
     if (_player->isStunned()) {
         // Store the frame being played before stun
         if (sprite->getFrame() != 31 && sprite->getFrame() != 24) {
@@ -439,8 +437,19 @@ void GameScene::update(float timestep)
     }
     if (arm2Image != nullptr) {
         arm2Image->flipHorizontal(_player->isFacingRight());
+        if (_meleeArm->getLastType() == AttackController::MeleeState::h1_left || _meleeArm->getLastType() == AttackController::MeleeState::h2_left || _meleeArm->getLastType() == AttackController::MeleeState::h3_left) {
+            arm2Image->flipHorizontal(false);
+        }
+        else if (_meleeArm->getLastType() == AttackController::MeleeState::h1_right || _meleeArm->getLastType() == AttackController::MeleeState::h2_right || _meleeArm->getLastType() == AttackController::MeleeState::h3_right) {
+            arm2Image->flipHorizontal(true);
+        }
+    }
 
-        scene2::SpriteNode* mSprite = dynamic_cast<scene2::SpriteNode*>(_meleeArm->getSceneNode().get());
+    scene2::SpriteNode* mSprite = dynamic_cast<scene2::SpriteNode*>(_meleeArm->getSceneNode().get());
+    _meleeArm->setAnimeTimer(_meleeArm->getAnimeTimer() + timestep);
+    _rangedArm->setAnimeTimer(_rangedArm->getAnimeTimer() + timestep);
+
+    if (_meleeArm->getLastType() == AttackController::MeleeState::cool) {
         if (_player->isFacingRight()) {
             mSprite->setFrame(8);
         }
@@ -448,6 +457,111 @@ void GameScene::update(float timestep)
             mSprite->setFrame(0);
         }
     }
+    else if (_meleeArm->getLastType() == AttackController::MeleeState::h1_left) {
+        if (_meleeArm->getAnimeTimer() > 0.06f) {
+            if (mSprite->getFrame() == 7) {
+                // Attack is finished
+                mSprite->setFrame(0);
+                _meleeArm->setLastType(AttackController::MeleeState::cool);
+                _meleeArm->setAnimeTimer(0);
+                arm2Image->flipHorizontal(_player->isFacingRight());
+            }
+            else {
+                mSprite->setFrame((mSprite->getFrame() + 1) % 8);
+                _meleeArm->setAnimeTimer(0);
+            }
+        }
+    }
+    else if (_meleeArm->getLastType() == AttackController::MeleeState::h2_left) {
+        if (_meleeArm->getAnimeTimer() > 0.06f) {
+            if (mSprite->getFrame() == 15) {
+                // Attack is finished
+                mSprite->setFrame(0);
+                _meleeArm->setLastType(AttackController::MeleeState::cool);
+                _meleeArm->setAnimeTimer(0);
+                arm2Image->flipHorizontal(_player->isFacingRight());
+            }
+            else {
+                mSprite->setFrame(((mSprite->getFrame() + 1) % 7) + 9);
+                _meleeArm->setAnimeTimer(0);
+            }
+        }
+    }
+    else if (_meleeArm->getLastType() == AttackController::MeleeState::h3_left) {
+        if (_meleeArm->getAnimeTimer() > 0.06f) {
+            if (mSprite->getFrame() == 26) {
+                // Attack is finished
+                mSprite->setFrame(0);
+                _meleeArm->setLastType(AttackController::MeleeState::cool);
+                _meleeArm->setAnimeTimer(0);
+                arm2Image->flipHorizontal(_player->isFacingRight());
+            }
+            else {
+                mSprite->setFrame(((mSprite->getFrame() + 1) % 9) + 18);
+                _meleeArm->setAnimeTimer(0);
+            }
+        }
+    }
+    else if (_meleeArm->getLastType() == AttackController::MeleeState::h1_right) {
+        if (_meleeArm->getAnimeTimer() > 0.06f) {
+            if (mSprite->getFrame() == 1) {
+                // Attack is finished
+                if (_player->isFacingRight()) {
+                    mSprite->setFrame(8);
+                }
+                else {
+                    mSprite->setFrame(0);
+                }
+                _meleeArm->setLastType(AttackController::MeleeState::cool);
+                _meleeArm->setAnimeTimer(0);
+                arm2Image->flipHorizontal(_player->isFacingRight());
+            }
+            else {
+                if (mSprite->getFrame() == 0) {
+                    mSprite->setFrame(8);
+                }
+                mSprite->setFrame(mSprite->getFrame() - 1);
+                _meleeArm->setAnimeTimer(0);
+            }
+        }
+    }
+    else if (_meleeArm->getLastType() == AttackController::MeleeState::h2_right) {
+        if (_meleeArm->getAnimeTimer() > 0.06f) {
+            if (mSprite->getFrame() == 11) {
+                // Attack is finished
+                mSprite->setFrame(8);
+                _meleeArm->setLastType(AttackController::MeleeState::cool);
+                _meleeArm->setAnimeTimer(0);
+                arm2Image->flipHorizontal(_player->isFacingRight());
+            }
+            else {
+                if (mSprite->getFrame() == 0) {
+                    mSprite->setFrame(17);
+                }
+                mSprite->setFrame(mSprite->getFrame() - 1);
+                _meleeArm->setAnimeTimer(0);
+            }
+        }
+    }
+    else if (_meleeArm->getLastType() == AttackController::MeleeState::h3_right) {
+        if (_meleeArm->getAnimeTimer() > 0.06f) {
+            if (mSprite->getFrame() == 18) {
+                // Attack is finished
+                mSprite->setFrame(8);
+                _meleeArm->setLastType(AttackController::MeleeState::cool);
+                _meleeArm->setAnimeTimer(0);
+                arm2Image->flipHorizontal(_player->isFacingRight());
+            }
+            else {
+                if (mSprite->getFrame() == 0) {
+                    mSprite->setFrame(26);
+                }
+                mSprite->setFrame(mSprite->getFrame() - 1);
+                _meleeArm->setAnimeTimer(0);
+            }
+        }
+    }
+
 
     // Enemy AI logic
     // For each enemy
@@ -603,9 +717,10 @@ void GameScene::update(float timestep)
     _player->setInvincibilityTimer(_player->getInvincibilityTimer() - timestep);
     _world->update(timestep);
 
+
+
     for (auto it = _attacks->_pending.begin(); it != _attacks->_pending.end(); ++it)
     {
-        // FIX WHEN TEXTURE EXISTS
 
         AttackController::Type attackType = (*it)->getType();
         std::shared_ptr<scene2::PolygonNode> attackSprite;
@@ -615,9 +730,9 @@ void GameScene::update(float timestep)
         }
         else if (attackType == AttackController::Type::p_melee) {
             AttackController::MeleeState meleeState = (*it)->getMeleeState();
-            if (meleeState == AttackController::MeleeState::h1_left) {
-
-            }
+            attackSprite = scene2::PolygonNode::allocWithTexture(_pMeleeTexture);
+            attackSprite->setVisible(false);
+            _meleeArm->setLastType(meleeState);
         }
         else {
             attackSprite = scene2::PolygonNode::allocWithTexture(_pMeleeTexture);
@@ -760,6 +875,20 @@ void GameScene::update(float timestep)
     float offsetArm2 = -3.f;
     if (!_player->isFacingRight()) {
         offsetArm = -1 * offsetArm;
+    }
+
+    // change based on arm attacks
+    if ((!_player->isFacingRight() || // player facing left or attacks left
+        (_meleeArm->getLastType() == AttackController::MeleeState::h1_left 
+            || _meleeArm->getLastType() == AttackController::MeleeState::h2_left
+            || _meleeArm->getLastType() == AttackController::MeleeState::h3_left)))// player facing left and attacking right 
+    {
+        offsetArm2 = -1 * offsetArm2;
+    }
+
+    if (!_player->isFacingRight() && (_meleeArm->getLastType() == AttackController::MeleeState::h1_right
+        || _meleeArm->getLastType() == AttackController::MeleeState::h2_right
+        || _meleeArm->getLastType() == AttackController::MeleeState::h3_right)) {
         offsetArm2 = -1 * offsetArm2;
     }
 
@@ -767,8 +896,6 @@ void GameScene::update(float timestep)
     float spacing = 2;
     float upDownY = fmod(upDown, spacing);
     if (upDownY > spacing/4 && upDownY <= 3*spacing/4) {
-        scene2::SpriteNode* meleeSprite = dynamic_cast<scene2::SpriteNode*>(_meleeArm->getSceneNode().get());
-//        meleeSprite->setFrame((meleeSprite->getFrame() + 1) % 12);
         upDownY = spacing/2 - upDownY;
     }
     else if (upDownY > 3*spacing/4) {
@@ -1120,6 +1247,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     std::shared_ptr<Texture> rangeImage = _assets->get<Texture>(PLAYER_RANGE_TEXTURE);
     _rangedArm = Glow::alloc(rangeArmPos, rangeImage->getSize() / _scale, _scale);
     _rangedArm->setGlowTimer(0);
+    _rangedArm->setAnimeTimer(0);
     std::shared_ptr<scene2::PolygonNode> rangeArmSprite = scene2::PolygonNode::allocWithTexture(rangeImage);
     _rangedArm->setSceneNode(rangeArmSprite);
     rangeArmSprite->setScale(0.2);
@@ -1131,10 +1259,12 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     std::shared_ptr<Texture> meleeImage = _assets->get<Texture>(PLAYER_MELEE_THREE_TEXTURE);
     _meleeArm = Glow::alloc(meleeArmPos, meleeHitboxImage->getSize() / _scale, _scale);
     _meleeArm->setGlowTimer(0);
+    _meleeArm->setLastType(AttackController::MeleeState::cool);
     std::shared_ptr<scene2::SpriteNode> meleeArmSprite = scene2::SpriteNode::alloc(meleeImage, 4, 9);
-    _meleeArm->setSceneNode(meleeArmSprite);
     meleeArmSprite->setFrame(0);
-    meleeArmSprite->setScale(0.4);
+    _meleeArm->setSceneNode(meleeArmSprite);
+    _meleeArm->setAnimeTimer(0);
+    meleeArmSprite->setScale(0.35);
     addObstacle(_meleeArm, meleeArmSprite, true);
 
     // Player creation

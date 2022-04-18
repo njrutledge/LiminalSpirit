@@ -13,6 +13,7 @@
 #include <cugl/physics2/CUBoxObstacle.h>
 #include <cugl/physics2/CUCapsuleObstacle.h>
 #include <cugl/scene2/graph/CUWireNode.h>
+#include "AttackController.hpp"
 
 #pragma mark - 
 #pragma mark Drawing Constants
@@ -41,6 +42,12 @@ protected:
 
 	/** Time passed since glow initialized */
 	float _glowTime;
+
+	/** Time passed since last animation frame */
+	float _animeTime;
+
+	/** Last Type of attack used*/
+	AttackController::MeleeState _attackType;
 
 	/** Redraws outline of physics fixtures */
 	virtual void resetDebug() override;
@@ -88,6 +95,17 @@ public:
 	/** Sets the amount of time past since the glow was initialized */
 	void setGlowTimer(float value) { _glowTime = value; }
 
+	/** Returns last type of attack used by melee */
+	AttackController::MeleeState getLastType() { return _attackType; }
+
+	/** Sets last type of attack used by melee */
+	void setLastType(AttackController::MeleeState type) { _attackType = type; }
+
+	/** Returns the amount of time past since the last animation frame played */
+	float getAnimeTimer() { return _animeTime; }
+
+	/** Sets the amount of time past since the last animation frame played */
+	void setAnimeTimer(float value) { _animeTime = value; }
 #pragma mark - 
 #pragma mark Physics Methods
 	/**Creates and adds the physics body(s) to the world */
