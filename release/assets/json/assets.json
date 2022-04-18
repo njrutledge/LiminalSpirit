@@ -491,7 +491,17 @@
 			"file": "sounds/cave/cave2.ogg",
 			"stream": true,
 			"volume": 0.5
-		}
+		},
+        "playerStep": {
+            "type": "sample",
+            "file": "sounds/playerSFX/Player_Step.wav",
+            "volume": 0.5
+        },
+        "playerShoot": {
+            "type": "sample",
+            "file": "sounds/playerSFX/Player_Shoot.wav",
+            "volume": 0.8
+        }
 	},
 	"jsons": {
 		"constants": "json/level.json"

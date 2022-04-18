@@ -125,6 +125,8 @@
 		F05BD2B327F29AB8005D1F38 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = F05BD2AF27F29AB8005D1F38 /* sounds */; };
 		F05BD2B427F29AB8005D1F38 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = F05BD2AF27F29AB8005D1F38 /* sounds */; };
 		F05BD2B527F29AB8005D1F38 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = F05BD2AF27F29AB8005D1F38 /* sounds */; };
+		F0750174280CD94B00CBD6A3 /* Phantom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85841F402809F09300169F44 /* Phantom.cpp */; };
+		F0750178280CD94C00CBD6A3 /* Phantom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85841F402809F09300169F44 /* Phantom.cpp */; };
 		F09AF65027F64ACA003C6EA2 /* Seeker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64727F64ACA003C6EA2 /* Seeker.cpp */; };
 		F09AF65127F64ACA003C6EA2 /* Seeker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64727F64ACA003C6EA2 /* Seeker.cpp */; };
 		F09AF65227F64ACA003C6EA2 /* Seeker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64727F64ACA003C6EA2 /* Seeker.cpp */; };
@@ -688,6 +690,7 @@
 				F09AF66127F64ACA003C6EA2 /* HomeScene.cpp in Sources */,
 				F09AF65827F64ACA003C6EA2 /* WorldSelectScene.cpp in Sources */,
 				85B0004327E00AD600DAC3F2 /* TiltController.cpp in Sources */,
+				F0750178280CD94C00CBD6A3 /* Phantom.cpp in Sources */,
 				F05176E227D080DF00C0617F /* CollisionController.cpp in Sources */,
 				F05176E427D080E700C0617F /* InputController.cpp in Sources */,
 				EB9CDA3925D0EAB100EE1A09 /* main.cpp in Sources */,
@@ -717,6 +720,7 @@
 				F09AF65A27F64ACA003C6EA2 /* Particle.cpp in Sources */,
 				F09AF66027F64ACA003C6EA2 /* HomeScene.cpp in Sources */,
 				F09AF65727F64ACA003C6EA2 /* WorldSelectScene.cpp in Sources */,
+				F0750174280CD94B00CBD6A3 /* Phantom.cpp in Sources */,
 				85B0004227E00AD600DAC3F2 /* TiltController.cpp in Sources */,
 				F05176E127D080DF00C0617F /* CollisionController.cpp in Sources */,
 				5783892E27E23F49000CB5B9 /* AIController.cpp in Sources */,

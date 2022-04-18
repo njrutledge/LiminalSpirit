@@ -283,10 +283,6 @@ void GameScene::dispose()
 void GameScene::update(float timestep)
 {
     _sound->play_level_music();
-   // if (AudioEngine::get()->getMusicQueue()->getState() == cugl::AudioEngine::State::INACTIVE) {
-    //    std::shared_ptr<Sound> source = _assets->get<Sound>("cave2");
-    //   AudioEngine::get()->getMusicQueue()->play(source, true, 1.0f);
-   // }
     
     // Update input controller
     _input.update();
@@ -445,8 +441,8 @@ void GameScene::update(float timestep)
     _swipes.update(_input, _player->isGrounded());
     b2Vec2 playerPos = _player->getBody()->GetPosition();
     if (_player->getInvincibilityTimer() <= 0) {
-        _attacks->attackLeft(Vec2(playerPos.x, playerPos.y), _swipes.getLeftSwipe(), _swipes.getLeftAngle(), _player->isGrounded(), _timer);
-        _attacks->attackRight(Vec2(playerPos.x, playerPos.y), _swipes.getRightSwipe(), _swipes.getRightAngle(), _player->isGrounded(), _timer);
+        _attacks->attackLeft(Vec2(playerPos.x, playerPos.y), _swipes.getLeftSwipe(), _swipes.getLeftAngle(), _player->isGrounded(), _timer, _sound);
+        _attacks->attackRight(Vec2(playerPos.x, playerPos.y), _swipes.getRightSwipe(), _swipes.getRightAngle(), _player->isGrounded(), _timer, _sound);
         if (_swipes.getRightSwipe() == SwipeController::chargedRight) {
             _dashXVel = 20;
             _dashTime = 0;
