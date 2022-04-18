@@ -732,6 +732,7 @@ void GameScene::update(float timestep)
         if (attackType == AttackController::Type::p_range) {
             std::shared_ptr<Texture> attackTexture = _assets->get<Texture>("player_projectile");
             attackSprite = scene2::PolygonNode::allocWithTexture(attackTexture);
+            attackSprite->setScale(.85f * (*it)->getRadius());
         }
         else if (attackType == AttackController::Type::p_melee) {
             AttackController::MeleeState meleeState = (*it)->getMeleeState();
@@ -739,14 +740,18 @@ void GameScene::update(float timestep)
             attackSprite->setVisible(false);
             _meleeArm->setLastType(meleeState);
         }
+        else if (attackType == AttackController::Type::e_range) {
+            std::shared_ptr<Texture> attackTexture = _assets->get<Texture>("phantom_projectile");
+            attackSprite = scene2::PolygonNode::allocWithTexture(attackTexture); // need to replace with animated texture
+            attackSprite->setScale(0.025);
+        }
         else {
             attackSprite = scene2::PolygonNode::allocWithTexture(_pMeleeTexture);
+            attackSprite->setVisible(false);
+            attackSprite->setScale(.85f * (*it)->getRadius());
         }
 
-
-        attackSprite->setScale(.85f * (*it)->getRadius());
         (*it)->setDebugColor(Color4::YELLOW);
-        (*it)->getMeleeState();
         addObstacle((*it), attackSprite, true);
     }
     // DO NOT MOVE THIS LINE
