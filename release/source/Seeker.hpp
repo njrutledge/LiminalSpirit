@@ -31,7 +31,7 @@ public:
         return (result->init(pos, size, scale, SEEKER_PROPS) ? result : nullptr);
     }
 
-    float velScale = 3.5;
+    float velScale = 3.8;
     cugl::Vec2 targetPosition;
     bool justAttacked = false;
     bool stop = false;
