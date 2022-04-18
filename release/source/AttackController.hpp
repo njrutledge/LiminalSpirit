@@ -25,17 +25,6 @@
 
 class AttackController {
     
-    enum MeleeState {
-        first,
-        h1_right,
-        h2_right,
-        h3_right,
-        h1_left,
-        h2_left,
-        h3_left,
-        cool
-    };
-    
 public:
 
     enum Type {
@@ -54,6 +43,17 @@ public:
         up,
         down,
         neither
+    };
+
+    enum MeleeState {
+        first,
+        h1_right,
+        h2_right,
+        h3_right,
+        h1_left,
+        h2_left,
+        h3_left,
+        cool
     };
     
 protected:

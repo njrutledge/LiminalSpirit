@@ -364,6 +364,14 @@ void GameScene::update(float timestep)
     }
     if (arm2Image != nullptr) {
         arm2Image->flipHorizontal(_player->isFacingRight());
+
+        scene2::SpriteNode* mSprite = dynamic_cast<scene2::SpriteNode*>(_meleeArm->getSceneNode().get());
+        if (_player->isFacingRight()) {
+            mSprite->setFrame(8);
+        }
+        else {
+            mSprite->setFrame(0);
+        }
     }
 
     // Enemy AI logic
@@ -388,9 +396,8 @@ void GameScene::update(float timestep)
         }
         else if ((*it)->getName() == "Glutton") {
             if ((*it)->getIdleAnimationTimer() > 1.f || 
-                (!sprite->getFrame() == 2 && (*it)->getIdleAnimationTimer() > 0.3f) 
+                (!(sprite->getFrame() == 2) && (*it)->getIdleAnimationTimer() > 0.3f) 
                 || (!(sprite->getFrame() == 2 || sprite->getFrame() == 5 || sprite->getFrame() == 6) && (*it)->getIdleAnimationTimer() > 0.1f)) {
-
                 sprite->setFrame((sprite->getFrame() + 1) % 7);
                 (*it)->setIdleAnimationTimer(0);
             }
@@ -524,9 +531,27 @@ void GameScene::update(float timestep)
     for (auto it = _attacks->_pending.begin(); it != _attacks->_pending.end(); ++it)
     {
         // FIX WHEN TEXTURE EXISTS
-        std::shared_ptr<scene2::PolygonNode> attackSprite = scene2::PolygonNode::allocWithTexture(_pMeleeTexture);
+
+        AttackController::Type attackType = (*it)->getType();
+        std::shared_ptr<scene2::PolygonNode> attackSprite;
+        if (attackType == AttackController::Type::p_range) {
+            std::shared_ptr<Texture> attackTexture = _assets->get<Texture>("player_projectile");
+            attackSprite = scene2::PolygonNode::allocWithTexture(attackTexture);
+        }
+        else if (attackType == AttackController::Type::p_melee) {
+            AttackController::MeleeState meleeState = (*it)->getMeleeState();
+            if (meleeState == AttackController::MeleeState::h1_left) {
+
+            }
+        }
+        else {
+            attackSprite = scene2::PolygonNode::allocWithTexture(_pMeleeTexture);
+        }
+
+
         attackSprite->setScale(.85f * (*it)->getRadius());
         (*it)->setDebugColor(Color4::YELLOW);
+        (*it)->getMeleeState();
         addObstacle((*it), attackSprite, true);
     }
     // DO NOT MOVE THIS LINE
@@ -649,7 +674,7 @@ void GameScene::update(float timestep)
 
     // Determining arm positions and offsets
     float offsetArm = -1.f;
-    float offsetArm2 = -1.25f;
+    float offsetArm2 = -3.f;
     if (!_player->isFacingRight()) {
         offsetArm = -1 * offsetArm;
         offsetArm2 = -1 * offsetArm2;
@@ -659,8 +684,6 @@ void GameScene::update(float timestep)
     float spacing = 2;
     float upDownY = fmod(upDown, spacing);
     if (upDownY > spacing/4 && upDownY <= 3*spacing/4) {
-        scene2::SpriteNode* meleeSprite = dynamic_cast<scene2::SpriteNode*>(_meleeArm->getSceneNode().get());
-        meleeSprite->setFrame((meleeSprite->getFrame() + 1) % 12);
         upDownY = spacing/2 - upDownY;
     }
     else if (upDownY > 3*spacing/4) {
@@ -992,10 +1015,10 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     std::shared_ptr<Texture> meleeImage = _assets->get<Texture>(PLAYER_MELEE_THREE_TEXTURE);
     _meleeArm = Glow::alloc(meleeArmPos, meleeHitboxImage->getSize() / _scale, _scale);
     _meleeArm->setGlowTimer(0);
-    std::shared_ptr<scene2::SpriteNode> meleeArmSprite = scene2::SpriteNode::alloc(meleeImage, 1, 12);
+    std::shared_ptr<scene2::SpriteNode> meleeArmSprite = scene2::SpriteNode::alloc(meleeImage, 4, 9);
     _meleeArm->setSceneNode(meleeArmSprite);
     meleeArmSprite->setFrame(0);
-    meleeArmSprite->setScale(0.2);
+    meleeArmSprite->setScale(0.4);
     addObstacle(_meleeArm, meleeArmSprite, true);
 
     // Player creation

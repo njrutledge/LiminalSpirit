@@ -115,7 +115,14 @@
 			"wrapT": "clamp"
 		},
 		"player_melee_three": {
-			"file": "textures/animations/sword_combo_spritesheet.png",
+			"file": "textures/animations/melee_arm_test.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"player_projectile": {
+			"file": "textures/interloper_projectile.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
@@ -504,6 +511,6 @@
         }
 	},
 	"jsons": {
-		"constants": "json/level.json"
+		"constants": "json/level2.json"
 	}
 }
