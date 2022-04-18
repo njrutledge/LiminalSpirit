@@ -494,6 +494,6 @@
         }
 	},
 	"jsons": {
-		"constants": "json/battlefield.json"
+		"constants": "json/surround.json"
 	}
 }
