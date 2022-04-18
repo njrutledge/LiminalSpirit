@@ -54,6 +54,8 @@ bool PlayerModel::init(const cugl::Vec2& pos, const cugl::Size& size, float scal
         _health = HEALTH;
         _faceRight = true;
         _isInvincible = false;
+        _isMovingUp = false;
+        _hasJustLanded = false;
 
         return true;
     }
@@ -147,6 +149,8 @@ void PlayerModel::reset(Vec2 pos) {
     _movement = 0.0f;
     _body->SetLinearVelocity(b2Vec2(0,0));
     _isJumping = false;
+    _isMovingUp = false;
+    _hasJustLanded = false;
     _isGrounded = true;
     _isInvincible = false;
 }

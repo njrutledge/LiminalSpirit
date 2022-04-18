@@ -302,16 +302,83 @@ void GameScene::update(float timestep)
     scene2::SpriteNode* sprite = dynamic_cast<scene2::SpriteNode*>(_player->getSceneNode().get());
     
     if (_player->isStunned()) {
+        // Store the frame being played before stun
+        if (sprite->getFrame() != 31 && sprite->getFrame() != 24) {
+            _jumpFrame = sprite->getFrame();
+        }
         if (_player->isFacingRight()) {
             sprite->setFrame(31);
         }
         else {
             sprite->setFrame(24);
         }
-    } else if (!_player->isGrounded()) {
-            nextFrame = (sprite->getFrame() + 1) % 8 + 15;
+    }
+    else if (!_player->isGrounded()) {
+        if (_player->getJumpAnimationTimer() > 0.03f) {
+            if(_player->isMovingUp()) {
+                nextFrame = sprite->getFrame();
+                if (nextFrame == 31 || nextFrame == 24) {
+                    nextFrame = _jumpFrame;
+                }
+                if (_player->isFacingRight()) {
+                    if (nextFrame < 20 || nextFrame > 23) {
+                        nextFrame = 21;
+                    }
+                    else if (nextFrame > 20) {
+                        nextFrame -= 1;
+                    }
+                } else {
+                    if (nextFrame < 16 || nextFrame > 19) {
+                        nextFrame = 18;
+                    }
+                    else if (nextFrame < 19) {
+                        nextFrame += 1;
+                    }
+                }
+            }
+            else {
+                if (_player->isFacingRight()) {
+                    nextFrame = 19;
+                    _player->setJustLanded(true);
+                }
+                else {
+                    nextFrame = 20;
+                    _player->setJustLanded(true);
+                }
+            }
             sprite->setFrame(nextFrame);
             _player->setJumpAnimationTimer(0);
+        }
+    }
+    else if (_player->isGrounded() && _player->hasJustLanded()) {
+        if (_player->getJumpAnimationTimer() > 0.06f) {
+            nextFrame = sprite->getFrame();
+            if (nextFrame == 31 || nextFrame == 24) {
+                nextFrame = _jumpFrame;
+            }
+            if (_player->isFacingRight()) {
+                if (nextFrame > 18) {
+                    nextFrame = 18;
+                } else {
+                    nextFrame -= 1;
+                }
+                if (nextFrame == 16) {
+                    _player->setJustLanded(false);
+                }
+            }
+            else {
+                if (nextFrame < 21) {
+                    nextFrame = 21;
+                } else {
+                    nextFrame += 1;
+                }
+                if (nextFrame == 23) {
+                    _player->setJustLanded(false);
+                }
+            }
+            sprite->setFrame(nextFrame);
+            _player->setJumpAnimationTimer(0);
+        }
     }
     else if (xPos != 0 && _player->getWalkAnimationTimer() > 0.065f) {
         nextFrame = (sprite->getFrame() + 1) % 8;
@@ -340,7 +407,7 @@ void GameScene::update(float timestep)
         sprite->setFrame(nextFrame);
         _player->setIdleAnimationTimer(0);
     }
-    _player->setJumpAnimationTimer(_player->getIdleAnimationTimer() + timestep);
+    _player->setJumpAnimationTimer(_player->getJumpAnimationTimer() + timestep);
     _player->setWalkAnimationTimer(_player->getWalkAnimationTimer() + timestep);
     _player->setIdleAnimationTimer(_player->getIdleAnimationTimer() + timestep);
     _rangedArm->setGlowTimer(_rangedArm->getGlowTimer() + timestep);
@@ -518,16 +585,22 @@ void GameScene::update(float timestep)
     {
         _player->setJumping(true);
         _player->setIsFirstFrame(true);
+        if (_player->isGrounded()) {
+            _player->setMovingUp(true);
+            _player->setJumpAnimationTimer(0);
+        }
     }
     else
     {
         _player->setJumping(false);
     }
+    _player->applyForce();
+
     if (_player->getVY() < -.2 || _player->getVY() > .2)
     {
         _player->setGrounded(false);
     }
-    else if (_player->getVY() >= -.2 && _player->getVY() <= .2)
+    else if (_player->getVY() >= -0.2 && _player->getVY() <= 0.2)
     {
         // check if this is the first "0" velocity frame, as this should not make the player grounded just yet. Might be height of jump.
         if (_player->isFirstFrame())
@@ -539,8 +612,10 @@ void GameScene::update(float timestep)
             _player->setGrounded(true);
         }
     }
-
-    _player->applyForce();
+    
+    if (_player->getVY() < 0) {
+        _player->setMovingUp(false);
+    }
 
     // Remove attacks
     auto ait = _attacks->_current.begin();
@@ -643,7 +718,7 @@ void GameScene::update(float timestep)
     float upDownY = fmod(upDown, spacing);
     if (upDownY > spacing/4 && upDownY <= 3*spacing/4) {
         scene2::SpriteNode* meleeSprite = dynamic_cast<scene2::SpriteNode*>(_meleeArm->getSceneNode().get());
-        meleeSprite->setFrame((meleeSprite->getFrame() + 1) % 12);
+//        meleeSprite->setFrame((meleeSprite->getFrame() + 1) % 12);
         upDownY = spacing/2 - upDownY;
     }
     else if (upDownY > 3*spacing/4) {

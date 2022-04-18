@@ -58,6 +58,10 @@ protected:
 	float _movement;
 	/** Whether we are actively jumping*/
 	bool _isJumping;
+    /** Whether player is moving upwards*/
+    bool _isMovingUp;
+    /** Whether the player just landed from a jump*/
+    bool _hasJustLanded;
 	/** Whether the player's feet is touching the ground*/
 	bool _isGrounded;
 	/** Ground/feet sensor */
@@ -190,6 +194,18 @@ public:
 
 	/** Sets whether the player is actively jumping*/
 	void setJumping(bool value) { _isJumping = value;  }
+
+    /** Returns true if the player is actively jumping*/
+    bool isMovingUp() const { return _isMovingUp;  }
+
+    /** Sets whether the player is actively jumping*/
+    void setMovingUp(bool value) { _isMovingUp = value;  }
+   
+    /** Returns true if the player is actively jumping*/
+    bool hasJustLanded() const { return _hasJustLanded;  }
+
+    /** Sets whether the player is actively jumping*/
+    void setJustLanded(bool value) { _hasJustLanded = value;  }
 
 	/** Returns true if the player is on the ground*/
 	bool isGrounded() const { return _isGrounded;  }
