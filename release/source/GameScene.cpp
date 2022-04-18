@@ -259,7 +259,7 @@ void GameScene::dispose()
     _assets = nullptr;
     _constants = nullptr;
     _world = nullptr;
-    _worldnode->removeAllChildren();
+    if(_worldnode)_worldnode->removeAllChildren();
     _worldnode = nullptr;
     _debugnode = nullptr;
     _vertbuff = nullptr;
