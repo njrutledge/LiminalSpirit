@@ -1135,6 +1135,7 @@ void GameScene::createEnemies(int wave, int spawnerInd) {
         else if (!enemyName.compare("spawner")) {
             _has_spawner = 1;
             _spawner_timer = 0;
+            _spawner_pos = enemyPos;
             std::shared_ptr<Texture> spawnerImage = _assets->get<Texture>("glutton");
             std::shared_ptr<Spawner> spawner = Spawner::alloc(enemyPos, spawnerImage->getSize() / _scale / 10, _scale);
             std::shared_ptr<scene2::PolygonNode> spawnerSprite = scene2::PolygonNode::allocWithTexture(spawnerImage);
