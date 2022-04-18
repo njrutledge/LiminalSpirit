@@ -10,11 +10,24 @@
 #define SoundController_hpp
 
 #include <cugl/cugl.h>
-#include "BaseEnemyModel.h"
 
 class SoundController {
     
 public:
+    
+    enum playerSType {
+        slash,
+        slashFinal,
+        slashDash,
+        shoot,
+        shootCharge,
+        hurt,
+        death,
+        step,
+        jump,
+        chargeP,
+        chargeM
+    };
     
     class LevelMusic {
         
@@ -37,23 +50,23 @@ public:
     };
     
     
-    class CharacterSFX {
+    class EnemySFX {
 
     protected:
         
-        string _character;
+        string _enemy;
         
         std::shared_ptr<cugl::audio::AudioPlayer> _player;
         
         std::shared_ptr<cugl::Sound> _attack;
         
-        std::shared_ptr<cugl::Sound> _passive;
+        std::shared_ptr<cugl::Sound> _death;
         
         std::shared_ptr<cugl::Sound> _hurt;
         
     public:
         
-        CharacterSFX();
+        EnemySFX();
         
         void init();
     };
@@ -67,6 +80,12 @@ protected:
     
     std::shared_ptr<LevelMusic> _cave2;
     
+    // Player Sounds
+    
+    std::shared_ptr<cugl::Sound> _playerShoot;
+    
+    std::shared_ptr<cugl::Sound> _playerStep;
+    
 public:
     
     SoundController();
@@ -74,6 +93,8 @@ public:
     void init(std::shared_ptr<cugl::AssetManager> &assets);
     
     void play_level_music();
+    
+    void play_player_sound(playerSType sound);
 };
 
 #endif /* SoundController_hpp */

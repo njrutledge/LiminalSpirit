@@ -187,7 +187,7 @@ void AttackController::update(const cugl::Vec2 p, b2Vec2 VX, float dt) {
     }
 }
 
-void AttackController::attackLeft(cugl::Vec2 p, SwipeController::SwipeAttack attack, float angle, bool grounded, float timer) {
+void AttackController::attackLeft(cugl::Vec2 p, SwipeController::SwipeAttack attack, float angle, bool grounded, float timer, std::shared_ptr<SoundController> sound) {
     // Subtract 90 degrees from the angle because vector rotates with the angle starting from the north
     angle -= 90;
     if (_rangedCounter > _reload) {
@@ -195,14 +195,17 @@ void AttackController::attackLeft(cugl::Vec2 p, SwipeController::SwipeAttack att
             case SwipeController::leftAttack:
                 _pending.emplace(Attack::alloc(p, 0.6, 0.5, 2, _scale, Type::p_range, first, _leftOff, ballMakyr, cugl::Vec2(_p_vel).rotate(angle * M_PI / 180), left, timer));
                 _rangedCounter = 0;
+                sound->play_player_sound(SoundController::playerSType::shoot);
                 break;
             case SwipeController::rightAttack:
                 _pending.emplace(Attack::alloc(p, 0.6, 0.5, 2, _scale, Type::p_range, first, _rightOff, ballMakyr, cugl::Vec2(_p_vel).rotate(angle * M_PI / 180), right, timer));
                 _rangedCounter = 0;
+                sound->play_player_sound(SoundController::playerSType::shoot);
                 break;
             case SwipeController::upAttack:
                 _pending.emplace(Attack::alloc(p, 0.6, 0.5, 2, _scale, Type::p_range, first, _upOff, ballMakyr, cugl::Vec2(_p_vel).rotate(angle * M_PI / 180), up, timer));
                 _rangedCounter = 0;
+                sound->play_player_sound(SoundController::playerSType::shoot);
                 break;
             case SwipeController::downAttack:
                 if(!grounded){
@@ -212,6 +215,7 @@ void AttackController::attackLeft(cugl::Vec2 p, SwipeController::SwipeAttack att
                     _pending.emplace(Attack::alloc(p, 0.6, 0.1, 2, _scale, Type::p_range, first, _rightOff, ballMakyr, cugl::Vec2(_p_vel).rotate(M_PI * 1.5), right, timer));
                 }
                 _rangedCounter = 0;
+                sound->play_player_sound(SoundController::playerSType::shoot);
                 break;
             case SwipeController::chargedLeft:
                 _pending.emplace(Attack::alloc(p, 0.3, 1.5, 0, _scale, Type::p_exp_package, first, _leftOff, ballMakyr, cugl::Vec2(_c_vel).rotate(angle * M_PI / 180), left, timer));
@@ -240,7 +244,7 @@ void AttackController::attackLeft(cugl::Vec2 p, SwipeController::SwipeAttack att
 /**
  * Right size represents melee in this case.
  */
-void AttackController::attackRight(cugl::Vec2 p, SwipeController::SwipeAttack attack, float angle, bool grounded, float timer) {
+void AttackController::attackRight(cugl::Vec2 p, SwipeController::SwipeAttack attack, float angle, bool grounded, float timer, std::shared_ptr<SoundController> sound) {
     if (_meleeCounter > _swing) {
         switch (attack) {
             case SwipeController::leftAttack:

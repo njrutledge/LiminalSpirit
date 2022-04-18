@@ -49,10 +49,33 @@ void SoundController::init(std::shared_ptr<cugl::AssetManager> &assets) {
     _cave2 = make_shared<LevelMusic>();
     _cave2->init("cave2", _assets);
     
+    _playerStep = assets->get<cugl::Sound>("playerStep");
+    _playerShoot = assets->get<cugl::Sound>("playerShoot");
 };
 
 void SoundController::play_level_music() {
     
     _cave2->play_music();
     
-}
+};
+
+void SoundController::play_player_sound(playerSType sound) {
+    switch (sound) {
+        case slash:
+        case slashFinal:
+        case slashDash:
+        case shoot:
+            cugl::AudioEngine::get()->play("playerShoot", _playerShoot);
+            break;
+        case shootCharge:
+        case hurt:
+        case death:
+        case step:
+            cugl::AudioEngine::get()->play("playerStep", _playerStep);
+            break;
+        case jump:
+        case chargeP:
+        case chargeM:
+            break;
+    }
+};
