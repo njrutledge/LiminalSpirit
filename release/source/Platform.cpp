@@ -19,7 +19,7 @@ bool PlatformModel::init(const cugl::Vec2& pos, const float width, const float h
     nsize.height = height;
     _drawScale = scale;
 
-    if (BoxObstacle::init(pos, nsize)) {
+    if (BoxObstacle::init(pos+nsize/2, nsize)) {
         setDensity(0);
         setFriction(0.0f);
         setFixedRotation(true);

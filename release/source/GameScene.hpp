@@ -156,6 +156,9 @@ protected:
     int _dashXVel;
     /** YVel for the current melee dash */
     int _dashYVel;
+    
+    /** jump frame for paused jump*/
+    int _jumpFrame;
 
     /**
      * Internal helper to build the scene graph.
