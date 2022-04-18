@@ -20,12 +20,11 @@ extern struct EnemyProperties SEEKER_PROPS;
 
 class Seeker : public BaseEnemyModel {
 public:
-    /** Inheriting all constructors exactly as is since specter does not need more initializers*/
     using BaseEnemyModel::BaseEnemyModel;
 
 #pragma mark -
 #pragma mark Static Constructors
-    /** Allocates a new lost */
+    /** Allocates a new seeker */
     static std::shared_ptr<Seeker> alloc(const cugl::Vec2& pos, const cugl::Size& size, float scale) {
         std::shared_ptr<Seeker> result = std::make_shared<Seeker>();
         return (result->init(pos, size, scale, SEEKER_PROPS) ? result : nullptr);
