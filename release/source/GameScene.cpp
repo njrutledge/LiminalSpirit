@@ -302,6 +302,10 @@ void GameScene::update(float timestep)
     scene2::SpriteNode* sprite = dynamic_cast<scene2::SpriteNode*>(_player->getSceneNode().get());
     
     if (_player->isStunned()) {
+        // Store the frame being played before stun
+        if (sprite->getFrame() != 31 && sprite->getFrame() != 24) {
+            _jumpFrame = sprite->getFrame();
+        }
         if (_player->isFacingRight()) {
             sprite->setFrame(31);
         }
@@ -312,8 +316,11 @@ void GameScene::update(float timestep)
     else if (!_player->isGrounded()) {
         if (_player->getJumpAnimationTimer() > 0.03f) {
             if(_player->isMovingUp()) {
+                nextFrame = sprite->getFrame();
+                if (nextFrame == 31 || nextFrame == 24) {
+                    nextFrame = _jumpFrame;
+                }
                 if (_player->isFacingRight()) {
-                    nextFrame = sprite->getFrame();
                     if (nextFrame < 20 || nextFrame > 23) {
                         nextFrame = 21;
                     }
@@ -321,7 +328,6 @@ void GameScene::update(float timestep)
                         nextFrame -= 1;
                     }
                 } else {
-                    nextFrame = sprite->getFrame();
                     if (nextFrame < 16 || nextFrame > 19) {
                         nextFrame = 18;
                     }
@@ -347,6 +353,9 @@ void GameScene::update(float timestep)
     else if (_player->isGrounded() && _player->hasJustLanded()) {
         if (_player->getJumpAnimationTimer() > 0.06f) {
             nextFrame = sprite->getFrame();
+            if (nextFrame == 31 || nextFrame == 24) {
+                nextFrame = _jumpFrame;
+            }
             if (_player->isFacingRight()) {
                 if (nextFrame > 18) {
                     nextFrame = 18;
