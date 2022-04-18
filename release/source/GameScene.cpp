@@ -34,12 +34,15 @@
 #include "BaseEnemyModel.h"
 #include "Lost.hpp"
 #include "Phantom.hpp"
+#include "Mirror.hpp"
+
 #include "PlayerModel.h"
 #include "Platform.hpp"
+
 #include "AttackController.hpp"
 #include "AIController.hpp"
 #include "CollisionController.hpp"
-#include "Platform.hpp"
+
 #include "Glow.hpp"
 #include "Particle.hpp"
 
@@ -300,17 +303,85 @@ void GameScene::update(float timestep)
     int nextFrame;
 
     scene2::SpriteNode* sprite = dynamic_cast<scene2::SpriteNode*>(_player->getSceneNode().get());
+    
     if (_player->isStunned()) {
+        // Store the frame being played before stun
+        if (sprite->getFrame() != 31 && sprite->getFrame() != 24) {
+            _jumpFrame = sprite->getFrame();
+        }
         if (_player->isFacingRight()) {
             sprite->setFrame(31);
         }
         else {
             sprite->setFrame(24);
         }
-    } else if (!_player->isGrounded()) {
-            nextFrame = (sprite->getFrame() + 1) % 8 + 15;
+    }
+    else if (!_player->isGrounded()) {
+        if (_player->getJumpAnimationTimer() > 0.03f) {
+            if(_player->isMovingUp()) {
+                nextFrame = sprite->getFrame();
+                if (nextFrame == 31 || nextFrame == 24) {
+                    nextFrame = _jumpFrame;
+                }
+                if (_player->isFacingRight()) {
+                    if (nextFrame < 20 || nextFrame > 23) {
+                        nextFrame = 21;
+                    }
+                    else if (nextFrame > 20) {
+                        nextFrame -= 1;
+                    }
+                } else {
+                    if (nextFrame < 16 || nextFrame > 19) {
+                        nextFrame = 18;
+                    }
+                    else if (nextFrame < 19) {
+                        nextFrame += 1;
+                    }
+                }
+            }
+            else {
+                if (_player->isFacingRight()) {
+                    nextFrame = 19;
+                    _player->setJustLanded(true);
+                }
+                else {
+                    nextFrame = 20;
+                    _player->setJustLanded(true);
+                }
+            }
             sprite->setFrame(nextFrame);
             _player->setJumpAnimationTimer(0);
+        }
+    }
+    else if (_player->isGrounded() && _player->hasJustLanded()) {
+        if (_player->getJumpAnimationTimer() > 0.06f) {
+            nextFrame = sprite->getFrame();
+            if (nextFrame == 31 || nextFrame == 24) {
+                nextFrame = _jumpFrame;
+            }
+            if (_player->isFacingRight()) {
+                if (nextFrame > 18) {
+                    nextFrame = 18;
+                } else {
+                    nextFrame -= 1;
+                }
+                if (nextFrame == 16) {
+                    _player->setJustLanded(false);
+                }
+            }
+            else {
+                if (nextFrame < 21) {
+                    nextFrame = 21;
+                } else {
+                    nextFrame += 1;
+                }
+                if (nextFrame == 23) {
+                    _player->setJustLanded(false);
+                }
+            }
+            sprite->setFrame(nextFrame);
+            _player->setJumpAnimationTimer(0);
+        }
     }
     else if (xPos != 0 && _player->getWalkAnimationTimer() > 0.065f) {
         nextFrame = (sprite->getFrame() + 1) % 8;
@@ -345,6 +416,10 @@ void GameScene::update(float timestep)
     _rangedArm->setGlowTimer(_rangedArm->getGlowTimer() + timestep);
     _meleeArm->setGlowTimer(_meleeArm->getGlowTimer() + timestep);
 
+    if (sprite->getFrame() == 0 || sprite->getFrame() == 4) {
+        _sound->play_player_sound(SoundController::playerSType::step);
+    }
+    
     // Debug Mode on/off
     if (_input.getDebugKeyPressed())
     {
@@ -560,16 +635,22 @@ void GameScene::update(float timestep)
     {
         _player->setJumping(true);
         _player->setIsFirstFrame(true);
+        if (_player->isGrounded()) {
+            _player->setMovingUp(true);
+            _player->setJumpAnimationTimer(0);
+        }
     }
     else
     {
         _player->setJumping(false);
     }
+    _player->applyForce();
+
     if (_player->getVY() < -.2 || _player->getVY() > .2)
     {
         _player->setGrounded(false);
     }
-    else if (_player->getVY() >= -.2 && _player->getVY() <= .2)
+    else if (_player->getVY() >= -0.2 && _player->getVY() <= 0.2)
     {
         // check if this is the first "0" velocity frame, as this should not make the player grounded just yet. Might be height of jump.
         if (_player->isFirstFrame())
@@ -581,8 +662,10 @@ void GameScene::update(float timestep)
             _player->setGrounded(true);
         }
     }
-
-    _player->applyForce();
+    
+    if (_player->getVY() < 0) {
+        _player->setMovingUp(false);
+    }
 
     // Remove attacks
     auto ait = _attacks->_current.begin();
@@ -684,6 +767,8 @@ void GameScene::update(float timestep)
     float spacing = 2;
     float upDownY = fmod(upDown, spacing);
     if (upDownY > spacing/4 && upDownY <= 3*spacing/4) {
+        scene2::SpriteNode* meleeSprite = dynamic_cast<scene2::SpriteNode*>(_meleeArm->getSceneNode().get());
+//        meleeSprite->setFrame((meleeSprite->getFrame() + 1) % 12);
         upDownY = spacing/2 - upDownY;
     }
     else if (upDownY > 3*spacing/4) {
@@ -762,14 +847,45 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
 
 void GameScene::createMirror(Vec2 enemyPos, Mirror::Type type, std::string assetName, std::shared_ptr<Glow> enemyGlow) {
     std::shared_ptr<Texture> mirrorImage = _assets->get<Texture>(assetName);
+    std::shared_ptr<Texture> mirror_reflectattackImage = _assets->get<Texture>(MIRROR_REFLECT_TEXTURE);
+    //shards
+    std::shared_ptr<scene2::PolygonNode> mirrorShards[6];
+    mirrorShards[0] = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_1));
+    mirrorShards[1] = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_2));
+    mirrorShards[2] = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_3));
+    mirrorShards[3] = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_4));
+    mirrorShards[4] = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_5));
+    mirrorShards[5] = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_6));
+
+
     std::shared_ptr<Mirror> mirror = Mirror::alloc(enemyPos, mirrorImage->getSize() / _scale / 15, _scale, type); // TODO this is not right, fix this to be closest enemy
     std::shared_ptr<scene2::PolygonNode> mirrorSprite = scene2::PolygonNode::allocWithTexture(mirrorImage);
     mirror->setGlow(enemyGlow);
+    mirror->setAttackAnimationTimer(0);
+    std::shared_ptr<scene2::SpriteNode> attackSprite = scene2::SpriteNode::alloc(mirror_reflectattackImage, MIRROR_REFLECT_ROWS, MIRROR_REFLECT_COLS);
+    attackSprite->setFrame(0);
+    attackSprite->setScale(1.15f);
+    mirror->setAttackSprite(attackSprite);
+    mirror->showAttack(false);
+
+
+    std::shared_ptr<scene2::PolygonNode> mirrorShard1 = mirrorShards[1];
+    mirrorShards[rand() % 6]->copy(mirrorShard1);
+    std::shared_ptr<scene2::PolygonNode> mirrorShard2 = mirrorShards[2];
+    mirrorShards[rand() % 6]->copy(mirrorShard2);
+    std::shared_ptr<scene2::PolygonNode> mirrorShard3 = mirrorShards[3];
+    mirrorShards[rand() % 6]->copy(mirrorShard3);
+
+    mirror->setThreeShards(mirrorShard1, mirrorShard2, mirrorShard3);
     mirror->setSceneNode(mirrorSprite);
+    //mirrorSprite->addChildWithName(mirrorShard1, "shard1");
+    //mirrorSprite->addChildWithName(mirrorShard2, "shard2");
+    //mirrorSprite->addChildWithName(mirrorShard3, "shard3");
     mirror->setDebugColor(Color4::BLUE);
     mirrorSprite->setScale(0.15f);
     addObstacle(mirror, mirrorSprite, true);
     _enemies.push_back(mirror);
+
 }
 
 void GameScene::createEnemies(int wave) {

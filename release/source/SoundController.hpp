@@ -86,6 +86,7 @@ protected:
     
     std::shared_ptr<cugl::Sound> _playerStep;
     
+    std::shared_ptr<cugl::Sound> _playerSlash;
 public:
     
     SoundController();

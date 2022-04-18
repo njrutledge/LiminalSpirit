@@ -102,6 +102,8 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                         }
                         break;
                     }
+                    //set to show the attack animation
+                    mirror->showAttack(true);
                     
                 }
                 else if (attack->getType() == AttackController::Type::p_melee ||
@@ -182,6 +184,8 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                     }
                     break;
                 }
+                //set to show the attack animation
+                mirror->showAttack(true);
             }
         }
     }
@@ -220,8 +224,8 @@ void CollisionController::handleAttackCollision(AttackController::Attack* attack
         //both attacks, see if cancellation can occur
         if ((attack->getType() == AttackController::p_range && attack2->getType() == AttackController::e_range) || (attack->getType() == AttackController::e_range && attack2->getType() == AttackController::p_range)) {
             //both different range attacks, cancel both
-            attack->setInactive();
-            attack2->setInactive();
+            //attack->setInactive();
+            //attack2->setInactive();
         }
         else if ((attack->getType() == AttackController::p_melee && attack2->getType() == AttackController::e_melee) || (attack->getType() == AttackController::e_melee && attack2->getType() == AttackController::p_melee)) {
             attack->setInactive();

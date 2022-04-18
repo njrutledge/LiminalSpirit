@@ -28,6 +28,7 @@
 /** Color of HealthBar health */
 #define HEALTH_COLOR Color4(200,240,200)
 
+
 using namespace cugl;
 
 #pragma mark - 
@@ -158,8 +159,8 @@ void BaseEnemyModel::update(float dt) {
 			_healthTimer -= dt;
 		}
 		else {
-			//since there are no other children but healthbars, this works
-			_node->removeAllChildren();
+			_node->removeChildByName("healthbar");
+			_node->removeChildByName("healthbarback");
 		}
 	}
 
