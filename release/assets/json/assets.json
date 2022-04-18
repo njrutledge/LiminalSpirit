@@ -36,6 +36,13 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
+		"phantom_ani": {
+			"file": "textures/animations/phantom_idle_spritesheet.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
 		"circlemirror": {
 			"file": "textures/circlemirror.png",
 			"minfilter": "nearest",
@@ -70,6 +77,14 @@
 			"magfilter": "linear",
 			"wrapS": "clamp",
 			"wrapT": "clamp"
+		},
+		"glutton_ani": {
+			"file": "textures/animations/glutton_idle_spritesheet.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+
 		},
 		"player": {
 			"file": "textures/player.png",
@@ -479,6 +494,6 @@
 		}
 	},
 	"jsons": {
-		"constants": "json/level2.json"
+		"constants": "json/level.json"
 	}
 }

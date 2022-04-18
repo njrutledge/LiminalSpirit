@@ -343,7 +343,7 @@ void GameScene::update(float timestep)
         sprite->setFrame(nextFrame);
         _player->setIdleAnimationTimer(0);
     }
-    _player->setJumpAnimationTimer(_player->getIdleAnimationTimer() + timestep);
+    _player->setJumpAnimationTimer(_player->getJumpAnimationTimer() + timestep);
     _player->setWalkAnimationTimer(_player->getWalkAnimationTimer() + timestep);
     _player->setIdleAnimationTimer(_player->getIdleAnimationTimer() + timestep);
     _rangedArm->setGlowTimer(_rangedArm->getGlowTimer() + timestep);
@@ -379,6 +379,28 @@ void GameScene::update(float timestep)
         (*it)->setVY(direction.y);
         (*it)->getGlow()->setPosition((*it)->getPosition());
         (*it)->setInvincibilityTimer((*it)->getInvincibilityTimer() - timestep);
+
+        (*it)->setIdleAnimationTimer((*it)->getIdleAnimationTimer() + timestep);
+
+        scene2::SpriteNode* sprite = dynamic_cast<scene2::SpriteNode*>((*it)->getSceneNode().get());
+        // For running idle animations specific (for speed) to enemies
+        if ((*it)->getName() == "Phantom") {
+            if ((*it)->getIdleAnimationTimer() > 0.1f) {
+                sprite->setFrame((sprite->getFrame() + 1) % 7);
+                (*it)->setIdleAnimationTimer(0);
+            }
+        }
+        else if ((*it)->getName() == "Glutton") {
+            if ((*it)->getIdleAnimationTimer() > 1.f || 
+                (!sprite->getFrame() == 2 && (*it)->getIdleAnimationTimer() > 0.3f) 
+                || (!(sprite->getFrame() == 2 || sprite->getFrame() == 5 || sprite->getFrame() == 6) && (*it)->getIdleAnimationTimer() > 0.1f)) {
+
+                sprite->setFrame((sprite->getFrame() + 1) % 7);
+                (*it)->setIdleAnimationTimer(0);
+            }
+        }
+
+
         if((*it)->getInvincibilityTimer() <= 0){
             (*it)->setInvincibility(false);
         }
@@ -760,13 +782,15 @@ void GameScene::createEnemies(int wave) {
             _enemies.push_back(lost);
         }
         else if (!enemyName.compare("phantom")) {
-            std::shared_ptr<Texture> phantomImage = _assets->get<Texture>("phantom");
-            std::shared_ptr<Phantom> phantom = Phantom::alloc(enemyPos, phantomImage->getSize() / _scale / 10, _scale);
-            std::shared_ptr<scene2::PolygonNode> phantomSprite = scene2::PolygonNode::allocWithTexture(phantomImage);
+            std::shared_ptr<Texture> phantomHitboxImage = _assets->get<Texture>("phantom");
+            std::shared_ptr<Texture> phantomImage = _assets->get<Texture>("phantom_ani");
+            std::shared_ptr<Phantom> phantom = Phantom::alloc(enemyPos, phantomHitboxImage->getSize() / _scale / 10, _scale);
+            std::shared_ptr<scene2::SpriteNode> phantomSprite = scene2::SpriteNode::alloc(phantomImage, 1, 7);
             phantom->setSceneNode(phantomSprite);
             phantom->setDebugColor(Color4::BLUE);
             phantom->setGlow(enemyGlow);
-            phantomSprite->setScale(0.15f);
+            phantomSprite->setScale(0.05f);
+            phantomSprite->setFrame(0);
             addObstacle(phantom, phantomSprite, true);
             _enemies.push_back(phantom);
         }
@@ -791,13 +815,15 @@ void GameScene::createEnemies(int wave) {
             _enemies.push_back(seeker);
         } 
         else if (!enemyName.compare("glutton")) {
-            std::shared_ptr<Texture> gluttonImage = _assets->get<Texture>("glutton");
-            std::shared_ptr<Glutton> glutton = Glutton::alloc(enemyPos, gluttonImage->getSize() / _scale / 10, _scale);
-            std::shared_ptr<scene2::PolygonNode> gluttonSprite = scene2::PolygonNode::allocWithTexture(gluttonImage);
+            std::shared_ptr<Texture> gluttonHitboxImage = _assets->get<Texture>("glutton");
+            std::shared_ptr<Texture> gluttonImage = _assets->get<Texture>("glutton_ani");
+            std::shared_ptr<Glutton> glutton = Glutton::alloc(enemyPos, gluttonHitboxImage->getSize() / _scale / 10, _scale);
+            std::shared_ptr<scene2::SpriteNode> gluttonSprite = scene2::SpriteNode::alloc(gluttonImage, 1, 7);
             glutton->setSceneNode(gluttonSprite);
             glutton->setDebugColor(Color4::BLUE);
             glutton->setGlow(enemyGlow);
             gluttonSprite->setScale(0.12f);
+            gluttonSprite->setFrame(0);
             addObstacle(glutton, gluttonSprite, true);
             _enemies.push_back(glutton);
         }

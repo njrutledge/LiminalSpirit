@@ -105,6 +105,9 @@ protected:
 	/** Pointer to the enemy's Glow*/
 	std::shared_ptr<Glow> _glow;
 
+	/** Timer for the enemy's idle animation */
+	float _idleTime;
+
 	/** Redraws outline of physics fixtures */
 	virtual void resetDebug() override;
 
@@ -228,6 +231,12 @@ public:
 
 	/** Returns the pointer to the enemy's glow */
 	std::shared_ptr<Glow> getGlow() { return _glow; }
+
+	/** Returns the amount of time remaining for next idle animation frame */
+	float getIdleAnimationTimer() { return _idleTime; }
+
+	/** Sets the idle animation time */
+	void setIdleAnimationTimer(float value) { _idleTime = value; }
 
 	/** Sets the pointer to the enemy's glow */
 	void setGlow(std::shared_ptr<Glow> glow) { _glow = glow; }
