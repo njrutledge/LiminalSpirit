@@ -481,21 +481,26 @@ void GameScene::update(float timestep)
     }
     else if (_rangedArm->getLastType() == AttackController::MeleeState::first) {
         if (_rangedArm->getAnimeTimer() > 0.06f) {
-            if (rSprite->getFrame() == 5 && !_player->isFacingRight() || 
-                rSprite->getFrame() == 0 && _player->isFacingRight()) {
+            if ((rSprite->getFrame() == 5 && !_player->isFacingRight()) ||
+                (rSprite->getFrame() == 0 && _player->isFacingRight())) {
                 // Attack is finished
                 if (_player->isFacingRight()) {
                     rSprite->setFrame(5);
+                    rSprite->setAnchor(0.5,0.5);
+                    _rangedArm->setAttackAngle(0);
                 }
                 else {
                     rSprite->setFrame(0);
+                    rSprite->setAnchor(0.5,0.5);
+                    _rangedArm->setAttackAngle(0);
                 }
-            _rangedArm->setLastType(AttackController::MeleeState::cool);
-            _rangedArm->setAnimeTimer(0);
-            arm1Image->flipHorizontal(_player->isFacingRight());
+                _rangedArm->setLastType(AttackController::MeleeState::cool);
+                _rangedArm->setAnimeTimer(0);
+                arm1Image->flipHorizontal(_player->isFacingRight());
             }
             else {
                 if (_player->isFacingRight()) {
+                    rSprite->setAnchor(0.8,0.8);
                     if (rSprite->getFrame() == 0) {
                         rSprite->setFrame(5);
                     }
@@ -504,6 +509,7 @@ void GameScene::update(float timestep)
                     }
                 }
                 else {
+                    rSprite->setAnchor(0.2,0.8);
                     rSprite->setFrame((rSprite->getFrame() + 1) % 6);
                 }
                 _rangedArm->setAnimeTimer(0);
@@ -817,6 +823,14 @@ void GameScene::update(float timestep)
             attackSprite->setScale(.85f * (*it)->getRadius());
             attackSprite->setAngle((*it)->getAngle() * M_PI / 180);
             _rangedArm->setLastType(AttackController::MeleeState::first);
+            if (_swipes.getLeftSwipe() == SwipeController::downAttack) {
+                _rangedArm->setAttackAngle(270);
+            } else {
+                _rangedArm->setAttackAngle((*it)->getAngle());
+            }
+            if (_player->isFacingRight()) {
+                _rangedArm->setAttackAngle(fmod(_rangedArm->getAttackAngle() + 180, 360));
+            }
         }
         else if (attackType == AttackController::Type::p_melee) {
             AttackController::MeleeState meleeState = (*it)->getMeleeState();

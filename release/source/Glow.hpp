@@ -48,6 +48,9 @@ protected:
 
 	/** Last Type of attack used*/
 	AttackController::MeleeState _attackType;
+    
+    /** Angle of last projectile in degrees*/
+    float _attackAngle;
 
 	/** Redraws outline of physics fixtures */
 	virtual void resetDebug() override;
@@ -100,6 +103,12 @@ public:
 
 	/** Sets last type of attack used by melee */
 	void setLastType(AttackController::MeleeState type) { _attackType = type; }
+    
+    /** Returns angle of last attack */
+    float getAttackAngle() { return _attackAngle; }
+
+    /** Sets angle of last attack */
+    void setAttackAngle(float angle) { _attackAngle = angle; }
 
 	/** Returns the amount of time past since the last animation frame played */
 	float getAnimeTimer() { return _animeTime; }
