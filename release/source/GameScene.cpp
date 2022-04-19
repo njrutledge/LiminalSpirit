@@ -294,7 +294,7 @@ void GameScene::dispose()
  */
 void GameScene::update(float timestep)
 {
-    _sound->play_level_music();
+    _sound->play_level_music("cave");
     
     // Update input controller
     _input.update();
@@ -309,6 +309,9 @@ void GameScene::update(float timestep)
         _player->setVX(xPos);
     }
 
+    ///////////////////////////////////////
+    // Start Player and Arm Animations ////
+    ///////////////////////////////////////
     int nextFrame;
     scene2::SpriteNode* sprite = dynamic_cast<scene2::SpriteNode*>(_player->getSceneNode().get());
     if (_player->isStunned()) {
@@ -390,9 +393,19 @@ void GameScene::update(float timestep)
             _player->setJumpAnimationTimer(0);
         }
     }
-    else if (xPos != 0 && _player->getWalkAnimationTimer() > 0.065f) {
-        nextFrame = (sprite->getFrame() + 1) % 8;
-        sprite->setFrame(nextFrame);
+    else if (xPos != 0 && _player->getWalkAnimationTimer() > 0.09f) {
+        if (!_player->isFacingRight()) {
+            nextFrame = (sprite->getFrame() + 1) % 8;
+            sprite->setFrame(nextFrame);
+        }
+        else {
+            if (sprite->getFrame() > 7 || sprite->getFrame() == 0) {
+                sprite->setFrame(7);
+            }
+            else {
+                sprite->setFrame(sprite->getFrame() - 1);
+            }
+        }
         _player->setWalkAnimationTimer(0);
     }
     else if (xPos == 0 && ((_player->getIdleAnimationTimer() > 1.f) || !(sprite->getFrame() == 13 || sprite->getFrame() == 8 || sprite->getFrame() == 10 || sprite->getFrame() == 15) && _player->getIdleAnimationTimer() < 0.2f)) {
@@ -431,12 +444,6 @@ void GameScene::update(float timestep)
     } else {
         _step = false;
     }
-    
-    // Debug Mode on/off
-    if (_input.getDebugKeyPressed())
-    {
-        setDebug(!isDebug());
-    }
 
     scene2::TexturedNode *image = dynamic_cast<scene2::TexturedNode *>(_player->getSceneNode().get());
     scene2::TexturedNode* arm1Image = dynamic_cast<scene2::TexturedNode*>(_rangedArm->getSceneNode().get());
@@ -460,8 +467,49 @@ void GameScene::update(float timestep)
     }
 
     scene2::SpriteNode* mSprite = dynamic_cast<scene2::SpriteNode*>(_meleeArm->getSceneNode().get());
+    scene2::SpriteNode* rSprite = dynamic_cast<scene2::SpriteNode*>(_rangedArm->getSceneNode().get());
     _meleeArm->setAnimeTimer(_meleeArm->getAnimeTimer() + timestep);
     _rangedArm->setAnimeTimer(_rangedArm->getAnimeTimer() + timestep);
+
+    if (_rangedArm->getLastType() == AttackController::MeleeState::cool) {
+        if (_player->isFacingRight()) {
+            rSprite->setFrame(5);
+        }
+        else {
+            rSprite->setFrame(0);
+        }
+    }
+    else if (_rangedArm->getLastType() == AttackController::MeleeState::first) {
+        if (_rangedArm->getAnimeTimer() > 0.06f) {
+            if (rSprite->getFrame() == 5 && !_player->isFacingRight() || 
+                rSprite->getFrame() == 0 && _player->isFacingRight()) {
+                // Attack is finished
+                if (_player->isFacingRight()) {
+                    rSprite->setFrame(5);
+                }
+                else {
+                    rSprite->setFrame(0);
+                }
+            _rangedArm->setLastType(AttackController::MeleeState::cool);
+            _rangedArm->setAnimeTimer(0);
+            arm1Image->flipHorizontal(_player->isFacingRight());
+            }
+            else {
+                if (_player->isFacingRight()) {
+                    if (rSprite->getFrame() == 0) {
+                        rSprite->setFrame(5);
+                    }
+                    else {
+                        rSprite->setFrame(rSprite->getFrame() - 1);
+                    }
+                }
+                else {
+                    rSprite->setFrame((rSprite->getFrame() + 1) % 6);
+                }
+                _rangedArm->setAnimeTimer(0);
+            }
+        }
+    }
 
     if (_meleeArm->getLastType() == AttackController::MeleeState::cool) {
         if (_player->isFacingRight()) {
@@ -475,7 +523,12 @@ void GameScene::update(float timestep)
         if (_meleeArm->getAnimeTimer() > 0.06f) {
             if (mSprite->getFrame() == 7) {
                 // Attack is finished
-                mSprite->setFrame(0);
+                if (_player->isFacingRight()) {
+                    mSprite->setFrame(8);
+                }
+                else {
+                    mSprite->setFrame(0);
+                }
                 _meleeArm->setLastType(AttackController::MeleeState::cool);
                 _meleeArm->setAnimeTimer(0);
                 arm2Image->flipHorizontal(_player->isFacingRight());
@@ -576,6 +629,16 @@ void GameScene::update(float timestep)
         }
     }
 
+    ////////////////////////////////////////
+    ///////End Player and Arm Animations////
+    ////////////////////////////////////////
+
+
+    // Debug Mode on/off
+    if (_input.getDebugKeyPressed())
+    {
+        setDebug(!isDebug());
+    }
 
     // Enemy AI logic
     // For each enemy
@@ -733,6 +796,10 @@ void GameScene::update(float timestep)
             _player->setIsStunned(false);
         }
     }
+    
+    if(_dashTime > 0 && _dashTime < 0.6f){
+        _player->setDropTime(timestep);
+    }
 
     _player->setInvincibilityTimer(_player->getInvincibilityTimer() - timestep);
     _world->update(timestep);
@@ -749,6 +816,7 @@ void GameScene::update(float timestep)
             attackSprite = scene2::SpriteNode::alloc(attackTexture, 1, 1);
             attackSprite->setScale(.85f * (*it)->getRadius());
             attackSprite->setAngle((*it)->getAngle() * M_PI / 180);
+            _rangedArm->setLastType(AttackController::MeleeState::first);
         }
         else if (attackType == AttackController::Type::p_melee) {
             AttackController::MeleeState meleeState = (*it)->getMeleeState();
@@ -770,8 +838,8 @@ void GameScene::update(float timestep)
         (*it)->setDebugColor(Color4::YELLOW);
         addObstacle((*it), attackSprite, true);
     }
-    // DO NOT MOVE THIS LINE
     _attacks->update(_player->getPosition(), _player->getBody()->GetLinearVelocity(), timestep);
+    // DO NOT MOVE THE ABOVE LINE
     if (_swipes.getRightSwipe() == _swipes.upAttack)
     {
         _player->setJumping(true);
@@ -780,6 +848,9 @@ void GameScene::update(float timestep)
             _player->setMovingUp(true);
             _player->setJumpAnimationTimer(0);
         }
+    } else if (_swipes.getRightSwipe() == _swipes.downAttack){
+        //IDK
+        _player->setDropTime(0.4f);
     }
     else
     {
@@ -905,8 +976,8 @@ void GameScene::update(float timestep)
     _playerGlow->setPosition(_player->getPosition());
 
     // Determining arm positions and offsets
-    float offsetArm = -1.f;
-    float offsetArm2 = -3.f;
+    float offsetArm = -2.3f;
+    float offsetArm2 = -2.65f;
     if (!_player->isFacingRight()) {
         offsetArm = -1 * offsetArm;
     }
@@ -927,16 +998,26 @@ void GameScene::update(float timestep)
     }
 
     float upDown = _rangedArm->getGlowTimer();
-    float spacing = 2;
-    float upDownY = fmod(upDown, spacing);
-    if (upDownY > spacing/4 && upDownY <= 3*spacing/4) {
-        upDownY = spacing/2 - upDownY;
+    float upDown2 = _rangedArm->getGlowTimer() + 0.5f;
+    float spacing = 1.f;
+    float upDownY1 = fmod(upDown/2, spacing);
+    float upDownY2 = fmod(upDown2/2, spacing);
+    if (upDownY1 > spacing/4 && upDownY1 <= 3*spacing/4) {
+        upDownY1 = spacing/2 - upDownY1;
     }
-    else if (upDownY > 3*spacing/4) {
-        upDownY = -1*spacing + upDownY;
+    else if (upDownY1 > 3*spacing/4) {
+        upDownY1 = -1*spacing + upDownY1;
     }
-    _rangedArm->setPosition(_player->getPosition().x + offsetArm, _player->getPosition().y + (upDownY/spacing));
-    _meleeArm->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY/spacing));
+    if (upDownY2 > spacing / 4 && upDownY2 <= 3 * spacing / 4) {
+        upDownY2 = spacing / 2 - upDownY2;
+    }
+    else if (upDownY2 > 3 * spacing / 4) {
+        upDownY2 = -1 * spacing + upDownY2;
+    }
+
+
+    _rangedArm->setPosition(_player->getPosition().x + offsetArm, _player->getPosition().y + (upDownY1/spacing/3) + 0.2f);
+    _meleeArm->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY2/spacing/3) + 0.5f);
 }
 
 std::shared_ptr<BaseEnemyModel> GameScene::getNearestNonMirror(cugl::Vec2 pos) {
@@ -1136,6 +1217,7 @@ void GameScene::createEnemies(int wave, int spawnerInd) {
         else if (!enemyName.compare("spawner")) {
             _has_spawner = 1;
             _spawner_timer = 0;
+            _spawner_pos = enemyPos;
             std::shared_ptr<Texture> spawnerImage = _assets->get<Texture>("glutton");
             std::shared_ptr<Spawner> spawner = Spawner::alloc(enemyPos, spawnerImage->getSize() / _scale / 10, _scale);
             std::shared_ptr<scene2::PolygonNode> spawnerSprite = scene2::PolygonNode::allocWithTexture(spawnerImage);
@@ -1315,13 +1397,16 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
 
     // Ranged Arm for the player
     Vec2 rangeArmPos = PLAYER_POS;
-    std::shared_ptr<Texture> rangeImage = _assets->get<Texture>(PLAYER_RANGE_TEXTURE);
-    _rangedArm = Glow::alloc(rangeArmPos, rangeImage->getSize() / _scale, _scale);
+    std::shared_ptr<Texture> rangeHitboxImage = _assets->get<Texture>(PLAYER_RANGE_TEXTURE);
+    std::shared_ptr<Texture> rangeImage = _assets->get<Texture>("player_range_arm_ani");
+    _rangedArm = Glow::alloc(rangeArmPos, rangeHitboxImage->getSize() / _scale, _scale);
     _rangedArm->setGlowTimer(0);
     _rangedArm->setAnimeTimer(0);
-    std::shared_ptr<scene2::PolygonNode> rangeArmSprite = scene2::PolygonNode::allocWithTexture(rangeImage);
+    _rangedArm->setLastType(AttackController::MeleeState::cool);
+    std::shared_ptr<scene2::SpriteNode> rangeArmSprite = scene2::SpriteNode::alloc(rangeImage, 2, 6);
     _rangedArm->setSceneNode(rangeArmSprite);
-    rangeArmSprite->setScale(0.2);
+    rangeArmSprite->setFrame(0);
+    rangeArmSprite->setScale(0.22);
     addObstacle(_rangedArm, rangeArmSprite, true);
 
     //Melee Arm for the player
