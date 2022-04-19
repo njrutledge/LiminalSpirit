@@ -135,6 +135,9 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                         enemy->setLastMelee(attack);
                     }
                     if (enemy->getHealth() <= 0) {
+                        if (Spawner* spawner = dynamic_cast<Spawner*>(enemy)) {
+                            _spawner_killed = 1;
+                        }
                         enemy->markRemoved(true);
                     }
                 }
