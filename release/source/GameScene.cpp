@@ -386,9 +386,19 @@ void GameScene::update(float timestep)
             _player->setJumpAnimationTimer(0);
         }
     }
-    else if (xPos != 0 && _player->getWalkAnimationTimer() > 0.065f) {
-        nextFrame = (sprite->getFrame() + 1) % 8;
-        sprite->setFrame(nextFrame);
+    else if (xPos != 0 && _player->getWalkAnimationTimer() > 0.09f) {
+        if (!_player->isFacingRight()) {
+            nextFrame = (sprite->getFrame() + 1) % 8;
+            sprite->setFrame(nextFrame);
+        }
+        else {
+            if (sprite->getFrame() > 7 || sprite->getFrame() == 0) {
+                sprite->setFrame(7);
+            }
+            else {
+                sprite->setFrame(sprite->getFrame() - 1);
+            }
+        }
         _player->setWalkAnimationTimer(0);
     }
     else if (xPos == 0 && ((_player->getIdleAnimationTimer() > 1.f) || !(sprite->getFrame() == 13 || sprite->getFrame() == 8 || sprite->getFrame() == 10 || sprite->getFrame() == 15) && _player->getIdleAnimationTimer() < 0.2f)) {
@@ -451,8 +461,23 @@ void GameScene::update(float timestep)
     }
 
     scene2::SpriteNode* mSprite = dynamic_cast<scene2::SpriteNode*>(_meleeArm->getSceneNode().get());
+    scene2::SpriteNode* rSprite = dynamic_cast<scene2::SpriteNode*>(_rangedArm->getSceneNode().get());
     _meleeArm->setAnimeTimer(_meleeArm->getAnimeTimer() + timestep);
     _rangedArm->setAnimeTimer(_rangedArm->getAnimeTimer() + timestep);
+
+    if (_rangedArm->getLastType() == AttackController::MeleeState::cool) {
+        if (_player->isFacingRight()) {
+            rSprite->setFrame(5);
+        }
+        else {
+            rSprite->setFrame(0);
+        }
+    }
+    else if (_rangedArm->getLastType() == AttackController::MeleeState::first) {
+        if (_rangedArm->getAnimeTimer() > 0.06f) {
+
+        }
+    }
 
     if (_meleeArm->getLastType() == AttackController::MeleeState::cool) {
         if (_player->isFacingRight()) {
@@ -733,6 +758,7 @@ void GameScene::update(float timestep)
             std::shared_ptr<Texture> attackTexture = _assets->get<Texture>("player_projectile");
             attackSprite = scene2::PolygonNode::allocWithTexture(attackTexture);
             attackSprite->setScale(.85f * (*it)->getRadius());
+            _rangedArm->setLastType(AttackController::MeleeState::first);
         }
         else if (attackType == AttackController::Type::p_melee) {
             AttackController::MeleeState meleeState = (*it)->getMeleeState();
@@ -881,7 +907,7 @@ void GameScene::update(float timestep)
     _playerGlow->setPosition(_player->getPosition());
 
     // Determining arm positions and offsets
-    float offsetArm = -0.85f;
+    float offsetArm = -2.3f;
     float offsetArm2 = -2.65f;
     if (!_player->isFacingRight()) {
         offsetArm = -1 * offsetArm;
@@ -921,7 +947,7 @@ void GameScene::update(float timestep)
     }
 
 
-    _rangedArm->setPosition(_player->getPosition().x + offsetArm, _player->getPosition().y + (upDownY1/spacing/3) + 0.5f);
+    _rangedArm->setPosition(_player->getPosition().x + offsetArm, _player->getPosition().y + (upDownY1/spacing/3) + 0.2f);
     _meleeArm->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY2/spacing/3) + 0.5f);
 }
 
@@ -1269,6 +1295,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     _rangedArm = Glow::alloc(rangeArmPos, rangeHitboxImage->getSize() / _scale, _scale);
     _rangedArm->setGlowTimer(0);
     _rangedArm->setAnimeTimer(0);
+    _rangedArm->setLastType(AttackController::MeleeState::cool);
     std::shared_ptr<scene2::SpriteNode> rangeArmSprite = scene2::SpriteNode::alloc(rangeImage, 2, 6);
     _rangedArm->setSceneNode(rangeArmSprite);
     rangeArmSprite->setFrame(0);
