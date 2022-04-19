@@ -156,6 +156,13 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
+		"player_range_arm_ani": {
+			"file": "textures/animations/range_arm.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
 		"player_melee_arm": {
 			"file": "textures/sword_arm_static.png",
 			"minfilter": "nearest",
@@ -572,7 +579,7 @@
         }
 	},
 	"jsons": {
-		"surround": "json/surround.json",
+		"surround": "json/level2.json",
 		"battlefield": "json/battlefield.json",
 		"levelt":  "json/scaffold.json"
 	}
