@@ -309,6 +309,9 @@ void GameScene::update(float timestep)
         _player->setVX(xPos);
     }
 
+    ///////////////////////////////////////
+    // Start Player and Arm Animations ////
+    ///////////////////////////////////////
     int nextFrame;
     scene2::SpriteNode* sprite = dynamic_cast<scene2::SpriteNode*>(_player->getSceneNode().get());
     if (_player->isStunned()) {
@@ -441,12 +444,6 @@ void GameScene::update(float timestep)
     } else {
         _step = false;
     }
-    
-    // Debug Mode on/off
-    if (_input.getDebugKeyPressed())
-    {
-        setDebug(!isDebug());
-    }
 
     scene2::TexturedNode *image = dynamic_cast<scene2::TexturedNode *>(_player->getSceneNode().get());
     scene2::TexturedNode* arm1Image = dynamic_cast<scene2::TexturedNode*>(_rangedArm->getSceneNode().get());
@@ -484,7 +481,33 @@ void GameScene::update(float timestep)
     }
     else if (_rangedArm->getLastType() == AttackController::MeleeState::first) {
         if (_rangedArm->getAnimeTimer() > 0.06f) {
-
+            if (rSprite->getFrame() == 5 && !_player->isFacingRight() || 
+                rSprite->getFrame() == 0 && _player->isFacingRight()) {
+                // Attack is finished
+                if (_player->isFacingRight()) {
+                    rSprite->setFrame(5);
+                }
+                else {
+                    rSprite->setFrame(0);
+                }
+            _rangedArm->setLastType(AttackController::MeleeState::cool);
+            _rangedArm->setAnimeTimer(0);
+            arm1Image->flipHorizontal(_player->isFacingRight());
+            }
+            else {
+                if (_player->isFacingRight()) {
+                    if (rSprite->getFrame() == 0) {
+                        rSprite->setFrame(5);
+                    }
+                    else {
+                        rSprite->setFrame(rSprite->getFrame() - 1);
+                    }
+                }
+                else {
+                    rSprite->setFrame((rSprite->getFrame() + 1) % 6);
+                }
+                _rangedArm->setAnimeTimer(0);
+            }
         }
     }
 
@@ -500,7 +523,12 @@ void GameScene::update(float timestep)
         if (_meleeArm->getAnimeTimer() > 0.06f) {
             if (mSprite->getFrame() == 7) {
                 // Attack is finished
-                mSprite->setFrame(0);
+                if (_player->isFacingRight()) {
+                    mSprite->setFrame(8);
+                }
+                else {
+                    mSprite->setFrame(0);
+                }
                 _meleeArm->setLastType(AttackController::MeleeState::cool);
                 _meleeArm->setAnimeTimer(0);
                 arm2Image->flipHorizontal(_player->isFacingRight());
@@ -601,6 +629,16 @@ void GameScene::update(float timestep)
         }
     }
 
+    ////////////////////////////////////////
+    ///////End Player and Arm Animations////
+    ////////////////////////////////////////
+
+
+    // Debug Mode on/off
+    if (_input.getDebugKeyPressed())
+    {
+        setDebug(!isDebug());
+    }
 
     // Enemy AI logic
     // For each enemy

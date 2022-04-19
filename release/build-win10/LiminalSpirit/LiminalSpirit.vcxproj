@@ -207,6 +207,7 @@
     <ClInclude Include="..\..\source\PlayerModel.h" />
     <ClInclude Include="..\..\source\Seeker.hpp" />
     <ClInclude Include="..\..\source\SoundController.hpp" />
+    <ClInclude Include="..\..\source\Spawner.hpp" />
     <ClInclude Include="..\..\source\SwipeController.hpp" />
     <ClInclude Include="..\..\source\TiltController.hpp" />
     <ClInclude Include="..\..\source\HomeScene.hpp" />
@@ -234,6 +235,7 @@
     <ClCompile Include="..\..\source\Platform.cpp" />
     <ClCompile Include="..\..\source\Seeker.cpp" />
     <ClCompile Include="..\..\source\SoundController.cpp" />
+    <ClCompile Include="..\..\source\Spawner.cpp" />
     <ClCompile Include="..\..\source\SwipeController.cpp" />
     <ClCompile Include="..\..\source\PlayerModel.cpp" />
     <ClCompile Include="..\..\source\TiltController.cpp" />
