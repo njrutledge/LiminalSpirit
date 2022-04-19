@@ -96,6 +96,9 @@ protected:
 
 	/** Time passed since last jump frame */
 	float _jumpTime;
+    
+    /** Time player will drop through platforms */
+    float _dropTime;
 
 	/** Redraws outline of physics fixtures */
 	virtual void resetDebug() override;
@@ -254,6 +257,12 @@ public:
 
 	/** Sets the jump animation time */
 	void setJumpAnimationTimer(float value) { _jumpTime = value; }
+    
+    /** Gets the drop time */
+    float getDropTime() { return _dropTime; }
+    
+    /** Sets the drop time */
+    void setDropTime(float value) { _dropTime = value; }
 
 	/**
 	 * Returns how much force to apply to get the player moving

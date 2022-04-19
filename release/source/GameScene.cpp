@@ -724,6 +724,10 @@ void GameScene::update(float timestep)
             _player->setIsStunned(false);
         }
     }
+    
+    if(_dashTime > 0 && _dashTime < 0.6f){
+        _player->setDropTime(timestep);
+    }
 
     _player->setInvincibilityTimer(_player->getInvincibilityTimer() - timestep);
     _world->update(timestep);
@@ -760,8 +764,8 @@ void GameScene::update(float timestep)
         (*it)->setDebugColor(Color4::YELLOW);
         addObstacle((*it), attackSprite, true);
     }
-    // DO NOT MOVE THIS LINE
     _attacks->update(_player->getPosition(), _player->getBody()->GetLinearVelocity(), timestep);
+    // DO NOT MOVE THE ABOVE LINE
     if (_swipes.getRightSwipe() == _swipes.upAttack)
     {
         _player->setJumping(true);
@@ -770,6 +774,9 @@ void GameScene::update(float timestep)
             _player->setMovingUp(true);
             _player->setJumpAnimationTimer(0);
         }
+    } else if (_swipes.getRightSwipe() == _swipes.downAttack){
+        //IDK
+        _player->setDropTime(0.4f);
     }
     else
     {
