@@ -746,8 +746,9 @@ void GameScene::update(float timestep)
         std::shared_ptr<scene2::PolygonNode> attackSprite;
         if (attackType == AttackController::Type::p_range) {
             std::shared_ptr<Texture> attackTexture = _assets->get<Texture>("player_projectile");
-            attackSprite = scene2::PolygonNode::allocWithTexture(attackTexture);
+            attackSprite = scene2::SpriteNode::alloc(attackTexture, 1, 1);
             attackSprite->setScale(.85f * (*it)->getRadius());
+            attackSprite->setAngle((*it)->getAngle() * M_PI / 180);
         }
         else if (attackType == AttackController::Type::p_melee) {
             AttackController::MeleeState meleeState = (*it)->getMeleeState();
@@ -1455,6 +1456,7 @@ void GameScene::addObstacle(const std::shared_ptr<cugl::physics2::Obstacle> &obj
         obj->setListener([=](physics2::Obstacle *obs)
                          {
             weak->setPosition(obs->getPosition()*_scale);
-            weak->setAngle(obs->getAngle()); });
+            weak->setAngle(node->getAngle());
+        });
     }
 }
