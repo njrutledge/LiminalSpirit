@@ -35,6 +35,7 @@
 #include "Phantom.hpp"
 #include "Mirror.hpp"
 #include "Glutton.hpp"
+#include "Spawner.hpp"
 #include "PlayerModel.h"
 #include "Platform.hpp"
 
@@ -140,6 +141,10 @@ protected:
     std::vector<vector<string>> _spawn_order;
     std::vector<vector<Vec2>> _spawn_pos;
     std::vector<float> _spawn_times;
+    std::vector<vector<string>> _spawner_types;
+    cugl::Vec2 _spawner_pos;
+    float _spawner_timer;
+    int _has_spawner;
     /** Number of waves for this level */
     int _numWaves;
     /** Next wave number for spawning, starts at 0 */
@@ -147,6 +152,12 @@ protected:
     /** A game timer used for spawn times */
     float _timer;
 
+    /** Number of waves for the spawner */
+    int _numWavesSpawner;
+    /** Next wave number of the spawner starts at 0 */
+    int _nextWaveNumSpawner;
+    /** A game timer used for spawner times */
+    float _SpawnerTimer;
     /** Whether or not debug mode is active */
     bool _debug;
     
@@ -162,6 +173,9 @@ protected:
 
     /** true if going back to world select */
     bool _back;
+    
+    /** Boolean check for walking sound effect timing*/
+    bool _step;
 
     /**
      * Internal helper to build the scene graph.
@@ -268,7 +282,7 @@ public:
     /**
      * Creates all enemies and adds to _enemies
      */
-    void createEnemies(int wave);
+    void createEnemies(int wave, int spawnerInd);
 
     /** 
     * helper to create mirror enemies, adding them to _enemmies

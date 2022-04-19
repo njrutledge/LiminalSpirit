@@ -209,13 +209,14 @@ void PlayerModel::update(float dt) {
     }
 
     b2Filter filter = getFilterData();
-    if (getVY() > 0.1) {
+    if (getVY() > 0.1 || _dropTime > 0) {
         filter.maskBits = 0b101000;
     }
     else {
         filter.maskBits = 0b101100;
     }
     setFilterData(filter);
+    _dropTime -= dt;
 }
 
 #pragma mark -

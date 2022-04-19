@@ -145,6 +145,9 @@
 		F09AF65F27F64ACA003C6EA2 /* HomeScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64D27F64ACA003C6EA2 /* HomeScene.cpp */; };
 		F09AF66027F64ACA003C6EA2 /* HomeScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64D27F64ACA003C6EA2 /* HomeScene.cpp */; };
 		F09AF66127F64ACA003C6EA2 /* HomeScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64D27F64ACA003C6EA2 /* HomeScene.cpp */; };
+		F0D6C758280E29BF00A34038 /* Spawner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F0D6C757280E29BF00A34038 /* Spawner.cpp */; };
+		F0D6C759280E29C100A34038 /* Spawner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F0D6C757280E29BF00A34038 /* Spawner.cpp */; };
+		F0D6C75A280E29C200A34038 /* Spawner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F0D6C757280E29BF00A34038 /* Spawner.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -262,6 +265,8 @@
 		F09AF64C27F64ACA003C6EA2 /* Glow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Glow.cpp; sourceTree = "<group>"; };
 		F09AF64D27F64ACA003C6EA2 /* HomeScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HomeScene.cpp; sourceTree = "<group>"; };
 		F09AF64E27F64ACA003C6EA2 /* WorldSelectScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WorldSelectScene.hpp; sourceTree = "<group>"; };
+		F0D6C753280E29BF00A34038 /* Spawner.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Spawner.hpp; sourceTree = "<group>"; };
+		F0D6C757280E29BF00A34038 /* Spawner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Spawner.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -449,6 +454,8 @@
 		EBBF18B11D749176008E2001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				F0D6C757280E29BF00A34038 /* Spawner.cpp */,
+				F0D6C753280E29BF00A34038 /* Spawner.hpp */,
 				85841F402809F09300169F44 /* Phantom.cpp */,
 				85841F3F2809F09300169F44 /* Phantom.hpp */,
 				85841F3E2809F09300169F44 /* shaders */,
@@ -691,6 +698,7 @@
 				F09AF65827F64ACA003C6EA2 /* WorldSelectScene.cpp in Sources */,
 				85B0004327E00AD600DAC3F2 /* TiltController.cpp in Sources */,
 				F0750178280CD94C00CBD6A3 /* Phantom.cpp in Sources */,
+				F0D6C75A280E29C200A34038 /* Spawner.cpp in Sources */,
 				F05176E227D080DF00C0617F /* CollisionController.cpp in Sources */,
 				F05176E427D080E700C0617F /* InputController.cpp in Sources */,
 				EB9CDA3925D0EAB100EE1A09 /* main.cpp in Sources */,
@@ -721,6 +729,7 @@
 				F09AF66027F64ACA003C6EA2 /* HomeScene.cpp in Sources */,
 				F09AF65727F64ACA003C6EA2 /* WorldSelectScene.cpp in Sources */,
 				F0750174280CD94B00CBD6A3 /* Phantom.cpp in Sources */,
+				F0D6C759280E29C100A34038 /* Spawner.cpp in Sources */,
 				85B0004227E00AD600DAC3F2 /* TiltController.cpp in Sources */,
 				F05176E127D080DF00C0617F /* CollisionController.cpp in Sources */,
 				5783892E27E23F49000CB5B9 /* AIController.cpp in Sources */,
@@ -751,6 +760,7 @@
 				F09AF65F27F64ACA003C6EA2 /* HomeScene.cpp in Sources */,
 				F09AF65627F64ACA003C6EA2 /* WorldSelectScene.cpp in Sources */,
 				85841F422809F09300169F44 /* Phantom.cpp in Sources */,
+				F0D6C758280E29BF00A34038 /* Spawner.cpp in Sources */,
 				85B0002027DFAC8500DAC3F2 /* LoadingScene.cpp in Sources */,
 				85B0004127E00AD600DAC3F2 /* TiltController.cpp in Sources */,
 				EB2BE9B61D74952A002FE78B /* main.cpp in Sources */,

@@ -93,6 +93,7 @@ float LEVEL_HEIGHT = 54;
 bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const std::shared_ptr<SoundController> sound, string json)
 {
     _back = false;
+    _step = false;
     Size dimen = Application::get()->getDisplaySize();
     float boundScale = SCENE_WIDTH / dimen.width;
     dimen *= boundScale;
@@ -163,6 +164,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _numWaves = index;
     // Set enemy wave number
     _nextWaveNum = 0;
+    
+    // Initialize spawner
+    _has_spawner = 0;
     
     // Create a scene graph the same size as the window
     //_scene = Scene2::alloc(dimen.width, dimen.height);
@@ -290,7 +294,7 @@ void GameScene::dispose()
  */
 void GameScene::update(float timestep)
 {
-    _sound->play_level_music();
+    _sound->play_level_music("cave");
     
     // Update input controller
     _input.update();
@@ -430,7 +434,12 @@ void GameScene::update(float timestep)
     _meleeArm->setGlowTimer(_meleeArm->getGlowTimer() + timestep);
 
     if (sprite->getFrame() == 0 || sprite->getFrame() == 4) {
-        _sound->play_player_sound(SoundController::playerSType::step);
+        if (!_step) {
+            _sound->play_player_sound(SoundController::playerSType::step);
+        }
+        
+    } else {
+        _step = false;
     }
     
     // Debug Mode on/off
@@ -636,9 +645,9 @@ void GameScene::update(float timestep)
             }
             else {
                 shared_ptr<Seeker> seeker = dynamic_pointer_cast<Seeker>(*it);
-                if (seeker->justAttacked) {
-                    _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 1.0f, 0.2f, 2.0f, AttackController::Type::e_melee, (vel.scale(0.2)).rotate((play_p - en_p).getAngle()), _timer);
-                }
+                
+                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 1.0f, 0.2f, 2.0f, AttackController::Type::e_melee, (vel.scale(0.2)).rotate((play_p - en_p).getAngle()), _timer);
+                
             }
   
             if ((*it)->getName() == "Lost") {
@@ -664,6 +673,12 @@ void GameScene::update(float timestep)
         }
     }
     
+    // update spawner
+    if(_has_spawner) {
+        if(_collider.getSpawnerKilled() == 1) {
+            _has_spawner = 0;
+        }
+    }
     _swipes.update(_input, _player->isGrounded());
     b2Vec2 playerPos = _player->getBody()->GetPosition();
     if (_player->getInvincibilityTimer() <= 0) {
@@ -743,6 +758,10 @@ void GameScene::update(float timestep)
             _player->setIsStunned(false);
         }
     }
+    
+    if(_dashTime > 0 && _dashTime < 0.6f){
+        _player->setDropTime(timestep);
+    }
 
     _player->setInvincibilityTimer(_player->getInvincibilityTimer() - timestep);
     _world->update(timestep);
@@ -780,8 +799,8 @@ void GameScene::update(float timestep)
         (*it)->setDebugColor(Color4::YELLOW);
         addObstacle((*it), attackSprite, true);
     }
-    // DO NOT MOVE THIS LINE
     _attacks->update(_player->getPosition(), _player->getBody()->GetLinearVelocity(), timestep);
+    // DO NOT MOVE THE ABOVE LINE
     if (_swipes.getRightSwipe() == _swipes.upAttack)
     {
         _player->setJumping(true);
@@ -790,6 +809,9 @@ void GameScene::update(float timestep)
             _player->setMovingUp(true);
             _player->setJumpAnimationTimer(0);
         }
+    } else if (_swipes.getRightSwipe() == _swipes.downAttack){
+        //IDK
+        _player->setDropTime(0.4f);
     }
     else
     {
@@ -890,12 +912,20 @@ void GameScene::update(float timestep)
     _timer += timestep;
 
     if (_nextWaveNum < _numWaves && _timer >= _spawn_times[_nextWaveNum]){
-        createEnemies(_nextWaveNum);
+        createEnemies(_nextWaveNum, 0);
         _nextWaveNum += 1;
+    }
+    
+    if(_has_spawner) {
+        _spawner_timer += timestep;
+        if (_nextWaveNumSpawner < _numWavesSpawner && _spawner_timer >= 10){
+            createEnemies(_nextWaveNumSpawner, 1);
+            _nextWaveNumSpawner += 1;
+        }
     }
 
     // All waves created and all enemies cleared
-    if (_nextWaveNum >= _numWaves && !_enemies.size()) {
+    if (_nextWaveNum >= _numWaves && !_enemies.size() && !_has_spawner) {
         // Create and layout win text
         std::string msg = strtool::format("YOU WIN!");
         _endText = TextLayout::allocWithText(msg, _font);
@@ -1061,13 +1091,23 @@ void GameScene::createMirror(Vec2 enemyPos, Mirror::Type type, std::string asset
 
 }
 
-void GameScene::createEnemies(int wave) {
-
-    std::vector<string> enemies = _spawn_order.at(wave);
-    std::vector<cugl::Vec2> positions = _spawn_pos.at(wave);
+void GameScene::createEnemies(int wave, int spawnerInd) {
+    std::vector<string> enemies;
+    std::vector<cugl::Vec2> positions;
+    if (!spawnerInd) {
+        enemies = _spawn_order.at(wave);
+        positions = _spawn_pos.at(wave);
+    } else {
+        enemies = _spawner_types.at(wave);
+    }
     
     for (int i = 0; i < enemies.size(); i++) {
-        Vec2 enemyPos = positions[i];
+        Vec2 enemyPos;
+        if (!spawnerInd) {
+            enemyPos = positions[i];
+        } else {
+            enemyPos = _spawner_pos;
+        }
         std::string enemyName = enemies[i];
         std::shared_ptr<Texture> enemyGlowImage = _assets->get<Texture>(GLOW_TEXTURE);
         std::shared_ptr<Glow> enemyGlow = Glow::alloc(enemyPos, enemyGlowImage->getSize() / _scale, _scale);
@@ -1134,6 +1174,34 @@ void GameScene::createEnemies(int wave) {
             gluttonSprite->setFrame(0);
             addObstacle(glutton, gluttonSprite, true);
             _enemies.push_back(glutton);
+        }
+        else if (!enemyName.compare("spawner")) {
+            _has_spawner = 1;
+            _spawner_timer = 0;
+            _spawner_pos = enemyPos;
+            std::shared_ptr<Texture> spawnerImage = _assets->get<Texture>("glutton");
+            std::shared_ptr<Spawner> spawner = Spawner::alloc(enemyPos, spawnerImage->getSize() / _scale / 10, _scale);
+            std::shared_ptr<scene2::PolygonNode> spawnerSprite = scene2::PolygonNode::allocWithTexture(spawnerImage);
+            spawner->setSceneNode(spawnerSprite);
+            spawner->setDebugColor(Color4::BLACK);
+            spawner->setGlow(enemyGlow);
+            spawnerSprite->setScale(0.12f);
+            addObstacle(spawner, spawnerSprite, true);
+            _enemies.push_back(spawner);
+            auto spawnTypes = _constants->get("spawner_types")->children();
+            int index = 0;
+            for(auto it = spawnTypes.begin(); it != spawnTypes.end(); ++it) {
+                std::shared_ptr<JsonValue> entry = (*it);
+                std::vector<string> enemies_types;
+                for(int i = 0; i < entry->size(); i++) {
+                    enemies_types.push_back(entry->get(i)->asString());
+                }
+                _spawner_types.push_back(enemies_types);
+                index++;
+            }
+            _numWavesSpawner = index;
+            createEnemies(0, 1);
+            _nextWaveNumSpawner = 1;
         }
         // TODO add more enemy types
         // If the enemy name is incorrect, no enemy will be made

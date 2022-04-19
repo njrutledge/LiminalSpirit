@@ -175,6 +175,7 @@ void LiminalSpirit::updateLoadingScene(float timestep)
 void LiminalSpirit::updateHomeScene(float timestep)
 {
     _home.update(timestep);
+    _sound_controller->play_menu_music();
     switch (_home.getChoice()) {
     case HomeScene::Choice::PLAY:
         _scene = State::WORLDS;
@@ -193,6 +194,7 @@ void LiminalSpirit::updateHomeScene(float timestep)
 void LiminalSpirit::updateWorldSelectScene(float timestep)
 {
     _worldSelect.update(timestep);
+    _sound_controller->play_menu_music();
     switch (_worldSelect.getChoice()) {
     case WorldSelectScene::Choice::CAVE:
         _gameplay.init(_assets, _sound_controller, "battlefield");
@@ -203,7 +205,7 @@ void LiminalSpirit::updateWorldSelectScene(float timestep)
         _scene = State::GAME;
         break;
     case WorldSelectScene::Choice::FOREST:
-        _gameplay.init(_assets, _sound_controller, "levelt");
+        _gameplay.init(_assets, _sound_controller, "stack");
         _scene = State::GAME;
         break;
     }
