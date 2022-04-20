@@ -50,6 +50,7 @@ bool BaseEnemyModel::init(const cugl::Vec2& pos, const cugl::Size& size, float s
 	_timePast = 0.0f;
 	_enemyName = props.name;
 	_density = props.density;
+    _spawnerIndex = -1;
 
 	if (CapsuleObstacle::init(pos, nsize)) {
 		setDensity(_density);

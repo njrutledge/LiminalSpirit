@@ -120,6 +120,9 @@ protected:
 	cugl::Size _size;
 
 	float _healthTimer;
+    
+    /** If the enemy is from a spawner, index of the spawner; otherwise, -1.*/
+    int _spawnerIndex;
 
 public:
 
@@ -245,6 +248,10 @@ public:
 
 	/** Returns the name of the ground sensor */
 	std::string* getSensorName() { return &_sensorName; }
+    
+    int getSpawnerInd() {return _spawnerIndex; }
+    
+    void setSpawnerInd(int index) {_spawnerIndex = index; }
 
 #pragma mark - 
 #pragma mark Physics Methods
