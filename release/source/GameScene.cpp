@@ -332,7 +332,7 @@ void GameScene::update(float timestep)
         _timer += timestep;
 
         if (_nextWaveNum < _numWaves && _timer >= _spawn_times[_nextWaveNum]) {
-            createEnemies(_nextWaveNum, 0);
+            createEnemies(_nextWaveNum);
             _nextWaveNum += 1;
         }
         //return to stop the rest of the update in DEBUG ONLY
@@ -1225,7 +1225,7 @@ void GameScene::createSpawnerEnemy(int spawnerInd, string enemyName) {
     addObstacle(enemyGlow, enemyGlowSprite, true);
     if (!enemyName.compare("lost") || !enemyName.compare("Lost") ) {
         std::shared_ptr<Texture> lostImage = _assets->get<Texture>("lost");
-        std::shared_ptr<Lost> lost = Lost::alloc(enemyPos, lostImage->getSize() / _scale / 10, _scale);
+        std::shared_ptr<Lost> lost = Lost::alloc(enemyPos,lostImage->getSize(), lostImage->getSize() / _scale / 10, _scale);
         std::shared_ptr<scene2::PolygonNode> lostSprite = scene2::PolygonNode::allocWithTexture(lostImage);
         lost->setGlow(enemyGlow);
         lost->setSceneNode(lostSprite);
@@ -1238,7 +1238,7 @@ void GameScene::createSpawnerEnemy(int spawnerInd, string enemyName) {
     else if (!enemyName.compare("phantom") || !enemyName.compare("Phantom")) {
         std::shared_ptr<Texture> phantomHitboxImage = _assets->get<Texture>("phantom");
         std::shared_ptr<Texture> phantomImage = _assets->get<Texture>("phantom_ani");
-        std::shared_ptr<Phantom> phantom = Phantom::alloc(enemyPos, phantomHitboxImage->getSize() / _scale / 10, _scale);
+        std::shared_ptr<Phantom> phantom = Phantom::alloc(enemyPos, Vec2(phantomImage->getSize().width / 7, phantomImage->getSize().height), phantomHitboxImage->getSize() / _scale / 10, _scale);
         std::shared_ptr<scene2::SpriteNode> phantomSprite = scene2::SpriteNode::alloc(phantomImage, 1, 7);
         phantom->setSceneNode(phantomSprite);
         phantom->setDebugColor(Color4::BLUE);
@@ -1262,7 +1262,7 @@ void GameScene::createSpawnerEnemy(int spawnerInd, string enemyName) {
     }
     else if (!enemyName.compare("seeker") || !enemyName.compare("Seeker")) {
         std::shared_ptr<Texture> seekerImage = _assets->get<Texture>("seeker");
-        std::shared_ptr<Seeker> seeker = Seeker::alloc(enemyPos, seekerImage->getSize() / _scale / 10, _scale);
+        std::shared_ptr<Seeker> seeker = Seeker::alloc(enemyPos, seekerImage->getSize(), seekerImage->getSize() / _scale / 10, _scale);
         std::shared_ptr<scene2::PolygonNode> seekerSprite = scene2::PolygonNode::allocWithTexture(seekerImage);
         seeker->setSceneNode(seekerSprite);
         seeker->setDebugColor(Color4::GREEN);
@@ -1275,7 +1275,7 @@ void GameScene::createSpawnerEnemy(int spawnerInd, string enemyName) {
     else if (!enemyName.compare("glutton") || !enemyName.compare("Glutton")) {
         std::shared_ptr<Texture> gluttonHitboxImage = _assets->get<Texture>("glutton");
         std::shared_ptr<Texture> gluttonImage = _assets->get<Texture>("glutton_ani");
-        std::shared_ptr<Glutton> glutton = Glutton::alloc(enemyPos, gluttonHitboxImage->getSize() / _scale / 10, _scale);
+        std::shared_ptr<Glutton> glutton = Glutton::alloc(enemyPos+ Vec2(0,2), Vec2(gluttonImage->getSize().width/7, gluttonImage->getSize().height), gluttonHitboxImage->getSize() / _scale / 5, _scale);
         std::shared_ptr<scene2::SpriteNode> gluttonSprite = scene2::SpriteNode::alloc(gluttonImage, 1, 7);
         glutton->setSceneNode(gluttonSprite);
         glutton->setDebugColor(Color4::BLUE);
