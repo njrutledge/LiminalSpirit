@@ -95,6 +95,9 @@ public:
         //A velocity vector to update the projectile
         cugl::Vec2 _vel;
         
+        /**Attack angle in degrees*/
+        float _angle;
+        
         //Which type of attack this is
         Type _type;
         
@@ -133,7 +136,7 @@ public:
         void dispose();
 
         bool init(const cugl::Vec2 p, float radius, float a, float dmg, float scale, Type s, MeleeState m,
-                  cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel, float timer);
+                  cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel, float angle, float timer);
         
         
         /**
@@ -154,6 +157,7 @@ public:
         
         cugl::Poly2 getBall() {return _ball;}
         cugl::Vec2 getPosition() { return cugl::Vec2(_body->GetPosition().x, _body->GetPosition().y); }
+        float getAngle() {return _angle; }
         int getDamage() { return _damage; }
         Type getType(){ return _type; }
         MeleeState getMeleeState(){ return _meleeState; }
@@ -184,7 +188,7 @@ public:
 #pragma mark Static Constructors
         static std::shared_ptr<Attack> alloc(cugl::Vec2 p, float radius, float age, float dmg, float scale,
                                              Type t, MeleeState m, cugl::Vec2 oof, cugl::PolyFactory b,
-                                             cugl::Vec2 vel, Side s, float timer) {
+                                             cugl::Vec2 vel, float angle, Side s, float timer) {
             float off = 1.5f;
             if (p.x + radius + off > _worldWidth && s == right) {
                 p.x = _worldWidth - 0.1f - radius - off;
@@ -200,7 +204,7 @@ public:
             }
 
             std::shared_ptr<Attack> result = std::make_shared<Attack>();
-            return (result->init(p, radius, age, dmg, scale, t, m, oof, b, vel, timer) ? result : nullptr);
+            return (result->init(p, radius, age, dmg, scale, t, m, oof, b, vel, angle, timer) ? result : nullptr);
         }
         
     };

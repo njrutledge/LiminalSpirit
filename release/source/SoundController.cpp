@@ -30,33 +30,60 @@ void SoundController::LevelMusic::init(string biome, std::shared_ptr<cugl::Asset
  */
 void SoundController::LevelMusic::play_music() {
     
-    std::shared_ptr<cugl::AudioQueue> q = cugl::AudioEngine::get()->getMusicQueue();
-    
-    if (q->getState() == cugl::AudioEngine::State::INACTIVE) {
-       q->play(_mixer, true);
-    }
+    cugl::AudioEngine::get()->getMusicQueue()->advance(0, 0.5);
+    cugl::AudioEngine::get()->getMusicQueue()->enqueue(_mixer, true);
     
 };
 
 SoundController::SoundController(){};
 
 void SoundController::init(std::shared_ptr<cugl::AssetManager> &assets) {
+    
+    _state = LOAD;
+    
     _assets = assets;
     
+    _menu = assets->get<cugl::Sound>("menu");
+    
     _cave1 = make_shared<LevelMusic>();
-    _cave1->init("cave2", _assets);
+    _cave1->init("cave1", _assets);
     
     _cave2 = make_shared<LevelMusic>();
     _cave2->init("cave2", _assets);
+    
+    _mushroom1 = make_shared<LevelMusic>();
+    _mushroom1->init("mushroom1", _assets);
     
     _playerStep = assets->get<cugl::Sound>("playerStep");
     _playerShoot = assets->get<cugl::Sound>("playerShoot");
     _playerSlash = assets->get<cugl::Sound>("playerSlash");
 };
 
-void SoundController::play_level_music() {
+void SoundController::play_menu_music() {
     
-    _cave2->play_music();
+    if (_state != MENU) {
+        _state = MENU;
+        cugl::AudioEngine::get()->getMusicQueue()->advance(0, 0.5);
+        cugl::AudioEngine::get()->getMusicQueue()->enqueue(_menu, true);
+    }
+
+}
+
+void SoundController::play_level_music(string biome) {
+    
+    int r = rand()%3;
+    
+    if (_state != LEVEL) {
+        _state = LEVEL;
+        if (r == 0) {
+            _cave1->play_music();
+        } else if (r == 1) {
+            _cave2->play_music();
+        }else {
+            _mushroom1->play_music();
+        }
+        
+    }
     
 };
 

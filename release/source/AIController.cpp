@@ -193,44 +193,75 @@ Vec2 AIController::getSeekerMovement(shared_ptr<Seeker> seeker, Vec2 player_pos,
 //    int flip = 1; // flips y direction
     //Check if enemy is already attacking
     if (!seeker->isAttacking()) {
-        if (player_pos.x <= seeker->getPosition().x + seeker->getAttackRadius()/4
-            && player_pos.x >= seeker->getPosition().x - seeker->getAttackRadius()/4
-            && player_pos.y <= seeker->getPosition().y + seeker->getAttackRadius()/4
-            && player_pos.y >= seeker->getPosition().y - seeker->getAttackRadius()/4) {
-            if (seeker->getAttackCooldown() < seeker->getTimePast()) {
-                seeker->setIsAttacking(true);
-                seeker->justAttacked = true;
-                seeker->setTimePast(0.0f);
+        if (seeker->stop) {
+            seeker->stopTimer+=timestep;
+            if (seeker->stopTimer >= 1) {
+                seeker->stopTimer = 0;
+                seeker->stop = false;
             }
-            return Vec2(); // Seeker stops moving
+            return Vec2();
         }
-
-        if (player_pos.distance(seeker->getPosition())>6 && !seeker->getHasSeenPlayer()) {
-            if(seeker->targetPosition.distance(seeker->getPosition()) <= 1) {
+        
+        if(seeker->targetPosition.distance(seeker->getPosition()) <= 1) {
+            if (player_pos.x <= seeker->getPosition().x + seeker->getAttackRadius()/4
+                && player_pos.x >= seeker->getPosition().x - seeker->getAttackRadius()/4
+                && player_pos.y <= seeker->getPosition().y + seeker->getAttackRadius()/4
+                && player_pos.y >= seeker->getPosition().y - seeker->getAttackRadius()/4) {
+                if (seeker->getAttackCooldown() < seeker->getTimePast()) {
+                    seeker->setIsAttacking(true);
+                    seeker->justAttacked = true;
+                    seeker->setTimePast(0.0f);
+                }
+                return Vec2(); // Seeker stops moving
+            }
+            if (player_pos.distance(seeker->getPosition())>6) {
                 seeker->targetPosition = Vec2(0,0);
                 while (seeker->targetPosition.x < 2 || seeker->targetPosition.x > 30 || seeker->targetPosition.y < 2 || seeker->targetPosition.y > 22) {
-                    float r = 10 + 10 * std::sqrt(static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
+                    float r = 5 + 10 * std::sqrt(static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
                     float alpha = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2 * M_PI;
                     seeker->targetPosition = Vec2(r * std::cos(alpha), r * std::sin(alpha)) + seeker->getPosition();
                 }
+            } else {
+                seeker->targetPosition = player_pos;
             }
-            return movementHelper(seeker->targetPosition, seeker->getPosition(), seeker->getHorizontalSpeed(), seeker->getVerticalSpeed(), seeker->velScale);
-        
+            seeker->stop = true;
+            seeker->stopTimer = 0;
+            return Vec2();
         }
-        
-        else if (player_pos.distance(seeker->getPosition())>4) {
-            return movementHelper(player_pos, seeker->getPosition(), seeker->getHorizontalSpeed(), seeker->getVerticalSpeed(), 1);
-        }
-        else {
-            return movementHelper(player_pos, seeker->getPosition(), seeker->getHorizontalSpeed(), seeker->getVerticalSpeed(), 3);
-        }
+            
+        return movementHelper(seeker->targetPosition, seeker->getPosition(), seeker->getHorizontalSpeed(), seeker->getVerticalSpeed(), seeker->velScale);
     }
+//        if (player_pos.distance(seeker->getPosition())>6 && !seeker->getHasSeenPlayer()) {
+//            if(seeker->targetPosition.distance(seeker->getPosition()) <= 1) {
+//                seeker->targetPosition = Vec2(0,0);
+//                while (seeker->targetPosition.x < 2 || seeker->targetPosition.x > 30 || seeker->targetPosition.y < 2 || seeker->targetPosition.y > 22) {
+//                    float r = 10 + 10 * std::sqrt(static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
+//                    float alpha = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2 * M_PI;
+//                    seeker->targetPosition = Vec2(r * std::cos(alpha), r * std::sin(alpha)) + seeker->getPosition();
+//                }
+//                seeker->stop = true;
+//                seeker->stopTimer = 0;
+//                return Vec2();
+//            }
+//
+//            return movementHelper(seeker->targetPosition, seeker->getPosition(), seeker->getHorizontalSpeed(), seeker->getVerticalSpeed(), seeker->velScale);
+//
+//        }
+        
+//        if (player_pos.distance(seeker->getPosition())>4) {
+//
+//            return movementHelper(player_pos, seeker->getPosition(), seeker->getHorizontalSpeed(), seeker->getVerticalSpeed(), 1);
+//        }
+//        else {
+//
+//            return movementHelper(player_pos, seeker->getPosition(), seeker->getHorizontalSpeed(), seeker->getVerticalSpeed(), 3);
+//        }
+//    }
     else {
         // Check if attack timer should be reset
         if (seeker->getAttackCooldown() < seeker->getTimePast()) {
             seeker->setIsAttacking(false);
             seeker->setTimePast(0.0f);
-            
         }
         seeker->justAttacked = false;
         return Vec2();

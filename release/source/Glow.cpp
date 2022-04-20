@@ -92,7 +92,7 @@ void Glow::update(float dt) {
 	CapsuleObstacle::update(dt);
 	if (_node != nullptr) {
 		_node->setPosition(getPosition() * _drawScale);
-		_node->setAngle(getAngle());
+        _node->setAngle(_attackAngle * M_PI / 180);
 	}
 }
 

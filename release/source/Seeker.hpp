@@ -25,15 +25,17 @@ public:
 
 #pragma mark -
 #pragma mark Static Constructors
-    /** Allocates a new lost */
+    /** Allocates a new seeker */
     static std::shared_ptr<Seeker> alloc(const cugl::Vec2& pos, const cugl::Size& realSize, const cugl::Size& size, float scale) {
         std::shared_ptr<Seeker> result = std::make_shared<Seeker>();
         return (result->init(pos, realSize, size, scale, SEEKER_PROPS) ? result : nullptr);
     }
 
-    float velScale = 2.5;
+    float velScale = 3.8;
     cugl::Vec2 targetPosition;
     bool justAttacked = false;
+    bool stop = false;
+    float stopTimer = 0;
 
 };
 

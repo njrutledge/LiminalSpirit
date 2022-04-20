@@ -156,6 +156,13 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
+		"player_range_arm_ani": {
+			"file": "textures/animations/range_arm.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
 		"player_melee_arm": {
 			"file": "textures/sword_arm_static.png",
 			"minfilter": "nearest",
@@ -555,6 +562,18 @@
 			"stream": true,
 			"volume": 0.5
 		},
+        "mushroom1": {
+            "type": "sample",
+            "file": "sounds/mushroom/mushroom1.ogg",
+            "stream": true,
+            "volume": 0.5
+        },
+        "menu": {
+            "type": "sample",
+            "file": "sounds/LiminalMenu.ogg",
+            "stream": true,
+            "volume": 0.5
+        },
         "playerStep": {
             "type": "sample",
             "file": "sounds/playerSFX/Player_Step.wav",
@@ -572,10 +591,11 @@
         }
 	},
 	"jsons": {
-		"surround": "json/surround.json",
+		"surround": "json/level2.json",
 		"battlefield": "json/battlefield.json",
 		"levelt": "json/levelt.json",
 		"scaffold": "json/scaffold.json",
-		"level2":  "json/level2.json"
+		"level2": "json/level2.json",
+		"stack": "json/stack.json"
 	}
 }

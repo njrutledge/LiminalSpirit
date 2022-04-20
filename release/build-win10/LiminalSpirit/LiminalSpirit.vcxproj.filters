@@ -52,6 +52,7 @@
     <ClCompile Include="..\..\source\WorldSelectScene.cpp" />
     <ClCompile Include="..\..\source\Phantom.cpp" />
     <ClCompile Include="..\..\source\Seeker.cpp" />
+    <ClCompile Include="..\..\source\Spawner.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -105,6 +106,7 @@
     <ClInclude Include="..\..\source\PlayerModel.h" />
     <ClInclude Include="..\..\source\Phantom.hpp" />
     <ClInclude Include="..\..\source\Seeker.hpp" />
+    <ClInclude Include="..\..\source\Spawner.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LiminalSpirit.rc" />
