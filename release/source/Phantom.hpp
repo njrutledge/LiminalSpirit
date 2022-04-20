@@ -12,6 +12,7 @@
 #include <cugl/cugl.h>
 #include "BaseEnemyModel.h"
 
+#define PHANTOM_ATTACK "phantom_projectile"
 
 #pragma mark - 
 #pragma mark Phantom

@@ -14,6 +14,7 @@
 #include <cugl/cugl.h>
 #include "BaseEnemyModel.h"
 
+#define GLUTTON_ATTACK "glutton_projectile"
 
 #pragma mark -
 #pragma mark Glutton

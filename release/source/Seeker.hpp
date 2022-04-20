@@ -11,6 +11,7 @@
 
 #include <cugl/cugl.h>
 #include "BaseEnemyModel.h"
+#define SEEKER_ATTACK "seeker_attack"
 
 
 #pragma mark -

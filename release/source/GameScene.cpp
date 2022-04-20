@@ -732,7 +732,7 @@ void GameScene::update(float timestep)
             }
             else if ((*it)->getName() == "Phantom")
             {
-                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()), _timer);
+                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()), _timer, PHANTOM_ATTACK);
             }
             else if ((*it)->getName() == "Glutton") {
                 _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()), _timer);
@@ -763,7 +763,12 @@ void GameScene::update(float timestep)
             _collider.setIndexSpawner(-1);
         }
     }
-    _swipes.update(_input, _player->isGrounded());
+    
+    // if player is stunned, do not read swipe input
+    if(!_player->isStunned()){
+        _swipes.update(_input, _player->isGrounded());
+    }
+    
     b2Vec2 playerPos = _player->getBody()->GetPosition();
     if (_player->getInvincibilityTimer() <= 0) {
         _attacks->attackLeft(Vec2(playerPos.x, playerPos.y), _swipes.getLeftSwipe(), _swipes.getLeftAngle(), _player->isGrounded(), _timer, _sound);
@@ -883,9 +888,10 @@ void GameScene::update(float timestep)
             _meleeArm->setLastType(meleeState);
         }
         else if (attackType == AttackController::Type::e_range) {
-            std::shared_ptr<Texture> attackTexture = _assets->get<Texture>("phantom_projectile");
+            std::shared_ptr<Texture> attackTexture = _assets->get<Texture>((*it)->getAttackID());
             attackSprite = scene2::PolygonNode::allocWithTexture(attackTexture); // need to replace with animated texture
-            attackSprite->setScale(0.025);
+            if ((*it)->getAttackID() == PHANTOM_ATTACK) attackSprite->setScale(0.025);
+            else attackSprite->setScale(.25);
         }
         else {
             attackSprite = scene2::PolygonNode::allocWithTexture(_pMeleeTexture);

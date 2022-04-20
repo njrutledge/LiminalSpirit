@@ -192,7 +192,14 @@
 			"wrapT": "clamp"
 		},
 		"phantom_projectile": {
-			"file": "textures/specter_static.png",
+			"file": "textures/phantom_projectile_static.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"glutton_projectile": {
+			"file": "textures/glutton_projectile_static.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",

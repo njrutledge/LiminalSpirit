@@ -12,6 +12,7 @@
 #include <cugl/cugl.h>
 #include "BaseEnemyModel.h"
 
+#define LOST_ATTACK "lost_attack"
 
 #pragma mark - 
 #pragma mark Lost
