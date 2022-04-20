@@ -687,6 +687,69 @@ void GameScene::update(float timestep)
     ///////End Player and Arm Animations////
     ////////////////////////////////////////
 
+    // Determining arm positions and offsets
+    float offsetArm = -2.3f;
+    float offsetArm2 = -2.65f;
+    if (!_player->isFacingRight()) {
+        offsetArm = -1 * offsetArm;
+    }
+    if ((!_player->isFacingRight() && rSprite->getFrame() != 0 && _rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270) ||
+        (_player->isFacingRight() && rSprite->getFrame() != 5 && (_rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270))) {
+        offsetArm = -1 * offsetArm;
+    }
+
+    // change based on arm attacks
+    if ((!_player->isFacingRight() || // player facing left or attacks left
+        (_meleeArm->getLastType() == AttackController::MeleeState::h1_left
+            || _meleeArm->getLastType() == AttackController::MeleeState::h2_left
+            || _meleeArm->getLastType() == AttackController::MeleeState::h3_left)))// player facing left and attacking right
+    {
+        offsetArm2 = -1 * offsetArm2;
+    }
+
+    if (!_player->isFacingRight() && (_meleeArm->getLastType() == AttackController::MeleeState::h1_right
+        || _meleeArm->getLastType() == AttackController::MeleeState::h2_right
+        || _meleeArm->getLastType() == AttackController::MeleeState::h3_right)) {
+        offsetArm2 = -1 * offsetArm2;
+    }
+
+    float upDown = _rangedArm->getGlowTimer();
+    float upDown2 = _rangedArm->getGlowTimer() + 0.5f;
+    float spacing = 1.f;
+    float upDownY1 = fmod(upDown/2, spacing);
+    float upDownY2 = fmod(upDown2/2, spacing);
+    if (upDownY1 > spacing/4 && upDownY1 <= 3*spacing/4) {
+        upDownY1 = spacing/2 - upDownY1;
+    }
+    else if (upDownY1 > 3*spacing/4) {
+        upDownY1 = -1*spacing + upDownY1;
+    }
+    if (upDownY2 > spacing / 4 && upDownY2 <= 3 * spacing / 4) {
+        upDownY2 = spacing / 2 - upDownY2;
+    }
+    else if (upDownY2 > 3 * spacing / 4) {
+        upDownY2 = -1 * spacing + upDownY2;
+    }
+
+
+    if (_player->isFacingRight() && rSprite->getFrame() != 5) {
+        if (_rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270) {
+        _rangedArm->setPosition(_player->getPosition().x + offsetArm - 2, _player->getPosition().y + (upDownY1/spacing/3) + 0.2f);
+        } else {
+            _rangedArm->setPosition(_player->getPosition().x + offsetArm + 2, _player->getPosition().y + (upDownY1/spacing/3) + 0.2f);
+        }
+    }
+    else if (!_player->isFacingRight() && rSprite->getFrame() != 0) {
+        if (_rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270) {
+            _rangedArm->setPosition(_player->getPosition().x + offsetArm + 2, _player->getPosition().y + (upDownY1/spacing/3) + 0.2f);
+        } else {
+            _rangedArm->setPosition(_player->getPosition().x + offsetArm - 2, _player->getPosition().y + (upDownY1/spacing/3) + 0.2f);
+        }
+    } else {
+        _rangedArm->setPosition(_player->getPosition().x + offsetArm, _player->getPosition().y + (upDownY1/spacing/3) + 0.2f);
+    }
+    _meleeArm->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY2/spacing/3) + 0.5f);
+    
     // Enemy AI logic
     // For each enemy
     for (auto it = _enemies.begin(); it != _enemies.end(); ++it)
@@ -1057,49 +1120,6 @@ void GameScene::update(float timestep)
     
     _playerGlow->setPosition(_player->getPosition());
 
-    // Determining arm positions and offsets
-    float offsetArm = -2.3f;
-    float offsetArm2 = -2.65f;
-    if (!_player->isFacingRight()) {
-        offsetArm = -1 * offsetArm;
-    }
-
-    // change based on arm attacks
-    if ((!_player->isFacingRight() || // player facing left or attacks left
-        (_meleeArm->getLastType() == AttackController::MeleeState::h1_left 
-            || _meleeArm->getLastType() == AttackController::MeleeState::h2_left
-            || _meleeArm->getLastType() == AttackController::MeleeState::h3_left)))// player facing left and attacking right 
-    {
-        offsetArm2 = -1 * offsetArm2;
-    }
-
-    if (!_player->isFacingRight() && (_meleeArm->getLastType() == AttackController::MeleeState::h1_right
-        || _meleeArm->getLastType() == AttackController::MeleeState::h2_right
-        || _meleeArm->getLastType() == AttackController::MeleeState::h3_right)) {
-        offsetArm2 = -1 * offsetArm2;
-    }
-
-    float upDown = _rangedArm->getGlowTimer();
-    float upDown2 = _rangedArm->getGlowTimer() + 0.5f;
-    float spacing = 1.f;
-    float upDownY1 = fmod(upDown/2, spacing);
-    float upDownY2 = fmod(upDown2/2, spacing);
-    if (upDownY1 > spacing/4 && upDownY1 <= 3*spacing/4) {
-        upDownY1 = spacing/2 - upDownY1;
-    }
-    else if (upDownY1 > 3*spacing/4) {
-        upDownY1 = -1*spacing + upDownY1;
-    }
-    if (upDownY2 > spacing / 4 && upDownY2 <= 3 * spacing / 4) {
-        upDownY2 = spacing / 2 - upDownY2;
-    }
-    else if (upDownY2 > 3 * spacing / 4) {
-        upDownY2 = -1 * spacing + upDownY2;
-    }
-
-
-    _rangedArm->setPosition(_player->getPosition().x + offsetArm, _player->getPosition().y + (upDownY1/spacing/3) + 0.2f);
-    _meleeArm->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY2/spacing/3) + 0.5f);
 }
 
 std::shared_ptr<BaseEnemyModel> GameScene::getNearestNonMirror(cugl::Vec2 pos) {
@@ -1562,6 +1582,24 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     spritet->setRelativeColor(false);
     spritet->setScale(.65f);
     addObstacle(_playerGlow, spritet, true);
+    
+    // Player creation
+    Vec2 playerPos = PLAYER_POS;
+    std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
+    std::shared_ptr<Texture> image = _assets->get<Texture>(PLAYER_WALK_TEXTURE);
+    std::shared_ptr<Texture> hitboxImage = _assets->get<Texture>(PLAYER_TEXTURE);
+    _player = PlayerModel::alloc(playerPos + Vec2(0,.5), hitboxImage->getSize() / _scale / 8, _scale);
+    _player->setIsStunned(false);
+    _player->setMovement(0);
+    _player->setWalkAnimationTimer(0);
+    _player->setIdleAnimationTimer(0);
+    _player->setJumpAnimationTimer(0);
+    std::shared_ptr<scene2::SpriteNode> sprite = scene2::SpriteNode::alloc(image, 4, 8);
+    sprite->setFrame(0);
+    _player->setSceneNode(sprite);
+    _player->setDebugColor(Color4::BLUE);
+    sprite->setScale(0.175f);
+    addObstacle(_player, sprite, true);
 
     // Ranged Arm for the player
     Vec2 rangeArmPos = PLAYER_POS;
@@ -1593,24 +1631,6 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     meleeArmSprite->setScale(0.35);
     addObstacle(_meleeArm, meleeArmSprite, true);
     
-    // Player creation
-    Vec2 playerPos = PLAYER_POS;
-    std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
-    std::shared_ptr<Texture> image = _assets->get<Texture>(PLAYER_WALK_TEXTURE);
-    std::shared_ptr<Texture> hitboxImage = _assets->get<Texture>(PLAYER_TEXTURE);
-    _player = PlayerModel::alloc(playerPos + Vec2(0,.5), hitboxImage->getSize() / _scale / 8, _scale);
-    _player->setIsStunned(false);
-    _player->setMovement(0);
-    _player->setWalkAnimationTimer(0);
-    _player->setIdleAnimationTimer(0);
-    _player->setJumpAnimationTimer(0);
-    std::shared_ptr<scene2::SpriteNode> sprite = scene2::SpriteNode::alloc(image, 4, 8);
-    sprite->setFrame(0);
-    _player->setSceneNode(sprite);
-    _player->setDebugColor(Color4::BLUE);
-    sprite->setScale(0.175f);
-    addObstacle(_player, sprite, true);
-
     // We can only activate a button AFTER it is added to a scene
     button->activate();
 

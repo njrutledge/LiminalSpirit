@@ -210,10 +210,10 @@ void AttackController::attackLeft(cugl::Vec2 p, SwipeController::SwipeAttack att
                 break;
             case SwipeController::downAttack:
                 if(!grounded){
-                _pending.emplace(Attack::alloc(p, 0.6, 0.5, 2, _scale, Type::p_range, first, _downOff, ballMakyr, cugl::Vec2(_p_vel).rotate(angleAdjusted * M_PI / 180), angle, down, timer));
+                    _pending.emplace(Attack::alloc(p, 0.6, 0.5, 2, _scale, Type::p_range, first, _downOff, ballMakyr, cugl::Vec2(_p_vel).rotate(angleAdjusted * M_PI / 180), angle, down, timer));
                 } else{
-                    _pending.emplace(Attack::alloc(p, 0.6, 0.1, 2, _scale, Type::p_range, first, _leftOff, ballMakyr, cugl::Vec2(_p_vel).rotate(M_PI * 0.5), 180, left, timer));
-                    _pending.emplace(Attack::alloc(p, 0.6, 0.1, 2, _scale, Type::p_range, first, _rightOff, ballMakyr, cugl::Vec2(_p_vel).rotate(M_PI * 1.5), 0, right, timer));
+//                    _pending.emplace(Attack::alloc(p, 0.6, 0.1, 2, _scale, Type::p_range, first, _leftOff, ballMakyr, cugl::Vec2(_p_vel).rotate(M_PI * 0.5), 180, left, timer));
+//                    _pending.emplace(Attack::alloc(p, 0.6, 0.1, 2, _scale, Type::p_range, first, _rightOff, ballMakyr, cugl::Vec2(_p_vel).rotate(M_PI * 1.5), 0, right, timer));
                 }
                 _rangedCounter = 0;
                 sound->play_player_sound(SoundController::playerSType::shoot);
@@ -231,9 +231,14 @@ void AttackController::attackLeft(cugl::Vec2 p, SwipeController::SwipeAttack att
                 _rangedCounter = 0;
                 break;
             case SwipeController::chargedDown:
-                _pending.emplace(Attack::alloc(p, 2, 0.2, 4, _scale, Type::p_range, first, _leftOff,  ballMakyr, cugl::Vec2::ZERO, 180, left, timer));
-                _pending.emplace(Attack::alloc(p, 2, 0.2, 4, _scale, Type::p_range, first, _rightOff, ballMakyr, cugl::Vec2::ZERO, 0, right, timer));
-                _rangedCounter = 0;
+                if(!grounded){
+                    _pending.emplace(Attack::alloc(p, 0.3, 1.5, 0, _scale, Type::p_exp_package, first, _downOff, ballMakyr, cugl::Vec2(_c_vel).rotate(angleAdjusted * M_PI / 180), angle, down, timer));
+                    _rangedCounter = 0;
+                } else {
+//                _pending.emplace(Attack::alloc(p, 2, 0.2, 4, _scale, Type::p_range, first, _leftOff,  ballMakyr, cugl::Vec2::ZERO, 180, left, timer));
+//                _pending.emplace(Attack::alloc(p, 2, 0.2, 4, _scale, Type::p_range, first, _rightOff, ballMakyr, cugl::Vec2::ZERO, 0, right, timer));
+//                _rangedCounter = 0;
+                }
                 break;
             default:
                 break;
@@ -316,13 +321,13 @@ void AttackController::attackRight(cugl::Vec2 p, SwipeController::SwipeAttack at
                 break;
             case SwipeController::chargedDown:
                 if(!grounded){
-                _pending.emplace(Attack::alloc(p, 1.25, 0.5, 4, _scale, Type::p_dash, first, _downOff + Vec2(0,-0.5), ballMakyr, cugl::Vec2(0,-20), 270, down, timer));
+                    _pending.emplace(Attack::alloc(p, 1.25, 0.5, 4, _scale, Type::p_dash, first, _downOff + Vec2(0,-0.5), ballMakyr, cugl::Vec2(0,-20), 270, down, timer));
                     _meleeCounter = 0;
                 } else {
-                    _pending.emplace(Attack::alloc(p, 2, 0.05, 2, _scale, Type::p_melee, first, _leftOff, ballMakyr, cugl::Vec2::ZERO, 180, left, timer));
-                    _meleeCounter = 0;
-                    _pending.emplace(Attack::alloc(p, 2, 0.05, 2, _scale,  Type::p_melee, first, _rightOff, ballMakyr, cugl::Vec2::ZERO, 0, right, timer));
-                    _meleeCounter = 0;
+//                    _pending.emplace(Attack::alloc(p, 2, 0.05, 2, _scale, Type::p_melee, first, _leftOff, ballMakyr, cugl::Vec2::ZERO, 180, left, timer));
+//                    _meleeCounter = 0;
+//                    _pending.emplace(Attack::alloc(p, 2, 0.05, 2, _scale,  Type::p_melee, first, _rightOff, ballMakyr, cugl::Vec2::ZERO, 0, right, timer));
+//                    _meleeCounter = 0;
                 }
                 _melee = cool;
                 break;
