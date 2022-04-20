@@ -23,7 +23,7 @@
 			"wrapT": "clamp"
 		},
 		"seeker": {
-			"file": "textures/specturtest.png",
+			"file": "textures/seeker_static.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
@@ -114,7 +114,7 @@
 			"wrapT": "clamp"
 		},
 		"lost": {
-			"file": "textures/enemy.png",
+			"file": "textures/lost.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
