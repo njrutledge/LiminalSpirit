@@ -1226,19 +1226,21 @@ void GameScene::createSpawnerEnemy(int spawnerInd, string enemyName) {
     enemyGlowSprite->setRelativeColor(false);
     enemyGlowSprite->setScale(.65f);
     addObstacle(enemyGlow, enemyGlowSprite, true);
-    if (!enemyName.compare("lost") || !enemyName.compare("Lost") ) {
+    // lowercase the enemyName
+    std::transform(enemyName.begin(), enemyName.end(), enemyName.begin(),
+        [](unsigned char c){ return std::tolower(c); });
+    if (!enemyName.compare("lost")) {
         std::shared_ptr<Texture> lostImage = _assets->get<Texture>("lost");
         std::shared_ptr<Lost> lost = Lost::alloc(enemyPos,lostImage->getSize(), lostImage->getSize() / _scale / 10, _scale);
         std::shared_ptr<scene2::PolygonNode> lostSprite = scene2::PolygonNode::allocWithTexture(lostImage);
         lost->setGlow(enemyGlow);
         lost->setSceneNode(lostSprite);
         lost->setDebugColor(Color4::RED);
-        lost->setSpawnerInd(spawnerInd);
         lostSprite->setScale(0.15f);
         addObstacle(lost, lostSprite, true);
         _enemies.push_back(lost);
     }
-    else if (!enemyName.compare("phantom") || !enemyName.compare("Phantom")) {
+    else if (!enemyName.compare("phantom")) {
         std::shared_ptr<Texture> phantomHitboxImage = _assets->get<Texture>("phantom");
         std::shared_ptr<Texture> phantomImage = _assets->get<Texture>("phantom_ani");
         std::shared_ptr<Phantom> phantom = Phantom::alloc(enemyPos, Vec2(phantomImage->getSize().width / 7, phantomImage->getSize().height), phantomHitboxImage->getSize() / _scale / 10, _scale);
@@ -1246,13 +1248,10 @@ void GameScene::createSpawnerEnemy(int spawnerInd, string enemyName) {
         phantom->setSceneNode(phantomSprite);
         phantom->setDebugColor(Color4::BLUE);
         phantom->setGlow(enemyGlow);
-        phantom->setSpawnerInd(spawnerInd);
         phantomSprite->setScale(0.05f);
         phantomSprite->setFrame(0);
         addObstacle(phantom, phantomSprite, true);
         _enemies.push_back(phantom);
-        
-        
     }
     else if (!enemyName.compare("square")) {
         createMirror(enemyPos, Mirror::Type::square, "squaremirror", enemyGlow);
@@ -1263,28 +1262,28 @@ void GameScene::createSpawnerEnemy(int spawnerInd, string enemyName) {
     else if (!enemyName.compare("circle")) {
         createMirror(enemyPos, Mirror::Type::circle, "circlemirror", enemyGlow);
     }
-    else if (!enemyName.compare("seeker") || !enemyName.compare("Seeker")) {
+    else if (!enemyName.compare("seeker")) {
         std::shared_ptr<Texture> seekerImage = _assets->get<Texture>("seeker");
         std::shared_ptr<Seeker> seeker = Seeker::alloc(enemyPos, seekerImage->getSize(), seekerImage->getSize() / _scale / 10, _scale);
         std::shared_ptr<scene2::PolygonNode> seekerSprite = scene2::PolygonNode::allocWithTexture(seekerImage);
         seeker->setSceneNode(seekerSprite);
         seeker->setDebugColor(Color4::GREEN);
         seeker->setGlow(enemyGlow);
-        seeker->setSpawnerInd(spawnerInd);
         seekerSprite->setScale(0.15f);
         addObstacle(seeker, seekerSprite, true);
         _enemies.push_back(seeker);
     }
-    else if (!enemyName.compare("glutton") || !enemyName.compare("Glutton")) {
+    else if (!enemyName.compare("glutton")) {
         std::shared_ptr<Texture> gluttonHitboxImage = _assets->get<Texture>("glutton");
         std::shared_ptr<Texture> gluttonImage = _assets->get<Texture>("glutton_ani");
         std::shared_ptr<Glutton> glutton = Glutton::alloc(enemyPos+ Vec2(0,2), Vec2(gluttonImage->getSize().width/7, gluttonImage->getSize().height), gluttonHitboxImage->getSize() / _scale / 5, _scale);
         std::shared_ptr<scene2::SpriteNode> gluttonSprite = scene2::SpriteNode::alloc(gluttonImage, 1, 7);
+        //fix the anchor slightly for glutton only
+        gluttonSprite->setAnchor(.5, .6);
         glutton->setSceneNode(gluttonSprite);
         glutton->setDebugColor(Color4::BLUE);
         glutton->setGlow(enemyGlow);
-        glutton->setSpawnerInd(spawnerInd);
-        gluttonSprite->setScale(0.12f);
+        gluttonSprite->setScale(0.2f);
         gluttonSprite->setFrame(0);
         addObstacle(glutton, gluttonSprite, true);
         _enemies.push_back(glutton);
@@ -1312,6 +1311,9 @@ void GameScene::createEnemies(int wave) {
         enemyGlowSprite->setRelativeColor(false);
         enemyGlowSprite->setScale(.65f);
         addObstacle(enemyGlow, enemyGlowSprite, true);
+        // lowercase the enemyName
+        std::transform(enemyName.begin(), enemyName.end(), enemyName.begin(),
+            [](unsigned char c){ return std::tolower(c); });
         if (!enemyName.compare("lost")) {
             std::shared_ptr<Texture> lostImage = _assets->get<Texture>("lost");
             std::shared_ptr<Lost> lost = Lost::alloc(enemyPos,lostImage->getSize(), lostImage->getSize() / _scale / 10, _scale);
@@ -1355,7 +1357,7 @@ void GameScene::createEnemies(int wave) {
             seekerSprite->setScale(0.15f);
             addObstacle(seeker, seekerSprite, true);
             _enemies.push_back(seeker);
-        } 
+        }
         else if (!enemyName.compare("glutton")) {
             std::shared_ptr<Texture> gluttonHitboxImage = _assets->get<Texture>("glutton");
             std::shared_ptr<Texture> gluttonImage = _assets->get<Texture>("glutton_ani");
@@ -1372,29 +1374,29 @@ void GameScene::createEnemies(int wave) {
             _enemies.push_back(glutton);
         }
         else if (!enemyName.compare("spawner")) {
-            _spawner_ind++;
-            _spawnerCount++;
-            _spawner_pos.push_back(enemyPos);
-            std::shared_ptr<Texture> spawnerImage = _assets->get<Texture>("glutton");
-            std::shared_ptr<Spawner> spawner = Spawner::alloc(enemyPos, spawnerImage->getSize(), spawnerImage->getSize() / _scale / 10, _scale);
-            std::shared_ptr<scene2::PolygonNode> spawnerSprite = scene2::PolygonNode::allocWithTexture(spawnerImage);
-            spawner->setSceneNode(spawnerSprite);
-            spawner->setDebugColor(Color4::BLACK);
-            spawner->setGlow(enemyGlow);
-            spawnerSprite->setScale(0.12f);
-            addObstacle(spawner, spawnerSprite, true);
-            _enemies.push_back(spawner);
-            auto spawnerEnemiesMap = _spawner_enemy_types.at(_spawner_ind);
-            for(auto it = spawnerEnemiesMap.begin(); it != spawnerEnemiesMap.end(); ++it) {
-                int index = it->second.max_count;
-                string spawnerEnemyName = it->first;
-                while(index!=0) {
-                    createSpawnerEnemy(_spawner_ind, spawnerEnemyName);
-                    _spawner_enemy_types.at(_spawner_ind).at(spawnerEnemyName).current_count++;
-                    index--;
-                }
-            }
-            _living_spawners[_spawner_ind] = 1;
+          _spawner_ind++;
+          _spawnerCount++;
+          _spawner_pos.push_back(enemyPos);
+          std::shared_ptr<Texture> spawnerImage = _assets->get<Texture>("glutton");
+          std::shared_ptr<Spawner> spawner = Spawner::alloc(enemyPos, spawnerImage->getSize(), spawnerImage->getSize() / _scale / 10, _scale);
+          std::shared_ptr<scene2::PolygonNode> spawnerSprite = scene2::PolygonNode::allocWithTexture(spawnerImage);
+          spawner->setSceneNode(spawnerSprite);
+          spawner->setDebugColor(Color4::BLACK);
+          spawner->setGlow(enemyGlow);
+          spawnerSprite->setScale(0.12f);
+          addObstacle(spawner, spawnerSprite, true);
+          _enemies.push_back(spawner);
+          auto spawnerEnemiesMap = _spawner_enemy_types.at(_spawner_ind);
+          for(auto it = spawnerEnemiesMap.begin(); it != spawnerEnemiesMap.end(); ++it) {
+              int index = it->second.max_count;
+              string spawnerEnemyName = it->first;
+              while(index!=0) {
+                  createSpawnerEnemy(_spawner_ind, spawnerEnemyName);
+                  _spawner_enemy_types.at(_spawner_ind).at(spawnerEnemyName).current_count++;
+                  index--;
+              }
+          }
+          _living_spawners[_spawner_ind] = 1;
 //            auto spawnTypes = _constants->get("spawner_types")->children();
 //            int index = 0;
 //            for(auto it = spawnTypes.begin(); it != spawnTypes.end(); ++it) {
@@ -1407,9 +1409,8 @@ void GameScene::createEnemies(int wave) {
 //                index++;
 //            }
 //            _numWavesSpawner = index;
-            
 //            _nextWaveNumSpawner = 1;
-        }
+      }
         // TODO add more enemy types
         // If the enemy name is incorrect, no enemy will be made
     }
