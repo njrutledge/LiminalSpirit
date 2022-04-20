@@ -13,6 +13,7 @@
 #include "BaseEnemyModel.h"
 
 #define PHANTOM_ATTACK "phantom_projectile"
+#define PHANTOM_FRAMES 2
 
 #pragma mark - 
 #pragma mark Phantom

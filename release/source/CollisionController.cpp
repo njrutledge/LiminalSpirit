@@ -80,7 +80,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                         //just reflect the attack
                         AC->createAttack(attack->getPosition(), attack->getRadius()*MIRROR_AMPLIFY, attack->getMaxAge(),
                             attack->getDamage(), AttackController::Type::e_range,
-                            linvel.rotate(M_PI), timer, attack->getAttackID(), false);
+                            linvel.rotate(M_PI), timer, attack->getAttackID(), 0, false);
                         break;
                     case Mirror::Type::triangle:
                         //reflect three back at you
@@ -89,7 +89,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                         for (int i = 0; i < 3; i++) {
                             AC->createAttack(attack->getPosition(), attack->getRadius(), attack->getMaxAge(),
                                 attack->getDamage(), AttackController::Type::e_range,
-                                linvel.rotate(angle_change)*.66f, timer, attack->getAttackID(), false);
+                                linvel.rotate(angle_change)*.66f, timer, attack->getAttackID(), 0, false);
                         }
                         break;
                     case Mirror::Type::circle:
@@ -98,7 +98,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                         for (float i = 0; i < 8; i++) {
                             AC->createAttack(attack->getPosition(), attack->getRadius(), attack->getMaxAge(),
                                 attack->getDamage(), AttackController::Type::e_range,
-                                linvel.rotate(angle_change)*.5f, timer, attack->getAttackID(), false);
+                                linvel.rotate(angle_change)*.5f, timer, attack->getAttackID(), 0, false);
                         }
                         break;
                     }
@@ -145,7 +145,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                     }
                 }
                 if (attack->getType() == AttackController::p_exp_package) {
-                    AC->createAttack(attack->getPosition() /*cugl::Vec2(bd->getPosition().x, bd->getPosition().y)*/, 3, 0.1, 4, AttackController::p_exp, cugl::Vec2::ZERO, timer, PLAYER_RANGE);
+                    AC->createAttack(attack->getPosition() /*cugl::Vec2(bd->getPosition().x, bd->getPosition().y)*/, 3, 0.1, 4, AttackController::p_exp, cugl::Vec2::ZERO, timer, PLAYER_RANGE, PLAYER_RANGE_FRAMES);
                 }
                 switch (attack->getType()) {
                 case AttackController::p_range:
@@ -168,7 +168,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                     //just amplify the attack
                     AC->createAttack(attack->getPosition(), attack->getRadius()*MIRROR_AMPLIFY, attack->getMaxAge(),
                         attack->getDamage()*MIRROR_AMPLIFY, AttackController::Type::e_range,
-                        linvel, timer, attack->getAttackID(), false);
+                        linvel, timer, attack->getAttackID(), 0, false);
                     break;
                 case Mirror::Type::triangle:
                     //split into three
@@ -177,7 +177,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                     for (int i = 0; i < 3; i++) {
                         AC->createAttack(attack->getPosition(), attack->getRadius(), attack->getMaxAge(),
                             attack->getDamage(), AttackController::Type::e_range,
-                            linvel.rotate(angle_change)*.66f, timer, attack->getAttackID(), false);
+                            linvel.rotate(angle_change)*.66f, timer, attack->getAttackID(), 0, false);
                     }
                     break;
                 case Mirror::Type::circle:
@@ -186,7 +186,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                     for (float i = 0; i < 8; i++) {
                         AC->createAttack(attack->getPosition(), attack->getRadius(), attack->getMaxAge(),
                             attack->getDamage(), AttackController::Type::e_range,
-                            linvel.rotate(angle_change)*.5f, timer, attack->getAttackID(), false);
+                            linvel.rotate(angle_change)*.5f, timer, attack->getAttackID(), 0, false);
                     }
                     break;
                 }
@@ -240,7 +240,7 @@ void CollisionController::handleAttackCollision(AttackController::Attack* attack
         }
     }
     else if ((bd && (bd->getName() == "platform" || bd->getName().find("wall")!= std::string::npos)) && attack->getType() == AttackController::p_exp_package) {
-        AC->createAttack(attack->getPosition(), 3, 0.1, 4, AttackController::p_exp, cugl::Vec2::ZERO, timer, PLAYER_RANGE);
+        AC->createAttack(attack->getPosition(), 3, 0.1, 4, AttackController::p_exp, cugl::Vec2::ZERO, timer, PLAYER_RANGE, PLAYER_RANGE_FRAMES);
             attack->setInactive();
     }
     if (bd && bd->getName() == "bottomwall") {

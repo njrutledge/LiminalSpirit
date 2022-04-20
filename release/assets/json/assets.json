@@ -192,14 +192,14 @@
 			"wrapT": "clamp"
 		},
 		"phantom_projectile": {
-			"file": "textures/phantom_projectile_static.png",
+			"file": "textures/animations/phantom_projectile_idle_spritesheet.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
 		"glutton_projectile": {
-			"file": "textures/glutton_projectile_static.png",
+			"file": "textures/animations/glutton_projectile_spritesheet.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
