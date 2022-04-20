@@ -1470,6 +1470,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     std::shared_ptr<Texture> image = _assets->get<Texture>(PLAYER_WALK_TEXTURE);
     std::shared_ptr<Texture> hitboxImage = _assets->get<Texture>(PLAYER_TEXTURE);
     _player = PlayerModel::alloc(playerPos + Vec2(0,.5), hitboxImage->getSize() / _scale / 8, _scale);
+    _player->setIsStunned(false);
     _player->setMovement(0);
     _player->setWalkAnimationTimer(0);
     _player->setIdleAnimationTimer(0);
