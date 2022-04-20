@@ -136,7 +136,10 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                     }
                     if (enemy->getHealth() <= 0) {
                         if (Spawner* spawner = dynamic_cast<Spawner*>(enemy)) {
-                            _spawner_killed = 1;
+                            _spawner_killed = spawner->getIndex();
+                        } else if(enemy->getSpawnerInd()!=-1) {
+                            _name_of_killed_spawner_enemy = enemy->getName();
+                            _index_spawner = enemy->getSpawnerInd();
                         }
                         enemy->markRemoved(true);
                     }

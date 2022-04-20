@@ -11,7 +11,7 @@
 class CollisionController {
 public:
     /** Creates a new collision Controller */
-    CollisionController() {_spawner_killed = 0;}
+    CollisionController() {_spawner_killed = -1; _index_spawner = -1;}
 
     /**Deletes the collision controller */
     ~CollisionController() {}
@@ -21,11 +21,19 @@ public:
 
     void endContact(b2Contact* contact);
     
-    float getSpawnerKilled() {return _spawner_killed;};
+    int getSpawnerKilled() {return _spawner_killed;};
+    void setSpawnerKilled(int v) { _spawner_killed = v;};
+    
+    string getSpawnerEnemyName() {return _name_of_killed_spawner_enemy;};
+    
+    int getIndexSpawner() {return _index_spawner;};
+    void setIndexSpawner(int v) { _index_spawner = v;};
 
 private:
-    /** if a spawner exists, 1 if it is killed, 0 if it is not. It is 0 if spawner does not exits. */
-    float _spawner_killed;
+    /** the index of spawner that is been killed */
+    int _spawner_killed;
+    string _name_of_killed_spawner_enemy;
+    int _index_spawner;
     /** handle collision between enemy and an obstacle */
     void handleEnemyCollision(BaseEnemyModel* enemy, cugl::physics2::Obstacle* bd, string* fd, std::shared_ptr<AttackController> AC, float timer);
 

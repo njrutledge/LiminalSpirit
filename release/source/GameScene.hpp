@@ -57,6 +57,12 @@
 class GameScene : public cugl::Scene2
 {
 protected:
+    struct spawnerEnemy {
+        int max_count;
+        int current_count;
+        float timer;
+    };
+    
     /** The loaders to (synchronously) load in assets */
     std::shared_ptr<cugl::AssetManager> _assets;
     /** The JSON value with all of the constants */
@@ -141,23 +147,20 @@ protected:
     std::vector<vector<string>> _spawn_order;
     std::vector<vector<Vec2>> _spawn_pos;
     std::vector<float> _spawn_times;
-    std::vector<vector<string>> _spawner_types;
-    cugl::Vec2 _spawner_pos;
-    float _spawner_timer;
-    int _has_spawner;
+    int _spawner_ind;
+    /**spawners' enemy types and their max count and current count*/
+    std::vector<unordered_map<string, spawnerEnemy>> _spawner_enemy_types;
+    std::vector<cugl::Vec2> _spawner_pos;
+    int _spawnerCount;
     /** Number of waves for this level */
     int _numWaves;
     /** Next wave number for spawning, starts at 0 */
     int _nextWaveNum;
     /** A game timer used for spawn times */
     float _timer;
-
-    /** Number of waves for the spawner */
-    int _numWavesSpawner;
-    /** Next wave number of the spawner starts at 0 */
-    int _nextWaveNumSpawner;
-    /** A game timer used for spawner times */
-    float _SpawnerTimer;
+    /** living spawners */
+    std::vector<int> _living_spawners;
+    
     /** Whether or not debug mode is active */
     bool _debug;
     
@@ -280,10 +283,15 @@ public:
     }
 
     /**
-     * Creates all enemies and adds to _enemies
+     * Creates all enemies and adds to _enemies.
      */
-    void createEnemies(int wave, int spawnerInd);
-
+    void createEnemies(int wave);
+    
+    /**
+    * helper to create enemy from spawner, adding it to _enemmies
+    */
+    void createSpawnerEnemy(int spawnerInd, string enemyName);
+    
     /** 
     * helper to create mirror enemies, adding them to _enemmies
     */

@@ -20,7 +20,7 @@ extern struct EnemyProperties SPAWNER_PROPS;
 
 class Spawner : public BaseEnemyModel {
     private:
-        float _timer;
+        int _index;
     public:
         using BaseEnemyModel::BaseEnemyModel;
 
@@ -32,8 +32,8 @@ class Spawner : public BaseEnemyModel {
             return (result->init(pos, realSize, size, scale, SPAWNER_PROPS) ? result : nullptr);
         }
 
-    float getTimer() {return _timer;};
-    void setTimer(float time) {_timer = time;};
+    int getIndex() {return _index;};
+    void setIndex(int index) {_index = index;};
 };
 
 #endif /* Spawner_hpp */
