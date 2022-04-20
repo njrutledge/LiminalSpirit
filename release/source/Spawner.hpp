@@ -27,9 +27,9 @@ class Spawner : public BaseEnemyModel {
 #pragma mark -
 #pragma mark Static Constructors
         /** Allocates a new spawner */
-        static std::shared_ptr<Spawner> alloc(const cugl::Vec2& pos, const cugl::Size& size, float scale) {
+        static std::shared_ptr<Spawner> alloc(const cugl::Vec2& pos, const cugl::Size& realSize, const cugl::Size& size, float scale) {
             std::shared_ptr<Spawner> result = std::make_shared<Spawner>();
-            return (result->init(pos, size, scale, SPAWNER_PROPS) ? result : nullptr);
+            return (result->init(pos, realSize, size, scale, SPAWNER_PROPS) ? result : nullptr);
         }
 
     float getTimer() {return _timer;};

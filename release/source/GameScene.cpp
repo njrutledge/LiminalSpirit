@@ -236,7 +236,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
 
     _collider = CollisionController();
 
-    setDebug(true);
+    setDebug(false);
     buildScene(scene);
     addChild(scene);
 
@@ -308,12 +308,14 @@ void GameScene::update(float timestep)
     }
 
     if (DEBUG) {
+        //go ahead and step the time to spawn some enemies, they won't move in debug
         _timer += timestep;
 
         if (_nextWaveNum < _numWaves && _timer >= _spawn_times[_nextWaveNum]) {
-            createEnemies(_nextWaveNum);
+            createEnemies(_nextWaveNum, 0);
             _nextWaveNum += 1;
         }
+        //return to stop the rest of the update in DEBUG ONLY
         return;
     }
     // Update tilt controller
@@ -1252,7 +1254,7 @@ void GameScene::createEnemies(int wave, int spawnerInd) {
             _spawner_timer = 0;
             _spawner_pos = enemyPos;
             std::shared_ptr<Texture> spawnerImage = _assets->get<Texture>("glutton");
-            std::shared_ptr<Spawner> spawner = Spawner::alloc(enemyPos, spawnerImage->getSize() / _scale / 10, _scale);
+            std::shared_ptr<Spawner> spawner = Spawner::alloc(enemyPos, spawnerImage->getSize(), spawnerImage->getSize() / _scale / 10, _scale);
             std::shared_ptr<scene2::PolygonNode> spawnerSprite = scene2::PolygonNode::allocWithTexture(spawnerImage);
             spawner->setSceneNode(spawnerSprite);
             spawner->setDebugColor(Color4::BLACK);
