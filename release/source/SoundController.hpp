@@ -16,6 +16,7 @@ class SoundController {
 public:
     
     enum playerSType {
+        slashEmpty,
         slash,
         slashFinal,
         slashDash,

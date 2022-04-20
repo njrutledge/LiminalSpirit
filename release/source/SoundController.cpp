@@ -89,6 +89,8 @@ void SoundController::play_level_music(string biome) {
 
 void SoundController::play_player_sound(playerSType sound) {
     switch (sound) {
+        case slashEmpty:
+            break;
         case slash:
             cugl::AudioEngine::get()->play("playerSlash", _playerSlash, false, 1.0, true);
             break;
