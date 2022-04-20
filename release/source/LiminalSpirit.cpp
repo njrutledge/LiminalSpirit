@@ -197,11 +197,11 @@ void LiminalSpirit::updateWorldSelectScene(float timestep)
     _sound_controller->play_menu_music();
     switch (_worldSelect.getChoice()) {
     case WorldSelectScene::Choice::CAVE:
-        _gameplay.init(_assets, _sound_controller, "battlefield");
+        _gameplay.init(_assets, _sound_controller, "surround");
         _scene = State::GAME;
         break;
     case WorldSelectScene::Choice::SHROOM:
-        _gameplay.init(_assets, _sound_controller, "surround");
+        _gameplay.init(_assets, _sound_controller, "battlefield");
         _scene = State::GAME;
         break;
     case WorldSelectScene::Choice::FOREST:
