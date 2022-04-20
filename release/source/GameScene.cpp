@@ -169,26 +169,29 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     // Set enemy wave number
     _nextWaveNum = 0;
     
-    auto spawnTypes = _constants->get("spawner_types")->children();
-    for(auto it = spawnTypes.begin(); it != spawnTypes.end(); ++it) {
-        std::shared_ptr<JsonValue> entry = (*it);
-        std::unordered_map<string, spawnerEnemy> enemy_types;
-
-        for(int i = 0; i < entry->size(); i++) {
-            string enemy = entry->get(i)->asString();
-            if(!enemy_types[enemy].max_count) {
-                enemy_types[enemy].max_count = 1;
-                enemy_types[enemy].current_count = 0;
-                enemy_types[enemy].timer = 10.0f;
-            } else {
-                enemy_types[enemy].max_count++;
-            }
-        }
-        _spawner_enemy_types.push_back(enemy_types);
-        _living_spawners.push_back(0);
-    }
+    // Set Spawner
     _spawner_ind = -1;
     _spawnerCount = 0;
+    if(_constants->get("spawner_types")) {
+        auto spawnTypes = _constants->get("spawner_types")->children();
+        for(auto it = spawnTypes.begin(); it != spawnTypes.end(); ++it) {
+            std::shared_ptr<JsonValue> entry = (*it);
+            std::unordered_map<string, spawnerEnemy> enemy_types;
+
+            for(int i = 0; i < entry->size(); i++) {
+                string enemy = entry->get(i)->asString();
+                if(!enemy_types[enemy].max_count) {
+                    enemy_types[enemy].max_count = 1;
+                    enemy_types[enemy].current_count = 0;
+                    enemy_types[enemy].timer = 10.0f;
+                } else {
+                    enemy_types[enemy].max_count++;
+                }
+            }
+            _spawner_enemy_types.push_back(enemy_types);
+            _living_spawners.push_back(0);
+        }
+    }
     
     // Create a scene graph the same size as the window
     //_scene = Scene2::alloc(dimen.width, dimen.height);
