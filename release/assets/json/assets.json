@@ -598,7 +598,7 @@
         }
 	},
 	"jsons": {
-		"surround": "json/level2.json",
+		"surround": "json/surround.json",
 		"battlefield": "json/battlefield.json",
 		"levelt": "json/levelt.json",
 		"scaffold": "json/scaffold.json",
