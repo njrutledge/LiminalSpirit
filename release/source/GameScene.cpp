@@ -746,10 +746,12 @@ void GameScene::update(float timestep)
         _attacks->attackRight(Vec2(playerPos.x, playerPos.y), _swipes.getRightSwipe(), _swipes.getRightAngle(), _player->isGrounded(), _timer, _sound);
         if (_swipes.getRightSwipe() == SwipeController::chargedRight) {
             _dashXVel = 20;
+            _dashYVel = 1;
             _dashTime = 0;
         }
         else if (_swipes.getRightSwipe() == SwipeController::chargedLeft) {
             _dashXVel = -20;
+            _dashYVel = 1;
             _dashTime = 0;
         }
         else if (_swipes.getRightSwipe() == SwipeController::chargedUp) {
