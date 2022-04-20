@@ -42,8 +42,8 @@
 
 
 #define PLAYER_MELEE "player_melee"
-#define PLAYER_RANGE "player_range"
-#define PLAYER_RANGE_FRAMES 0
+#define PLAYER_RANGE "player_projectile"
+#define PLAYER_RANGE_FRAMES 1
 
 #pragma mark - 
 #pragma mark Player Model

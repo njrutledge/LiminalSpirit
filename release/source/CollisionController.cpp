@@ -80,7 +80,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                         //just reflect the attack
                         AC->createAttack(attack->getPosition(), attack->getRadius()*MIRROR_AMPLIFY, attack->getMaxAge(),
                             attack->getDamage(), AttackController::Type::e_range,
-                            linvel.rotate(M_PI), timer, attack->getAttackID(), 0, false);
+                            linvel.rotate(M_PI), timer, attack->getAttackID(), attack->getFrames(), false);
                         break;
                     case Mirror::Type::triangle:
                         //reflect three back at you
@@ -89,7 +89,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                         for (int i = 0; i < 3; i++) {
                             AC->createAttack(attack->getPosition(), attack->getRadius(), attack->getMaxAge(),
                                 attack->getDamage(), AttackController::Type::e_range,
-                                linvel.rotate(angle_change)*.66f, timer, attack->getAttackID(), 0, false);
+                                linvel.rotate(angle_change)*.66f, timer, attack->getAttackID(), attack->getFrames(), false);
                         }
                         break;
                     case Mirror::Type::circle:
@@ -98,7 +98,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                         for (float i = 0; i < 8; i++) {
                             AC->createAttack(attack->getPosition(), attack->getRadius(), attack->getMaxAge(),
                                 attack->getDamage(), AttackController::Type::e_range,
-                                linvel.rotate(angle_change)*.5f, timer, attack->getAttackID(), 0, false);
+                                linvel.rotate(angle_change)*.5f, timer, attack->getAttackID(), attack->getFrames(), false);
                         }
                         break;
                     }
@@ -168,7 +168,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                     //just amplify the attack
                     AC->createAttack(attack->getPosition(), attack->getRadius()*MIRROR_AMPLIFY, attack->getMaxAge(),
                         attack->getDamage()*MIRROR_AMPLIFY, AttackController::Type::e_range,
-                        linvel, timer, attack->getAttackID(), 0, false);
+                        linvel, timer, attack->getAttackID(), attack->getFrames(), false);
                     break;
                 case Mirror::Type::triangle:
                     //split into three
@@ -177,7 +177,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                     for (int i = 0; i < 3; i++) {
                         AC->createAttack(attack->getPosition(), attack->getRadius(), attack->getMaxAge(),
                             attack->getDamage(), AttackController::Type::e_range,
-                            linvel.rotate(angle_change)*.66f, timer, attack->getAttackID(), 0, false);
+                            linvel.rotate(angle_change)*.66f, timer, attack->getAttackID(), attack->getFrames(), false);
                     }
                     break;
                 case Mirror::Type::circle:
@@ -186,7 +186,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                     for (float i = 0; i < 8; i++) {
                         AC->createAttack(attack->getPosition(), attack->getRadius(), attack->getMaxAge(),
                             attack->getDamage(), AttackController::Type::e_range,
-                            linvel.rotate(angle_change)*.5f, timer, attack->getAttackID(), 0, false);
+                            linvel.rotate(angle_change)*.5f, timer, attack->getAttackID(), attack->getFrames(), false);
                     }
                     break;
                 }

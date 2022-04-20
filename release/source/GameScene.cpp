@@ -928,7 +928,7 @@ void GameScene::update(float timestep)
         AttackController::Type attackType = (*it)->getType();
         std::shared_ptr<scene2::PolygonNode> attackSprite;
         if (attackType == AttackController::Type::p_range) {
-            std::shared_ptr<Texture> attackTexture = _assets->get<Texture>("player_projectile");
+            std::shared_ptr<Texture> attackTexture = _assets->get<Texture>(PLAYER_RANGE);
             attackSprite = scene2::SpriteNode::alloc(attackTexture, 1, 1);
             attackSprite->setScale(.85f * (*it)->getRadius());
             attackSprite->setAngle((*it)->getAngle() * M_PI / 180);
@@ -944,7 +944,7 @@ void GameScene::update(float timestep)
             }
         }
         else if (attackType == AttackController::Type::p_exp) {
-            std::shared_ptr<Texture> attackTexture = _assets->get<Texture>("player_projectile");
+            std::shared_ptr<Texture> attackTexture = _assets->get<Texture>(PLAYER_RANGE);
             attackSprite = scene2::SpriteNode::alloc(attackTexture, 1, 1);
             attackSprite->setScale(.85f * (*it)->getRadius());
             attackSprite->setAngle((*it)->getAngle() * M_PI / 180);
@@ -988,13 +988,18 @@ void GameScene::update(float timestep)
             std::shared_ptr<Texture> attackTexture = _assets->get<Texture>((*it)->getAttackID());
             attackSprite = scene2::SpriteNode::alloc(attackTexture, 1, (*it)->getFrames()); // need to replace with animated texture
             //float angle = (*it)->getAngle();
-            if ((*it)->getAttackID() == PHANTOM_ATTACK) {
+            if ((*it)->getAttackID() == PLAYER_RANGE) {
+                //this is mirrors
+                attackSprite->setScale(.85f * (*it)->getRadius());
+                attackSprite->setAngle((*it)->getAngle());
+            }
+            else if ((*it)->getAttackID() == PHANTOM_ATTACK) {
                 attackSprite->setScale(0.025);
                 attackSprite->setAngle((*it)->getAngle()+M_PI/2);
 
                 dynamic_pointer_cast<scene2::SpriteNode>(attackSprite)->setFrame(0);
             }
-            else {
+            else if((*it)->getAttackID() == GLUTTON_ATTACK) {
                 attackSprite->setScale(.25);
                 attackSprite->setAngle((*it)->getAngle() + M_PI);
             }
