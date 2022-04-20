@@ -731,20 +731,20 @@ void GameScene::update(float timestep)
             else {
                 shared_ptr<Seeker> seeker = dynamic_pointer_cast<Seeker>(*it);
                 
-                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 1.0f, 0.2f, 2.0f, AttackController::Type::e_melee, (vel.scale(0.2)).rotate((play_p - en_p).getAngle()), _timer);
+                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 1.0f, 0.2f, 2.0f, AttackController::Type::e_melee, (vel.scale(0.2)).rotate((play_p - en_p).getAngle()), _timer, SEEKER_ATTACK);
                 
             }
   
             if ((*it)->getName() == "Lost") {
-                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 1.0f, 0.2f, 1.0f, AttackController::Type::e_melee, vel.rotate((play_p - en_p).getAngle()), _timer);
+                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 1.0f, 0.2f, 1.0f, AttackController::Type::e_melee, vel.rotate((play_p - en_p).getAngle()), _timer, LOST_ATTACK);
                 
             }
             else if ((*it)->getName() == "Phantom")
             {
-                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()), _timer);
+                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()), _timer, PHANTOM_ATTACK);
             }
             else if ((*it)->getName() == "Glutton") {
-                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()), _timer);
+                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()), _timer, GLUTTON_ATTACK);
             }
 
         }
@@ -891,9 +891,10 @@ void GameScene::update(float timestep)
             _meleeArm->setLastType(meleeState);
         }
         else if (attackType == AttackController::Type::e_range) {
-            std::shared_ptr<Texture> attackTexture = _assets->get<Texture>("phantom_projectile");
+            std::shared_ptr<Texture> attackTexture = _assets->get<Texture>((*it)->getAttackID());
             attackSprite = scene2::PolygonNode::allocWithTexture(attackTexture); // need to replace with animated texture
-            attackSprite->setScale(0.025);
+            if ((*it)->getAttackID() == PHANTOM_ATTACK) attackSprite->setScale(0.025);
+            else attackSprite->setScale(.25);
         }
         else {
             attackSprite = scene2::PolygonNode::allocWithTexture(_pMeleeTexture);

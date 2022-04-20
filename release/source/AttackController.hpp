@@ -15,6 +15,9 @@
 /**Height of the sensor */
 #define SENSOR_HEIGHT 01.f
 
+#define PLAYER_MELEE "player_melee"
+#define PLAYER_RANGE "player_range"
+
 
 
 #include <cugl/cugl.h>
@@ -56,6 +59,8 @@ public:
         cool
     };
     
+
+
 protected:
     // Used to make attacks in bounds
     static float _worldWidth;
@@ -119,6 +124,7 @@ public:
         
         virtual void resetDebug() override;
         
+        string _attackID;
         
     public:
         /**
@@ -136,7 +142,7 @@ public:
         void dispose();
 
         bool init(const cugl::Vec2 p, float radius, float a, float dmg, float scale, Type s, MeleeState m,
-                  cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel, float angle, float timer);
+                  cugl::Vec2 oof, cugl::PolyFactory b, cugl::Vec2 vel, float angle, float timer, string attackID);
         
         
         /**
@@ -154,6 +160,8 @@ public:
         float getRadius() {return _radius;}
 
         float getMaxAge() { return _maxAge;}
+
+        string getAttackID() { return _attackID; }
         
         cugl::Poly2 getBall() {return _ball;}
         cugl::Vec2 getPosition() { return cugl::Vec2(_body->GetPosition().x, _body->GetPosition().y); }
@@ -188,7 +196,7 @@ public:
 #pragma mark Static Constructors
         static std::shared_ptr<Attack> alloc(cugl::Vec2 p, float radius, float age, float dmg, float scale,
                                              Type t, MeleeState m, cugl::Vec2 oof, cugl::PolyFactory b,
-                                             cugl::Vec2 vel, float angle, Side s, float timer) {
+                                             cugl::Vec2 vel, float angle, Side s, float timer, string attackID) {
             float off = 1.5f;
             if (p.x + radius + off > _worldWidth && s == right) {
                 p.x = _worldWidth - 0.1f - radius - off;
@@ -204,7 +212,7 @@ public:
             }
 
             std::shared_ptr<Attack> result = std::make_shared<Attack>();
-            return (result->init(p, radius, age, dmg, scale, t, m, oof, b, vel, angle, timer) ? result : nullptr);
+            return (result->init(p, radius, age, dmg, scale, t, m, oof, b, vel, angle, timer, attackID) ? result : nullptr);
         }
         
     };
@@ -288,12 +296,12 @@ public:
     /**
      *  Creates an attack with the designated parameters. This is mostly to create enemy attacks, but also any explosion attacks for the player. There is no parameter. This must be calculated in the position. The attack will be splitable
      */
-    void createAttack(cugl::Vec2 p, float radius, float age, float damage, Type s, cugl::Vec2 vel, float timer);
+    void createAttack(cugl::Vec2 p, float radius, float age, float damage, Type s, cugl::Vec2 vel, float timer, string attackID);
 
     /**
      *  Creates an attack with the designated parameters. This is mostly to create enemy attacks, but also any explosion attacks for the player. There is no parameter. This must be calculated in the position.
      */
-    void createAttack(cugl::Vec2 p, float radius, float age, float damage, Type s, cugl::Vec2 vel, float timer, bool splitable);
+    void createAttack(cugl::Vec2 p, float radius, float age, float damage, Type s, cugl::Vec2 vel, float timer, string attackID, bool splitable);
 
     /** Get left offset */
     cugl::Vec2 getLeftOff() { return _leftOff; }
