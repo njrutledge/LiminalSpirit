@@ -680,7 +680,7 @@ void GameScene::update(float timestep)
 
     // Determining arm positions and offsets
     float offsetArm = -2.3f;
-    float offsetArm2 = -2.65f;
+    float offsetArm2 = -2.75f;
     if (!_player->isFacingRight()) {
         offsetArm = -1 * offsetArm;
     }
@@ -739,7 +739,7 @@ void GameScene::update(float timestep)
     } else {
         _rangedArm->setPosition(_player->getPosition().x + offsetArm, _player->getPosition().y + (upDownY1/spacing/3) + 0.2f);
     }
-    _meleeArm->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY2/spacing/3) + 0.5f);
+    _meleeArm->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY2/spacing/3) + 0.1f);
     
     // Enemy AI logic
     // For each enemy
@@ -932,6 +932,40 @@ void GameScene::update(float timestep)
             attackSprite = scene2::SpriteNode::alloc(attackTexture, 1, 1);
             attackSprite->setScale(.85f * (*it)->getRadius());
             attackSprite->setAngle((*it)->getAngle() * M_PI / 180);
+            _rangedArm->setLastType(AttackController::MeleeState::first);
+            if (_swipes.getLeftSwipe() == SwipeController::downAttack) {
+                _rangedArm->setAttackAngle(270);
+            }
+            else {
+                _rangedArm->setAttackAngle((*it)->getAngle());
+            }
+            if (_player->isFacingRight()) {
+                _rangedArm->setAttackAngle(fmod(_rangedArm->getAttackAngle() + 180, 360));
+            }
+        }
+        else if (attackType == AttackController::Type::p_exp) {
+            std::shared_ptr<Texture> attackTexture = _assets->get<Texture>("player_projectile");
+            attackSprite = scene2::SpriteNode::alloc(attackTexture, 1, 1);
+            attackSprite->setScale(.85f * (*it)->getRadius());
+            attackSprite->setAngle((*it)->getAngle() * M_PI / 180);
+            attackSprite->setColor(Color4::RED);
+            _rangedArm->setLastType(AttackController::MeleeState::first);
+            if (_swipes.getLeftSwipe() == SwipeController::downAttack) {
+                _rangedArm->setAttackAngle(270);
+            }
+            else {
+                _rangedArm->setAttackAngle((*it)->getAngle());
+            }
+            if (_player->isFacingRight()) {
+                _rangedArm->setAttackAngle(fmod(_rangedArm->getAttackAngle() + 180, 360));
+            }
+        }
+        else if (attackType == AttackController::Type::p_exp_package) {
+            std::shared_ptr<Texture> attackTexture = _assets->get<Texture>("player_projectile");
+            attackSprite = scene2::SpriteNode::alloc(attackTexture, 1, 1);
+            attackSprite->setScale(.85f * (*it)->getRadius());
+            attackSprite->setAngle((*it)->getAngle() * M_PI / 180);
+            attackSprite->setColor(Color4::RED);
             _rangedArm->setLastType(AttackController::MeleeState::first);
             if (_swipes.getLeftSwipe() == SwipeController::downAttack) {
                 _rangedArm->setAttackAngle(270);
