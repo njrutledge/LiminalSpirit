@@ -94,7 +94,7 @@ float LEVEL_HEIGHT = 54;
  *
  * @return true if the controller is initialized properly, false otherwise.
  */
-bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const std::shared_ptr<SoundController> sound, string json)
+bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const std::shared_ptr<SoundController> sound, string json)
 {
     _back = false;
     _step = false;
@@ -120,7 +120,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
 
     // set assets
     _assets = assets;
-    
+
     // Get constant values from assets/level.json
     _constants = assets->get<JsonValue>(json);
     BIOME = _constants->getString("biome");
@@ -129,13 +129,13 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     PLAYER_POS[1] = _constants->get("start_pos")->get(1)->asFloat();
     auto platformsAttr = _constants->get("platforms")->children();
     _platforms_attr.clear();
-    for(auto it = platformsAttr.begin(); it != platformsAttr.end(); ++it) {
+    for (auto it = platformsAttr.begin(); it != platformsAttr.end(); ++it) {
         std::shared_ptr<JsonValue> entry = (*it);
         float* attr = new float[3];
         attr[0] = entry->get(0)->asFloat();
         attr[1] = entry->get(1)->asFloat();
         attr[2] = entry->get(2)->asFloat();
-        
+
         _platforms_attr.push_back(attr);
     }
 
@@ -150,11 +150,11 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _spawn_order.clear();
     _spawn_pos.clear();
     _spawn_times.clear();
-    for(auto it = spawn.begin(); it != spawn.end(); ++it) {
+    for (auto it = spawn.begin(); it != spawn.end(); ++it) {
         std::shared_ptr<JsonValue> entry = (*it);
         std::vector<string> enemies;
         std::vector<Vec2> enemies_pos;
-        for(int i = 0; i < entry->size(); i++) {
+        for (int i = 0; i < entry->size(); i++) {
             enemies.push_back(entry->get(i)->asString());
             pos.x = spawnPos->get(index)->get(i)->get(0)->asFloat();
             pos.y = spawnPos->get(index)->get(i)->get(1)->asFloat();
@@ -168,28 +168,28 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _numWaves = index;
     // Set enemy wave number
     _nextWaveNum = 0;
-    
-    auto spawnTypes = _constants->get("spawner_types")->children();
-    for(auto it = spawnTypes.begin(); it != spawnTypes.end(); ++it) {
-        std::shared_ptr<JsonValue> entry = (*it);
-        std::unordered_map<string, spawnerEnemy> enemy_types;
 
-        for(int i = 0; i < entry->size(); i++) {
-            string enemy = entry->get(i)->asString();
-            if(!enemy_types[enemy].max_count) {
-                enemy_types[enemy].max_count = 1;
-                enemy_types[enemy].current_count = 0;
-                enemy_types[enemy].timer = 10.0f;
-            } else {
-                enemy_types[enemy].max_count++;
-            }
-        }
-        _spawner_enemy_types.push_back(enemy_types);
-        _living_spawners.push_back(0);
-    }
+    //    auto spawnTypes = _constants->get("spawner_types")->children();
+    //    for(auto it = spawnTypes.begin(); it != spawnTypes.end(); ++it) {
+    //        std::shared_ptr<JsonValue> entry = (*it);
+    //        std::unordered_map<string, spawnerEnemy> enemy_types;
+    //
+    //        for(int i = 0; i < entry->size(); i++) {
+    //            string enemy = entry->get(i)->asString();
+    //            if(!enemy_types[enemy].max_count) {
+    //                enemy_types[enemy].max_count = 1;
+    //                enemy_types[enemy].current_count = 0;
+    //                enemy_types[enemy].timer = 10.0f;
+    //            } else {
+    //                enemy_types[enemy].max_count++;
+    //            }
+    //        }
+    //        _spawner_enemy_types.push_back(enemy_types);
+    //        _living_spawners.push_back(0);
+    //    }
     _spawner_ind = -1;
     _spawnerCount = 0;
-    
+
     // Create a scene graph the same size as the window
     //_scene = Scene2::alloc(dimen.width, dimen.height);
     auto scene = _assets->get<scene2::SceneNode>("game");
@@ -211,11 +211,11 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     //    _world->PreSolve = [this](b2Contact* contact, const b2Manifold *oldManifold) {
     //        preSolve(contact, oldManifold);
     //    };
-    _world->onBeginContact = [this](b2Contact *contact)
+    _world->onBeginContact = [this](b2Contact* contact)
     {
         _collider.beginContact(contact, _attacks, _timer);
     };
-    _world->onEndContact = [this](b2Contact *contact)
+    _world->onEndContact = [this](b2Contact* contact)
     {
         _collider.endContact(contact);
     };
@@ -247,7 +247,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     // TODO this init might be wrong, Nick had _scale/2.0f
     _pMeleeTexture = _assets->get<Texture>(PATTACK_TEXTURE);
     _attacks = std::make_shared<AttackController>();
-    _attacks->init(_scale, 1.5, cugl::Vec2::UNIT_Y, cugl::Vec2(0,0.5), 0.5, 1, 0.5, 0.1, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    _attacks->init(_scale, 1.5, cugl::Vec2::UNIT_Y, cugl::Vec2(0, 0.5), 0.5, 1, 0.5, 0.1, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     _dashTime = 0;
     _dashXVel = 0;
     _dashYVel = 0;
@@ -267,9 +267,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     std::string msg = strtool::format("Health %d", (int)0/*_player->getHealth()*/);
     _text = TextLayout::allocWithText(msg, assets->get<Font>("marker"));
     _text->layout();
-    
+
     _timer = 0.0f;
-    
+
     return true;
 }
 
@@ -285,7 +285,7 @@ void GameScene::dispose()
     _assets = nullptr;
     _constants = nullptr;
     _world = nullptr;
-    if(_worldnode)_worldnode->removeAllChildren();
+    if (_worldnode)_worldnode->removeAllChildren();
     _worldnode = nullptr;
     if (_debugnode) _debugnode->removeAllChildren();
     _debugnode = nullptr;
@@ -294,7 +294,7 @@ void GameScene::dispose()
     _text = nullptr;
     _font = nullptr;
     _endText = nullptr;
-    
+
     //TODO: CHECK IF THIS IS RIGHT FOR DISPOSING
 //    for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
 //        (*it).~shared_ptr();
@@ -318,7 +318,7 @@ void GameScene::dispose()
 void GameScene::update(float timestep)
 {
     _sound->play_level_music("cave");
-    
+
     // Update input controller
     _input.update();
     // Debug Mode on/off
@@ -332,7 +332,7 @@ void GameScene::update(float timestep)
         _timer += timestep;
 
         if (_nextWaveNum < _numWaves && _timer >= _spawn_times[_nextWaveNum]) {
-            createEnemies(_nextWaveNum, 0);
+            createEnemies(_nextWaveNum);
             _nextWaveNum += 1;
         }
         //return to stop the rest of the update in DEBUG ONLY
@@ -564,79 +564,76 @@ void GameScene::update(float timestep)
     // Melee Arm
     if (_meleeArm->getLastType() == AttackController::MeleeState::cool) {
         if (_player->isFacingRight()) {
-            mSprite->setFrame(8);
+            mSprite->setFrame(7);
         }
         else {
-            mSprite->setFrame(0);
+            mSprite->setFrame(13);
         }
     }
     else if (_meleeArm->getLastType() == AttackController::MeleeState::h1_left) {
-        if (_meleeArm->getAnimeTimer() > 0.03f) {
-            if (mSprite->getFrame() == 7) {
+        if (_meleeArm->getAnimeTimer() > 0.05f) {
+            if (mSprite->getFrame() == 12) {
                 // Attack is finished
-                if (_player->isFacingRight()) {
-                    mSprite->setFrame(8);
-                }
-                else {
-                    mSprite->setFrame(0);
-                }
                 _meleeArm->setLastType(AttackController::MeleeState::cool);
                 _meleeArm->setAnimeTimer(0);
-                arm2Image->flipHorizontal(_player->isFacingRight());
             }
             else {
-                mSprite->setFrame((mSprite->getFrame() + 1) % 8);
+                if (mSprite->getFrame() == 13) {
+                    mSprite->setFrame(7);
+                }
+                else {
+                    mSprite->setFrame(((mSprite->getFrame() + 1) % 7) + 7);
+                }
                 _meleeArm->setAnimeTimer(0);
             }
         }
     }
     else if (_meleeArm->getLastType() == AttackController::MeleeState::h2_left) {
-        if (_meleeArm->getAnimeTimer() > 0.008f) {
-            if (mSprite->getFrame() == 15) {
+        if (_meleeArm->getAnimeTimer() > 0.06f) {
+            if (mSprite->getFrame() == 4) {
                 // Attack is finished
-                mSprite->setFrame(0);
                 _meleeArm->setLastType(AttackController::MeleeState::cool);
                 _meleeArm->setAnimeTimer(0);
-                arm2Image->flipHorizontal(_player->isFacingRight());
             }
             else {
-                mSprite->setFrame(((mSprite->getFrame() + 1) % 7) + 9);
+                if (mSprite->getFrame() > 6) {
+                    mSprite->setFrame(0);
+                }
+                else {
+                    mSprite->setFrame((mSprite->getFrame() + 1) % 5);
+                }
                 _meleeArm->setAnimeTimer(0);
             }
         }
     }
     else if (_meleeArm->getLastType() == AttackController::MeleeState::h3_left) {
-        if (_meleeArm->getAnimeTimer() > 0.03f) {
-            if (mSprite->getFrame() == 26) {
+        if (_meleeArm->getAnimeTimer() > 0.05f) {
+            if (mSprite->getFrame() == 20) {
                 // Attack is finished
-                mSprite->setFrame(0);
                 _meleeArm->setLastType(AttackController::MeleeState::cool);
                 _meleeArm->setAnimeTimer(0);
-                arm2Image->flipHorizontal(_player->isFacingRight());
             }
             else {
-                mSprite->setFrame(((mSprite->getFrame() + 1) % 9) + 18);
+                if (mSprite->getFrame() < 14) {
+                    mSprite->setFrame(14);
+                }
+                else {
+                    mSprite->setFrame(((mSprite->getFrame() + 1) % 7) + 14);
+                }
                 _meleeArm->setAnimeTimer(0);
             }
         }
     }
     else if (_meleeArm->getLastType() == AttackController::MeleeState::h1_right) {
-        if (_meleeArm->getAnimeTimer() > 0.03f) {
-            if (mSprite->getFrame() == 1) {
+        if (_meleeArm->getAnimeTimer() > 0.05f) {
+            if (mSprite->getFrame() == 8) {
                 // Attack is finished
-                if (_player->isFacingRight()) {
-                    mSprite->setFrame(8);
-                }
-                else {
-                    mSprite->setFrame(0);
-                }
                 _meleeArm->setLastType(AttackController::MeleeState::cool);
                 _meleeArm->setAnimeTimer(0);
-                arm2Image->flipHorizontal(_player->isFacingRight());
             }
             else {
-                if (mSprite->getFrame() == 0) {
-                    mSprite->setFrame(8);
+                if (mSprite->getFrame() <= 7) {
+                    mSprite->setFrame(13);
                 }
                 mSprite->setFrame(mSprite->getFrame() - 1);
                 _meleeArm->setAnimeTimer(0);
@@ -644,17 +641,16 @@ void GameScene::update(float timestep)
         }
     }
     else if (_meleeArm->getLastType() == AttackController::MeleeState::h2_right) {
-        if (_meleeArm->getAnimeTimer() > 0.008f) {
-            if (mSprite->getFrame() == 11) {
+        if (_meleeArm->getAnimeTimer() > 0.06f) {
+            if (mSprite->getFrame() == 2) {
                 // Attack is finished
-                mSprite->setFrame(8);
                 _meleeArm->setLastType(AttackController::MeleeState::cool);
+                mSprite->setFrame(7);
                 _meleeArm->setAnimeTimer(0);
-                arm2Image->flipHorizontal(_player->isFacingRight());
             }
             else {
-                if (mSprite->getFrame() == 0) {
-                    mSprite->setFrame(17);
+                if (mSprite->getFrame() >= 7) {
+                    mSprite->setFrame(6);
                 }
                 mSprite->setFrame(mSprite->getFrame() - 1);
                 _meleeArm->setAnimeTimer(0);
@@ -662,17 +658,15 @@ void GameScene::update(float timestep)
         }
     }
     else if (_meleeArm->getLastType() == AttackController::MeleeState::h3_right) {
-        if (_meleeArm->getAnimeTimer() > 0.03f) {
-            if (mSprite->getFrame() == 18) {
+        if (_meleeArm->getAnimeTimer() > 0.05f) {
+            if (mSprite->getFrame() == 14) {
                 // Attack is finished
-                mSprite->setFrame(8);
                 _meleeArm->setLastType(AttackController::MeleeState::cool);
                 _meleeArm->setAnimeTimer(0);
-                arm2Image->flipHorizontal(_player->isFacingRight());
             }
             else {
-                if (mSprite->getFrame() == 0 || mSprite->getFrame() == 8) {
-                    mSprite->setFrame(26);
+                if (mSprite->getFrame() < 13) {
+                    mSprite->setFrame(20);
                 }
                 mSprite->setFrame(mSprite->getFrame() - 1);
                 _meleeArm->setAnimeTimer(0);
@@ -705,8 +699,8 @@ void GameScene::update(float timestep)
             }
         }
         else if ((*it)->getName() == "Glutton") {
-            if ((*it)->getIdleAnimationTimer() > 1.f || 
-                (!(sprite->getFrame() == 2) && (*it)->getIdleAnimationTimer() > 0.3f) 
+            if ((*it)->getIdleAnimationTimer() > 1.f ||
+                (!(sprite->getFrame() == 2) && (*it)->getIdleAnimationTimer() > 0.3f)
                 || (!(sprite->getFrame() == 2 || sprite->getFrame() == 5 || sprite->getFrame() == 6) && (*it)->getIdleAnimationTimer() > 0.1f)) {
                 sprite->setFrame((sprite->getFrame() + 1) % 7);
                 (*it)->setIdleAnimationTimer(0);
@@ -714,7 +708,7 @@ void GameScene::update(float timestep)
         }
 
 
-        if((*it)->getInvincibilityTimer() <= 0){
+        if ((*it)->getInvincibilityTimer() <= 0) {
             (*it)->setInvincibility(false);
         }
         if ((*it)->isAttacking()) {
@@ -727,21 +721,21 @@ void GameScene::update(float timestep)
             }
             else {
                 shared_ptr<Seeker> seeker = dynamic_pointer_cast<Seeker>(*it);
-                
-                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 1.0f, 0.2f, 2.0f, AttackController::Type::e_melee, (vel.scale(0.2)).rotate((play_p - en_p).getAngle()), _timer);
-                
+
+                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 1.0f, 0.2f, 2.0f, AttackController::Type::e_melee, (vel.scale(0.2)).rotate((play_p - en_p).getAngle()), _timer);
+
             }
-  
+
             if ((*it)->getName() == "Lost") {
-                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 1.0f, 0.2f, 1.0f, AttackController::Type::e_melee, vel.rotate((play_p - en_p).getAngle()), _timer);
-                
+                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 1.0f, 0.2f, 1.0f, AttackController::Type::e_melee, vel.rotate((play_p - en_p).getAngle()), _timer);
+
             }
             else if ((*it)->getName() == "Phantom")
             {
                 _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()), _timer);
             }
             else if ((*it)->getName() == "Glutton") {
-                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()), _timer);
+                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()), _timer);
             }
 
         }
@@ -754,15 +748,15 @@ void GameScene::update(float timestep)
             }
         }
     }
-    
+
     // update spawners
-    if(_spawnerCount) {
-        if(_collider.getSpawnerKilled() != -1) {
+    if (_spawnerCount) {
+        if (_collider.getSpawnerKilled() != -1) {
             _living_spawners[_collider.getSpawnerKilled()] = 0;
             _spawnerCount--;
             _collider.setSpawnerKilled(-1);
         }
-        if(_collider.getIndexSpawner() != -1) {
+        if (_collider.getIndexSpawner() != -1) {
             int i = _collider.getIndexSpawner();
             string name = _collider.getSpawnerEnemyName();
             _spawner_enemy_types[i][name].current_count = _spawner_enemy_types[i][name].current_count - 1;
@@ -850,8 +844,8 @@ void GameScene::update(float timestep)
             _player->setIsStunned(false);
         }
     }
-    
-    if(_dashTime > 0 && _dashTime < 0.6f){
+
+    if (_dashTime > 0 && _dashTime < 0.6f) {
         _player->setDropTime(timestep);
     }
 
@@ -873,7 +867,8 @@ void GameScene::update(float timestep)
             _rangedArm->setLastType(AttackController::MeleeState::first);
             if (_swipes.getLeftSwipe() == SwipeController::downAttack) {
                 _rangedArm->setAttackAngle(270);
-            } else {
+            }
+            else {
                 _rangedArm->setAttackAngle((*it)->getAngle());
             }
             if (_player->isFacingRight()) {
@@ -911,7 +906,8 @@ void GameScene::update(float timestep)
             _player->setMovingUp(true);
             _player->setJumpAnimationTimer(0);
         }
-    } else if (_swipes.getRightSwipe() == _swipes.downAttack){
+    }
+    else if (_swipes.getRightSwipe() == _swipes.downAttack) {
         //IDK
         _player->setDropTime(0.4f);
     }
@@ -937,7 +933,7 @@ void GameScene::update(float timestep)
             _player->setGrounded(true);
         }
     }
-    
+
     if (_player->getVY() < 0) {
         _player->setMovingUp(false);
     }
@@ -949,7 +945,7 @@ void GameScene::update(float timestep)
         if ((*ait)->isRemoved())
         {
             // int log1 = _world->getObstacles().size();
-            cugl::physics2::Obstacle *obj = dynamic_cast<cugl::physics2::Obstacle *>(&**ait);
+            cugl::physics2::Obstacle* obj = dynamic_cast<cugl::physics2::Obstacle*>(&**ait);
             _world->removeObstacle(obj);
             _worldnode->removeChild(obj->_node);
 
@@ -982,7 +978,7 @@ void GameScene::update(float timestep)
             eit++;
         }
     }
-    
+
     // Move wave spawn times up if all enemies killed
     if (_nextWaveNum < _numWaves && !_enemies.size()) {
         float nextSpawnTime = _spawn_times[_nextWaveNum];
@@ -991,7 +987,7 @@ void GameScene::update(float timestep)
             _spawn_times[i] -= diff;
         }
     }
-    
+
     if (_player->isRemoved()) {
         reset();
         _player->markRemoved(false);
@@ -1009,31 +1005,32 @@ void GameScene::update(float timestep)
     // Copy World's zoom and transform
     _debugnode->applyPan(-_debugnode->getPaneTransform().transform(Vec2()));
     _debugnode->applyPan(_worldnode->getPaneTransform().transform(Vec2()) / _scale);
-    
+
     // Spawn new enemies if time for next wave
     _timer += timestep;
 
-    if (_nextWaveNum < _numWaves && _timer >= _spawn_times[_nextWaveNum]){
+    if (_nextWaveNum < _numWaves && _timer >= _spawn_times[_nextWaveNum]) {
         createEnemies(_nextWaveNum);
         _nextWaveNum += 1;
     }
-    
+
     int index = 0;
-    for(auto it = _spawner_enemy_types.begin(); it != _spawner_enemy_types.end(); ++it) {
-        if(_living_spawners[index]) {
-            for(auto i : (*it)) {
+    for (auto it = _spawner_enemy_types.begin(); it != _spawner_enemy_types.end(); ++it) {
+        if (_living_spawners[index]) {
+            for (auto i : (*it)) {
                 auto p = i.second;
                 int diff_count = p.max_count - p.current_count;
                 string name = i.first;
                 if (p.timer <= 0) {
-                    
-                    while(diff_count != 0) {
+
+                    while (diff_count != 0) {
                         createSpawnerEnemy(index, name);
                         _spawner_enemy_types[index][name].current_count++;
                         diff_count--;
                     }
                     _spawner_enemy_types[index][name].timer = 10.0f;
-                } else if (diff_count > 0) {
+                }
+                else if (diff_count > 0) {
                     _spawner_enemy_types[index][name].timer -= timestep;
 
                 }
@@ -1051,19 +1048,19 @@ void GameScene::update(float timestep)
         _endText->setHorizontalAlignment(HorizontalAlign::CENTER);
         _endText->layout();
     }
-    
+
     _playerGlow->setPosition(_player->getPosition());
 
     // Determining arm positions and offsets
     float offsetArm = -2.3f;
-    float offsetArm2 = -2.65f;
+    float offsetArm2 = -2.75f;
     if (!_player->isFacingRight()) {
         offsetArm = -1 * offsetArm;
     }
 
     // change based on arm attacks
     if ((!_player->isFacingRight() || // player facing left or attacks left
-        (_meleeArm->getLastType() == AttackController::MeleeState::h1_left 
+        (_meleeArm->getLastType() == AttackController::MeleeState::h1_left
             || _meleeArm->getLastType() == AttackController::MeleeState::h2_left
             || _meleeArm->getLastType() == AttackController::MeleeState::h3_left)))// player facing left and attacking right 
     {
@@ -1079,13 +1076,13 @@ void GameScene::update(float timestep)
     float upDown = _rangedArm->getGlowTimer();
     float upDown2 = _rangedArm->getGlowTimer() + 0.5f;
     float spacing = 1.f;
-    float upDownY1 = fmod(upDown/2, spacing);
-    float upDownY2 = fmod(upDown2/2, spacing);
-    if (upDownY1 > spacing/4 && upDownY1 <= 3*spacing/4) {
-        upDownY1 = spacing/2 - upDownY1;
+    float upDownY1 = fmod(upDown / 2, spacing);
+    float upDownY2 = fmod(upDown2 / 2, spacing);
+    if (upDownY1 > spacing / 4 && upDownY1 <= 3 * spacing / 4) {
+        upDownY1 = spacing / 2 - upDownY1;
     }
-    else if (upDownY1 > 3*spacing/4) {
-        upDownY1 = -1*spacing + upDownY1;
+    else if (upDownY1 > 3 * spacing / 4) {
+        upDownY1 = -1 * spacing + upDownY1;
     }
     if (upDownY2 > spacing / 4 && upDownY2 <= 3 * spacing / 4) {
         upDownY2 = spacing / 2 - upDownY2;
@@ -1095,14 +1092,14 @@ void GameScene::update(float timestep)
     }
 
 
-    _rangedArm->setPosition(_player->getPosition().x + offsetArm, _player->getPosition().y + (upDownY1/spacing/3) + 0.2f);
-    _meleeArm->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY2/spacing/3) + 0.5f);
+    _rangedArm->setPosition(_player->getPosition().x + offsetArm, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
+    _meleeArm->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY2 / spacing / 3) + 0.1f);
 }
 
 std::shared_ptr<BaseEnemyModel> GameScene::getNearestNonMirror(cugl::Vec2 pos) {
     float distance(INT_MAX);
     std::shared_ptr<BaseEnemyModel> savedEnemy = nullptr;
-        for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
+    for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
         if (Mirror* mirror = dynamic_cast<Mirror*>((*it).get())) {
             //Do nothing, but need to see if it can be casted
         }
@@ -1119,7 +1116,7 @@ std::shared_ptr<BaseEnemyModel> GameScene::getNearestNonMirror(cugl::Vec2 pos) {
 /**
  * The method called to draw the gameplay scene
  */
-void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
+void GameScene::render(const std::shared_ptr<cugl::SpriteBatch>& batch)
 {
     // This takes care of begin/end
 
@@ -1127,20 +1124,25 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     if (_player->isInvincible() && !_player->isStunned()) {
         // TODO Change this
         _player->getSceneNode()->setColor(Color4::GREEN);
-    } else if(_swipes.hasLeftChargedAttack() && _swipes.hasRightChargedAttack()){
-        _player->getSceneNode()->setColor(Color4(125,0,255,255));
-    } else if(_swipes.hasLeftChargedAttack()) {
+    }
+    else if (_swipes.hasLeftChargedAttack() && _swipes.hasRightChargedAttack()) {
+        _player->getSceneNode()->setColor(Color4(125, 0, 255, 255));
+    }
+    else if (_swipes.hasLeftChargedAttack()) {
         _player->getSceneNode()->setColor(Color4::RED);
-    } else if(_swipes.hasRightChargedAttack()){
+    }
+    else if (_swipes.hasRightChargedAttack()) {
         _player->getSceneNode()->setColor(Color4::BLUE);
-    } else {
+    }
+    else {
         _player->getSceneNode()->setColor(Color4::WHITE);
     }
     // Make enemies flash red when invincible
     for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
-        if((*it)->getInvincibility()){
+        if ((*it)->getInvincibility()) {
             (*it)->getSceneNode()->setColor(Color4::RED);
-        } else {
+        }
+        else {
             (*it)->getSceneNode()->setColor(Color4::WHITE);
         }
     }
@@ -1149,20 +1151,20 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
 
     //_attacks.draw(batch);
     batch->drawText(_text, Vec2(20, getSize().height - _text->getBounds().size.height - 10));
-    
+
     batch->setColor(Color4::GREEN);
     Affine2 trans;
     trans.scale(3);
-    trans.translate(Vec2(getSize().width/2,getSize().height/2));
-    
-    if(_endText && !_endText->getText().compare("YOU WIN!")) {
+    trans.translate(Vec2(getSize().width / 2, getSize().height / 2));
+
+    if (_endText && !_endText->getText().compare("YOU WIN!")) {
         batch->setColor(Color4::GREEN);
         Affine2 trans;
         trans.scale(3);
-        trans.translate(Vec2(getSize().width/2,getSize().height/2));
+        trans.translate(Vec2(getSize().width / 2, getSize().height / 2));
         batch->drawText(_endText, trans);
     }
-    
+
     batch->end();
 }
 
@@ -1211,9 +1213,9 @@ void GameScene::createMirror(Vec2 enemyPos, Mirror::Type type, std::string asset
 
 void GameScene::createSpawnerEnemy(int spawnerInd, string enemyName) {
     Vec2 enemyPos;
-   
+
     enemyPos = _spawner_pos[spawnerInd];
-   
+
     std::shared_ptr<Texture> enemyGlowImage = _assets->get<Texture>(GLOW_TEXTURE);
     std::shared_ptr<Glow> enemyGlow = Glow::alloc(enemyPos, enemyGlowImage->getSize() / _scale, _scale);
     std::shared_ptr<scene2::PolygonNode> enemyGlowSprite = scene2::PolygonNode::allocWithTexture(enemyGlowImage);
@@ -1223,33 +1225,32 @@ void GameScene::createSpawnerEnemy(int spawnerInd, string enemyName) {
     enemyGlowSprite->setRelativeColor(false);
     enemyGlowSprite->setScale(.65f);
     addObstacle(enemyGlow, enemyGlowSprite, true);
-    if (!enemyName.compare("lost") || !enemyName.compare("Lost") ) {
+    // lowercase the enemyName
+    std::transform(enemyName.begin(), enemyName.end(), enemyName.begin(),
+        [](unsigned char c) { return std::tolower(c); });
+    if (!enemyName.compare("lost")) {
         std::shared_ptr<Texture> lostImage = _assets->get<Texture>("lost");
-        std::shared_ptr<Lost> lost = Lost::alloc(enemyPos, lostImage->getSize() / _scale / 10, _scale);
+        std::shared_ptr<Lost> lost = Lost::alloc(enemyPos, lostImage->getSize(), lostImage->getSize() / _scale / 10, _scale);
         std::shared_ptr<scene2::PolygonNode> lostSprite = scene2::PolygonNode::allocWithTexture(lostImage);
         lost->setGlow(enemyGlow);
         lost->setSceneNode(lostSprite);
         lost->setDebugColor(Color4::RED);
-        lost->setSpawnerInd(spawnerInd);
         lostSprite->setScale(0.15f);
         addObstacle(lost, lostSprite, true);
         _enemies.push_back(lost);
     }
-    else if (!enemyName.compare("phantom") || !enemyName.compare("Phantom")) {
+    else if (!enemyName.compare("phantom")) {
         std::shared_ptr<Texture> phantomHitboxImage = _assets->get<Texture>("phantom");
         std::shared_ptr<Texture> phantomImage = _assets->get<Texture>("phantom_ani");
-        std::shared_ptr<Phantom> phantom = Phantom::alloc(enemyPos, phantomHitboxImage->getSize() / _scale / 10, _scale);
+        std::shared_ptr<Phantom> phantom = Phantom::alloc(enemyPos, Vec2(phantomImage->getSize().width / 7, phantomImage->getSize().height), phantomHitboxImage->getSize() / _scale / 10, _scale);
         std::shared_ptr<scene2::SpriteNode> phantomSprite = scene2::SpriteNode::alloc(phantomImage, 1, 7);
         phantom->setSceneNode(phantomSprite);
         phantom->setDebugColor(Color4::BLUE);
         phantom->setGlow(enemyGlow);
-        phantom->setSpawnerInd(spawnerInd);
         phantomSprite->setScale(0.05f);
         phantomSprite->setFrame(0);
         addObstacle(phantom, phantomSprite, true);
         _enemies.push_back(phantom);
-        
-        
     }
     else if (!enemyName.compare("square")) {
         createMirror(enemyPos, Mirror::Type::square, "squaremirror", enemyGlow);
@@ -1260,28 +1261,28 @@ void GameScene::createSpawnerEnemy(int spawnerInd, string enemyName) {
     else if (!enemyName.compare("circle")) {
         createMirror(enemyPos, Mirror::Type::circle, "circlemirror", enemyGlow);
     }
-    else if (!enemyName.compare("seeker") || !enemyName.compare("Seeker")) {
+    else if (!enemyName.compare("seeker")) {
         std::shared_ptr<Texture> seekerImage = _assets->get<Texture>("seeker");
-        std::shared_ptr<Seeker> seeker = Seeker::alloc(enemyPos, seekerImage->getSize() / _scale / 10, _scale);
+        std::shared_ptr<Seeker> seeker = Seeker::alloc(enemyPos, seekerImage->getSize(), seekerImage->getSize() / _scale / 10, _scale);
         std::shared_ptr<scene2::PolygonNode> seekerSprite = scene2::PolygonNode::allocWithTexture(seekerImage);
         seeker->setSceneNode(seekerSprite);
         seeker->setDebugColor(Color4::GREEN);
         seeker->setGlow(enemyGlow);
-        seeker->setSpawnerInd(spawnerInd);
         seekerSprite->setScale(0.15f);
         addObstacle(seeker, seekerSprite, true);
         _enemies.push_back(seeker);
     }
-    else if (!enemyName.compare("glutton") || !enemyName.compare("Glutton")) {
+    else if (!enemyName.compare("glutton")) {
         std::shared_ptr<Texture> gluttonHitboxImage = _assets->get<Texture>("glutton");
         std::shared_ptr<Texture> gluttonImage = _assets->get<Texture>("glutton_ani");
-        std::shared_ptr<Glutton> glutton = Glutton::alloc(enemyPos, gluttonHitboxImage->getSize() / _scale / 10, _scale);
+        std::shared_ptr<Glutton> glutton = Glutton::alloc(enemyPos + Vec2(0, 2), Vec2(gluttonImage->getSize().width / 7, gluttonImage->getSize().height), gluttonHitboxImage->getSize() / _scale / 5, _scale);
         std::shared_ptr<scene2::SpriteNode> gluttonSprite = scene2::SpriteNode::alloc(gluttonImage, 1, 7);
+        //fix the anchor slightly for glutton only
+        gluttonSprite->setAnchor(.5, .6);
         glutton->setSceneNode(gluttonSprite);
         glutton->setDebugColor(Color4::BLUE);
         glutton->setGlow(enemyGlow);
-        glutton->setSpawnerInd(spawnerInd);
-        gluttonSprite->setScale(0.12f);
+        gluttonSprite->setScale(0.2f);
         gluttonSprite->setFrame(0);
         addObstacle(glutton, gluttonSprite, true);
         _enemies.push_back(glutton);
@@ -1293,12 +1294,12 @@ void GameScene::createEnemies(int wave) {
     std::vector<cugl::Vec2> positions;
     enemies = _spawn_order.at(wave);
     positions = _spawn_pos.at(wave);
-    
+
     for (int i = 0; i < enemies.size(); i++) {
         Vec2 enemyPos;
-       
+
         enemyPos = positions[i];
-       
+
         std::string enemyName = enemies[i];
         std::shared_ptr<Texture> enemyGlowImage = _assets->get<Texture>(GLOW_TEXTURE);
         std::shared_ptr<Glow> enemyGlow = Glow::alloc(enemyPos, enemyGlowImage->getSize() / _scale, _scale);
@@ -1309,9 +1310,12 @@ void GameScene::createEnemies(int wave) {
         enemyGlowSprite->setRelativeColor(false);
         enemyGlowSprite->setScale(.65f);
         addObstacle(enemyGlow, enemyGlowSprite, true);
+        // lowercase the enemyName
+        std::transform(enemyName.begin(), enemyName.end(), enemyName.begin(),
+            [](unsigned char c) { return std::tolower(c); });
         if (!enemyName.compare("lost")) {
             std::shared_ptr<Texture> lostImage = _assets->get<Texture>("lost");
-            std::shared_ptr<Lost> lost = Lost::alloc(enemyPos,lostImage->getSize(), lostImage->getSize() / _scale / 10, _scale);
+            std::shared_ptr<Lost> lost = Lost::alloc(enemyPos, lostImage->getSize(), lostImage->getSize() / _scale / 10, _scale);
             std::shared_ptr<scene2::PolygonNode> lostSprite = scene2::PolygonNode::allocWithTexture(lostImage);
             lost->setGlow(enemyGlow);
             lost->setSceneNode(lostSprite);
@@ -1352,11 +1356,11 @@ void GameScene::createEnemies(int wave) {
             seekerSprite->setScale(0.15f);
             addObstacle(seeker, seekerSprite, true);
             _enemies.push_back(seeker);
-        } 
+        }
         else if (!enemyName.compare("glutton")) {
             std::shared_ptr<Texture> gluttonHitboxImage = _assets->get<Texture>("glutton");
             std::shared_ptr<Texture> gluttonImage = _assets->get<Texture>("glutton_ani");
-            std::shared_ptr<Glutton> glutton = Glutton::alloc(enemyPos+ Vec2(0,2), Vec2(gluttonImage->getSize().width/7, gluttonImage->getSize().height), gluttonHitboxImage->getSize() / _scale / 5, _scale);
+            std::shared_ptr<Glutton> glutton = Glutton::alloc(enemyPos + Vec2(0, 2), Vec2(gluttonImage->getSize().width / 7, gluttonImage->getSize().height), gluttonHitboxImage->getSize() / _scale / 5, _scale);
             std::shared_ptr<scene2::SpriteNode> gluttonSprite = scene2::SpriteNode::alloc(gluttonImage, 1, 7);
             //fix the anchor slightly for glutton only
             gluttonSprite->setAnchor(.5, .6);
@@ -1382,30 +1386,29 @@ void GameScene::createEnemies(int wave) {
             addObstacle(spawner, spawnerSprite, true);
             _enemies.push_back(spawner);
             auto spawnerEnemiesMap = _spawner_enemy_types.at(_spawner_ind);
-            for(auto it = spawnerEnemiesMap.begin(); it != spawnerEnemiesMap.end(); ++it) {
+            for (auto it = spawnerEnemiesMap.begin(); it != spawnerEnemiesMap.end(); ++it) {
                 int index = it->second.max_count;
                 string spawnerEnemyName = it->first;
-                while(index!=0) {
+                while (index != 0) {
                     createSpawnerEnemy(_spawner_ind, spawnerEnemyName);
                     _spawner_enemy_types.at(_spawner_ind).at(spawnerEnemyName).current_count++;
                     index--;
                 }
             }
             _living_spawners[_spawner_ind] = 1;
-//            auto spawnTypes = _constants->get("spawner_types")->children();
-//            int index = 0;
-//            for(auto it = spawnTypes.begin(); it != spawnTypes.end(); ++it) {
-//                std::shared_ptr<JsonValue> entry = (*it);
-//                std::vector<string> enemies_types;
-//                for(int i = 0; i < entry->size(); i++) {
-//                    enemies_types.push_back(entry->get(i)->asString());
-//                }
-//                _spawner_types.push_back(enemies_types);
-//                index++;
-//            }
-//            _numWavesSpawner = index;
-            
-//            _nextWaveNumSpawner = 1;
+            //            auto spawnTypes = _constants->get("spawner_types")->children();
+            //            int index = 0;
+            //            for(auto it = spawnTypes.begin(); it != spawnTypes.end(); ++it) {
+            //                std::shared_ptr<JsonValue> entry = (*it);
+            //                std::vector<string> enemies_types;
+            //                for(int i = 0; i < entry->size(); i++) {
+            //                    enemies_types.push_back(entry->get(i)->asString());
+            //                }
+            //                _spawner_types.push_back(enemies_types);
+            //                index++;
+            //            }
+            //            _numWavesSpawner = index;
+            //            _nextWaveNumSpawner = 1;
         }
         // TODO add more enemy types
         // If the enemy name is incorrect, no enemy will be made
@@ -1416,7 +1419,7 @@ void GameScene::createParticles() {
     // deprecated for now as it lags the game // try bitmasking then custom node
     for (int i = 0; i < 99; i++) {
         std::shared_ptr<Texture> particleTexture = _assets->get<Texture>(GLOW_TEXTURE);
-        std::shared_ptr<Particle> party = Particle::alloc(Vec2(10,10), particleTexture->getSize() / _scale / 10, _scale);
+        std::shared_ptr<Particle> party = Particle::alloc(Vec2(10, 10), particleTexture->getSize() / _scale / 10, _scale);
         std::shared_ptr<scene2::PolygonNode> particleSprite = scene2::PolygonNode::allocWithTexture(particleTexture);
         party->setSceneNode(particleSprite);
         party->setDebugColor(Color4::CYAN);
@@ -1446,16 +1449,16 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
 
     Size bsize = up->getSize();
     std::shared_ptr<scene2::Button> button = scene2::Button::alloc(scene2::PolygonNode::allocWithTexture(up),
-                                                                   scene2::PolygonNode::allocWithTexture(down));
+        scene2::PolygonNode::allocWithTexture(down));
 
     // Create a callback function for the button
     button->setName("close");
-    button->addListener([=](const std::string &name, bool down)
-                        {
-        // Only quit when the button is released
-        if (!down) {
-            _back = true;
-        } });
+    button->addListener([=](const std::string& name, bool down)
+        {
+            // Only quit when the button is released
+            if (!down) {
+                _back = true;
+            } });
 
     // Find the safe area, adapting to the iPhone X
     Rect safe = Application::get()->getSafeBounds();
@@ -1522,7 +1525,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     std::shared_ptr<scene2::SceneNode> platformNode;
     std::shared_ptr<PlatformModel> platform;
     std::shared_ptr<scene2::PolygonNode> spritePlatform;
-    for(int i = 0; i < _platforms_attr.size(); i++) {
+    for (int i = 0; i < _platforms_attr.size(); i++) {
         pos.x = _platforms_attr[i][0];
         pos.y = _platforms_attr[i][1];
         float width = _platforms_attr[i][2];
@@ -1553,7 +1556,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     _playerGlow = Glow::alloc(testPos, imaget->getSize() / _scale, _scale);
     std::shared_ptr<scene2::PolygonNode> spritet = scene2::PolygonNode::allocWithTexture(imaget);
     _playerGlow->setSceneNode(spritet);
-    std::shared_ptr<Gradient> grad = Gradient::allocRadial(Color4(255, 255, 255, 55), Color4(111,111,111, 0), Vec2(0.5, 0.5), .3f);
+    std::shared_ptr<Gradient> grad = Gradient::allocRadial(Color4(255, 255, 255, 55), Color4(111, 111, 111, 0), Vec2(0.5, 0.5), .3f);
     spritet->setGradient(grad);
     spritet->setRelativeColor(false);
     spritet->setScale(.65f);
@@ -1582,19 +1585,19 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     _meleeArm->setAttackAngle(0);
     _meleeArm->setGlowTimer(0);
     _meleeArm->setLastType(AttackController::MeleeState::cool);
-    std::shared_ptr<scene2::SpriteNode> meleeArmSprite = scene2::SpriteNode::alloc(meleeImage, 4, 9);
-    meleeArmSprite->setFrame(0);
+    std::shared_ptr<scene2::SpriteNode> meleeArmSprite = scene2::SpriteNode::alloc(meleeImage, 4, 7);
+    meleeArmSprite->setFrame(21);
     _meleeArm->setSceneNode(meleeArmSprite);
     _meleeArm->setAnimeTimer(0);
-    meleeArmSprite->setScale(0.35);
+    meleeArmSprite->setScale(0.22);
     addObstacle(_meleeArm, meleeArmSprite, true);
-    
+
     // Player creation
     Vec2 playerPos = PLAYER_POS;
     std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
     std::shared_ptr<Texture> image = _assets->get<Texture>(PLAYER_WALK_TEXTURE);
     std::shared_ptr<Texture> hitboxImage = _assets->get<Texture>(PLAYER_TEXTURE);
-    _player = PlayerModel::alloc(playerPos + Vec2(0,.5), hitboxImage->getSize() / _scale / 8, _scale);
+    _player = PlayerModel::alloc(playerPos + Vec2(0, .5), hitboxImage->getSize() / _scale / 8, _scale);
     _player->setIsStunned(false);
     _player->setMovement(0);
     _player->setWalkAnimationTimer(0);
@@ -1624,7 +1627,7 @@ void GameScene::reset()
     while (ac_it != _attacks->_current.end())
     {
         // int log1 = _world->getObstacles().size();
-        cugl::physics2::Obstacle *obj = dynamic_cast<cugl::physics2::Obstacle *>(&**ac_it);
+        cugl::physics2::Obstacle* obj = dynamic_cast<cugl::physics2::Obstacle*>(&**ac_it);
         _world->removeObstacle(obj);
         _worldnode->removeChild(obj->_node);
 
@@ -1635,7 +1638,7 @@ void GameScene::reset()
     while (ap_it != _attacks->_current.end())
     {
         // int log1 = _world->getObstacles().size();
-        cugl::physics2::Obstacle *obj = dynamic_cast<cugl::physics2::Obstacle *>(&**ap_it);
+        cugl::physics2::Obstacle* obj = dynamic_cast<cugl::physics2::Obstacle*>(&**ap_it);
         _world->removeObstacle(obj);
         _worldnode->removeChild(obj->_node);
 
@@ -1662,15 +1665,15 @@ void GameScene::reset()
 
         eit = _enemies.erase(eit);
     }
-    
+
     // Reset wave spawning
     _timer = 0.0f;
     _nextWaveNum = 0;
     auto spawnTime = _constants->get("spawn_times");
-    for(int i = 0; i < _numWaves; i++) {
+    for (int i = 0; i < _numWaves; i++) {
         _spawn_times[i] = spawnTime->get(i)->asFloat();
     }
-    
+
     _endText = nullptr;
 }
 
@@ -1686,9 +1689,9 @@ void GameScene::reset()
  * @param node            The scene graph node to attach it to
  * @param useObjPosition  Whether to update the node's position to be at the object's position
  */
-void GameScene::addObstacle(const std::shared_ptr<cugl::physics2::Obstacle> &obj,
-                            const std::shared_ptr<cugl::scene2::SceneNode> &node,
-                            bool useObjPosition)
+void GameScene::addObstacle(const std::shared_ptr<cugl::physics2::Obstacle>& obj,
+    const std::shared_ptr<cugl::scene2::SceneNode>& node,
+    bool useObjPosition)
 {
     _world->addObstacle(obj);
     obj->setDebugScene(_debugnode);
@@ -1704,11 +1707,11 @@ void GameScene::addObstacle(const std::shared_ptr<cugl::physics2::Obstacle> &obj
     // Dynamic objects need constant updating
     if (obj->getBodyType() == b2_dynamicBody)
     {
-        scene2::SceneNode *weak = node.get(); // No need for smart pointer in callback
-        obj->setListener([=](physics2::Obstacle *obs)
-                         {
-            weak->setPosition(obs->getPosition()*_scale);
-            weak->setAngle(node->getAngle());
-        });
+        scene2::SceneNode* weak = node.get(); // No need for smart pointer in callback
+        obj->setListener([=](physics2::Obstacle* obs)
+            {
+                weak->setPosition(obs->getPosition() * _scale);
+                weak->setAngle(node->getAngle());
+            });
     }
 }
