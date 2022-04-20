@@ -1435,6 +1435,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     std::shared_ptr<Texture> rangeHitboxImage = _assets->get<Texture>(PLAYER_RANGE_TEXTURE);
     std::shared_ptr<Texture> rangeImage = _assets->get<Texture>("player_range_arm_ani");
     _rangedArm = Glow::alloc(rangeArmPos, rangeHitboxImage->getSize() / _scale, _scale);
+    _rangedArm->setAttackAngle(0);
     _rangedArm->setGlowTimer(0);
     _rangedArm->setAnimeTimer(0);
     _rangedArm->setLastType(AttackController::MeleeState::cool);
@@ -1449,6 +1450,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     std::shared_ptr<Texture> meleeHitboxImage = _assets->get<Texture>(PLAYER_MELEE_TEXTURE);
     std::shared_ptr<Texture> meleeImage = _assets->get<Texture>(PLAYER_MELEE_THREE_TEXTURE);
     _meleeArm = Glow::alloc(meleeArmPos, meleeHitboxImage->getSize() / _scale, _scale);
+    _meleeArm->setAttackAngle(0);
     _meleeArm->setGlowTimer(0);
     _meleeArm->setLastType(AttackController::MeleeState::cool);
     std::shared_ptr<scene2::SpriteNode> meleeArmSprite = scene2::SpriteNode::alloc(meleeImage, 4, 9);
