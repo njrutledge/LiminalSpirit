@@ -335,6 +335,8 @@ void GameScene::update(float timestep)
     ///////////////////////////////////////
     int nextFrame;
     scene2::SpriteNode* sprite = dynamic_cast<scene2::SpriteNode*>(_player->getSceneNode().get());
+
+    // Player (body) Animations
     if (_player->isStunned()) {
         // Store the frame being played before stun
         if (sprite->getFrame() != 31 && sprite->getFrame() != 24) {
@@ -467,7 +469,7 @@ void GameScene::update(float timestep)
     }
     
     
-
+    // Arm and Player Flipping
     scene2::TexturedNode *image = dynamic_cast<scene2::TexturedNode *>(_player->getSceneNode().get());
     scene2::TexturedNode* arm1Image = dynamic_cast<scene2::TexturedNode*>(_rangedArm->getSceneNode().get());
     scene2::TexturedNode* arm2Image = dynamic_cast<scene2::TexturedNode*>(_meleeArm->getSceneNode().get());
@@ -494,6 +496,7 @@ void GameScene::update(float timestep)
     _meleeArm->setAnimeTimer(_meleeArm->getAnimeTimer() + timestep);
     _rangedArm->setAnimeTimer(_rangedArm->getAnimeTimer() + timestep);
 
+    // Ranged Arm
     if (_rangedArm->getLastType() == AttackController::MeleeState::cool) {
         if (_player->isFacingRight()) {
             rSprite->setFrame(5);
@@ -540,6 +543,7 @@ void GameScene::update(float timestep)
         }
     }
 
+    // Melee Arm
     if (_meleeArm->getLastType() == AttackController::MeleeState::cool) {
         if (_player->isFacingRight()) {
             mSprite->setFrame(8);
@@ -549,7 +553,7 @@ void GameScene::update(float timestep)
         }
     }
     else if (_meleeArm->getLastType() == AttackController::MeleeState::h1_left) {
-        if (_meleeArm->getAnimeTimer() > 0.06f) {
+        if (_meleeArm->getAnimeTimer() > 0.03f) {
             if (mSprite->getFrame() == 7) {
                 // Attack is finished
                 if (_player->isFacingRight()) {
@@ -569,7 +573,7 @@ void GameScene::update(float timestep)
         }
     }
     else if (_meleeArm->getLastType() == AttackController::MeleeState::h2_left) {
-        if (_meleeArm->getAnimeTimer() > 0.06f) {
+        if (_meleeArm->getAnimeTimer() > 0.008f) {
             if (mSprite->getFrame() == 15) {
                 // Attack is finished
                 mSprite->setFrame(0);
@@ -584,7 +588,7 @@ void GameScene::update(float timestep)
         }
     }
     else if (_meleeArm->getLastType() == AttackController::MeleeState::h3_left) {
-        if (_meleeArm->getAnimeTimer() > 0.06f) {
+        if (_meleeArm->getAnimeTimer() > 0.03f) {
             if (mSprite->getFrame() == 26) {
                 // Attack is finished
                 mSprite->setFrame(0);
@@ -599,7 +603,7 @@ void GameScene::update(float timestep)
         }
     }
     else if (_meleeArm->getLastType() == AttackController::MeleeState::h1_right) {
-        if (_meleeArm->getAnimeTimer() > 0.06f) {
+        if (_meleeArm->getAnimeTimer() > 0.03f) {
             if (mSprite->getFrame() == 1) {
                 // Attack is finished
                 if (_player->isFacingRight()) {
@@ -622,7 +626,7 @@ void GameScene::update(float timestep)
         }
     }
     else if (_meleeArm->getLastType() == AttackController::MeleeState::h2_right) {
-        if (_meleeArm->getAnimeTimer() > 0.06f) {
+        if (_meleeArm->getAnimeTimer() > 0.008f) {
             if (mSprite->getFrame() == 11) {
                 // Attack is finished
                 mSprite->setFrame(8);
@@ -640,7 +644,7 @@ void GameScene::update(float timestep)
         }
     }
     else if (_meleeArm->getLastType() == AttackController::MeleeState::h3_right) {
-        if (_meleeArm->getAnimeTimer() > 0.06f) {
+        if (_meleeArm->getAnimeTimer() > 0.03f) {
             if (mSprite->getFrame() == 18) {
                 // Attack is finished
                 mSprite->setFrame(8);
@@ -649,7 +653,7 @@ void GameScene::update(float timestep)
                 arm2Image->flipHorizontal(_player->isFacingRight());
             }
             else {
-                if (mSprite->getFrame() == 0) {
+                if (mSprite->getFrame() == 0 || mSprite->getFrame() == 8) {
                     mSprite->setFrame(26);
                 }
                 mSprite->setFrame(mSprite->getFrame() - 1);
@@ -852,6 +856,7 @@ void GameScene::update(float timestep)
         }
         else if (attackType == AttackController::Type::p_melee) {
             AttackController::MeleeState meleeState = (*it)->getMeleeState();
+
             attackSprite = scene2::PolygonNode::allocWithTexture(_pMeleeTexture);
             attackSprite->setVisible(false);
             _meleeArm->setLastType(meleeState);
