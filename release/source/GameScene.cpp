@@ -1075,7 +1075,7 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     // This takes care of begin/end
 
     //_scene->render(batch);
-    /* if (_player->isInvincible() && !_player->isStunned()) {
+    if (_player->isInvincible() && !_player->isStunned()) {
         // TODO Change this
         _player->getSceneNode()->setColor(Color4::GREEN);
     } else if(_swipes.hasLeftChargedAttack() && _swipes.hasRightChargedAttack()){
@@ -1086,7 +1086,7 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
         _player->getSceneNode()->setColor(Color4::BLUE);
     } else {
         _player->getSceneNode()->setColor(Color4::WHITE);
-    }*/
+    }
     // Make enemies flash red when invincible
     for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
         if((*it)->getInvincibility()){
