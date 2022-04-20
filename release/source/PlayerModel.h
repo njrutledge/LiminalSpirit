@@ -40,6 +40,11 @@
 /** The maximum character speed */
 #define PLAYER_MAXSPEED   5.0f
 
+
+#define PLAYER_MELEE "player_melee"
+#define PLAYER_RANGE "player_range"
+#define PLAYER_RANGE_FRAMES 0
+
 #pragma mark - 
 #pragma mark Player Model
 

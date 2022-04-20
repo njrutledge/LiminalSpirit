@@ -171,7 +171,7 @@
 			"wrapT": "clamp"
 		},
 		"player_melee_three": {
-			"file": "textures/animations/melee_arm_test.png",
+			"file": "textures/animations/melee_arm_spritesheet.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
@@ -192,7 +192,14 @@
 			"wrapT": "clamp"
 		},
 		"phantom_projectile": {
-			"file": "textures/specter_static.png",
+			"file": "textures/animations/phantom_projectile_idle_spritesheet.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"glutton_projectile": {
+			"file": "textures/animations/glutton_projectile_spritesheet.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
