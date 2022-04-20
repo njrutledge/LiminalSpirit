@@ -354,6 +354,7 @@ void GameScene::update(float timestep)
     int nextFrame;
     scene2::SpriteNode* sprite = dynamic_cast<scene2::SpriteNode*>(_player->getSceneNode().get());
 
+    sprite->setAnchor(0.5, 0.3);
     // Player (body) Animations
     if (_player->isStunned()) {
         // Store the frame being played before stun
