@@ -53,6 +53,9 @@
 // This keeps us from having to write cugl:: all the time
 using namespace cugl;
 
+//set to true to disable most of the update loop, for checking sprites
+#define DEBUG false
+
 // The number of frames before moving the logo to a new position
 #define TIME_STEP 60
 /** This is the size of the active portion of the screen */
@@ -72,7 +75,6 @@ float DEFAULT_HEIGHT = DEFAULT_WIDTH / SCENE_WIDTH * SCENE_HEIGHT;
 #define PLATFORM_HEIGHT 0.5
 #define PLATFORMTEXTURE "platform"
 
-#define DEBUG false
 
 /** The initial position of the player*/
 float PLAYER_POS[] = { 5.0f, 4.0f };
@@ -660,13 +662,6 @@ void GameScene::update(float timestep)
     ///////End Player and Arm Animations////
     ////////////////////////////////////////
 
-
-    // Debug Mode on/off
-    if (_input.getDebugKeyPressed())
-    {
-        setDebug(!isDebug());
-    }
-
     // Enemy AI logic
     // For each enemy
     for (auto it = _enemies.begin(); it != _enemies.end(); ++it)
@@ -1239,8 +1234,10 @@ void GameScene::createEnemies(int wave, int spawnerInd) {
         else if (!enemyName.compare("glutton")) {
             std::shared_ptr<Texture> gluttonHitboxImage = _assets->get<Texture>("glutton");
             std::shared_ptr<Texture> gluttonImage = _assets->get<Texture>("glutton_ani");
-            std::shared_ptr<Glutton> glutton = Glutton::alloc(enemyPos+ Vec2(0,2), Vec2(gluttonImage->getSize().width/7, gluttonImage->getSize().height), gluttonHitboxImage->getSize() / _scale / 7, _scale);
+            std::shared_ptr<Glutton> glutton = Glutton::alloc(enemyPos+ Vec2(0,2), Vec2(gluttonImage->getSize().width/7, gluttonImage->getSize().height), gluttonHitboxImage->getSize() / _scale / 5, _scale);
             std::shared_ptr<scene2::SpriteNode> gluttonSprite = scene2::SpriteNode::alloc(gluttonImage, 1, 7);
+            //fix the anchor slightly for glutton only
+            gluttonSprite->setAnchor(.5, .6);
             glutton->setSceneNode(gluttonSprite);
             glutton->setDebugColor(Color4::BLUE);
             glutton->setGlow(enemyGlow);
