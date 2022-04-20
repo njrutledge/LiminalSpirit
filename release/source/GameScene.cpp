@@ -772,7 +772,12 @@ void GameScene::update(float timestep)
             _collider.setIndexSpawner(-1);
         }
     }
-    _swipes.update(_input, _player->isGrounded());
+    
+    // if player is stunned, do not read swipe input
+    if(!_player->isStunned()){
+        _swipes.update(_input, _player->isGrounded());
+    }
+    
     b2Vec2 playerPos = _player->getBody()->GetPosition();
     if (_player->getInvincibilityTimer() <= 0) {
         _attacks->attackLeft(Vec2(playerPos.x, playerPos.y), _swipes.getLeftSwipe(), _swipes.getLeftAngle(), _player->isGrounded(), _timer, _sound);
