@@ -80,7 +80,7 @@ protected:
 public:
 
 	//override to set the linkedEnemy
-	bool init(const cugl::Vec2& pos, const cugl::Size& size, float scale, EnemyProperties props, Mirror::Type type, std::shared_ptr<BaseEnemyModel> enemy);
+	bool init(const cugl::Vec2& pos, const cugl::Size& realSize, const cugl::Size& size, float scale, EnemyProperties props, Mirror::Type type, std::shared_ptr<BaseEnemyModel> enemy);
 
 	//set the linked enemy
 	void setLinkedEnemy(std::shared_ptr<BaseEnemyModel> enemy) { _linkedEnemy = enemy; }
@@ -111,14 +111,14 @@ public:
 #pragma mark - 
 #pragma mark Static Constructors
 	/** Allocates a new mirror */
-	static std::shared_ptr<Mirror> alloc(const cugl::Vec2& pos, const cugl::Size& size, float scale, Mirror::Type type) {
+	static std::shared_ptr<Mirror> alloc(const cugl::Vec2& pos, const cugl::Size& realSize, const cugl::Size& size, float scale, Mirror::Type type) {
 		std::shared_ptr<Mirror> result = std::make_shared<Mirror>();
-		return (result->init(pos, size, scale, MIRROR_PROPS, type, nullptr) ? result : nullptr);
+		return (result->init(pos, realSize, size, scale, MIRROR_PROPS, type, nullptr) ? result : nullptr);
 	}
 
-	static std::shared_ptr<Mirror> alloc(const cugl::Vec2& pos, const cugl::Size& size, float scale, Mirror::Type type, std::shared_ptr<BaseEnemyModel> enemy) {
+	static std::shared_ptr<Mirror> alloc(const cugl::Vec2& pos, const cugl::Size& realSize, const cugl::Size& size, float scale, Mirror::Type type, std::shared_ptr<BaseEnemyModel> enemy) {
 		std::shared_ptr<Mirror> result = std::make_shared<Mirror>();
-		return (result->init(pos, size, scale, MIRROR_PROPS, type, enemy) ? result : nullptr);
+		return (result->init(pos, realSize, size, scale, MIRROR_PROPS, type, enemy) ? result : nullptr);
 	}
 
 #pragma mark -

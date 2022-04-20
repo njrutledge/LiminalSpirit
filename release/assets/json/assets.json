@@ -574,6 +574,8 @@
 	"jsons": {
 		"surround": "json/surround.json",
 		"battlefield": "json/battlefield.json",
-		"levelt":  "json/scaffold.json"
+		"levelt": "json/levelt.json",
+		"scaffold": "json/scaffold.json",
+		"level2":  "json/level2.json"
 	}
 }

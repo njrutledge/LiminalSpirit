@@ -134,7 +134,7 @@ public:
 	void dispose();
 
 	/** Base init function */
-	virtual bool init(const cugl::Vec2& pos, const cugl::Size& size, float scale, EnemyProperties props);
+	virtual bool init(const cugl::Vec2& pos, const cugl::Size& rsize, const cugl::Size& size, float scale, EnemyProperties props);
 
 	float getRadius() {
 		return _sensorFixture->GetShape()->m_radius;
@@ -149,9 +149,9 @@ public:
 #pragma mark - 
 #pragma mark Static Constructors
 	/** Allocates a new enemy, using placeholder values, DO NOT MAKE IN-GAME ENEMIES USING THIS MODEL */
-	static std::shared_ptr<BaseEnemyModel> alloc(const cugl::Vec2& pos, const cugl::Size& size, float scale) {
+	static std::shared_ptr<BaseEnemyModel> alloc(const cugl::Vec2& pos, const cugl::Size& realSize, const cugl::Size& size, float scale) {
 		std::shared_ptr<BaseEnemyModel> result = std::make_shared<BaseEnemyModel>();
-		return (result->init(pos, size, scale, { 10, 1.0f, 1.0f, 600, 1, 1.0f, "base" }) ? result : nullptr);
+		return (result->init(pos, realSize, size, scale, { 10, 1.0f, 1.0f, 600, 1, 1.0f, "base" }) ? result : nullptr);
 	}
 
 #pragma mark -

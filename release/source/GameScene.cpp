@@ -72,6 +72,8 @@ float DEFAULT_HEIGHT = DEFAULT_WIDTH / SCENE_WIDTH * SCENE_HEIGHT;
 #define PLATFORM_HEIGHT 0.5
 #define PLATFORMTEXTURE "platform"
 
+#define DEBUG false
+
 /** The initial position of the player*/
 float PLAYER_POS[] = { 5.0f, 4.0f };
 
@@ -231,7 +233,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
 
     _collider = CollisionController();
 
-    setDebug(false);
+    setDebug(true);
     buildScene(scene);
     addChild(scene);
 
@@ -239,7 +241,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _font = assets->get<Font>("marker");
 
     // Create and layout the health meter
-    std::string msg = strtool::format("Health %d", (int)_player->getHealth());
+    std::string msg = strtool::format("Health %d", (int)0/*_player->getHealth()*/);
     _text = TextLayout::allocWithText(msg, assets->get<Font>("marker"));
     _text->layout();
     
@@ -262,6 +264,7 @@ void GameScene::dispose()
     _world = nullptr;
     if(_worldnode)_worldnode->removeAllChildren();
     _worldnode = nullptr;
+    if (_debugnode) _debugnode->removeAllChildren();
     _debugnode = nullptr;
     _vertbuff = nullptr;
     _sound = nullptr;
@@ -295,7 +298,21 @@ void GameScene::update(float timestep)
     
     // Update input controller
     _input.update();
+    // Debug Mode on/off
+    if (_input.getDebugKeyPressed())
+    {
+        setDebug(!isDebug());
+    }
 
+    if (DEBUG) {
+        _timer += timestep;
+
+        if (_nextWaveNum < _numWaves && _timer >= _spawn_times[_nextWaveNum]) {
+            createEnemies(_nextWaveNum);
+            _nextWaveNum += 1;
+        }
+        return;
+    }
     // Update tilt controller
     _tilt.update(_input, SCENE_WIDTH);
     float xPos = _tilt.getXpos();
@@ -429,11 +446,7 @@ void GameScene::update(float timestep)
         _step = false;
     }
     
-    // Debug Mode on/off
-    if (_input.getDebugKeyPressed())
-    {
-        setDebug(!isDebug());
-    }
+    
 
     scene2::TexturedNode *image = dynamic_cast<scene2::TexturedNode *>(_player->getSceneNode().get());
     scene2::TexturedNode* arm1Image = dynamic_cast<scene2::TexturedNode*>(_rangedArm->getSceneNode().get());
@@ -946,7 +959,7 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     // This takes care of begin/end
 
     //_scene->render(batch);
-    if (_player->isInvincible() && !_player->isStunned()){
+    /* if (_player->isInvincible() && !_player->isStunned()) {
         // TODO Change this
         _player->getSceneNode()->setColor(Color4::GREEN);
     } else if(_swipes.hasLeftChargedAttack() && _swipes.hasRightChargedAttack()){
@@ -957,7 +970,7 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
         _player->getSceneNode()->setColor(Color4::BLUE);
     } else {
         _player->getSceneNode()->setColor(Color4::WHITE);
-    }
+    }*/
     // Make enemies flash red when invincible
     for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
         if((*it)->getInvincibility()){
@@ -1001,7 +1014,7 @@ void GameScene::createMirror(Vec2 enemyPos, Mirror::Type type, std::string asset
     mirrorShards[5] = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_6));
 
 
-    std::shared_ptr<Mirror> mirror = Mirror::alloc(enemyPos, mirrorImage->getSize() / _scale / 15, _scale, type); // TODO this is not right, fix this to be closest enemy
+    std::shared_ptr<Mirror> mirror = Mirror::alloc(enemyPos, mirrorImage->getSize(), mirrorImage->getSize() / _scale / 15, _scale, type); // TODO this is not right, fix this to be closest enemy
     std::shared_ptr<scene2::PolygonNode> mirrorSprite = scene2::PolygonNode::allocWithTexture(mirrorImage);
     mirror->setGlow(enemyGlow);
     mirror->setAttackAnimationTimer(0);
@@ -1050,7 +1063,7 @@ void GameScene::createEnemies(int wave) {
         addObstacle(enemyGlow, enemyGlowSprite, true);
         if (!enemyName.compare("lost")) {
             std::shared_ptr<Texture> lostImage = _assets->get<Texture>("lost");
-            std::shared_ptr<Lost> lost = Lost::alloc(enemyPos, lostImage->getSize() / _scale / 10, _scale);
+            std::shared_ptr<Lost> lost = Lost::alloc(enemyPos,lostImage->getSize(), lostImage->getSize() / _scale / 10, _scale);
             std::shared_ptr<scene2::PolygonNode> lostSprite = scene2::PolygonNode::allocWithTexture(lostImage);
             lost->setGlow(enemyGlow);
             lost->setSceneNode(lostSprite);
@@ -1062,7 +1075,7 @@ void GameScene::createEnemies(int wave) {
         else if (!enemyName.compare("phantom")) {
             std::shared_ptr<Texture> phantomHitboxImage = _assets->get<Texture>("phantom");
             std::shared_ptr<Texture> phantomImage = _assets->get<Texture>("phantom_ani");
-            std::shared_ptr<Phantom> phantom = Phantom::alloc(enemyPos, phantomHitboxImage->getSize() / _scale / 10, _scale);
+            std::shared_ptr<Phantom> phantom = Phantom::alloc(enemyPos, Vec2(phantomImage->getSize().width / 7, phantomImage->getSize().height), phantomHitboxImage->getSize() / _scale / 10, _scale);
             std::shared_ptr<scene2::SpriteNode> phantomSprite = scene2::SpriteNode::alloc(phantomImage, 1, 7);
             phantom->setSceneNode(phantomSprite);
             phantom->setDebugColor(Color4::BLUE);
@@ -1083,7 +1096,7 @@ void GameScene::createEnemies(int wave) {
         }
         else if (!enemyName.compare("seeker")) {
             std::shared_ptr<Texture> seekerImage = _assets->get<Texture>("seeker");
-            std::shared_ptr<Seeker> seeker = Seeker::alloc(enemyPos, seekerImage->getSize() / _scale / 10, _scale);
+            std::shared_ptr<Seeker> seeker = Seeker::alloc(enemyPos, seekerImage->getSize(), seekerImage->getSize() / _scale / 10, _scale);
             std::shared_ptr<scene2::PolygonNode> seekerSprite = scene2::PolygonNode::allocWithTexture(seekerImage);
             seeker->setSceneNode(seekerSprite);
             seeker->setDebugColor(Color4::GREEN);
@@ -1095,12 +1108,12 @@ void GameScene::createEnemies(int wave) {
         else if (!enemyName.compare("glutton")) {
             std::shared_ptr<Texture> gluttonHitboxImage = _assets->get<Texture>("glutton");
             std::shared_ptr<Texture> gluttonImage = _assets->get<Texture>("glutton_ani");
-            std::shared_ptr<Glutton> glutton = Glutton::alloc(enemyPos, gluttonHitboxImage->getSize() / _scale / 10, _scale);
+            std::shared_ptr<Glutton> glutton = Glutton::alloc(enemyPos+ Vec2(0,2), Vec2(gluttonImage->getSize().width/7, gluttonImage->getSize().height), gluttonHitboxImage->getSize() / _scale / 7, _scale);
             std::shared_ptr<scene2::SpriteNode> gluttonSprite = scene2::SpriteNode::alloc(gluttonImage, 1, 7);
             glutton->setSceneNode(gluttonSprite);
             glutton->setDebugColor(Color4::BLUE);
             glutton->setGlow(enemyGlow);
-            gluttonSprite->setScale(0.12f);
+            gluttonSprite->setScale(0.2f);
             gluttonSprite->setFrame(0);
             addObstacle(glutton, gluttonSprite, true);
             _enemies.push_back(glutton);
@@ -1117,7 +1130,7 @@ void GameScene::createParticles() {
         std::shared_ptr<Particle> party = Particle::alloc(Vec2(10,10), particleTexture->getSize() / _scale / 10, _scale);
         std::shared_ptr<scene2::PolygonNode> particleSprite = scene2::PolygonNode::allocWithTexture(particleTexture);
         party->setSceneNode(particleSprite);
-        party->setDebugColor(Color4::RED);
+        party->setDebugColor(Color4::CYAN);
         particleSprite->setScale(0.1f);
         particleSprite->setVisible(false);
         addObstacle(party, particleSprite, true);
@@ -1214,7 +1227,6 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     button->setAnchor(Vec2::ANCHOR_CENTER);
     button->setPosition(size.width - (bsize.width + rOffset) / 2, (bsize.height + bOffset) / 2);
 
-
     // Add platforms to the world
     Vec2 pos;
     Rect platRect;
@@ -1244,7 +1256,8 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     scene->addChild(button);
 
     // Create particles
-    createParticles();
+    // TODO: THIS IS BAD AND MAKING A FAKE "PLAYER"
+    //createParticles();
 
     // Glow effect on player
     Vec2 testPos = PLAYER_POS;
@@ -1282,13 +1295,13 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     _meleeArm->setAnimeTimer(0);
     meleeArmSprite->setScale(0.35);
     addObstacle(_meleeArm, meleeArmSprite, true);
-
+    
     // Player creation
     Vec2 playerPos = PLAYER_POS;
     std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
     std::shared_ptr<Texture> image = _assets->get<Texture>(PLAYER_WALK_TEXTURE);
     std::shared_ptr<Texture> hitboxImage = _assets->get<Texture>(PLAYER_TEXTURE);
-    _player = PlayerModel::alloc(playerPos, hitboxImage->getSize() / _scale / 8, _scale);
+    _player = PlayerModel::alloc(playerPos + Vec2(0,.5), hitboxImage->getSize() / _scale / 8, _scale);
     _player->setMovement(0);
     _player->setWalkAnimationTimer(0);
     _player->setIdleAnimationTimer(0);
@@ -1296,7 +1309,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     std::shared_ptr<scene2::SpriteNode> sprite = scene2::SpriteNode::alloc(image, 4, 8);
     sprite->setFrame(0);
     _player->setSceneNode(sprite);
-    _player->setDebugColor(Color4::RED);
+    _player->setDebugColor(Color4::BLUE);
     sprite->setScale(0.175f);
     addObstacle(_player, sprite, true);
 

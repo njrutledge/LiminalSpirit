@@ -28,9 +28,9 @@ class Glutton : public BaseEnemyModel {
 #pragma mark -
 #pragma mark Static Constructors
         /** Allocates a new Glutton */
-        static std::shared_ptr<Glutton> alloc(const cugl::Vec2& pos, const cugl::Size& size, float scale) {
+        static std::shared_ptr<Glutton> alloc(const cugl::Vec2& pos, const cugl::Size& realSize, const cugl::Size& size, float scale) {
             std::shared_ptr<Glutton> result = std::make_shared<Glutton>();
-            return (result->init(pos, size, scale, GLUTTON_PROPS) ? result : nullptr);
+            return (result->init(pos, realSize, size, scale, GLUTTON_PROPS) ? result : nullptr);
         }
 
 };

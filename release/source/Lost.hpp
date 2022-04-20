@@ -26,9 +26,9 @@ class Lost : public BaseEnemyModel {
 #pragma mark - 
 #pragma mark Static Constructors
 		/** Allocates a new lost */
-		static std::shared_ptr<Lost> alloc(const cugl::Vec2& pos, const cugl::Size& size, float scale) {
+		static std::shared_ptr<Lost> alloc(const cugl::Vec2& pos, const cugl::Size& realSize, const cugl::Size& size, float scale) {
 			std::shared_ptr<Lost> result = std::make_shared<Lost>();
-			return (result->init(pos, size, scale, LOST_PROPS) ? result : nullptr);
+			return (result->init(pos, realSize, size, scale, LOST_PROPS) ? result : nullptr);
 		}
 
 };

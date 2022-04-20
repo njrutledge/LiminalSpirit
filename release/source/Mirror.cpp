@@ -26,9 +26,9 @@ EnemyProperties MIRROR_PROPS{
 };
 
 
-bool Mirror::init(const cugl::Vec2& pos, const cugl::Size& size, float scale, EnemyProperties props, Mirror::Type type, std::shared_ptr<BaseEnemyModel> enemy) {
+bool Mirror::init(const cugl::Vec2& pos, const cugl::Size& realSize, const cugl::Size& size, float scale, EnemyProperties props, Mirror::Type type, std::shared_ptr<BaseEnemyModel> enemy) {
 	
-	if (BaseEnemyModel::init(pos, size, scale, props)) {
+	if (BaseEnemyModel::init(pos, realSize, size, scale, props)) {
 		_linkedEnemy = enemy;
 		_type = type;
 		//okay its a lot of magic numbers but its all just relative positions
