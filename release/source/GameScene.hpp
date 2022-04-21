@@ -141,8 +141,6 @@ protected:
     /** Collision Controller */
     CollisionController _collider;
 
-    std::shared_ptr<ParticleNode> _newParts;
-
     /** Enemies set */
     std::vector<std::shared_ptr<BaseEnemyModel>> _enemies;
 

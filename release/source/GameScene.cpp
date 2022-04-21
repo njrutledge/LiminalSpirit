@@ -353,18 +353,22 @@ void GameScene::update(float timestep)
         return;
     }
 
+    // Some Particle Stuff
     if (_meleeArm->getLastType() == AttackController::MeleeState::h1_left) {
         std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo, Vec2(0,0));
         std::shared_ptr<Texture> text = _assets->get<Texture>(PLAYER_RANGE);
-        _newParts = ParticleNode::alloc(Vec2(10*_scale,10*_scale), text, pool);
-        _newParts->setVisible(true);
-        _worldnode->addChild(_newParts);
-    }
-    else if (_newParts != NULL) {
-        _newParts->update(timestep);
+
+        std::shared_ptr<ParticleNode> newParts = ParticleNode::alloc(Vec2(10*_scale,10*_scale), text, pool);
+        newParts->setVisible(true);
+        _worldnode->addChildWithTag(newParts, 100);
     }
     ////Update all Particles
-    //_worldnode->getChildren();
+    for (std::shared_ptr<scene2::SceneNode> s : _worldnode->getChildren()) {
+        if (s->getTag() == 100) {
+            ParticleNode* pn = dynamic_cast<ParticleNode*>(s.get());
+            pn->update(timestep);
+        }
+    };
 
     // Update tilt controller
     _tilt.update(_input, SCENE_WIDTH);
