@@ -243,7 +243,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
     scene->addChild(_worldnode);
 
     _worldnode2 = scene2::OrderedNode::allocWithBounds(bounds.size);
-    (dynamic_pointer_cast<scene2::OrderedNode>(_worldnode2))->initWithOrder(scene2::OrderedNode::Order::ASCEND, bounds.size);
+    _worldnode2->setPosition(offset);
+    //(dynamic_pointer_cast<scene2::OrderedNode>(_worldnode2))->initWithOrder(scene2::OrderedNode::Order::ASCEND, bounds.size);
     _worldnode->addChild(_worldnode2);
 
     // Bounds do not matter when constraint is false
