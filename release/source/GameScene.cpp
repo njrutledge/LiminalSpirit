@@ -714,8 +714,8 @@ void GameScene::update(float timestep)
     ////////////////////////////////////////
 
     // Determining arm positions and offsets
-    float offsetArm = -2.3f;
-    float offsetArm2 = -2.75f;
+    float offsetArm = -2.7f;
+    float offsetArm2 = -3.1f;
     if (!_player->isFacingRight()) {
         offsetArm = -1 * offsetArm;
     }
