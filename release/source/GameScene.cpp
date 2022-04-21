@@ -238,9 +238,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
     _worldnode->setConstrained(true);
     scene->addChild(_worldnode);
 
-    _worldnode2 = scene2::OrderedNode::allocWithBounds(bounds.size);
+    _worldnode2 = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND, bounds.size);
     _worldnode2->setPosition(offset);
-    //(dynamic_pointer_cast<scene2::OrderedNode>(_worldnode2))->initWithOrder(scene2::OrderedNode::Order::ASCEND, bounds.size);
     _worldnode->addChild(_worldnode2);
 
     // Bounds do not matter when constraint is false
@@ -971,9 +970,10 @@ void GameScene::update(float timestep)
         std::shared_ptr<scene2::PolygonNode> attackSprite;
         if (attackType == AttackController::Type::p_range) {
             std::shared_ptr<Texture> attackTexture = _assets->get<Texture>(PLAYER_RANGE);
-            attackSprite = scene2::SpriteNode::alloc(attackTexture, 1, 1);
+            attackSprite = scene2::SpriteNode::alloc(attackTexture, 1, 1);//this is wrong for sprite sheet
             attackSprite->setScale(.85f * (*it)->getRadius());
             attackSprite->setAngle((*it)->getAngle() * M_PI / 180);
+            attackSprite->setPriority(3);
             _rangedArm->setLastType(AttackController::MeleeState::first);
             if (_swipes.getLeftSwipe() == SwipeController::downAttack) {
                 _rangedArm->setAttackAngle(270);
@@ -986,11 +986,12 @@ void GameScene::update(float timestep)
             }
         }
         else if (attackType == AttackController::Type::p_exp) {
-            std::shared_ptr<Texture> attackTexture = _assets->get<Texture>(PLAYER_RANGE);
-            attackSprite = scene2::SpriteNode::alloc(attackTexture, 1, 1);
+            std::shared_ptr<Texture> attackTexture = _assets->get<Texture>("player_projectile");//this string is wrong
+            attackSprite = scene2::SpriteNode::alloc(attackTexture, 1, 1);//this is wrong for sprite sheet
             attackSprite->setScale(.85f * (*it)->getRadius());
             attackSprite->setAngle((*it)->getAngle() * M_PI / 180);
             attackSprite->setColor(Color4::RED);
+            attackSprite->setPriority(3);
             _rangedArm->setLastType(AttackController::MeleeState::first);
             if (_swipes.getLeftSwipe() == SwipeController::downAttack) {
                 _rangedArm->setAttackAngle(270);
@@ -1003,11 +1004,12 @@ void GameScene::update(float timestep)
             }
         }
         else if (attackType == AttackController::Type::p_exp_package) {
-            std::shared_ptr<Texture> attackTexture = _assets->get<Texture>("player_projectile");
-            attackSprite = scene2::SpriteNode::alloc(attackTexture, 1, 1);
+            std::shared_ptr<Texture> attackTexture = _assets->get<Texture>("player_projectile");//this string is wrong
+            attackSprite = scene2::SpriteNode::alloc(attackTexture, 1, 1);//this is wrong for sprite sheet
             attackSprite->setScale(.85f * (*it)->getRadius());
             attackSprite->setAngle((*it)->getAngle() * M_PI / 180);
             attackSprite->setColor(Color4::RED);
+            attackSprite->setPriority(3);
             _rangedArm->setLastType(AttackController::MeleeState::first);
             if (_swipes.getLeftSwipe() == SwipeController::downAttack) {
                 _rangedArm->setAttackAngle(270);
@@ -1024,27 +1026,32 @@ void GameScene::update(float timestep)
 
             attackSprite = scene2::PolygonNode::allocWithTexture(_pMeleeTexture);
             attackSprite->setVisible(false);
+            attackSprite->setPriority(3);
             _meleeArm->setLastType(meleeState);
         }
         else if (attackType == AttackController::Type::e_range) {
             std::shared_ptr<Texture> attackTexture = _assets->get<Texture>((*it)->getAttackID());
             attackSprite = scene2::SpriteNode::alloc(attackTexture, 1, (*it)->getFrames()); // need to replace with animated texture
-            //float angle = (*it)->getAngle();
             if ((*it)->getAttackID() == PLAYER_RANGE) {
                 //this is mirrors
                 attackSprite->setScale(.85f * (*it)->getRadius());
                 attackSprite->setAngle((*it)->getAngle());
                 attackSprite->setColor(Color4::BLUE);
+                attackSprite->setPriority(2.1);
+
             }
             else if ((*it)->getAttackID() == PHANTOM_ATTACK) {
                 attackSprite->setScale(0.025);
                 attackSprite->setAngle((*it)->getAngle()+M_PI/2);
+                attackSprite->setPriority(2.2);
+
 
                 dynamic_pointer_cast<scene2::SpriteNode>(attackSprite)->setFrame(0);
             }
             else if((*it)->getAttackID() == GLUTTON_ATTACK) {
                 attackSprite->setScale(.25);
                 attackSprite->setAngle((*it)->getAngle() + M_PI);
+                attackSprite->setPriority(2);
             }
         }
         else {
@@ -1323,6 +1330,7 @@ void GameScene::createMirror(Vec2 enemyPos, Mirror::Type type, std::string asset
     //mirrorSprite->addChildWithName(mirrorShard3, "shard3");
     mirror->setDebugColor(Color4::BLUE);
     mirrorSprite->setScale(0.15f);
+    mirrorSprite->setPriority(1.4);
     addObstacle(mirror, mirrorSprite, true);
     _enemies.push_back(mirror);
 
@@ -1438,6 +1446,7 @@ void GameScene::createEnemies(int wave) {
             lost->setSceneNode(lostSprite);
             lost->setDebugColor(Color4::RED);
             lostSprite->setScale(0.15f);
+            lostSprite->setPriority(1.3);
             addObstacle(lost, lostSprite, true);
             _enemies.push_back(lost);
         }
@@ -1451,6 +1460,7 @@ void GameScene::createEnemies(int wave) {
             phantom->setGlow(enemyGlow);
             phantomSprite->setScale(0.05f);
             phantomSprite->setFrame(0);
+            phantomSprite->setPriority(1.2);
             addObstacle(phantom, phantomSprite, true);
             _enemies.push_back(phantom);
         }
@@ -1471,6 +1481,7 @@ void GameScene::createEnemies(int wave) {
             seeker->setDebugColor(Color4::GREEN);
             seeker->setGlow(enemyGlow);
             seekerSprite->setScale(0.15f);
+            seekerSprite->setPriority(1.1);
             addObstacle(seeker, seekerSprite, true);
             _enemies.push_back(seeker);
         }
@@ -1486,6 +1497,7 @@ void GameScene::createEnemies(int wave) {
             glutton->setGlow(enemyGlow);
             gluttonSprite->setScale(0.2f);
             gluttonSprite->setFrame(0);
+            gluttonSprite->setPriority(1);
             addObstacle(glutton, gluttonSprite, true);
             _enemies.push_back(glutton);
         }
@@ -1500,6 +1512,7 @@ void GameScene::createEnemies(int wave) {
             spawner->setDebugColor(Color4::BLACK);
             spawner->setGlow(enemyGlow);
             spawnerSprite->setScale(0.12f);
+            spawnerSprite->setPriority(1);
             addObstacle(spawner, spawnerSprite, true);
             _enemies.push_back(spawner);
             auto spawnerEnemiesMap = _spawner_enemy_types.at(_spawner_ind);
@@ -1695,6 +1708,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     _player->setSceneNode(sprite);
     _player->setDebugColor(Color4::BLUE);
     sprite->setScale(0.175f);
+    sprite->setPriority(4);
     addObstacle(_player, sprite, true);
     
     // Ranged Arm for the player
@@ -1710,6 +1724,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     _rangedArm->setSceneNode(rangeArmSprite);
     rangeArmSprite->setFrame(0);
     rangeArmSprite->setScale(0.22);
+    rangeArmSprite->setPriority(5);
     addObstacle(_rangedArm, rangeArmSprite, true);
 
     //Melee Arm for the player
@@ -1725,6 +1740,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     _meleeArm->setSceneNode(meleeArmSprite);
     _meleeArm->setAnimeTimer(0);
     meleeArmSprite->setScale(0.22);
+    meleeArmSprite->setPriority(6);
     addObstacle(_meleeArm, meleeArmSprite, true);
 
     // We can only activate a button AFTER it is added to a scene
