@@ -44,7 +44,11 @@
 #include "CollisionController.hpp"
 
 #include "Glow.hpp"
-#include "Particle.hpp"
+
+
+#include "RRParticle.h"
+#include "RRParticleNode.h"
+#include "RRParticlePool.h"
 
 // Add support for simple random number generation
 #include <cstdlib>
