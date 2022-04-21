@@ -242,6 +242,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
     _worldnode->setConstrained(true);
     scene->addChild(_worldnode);
 
+    _worldnode2 = scene2::OrderedNode::allocWithBounds(bounds.size);
+    (dynamic_pointer_cast<scene2::OrderedNode>(_worldnode2))->initWithOrder(scene2::OrderedNode::Order::ASCEND, bounds.size);
+    _worldnode->addChild(_worldnode2);
+
     // Bounds do not matter when constraint is false
     _debugnode = scene2::ScrollPane::allocWithBounds(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     _debugnode->setScale(_scale); // Debug node draws in PHYSICS coordinates
@@ -268,7 +272,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
     _font = assets->get<Font>("marker");
 
     // Create and layout the health meter
-    std::string msg = strtool::format("Health %d", (int)0/*_player->getHealth()*/);
+    std::string msg = strtool::format("Health %d", (int) _player->getHealth());
     _text = TextLayout::allocWithText(msg, assets->get<Font>("marker"));
     _text->layout();
 
@@ -291,6 +295,8 @@ void GameScene::dispose()
     _world = nullptr;
     if (_worldnode)_worldnode->removeAllChildren();
     _worldnode = nullptr;
+    if (_worldnode2)_worldnode2->removeAllChildren();
+    _worldnode2 = nullptr;
     if (_debugnode) _debugnode->removeAllChildren();
     _debugnode = nullptr;
     _vertbuff = nullptr;
@@ -1031,6 +1037,7 @@ void GameScene::update(float timestep)
                 //this is mirrors
                 attackSprite->setScale(.85f * (*it)->getRadius());
                 attackSprite->setAngle((*it)->getAngle());
+                attackSprite->setColor(Color4::BLUE);
             }
             else if ((*it)->getAttackID() == PHANTOM_ATTACK) {
                 attackSprite->setScale(0.025);
@@ -1103,7 +1110,7 @@ void GameScene::update(float timestep)
             // int log1 = _world->getObstacles().size();
             cugl::physics2::Obstacle* obj = dynamic_cast<cugl::physics2::Obstacle*>(&**ait);
             _world->removeObstacle(obj);
-            _worldnode->removeChild(obj->_node);
+            _worldnode2->removeChild(obj->_node);
 
             // int log2 = _world->getObstacles().size();
             ait = _attacks->_current.erase(ait);
@@ -1122,9 +1129,9 @@ void GameScene::update(float timestep)
             cugl::physics2::Obstacle* glowObj = dynamic_cast<cugl::physics2::Obstacle*>(&*(*eit)->getGlow());
             cugl::physics2::Obstacle* obj = dynamic_cast<cugl::physics2::Obstacle*>(&**eit);
             _world->removeObstacle(glowObj);
-            _worldnode->removeChild(glowObj->_node);
+            _worldnode2->removeChild(glowObj->_node);
             _world->removeObstacle(obj);
-            _worldnode->removeChild(obj->_node);
+            _worldnode2->removeChild(obj->_node);
 
             // int log2 = _world->getObstacles().size();
             eit = _enemies.erase(eit);
@@ -1742,7 +1749,7 @@ void GameScene::reset()
         // int log1 = _world->getObstacles().size();
         cugl::physics2::Obstacle* obj = dynamic_cast<cugl::physics2::Obstacle*>(&**ac_it);
         _world->removeObstacle(obj);
-        _worldnode->removeChild(obj->_node);
+        _worldnode2->removeChild(obj->_node);
 
         // int log2 = _world->getObstacles().size();
         ac_it = _attacks->_current.erase(ac_it);
@@ -1753,7 +1760,7 @@ void GameScene::reset()
         // int log1 = _world->getObstacles().size();
         cugl::physics2::Obstacle* obj = dynamic_cast<cugl::physics2::Obstacle*>(&**ap_it);
         _world->removeObstacle(obj);
-        _worldnode->removeChild(obj->_node);
+        _worldnode2->removeChild(obj->_node);
 
         // int log2 = _world->getObstacles().size();
         ac_it = _attacks->_current.erase(ap_it);
@@ -1772,9 +1779,9 @@ void GameScene::reset()
         cugl::physics2::Obstacle* obj = dynamic_cast<cugl::physics2::Obstacle*>(&**eit);
         cugl::physics2::Obstacle* glowObj = dynamic_cast<cugl::physics2::Obstacle*>(&*(*eit)->getGlow());
         _world->removeObstacle(glowObj);
-        _worldnode->removeChild(glowObj->_node);
+        _worldnode2->removeChild(glowObj->_node);
         _world->removeObstacle(obj);
-        _worldnode->removeChild(obj->_node);
+        _worldnode2->removeChild(obj->_node);
 
         eit = _enemies.erase(eit);
     }
@@ -1814,7 +1821,7 @@ void GameScene::addObstacle(const std::shared_ptr<cugl::physics2::Obstacle>& obj
     {
         node->setPosition(obj->getPosition() * _scale);
     }
-    _worldnode->addChild(node);
+    _worldnode2->addChild(node);
     obj->setNode(node);
 
     // Dynamic objects need constant updating
