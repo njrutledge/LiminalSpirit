@@ -171,8 +171,8 @@ protected:
     /** YVel for the current melee dash */
     int _dashYVel;
     
-    /** jump frame for paused jump*/
-    int _jumpFrame;
+    /** frame used for when animation interrupted when stunned */
+    int _prevFrame;
 
     /** true if going back to world select */
     bool _back;

@@ -359,7 +359,7 @@ void GameScene::update(float timestep)
     if (_player->isStunned()) {
         // Store the frame being played before stun
         if (sprite->getFrame() != 31 && sprite->getFrame() != 24) {
-            _jumpFrame = sprite->getFrame();
+            _prevFrame = sprite->getFrame();
         }
         if (_player->isFacingRight()) {
             sprite->setFrame(31);
@@ -373,7 +373,7 @@ void GameScene::update(float timestep)
             if(_player->isMovingUp()) {
                 nextFrame = sprite->getFrame();
                 if (nextFrame == 31 || nextFrame == 24) {
-                    nextFrame = _jumpFrame;
+                    nextFrame = _prevFrame;
                 }
                 if (_player->isFacingRight()) {
                     if (nextFrame < 20 || nextFrame > 23) {
@@ -404,12 +404,13 @@ void GameScene::update(float timestep)
             sprite->setFrame(nextFrame);
             _player->setJumpAnimationTimer(0);
         }
+        _prevFrame = sprite->getFrame();
     }
     else if (_player->isGrounded() && _player->hasJustLanded()) {
         if (_player->getJumpAnimationTimer() > 0.06f) {
             nextFrame = sprite->getFrame();
             if (nextFrame == 31 || nextFrame == 24) {
-                nextFrame = _jumpFrame;
+                nextFrame = _prevFrame;
             }
             if (_player->isFacingRight()) {
                 if (nextFrame > 18) {
@@ -434,6 +435,7 @@ void GameScene::update(float timestep)
             sprite->setFrame(nextFrame);
             _player->setJumpAnimationTimer(0);
         }
+        _prevFrame = sprite->getFrame();
     }
     else if (xPos != 0 && _player->getWalkAnimationTimer() > 0.09f) {
         if (!_player->isFacingRight()) {
@@ -449,6 +451,7 @@ void GameScene::update(float timestep)
             }
         }
         _player->setWalkAnimationTimer(0);
+        _prevFrame = sprite->getFrame();
     }
     else if (xPos == 0 && ((_player->getIdleAnimationTimer() > 1.f) || !(sprite->getFrame() == 13 || sprite->getFrame() == 8 || sprite->getFrame() == 10 || sprite->getFrame() == 15) && _player->getIdleAnimationTimer() < 0.2f)) {
         if (sprite->getFrame() < 8) {
@@ -456,7 +459,6 @@ void GameScene::update(float timestep)
                 nextFrame = 12;
             }
             else {
-
                 nextFrame = 8;
             }
         }
@@ -471,7 +473,17 @@ void GameScene::update(float timestep)
         }
         sprite->setFrame(nextFrame);
         _player->setIdleAnimationTimer(0);
+        _prevFrame = sprite->getFrame();
     }
+    else {
+        if (_player->isFacingRight()) {
+            sprite->setFrame(_prevFrame);
+        }
+        else {
+            sprite->setFrame(_prevFrame);
+        }
+    }
+    
     _player->setJumpAnimationTimer(_player->getJumpAnimationTimer() + timestep);
     _player->setWalkAnimationTimer(_player->getWalkAnimationTimer() + timestep);
     _player->setIdleAnimationTimer(_player->getIdleAnimationTimer() + timestep);
@@ -516,7 +528,10 @@ void GameScene::update(float timestep)
     _rangedArm->setAnimeTimer(_rangedArm->getAnimeTimer() + timestep);
 
     // Ranged Arm
-    if (_rangedArm->getLastType() == AttackController::MeleeState::cool) {
+    if (_player->isStunned()) {
+        rSprite->setFrame(8);
+    }
+    else if (_rangedArm->getLastType() == AttackController::MeleeState::cool) {
         if (_player->isFacingRight()) {
             rSprite->setFrame(5);
         }
@@ -561,9 +576,20 @@ void GameScene::update(float timestep)
             }
         }
     }
+    else {
+        if (_player->isFacingRight()) {
+            rSprite->setFrame(5);
+        }
+        else {
+            rSprite->setFrame(0);
+        }
+    }
 
     // Melee Arm
-    if (_meleeArm->getLastType() == AttackController::MeleeState::cool) {
+    if (_player->isStunned()) {
+        mSprite->setFrame(22);
+    }
+    else if (_meleeArm->getLastType() == AttackController::MeleeState::cool) {
         if (_player->isFacingRight()) {
             mSprite->setFrame(7);
         }
@@ -672,6 +698,14 @@ void GameScene::update(float timestep)
                 mSprite->setFrame(mSprite->getFrame() - 1);
                 _meleeArm->setAnimeTimer(0);
             }
+        }
+    }
+    else {
+        if (_player->isFacingRight()) {
+            mSprite->setFrame(7);
+        }
+        else {
+            mSprite->setFrame(13);
         }
     }
 
