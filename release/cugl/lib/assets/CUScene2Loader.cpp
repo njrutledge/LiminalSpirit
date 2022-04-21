@@ -90,6 +90,8 @@ bool Scene2Loader::init(const std::shared_ptr<ThreadPool>& threads) {
     _types["wireframe"] = Widget::WIRE;
     _types["wire frame"] = Widget::WIRE;
     _types["sprite"] = Widget::ANIMATE;
+    _types["order"] = Widget::ORDER;
+    _types["canvas"] = Widget::CANVAS;
     _types["ninepatch"] = Widget::NINE;
     _types["label"] = Widget::LABEL;
     _types["button"] = Widget::BUTTON;
@@ -172,6 +174,12 @@ std::shared_ptr<scene2::SceneNode> Scene2Loader::build(const std::string& key,
         break;
     case Widget::WIRE:
         node = scene2::WireNode::allocWithData(this,data);
+        break;
+    case Widget::ORDER:
+        node = scene2::OrderedNode::allocWithData(this,data);
+        break;
+    case Widget::CANVAS:
+        node = scene2::CanvasNode::allocWithData(this,data);
         break;
     case Widget::ANIMATE:
         node = scene2::SpriteNode::allocWithData(this,data);

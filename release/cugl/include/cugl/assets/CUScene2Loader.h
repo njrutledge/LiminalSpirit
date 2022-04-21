@@ -98,6 +98,10 @@ protected:
         PATH,
         /** A WireNode type */
         WIRE,
+        /** An ordered node (for non pre-traversals) */
+        ORDER,
+        /** A canvas node for vector graphics */
+        CANVAS,
         /** An animation node type */
         ANIMATE,
         /** A nine-patch type */
