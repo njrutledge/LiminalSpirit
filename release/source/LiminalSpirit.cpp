@@ -201,7 +201,7 @@ void LiminalSpirit::updateWorldSelectScene(float timestep)
         _scene = State::GAME;
         break;
     case WorldSelectScene::Choice::SHROOM:
-        _gameplay.init(_assets, _sound_controller, "battlefield");
+        _gameplay.init(_assets, _sound_controller, "level2");
         _scene = State::GAME;
         break;
     case WorldSelectScene::Choice::FOREST:

@@ -46,8 +46,12 @@
 #include "CollisionController.hpp"
 #include "Platform.hpp"
 #include "Glow.hpp"
-#include "Particle.hpp"
 #include "SoundController.hpp"
+
+
+#include "RRParticle.h"
+#include "RRParticleNode.h"
+#include "RRParticlePool.h"
 /**
  * Class for a simple Hello World style application
  *
@@ -67,6 +71,8 @@ protected:
     std::shared_ptr<cugl::AssetManager> _assets;
     /** The JSON value with all of the constants */
     std::shared_ptr<cugl::JsonValue> _constants;
+    /** The JSON value with all particle effects*/
+    std::shared_ptr<cugl::JsonValue> _particleInfo;
     /** A scene graph, used to display our 2D scenes */
     // std::shared_ptr<cugl::Scene2> _scene;
     /** A 3152 style SpriteBatch to render the scene */
@@ -134,6 +140,8 @@ protected:
 
     /** Collision Controller */
     CollisionController _collider;
+
+    std::shared_ptr<ParticleNode> _newParts;
 
     /** Enemies set */
     std::vector<std::shared_ptr<BaseEnemyModel>> _enemies;

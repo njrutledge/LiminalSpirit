@@ -146,6 +146,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
     // Sound controller
     _sound = sound;
 
+    //Get Particle Info
+    _particleInfo = assets->get<JsonValue>("particles")->get("collision");
+
+
     auto spawn = _constants->get("spawn_order")->children();
     auto spawnPos = _constants->get("spawn_pos");
     auto spawnTime = _constants->get("spawn_times");
@@ -349,6 +353,20 @@ void GameScene::update(float timestep)
         //return to stop the rest of the update in DEBUG ONLY
         return;
     }
+
+    if (_meleeArm->getLastType() == AttackController::MeleeState::h1_left) {
+        std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo, Vec2(0,0));
+        std::shared_ptr<Texture> text = _assets->get<Texture>(PLAYER_RANGE);
+        _newParts = ParticleNode::alloc(Vec2(10*_scale,10*_scale), text, pool);
+        _newParts->setVisible(true);
+        _worldnode->addChild(_newParts);
+    }
+    else if (_newParts != NULL) {
+        _newParts->update(timestep);
+    }
+    ////Update all Particles
+    //_worldnode->getChildren();
+
     // Update tilt controller
     _tilt.update(_input, SCENE_WIDTH);
     float xPos = _tilt.getXpos();
@@ -1533,21 +1551,6 @@ void GameScene::createEnemies(int wave) {
         }
         // TODO add more enemy types
         // If the enemy name is incorrect, no enemy will be made
-    }
-}
-
-void GameScene::createParticles() {
-    // deprecated for now as it lags the game // try bitmasking then custom node
-    for (int i = 0; i < 99; i++) {
-        std::shared_ptr<Texture> particleTexture = _assets->get<Texture>(GLOW_TEXTURE);
-        std::shared_ptr<Particle> party = Particle::alloc(Vec2(10, 10), particleTexture->getSize() / _scale / 10, _scale);
-        std::shared_ptr<scene2::PolygonNode> particleSprite = scene2::PolygonNode::allocWithTexture(particleTexture);
-        party->setSceneNode(particleSprite);
-        party->setDebugColor(Color4::CYAN);
-        particleSprite->setScale(0.1f);
-        particleSprite->setVisible(false);
-        addObstacle(party, particleSprite, true);
-        _particlePool.push_back(party);
     }
 }
 

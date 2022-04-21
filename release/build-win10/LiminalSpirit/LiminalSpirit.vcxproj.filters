@@ -43,7 +43,6 @@
     <ClCompile Include="..\..\source\LoadingScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\Particle.cpp" />
     <ClCompile Include="..\..\source\Glow.cpp" />
     <ClCompile Include="..\..\source\Mirror.cpp" />
     <ClCompile Include="..\..\source\Glutton.cpp" />
@@ -53,6 +52,9 @@
     <ClCompile Include="..\..\source\Phantom.cpp" />
     <ClCompile Include="..\..\source\Seeker.cpp" />
     <ClCompile Include="..\..\source\Spawner.cpp" />
+    <ClCompile Include="..\..\source\RRParticle.cpp" />
+    <ClCompile Include="..\..\source\RRParticleNode.cpp" />
+    <ClCompile Include="..\..\source\RRParticlePool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -95,7 +97,6 @@
     <ClInclude Include="..\..\source\LoadingScene.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\Particle.hpp" />
     <ClInclude Include="..\..\source\Glow.hpp" />
     <ClInclude Include="..\..\source\Mirror.hpp" />
     <ClInclude Include="..\..\source\Glutton.hpp" />
@@ -107,6 +108,9 @@
     <ClInclude Include="..\..\source\Phantom.hpp" />
     <ClInclude Include="..\..\source\Seeker.hpp" />
     <ClInclude Include="..\..\source\Spawner.hpp" />
+    <ClInclude Include="..\..\source\RRParticle.h" />
+    <ClInclude Include="..\..\source\RRParticleNode.h" />
+    <ClInclude Include="..\..\source\RRParticlePool.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LiminalSpirit.rc" />

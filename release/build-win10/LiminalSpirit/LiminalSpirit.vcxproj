@@ -201,10 +201,12 @@
     <ClInclude Include="..\..\source\Lost.hpp" />
     <ClInclude Include="..\..\source\LSCharacter.h" />
     <ClInclude Include="..\..\source\Mirror.hpp" />
-    <ClInclude Include="..\..\source\Particle.hpp" />
     <ClInclude Include="..\..\source\Phantom.hpp" />
     <ClInclude Include="..\..\source\Platform.hpp" />
     <ClInclude Include="..\..\source\PlayerModel.h" />
+    <ClInclude Include="..\..\source\RRParticle.h" />
+    <ClInclude Include="..\..\source\RRParticleNode.h" />
+    <ClInclude Include="..\..\source\RRParticlePool.h" />
     <ClInclude Include="..\..\source\Seeker.hpp" />
     <ClInclude Include="..\..\source\SoundController.hpp" />
     <ClInclude Include="..\..\source\Spawner.hpp" />
@@ -230,9 +232,11 @@
     <ClCompile Include="..\..\source\Lost.cpp" />
     <ClCompile Include="..\..\source\main.cpp" />
     <ClCompile Include="..\..\source\Mirror.cpp" />
-    <ClCompile Include="..\..\source\Particle.cpp" />
     <ClCompile Include="..\..\source\Phantom.cpp" />
     <ClCompile Include="..\..\source\Platform.cpp" />
+    <ClCompile Include="..\..\source\RRParticle.cpp" />
+    <ClCompile Include="..\..\source\RRParticleNode.cpp" />
+    <ClCompile Include="..\..\source\RRParticlePool.cpp" />
     <ClCompile Include="..\..\source\Seeker.cpp" />
     <ClCompile Include="..\..\source\SoundController.cpp" />
     <ClCompile Include="..\..\source\Spawner.cpp" />

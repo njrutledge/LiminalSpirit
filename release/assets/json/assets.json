@@ -603,6 +603,7 @@
 		"levelt": "json/levelt.json",
 		"scaffold": "json/scaffold.json",
 		"level2": "json/level2.json",
-		"stack": "json/stack.json"
+		"stack": "json/stack.json",
+		"particles": "json/particles.json"
 	}
 }

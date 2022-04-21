@@ -89,15 +89,6 @@
 			std::shared_ptr<Particle> result = std::make_shared<Particle>();
 			return (result->initFading(position, gravity, speed, lifetime, angle, maxFadeTime) ? result : nullptr);
 		}
-		/**
-		* Creates a new particle with fade-in along a path
-		*
-		* @return  A newly allocated particle with fade-in along a path
-		*/
-		static std::shared_ptr<Particle> alloc(cugl::Vec2 position, cugl::Vec2 gravity, float speed, float lifetime, float angle, float maxFadeTime, std::shared_ptr<cugl::Path2> path) {
-			std::shared_ptr<Particle> result = std::make_shared<Particle>();
-			return (result->initFadingPath(position, gravity, speed, lifetime, angle, maxFadeTime, path) ? result : nullptr);
-		}
 
 		/*
 		* Creates a new particle with random texturing

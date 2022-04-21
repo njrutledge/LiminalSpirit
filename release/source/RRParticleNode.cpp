@@ -38,7 +38,9 @@ bool ParticleNode::init(const Vec2& pos, std::vector<std::shared_ptr<Texture>> t
 }
 
 void ParticleNode::update(float dt) {
+	CULog("PN update");
 	if (isVisible()) {
+		CULog("PN Visible");
 		_particlePool->update(dt);
 	}
 }

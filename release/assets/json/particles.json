@@ -1,0 +1,11 @@
+{
+    "collision": {
+        "burstParticles": 16, 
+        "maxParticleCount": 16,
+        "gravity": [0, -200],
+        "emissionRateRange": [1, 1],
+        "lifetimeRange": [1, 3],
+        "angleRange": [0, 3.14],
+        "speedRange": [30, 150]
+    }
+}
