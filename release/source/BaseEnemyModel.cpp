@@ -153,12 +153,14 @@ void BaseEnemyModel::update(float dt) {
 				healthBarBack->setColor(HEALTHBACK_COLOR);
 				healthBarBack->setAnchor(.5, 0);
 				healthBarBack->setPosition(Vec2(_size.width / 2, _size.height));
+				healthBarBack->setPriority(2);
 				_node->addChildWithName(healthBarBack, "healthbarback");
 
 				std::shared_ptr<scene2::PolygonNode> healthBar = scene2::PolygonNode::allocWithPoly(Rect(0, 0, _health / 2.0f / _node->getScaleX(), .1/ _node->getScaleY()) * _drawScale);
 				healthBar->setColor(HEALTH_COLOR);
 				healthBar->setAnchor(.5, 0);
 				healthBar->setPosition(Vec2(_size.width / 2, _size.height));
+				healthBarBack->setPriority(3);
 				_node->addChildWithName(healthBar, "healthbar");
 			}
 			_healthTimer -= dt;

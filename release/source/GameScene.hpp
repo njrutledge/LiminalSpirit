@@ -78,6 +78,8 @@ protected:
     std::shared_ptr<cugl::physics2::ObstacleWorld> _world;
     /** Reference to the physics root of the scene graph */
     std::shared_ptr<cugl::scene2::ScrollPane> _worldnode;
+    /** ordered world node to take over _worldnode */
+    std::shared_ptr < cugl::scene2::SceneNode> _worldnode2;
     /** Reference to the debug root of the scene graph */
     std::shared_ptr<cugl::scene2::ScrollPane> _debugnode;
 
