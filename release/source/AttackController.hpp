@@ -225,6 +225,9 @@ public:
     std::unordered_set<std::shared_ptr<Attack>> _current;
     
     float _scale;
+    
+    /** Scale for range attacks */
+    float _rscale;
 
     std::shared_ptr<PlayerModel> _player;
     
@@ -269,7 +272,7 @@ public:
      *  Initializes the attack controller. Currently greyed out because we only have basic attack hitboxes. Can use a json to set predetermined attack shapes, designs, and damage if we have more complicated moves and attacks.
      *  Projectile velocities are vectors facing the +y direction. They are rotated accordingly when initializing different direction attacks.
      */
-    void init(float scale, float oof, cugl::Vec2 p_vel, cugl::Vec2 c_vel, float hit_wind, float hit_cooldown, float reload, float swingSpeed, float worldWidth, float worldHeight);
+    void init(float scale, float rscale, float oof, cugl::Vec2 p_vel, cugl::Vec2 c_vel, float hit_wind, float hit_cooldown, float reload, float swingSpeed, float worldWidth, float worldHeight);
     
     /**
      *  Update function for attack controller. Updates all attacks and removes inactive attacks from queue.
