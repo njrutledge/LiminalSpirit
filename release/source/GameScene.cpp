@@ -1668,24 +1668,36 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     // Add platforms to the world
     Vec2 pos;
     Rect platRect;
-    std::shared_ptr<scene2::SceneNode> platformNode;
     std::shared_ptr<PlatformModel> platform;
-    std::shared_ptr<scene2::PolygonNode> spritePlatform;
-    for (int i = 0; i < _platforms_attr.size(); i++) {
+    std::shared_ptr<scene2::PolygonNode> platformSprite;
+    std::shared_ptr<Texture> platformImage;
+    for(int i = 0; i < _platforms_attr.size(); i++) {
         pos.x = _platforms_attr[i][0];
         pos.y = _platforms_attr[i][1];
         float width = _platforms_attr[i][2];
-        platRect = Rect(pos.x, pos.y, width, PLATFORM_HEIGHT);
-        platformNode = scene2::SceneNode::alloc();
+        if (width < DEFAULT_WIDTH / 3) {
+            //use small platform
+            platformImage = _assets->get<Texture>("forest_small_platform");
+        } else if (width < (DEFAULT_WIDTH / 3) * 2) {
+            //use medium platform
+            platformImage = _assets->get<Texture>("forest_medium_platform");
+        } else {
+            //use large platform
+            platformImage = _assets->get<Texture>("forest_large_platform");
+        }
+        platformSprite = scene2::PolygonNode::allocWithTexture(platformImage);
+        float desiredWidth = width * _scale;
+        float scale = desiredWidth / platformSprite->getWidth();
+        platformSprite->setScale(scale);
+        platformSprite->setAnchor(0.5,1);
+        cout << pos.x << " " << pos.y << " " << width << endl;
         platform = PlatformModel::alloc(pos, width, PLATFORM_HEIGHT, _scale);
         _platforms.push_back(platform);
-        spritePlatform = scene2::PolygonNode::allocWithPoly(platRect * _scale);
-        _platformNodes.push_back(spritePlatform);
+        _platformNodes.push_back(platformSprite);
         platform->setName("platform");
         platform->setSceneNode(_platformNodes[i]);
         platform->setDebugColor(Color4::RED);
-        spritePlatform->setColor(Color4::BLACK);
-        addObstacle(platform, spritePlatform, true);
+        addObstacle(platform, platformSprite, true);
     }
 
     // Add the logo and button to the scene graph
