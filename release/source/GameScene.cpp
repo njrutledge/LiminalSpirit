@@ -267,6 +267,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
     _ai = AIController();
 
     _collider = CollisionController();
+    _collider.init(sound);
 
     setDebug(false);
     buildScene(scene);
@@ -833,7 +834,7 @@ void GameScene::update(float timestep)
         }
         else if ((*it)->getName() == "Glutton") {
             if ((*it)->getInvincibility()) {
-                sprite->setFrame(7);
+                sprite->setFrame(7); 
             } else if ((*it)->getIdleAnimationTimer() > 1.f ||
                 (!(sprite->getFrame() == 2) && (*it)->getIdleAnimationTimer() > 0.3f)
                 || (!(sprite->getFrame() == 2 || sprite->getFrame() == 5 || sprite->getFrame() == 6) && (*it)->getIdleAnimationTimer() > 0.1f)) {
@@ -848,8 +849,13 @@ void GameScene::update(float timestep)
             else {
                 sprite->flipHorizontal(true);
             }
-            if ((*it)->getInvincibility()) {
-                sprite->setFrame(4);
+            if ((*it)->getInvincibilityTimer() > 0) {
+                if ((*it)->getVX() > 0) {
+                    sprite->setFrame(4);
+                }
+                else {
+                    sprite->setFrame(7);
+                }
             } // Using idle timer for walking animation since lost has no idle
             else if ((*it)->getIdleAnimationTimer() > .1f && (*it)->getVX() > 0) {
                 sprite->setFrame((sprite->getFrame() + 1) % 4);
