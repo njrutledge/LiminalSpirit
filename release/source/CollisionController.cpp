@@ -111,7 +111,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                     if (!mirror->getLastMelee()->isSame(attack)) {
                         mirror->setHealth(mirror->getHealth() - attack->getDamage());
                         mirror->setLastMelee(attack);
-                        mirror->setInvincibility(true);
+                        //mirror->setInvincibility(true);
                         mirror->setInvincibilityTimer(0.1f);
                         CULog("NEW ATTACK~~~~~~~~~~~~~~~~~~");
                         if (mirror->getHealth() <= 0) {
@@ -124,25 +124,33 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                 }
             }
             else{
-                if (!enemy->getLastMelee()->isSame(attack) && !enemy->getInvincibility()) {
+                if (!enemy->getLastMelee()->isSame(attack)) {
                     enemy->setHealth(enemy->getHealth() - attack->getDamage());
-                    if(attack->getDamage() > 0){
-                        enemy->setInvincibility(true);
+                    CULog("HEALTH SET");
+                    if (attack->getDamage() > 0) {
+                        //enemy->setInvincibility(true);
                         enemy->setInvincibilityTimer(0.1f);
                     }
+                    else {
+                        CULog("NO DAMAGE ATTACK???");
+                    }
                     if (attack->getType() == AttackController::Type::p_melee ||
-                        attack->getType() == AttackController::Type::p_dash) {
+                        attack->getType() == AttackController::Type::p_dash && enemy->getLastMelee() == nullptr) {
                         enemy->setLastMelee(attack);
                     }
                     if (enemy->getHealth() <= 0) {
                         if (Spawner* spawner = dynamic_cast<Spawner*>(enemy)) {
                             _spawner_killed = spawner->getIndex();
-                        } else if(enemy->getSpawnerInd()!=-1) {
+                        }
+                        else if (enemy->getSpawnerInd() != -1) {
                             _name_of_killed_spawner_enemy = enemy->getName();
                             _index_spawner = enemy->getSpawnerInd();
                         }
                         enemy->markRemoved(true);
                     }
+                }
+                else {
+                    CULog("SAME ATTACK? timer = %f", timer);
                 }
                 if (attack->getType() == AttackController::p_exp_package) {
                     AC->createAttack(attack->getPosition() /*cugl::Vec2(bd->getPosition().x, bd->getPosition().y)*/, 3, 0.1, 4, AttackController::p_exp, cugl::Vec2::ZERO, timer, PLAYER_RANGE, PLAYER_RANGE_FRAMES);

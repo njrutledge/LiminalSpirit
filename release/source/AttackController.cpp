@@ -32,7 +32,7 @@ bool AttackController::Attack::init(const cugl::Vec2 p, float radius, float a, f
     _offset = oof;
     _active = true;
     _ball = b.makeCircle(_position, _radius);
-    _UID = timer;
+    _UID = rand();
     _attackID = attackID;
     _timer = 0;
     _maxFrames = frames;
@@ -386,8 +386,11 @@ void AttackController::reset() {
 
 bool AttackController::Attack::isSame(Attack* a) {
     if (this && _UID == a->_UID) {
-        if (_type == a->_type && _attackID == a->_attackID) {
+        if (_type == a->_type && _attackID == a->_attackID && _timer == a->_timer && _age == a->_age) {
             return true;
+        }
+        else {
+            return false;
         }
     }
     return false;
