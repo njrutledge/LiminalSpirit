@@ -42,7 +42,7 @@ void SwipeController::update(InputController &input, bool grounded)
     // If left finger lifted, process left swipe
     else if (input.didLeftRelease())
     {
-        calculateSwipeDirection(input.getLeftStartPosition(), input.getLeftEndPosition(), true, grounded);
+        calculateSwipeDirection(input.getLeftStartPosition(), input.getLeftEndPosition(), true, grounded, input.getLeftStartTime());
     }
     // Otherwise note that no left swipe was completed this frame
     else
@@ -57,7 +57,7 @@ void SwipeController::update(InputController &input, bool grounded)
     }
     // If right finger lifted, process right swipe
     else if(input.didRightRelease()) {
-        calculateSwipeDirection(input.getRightStartPosition(), input.getRightEndPosition(), false, grounded);
+        calculateSwipeDirection(input.getRightStartPosition(), input.getRightEndPosition(), false, grounded, input.getRightStartTime());
     }
     // Otherwise note that no right swipe was completed this frame
     else
@@ -67,7 +67,7 @@ void SwipeController::update(InputController &input, bool grounded)
 #else
     switch (input._leftCode)
     {
-    case 0:
+        case 0:
         {
             setLeftSwipe(noAttack);
             break;
@@ -79,62 +79,71 @@ void SwipeController::update(InputController &input, bool grounded)
             processLeftState();
             break;
         }
-    case 2:
+        case 2:
         {
             setLeftDirection(left);
             setLeftAngle(180);
             processLeftState();
             break;
         }
-    case 3:
+        case 3:
         {
             setLeftDirection(down);
             setLeftAngle(270);
             processLeftState();
             break;
         }
-    case 4:
+        case 4:
         {
             setLeftDirection(right);
             setLeftAngle(0);
             processLeftState();
             break;
         }
+        case 5:
+        {
+            setLeftSwipe(jump);
+        }
+            
     }
     switch (input._rightCode)
     {
-    case 0:
+        case 0:
         {
             setRightSwipe(noAttack);
             break;
         }
-    case 1:
+        case 1:
         {
             setRightDirection(up);
             setRightAngle(90);
             processRightState(grounded);
             break;
         }
-    case 2:
+        case 2:
         {
             setRightDirection(left);
             setRightAngle(180);
             processRightState(grounded);
             break;
         }
-    case 3:
+        case 3:
         {
             setRightDirection(down);
             setRightAngle(270);
             processRightState(grounded);
             break;
         }
-    case 4:
+        case 4:
         {
             setRightDirection(right);
             setRightAngle(0);
             processRightState(grounded);
             break;
+        }
+        case 5:
+        {
+            setRightSwipe(jump);
         }
     }
     if (input._leftCharged) {
@@ -163,8 +172,7 @@ void SwipeController::calculateChargeAttack(cugl::Timestamp startTime, bool isLe
 
     Uint64 chargeTime = cugl::Timestamp::ellapsedMillis(startTime, _currTime);
     
-    // TODO This is currently 500 for easier testing, change it back to 1000 when done testing
-    if (chargeTime >= 500) { //1000) {
+    if (chargeTime >= 1000) {
         if (isLeftSidedCharge) {
             chargeLeftAttack();
         } else {
@@ -181,7 +189,7 @@ void SwipeController::calculateChargeAttack(cugl::Timestamp startTime, bool isLe
  * @param isLeftSidedSwipe  if the swipe was on the left side of the screen
  *
  */
-void SwipeController::calculateSwipeDirection(cugl::Vec2 startPos, cugl::Vec2 endPos, bool isLeftSidedSwipe, bool grounded)
+void SwipeController::calculateSwipeDirection(cugl::Vec2 startPos, cugl::Vec2 endPos, bool isLeftSidedSwipe, bool grounded, cugl::Timestamp startTime)
 {
 
     float startx = startPos.x;
@@ -192,10 +200,20 @@ void SwipeController::calculateSwipeDirection(cugl::Vec2 startPos, cugl::Vec2 en
     float xdiff = endx - startx;
     float ydiff = endy - starty;
 
-    // If the xdiff and ydiff is really small, the "swipe" was to charge
-    // the attack or was a mistap, no direction calculation needed
+    // If the xdiff and ydiff is really small the input was a tap, no need to process swipes
     if (xdiff > -20 && xdiff < 20 && ydiff > -20 && ydiff < 20)
     {
+        _currTime.mark();
+        Uint64 tapTime = cugl::Timestamp::ellapsedMillis(startTime, _currTime);
+        
+        // if the tap time is less than a second the intent of the tap was a jump
+        if (tapTime < 1000) {
+            if (isLeftSidedSwipe) {
+                setLeftSwipe(jump);
+            } else {
+                setRightSwipe(jump);
+            }
+        }
         return;
     }
 
@@ -227,42 +245,7 @@ void SwipeController::calculateSwipeDirection(cugl::Vec2 startPos, cugl::Vec2 en
     else {
         swipeAngle = 360 - angle;
     }
-    
-    // Convert the swipe angle to one of 16 directions
-//    if (swipeAngle <= 11.25 || swipeAngle > 348.75) {
-//        swipeAngle = 0;
-//    } else if (swipeAngle > 11.25 && swipeAngle <= 33.75) {
-//        swipeAngle = 22.5;
-//    } else if (swipeAngle > 33.75 && swipeAngle <= 56.25) {
-//        swipeAngle = 45;
-//    } else if (swipeAngle > 56.25 && swipeAngle <= 78.75) {
-//        swipeAngle = 67.5;
-//    } else if (swipeAngle > 78.75 && swipeAngle <= 101.25) {
-//        swipeAngle = 90;
-//    } else if (swipeAngle > 101.25 && swipeAngle <= 123.75) {
-//        swipeAngle = 112.5;
-//    } else if (swipeAngle > 123.75 && swipeAngle <= 146.25) {
-//        swipeAngle = 135;
-//    } else if (swipeAngle > 146.25 && swipeAngle <= 168.75) {
-//        swipeAngle = 157.5;
-//    } else if (swipeAngle > 168.75 && swipeAngle <= 191.25) {
-//        swipeAngle = 180;
-//    } else if (swipeAngle > 191.25 && swipeAngle <= 213.75) {
-//        swipeAngle = 202.5;
-//    } else if (swipeAngle > 213.75 && swipeAngle <= 236.25) {
-//        swipeAngle = 225;
-//    } else if (swipeAngle > 236.25 && swipeAngle <= 258.75) {
-//        swipeAngle = 247.5;
-//    } else if (swipeAngle > 258.75 && swipeAngle <= 281.25) {
-//        swipeAngle = 270;
-//    } else if (swipeAngle > 281.25 && swipeAngle <= 303.75) {
-//        swipeAngle = 292.5;
-//    } else if (swipeAngle > 303.75 && swipeAngle <= 326.25) {
-//        swipeAngle = 315;
-//    } else if (swipeAngle > 326.25 && swipeAngle <= 348.75) {
-//        swipeAngle = 337.5;
-//    }
-    
+
     // if swipe angle is close to 0, set to 0
     if (swipeAngle > 355) {
         swipeAngle = 0;

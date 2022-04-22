@@ -84,6 +84,10 @@ void InputController::readInput()
     {
         _leftCode = 4;
     }
+    else if (keys->keyDown(KeyCode::SPACE))
+    {
+        _leftCode = 5;
+    }
 
     if (keys->keyPressed(KeyCode::I))
     {
@@ -100,6 +104,10 @@ void InputController::readInput()
     else if (keys->keyPressed(KeyCode::L))
     {
         _rightCode = 4;
+    }
+    else if (keys->keyDown(KeyCode::ARROW_UP))
+    {
+        _rightCode = 5;
     }
 
     if (keys->keyDown(KeyCode::ARROW_LEFT))

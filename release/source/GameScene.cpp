@@ -1096,7 +1096,7 @@ void GameScene::update(float timestep)
     }
     _attacks->update(_player->getPosition(), _player->getBody()->GetLinearVelocity(), timestep);
     // DO NOT MOVE THE ABOVE LINE
-    if (_swipes.getRightSwipe() == _swipes.upAttack)
+    if (_swipes.getRightSwipe() == SwipeController::upAttack || _swipes.getLeftSwipe() == SwipeController::jump || _swipes.getRightSwipe() == SwipeController::jump)
     {
         _player->setJumping(true);
         _player->setIsFirstFrame(true);
