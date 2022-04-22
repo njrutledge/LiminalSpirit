@@ -267,13 +267,14 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
     _ai = AIController();
 
     _collider = CollisionController();
+    _collider.init(sound);
 
     setDebug(false);
     buildScene(scene);
     addChild(scene);
 
     // Get font
-    //_font = assets->get<Font>("marker");
+    _font = assets->get<Font>("marker");
 
     // Create and layout the health meter
     //std::string msg = strtool::format("Health %d", (int) _player->getHealth());
