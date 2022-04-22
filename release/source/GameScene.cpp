@@ -267,13 +267,14 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
     _ai = AIController();
 
     _collider = CollisionController();
+    _collider.init(sound);
 
     setDebug(false);
     buildScene(scene);
     addChild(scene);
 
     // Get font
-    //_font = assets->get<Font>("marker");
+    _font = assets->get<Font>("marker");
 
     // Create and layout the health meter
     //std::string msg = strtool::format("Health %d", (int) _player->getHealth());
@@ -284,13 +285,13 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
     _healthback->setColor(PLAYER_HEALTHBACK_COLOR);
     _healthback->setAnchor(0, 1);
     _healthback->setPosition(Vec2(10, dimen.height - 10));
-    _worldnode2->addChild(_healthback);
+    scene->addChild(_healthback);
     _health = scene2::PolygonNode::allocWithPoly((Rect(0, 0, _player->getHealth() / 4.0f, .5) * _scale));
     _health->setPriority(10);
     _health->setColor(PLAYER_HEALTH_COLOR);
     _health->setAnchor(0, 1);
     _health->setPosition(Vec2(10, dimen.height - 10));
-    _worldnode2->addChild(_health);
+    scene->addChild(_health);
 
 
 

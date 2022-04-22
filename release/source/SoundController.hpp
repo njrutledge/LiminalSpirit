@@ -17,8 +17,7 @@ public:
     
     enum playerSType {
         slashEmpty,
-        slash,
-        slashFinal,
+        slashHit,
         slashDash,
         shoot,
         shootCharge,
@@ -100,7 +99,9 @@ protected:
     
     std::shared_ptr<cugl::Sound> _playerStep;
     
-    std::shared_ptr<cugl::Sound> _playerSlash;
+    std::shared_ptr<cugl::Sound> _playerSlashEmpty;
+    
+    std::shared_ptr<cugl::Sound> _playerSlashHit;
 public:
     
     SoundController();

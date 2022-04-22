@@ -7,11 +7,14 @@
 #include "Mirror.hpp"
 #include "Spawner.hpp"
 #include "PlayerModel.h"
+#include "SoundController.hpp"
 
 class CollisionController {
 public:
     /** Creates a new collision Controller */
     CollisionController() {_spawner_killed = -1; _index_spawner = -1;}
+    
+    void init(std::shared_ptr<SoundController> sound);
 
     /**Deletes the collision controller */
     ~CollisionController() {}
@@ -30,6 +33,7 @@ public:
     void setIndexSpawner(int v) { _index_spawner = v;};
 
 private:
+    std::shared_ptr<SoundController> _sound;
     /** the index of spawner that is been killed */
     int _spawner_killed;
     string _name_of_killed_spawner_enemy;

@@ -614,9 +614,14 @@
             "file": "sounds/playerSFX/Player_Shoot.wav",
             "volume": 0.6
         },
-        "playerSlash": {
+        "playerSlashEmpty": {
             "type": "sample",
-            "file": "sounds/playerSFX/Player_Slash.wav",
+            "file": "sounds/playerSFX/Player_Empty_Swing.wav",
+            "volume": 0.6
+        },
+        "playerSlashHit": {
+            "type": "sample",
+            "file": "sounds/playerSFX/Player_Hit_Swing.wav",
             "volume": 0.6
         }
 	},

@@ -4,6 +4,10 @@
 #include "AttackController.hpp"
 using namespace cugl;
 
+void CollisionController::init(std::shared_ptr<SoundController> sound) {
+    _sound = sound;
+}
+
 /**
     * Processes the start of a collision
     *
@@ -117,6 +121,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                         if (mirror->getHealth() <= 0) {
                             mirror->markRemoved(true);
                         }
+                        _sound->play_player_sound(SoundController::playerSType::slashHit);
                     }
                     else {
                         CULog("SAME ATTACK");
@@ -152,6 +157,8 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                 case AttackController::p_exp_package:
                     attack->setInactive();
                     break;
+                    case AttackController::p_melee:
+                        _sound->play_player_sound(SoundController::playerSType::slashHit);
                 default:
                     break;
                 }
