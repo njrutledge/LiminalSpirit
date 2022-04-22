@@ -29,6 +29,7 @@ public:
         chargedRight,
         chargedDown,
         chargedLeft,
+        jump,
         noAttack
     };
     
@@ -185,7 +186,7 @@ protected:
      * @param isLeftSidedSwipe  if the swipe was on the left side of the screen
      *
      */
-    void calculateSwipeDirection(cugl::Vec2 startPos, cugl::Vec2 endPos, bool isLeftSidedSwipe, bool grounded);
+    void calculateSwipeDirection(cugl::Vec2 startPos, cugl::Vec2 endPos, bool isLeftSidedSwipe, bool grounded, cugl::Timestamp startTime);
     
     /**
      * Processes the type of swipe attack that was just completed on the left side

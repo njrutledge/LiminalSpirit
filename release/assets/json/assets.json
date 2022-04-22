@@ -243,6 +243,15 @@
 		"forest_background": {
 			"file": "textures/backgrounds/forest_background.png"
 		},
+        "forest_small_platform": {
+            "file": "textures/forest/forest_small_platform.png"
+        },
+        "forest_medium_platform": {
+            "file": "textures/forest/forest_medium_platform.png"
+        },
+        "forest_large_platform": {
+            "file": "textures/forest/forest_large_platform.png"
+        },
 		"home_background": {
 			"file": "textures/menus/home/home_background.png"
 		},
