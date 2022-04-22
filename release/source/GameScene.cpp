@@ -273,12 +273,26 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
     addChild(scene);
 
     // Get font
-    _font = assets->get<Font>("marker");
+    //_font = assets->get<Font>("marker");
 
     // Create and layout the health meter
-    std::string msg = strtool::format("Health %d", (int) _player->getHealth());
-    _text = TextLayout::allocWithText(msg, assets->get<Font>("marker"));
-    _text->layout();
+    //std::string msg = strtool::format("Health %d", (int) _player->getHealth());
+    //_text = TextLayout::allocWithText(msg, assets->get<Font>("marker"));
+    //_text->layout();
+    _healthback = scene2::PolygonNode::allocWithPoly((Rect(0, 0, _player->getHealth() / 4.0f, .5) * _scale));
+    _healthback->setPriority(9);
+    _healthback->setColor(PLAYER_HEALTHBACK_COLOR);
+    _healthback->setAnchor(0, 1);
+    _healthback->setPosition(Vec2(10, dimen.height - 10));
+    _worldnode2->addChild(_healthback);
+    _health = scene2::PolygonNode::allocWithPoly((Rect(0, 0, _player->getHealth() / 4.0f, .5) * _scale));
+    _health->setPriority(10);
+    _health->setColor(PLAYER_HEALTH_COLOR);
+    _health->setAnchor(0, 1);
+    _health->setPosition(Vec2(10, dimen.height - 10));
+    _worldnode2->addChild(_health);
+
+
 
     _timer = 0.0f;
 
@@ -1197,9 +1211,11 @@ void GameScene::update(float timestep)
     }
 
     // Update the health meter
-    _text->setText(strtool::format("Health %d", (int)_player->getHealth()));
-    _text->layout();
-
+    //_text->setText(strtool::format("Health %d", (int)_player->getHealth()));
+    //_text->layout();
+    _health->setPolygon((Rect(0, 0, _player->getHealth()/ 4.0f, .5) * _scale));
+    _health->setPriority(10);
+   
     // Camera following player, with some non-linear smoothing
     float dy = getChild(0)->getContentSize().height / 2 - _worldnode->getPaneTransform().transform(_player->getSceneNode()->getPosition()).y;
     Vec2 pan = Vec2(0, dy);
@@ -1347,7 +1363,7 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch>& batch)
     batch->begin(getCamera()->getCombined());
 
     //_attacks.draw(batch);
-    batch->drawText(_text, Vec2(20, getSize().height - _text->getBounds().size.height - 10));
+   // batch->drawText(_text, Vec2(20, getSize().height - _text->getBounds().size.height - 10));
 
     batch->setColor(Color4::GREEN);
     Affine2 trans;

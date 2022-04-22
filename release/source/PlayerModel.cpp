@@ -28,8 +28,7 @@
 #define PLAYER_JUMP 100.0f
 /** Debug color for sensor */
 #define DEBUG_COLOR Color4::RED
-/** Player health */
-#define HEALTH 40.0f
+
 
 #define PLAYER_MASS 5.0f
 
@@ -51,7 +50,7 @@ bool PlayerModel::init(const cugl::Vec2& pos, const cugl::Size& size, float scal
         filter.maskBits = 0b101100;
         setFilterData(filter);
         // Gameplay attributes
-        _health = HEALTH;
+        _health = PLAYER_HEALTH;
         _faceRight = true;
         _isInvincible = false;
         _isGrounded = true;
@@ -145,7 +144,7 @@ void PlayerModel::dispose() {
 
 void PlayerModel::reset(Vec2 pos) {
     setPosition(pos);
-    _health = HEALTH;
+    _health = PLAYER_HEALTH;
     _faceRight = true;
     _movement = 0.0f;
     _body->SetLinearVelocity(b2Vec2(0,0));
