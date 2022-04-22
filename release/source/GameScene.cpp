@@ -906,7 +906,7 @@ void GameScene::update(float timestep)
     
     // if player is stunned, do not read swipe input
     if(!_player->isStunned()){
-        _swipes.update(_input, _player->isGrounded());
+        _swipes.update(_input, _player->isGrounded(), timestep);
     }
     
     b2Vec2 playerPos = _player->getBody()->GetPosition();

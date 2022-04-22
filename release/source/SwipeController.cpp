@@ -17,6 +17,12 @@ SwipeController::SwipeController() : _leftSwipe(noAttack),
 {
     _leftState.construct();
     _rightState.construct();
+    
+    _cMeleeCount = 2.0f;
+    _cRangeCount = 5.0f;
+    
+    _cMCool = 2.0f;
+    _cRCool = 5.0f;
 }
 
 /**
@@ -30,8 +36,10 @@ SwipeController::~SwipeController()
 /**
  * Updates the swipe controller based on the latest inputs.
  */
-void SwipeController::update(InputController &input, bool grounded)
+void SwipeController::update(InputController &input, bool grounded, float dt)
 {
+    _cMeleeCount += dt;
+    _cRangeCount += dt;
 #ifdef CU_TOUCH_SCREEN
 
     // If the left finger is pressed down, check if it has been pressed long enough for
@@ -153,6 +161,7 @@ void SwipeController::update(InputController &input, bool grounded)
         chargeRightAttack();
     }
 #endif
+    
 }
 
 /**
@@ -175,9 +184,17 @@ void SwipeController::calculateChargeAttack(cugl::Timestamp startTime, bool isLe
     // half second charge time
     if (chargeTime >= 500) {
         if (isLeftSidedCharge) {
-            chargeLeftAttack();
+            if (_cRCool <= _cRangeCount) {
+                chargeLeftAttack();
+                _cRangeCount = 0;
+            }
+            
         } else {
-            chargeRightAttack();
+            if (_cMCool <= _cMeleeCount) {
+                chargeRightAttack();
+                _cMeleeCount = 0;
+            }
+            
         }
     }
 }
