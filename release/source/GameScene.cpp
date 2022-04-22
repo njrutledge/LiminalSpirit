@@ -875,7 +875,7 @@ void GameScene::update(float timestep)
                 _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()), _timer, PHANTOM_ATTACK, PHANTOM_FRAMES);
             }
             else if ((*it)->getName() == "Glutton") {
-                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()), _timer, GLUTTON_ATTACK, GLUTTON_FRAMES);
+                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 1.5f, 3.0f, 2.0f, AttackController::Type::e_range, (vel.scale(0.25)).rotate((play_p - en_p).getAngle()), _timer, GLUTTON_ATTACK, GLUTTON_FRAMES);
             }
 
         }
@@ -1077,7 +1077,7 @@ void GameScene::update(float timestep)
 
             }
             else if ((*it)->getAttackID() == PHANTOM_ATTACK) {
-                attackSprite->setScale(0.025);
+                attackSprite->setScale(0.04*(*it)->getRadius());
                 attackSprite->setAngle((*it)->getAngle()+M_PI/2);
                 attackSprite->setPriority(2.2);
 
@@ -1085,7 +1085,7 @@ void GameScene::update(float timestep)
                 dynamic_pointer_cast<scene2::SpriteNode>(attackSprite)->setFrame(0);
             }
             else if((*it)->getAttackID() == GLUTTON_ATTACK) {
-                attackSprite->setScale(.25);
+                attackSprite->setScale(.25 * (*it)->getRadius());
                 attackSprite->setAngle((*it)->getAngle() + M_PI);
                 attackSprite->setPriority(2);
             }

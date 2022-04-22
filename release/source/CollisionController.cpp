@@ -73,7 +73,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                     //attack->markRemoved();
                     attack->setInactive();
                     float angle_change;
-                    cugl::Vec2 linvel = attack->getVel();//getLinearVelocity().normalize();
+                    cugl::Vec2 linvel = attack->getVel();
                     
                     switch (mirror->getType()) {
                     case Mirror::Type::square:
@@ -161,7 +161,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
             if (Mirror* mirror = dynamic_cast<Mirror*>(enemy)) {
                 attack->setInactive();
                 float angle_change;
-                cugl::Vec2 linvel = attack->getLinearVelocity().normalize();
+                cugl::Vec2 linvel = attack->getVel();
 
                 switch (mirror->getType()) {
                 case Mirror::Type::square:
