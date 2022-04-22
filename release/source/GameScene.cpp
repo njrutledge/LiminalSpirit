@@ -828,11 +828,21 @@ void GameScene::update(float timestep)
             }
         }
         else if ((*it)->getName() == "Lost") {
+            if ((*it)->getVX() > 0) {
+                sprite->flipHorizontal(false);
+            }
+            else {
+                sprite->flipHorizontal(true);
+            }
             if ((*it)->getInvincibility()) {
                 sprite->setFrame(4);
-            }
-            else if ((*it)->getIdleAnimationTimer() > .1f) {
+            } // Using idle timer for walking animation since lost has no idle
+            else if ((*it)->getIdleAnimationTimer() > .1f && (*it)->getVX() > 0) {
                 sprite->setFrame((sprite->getFrame() + 1) % 4);
+                (*it)->setIdleAnimationTimer(0);
+            }
+            else if ((*it)->getIdleAnimationTimer() > .1f && (*it)->getVX() < 0) {
+                sprite->setFrame((sprite->getFrame() - 1) % 4);
                 (*it)->setIdleAnimationTimer(0);
             }
         }
