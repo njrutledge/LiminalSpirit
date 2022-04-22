@@ -23,6 +23,7 @@ Vec2 AIController::getMovement(shared_ptr<BaseEnemyModel> e, Vec2 player_pos, fl
 	std::string name = e->getName();
 
     if (e->getInvincibilityTimer() > 0) {
+        e->setTimePast(0);
         return Vec2(0, 0);
     } 
     else if (name == "Lost") {

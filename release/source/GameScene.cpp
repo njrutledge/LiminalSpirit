@@ -849,8 +849,13 @@ void GameScene::update(float timestep)
             else {
                 sprite->flipHorizontal(true);
             }
-            if ((*it)->getInvincibility()) {
-                sprite->setFrame(4);
+            if ((*it)->getInvincibilityTimer() > 0) {
+                if ((*it)->getVX() > 0) {
+                    sprite->setFrame(4);
+                }
+                else {
+                    sprite->setFrame(7);
+                }
             } // Using idle timer for walking animation since lost has no idle
             else if ((*it)->getIdleAnimationTimer() > .1f && (*it)->getVX() > 0) {
                 sprite->setFrame((sprite->getFrame() + 1) % 4);
