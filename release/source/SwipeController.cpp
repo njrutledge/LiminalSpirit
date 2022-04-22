@@ -172,7 +172,8 @@ void SwipeController::calculateChargeAttack(cugl::Timestamp startTime, bool isLe
 
     Uint64 chargeTime = cugl::Timestamp::ellapsedMillis(startTime, _currTime);
     
-    if (chargeTime >= 1000) {
+    // half second charge time
+    if (chargeTime >= 500) {
         if (isLeftSidedCharge) {
             chargeLeftAttack();
         } else {
@@ -206,8 +207,8 @@ void SwipeController::calculateSwipeDirection(cugl::Vec2 startPos, cugl::Vec2 en
         _currTime.mark();
         Uint64 tapTime = cugl::Timestamp::ellapsedMillis(startTime, _currTime);
         
-        // if the tap time is less than a second the intent of the tap was a jump
-        if (tapTime < 1000) {
+        // if the tap time is less than half a second the intent of the tap was a jump
+        if (tapTime < 500) {
             if (isLeftSidedSwipe) {
                 setLeftSwipe(jump);
             } else {
