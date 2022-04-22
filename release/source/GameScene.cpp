@@ -833,7 +833,7 @@ void GameScene::update(float timestep)
         }
         else if ((*it)->getName() == "Glutton") {
             if ((*it)->getInvincibility()) {
-                sprite->setFrame(7);
+                sprite->setFrame(7); 
             } else if ((*it)->getIdleAnimationTimer() > 1.f ||
                 (!(sprite->getFrame() == 2) && (*it)->getIdleAnimationTimer() > 0.3f)
                 || (!(sprite->getFrame() == 2 || sprite->getFrame() == 5 || sprite->getFrame() == 6) && (*it)->getIdleAnimationTimer() > 0.1f)) {
