@@ -147,7 +147,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
     _sound = sound;
 
     //Get Particle Info
-    _particleInfo = assets->get<JsonValue>("particles")->get("collision");
+    _particleInfo = assets->get<JsonValue>("particles");
 
 
     auto spawn = _constants->get("spawn_order")->children();
@@ -354,17 +354,22 @@ void GameScene::update(float timestep)
     }
 
     // Some Particle Stuff
-    if (_meleeArm->getLastType() == AttackController::MeleeState::h1_left) {
-        std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo, Vec2(0,0));
-        std::shared_ptr<Texture> text = _assets->get<Texture>(PLAYER_RANGE);
+    // ********* this is how you'd make a new node of particles ***********/
+    //if (_meleeArm->getLastType() == AttackController::MeleeState::h1_left) { ///////////////////////////////////////A way to trigger
+    //    std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("collision"), Vec2(0,0));//Create the pool for the effect based on defined values in json
+    //    std::shared_ptr<Texture> text = _assets->get<Texture>(PLAYER_RANGE);////////////////////////////////////////Create a texture or vector of textures to use for the particle effect
 
-        std::shared_ptr<ParticleNode> newParts = ParticleNode::alloc(Vec2(10*_scale,10*_scale), text, pool);
-        newParts->setVisible(true);
-        _worldnode->addChildWithTag(newParts, 100);
-    }
+    //    std::shared_ptr<ParticleNode> newParts = ParticleNode::alloc(Vec2(10*_scale,10*_scale), text, pool);///////Create a node 
+    //    newParts->setVisible(true);////////////////////////////////////////////////////////////////////////////////Make visible (not usually necessary)
+    //    _worldnode->addChildWithTag(newParts, 100);///////////////////////////////////////////////////////////////Add to worldnode with 100 tag (necessary)
+    //}
+     
     ////Update all Particles
     for (std::shared_ptr<scene2::SceneNode> s : _worldnode->getChildren()) {
         if (s->getTag() == 100) {
+            if (!s->isVisible()) {
+                s->dispose();
+            }
             ParticleNode* pn = dynamic_cast<ParticleNode*>(s.get());
             pn->update(timestep);
         }
