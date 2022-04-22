@@ -120,6 +120,13 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
+		"lost_ani": {
+			"file": "textures/animations/lost_spritesheet.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
 		"glutton": {
 			"file": "textures/glutton.png",
 			"minfilter": "nearest",
@@ -128,7 +135,7 @@
 			"wrapT": "clamp"
 		},
 		"glutton_ani": {
-			"file": "textures/animations/glutton_idle_spritesheet.png",
+			"file": "textures/animations/glutton_spritesheet.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
@@ -200,6 +207,13 @@
 		},
 		"glutton_projectile": {
 			"file": "textures/animations/glutton_projectile_spritesheet.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"star": {
+			"file": "textures/star.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",

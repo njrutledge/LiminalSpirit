@@ -7,5 +7,15 @@
         "lifetimeRange": [0.5, 1],
         "angleRange": [0, 6.28],
         "speedRange": [130, 150]
-    }
+    },
+    "damaged": {
+         "burstParticles": 6, 
+         "maxParticleCount": 6,
+         "gravity": [0, -30],
+         "emissionRateRange": [1, 1],
+         "lifetimeRange": [0.25, 0.5],
+         "angleRange": [0, 3.14],
+         "speedRange": [250, 375],
+         "fadeinRange": [0.5, 1]
+     }
 }

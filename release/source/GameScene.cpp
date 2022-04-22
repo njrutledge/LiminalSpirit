@@ -394,6 +394,17 @@ void GameScene::update(float timestep)
     sprite->setAnchor(0.5, 0.3);
     // Player (body) Animations
     if (_player->isStunned()) {
+
+        // Play damaged particles once when stunned
+        if ((sprite->getFrame() != 31 && _player->isFacingRight()) || (sprite->getFrame() != 24 && !_player->isFacingRight())) {
+            std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("damaged"), Vec2(0, 0));
+            std::shared_ptr<Texture> text = _assets->get<Texture>("star");
+            std::shared_ptr<ParticleNode> dmgd = ParticleNode::alloc(_player->getPosition() * _scale, text, pool);
+            dmgd->setColor(Color4::RED);
+            dmgd->setScale(0.25f);
+            _worldnode->addChildWithTag(dmgd, 100);
+        }
+
         // Store the frame being played before stun
         if (sprite->getFrame() != 31 && sprite->getFrame() != 24) {
             _prevFrame = sprite->getFrame();
@@ -745,73 +756,46 @@ void GameScene::update(float timestep)
             mSprite->setFrame(13);
         }
     }
+    
 
-    ////////////////////////////////////////
-    ///////End Player and Arm Animations////
-    ////////////////////////////////////////
-
-    // Determining arm positions and offsets
     float offsetArm = -2.7f;
-    float offsetArm2 = -3.1f;
     if (!_player->isFacingRight()) {
         offsetArm = -1 * offsetArm;
     }
+
     if ((!_player->isFacingRight() && rSprite->getFrame() != 0 && _rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270) ||
         (_player->isFacingRight() && rSprite->getFrame() != 5 && (_rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270))) {
         offsetArm = -1 * offsetArm;
     }
 
-    // change based on arm attacks
-    if ((!_player->isFacingRight() || // player facing left or attacks left
-        (_meleeArm->getLastType() == AttackController::MeleeState::h1_left
-            || _meleeArm->getLastType() == AttackController::MeleeState::h2_left
-            || _meleeArm->getLastType() == AttackController::MeleeState::h3_left)))// player facing left and attacking right
-    {
-        offsetArm2 = -1 * offsetArm2;
-    }
-
-    if (!_player->isFacingRight() && (_meleeArm->getLastType() == AttackController::MeleeState::h1_right
-        || _meleeArm->getLastType() == AttackController::MeleeState::h2_right
-        || _meleeArm->getLastType() == AttackController::MeleeState::h3_right)) {
-        offsetArm2 = -1 * offsetArm2;
-    }
 
     float upDown = _rangedArm->getGlowTimer();
-    float upDown2 = _rangedArm->getGlowTimer() + 0.5f;
     float spacing = 1.f;
-    float upDownY1 = fmod(upDown/2, spacing);
-    float upDownY2 = fmod(upDown2/2, spacing);
-    if (upDownY1 > spacing/4 && upDownY1 <= 3*spacing/4) {
-        upDownY1 = spacing/2 - upDownY1;
-    }
-    else if (upDownY1 > 3*spacing/4) {
-        upDownY1 = -1*spacing + upDownY1;
-    }
-    if (upDownY2 > spacing / 4 && upDownY2 <= 3 * spacing / 4) {
-        upDownY2 = spacing / 2 - upDownY2;
-    }
-    else if (upDownY2 > 3 * spacing / 4) {
-        upDownY2 = -1 * spacing + upDownY2;
-    }
-
+    float upDownY1 = fmod(upDown / 2, spacing);
 
     if (_player->isFacingRight() && rSprite->getFrame() != 5) {
         if (_rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270) {
-        _rangedArm->setPosition(_player->getPosition().x + offsetArm - 2, _player->getPosition().y + (upDownY1/spacing/3) + 0.2f);
-        } else {
-            _rangedArm->setPosition(_player->getPosition().x + offsetArm + 2, _player->getPosition().y + (upDownY1/spacing/3) + 0.2f);
+            _rangedArm->setPosition(_player->getPosition().x + offsetArm - 2, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
+        }
+        else {
+            _rangedArm->setPosition(_player->getPosition().x + offsetArm + 2, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
         }
     }
     else if (!_player->isFacingRight() && rSprite->getFrame() != 0) {
         if (_rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270) {
-            _rangedArm->setPosition(_player->getPosition().x + offsetArm + 2, _player->getPosition().y + (upDownY1/spacing/3) + 0.2f);
-        } else {
-            _rangedArm->setPosition(_player->getPosition().x + offsetArm - 2, _player->getPosition().y + (upDownY1/spacing/3) + 0.2f);
+            _rangedArm->setPosition(_player->getPosition().x + offsetArm + 2, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
         }
-    } else {
-        _rangedArm->setPosition(_player->getPosition().x + offsetArm, _player->getPosition().y + (upDownY1/spacing/3) + 0.2f);
+        else {
+            _rangedArm->setPosition(_player->getPosition().x + offsetArm - 2, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
+        }
     }
-    _meleeArm->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY2/spacing/3) + 0.1f);
+    else {
+        _rangedArm->setPosition(_player->getPosition().x + offsetArm, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
+    }
+
+    ////////////////////////////////////////
+    ///////End Player and Arm Animations////
+    ////////////////////////////////////////
     
     // Enemy AI logic
     // For each enemy
@@ -834,10 +818,21 @@ void GameScene::update(float timestep)
             }
         }
         else if ((*it)->getName() == "Glutton") {
-            if ((*it)->getIdleAnimationTimer() > 1.f ||
+            if ((*it)->getInvincibility()) {
+                sprite->setFrame(7);
+            } else if ((*it)->getIdleAnimationTimer() > 1.f ||
                 (!(sprite->getFrame() == 2) && (*it)->getIdleAnimationTimer() > 0.3f)
                 || (!(sprite->getFrame() == 2 || sprite->getFrame() == 5 || sprite->getFrame() == 6) && (*it)->getIdleAnimationTimer() > 0.1f)) {
                 sprite->setFrame((sprite->getFrame() + 1) % 7);
+                (*it)->setIdleAnimationTimer(0);
+            }
+        }
+        else if ((*it)->getName() == "Lost") {
+            if ((*it)->getInvincibility()) {
+                sprite->setFrame(4);
+            }
+            else if ((*it)->getIdleAnimationTimer() > .1f) {
+                sprite->setFrame((sprite->getFrame() + 1) % 4);
                 (*it)->setIdleAnimationTimer(0);
             }
         }
@@ -1248,6 +1243,43 @@ void GameScene::update(float timestep)
     }
 
     _playerGlow->setPosition(_player->getPosition());
+    ////MELEE ARM MUST STAY AT BOTTOM
+    // Determining arm positions and offsets
+    float offsetArm2 = -3.1f;
+    if (!_player->isFacingRight()) {
+        offsetArm = -1 * offsetArm;
+    }
+
+    // change based on arm attacks
+    if ((!_player->isFacingRight() || // player facing left or attacks left
+        (_meleeArm->getLastType() == AttackController::MeleeState::h1_left
+            || _meleeArm->getLastType() == AttackController::MeleeState::h2_left
+            || _meleeArm->getLastType() == AttackController::MeleeState::h3_left)))// player facing left and attacking right
+    {
+        offsetArm2 = -1 * offsetArm2;
+    }
+
+    if (!_player->isFacingRight() && (_meleeArm->getLastType() == AttackController::MeleeState::h1_right
+        || _meleeArm->getLastType() == AttackController::MeleeState::h2_right
+        || _meleeArm->getLastType() == AttackController::MeleeState::h3_right)) {
+        offsetArm2 = -1 * offsetArm2;
+    }
+
+    float upDown2 = _meleeArm->getGlowTimer() + 0.5f;
+    float upDownY2 = fmod(upDown2 / 2, spacing);
+    if (upDownY1 > spacing / 4 && upDownY1 <= 3 * spacing / 4) {
+        upDownY1 = spacing / 2 - upDownY1;
+    }
+    else if (upDownY1 > 3 * spacing / 4) {
+        upDownY1 = -1 * spacing + upDownY1;
+    }
+    if (upDownY2 > spacing / 4 && upDownY2 <= 3 * spacing / 4) {
+        upDownY2 = spacing / 2 - upDownY2;
+    }
+    else if (upDownY2 > 3 * spacing / 4) {
+        upDownY2 = -1 * spacing + upDownY2;
+    }
+    _meleeArm->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY2 / spacing / 3) + 0.1f);
 
 }
 
@@ -1470,9 +1502,12 @@ void GameScene::createEnemies(int wave) {
         std::transform(enemyName.begin(), enemyName.end(), enemyName.begin(),
             [](unsigned char c) { return std::tolower(c); });
         if (!enemyName.compare("lost")) {
-            std::shared_ptr<Texture> lostImage = _assets->get<Texture>("lost");
-            std::shared_ptr<Lost> lost = Lost::alloc(enemyPos, lostImage->getSize(), lostImage->getSize() / _scale / 10, _scale);
-            std::shared_ptr<scene2::PolygonNode> lostSprite = scene2::PolygonNode::allocWithTexture(lostImage);
+            std::shared_ptr<Texture> lostHitBoxImage = _assets->get<Texture>("lost");
+            std::shared_ptr<Texture> lostImage = _assets->get<Texture>("lost_ani");
+            std::shared_ptr<Lost> lost = Lost::alloc(enemyPos, lostHitBoxImage->getSize(), lostHitBoxImage->getSize() / _scale / 10, _scale);
+            std::shared_ptr<scene2::SpriteNode> lostSprite = scene2::SpriteNode::alloc(lostImage, 2, 4);
+            lostSprite->setFrame(0);
+            lostSprite->setAnchor(Vec2(0.5, 0.25));
             lost->setGlow(enemyGlow);
             lost->setSceneNode(lostSprite);
             lost->setDebugColor(Color4::RED);
@@ -1519,10 +1554,10 @@ void GameScene::createEnemies(int wave) {
         else if (!enemyName.compare("glutton")) {
             std::shared_ptr<Texture> gluttonHitboxImage = _assets->get<Texture>("glutton");
             std::shared_ptr<Texture> gluttonImage = _assets->get<Texture>("glutton_ani");
-            std::shared_ptr<Glutton> glutton = Glutton::alloc(enemyPos + Vec2(0, 2), Vec2(gluttonImage->getSize().width / 7, gluttonImage->getSize().height), gluttonHitboxImage->getSize() / _scale / 5, _scale);
-            std::shared_ptr<scene2::SpriteNode> gluttonSprite = scene2::SpriteNode::alloc(gluttonImage, 1, 7);
+            std::shared_ptr<Glutton> glutton = Glutton::alloc(enemyPos + Vec2(0, 2), Vec2(gluttonHitboxImage->getSize().width, gluttonHitboxImage->getSize().height), gluttonHitboxImage->getSize() / _scale / 5, _scale);
+            std::shared_ptr<scene2::SpriteNode> gluttonSprite = scene2::SpriteNode::alloc(gluttonImage, 2, 7);
             //fix the anchor slightly for glutton only
-            gluttonSprite->setAnchor(.5, .6);
+            gluttonSprite->setAnchor(.5, .4);
             glutton->setSceneNode(gluttonSprite);
             glutton->setDebugColor(Color4::BLUE);
             glutton->setGlow(enemyGlow);
