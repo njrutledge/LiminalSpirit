@@ -240,17 +240,17 @@
 			"minfilter": "linear",
 			"magfilter": "linear"
 		},
-		"forest_background": {
-			"file": "textures/backgrounds/forest_background.png"
-		},
-        "forest_small_platform": {
-            "file": "textures/forest/forest_small_platform.png"
+        "cave_background": {
+            "file": "textures/backgrounds/cave_background.png"
         },
-        "forest_medium_platform": {
-            "file": "textures/forest/forest_medium_platform.png"
+        "cave_small_platform": {
+            "file": "textures/cave/S-DOWN.png"
         },
-        "forest_large_platform": {
-            "file": "textures/forest/forest_large_platform.png"
+        "cave_medium_platform": {
+            "file": "textures/cave/M-DOWN.png"
+        },
+        "cave_large_platform": {
+            "file": "textures/cave/L-DOWN.png"
         },
         "shroom_background": {
             "file": "textures/backgrounds/shroom_background.png"
@@ -263,6 +263,18 @@
         },
         "shroom_large_platform": {
             "file": "textures/shroom/2-L.png"
+        },
+        "forest_background": {
+            "file": "textures/backgrounds/forest_background.png"
+        },
+        "forest_small_platform": {
+            "file": "textures/forest/forest_small_platform.png"
+        },
+        "forest_medium_platform": {
+            "file": "textures/forest/forest_medium_platform.png"
+        },
+        "forest_large_platform": {
+            "file": "textures/forest/forest_large_platform.png"
         },
         "platform": {
             "file": "textures/platform.png"
@@ -319,30 +331,30 @@
 		}
 	},
 	"scene2s": {
-		"forest": {
-			"type": "Node",
-			"comment": "This is the root node of the scene",
-			"format": {
-				"type": "Anchored"
-			},
-			"children": {
-				"backdrop": {
-					"type": "Image",
-					"data": {
-						"texture": "forest_background",
-						"anchor": [
-							0.5,
-							0.5
-						],
-						"scale": 0.75
-					},
-					"layout": {
-						"x_anchor": "center",
-						"y_anchor": "middle"
-					}
-				}
-			}
-		},
+        "cave": {
+            "type": "Node",
+            "comment": "This is the root node of the scene",
+            "format": {
+                "type": "Anchored"
+            },
+            "children": {
+                "backdrop": {
+                    "type": "Image",
+                    "data": {
+                        "texture": "cave_background",
+                        "anchor": [
+                            0.5,
+                            0.5
+                        ],
+                        "scale": 0.75
+                    },
+                    "layout": {
+                        "x_anchor": "center",
+                        "y_anchor": "middle"
+                    }
+                }
+            }
+        },
         "shroom": {
             "type": "Node",
             "comment": "This is the root node of the scene",
@@ -354,6 +366,30 @@
                     "type": "Image",
                     "data": {
                         "texture": "shroom_background",
+                        "anchor": [
+                            0.5,
+                            0.5
+                        ],
+                        "scale": 0.75
+                    },
+                    "layout": {
+                        "x_anchor": "center",
+                        "y_anchor": "middle"
+                    }
+                }
+            }
+        },
+        "forest": {
+            "type": "Node",
+            "comment": "This is the root node of the scene",
+            "format": {
+                "type": "Anchored"
+            },
+            "children": {
+                "backdrop": {
+                    "type": "Image",
+                    "data": {
+                        "texture": "forest_background",
                         "anchor": [
                             0.5,
                             0.5

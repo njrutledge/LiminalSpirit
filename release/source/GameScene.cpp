@@ -202,7 +202,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
     //_scene = Scene2::alloc(dimen.width, dimen.height);
     // default scene is forest for now
     auto scene = _assets->get<scene2::SceneNode>("forest");
-    if (!BIOME.compare("shroom")) {
+    if (!BIOME.compare("cave")) {
+        scene = _assets->get<scene2::SceneNode>("cave");
+    }
+    else if (!BIOME.compare("shroom")) {
         scene = _assets->get<scene2::SceneNode>("shroom");
     }
     scene->setContentSize(dimen);
@@ -1785,16 +1788,22 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
                 platformImage = _assets->get<Texture>("shroom_large_platform");
             }
         }
-        else {
+        else if (!BIOME.compare("forest")) {
             if (width < DEFAULT_WIDTH / 3) {
-                //use small platform
                 platformImage = _assets->get<Texture>("forest_small_platform");
             } else if (width < (DEFAULT_WIDTH / 3) * 2) {
-                //use medium platform
                 platformImage = _assets->get<Texture>("forest_medium_platform");
             } else {
-                //use large platform
                 platformImage = _assets->get<Texture>("forest_large_platform");
+            }
+        }
+        else {
+            if (width < DEFAULT_WIDTH / 3) {
+                platformImage = _assets->get<Texture>("cave_small_platform");
+            } else if (width < (DEFAULT_WIDTH / 3) * 2) {
+                platformImage = _assets->get<Texture>("cave_medium_platform");
+            } else {
+                platformImage = _assets->get<Texture>("cave_large_platform");
             }
         }
         platformSprite = scene2::PolygonNode::allocWithTexture(platformImage);
