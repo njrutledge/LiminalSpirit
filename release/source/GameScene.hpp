@@ -107,8 +107,10 @@ protected:
     /** The type*/
     int _type;
     
-    /** The text with the current health */
+    /** The text with the current wave */
     std::shared_ptr<cugl::TextLayout> _text;
+    /** The text with the wave timer */
+    std::shared_ptr<cugl::TextLayout> _timer_text;
     /** Text font */
     std::shared_ptr<cugl::Font> _font;
     /** The temp text with the ending win message */

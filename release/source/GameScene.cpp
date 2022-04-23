@@ -281,9 +281,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
     _font = assets->get<Font>("marker");
 
     // Create and layout the health meter
-    //std::string msg = strtool::format("Health %d", (int) _player->getHealth());
-    //_text = TextLayout::allocWithText(msg, assets->get<Font>("marker"));
-    //_text->layout();
     _healthback = scene2::PolygonNode::allocWithPoly((Rect(0, 0, _player->getHealth() / 4.0f, .5) * _scale));
     _healthback->setPriority(9);
     _healthback->setColor(PLAYER_HEALTHBACK_COLOR);
@@ -297,8 +294,15 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
     _health->setPosition(Vec2(bounds.getMinX() + 10, dimen.height - 10));
     scene->addChild(_health);
 
+    std::string msg = strtool::format("Wave: %d / %d", _nextWaveNum, _numWaves);
+    _text = TextLayout::allocWithText(msg, assets->get<Font>("marker"));
+    _text->layout();
 
-
+    int duration = (int) _spawn_times[_nextWaveNum] - (int) _timer;
+    std::string timer = strtool::format("Next Wave In: %d", duration);
+    _timer_text = TextLayout::allocWithText(msg, assets->get<Font>("marker"));
+    _timer_text->layout();
+    
     _timer = 0.0f;
 
     return true;
@@ -325,6 +329,7 @@ void GameScene::dispose()
     _vertbuff = nullptr;
     _sound = nullptr;
     _text = nullptr;
+    _timer_text = nullptr;
     _font = nullptr;
     _endText = nullptr;
 
@@ -1219,6 +1224,13 @@ void GameScene::update(float timestep)
             eit++;
         }
     }
+    
+    _text->setText(strtool::format("Wave: %d / %d", _nextWaveNum, _numWaves));
+    _text->layout();
+    
+    int duration = (int) _spawn_times[_nextWaveNum] - (int) _timer;
+    _timer_text->setText(strtool::format("Next Wave In: %d", duration > 0 ? duration : 0));
+    _timer_text->layout();
 
     // Move wave spawn times up if all enemies killed
     if (_nextWaveNum < _numWaves && !_enemies.size()) {
@@ -1235,8 +1247,6 @@ void GameScene::update(float timestep)
     }
 
     // Update the health meter
-    //_text->setText(strtool::format("Health %d", (int)_player->getHealth()));
-    //_text->layout();
     _health->setPolygon((Rect(0, 0, _player->getHealth()/ 4.0f, .5) * _scale));
     _health->setPriority(10);
    
@@ -1387,7 +1397,9 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch>& batch)
     batch->begin(getCamera()->getCombined());
 
     //_attacks.draw(batch);
-   // batch->drawText(_text, Vec2(20, getSize().height - _text->getBounds().size.height - 10));
+    batch->drawText(_text, Vec2(getSize().width / 2 - _text->getBounds().size.width / 2, getSize().height - _text->getBounds().size.height - 10));
+    
+    batch->drawText(_timer_text, Vec2(getSize().width - _timer_text->getBounds().size.width - 20, getSize().height - _timer_text->getBounds().size.height - 10));
 
     batch->setColor(Color4::GREEN);
     Affine2 trans;
