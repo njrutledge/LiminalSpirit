@@ -56,7 +56,8 @@ void SoundController::init(std::shared_ptr<cugl::AssetManager> &assets) {
     
     _playerStep = assets->get<cugl::Sound>("playerStep");
     _playerShoot = assets->get<cugl::Sound>("playerShoot");
-    _playerSlash = assets->get<cugl::Sound>("playerSlash");
+    _playerSlashEmpty = assets->get<cugl::Sound>("playerSlashEmpty");
+    _playerSlashHit = assets->get<cugl::Sound>("playerSlashHit");
 };
 
 void SoundController::play_menu_music() {
@@ -90,11 +91,11 @@ void SoundController::play_level_music(string biome) {
 void SoundController::play_player_sound(playerSType sound) {
     switch (sound) {
         case slashEmpty:
+            cugl::AudioEngine::get()->play("playerSlashEmpty", _playerSlashEmpty, false, 1.0, true);
             break;
-        case slash:
-            cugl::AudioEngine::get()->play("playerSlash", _playerSlash, false, 1.0, true);
+        case slashHit:
+            cugl::AudioEngine::get()->play("playerSlashEmpty", _playerSlashHit, false, 1.0, true);
             break;
-        case slashFinal:
         case slashDash:
         case shoot:
             cugl::AudioEngine::get()->play("playerShoot", _playerShoot, false, 1.0, true);
@@ -103,7 +104,7 @@ void SoundController::play_player_sound(playerSType sound) {
         case hurt:
         case death:
         case step:
-            cugl::AudioEngine::get()->play("playerStep", _playerStep, false, 0.2, true);
+            cugl::AudioEngine::get()->play("playerStep", _playerStep, false, 0.5, true);
             break;
         case jump:
         case chargeP:

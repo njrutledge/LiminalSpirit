@@ -188,6 +188,10 @@ protected:
     /** Boolean check for walking sound effect timing*/
     bool _step;
 
+    /** health bar nodes */
+    std::shared_ptr<scene2::PolygonNode> _healthback;
+    std::shared_ptr<scene2::PolygonNode> _health;
+
     /**
      * Internal helper to build the scene graph.
      *

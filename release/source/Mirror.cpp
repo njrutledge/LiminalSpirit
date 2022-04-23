@@ -25,7 +25,6 @@ EnemyProperties MIRROR_PROPS{
 	"Mirror",
 };
 
-
 bool Mirror::init(const cugl::Vec2& pos, const cugl::Size& realSize, const cugl::Size& size, float scale, EnemyProperties props, Mirror::Type type, std::shared_ptr<BaseEnemyModel> enemy) {
 	
 	if (BaseEnemyModel::init(pos, realSize, size, scale, props)) {
@@ -72,8 +71,9 @@ void Mirror::updateAnimations(float dt) {
 		_attackTime += dt;
 		if (_node->getChildByName("attack")) {
 			int nextFrame = -1;
-			if (_attackTime > .15f) {
+			if (_attackTime > .1f) {
 				nextFrame = _attackSprite->getFrame() + 1;
+				CULog("nextFrame: %d", nextFrame);
 				if (nextFrame < 3) {
 					_attackSprite->setFrame(nextFrame);
 					setAttackAnimationTimer(0);
@@ -86,28 +86,30 @@ void Mirror::updateAnimations(float dt) {
 			}
 		}
 		else {
-			_attackSprite->setPosition(cugl::Vec2(_size.width / 2, _size.height / 2) * _drawScale * 15);
+			_attackSprite->setPosition(cugl::Vec2(_size.width / 2, _size.height / 2));
 			_attackSprite->setScale(5.0f);
+			_attackSprite->setPriority(3.1);
 			_node->addChildWithName(_attackSprite, "attack");
 			//_node->swapChild(_node->getChildByName("attack"), _node->getChild(0));
-
+			showAttack(true);
+			setAttackAnimationTimer(0);
 			updateAnimations(dt);//so as to not miss the first animation on adding, and to not duplicate code
 		}
 	}
 	//see if shard1 does not exists, if so, no shard exists and add all three shards
 	if (!_node->getChildByName("shard1")) {
 		//shard 1
-		_shard1->setPosition(cugl::Vec2(_size.width / 6, _size.height / 2)*_drawScale*15);
+		_shard1->setPosition(cugl::Vec2(_size.width / 6, _size.height / 2));// *_drawScale * 15);
 		_shard1->setScale(.75f);
 		_node->addChildWithName(_shard1, "shard1");
 		_shard1Time = 0;
 		//shard2
-		_shard2->setPosition(cugl::Vec2(_size.width * 7 / 8, _size.height * 2 / 3) * _drawScale * 15);
+		_shard2->setPosition(cugl::Vec2(_size.width * 7 / 8, _size.height * 2 / 3));// *_drawScale * 15);
 		_shard2->setScale(.75f);
 		_node->addChildWithName(_shard2, "shard2");
 		_shard2Time = 0;
 		//shard3
-		_shard3->setPosition(cugl::Vec2(_size.width * 5 / 8, _size.height / 6) * _drawScale * 15);
+		_shard3->setPosition(cugl::Vec2(_size.width * 5 / 8, _size.height / 6));// *_drawScale * 15);
 		_shard3->setScale(.75f);
 		_node->addChildWithName(_shard3, "shard3");
 		_shard3Time = 0;
@@ -126,7 +128,7 @@ void Mirror::updateAnimations(float dt) {
 void Mirror::updateShard(float* shardTime, int* shardIndex, std::shared_ptr<cugl::scene2::PolygonNode> shard, cugl::Vec2 shardPositions[4], float time) {
 	if (*shardTime > time) {
 		*shardIndex = ((*shardIndex + 1) % 4);
-		shard->setPosition((shardPositions[*shardIndex]) * _drawScale * 15);
+		shard->setPosition((shardPositions[*shardIndex]));
 		*shardTime = 0;
 	}
 	else {
@@ -134,7 +136,7 @@ void Mirror::updateShard(float* shardTime, int* shardIndex, std::shared_ptr<cugl
 		cugl::Vec2 pos2 = shardPositions[(*shardIndex + 1) % 4];
 		float t = *shardTime / time;
 		cugl::Vec2 diff = pos2 - pos1;
-		shard->setPosition((shardPositions[*shardIndex] + (diff * t)) * _drawScale * 15);
+		shard->setPosition((shardPositions[*shardIndex] + (diff * t)));
 
 	}
 }

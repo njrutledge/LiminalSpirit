@@ -136,15 +136,21 @@
 		F09AF65627F64ACA003C6EA2 /* WorldSelectScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64A27F64ACA003C6EA2 /* WorldSelectScene.cpp */; };
 		F09AF65727F64ACA003C6EA2 /* WorldSelectScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64A27F64ACA003C6EA2 /* WorldSelectScene.cpp */; };
 		F09AF65827F64ACA003C6EA2 /* WorldSelectScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64A27F64ACA003C6EA2 /* WorldSelectScene.cpp */; };
-		F09AF65927F64ACA003C6EA2 /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64B27F64ACA003C6EA2 /* Particle.cpp */; };
-		F09AF65A27F64ACA003C6EA2 /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64B27F64ACA003C6EA2 /* Particle.cpp */; };
-		F09AF65B27F64ACA003C6EA2 /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64B27F64ACA003C6EA2 /* Particle.cpp */; };
 		F09AF65C27F64ACA003C6EA2 /* Glow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64C27F64ACA003C6EA2 /* Glow.cpp */; };
 		F09AF65D27F64ACA003C6EA2 /* Glow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64C27F64ACA003C6EA2 /* Glow.cpp */; };
 		F09AF65E27F64ACA003C6EA2 /* Glow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64C27F64ACA003C6EA2 /* Glow.cpp */; };
 		F09AF65F27F64ACA003C6EA2 /* HomeScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64D27F64ACA003C6EA2 /* HomeScene.cpp */; };
 		F09AF66027F64ACA003C6EA2 /* HomeScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64D27F64ACA003C6EA2 /* HomeScene.cpp */; };
 		F09AF66127F64ACA003C6EA2 /* HomeScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64D27F64ACA003C6EA2 /* HomeScene.cpp */; };
+		F0BE06F728132DCD00B22958 /* RRParticle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F0BE06F228132DCD00B22958 /* RRParticle.cpp */; };
+		F0BE06F828132DCD00B22958 /* RRParticlePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F0BE06F428132DCD00B22958 /* RRParticlePool.cpp */; };
+		F0BE06F928132DCD00B22958 /* RRParticleNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F0BE06F628132DCD00B22958 /* RRParticleNode.cpp */; };
+		F0BE06FA28132DCF00B22958 /* RRParticle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F0BE06F228132DCD00B22958 /* RRParticle.cpp */; };
+		F0BE06FB28132DD000B22958 /* RRParticle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F0BE06F228132DCD00B22958 /* RRParticle.cpp */; };
+		F0BE06FC28132DD300B22958 /* RRParticleNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F0BE06F628132DCD00B22958 /* RRParticleNode.cpp */; };
+		F0BE06FD28132DD300B22958 /* RRParticleNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F0BE06F628132DCD00B22958 /* RRParticleNode.cpp */; };
+		F0BE06FE28132DD500B22958 /* RRParticlePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F0BE06F428132DCD00B22958 /* RRParticlePool.cpp */; };
+		F0BE06FF28132DD600B22958 /* RRParticlePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F0BE06F428132DCD00B22958 /* RRParticlePool.cpp */; };
 		F0D6C758280E29BF00A34038 /* Spawner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F0D6C757280E29BF00A34038 /* Spawner.cpp */; };
 		F0D6C759280E29C100A34038 /* Spawner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F0D6C757280E29BF00A34038 /* Spawner.cpp */; };
 		F0D6C75A280E29C200A34038 /* Spawner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F0D6C757280E29BF00A34038 /* Spawner.cpp */; };
@@ -254,17 +260,21 @@
 		F05176D827D071D900C0617F /* PlayerModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayerModel.cpp; sourceTree = "<group>"; };
 		F05BD2AF27F29AB8005D1F38 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
 		F09AF64027F64ACA003C6EA2 /* Mirror.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Mirror.hpp; sourceTree = "<group>"; };
-		F09AF64427F64ACA003C6EA2 /* Particle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Particle.hpp; sourceTree = "<group>"; };
 		F09AF64527F64ACA003C6EA2 /* HomeScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HomeScene.hpp; sourceTree = "<group>"; };
 		F09AF64627F64ACA003C6EA2 /* Glow.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Glow.hpp; sourceTree = "<group>"; };
 		F09AF64727F64ACA003C6EA2 /* Seeker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Seeker.cpp; sourceTree = "<group>"; };
 		F09AF64827F64ACA003C6EA2 /* Seeker.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Seeker.hpp; sourceTree = "<group>"; };
 		F09AF64927F64ACA003C6EA2 /* Mirror.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Mirror.cpp; sourceTree = "<group>"; };
 		F09AF64A27F64ACA003C6EA2 /* WorldSelectScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WorldSelectScene.cpp; sourceTree = "<group>"; };
-		F09AF64B27F64ACA003C6EA2 /* Particle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Particle.cpp; sourceTree = "<group>"; };
 		F09AF64C27F64ACA003C6EA2 /* Glow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Glow.cpp; sourceTree = "<group>"; };
 		F09AF64D27F64ACA003C6EA2 /* HomeScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HomeScene.cpp; sourceTree = "<group>"; };
 		F09AF64E27F64ACA003C6EA2 /* WorldSelectScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WorldSelectScene.hpp; sourceTree = "<group>"; };
+		F0BE06F128132DCD00B22958 /* RRParticlePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RRParticlePool.h; sourceTree = "<group>"; };
+		F0BE06F228132DCD00B22958 /* RRParticle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RRParticle.cpp; sourceTree = "<group>"; };
+		F0BE06F328132DCD00B22958 /* RRParticleNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RRParticleNode.h; sourceTree = "<group>"; };
+		F0BE06F428132DCD00B22958 /* RRParticlePool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RRParticlePool.cpp; sourceTree = "<group>"; };
+		F0BE06F528132DCD00B22958 /* RRParticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RRParticle.h; sourceTree = "<group>"; };
+		F0BE06F628132DCD00B22958 /* RRParticleNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RRParticleNode.cpp; sourceTree = "<group>"; };
 		F0D6C753280E29BF00A34038 /* Spawner.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Spawner.hpp; sourceTree = "<group>"; };
 		F0D6C757280E29BF00A34038 /* Spawner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Spawner.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -454,6 +464,12 @@
 		EBBF18B11D749176008E2001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				F0BE06F228132DCD00B22958 /* RRParticle.cpp */,
+				F0BE06F528132DCD00B22958 /* RRParticle.h */,
+				F0BE06F628132DCD00B22958 /* RRParticleNode.cpp */,
+				F0BE06F328132DCD00B22958 /* RRParticleNode.h */,
+				F0BE06F428132DCD00B22958 /* RRParticlePool.cpp */,
+				F0BE06F128132DCD00B22958 /* RRParticlePool.h */,
 				F0D6C757280E29BF00A34038 /* Spawner.cpp */,
 				F0D6C753280E29BF00A34038 /* Spawner.hpp */,
 				85841F402809F09300169F44 /* Phantom.cpp */,
@@ -465,8 +481,6 @@
 				F09AF64527F64ACA003C6EA2 /* HomeScene.hpp */,
 				F09AF64927F64ACA003C6EA2 /* Mirror.cpp */,
 				F09AF64027F64ACA003C6EA2 /* Mirror.hpp */,
-				F09AF64B27F64ACA003C6EA2 /* Particle.cpp */,
-				F09AF64427F64ACA003C6EA2 /* Particle.hpp */,
 				F09AF64727F64ACA003C6EA2 /* Seeker.cpp */,
 				F09AF64827F64ACA003C6EA2 /* Seeker.hpp */,
 				F09AF64A27F64ACA003C6EA2 /* WorldSelectScene.cpp */,
@@ -577,7 +591,7 @@
 					};
 					EB74548B1D74D75C002FBAE6 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = H2MPDV89H8;
+						DevelopmentTeam = PXKGFP2M23;
 					};
 					EBBF18901D74904A008E2001 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -692,18 +706,20 @@
 				F09AF65227F64ACA003C6EA2 /* Seeker.cpp in Sources */,
 				F05176DE27D080C900C0617F /* SwipeController.cpp in Sources */,
 				F09AF65527F64ACA003C6EA2 /* Mirror.cpp in Sources */,
+				F0BE06FF28132DD600B22958 /* RRParticlePool.cpp in Sources */,
 				F05176DC27D0808B00C0617F /* AttackController.cpp in Sources */,
-				F09AF65B27F64ACA003C6EA2 /* Particle.cpp in Sources */,
 				F09AF66127F64ACA003C6EA2 /* HomeScene.cpp in Sources */,
 				F09AF65827F64ACA003C6EA2 /* WorldSelectScene.cpp in Sources */,
 				85B0004327E00AD600DAC3F2 /* TiltController.cpp in Sources */,
 				F0750178280CD94C00CBD6A3 /* Phantom.cpp in Sources */,
 				F0D6C75A280E29C200A34038 /* Spawner.cpp in Sources */,
 				F05176E227D080DF00C0617F /* CollisionController.cpp in Sources */,
+				F0BE06FB28132DD000B22958 /* RRParticle.cpp in Sources */,
 				F05176E427D080E700C0617F /* InputController.cpp in Sources */,
 				EB9CDA3925D0EAB100EE1A09 /* main.cpp in Sources */,
 				5783892A27E2369B000CB5B9 /* BaseEnemyModel.cpp in Sources */,
 				85DA524327EE3B93006DA122 /* Glutton.cpp in Sources */,
+				F0BE06FD28132DD300B22958 /* RRParticleNode.cpp in Sources */,
 				85B0001F27DFAC8500DAC3F2 /* GameScene.cpp in Sources */,
 				85B0002527DFAC8500DAC3F2 /* AIController.cpp in Sources */,
 				85B0002227DFAC8500DAC3F2 /* LoadingScene.cpp in Sources */,
@@ -723,18 +739,20 @@
 				F09AF65127F64ACA003C6EA2 /* Seeker.cpp in Sources */,
 				5783892827E2369B000CB5B9 /* Platform.cpp in Sources */,
 				F09AF65427F64ACA003C6EA2 /* Mirror.cpp in Sources */,
+				F0BE06FE28132DD500B22958 /* RRParticlePool.cpp in Sources */,
 				F05176DB27D0808A00C0617F /* AttackController.cpp in Sources */,
 				85B0002127DFAC8500DAC3F2 /* LoadingScene.cpp in Sources */,
-				F09AF65A27F64ACA003C6EA2 /* Particle.cpp in Sources */,
 				F09AF66027F64ACA003C6EA2 /* HomeScene.cpp in Sources */,
 				F09AF65727F64ACA003C6EA2 /* WorldSelectScene.cpp in Sources */,
 				F0750174280CD94B00CBD6A3 /* Phantom.cpp in Sources */,
 				F0D6C759280E29C100A34038 /* Spawner.cpp in Sources */,
 				85B0004227E00AD600DAC3F2 /* TiltController.cpp in Sources */,
+				F0BE06FA28132DCF00B22958 /* RRParticle.cpp in Sources */,
 				F05176E127D080DF00C0617F /* CollisionController.cpp in Sources */,
 				5783892E27E23F49000CB5B9 /* AIController.cpp in Sources */,
 				F05176E327D080E600C0617F /* InputController.cpp in Sources */,
 				85DA524227EE3B93006DA122 /* Glutton.cpp in Sources */,
+				F0BE06FC28132DD300B22958 /* RRParticleNode.cpp in Sources */,
 				EB7454AE1D74D891002FBAE6 /* main.cpp in Sources */,
 				5783892927E2369B000CB5B9 /* BaseEnemyModel.cpp in Sources */,
 				F05176DF27D080CE00C0617F /* PlayerModel.cpp in Sources */,
@@ -756,12 +774,14 @@
 				F09AF65327F64ACA003C6EA2 /* Mirror.cpp in Sources */,
 				85B0002327DFAC8500DAC3F2 /* AIController.cpp in Sources */,
 				F025104027D02C6C00AB80AA /* InputController.cpp in Sources */,
-				F09AF65927F64ACA003C6EA2 /* Particle.cpp in Sources */,
 				F09AF65F27F64ACA003C6EA2 /* HomeScene.cpp in Sources */,
 				F09AF65627F64ACA003C6EA2 /* WorldSelectScene.cpp in Sources */,
+				F0BE06F928132DCD00B22958 /* RRParticleNode.cpp in Sources */,
+				F0BE06F828132DCD00B22958 /* RRParticlePool.cpp in Sources */,
 				85841F422809F09300169F44 /* Phantom.cpp in Sources */,
 				F0D6C758280E29BF00A34038 /* Spawner.cpp in Sources */,
 				85B0002027DFAC8500DAC3F2 /* LoadingScene.cpp in Sources */,
+				F0BE06F728132DCD00B22958 /* RRParticle.cpp in Sources */,
 				85B0004127E00AD600DAC3F2 /* TiltController.cpp in Sources */,
 				EB2BE9B61D74952A002FE78B /* main.cpp in Sources */,
 				F025104227D02C6C00AB80AA /* AttackController.cpp in Sources */,
@@ -836,12 +856,12 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = H2MPDV89H8;
+				DEVELOPMENT_TEAM = PXKGFP2M23;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/iOS-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = gamedesign.LiminalSpirit2.6;
+				PRODUCT_BUNDLE_IDENTIFIER = gamedesign.LiminalSpirit2.9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -857,12 +877,12 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = H2MPDV89H8;
+				DEVELOPMENT_TEAM = PXKGFP2M23;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/iOS-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = gamedesign.LiminalSpirit2.6;
+				PRODUCT_BUNDLE_IDENTIFIER = gamedesign.LiminalSpirit2.9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

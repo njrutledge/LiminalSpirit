@@ -147,6 +147,11 @@ public:
 
 	void setLastMelee(AttackController::Attack* attack) { _lastMelee = attack; }
 
+	float getMirrorDistanceModifier() {
+		auto pause = getDimension();
+		return getDimension().width;
+	}
+
 
 
 #pragma mark - 

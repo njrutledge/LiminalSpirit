@@ -183,6 +183,7 @@ public:
         bool isSame(Attack* a);
 
         cugl::Vec2 getVel() { return _vel; }
+        float getScale() { return _scale; }
 
 #pragma mark - 
 #pragma mark Physics Methods

@@ -45,6 +45,14 @@
 #define PLAYER_RANGE "player_projectile"
 #define PLAYER_RANGE_FRAMES 1
 
+/** Color of HealthBar back */
+#define PLAYER_HEALTHBACK_COLOR Color4(160,160,220)
+/** Color of HealthBar health */
+#define PLAYER_HEALTH_COLOR Color4(200,240,200)
+
+/** Player health */
+#define PLAYER_HEALTH 40.0f
+
 #pragma mark - 
 #pragma mark Player Model
 

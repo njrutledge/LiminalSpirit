@@ -21,7 +21,12 @@ void AIController::reset() {
 
 Vec2 AIController::getMovement(shared_ptr<BaseEnemyModel> e, Vec2 player_pos, float timestep) {
 	std::string name = e->getName();
-	if (name == "Lost") {
+
+    if (e->getInvincibilityTimer() > 0) {
+        e->setTimePast(0);
+        return Vec2(0, 0);
+    } 
+    else if (name == "Lost") {
 		return Vec2(getLostMovement(e, player_pos, timestep), -9.8f);
 	} 
 	else if (name == "Phantom") {
@@ -45,7 +50,8 @@ float AIController::getGluttonMovement(shared_ptr<BaseEnemyModel> glutton, Vec2 
     glutton->setTimePast(glutton->getTimePast() + timestep);
     if (!glutton->isAttacking()) {
         if (glutton->getAttackCooldown() < glutton->getTimePast()
-            && rand() % 100 <= 2.5) {
+            && rand() % 100 <= 2.5
+            && glutton->getInvincibilityTimer() <= 0) {
             glutton->setIsAttacking(true);
             glutton->setTimePast(0.0f);
         } else
@@ -75,7 +81,7 @@ float AIController::getLostMovement(shared_ptr<BaseEnemyModel> lost, Vec2 player
 			&& player_pos.x >= lost->getPosition().x - lost->getAttackRadius() / 2 
 			&& player_pos.y <= lost->getPosition().y + lost->getAttackRadius() / 4 //Likely exists a better way to check height is similar but this will do for now
 			&& player_pos.y >= lost->getPosition().y - lost->getAttackRadius() / 4) {
-            if (lost->getAttackCooldown() < lost->getTimePast()) {
+            if (lost->getAttackCooldown() < lost->getTimePast() && lost->getInvincibilityTimer() <= 0) {
                 lost->setIsAttacking(true);
                 lost->setTimePast(0.0f);
                 
@@ -131,7 +137,7 @@ Vec2 AIController::getPhantomMovement(shared_ptr<BaseEnemyModel> phantom, Vec2 p
 			&& player_pos.x >= phantom->getPosition().x - phantom->getAttackRadius()
 			&& player_pos.y <= phantom->getPosition().y + phantom->getAttackRadius()
 			&& player_pos.y >= phantom->getPosition().y - phantom->getAttackRadius()) {
-            if (phantom->getAttackCooldown() < phantom->getTimePast()) {
+            if (phantom->getAttackCooldown() < phantom->getTimePast() && phantom->getInvincibilityTimer() <= 0) {
                 phantom->setIsAttacking(true);
                 phantom->setTimePast(0.0f);
             }
@@ -178,7 +184,7 @@ Vec2 AIController::getMirrorMovement(Mirror* mirror, cugl::Vec2 player_pos, floa
 		if (true || enemy_pos.distance(mirror->getPosition())<=MIRROR_DISTANCE) {
 			//get slope of line between linked enemy and player. Mirror should be on this line at MIRROR_DISTANCE
 			Vec2 diff = enemy_pos - player_pos;
-			Vec2 targetPoint = enemy_pos - (diff * MIRROR_DISTANCE / (player_pos.distance(enemy_pos)));
+            Vec2 targetPoint = enemy_pos - (diff * MIRROR_DISTANCE * linkedEnemy->getMirrorDistanceModifier() / (player_pos.distance(enemy_pos)));
 			diff = targetPoint - mirror->getPosition();
 			if (diff.length() > 1) diff.normalize();
 			return Vec2(diff.x * mirror->getHorizontalSpeed(), diff.y * mirror->getVerticalSpeed());
@@ -212,7 +218,7 @@ Vec2 AIController::getSeekerMovement(shared_ptr<Seeker> seeker, Vec2 player_pos,
                 && player_pos.x >= seeker->getPosition().x - seeker->getAttackRadius()/4
                 && player_pos.y <= seeker->getPosition().y + seeker->getAttackRadius()/4
                 && player_pos.y >= seeker->getPosition().y - seeker->getAttackRadius()/4) {
-                if (seeker->getAttackCooldown() < seeker->getTimePast()) {
+                if (seeker->getAttackCooldown() < seeker->getTimePast() && seeker->getInvincibilityTimer() <= 0) {
                     seeker->setIsAttacking(true);
                     seeker->justAttacked = true;
                     seeker->setTimePast(0.0f);

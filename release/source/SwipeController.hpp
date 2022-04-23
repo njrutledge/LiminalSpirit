@@ -98,6 +98,15 @@ protected:
     /** Swipe angle in degrees on the right side */
     float _rightAngle;
     
+    /** Charge counter for melee (right) */
+    float _cMeleeCount;
+    /** Charge threshold for melee*/
+    float _cMCool;
+    /** Charge counter for range (left) */
+    float _cRangeCount;
+    /** Charge threshold for range*/
+    float _cRCool;
+    
     /** Timestamp to get the current time for charge calculations */
     cugl::Timestamp _currTime;
     
@@ -239,7 +248,7 @@ public:
     /**
      * Updates the swipe controller based on the latest inputs.
      */
-    void update(InputController& input, bool grounded);
+    void update(InputController& input, bool grounded, float dt);
     
     /**
      * Returns the type of swipe attack that was just completed on the left side
