@@ -25,12 +25,12 @@
 /**Density of character*/
 #define PLAYER_DENSITY 3.0f
 /** Impulse of the player jump */
-#define PLAYER_JUMP 100.0f
+#define PLAYER_JUMP 240.0f
 /** Debug color for sensor */
 #define DEBUG_COLOR Color4::RED
 
 
-#define PLAYER_MASS 5.0f
+#define PLAYER_MASS 10.0f
 
 using namespace cugl;
 
