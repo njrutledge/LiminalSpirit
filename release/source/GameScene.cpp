@@ -411,14 +411,14 @@ void GameScene::update(float timestep)
     if (_player->isStunned()) {
 
         // Play damaged particles once when stunned
-        if ((sprite->getFrame() != 31 && _player->isFacingRight()) || (sprite->getFrame() != 24 && !_player->isFacingRight())) {
-            std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("damaged"), Vec2(0, 0));
-            std::shared_ptr<Texture> text = _assets->get<Texture>("star");
-            std::shared_ptr<ParticleNode> dmgd = ParticleNode::alloc(_player->getPosition() * _scale, text, pool);
-            dmgd->setColor(Color4::RED);
-            dmgd->setScale(0.25f);
-            _worldnode->addChildWithTag(dmgd, 100);
-        }
+        //if ((sprite->getFrame() != 31 && _player->isFacingRight()) || (sprite->getFrame() != 24 && !_player->isFacingRight())) {
+        //    std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("damaged"), Vec2(0, 0));
+        //    std::shared_ptr<Texture> text = _assets->get<Texture>("star");
+        //    std::shared_ptr<ParticleNode> dmgd = ParticleNode::alloc(_player->getPosition() * _scale, text, pool);
+        //    dmgd->setColor(Color4::RED);
+        //    dmgd->setScale(0.25f);
+        //    _worldnode->addChildWithTag(dmgd, 100);
+        //}
 
         // Store the frame being played before stun
         if (sprite->getFrame() != 31 && sprite->getFrame() != 24) {
@@ -814,6 +814,9 @@ void GameScene::update(float timestep)
     
     // Enemy AI logic
     // For each enemy
+    std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("damaged"), Vec2(0, 0));
+    std::shared_ptr<Texture> text = _assets->get<Texture>("star");
+
     for (auto it = _enemies.begin(); it != _enemies.end(); ++it)
     {
         Vec2 direction = _ai.getMovement(*it, _player->getPosition(), timestep);
@@ -825,6 +828,7 @@ void GameScene::update(float timestep)
         (*it)->setIdleAnimationTimer((*it)->getIdleAnimationTimer() + timestep);
 
         scene2::SpriteNode* sprite = dynamic_cast<scene2::SpriteNode*>((*it)->getSceneNode().get());
+
         // For running idle animations specific (for speed) to enemies
         if ((*it)->getName() == "Phantom") {
             if ((*it)->getIdleAnimationTimer() > 0.1f) {
@@ -833,8 +837,13 @@ void GameScene::update(float timestep)
             }
         }
         else if ((*it)->getName() == "Glutton") {
-            if ((*it)->getInvincibility()) {
-                sprite->setFrame(7); 
+            if ((*it)->getInvincibilityTimer() > 0) {
+                if (sprite->getFrame() != 7) {
+                    std::shared_ptr<ParticleNode> dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, text, pool);
+                    dmgd->setScale(0.25f);
+                    _worldnode->addChildWithTag(dmgd, 100);
+                }
+                sprite->setFrame(7);
             } else if ((*it)->getIdleAnimationTimer() > 1.f ||
                 (!(sprite->getFrame() == 2) && (*it)->getIdleAnimationTimer() > 0.3f)
                 || (!(sprite->getFrame() == 2 || sprite->getFrame() == 5 || sprite->getFrame() == 6) && (*it)->getIdleAnimationTimer() > 0.1f)) {
@@ -850,6 +859,11 @@ void GameScene::update(float timestep)
                 sprite->flipHorizontal(true);
             }
             if ((*it)->getInvincibilityTimer() > 0) {
+                if (sprite->getFrame() != 7 && sprite->getFrame() != 4) {
+                    std::shared_ptr<ParticleNode> dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, text, pool);
+                    dmgd->setScale(0.25f);
+                    _worldnode->addChildWithTag(dmgd, 100);
+                }
                 if ((*it)->getVX() > 0) {
                     sprite->setFrame(4);
                 }
