@@ -316,6 +316,11 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
  */
 void GameScene::dispose()
 {
+    // Resetting input stuff because dispose is currently being used for switching levels
+    _input.reset();
+    _swipes.reset();
+    _tilt.reset();
+    
     // Delete all smart pointers
     _logo = nullptr;
     //    scene = nullptr;
