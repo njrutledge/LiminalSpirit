@@ -73,7 +73,7 @@ using namespace cugl;
 float DEFAULT_HEIGHT = DEFAULT_WIDTH / SCENE_WIDTH * SCENE_HEIGHT;
 
 /** The constant for gravity in the physics world. */
-#define GRAVITY 30
+#define GRAVITY 50
 #define PLATFORM_ATT 3
 #define PLATFORM_COUNT 4
 #define PLATFORM_HEIGHT 0.5
