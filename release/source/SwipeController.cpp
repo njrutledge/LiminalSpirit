@@ -533,4 +533,6 @@ void SwipeController::reset()
     resetRightState();
     _leftSwipe = noAttack;
     _rightSwipe = noAttack;
+    _cMeleeCount = _cMCool;
+    _cRangeCount = _cRCool;
 }
