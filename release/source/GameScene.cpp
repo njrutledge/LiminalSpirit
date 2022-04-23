@@ -251,7 +251,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
     scene->addChild(_worldnode);
 
     _worldnode2 = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND, bounds.size);
-    _worldnode2->setPosition(offset);
+    _worldnode2->setPosition(Vec2(0,0));
     _worldnode->addChild(_worldnode2);
 
     // Bounds do not matter when constraint is false
@@ -263,7 +263,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
     // TODO this init might be wrong, Nick had _scale/2.0f
     _pMeleeTexture = _assets->get<Texture>(PATTACK_TEXTURE);
     _attacks = std::make_shared<AttackController>();
-    _attacks->init(_scale, _scale * 1.5, 1.5, cugl::Vec2(0, 1.25), cugl::Vec2(0, 0.5), 0.5, 1, 0.35, 0.1, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    _attacks->init(_scale, _scale * 1.5, 3, cugl::Vec2(0, 1.25), cugl::Vec2(0, 0.5), 0.5, 1, 0.35, 0.1, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     _dashTime = 0;
     _dashXVel = 0;
     _dashYVel = 0;
