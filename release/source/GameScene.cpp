@@ -200,7 +200,11 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
 
     // Create a scene graph the same size as the window
     //_scene = Scene2::alloc(dimen.width, dimen.height);
-    auto scene = _assets->get<scene2::SceneNode>("game");
+    // default scene is forest for now
+    auto scene = _assets->get<scene2::SceneNode>("forest");
+    if (!BIOME.compare("shroom")) {
+        scene = _assets->get<scene2::SceneNode>("shroom");
+    }
     scene->setContentSize(dimen);
     scene->doLayout();
 
@@ -1670,20 +1674,35 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     Rect platRect;
     std::shared_ptr<PlatformModel> platform;
     std::shared_ptr<scene2::PolygonNode> platformSprite;
-    std::shared_ptr<Texture> platformImage;
+    // putting this default to see if that fixes platforms being occasionally invisible
+    std::shared_ptr<Texture> platformImage = _assets->get<Texture>("platform");;
     for(int i = 0; i < _platforms_attr.size(); i++) {
         pos.x = _platforms_attr[i][0];
         pos.y = _platforms_attr[i][1];
         float width = _platforms_attr[i][2];
-        if (width < DEFAULT_WIDTH / 3) {
-            //use small platform
-            platformImage = _assets->get<Texture>("forest_small_platform");
-        } else if (width < (DEFAULT_WIDTH / 3) * 2) {
-            //use medium platform
-            platformImage = _assets->get<Texture>("forest_medium_platform");
-        } else {
-            //use large platform
-            platformImage = _assets->get<Texture>("forest_large_platform");
+        if (!BIOME.compare("shroom")) {
+            if (width < DEFAULT_WIDTH / 3) {
+                //use small platform
+                platformImage = _assets->get<Texture>("shroom_small_platform");
+            } else if (width < (DEFAULT_WIDTH / 3) * 2) {
+                //use medium platform
+                platformImage = _assets->get<Texture>("shroom_medium_platform");
+            } else {
+                //use large platform
+                platformImage = _assets->get<Texture>("shroom_large_platform");
+            }
+        }
+        else {
+            if (width < DEFAULT_WIDTH / 3) {
+                //use small platform
+                platformImage = _assets->get<Texture>("forest_small_platform");
+            } else if (width < (DEFAULT_WIDTH / 3) * 2) {
+                //use medium platform
+                platformImage = _assets->get<Texture>("forest_medium_platform");
+            } else {
+                //use large platform
+                platformImage = _assets->get<Texture>("forest_large_platform");
+            }
         }
         platformSprite = scene2::PolygonNode::allocWithTexture(platformImage);
         float desiredWidth = width * _scale;
