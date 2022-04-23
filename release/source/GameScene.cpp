@@ -288,13 +288,13 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
     _healthback->setPriority(9);
     _healthback->setColor(PLAYER_HEALTHBACK_COLOR);
     _healthback->setAnchor(0, 1);
-    _healthback->setPosition(Vec2(10, dimen.height - 10));
+    _healthback->setPosition(Vec2(bounds.getMinX() + 10, dimen.height - 10));
     scene->addChild(_healthback);
     _health = scene2::PolygonNode::allocWithPoly((Rect(0, 0, _player->getHealth() / 4.0f, .5) * _scale));
     _health->setPriority(10);
     _health->setColor(PLAYER_HEALTH_COLOR);
     _health->setAnchor(0, 1);
-    _health->setPosition(Vec2(10, dimen.height - 10));
+    _health->setPosition(Vec2(bounds.getMinX() + 10, dimen.height - 10));
     scene->addChild(_health);
 
 
