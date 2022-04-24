@@ -1236,7 +1236,7 @@ void GameScene::update(float timestep)
     _text->setText(strtool::format("Wave: %d / %d", _nextWaveNum, _numWaves));
     _text->layout();
     
-    int duration = (int) _spawn_times[_nextWaveNum] - (int) _timer;
+    int duration = _nextWaveNum < _spawn_times.size() ? (int) _spawn_times[_nextWaveNum] - (int) _timer : -1;
     _timer_text->setText(strtool::format("Next Wave In: %d", duration > 0 ? duration : 0));
     _timer_text->layout();
 
@@ -1407,7 +1407,7 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch>& batch)
     //_attacks.draw(batch);
     batch->drawText(_text, Vec2(getSize().width / 2 - _text->getBounds().size.width / 2, getSize().height - _text->getBounds().size.height - 10));
     
-    batch->drawText(_timer_text, Vec2(getSize().width - _timer_text->getBounds().size.width - 20, getSize().height - _timer_text->getBounds().size.height - 10));
+    if (_nextWaveNum < _spawn_times.size()) batch->drawText(_timer_text, Vec2(getSize().width - _timer_text->getBounds().size.width - 20, getSize().height - _timer_text->getBounds().size.height - 10));
 
     batch->setColor(Color4::GREEN);
     Affine2 trans;
