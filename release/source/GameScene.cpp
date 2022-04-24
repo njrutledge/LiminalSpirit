@@ -573,6 +573,7 @@ void GameScene::update(float timestep)
     if (sprite->getFrame() == 0 || sprite->getFrame() == 4) {
         if (!_step) {
             _sound->play_player_sound(SoundController::playerSType::step);
+            _step = true;
         }
         
     } else {
