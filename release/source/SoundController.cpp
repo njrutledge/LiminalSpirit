@@ -64,8 +64,8 @@ void SoundController::play_menu_music() {
     
     if (_state != MENU) {
         _state = MENU;
-        cugl::AudioEngine::get()->getMusicQueue()->advance(0, 0.5);
-        cugl::AudioEngine::get()->getMusicQueue()->enqueue(_menu, true);
+        // cugl::AudioEngine::get()->getMusicQueue()->advance(0, 0.5);
+        // cugl::AudioEngine::get()->getMusicQueue()->enqueue(_menu, true);
     }
 
 }
@@ -77,11 +77,11 @@ void SoundController::play_level_music(string biome) {
     if (_state != LEVEL) {
         _state = LEVEL;
         if (r == 0) {
-            _cave1->play_music();
+            //_cave1->play_music();
         } else if (r == 1) {
-            _cave2->play_music();
+            // _cave2->play_music();
         }else {
-            _mushroom1->play_music();
+            //_mushroom1->play_music();
         }
         
     }
