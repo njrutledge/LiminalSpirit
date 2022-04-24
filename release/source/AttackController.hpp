@@ -201,7 +201,8 @@ public:
         static std::shared_ptr<Attack> alloc(cugl::Vec2 p, float radius, float age, float dmg, float scale,
                                              Type t, MeleeState m, cugl::Vec2 oof, cugl::PolyFactory b,
                                              cugl::Vec2 vel, float angle, Side s, float timer, string attackID, int frames) {
-            float off = 1.5f;
+            //TODO make this not hardcoded
+            float off = 2.5f;
             if (p.x + radius + off > _worldWidth && s == right) {
                 p.x = _worldWidth - 0.1f - radius - off;
             }
