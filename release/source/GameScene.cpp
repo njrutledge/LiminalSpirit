@@ -1859,6 +1859,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     _player->setJumpAnimationTimer(0);
     std::shared_ptr<scene2::SpriteNode> sprite = scene2::SpriteNode::alloc(image, 4, 8);
     sprite->setFrame(0);
+    _prevFrame = 0;
     _player->setSceneNode(sprite);
     _player->setDebugColor(Color4::BLUE);
     sprite->setScale(0.175f);
