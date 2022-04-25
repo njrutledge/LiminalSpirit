@@ -805,6 +805,13 @@ void GameScene::update(float timestep)
     float spacing = 1.f;
     float upDownY1 = fmod(upDown / 2, spacing);
 
+    if (upDownY1 > spacing / 4 && upDownY1 <= 3 * spacing / 4) {
+        upDownY1 = spacing / 2 - upDownY1;
+    }
+    else if (upDownY1 > 3 * spacing / 4) {
+        upDownY1 = -1 * spacing + upDownY1;
+    }
+
     if (_player->isFacingRight() && rSprite->getFrame() != 5) {
         if (_rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270) {
             _rangedArm->setPosition(_player->getPosition().x + offsetArm - 2, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
@@ -1335,12 +1342,6 @@ void GameScene::update(float timestep)
 
     float upDown2 = _meleeArm->getGlowTimer() + 0.5f;
     float upDownY2 = fmod(upDown2 / 2, spacing);
-    if (upDownY1 > spacing / 4 && upDownY1 <= 3 * spacing / 4) {
-        upDownY1 = spacing / 2 - upDownY1;
-    }
-    else if (upDownY1 > 3 * spacing / 4) {
-        upDownY1 = -1 * spacing + upDownY1;
-    }
     if (upDownY2 > spacing / 4 && upDownY2 <= 3 * spacing / 4) {
         upDownY2 = spacing / 2 - upDownY2;
     }
