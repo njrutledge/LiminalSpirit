@@ -91,6 +91,8 @@ protected:
     
     std::shared_ptr<LevelMusic> _mushroom1;
     
+    std::shared_ptr<LevelMusic> _mushroom2;
+    
     std::shared_ptr<cugl::Sound> _menu;
     
     // Player Sounds
