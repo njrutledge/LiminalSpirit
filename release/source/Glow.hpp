@@ -13,7 +13,6 @@
 #include <cugl/physics2/CUBoxObstacle.h>
 #include <cugl/physics2/CUCapsuleObstacle.h>
 #include <cugl/scene2/graph/CUWireNode.h>
-#include "AttackController.hpp"
 
 #pragma mark - 
 #pragma mark Drawing Constants
@@ -29,6 +28,18 @@
 *
 */
 class Glow : public cugl::physics2::CapsuleObstacle {
+public:
+	enum MeleeState {
+		first,
+		h1_right,
+		h2_right,
+		h3_right,
+		h1_left,
+		h2_left,
+		h3_left,
+		cool
+	};
+
 protected:
 	/** Name of sensor */
 	std::string _sensorName;
@@ -47,7 +58,7 @@ protected:
 	float _animeTime;
 
 	/** Last Type of attack used*/
-	AttackController::MeleeState _attackType;
+	MeleeState _attackType;
     
     /** Angle of last projectile in degrees*/
     float _attackAngle;
@@ -99,10 +110,10 @@ public:
 	void setGlowTimer(float value) { _glowTime = value; }
 
 	/** Returns last type of attack used by melee */
-	AttackController::MeleeState getLastType() { return _attackType; }
+	MeleeState getLastType() { return _attackType; }
 
 	/** Sets last type of attack used by melee */
-	void setLastType(AttackController::MeleeState type) { _attackType = type; }
+	void setLastType(MeleeState type) { _attackType = type; }
     
     /** Returns angle of last attack */
     float getAttackAngle() { return _attackAngle; }

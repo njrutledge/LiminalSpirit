@@ -13,7 +13,6 @@
 #include <cugl/physics2/CUBoxObstacle.h>
 #include <cugl/physics2/CUCapsuleObstacle.h>
 #include <cugl/scene2/graph/CUWireNode.h>
-#include "AttackController.hpp"
 #include "Glow.hpp"
 
 #pragma mark - 
@@ -113,9 +112,6 @@ protected:
 	/** Redraws outline of physics fixtures */
 	virtual void resetDebug() override;
 
-	/** Melee attack that last hit this enemy (avoids multiple hits) */
-	AttackController::Attack* _lastMelee;
-
 	/** Size of the enemy image */
 	cugl::Size _size;
 
@@ -142,10 +138,6 @@ public:
 	float getRadius() {
 		return _sensorFixture->GetShape()->m_radius;
 	}
-
-	AttackController::Attack* getLastMelee() { return _lastMelee; }
-
-	void setLastMelee(AttackController::Attack* attack) { _lastMelee = attack; }
 
 	float getMirrorDistanceModifier() {
 		auto pause = getDimension();

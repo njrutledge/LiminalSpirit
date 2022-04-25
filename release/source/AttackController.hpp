@@ -22,6 +22,7 @@
 #include "SwipeController.hpp"
 #include "PlayerModel.h"
 #include "SoundController.hpp"
+#include "BaseEnemyModel.h"
 
 class AttackController {
     
@@ -126,6 +127,8 @@ public:
         float _timer;
 
         int _maxFrames;
+
+        vector<BaseEnemyModel*> _hitEnemies;
         
     public:
         /**
@@ -184,6 +187,19 @@ public:
 
         cugl::Vec2 getVel() { return _vel; }
         float getScale() { return _scale; }
+
+        bool hasHitEnemy(BaseEnemyModel* enemy) {
+            for (auto it = _hitEnemies.begin(); it != _hitEnemies.end(); ++it) {
+                if ((* it) == enemy) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        void hitEnemy(BaseEnemyModel* enemy) {
+            _hitEnemies.push_back(enemy);
+        }
 
 #pragma mark - 
 #pragma mark Physics Methods

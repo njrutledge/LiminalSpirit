@@ -112,9 +112,9 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                 }
                 else if (attack->getType() == AttackController::Type::p_melee ||
                          attack->getType() == AttackController::Type::p_dash) {
-                    if (!mirror->getLastMelee()->isSame(attack)) {
+                    if (true){//TODO !mirror->getLastMelee()->isSame(attack) && timer != mirror->getLastMeleeTimer()) {
                         mirror->setHealth(mirror->getHealth() - attack->getDamage());
-                        mirror->setLastMelee(attack);
+                        //mirror->setLastMelee(attack, timer);
                         //mirror->setInvincibility(true);
                         mirror->setInvincibilityTimer(0.1f);
                         CULog("NEW ATTACK~~~~~~~~~~~~~~~~~~");
@@ -129,7 +129,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                 }
             }
             else{
-                if (!enemy->getLastMelee()->isSame(attack)) {
+                if (!attack->hasHitEnemy(enemy)) {//!enemy->getLastMelee()->isSame(attack)) {
                     enemy->setHealth(enemy->getHealth() - attack->getDamage());
                     CULog("HEALTH SET");
                     if (attack->getDamage() > 0) {
@@ -140,8 +140,9 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                         CULog("NO DAMAGE ATTACK???");
                     }
                     if (attack->getType() == AttackController::Type::p_melee ||
-                        attack->getType() == AttackController::Type::p_dash && enemy->getLastMelee() == nullptr) {
-                        enemy->setLastMelee(attack);
+                        attack->getType() == AttackController::Type::p_dash) {
+                        //enemy->setLastMelee(attack, timer);
+                        attack->hitEnemy(enemy);
                     }
                     if (enemy->getHealth() <= 0) {
                         if (Spawner* spawner = dynamic_cast<Spawner*>(enemy)) {
@@ -155,8 +156,10 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                     }
                 }
                 else {
-                    CULog("SAME ATTACK? timer = %f", timer);
+                    CULog("SAME ATTACK? timer = %f", timer);                    
                 }
+
+
                 if (attack->getType() == AttackController::p_exp_package) {
                     AC->createAttack(attack->getPosition() /*cugl::Vec2(bd->getPosition().x, bd->getPosition().y)*/, 3, 0.1, 4, AttackController::p_exp, cugl::Vec2::ZERO, timer, PLAYER_RANGE, PLAYER_RANGE_FRAMES);
                 }

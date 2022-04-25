@@ -595,10 +595,10 @@ void GameScene::update(float timestep)
     }
     if (arm2Image != nullptr) {
         arm2Image->flipHorizontal(_player->isFacingRight());
-        if (_meleeArm->getLastType() == AttackController::MeleeState::h1_left || _meleeArm->getLastType() == AttackController::MeleeState::h2_left || _meleeArm->getLastType() == AttackController::MeleeState::h3_left) {
+        if (_meleeArm->getLastType() == Glow::MeleeState::h1_left || _meleeArm->getLastType() == Glow::MeleeState::h2_left || _meleeArm->getLastType() == Glow::MeleeState::h3_left) {
             arm2Image->flipHorizontal(false);
         }
-        else if (_meleeArm->getLastType() == AttackController::MeleeState::h1_right || _meleeArm->getLastType() == AttackController::MeleeState::h2_right || _meleeArm->getLastType() == AttackController::MeleeState::h3_right) {
+        else if (_meleeArm->getLastType() == Glow::MeleeState::h1_right || _meleeArm->getLastType() == Glow::MeleeState::h2_right || _meleeArm->getLastType() == Glow::MeleeState::h3_right) {
             arm2Image->flipHorizontal(true);
         }
     }
@@ -635,7 +635,7 @@ void GameScene::update(float timestep)
                     rSprite->setAnchor(0.5,0.5);
                     _rangedArm->setAttackAngle(0);
                 }
-                _rangedArm->setLastType(AttackController::MeleeState::cool);
+                _rangedArm->setLastType(Glow::MeleeState::cool);
                 _rangedArm->setAnimeTimer(0);
                 arm1Image->flipHorizontal(_player->isFacingRight());
             }
@@ -682,7 +682,7 @@ void GameScene::update(float timestep)
         if (_meleeArm->getAnimeTimer() > 0.05f) {
             if (mSprite->getFrame() == 12) {
                 // Attack is finished
-                _meleeArm->setLastType(AttackController::MeleeState::cool);
+                _meleeArm->setLastType(Glow::MeleeState::cool);
                 _meleeArm->setAnimeTimer(0);
             }
             else {
@@ -696,11 +696,11 @@ void GameScene::update(float timestep)
             }
         }
     }
-    else if (_meleeArm->getLastType() == AttackController::MeleeState::h2_left) {
+    else if (_meleeArm->getLastType() == Glow::MeleeState::h2_left) {
         if (_meleeArm->getAnimeTimer() > 0.06f) {
             if (mSprite->getFrame() == 4) {
                 // Attack is finished
-                _meleeArm->setLastType(AttackController::MeleeState::cool);
+                _meleeArm->setLastType(Glow::MeleeState::cool);
                 _meleeArm->setAnimeTimer(0);
             }
             else {
@@ -714,11 +714,11 @@ void GameScene::update(float timestep)
             }
         }
     }
-    else if (_meleeArm->getLastType() == AttackController::MeleeState::h3_left) {
+    else if (_meleeArm->getLastType() == Glow::MeleeState::h3_left) {
         if (_meleeArm->getAnimeTimer() > 0.05f) {
             if (mSprite->getFrame() == 20) {
                 // Attack is finished
-                _meleeArm->setLastType(AttackController::MeleeState::cool);
+                _meleeArm->setLastType(Glow::MeleeState::cool);
                 _meleeArm->setAnimeTimer(0);
             }
             else {
@@ -732,11 +732,11 @@ void GameScene::update(float timestep)
             }
         }
     }
-    else if (_meleeArm->getLastType() == AttackController::MeleeState::h1_right) {
+    else if (_meleeArm->getLastType() == Glow::MeleeState::h1_right) {
         if (_meleeArm->getAnimeTimer() > 0.05f) {
             if (mSprite->getFrame() == 8) {
                 // Attack is finished
-                _meleeArm->setLastType(AttackController::MeleeState::cool);
+                _meleeArm->setLastType(Glow::MeleeState::cool);
                 _meleeArm->setAnimeTimer(0);
             }
             else {
@@ -748,11 +748,11 @@ void GameScene::update(float timestep)
             }
         }
     }
-    else if (_meleeArm->getLastType() == AttackController::MeleeState::h2_right) {
+    else if (_meleeArm->getLastType() == Glow::MeleeState::h2_right) {
         if (_meleeArm->getAnimeTimer() > 0.06f) {
             if (mSprite->getFrame() == 2) {
                 // Attack is finished
-                _meleeArm->setLastType(AttackController::MeleeState::cool);
+                _meleeArm->setLastType(Glow::MeleeState::cool);
                 mSprite->setFrame(7);
                 _meleeArm->setAnimeTimer(0);
             }
@@ -769,7 +769,7 @@ void GameScene::update(float timestep)
         if (_meleeArm->getAnimeTimer() > 0.05f) {
             if (mSprite->getFrame() == 14) {
                 // Attack is finished
-                _meleeArm->setLastType(AttackController::MeleeState::cool);
+                _meleeArm->setLastType(Glow::MeleeState::cool);
                 _meleeArm->setAnimeTimer(0);
             }
             else {
@@ -1069,7 +1069,7 @@ void GameScene::update(float timestep)
             attackSprite->setScale(.85f * (*it)->getRadius());
             attackSprite->setAngle((*it)->getAngle() * M_PI / 180);
             attackSprite->setPriority(3);
-            _rangedArm->setLastType(AttackController::MeleeState::first);
+            _rangedArm->setLastType(Glow::MeleeState::first);
             if (_swipes.getLeftSwipe() == SwipeController::downAttack) {
                 _rangedArm->setAttackAngle(270);
             }
@@ -1087,7 +1087,7 @@ void GameScene::update(float timestep)
             attackSprite->setAngle((*it)->getAngle() * M_PI / 180);
             attackSprite->setColor(Color4::RED);
             attackSprite->setPriority(3);
-            _rangedArm->setLastType(AttackController::MeleeState::first);
+            _rangedArm->setLastType(Glow::MeleeState::first);
             if (_swipes.getLeftSwipe() == SwipeController::downAttack) {
                 _rangedArm->setAttackAngle(270);
             }
@@ -1105,7 +1105,7 @@ void GameScene::update(float timestep)
             attackSprite->setAngle((*it)->getAngle() * M_PI / 180);
             attackSprite->setColor(Color4::RED);
             attackSprite->setPriority(3);
-            _rangedArm->setLastType(AttackController::MeleeState::first);
+            _rangedArm->setLastType(Glow::MeleeState::first);
             if (_swipes.getLeftSwipe() == SwipeController::downAttack) {
                 _rangedArm->setAttackAngle(270);
             }
@@ -1122,7 +1122,33 @@ void GameScene::update(float timestep)
             attackSprite = scene2::PolygonNode::allocWithTexture(_pMeleeTexture);
             attackSprite->setVisible(false);
             attackSprite->setPriority(3);
-            _meleeArm->setLastType(meleeState);
+            switch (meleeState) {
+            case(AttackController::MeleeState::cool):
+                _meleeArm->setLastType(Glow::MeleeState::cool);
+                break;
+            case(AttackController::MeleeState::first):
+                _meleeArm->setLastType(Glow::MeleeState::first);
+                break;
+            case(AttackController::MeleeState::h1_left):
+                _meleeArm->setLastType(Glow::MeleeState::h1_left);
+                break;
+            case(AttackController::MeleeState::h2_left):
+                _meleeArm->setLastType(Glow::MeleeState::h2_left);
+                break;
+            case(AttackController::MeleeState::h3_left):
+                _meleeArm->setLastType(Glow::MeleeState::h3_left);
+                break;
+            case(AttackController::MeleeState::h1_right):
+                _meleeArm->setLastType(Glow::MeleeState::h1_right);
+                break;
+            case(AttackController::MeleeState::h2_right):
+                _meleeArm->setLastType(Glow::MeleeState::h2_right);
+                break;
+            case(AttackController::MeleeState::h3_right):
+                _meleeArm->setLastType(Glow::MeleeState::h3_right);
+                break;
+            }
+
         }
         else if (attackType == AttackController::Type::e_range) {
             std::shared_ptr<Texture> attackTexture = _assets->get<Texture>((*it)->getAttackID());
@@ -1876,7 +1902,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     _rangedArm->setAttackAngle(0);
     _rangedArm->setGlowTimer(0);
     _rangedArm->setAnimeTimer(0);
-    _rangedArm->setLastType(AttackController::MeleeState::cool);
+    _rangedArm->setLastType(Glow::MeleeState::cool);
     std::shared_ptr<scene2::SpriteNode> rangeArmSprite = scene2::SpriteNode::alloc(rangeImage, 2, 6);
     _rangedArm->setSceneNode(rangeArmSprite);
     rangeArmSprite->setFrame(0);
@@ -1891,7 +1917,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     _meleeArm = Glow::alloc(meleeArmPos, meleeHitboxImage->getSize() / _scale, _scale);
     _meleeArm->setAttackAngle(0);
     _meleeArm->setGlowTimer(0);
-    _meleeArm->setLastType(AttackController::MeleeState::cool);
+    _meleeArm->setLastType(Glow::MeleeState::cool);
     std::shared_ptr<scene2::SpriteNode> meleeArmSprite = scene2::SpriteNode::alloc(meleeImage, 4, 7);
     meleeArmSprite->setFrame(21);
     _meleeArm->setSceneNode(meleeArmSprite);
