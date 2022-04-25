@@ -112,9 +112,10 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                 }
                 else if (attack->getType() == AttackController::Type::p_melee ||
                          attack->getType() == AttackController::Type::p_dash) {
-                    if (true){//TODO !mirror->getLastMelee()->isSame(attack) && timer != mirror->getLastMeleeTimer()) {
+                    if (attack->hasHitEnemy(mirror)) {
                         mirror->setHealth(mirror->getHealth() - attack->getDamage());
-                        //mirror->setLastMelee(attack, timer);
+                        //mirror->setLastMelee(attack, timer)
+                        attack->hitEnemy(mirror);
                         //mirror->setInvincibility(true);
                         mirror->setInvincibilityTimer(0.1f);
                         CULog("NEW ATTACK~~~~~~~~~~~~~~~~~~");
