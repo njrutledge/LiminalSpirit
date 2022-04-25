@@ -97,6 +97,10 @@ protected:
     
     // Player Sounds
     
+    //std::shared_ptr<cugl::audio::AudioMixer> _playerMixer;
+    
+    std::vector<std::shared_ptr<cugl::audio::AudioScheduler>> _player_sfx_slots;
+    
     std::shared_ptr<cugl::Sound> _playerShoot;
     
     std::shared_ptr<cugl::Sound> _playerStep;

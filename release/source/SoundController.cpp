@@ -31,7 +31,7 @@ void SoundController::LevelMusic::init(string biome, std::shared_ptr<cugl::Asset
 void SoundController::LevelMusic::play_music() {
     
     cugl::AudioEngine::get()->getMusicQueue()->advance(0, 0.5);
-    //cugl::AudioEngine::get()->getMusicQueue()->enqueue(_mixer, true, 0.3);
+    cugl::AudioEngine::get()->getMusicQueue()->enqueue(_mixer, true, 0.3);
     
 };
 
@@ -59,8 +59,20 @@ void SoundController::init(std::shared_ptr<cugl::AssetManager> &assets) {
     
     _playerStep = assets->get<cugl::Sound>("playerStep");
     _playerShoot = assets->get<cugl::Sound>("playerShoot");
+    
     _playerSlashEmpty = assets->get<cugl::Sound>("playerSlashEmpty");
+    
     _playerSlashHit = assets->get<cugl::Sound>("playerSlashHit");
+    
+    //int playerslots = 12;
+    //_playerMixer = cugl::audio::AudioMixer::alloc(playerslots);
+    
+    //for (int i = 0; i < playerslots; i++) {
+    //    std::shared_ptr<cugl::audio::AudioScheduler> s = cugl::audio::AudioScheduler::alloc(2, 48000);//
+    //    _playerMixer->attach(i, s);
+    //    _player_sfx_slots.emplace_back(s);
+    //}
+    //cugl::AudioEngine::get()->play("playerMixer", _playerMixer);
 };
 
 void SoundController::play_menu_music() {
@@ -77,16 +89,18 @@ void SoundController::play_level_music(string biome) {
     
     int r = rand()%4;
     
+    //r = 3;
+    
     if (_state != LEVEL) {
         _state = LEVEL;
         if (r == 0) {
-            //_cave1->play_music();
+            _cave1->play_music();
         } else if (r == 1) {
-           // _cave2->play_music();
+            _cave2->play_music();
         }else  if (r == 2) {
-            //_mushroom1->play_music();
+            _mushroom1->play_music();
         } else {
-           // _mushroom2->play_music();
+           _mushroom2->play_music();
         }
         
     }
@@ -97,6 +111,8 @@ void SoundController::play_player_sound(playerSType sound) {
     switch (sound) {
         case slashEmpty:
             cugl::AudioEngine::get()->play("playerSlashEmpty", _playerSlashEmpty, false, 1.0, true);
+            //_player_sfx_slots[0]->trim();
+           // _player_sfx_slots[0]->play(_playerSlashEmpty->createNode());
             break;
         case slashHit:
             cugl::AudioEngine::get()->play("playerSlashEmpty", _playerSlashHit, false, 1.0, true);
