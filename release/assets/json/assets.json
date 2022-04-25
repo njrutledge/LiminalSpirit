@@ -659,45 +659,51 @@
 			"type": "sample",
 			"file": "sounds/cave/cave1.ogg",
 			"stream": true,
-			"volume": 0.5
+			"volume": 0.3
 		},
 		"cave2": {
 			"type": "sample",
 			"file": "sounds/cave/cave2.ogg",
 			"stream": true,
-			"volume": 0.5
+			"volume": 0.3
 		},
         "mushroom1": {
             "type": "sample",
             "file": "sounds/mushroom/mushroom1.ogg",
             "stream": true,
-            "volume": 0.5
+            "volume": 0.3
+        },
+        "mushroom2": {
+            "type": "sample",
+            "file": "sounds/mushroom/mushroom2.ogg",
+            "stream": true,
+            "volume": 0.3
         },
         "menu": {
             "type": "sample",
             "file": "sounds/LiminalMenu.ogg",
             "stream": true,
-            "volume": 0.5
+            "volume": 0.3
         },
         "playerStep": {
             "type": "sample",
             "file": "sounds/playerSFX/Player_Step.wav",
-            "volume": 0.3
+            "volume": 0.4
         },
         "playerShoot": {
             "type": "sample",
             "file": "sounds/playerSFX/Player_Shoot.wav",
-            "volume": 0.6
+            "volume": 0.4
         },
         "playerSlashEmpty": {
             "type": "sample",
             "file": "sounds/playerSFX/Player_Empty_Swing.wav",
-            "volume": 0.6
+            "volume": 0.4
         },
         "playerSlashHit": {
             "type": "sample",
             "file": "sounds/playerSFX/Player_Hit_Swing.wav",
-            "volume": 0.6
+            "volume": 0.4
         }
 	},
 	"jsons": {

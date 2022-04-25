@@ -31,7 +31,7 @@ void SoundController::LevelMusic::init(string biome, std::shared_ptr<cugl::Asset
 void SoundController::LevelMusic::play_music() {
     
     cugl::AudioEngine::get()->getMusicQueue()->advance(0, 0.5);
-    cugl::AudioEngine::get()->getMusicQueue()->enqueue(_mixer, true);
+    //cugl::AudioEngine::get()->getMusicQueue()->enqueue(_mixer, true, 0.3);
     
 };
 
@@ -54,6 +54,9 @@ void SoundController::init(std::shared_ptr<cugl::AssetManager> &assets) {
     _mushroom1 = make_shared<LevelMusic>();
     _mushroom1->init("mushroom1", _assets);
     
+    _mushroom2 = make_shared<LevelMusic>();
+    _mushroom2->init("mushroom2", _assets);
+    
     _playerStep = assets->get<cugl::Sound>("playerStep");
     _playerShoot = assets->get<cugl::Sound>("playerShoot");
     _playerSlashEmpty = assets->get<cugl::Sound>("playerSlashEmpty");
@@ -64,24 +67,26 @@ void SoundController::play_menu_music() {
     
     if (_state != MENU) {
         _state = MENU;
-        // cugl::AudioEngine::get()->getMusicQueue()->advance(0, 0.5);
-        // cugl::AudioEngine::get()->getMusicQueue()->enqueue(_menu, true);
+        cugl::AudioEngine::get()->getMusicQueue()->advance(0, 0.5);
+        cugl::AudioEngine::get()->getMusicQueue()->enqueue(_menu, true, 0.4);
     }
 
 }
 
 void SoundController::play_level_music(string biome) {
     
-    int r = rand()%3;
+    int r = rand()%4;
     
     if (_state != LEVEL) {
         _state = LEVEL;
         if (r == 0) {
             //_cave1->play_music();
         } else if (r == 1) {
-            // _cave2->play_music();
-        }else {
+           // _cave2->play_music();
+        }else  if (r == 2) {
             //_mushroom1->play_music();
+        } else {
+           // _mushroom2->play_music();
         }
         
     }
@@ -104,7 +109,7 @@ void SoundController::play_player_sound(playerSType sound) {
         case hurt:
         case death:
         case step:
-            cugl::AudioEngine::get()->play("playerStep", _playerStep, false, 0.5, true);
+            cugl::AudioEngine::get()->play("playerStep", _playerStep, false, 1.0, true);
             break;
         case jump:
         case chargeP:
