@@ -112,7 +112,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                 }
                 else if (attack->getType() == AttackController::Type::p_melee ||
                          attack->getType() == AttackController::Type::p_dash) {
-                    if (attack->hasHitEnemy(mirror)) {
+                    if (!attack->hasHitEnemy(mirror)) {
                         mirror->setHealth(mirror->getHealth() - attack->getDamage());
                         //mirror->setLastMelee(attack, timer)
                         attack->hitEnemy(mirror);
