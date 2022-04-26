@@ -369,6 +369,8 @@ void GameScene::update(float timestep)
         string n = (*it)->getName();
         if (n == "Glutton") {
             e[0] = true;
+        } else if (n == "Phantom") {
+            e[1] = true;
         }
     }
     

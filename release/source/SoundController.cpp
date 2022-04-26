@@ -23,15 +23,18 @@ void SoundController::LevelMusic::init(string biome, std::shared_ptr<cugl::Asset
     _themeAsset = assets->get<cugl::Sound>(biome);
     
     _glutton = assets->get<cugl::Sound>(biome + "Glutton");
-    
     _glutton->setVolume(0.0);
-    
     _gNode = _glutton->createNode();
+    
+    _phantom = assets->get<cugl::Sound>(biome + "Phantom");
+    _phantom->setVolume(0.0);
+    _pNode = _phantom->createNode();
     
     _mixer = cugl::audio::AudioMixer::alloc(8);
     
     _mixer->attach(7, _themeAsset->createNode());
     _mixer->attach(0, _gNode);
+    _mixer->attach(1, _pNode);
 };
 
 /**
@@ -51,6 +54,13 @@ void SoundController::LevelMusic::play_music(std::vector<bool> e, GameState s) {
                     _gNode->setGain(clampf(_gNode->getGain() + FADE, 0.0f, MAX_LAYER_VOLUME));
                 } else {
                     _gNode->setGain(clampf(_gNode->getGain() - FADE, 0.0f, MAX_LAYER_VOLUME));
+                }
+                break;
+            case 1:
+                if (e[1]) {
+                    _pNode->setGain(clampf(_pNode->getGain() + FADE, 0.0f, MAX_LAYER_VOLUME * 1.3f));
+                } else {
+                    _pNode->setGain(clampf(_pNode->getGain() - FADE, 0.0f, MAX_LAYER_VOLUME * 1.3f));
                 }
                 break;
             default:

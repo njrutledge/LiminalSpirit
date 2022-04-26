@@ -667,6 +667,12 @@
             "stream": true,
             "volume": 0.2
         },
+        "cave1Phantom": {
+            "type": "sample",
+            "file": "sounds/cave/cave1/cave1_phantom.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
 		"cave2": {
 			"type": "sample",
 			"file": "sounds/cave/cave2/cave2.ogg",
@@ -676,6 +682,12 @@
         "cave2Glutton": {
             "type": "sample",
             "file": "sounds/cave/cave2/cave2_glutton.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
+        "cave2Phantom": {
+            "type": "sample",
+            "file": "sounds/cave/cave2/cave2_phantom.ogg",
             "stream": true,
             "volume": 0.2
         },
@@ -691,6 +703,12 @@
             "stream": true,
             "volume": 0.2
         },
+        "mushroom1Phantom": {
+            "type": "sample",
+            "file": "sounds/mushroom/mush1/mush1_phantom.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
         "mushroom2": {
             "type": "sample",
             "file": "sounds/mushroom/mush2/mushroom2.ogg",
@@ -700,6 +718,12 @@
         "mushroom2Glutton": {
             "type": "sample",
             "file": "sounds/mushroom/mush2/mush2_glutton.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
+        "mushroom2Phantom": {
+            "type": "sample",
+            "file": "sounds/mushroom/mush2/mush2_phantom.ogg",
             "stream": true,
             "volume": 0.2
         },

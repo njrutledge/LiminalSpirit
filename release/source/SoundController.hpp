@@ -45,8 +45,10 @@ public:
         std::shared_ptr<cugl::Sound> _themeAsset;
         
         std::shared_ptr<cugl::Sound> _glutton;
-        
         std::shared_ptr<cugl::audio::AudioNode> _gNode;
+        
+        std::shared_ptr<cugl::Sound> _phantom;
+        std::shared_ptr<cugl::audio::AudioNode> _pNode;
         
         std::shared_ptr<cugl::audio::AudioMixer> _mixer;
         
