@@ -755,12 +755,13 @@
         }
 	},
 	"jsons": {
-		"surround": "json/surround.json",
-		"battlefield": "json/battlefield.json",
-		"levelt": "json/levelt.json",
-		"scaffold": "json/scaffold.json",
-		"level2": "json/level2.json",
-		"stack": "json/stack.json",
-		"particles": "json/particles.json"
+		"surround": "json/levels/surround.json",
+		"battlefield": "json/levels/battlefield.json",
+		"levelt": "json/levels/levelt.json",
+		"scaffold": "json/levels/scaffold.json",
+		"level2": "json/levels/level2.json",
+		"stack": "json/levels/stack.json",
+		"particles": "json/levels/particles.json",
+		"BOSS":  "json/levels/BOSS.json"
 	}
 }
