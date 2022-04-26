@@ -126,6 +126,7 @@ void SoundController::play_level_music(string biome, std::vector<bool> enemies) 
     if (biome == "cave") {
         if (_state != LEVEL) {
             _track = rand()%2;
+            reset_level_tracks();
         }
         switch (_track) {
             case 0:
@@ -140,6 +141,7 @@ void SoundController::play_level_music(string biome, std::vector<bool> enemies) 
     } else if (biome == "shroom") {
         if (_state != LEVEL) {
             _track = rand()%2;
+            reset_level_tracks();
         }
         switch (_track) {
             case 0:
