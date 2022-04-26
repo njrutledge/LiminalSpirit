@@ -29,6 +29,13 @@ public:
         chargeM
     };
     
+    enum GameState {
+        LOAD,
+        MENU,
+        PAUSE,
+        LEVEL
+    };
+    
     class LevelMusic {
         
     protected:
@@ -36,6 +43,10 @@ public:
         string _biome;
         
         std::shared_ptr<cugl::Sound> _themeAsset;
+        
+        std::shared_ptr<cugl::Sound> _glutton;
+        
+        std::shared_ptr<cugl::audio::AudioNode> _gNode;
         
         std::shared_ptr<cugl::audio::AudioMixer> _mixer;
         
@@ -45,7 +56,7 @@ public:
         
         void init(string biome, std::shared_ptr<cugl::AssetManager> &assets);
         
-        void play_music();
+        void play_music(std::vector<bool> e, SoundController::GameState s);
         
     };
     
@@ -73,13 +84,6 @@ public:
     
 protected:
     
-    enum GameState {
-        LOAD,
-        MENU,
-        PAUSE,
-        LEVEL
-    };
-    
     GameState _state;
 
     /** Reference to Asset Manager to load sounds */
@@ -95,9 +99,9 @@ protected:
     
     std::shared_ptr<cugl::Sound> _menu;
     
-    // Player Sounds
+    int _track;
     
-    //std::shared_ptr<cugl::audio::AudioMixer> _playerMixer;
+    // Player Sounds
     
     std::vector<std::shared_ptr<cugl::audio::AudioScheduler>> _player_sfx_slots;
     
@@ -108,6 +112,7 @@ protected:
     std::shared_ptr<cugl::Sound> _playerSlashEmpty;
     
     std::shared_ptr<cugl::Sound> _playerSlashHit;
+    
 public:
     
     SoundController();
@@ -116,7 +121,7 @@ public:
     
     void play_menu_music();
     
-    void play_level_music(string biome);
+    void play_level_music(string biome, std::vector<bool> enemies);
     
     void play_player_sound(playerSType sound);
 };

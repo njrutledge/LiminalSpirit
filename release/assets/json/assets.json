@@ -657,27 +657,51 @@
 	"sounds": {
 		"cave1": {
 			"type": "sample",
-			"file": "sounds/cave/cave1.ogg",
+			"file": "sounds/cave/cave1/cave1.ogg",
 			"stream": true,
 			"volume": 0.3
 		},
+        "cave1Glutton": {
+            "type": "sample",
+            "file": "sounds/cave/cave1/cave1_glutton.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
 		"cave2": {
 			"type": "sample",
-			"file": "sounds/cave/cave2.ogg",
+			"file": "sounds/cave/cave2/cave2.ogg",
 			"stream": true,
 			"volume": 0.3
 		},
+        "cave2Glutton": {
+            "type": "sample",
+            "file": "sounds/cave/cave2/cave2_glutton.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
         "mushroom1": {
             "type": "sample",
-            "file": "sounds/mushroom/mushroom1.ogg",
+            "file": "sounds/mushroom/mush1/mushroom1.ogg",
             "stream": true,
             "volume": 0.3
         },
+        "mushroom1Glutton": {
+            "type": "sample",
+            "file": "sounds/mushroom/mush1/mush1_glutton.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
         "mushroom2": {
             "type": "sample",
-            "file": "sounds/mushroom/mushroom2.ogg",
+            "file": "sounds/mushroom/mush2/mushroom2.ogg",
             "stream": true,
             "volume": 0.3
+        },
+        "mushroom2Glutton": {
+            "type": "sample",
+            "file": "sounds/mushroom/mush2/mush2_glutton.ogg",
+            "stream": true,
+            "volume": 0.2
         },
         "menu": {
             "type": "sample",

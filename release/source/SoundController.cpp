@@ -6,6 +6,8 @@
 //  Copyright © 2022 Game Design Initiative at Cornell. All rights reserved.
 //
 
+#define FADE 0.003
+#define MAX_LAYER_VOLUME 0.3
 
 #include "SoundController.hpp"
 
@@ -20,18 +22,42 @@ void SoundController::LevelMusic::init(string biome, std::shared_ptr<cugl::Asset
     _biome = biome;
     _themeAsset = assets->get<cugl::Sound>(biome);
     
+    _glutton = assets->get<cugl::Sound>(biome + "Glutton");
+    
+    _glutton->setVolume(0.0);
+    
+    _gNode = _glutton->createNode();
+    
     _mixer = cugl::audio::AudioMixer::alloc(8);
     
-    _mixer->attach(1, _themeAsset->createNode());
+    _mixer->attach(7, _themeAsset->createNode());
+    _mixer->attach(0, _gNode);
 };
 
 /**
  * Plays the music for the specified level class.
  */
-void SoundController::LevelMusic::play_music() {
+void SoundController::LevelMusic::play_music(std::vector<bool> e, GameState s) {
     
-    cugl::AudioEngine::get()->getMusicQueue()->advance(0, 0.5);
-    cugl::AudioEngine::get()->getMusicQueue()->enqueue(_mixer, true, 0.3);
+    if (s != LEVEL) {
+        cugl::AudioEngine::get()->getMusicQueue()->advance(0, 0.2);
+        cugl::AudioEngine::get()->getMusicQueue()->enqueue(_mixer, true, 0.3);
+    }
+    
+    for (int i = 0; i < 7; i++) {
+        switch (i) {
+            case 0:
+                if (e[0]) {
+                    _gNode->setGain(clampf(_gNode->getGain() + FADE, 0.0f, MAX_LAYER_VOLUME));
+                } else {
+                    _gNode->setGain(clampf(_gNode->getGain() - FADE, 0.0f, MAX_LAYER_VOLUME));
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    
     
 };
 
@@ -85,25 +111,43 @@ void SoundController::play_menu_music() {
 
 }
 
-void SoundController::play_level_music(string biome) {
+void SoundController::play_level_music(string biome, std::vector<bool> enemies) {
     
-    int r = rand()%4;
-    
-    //r = 3;
-    
-    if (_state != LEVEL) {
-        _state = LEVEL;
-        if (r == 0) {
-            _cave1->play_music();
-        } else if (r == 1) {
-            _cave2->play_music();
-        }else  if (r == 2) {
-            _mushroom1->play_music();
-        } else {
-           _mushroom2->play_music();
+    if (biome == "cave") {
+        if (_state != LEVEL) {
+            _track = rand()%2;
+        }
+        switch (_track) {
+            case 1:
+                _cave1->play_music(enemies, _state);
+                _state = LEVEL;
+                break;
+            case 2:
+                _cave2->play_music(enemies, _state);
+                _state = LEVEL;
+                break;
+        }
+    } else if (biome == "shroom") {
+        if (_state != LEVEL) {
+            _track = rand()%2;
+        }
+        switch (_track) {
+            case 1:
+                _mushroom1->play_music(enemies, _state);
+                _state = LEVEL;
+                break;
+            case 2:
+                _mushroom2->play_music(enemies, _state);
+                _state = LEVEL;
+                break;
         }
         
+        
+    } else {
+        
     }
+    
+    
     
 };
 

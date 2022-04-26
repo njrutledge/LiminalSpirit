@@ -363,7 +363,16 @@ void GameScene::dispose()
  */
 void GameScene::update(float timestep)
 {
-    _sound->play_level_music("cave");
+    std::vector<bool> e = std::vector<bool>(7);
+    
+    for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
+        string n = (*it)->getName();
+        if (n == "Glutton") {
+            e[0] = true;
+        }
+    }
+    
+    _sound->play_level_music(BIOME, e);
 
     // Update input controller
     _input.update();
