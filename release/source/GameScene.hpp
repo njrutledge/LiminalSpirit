@@ -260,6 +260,10 @@ public:
      */
     void updateAnimations(float timestep);
     /**
+    * helper method to update melee arm animations
+    */
+    void updateMeleeArm(float timestep);
+    /**
      * helper method to update all enemies 
      */
     void updateEnemies(float timestep);

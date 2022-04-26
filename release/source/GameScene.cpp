@@ -351,6 +351,44 @@ void GameScene::dispose()
     removeAllChildren();
 }
 
+/**
+ * The method called to update the game mode.
+ *
+ * This method contains any gameplay code that is not an OpenGL call.
+ *
+ * @param timestep  The amount of time (in seconds) since the last frame
+ */
+void GameScene::update(float timestep)
+{
+    updateSoundInputParticlesAndTilt(timestep);
+
+    updateAnimations(timestep);
+
+    updateEnemies(timestep);
+
+    updateSwipesAndAttacks(timestep);
+
+    updateRemoveDeletedAttacks();
+
+    updateRemoveDeletedEnemies();
+
+    updateText();
+
+    updateSpawnTimes();
+
+    updateRemoveDeletedPlayer();
+
+    updateHealthbar();
+
+    updateCamera();
+
+    updateSpawnEnemies(timestep);
+
+    updateMeleeArm(timestep);
+
+    updateWin();
+}
+
 void GameScene::updateSoundInputParticlesAndTilt(float timestep) {
     std::vector<bool> e = std::vector<bool>(7);
 
@@ -607,8 +645,10 @@ void GameScene::updateAnimations(float timestep) {
     // Ranged Arm
     if (_player->isStunned()) {
         rSprite->setFrame(8);
+        _rangedArm->setLastType(Glow::MeleeState::cool);
+        _rangedArm->setAnimeTimer(0);
     }
-    else if (_rangedArm->getLastType() == AttackController::MeleeState::cool) {
+    else if (_rangedArm->getLastType() == Glow::MeleeState::cool) {
         if (_player->isFacingRight()) {
             rSprite->setFrame(5);
         }
@@ -616,7 +656,7 @@ void GameScene::updateAnimations(float timestep) {
             rSprite->setFrame(0);
         }
     }
-    else if (_rangedArm->getLastType() == AttackController::MeleeState::first) {
+    else if (_rangedArm->getLastType() == Glow::MeleeState::first) {
         if (_rangedArm->getAnimeTimer() > 0.06f) {
             if ((rSprite->getFrame() == 5 && !_player->isFacingRight()) ||
                 (rSprite->getFrame() == 0 && _player->isFacingRight())) {
@@ -665,8 +705,10 @@ void GameScene::updateAnimations(float timestep) {
     // Melee Arm
     if (_player->isStunned()) {
         mSprite->setFrame(22);
+        _meleeArm->setLastType(Glow::MeleeState::cool);
+        _meleeArm->setAnimeTimer(0);
     }
-    else if (_meleeArm->getLastType() == AttackController::MeleeState::cool) {
+    else if (_meleeArm->getLastType() == Glow::MeleeState::cool) {
         if (_player->isFacingRight()) {
             mSprite->setFrame(7);
         }
@@ -674,7 +716,7 @@ void GameScene::updateAnimations(float timestep) {
             mSprite->setFrame(13);
         }
     }
-    else if (_meleeArm->getLastType() == AttackController::MeleeState::h1_left) {
+    else if (_meleeArm->getLastType() == Glow::MeleeState::h1_left) {
         if (_meleeArm->getAnimeTimer() > 0.05f) {
             if (mSprite->getFrame() == 12) {
                 // Attack is finished
@@ -761,7 +803,7 @@ void GameScene::updateAnimations(float timestep) {
             }
         }
     }
-    else if (_meleeArm->getLastType() == AttackController::MeleeState::h3_right) {
+    else if (_meleeArm->getLastType() == Glow::MeleeState::h3_right) {
         if (_meleeArm->getAnimeTimer() > 0.05f) {
             if (mSprite->getFrame() == 14) {
                 // Attack is finished
@@ -835,28 +877,28 @@ void GameScene::updateAnimations(float timestep) {
 
     //TODO: MAKE SURE MOVING THIS FROM BOTTOM OF UPDATE LOOP DOES NOT BREAK ANYTHING
     _playerGlow->setPosition(_player->getPosition());
+}
+
+void GameScene::updateMeleeArm(float timestep) {
     ////MELEE ARM MUST STAY AT BOTTOM
-    // Determining arm positions and offsets
+   // Determining arm positions and offsets
     float offsetArm2 = -3.1f;
-    if (!_player->isFacingRight()) {
-        offsetArm = -1 * offsetArm;
-    }
 
     // change based on arm attacks
     if ((!_player->isFacingRight() || // player facing left or attacks left
-        (_meleeArm->getLastType() == AttackController::MeleeState::h1_left
-            || _meleeArm->getLastType() == AttackController::MeleeState::h2_left
-            || _meleeArm->getLastType() == AttackController::MeleeState::h3_left)))// player facing left and attacking right
+        (_meleeArm->getLastType() == Glow::MeleeState::h1_left
+            || _meleeArm->getLastType() == Glow::MeleeState::h2_left
+            || _meleeArm->getLastType() == Glow::MeleeState::h3_left)))// player facing left and attacking right
     {
         offsetArm2 = -1 * offsetArm2;
     }
 
-    if (!_player->isFacingRight() && (_meleeArm->getLastType() == AttackController::MeleeState::h1_right
-        || _meleeArm->getLastType() == AttackController::MeleeState::h2_right
-        || _meleeArm->getLastType() == AttackController::MeleeState::h3_right)) {
+    if (!_player->isFacingRight() && (_meleeArm->getLastType() == Glow::MeleeState::h1_right
+        || _meleeArm->getLastType() == Glow::MeleeState::h2_right
+        || _meleeArm->getLastType() == Glow::MeleeState::h3_right)) {
         offsetArm2 = -1 * offsetArm2;
     }
-
+    float spacing = 1.f;
     float upDown2 = _meleeArm->getGlowTimer() + 0.5f;
     float upDownY2 = fmod(upDown2 / 2, spacing);
     if (upDownY2 > spacing / 4 && upDownY2 <= 3 * spacing / 4) {
@@ -1398,42 +1440,6 @@ void GameScene::updateWin() {
         _endText->setHorizontalAlignment(HorizontalAlign::CENTER);
         _endText->layout();
     }
-}
-
-/**
- * The method called to update the game mode.
- *
- * This method contains any gameplay code that is not an OpenGL call.
- *
- * @param timestep  The amount of time (in seconds) since the last frame
- */
-void GameScene::update(float timestep)
-{
-    updateSoundInputParticlesAndTilt(timestep);
-
-    updateAnimations(timestep);
-    
-    updateEnemies(timestep);
-    
-    updateSwipesAndAttacks(timestep);
-
-    updateRemoveDeletedAttacks();
-
-    updateRemoveDeletedEnemies();
-
-    updateText();
-
-    updateSpawnTimes();
-
-    updateRemoveDeletedPlayer();
-
-    updateHealthbar();
-
-    updateCamera();
-
-    updateSpawnEnemies(timestep);
-
-    updateWin();
 }
 
 std::shared_ptr<BaseEnemyModel> GameScene::getNearestNonMirror(cugl::Vec2 pos) {
