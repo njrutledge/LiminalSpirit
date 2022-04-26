@@ -105,10 +105,10 @@ void SoundController::play_menu_music() {
     
     if (_state != MENU) {
         _state = MENU;
-        cugl::AudioEngine::get()->getMusicQueue()->advance(0, 0.5);
+        cugl::AudioEngine::get()->getMusicQueue()->advance(0, 0.2);
         cugl::AudioEngine::get()->getMusicQueue()->enqueue(_menu, true, 0.4);
     }
-
+    
 }
 
 void SoundController::play_level_music(string biome, std::vector<bool> enemies) {
@@ -118,11 +118,11 @@ void SoundController::play_level_music(string biome, std::vector<bool> enemies) 
             _track = rand()%2;
         }
         switch (_track) {
-            case 1:
+            case 0:
                 _cave1->play_music(enemies, _state);
                 _state = LEVEL;
                 break;
-            case 2:
+            case 1:
                 _cave2->play_music(enemies, _state);
                 _state = LEVEL;
                 break;
@@ -132,11 +132,11 @@ void SoundController::play_level_music(string biome, std::vector<bool> enemies) 
             _track = rand()%2;
         }
         switch (_track) {
-            case 1:
+            case 0:
                 _mushroom1->play_music(enemies, _state);
                 _state = LEVEL;
                 break;
-            case 2:
+            case 1:
                 _mushroom2->play_music(enemies, _state);
                 _state = LEVEL;
                 break;
@@ -176,4 +176,12 @@ void SoundController::play_player_sound(playerSType sound) {
         case chargeM:
             break;
     }
+};
+
+void SoundController::reset_level_tracks() {
+    _cave1->getMixer()->reset();
+    _cave2->getMixer()->reset();
+    _mushroom1->getMixer()->reset();
+    _mushroom2->getMixer()->reset();
+    
 };

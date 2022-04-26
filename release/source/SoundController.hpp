@@ -58,6 +58,8 @@ public:
         
         void play_music(std::vector<bool> e, SoundController::GameState s);
         
+        std::shared_ptr<cugl::audio::AudioMixer> getMixer() {return _mixer;}
+        
     };
     
     
@@ -124,6 +126,8 @@ public:
     void play_level_music(string biome, std::vector<bool> enemies);
     
     void play_player_sound(playerSType sound);
+    
+    void reset_level_tracks();
 };
 
 #endif /* SoundController_hpp */
