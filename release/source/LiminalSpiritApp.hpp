@@ -14,6 +14,7 @@
 #define LiminalSpirit_hpp
 #include <cugl/cugl.h>
 #include "GameScene.hpp"
+#include "BossScene.hpp"
 #include "LoadingScene.hpp"
 #include "SoundController.hpp"
 #include "HomeScene.hpp"
@@ -54,12 +55,16 @@ protected:
         /** The pause menu*/
         PAUSE,
         /** The scene to play the game */
-        GAME
+        GAME,
+        /** The scene to play the boss */
+        BOSS
     };
 
     // Player modes
     /** The primary controller for the game world */
     GameScene _gameplay;
+    /** the primary controller for the boss world */
+    BossScene _bossgame;
     /** The controller for the loading screen */
     LoadingScene _loading;
     /** The controller for the home screen*/
@@ -170,6 +175,16 @@ public:
      * @param timestep  The amount of time (in seconds) since the last frame
      */
     void updateGameScene(float timestep);
+
+    /**
+     * Individualized update method for the boss scene.
+     *
+     * This method keeps the primary {@link #update} from being a mess of switch
+     * statements. It also handles the transition logic from the game scene.
+     *
+     * @param timestep  The amount of time (in seconds) since the last frame
+     */
+    void updateBossScene(float timestep);
 
     /**
      * The method called to draw the application to the screen.

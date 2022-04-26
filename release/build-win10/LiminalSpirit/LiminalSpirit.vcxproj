@@ -191,6 +191,7 @@
     <ClInclude Include="..\..\source\AIController.hpp" />
     <ClInclude Include="..\..\source\AttackController.hpp" />
     <ClInclude Include="..\..\source\BaseEnemyModel.h" />
+    <ClInclude Include="..\..\source\BossScene.hpp" />
     <ClInclude Include="..\..\source\CollisionController.hpp" />
     <ClInclude Include="..\..\source\GameScene.hpp" />
     <ClInclude Include="..\..\source\Glow.hpp" />
@@ -221,6 +222,7 @@
     <ClCompile Include="..\..\source\AIController.cpp" />
     <ClCompile Include="..\..\source\AttackController.cpp" />
     <ClCompile Include="..\..\source\BaseEnemyModel.cpp" />
+    <ClCompile Include="..\..\source\BossScene.cpp" />
     <ClCompile Include="..\..\source\CollisionController.cpp" />
     <ClCompile Include="..\..\source\GameScene.cpp" />
     <ClCompile Include="..\..\source\Glow.cpp" />

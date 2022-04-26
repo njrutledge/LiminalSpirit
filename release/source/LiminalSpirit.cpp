@@ -75,6 +75,7 @@ void LiminalSpirit::onShutdown()
 {
     _loading.dispose();
     _gameplay.dispose();
+    _bossgame.dispose();
     _home.dispose();
     _worldSelect.dispose();
     _assets = nullptr;
@@ -119,6 +120,9 @@ void LiminalSpirit::update(float timestep)
         break;
     case GAME:
         updateGameScene(timestep);
+        break;
+    case BOSS:
+        updateBossScene(timestep);
         break;
     }
     /*if (!_loaded && _loading.isActive())
@@ -205,8 +209,9 @@ void LiminalSpirit::updateWorldSelectScene(float timestep)
         _scene = State::GAME;
         break;
     case WorldSelectScene::Choice::FOREST:
-        _gameplay.init(_assets, _sound_controller, "stack");
-        _scene = State::GAME;
+        //_gameplay.init(_assets, _sound_controller, "stack");
+        _bossgame.init(_assets, _sound_controller);
+        _scene = State::BOSS;
         break;
     }
 }
@@ -225,6 +230,24 @@ void LiminalSpirit::updateGameScene(float timestep)
     if (_gameplay.goingBack()) {
         _scene = State::WORLDS;
         _gameplay.dispose();
+        _worldSelect.setDefaultChoice();
+    }
+}
+
+/**
+ * Individualized update method for the boss scene.
+ *
+ * This method keeps the primary {@link #update} from being a mess of switch
+ * statements. It also handles the transition logic from the game scene.
+ *
+ * @param timestep  The amount of time (in seconds) since the last frame
+ */
+void LiminalSpirit::updateBossScene(float timestep)
+{
+    _bossgame.update(timestep);
+    if (_bossgame.goingBack()) {
+        _scene = State::WORLDS;
+        _bossgame.dispose();
         _worldSelect.setDefaultChoice();
     }
 }
@@ -253,6 +276,9 @@ void LiminalSpirit::draw()
         break;
     case GAME:
         _gameplay.render(_batch);
+        break;
+    case BOSS:
+        _bossgame.render(_batch);
         break;
     }
     /*if (!_loaded)

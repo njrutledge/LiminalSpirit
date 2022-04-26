@@ -57,9 +57,6 @@
 // This keeps us from having to write cugl:: all the time
 using namespace cugl;
 
-//set to true to disable most of the update loop, for checking sprites
-#define DEBUG false
-
 // The number of frames before moving the logo to a new position
 #define TIME_STEP 60
 /** This is the size of the active portion of the screen */
@@ -354,26 +351,19 @@ void GameScene::dispose()
     removeAllChildren();
 }
 
-/**
- * The method called to update the game mode.
- *
- * This method contains any gameplay code that is not an OpenGL call.
- *
- * @param timestep  The amount of time (in seconds) since the last frame
- */
-void GameScene::update(float timestep)
-{
+void GameScene::updateSoundInputParticlesAndTilt(float timestep) {
     std::vector<bool> e = std::vector<bool>(7);
-    
+
     for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
         string n = (*it)->getName();
         if (n == "Glutton") {
             e[0] = true;
-        } else if (n == "Phantom") {
+        }
+        else if (n == "Phantom") {
             e[1] = true;
         }
     }
-    
+
     _sound->play_level_music(BIOME, e);
 
     // Update input controller
@@ -382,18 +372,6 @@ void GameScene::update(float timestep)
     if (_input.getDebugKeyPressed())
     {
         setDebug(!isDebug());
-    }
-
-    if (DEBUG) {
-        //go ahead and step the time to spawn some enemies, they won't move in debug
-        _timer += timestep;
-
-        if (_nextWaveNum < _numWaves && _timer >= _spawn_times[_nextWaveNum]) {
-            createEnemies(_nextWaveNum);
-            _nextWaveNum += 1;
-        }
-        //return to stop the rest of the update in DEBUG ONLY
-        return;
     }
 
     // Some Particle Stuff
@@ -406,7 +384,7 @@ void GameScene::update(float timestep)
     //    newParts->setVisible(true);////////////////////////////////////////////////////////////////////////////////Make visible (not usually necessary)
     //    _worldnode->addChildWithTag(newParts, 100);///////////////////////////////////////////////////////////////Add to worldnode with 100 tag (necessary)
     //}
-     
+
     ////Update all Particles
     for (std::shared_ptr<scene2::SceneNode> s : _worldnode->getChildren()) {
         if (s->getTag() == 100) {
@@ -427,10 +405,13 @@ void GameScene::update(float timestep)
     else {
         _player->setVX(xPos);
     }
+}
 
+void GameScene::updateAnimations(float timestep) {
     ///////////////////////////////////////
     // Start Player and Arm Animations ////
     ///////////////////////////////////////
+    float xPos = _tilt.getXpos();
     int nextFrame;
     scene2::SpriteNode* sprite = dynamic_cast<scene2::SpriteNode*>(_player->getSceneNode().get());
 
@@ -461,7 +442,7 @@ void GameScene::update(float timestep)
     }
     else if (!_player->isGrounded()) {
         if (_player->getJumpAnimationTimer() > 0.03f) {
-            if(_player->isMovingUp()) {
+            if (_player->isMovingUp()) {
                 nextFrame = sprite->getFrame();
                 if (nextFrame == 31 || nextFrame == 24) {
                     nextFrame = _prevFrame;
@@ -473,7 +454,8 @@ void GameScene::update(float timestep)
                     else if (nextFrame > 20) {
                         nextFrame -= 1;
                     }
-                } else {
+                }
+                else {
                     if (nextFrame < 16 || nextFrame > 19) {
                         nextFrame = 18;
                     }
@@ -506,7 +488,8 @@ void GameScene::update(float timestep)
             if (_player->isFacingRight()) {
                 if (nextFrame > 18) {
                     nextFrame = 18;
-                } else {
+                }
+                else {
                     nextFrame -= 1;
                 }
                 if (nextFrame == 16) {
@@ -516,7 +499,8 @@ void GameScene::update(float timestep)
             else {
                 if (nextFrame < 21) {
                     nextFrame = 21;
-                } else {
+                }
+                else {
                     nextFrame += 1;
                 }
                 if (nextFrame == 23) {
@@ -574,7 +558,7 @@ void GameScene::update(float timestep)
             sprite->setFrame(_prevFrame);
         }
     }
-    
+
     _player->setJumpAnimationTimer(_player->getJumpAnimationTimer() + timestep);
     _player->setWalkAnimationTimer(_player->getWalkAnimationTimer() + timestep);
     _player->setIdleAnimationTimer(_player->getIdleAnimationTimer() + timestep);
@@ -586,14 +570,15 @@ void GameScene::update(float timestep)
             _sound->play_player_sound(SoundController::playerSType::step);
             _step = true;
         }
-        
-    } else {
+
+    }
+    else {
         _step = false;
     }
-    
-    
+
+
     // Arm and Player Flipping
-    scene2::TexturedNode *image = dynamic_cast<scene2::TexturedNode *>(_player->getSceneNode().get());
+    scene2::TexturedNode* image = dynamic_cast<scene2::TexturedNode*>(_player->getSceneNode().get());
     scene2::TexturedNode* arm1Image = dynamic_cast<scene2::TexturedNode*>(_rangedArm->getSceneNode().get());
     scene2::TexturedNode* arm2Image = dynamic_cast<scene2::TexturedNode*>(_meleeArm->getSceneNode().get());
 
@@ -638,12 +623,12 @@ void GameScene::update(float timestep)
                 // Attack is finished
                 if (_player->isFacingRight()) {
                     rSprite->setFrame(5);
-                    rSprite->setAnchor(0.5,0.5);
+                    rSprite->setAnchor(0.5, 0.5);
                     _rangedArm->setAttackAngle(0);
                 }
                 else {
                     rSprite->setFrame(0);
-                    rSprite->setAnchor(0.5,0.5);
+                    rSprite->setAnchor(0.5, 0.5);
                     _rangedArm->setAttackAngle(0);
                 }
                 _rangedArm->setLastType(Glow::MeleeState::cool);
@@ -652,7 +637,7 @@ void GameScene::update(float timestep)
             }
             else {
                 if (_player->isFacingRight()) {
-                    rSprite->setAnchor(0.8,0.8);
+                    rSprite->setAnchor(0.8, 0.8);
                     if (rSprite->getFrame() == 0) {
                         rSprite->setFrame(5);
                     }
@@ -661,7 +646,7 @@ void GameScene::update(float timestep)
                     }
                 }
                 else {
-                    rSprite->setAnchor(0.2,0.8);
+                    rSprite->setAnchor(0.2, 0.8);
                     rSprite->setFrame((rSprite->getFrame() + 1) % 6);
                 }
                 _rangedArm->setAnimeTimer(0);
@@ -800,7 +785,7 @@ void GameScene::update(float timestep)
             mSprite->setFrame(13);
         }
     }
-    
+
 
     float offsetArm = -2.7f;
     if (!_player->isFacingRight()) {
@@ -847,9 +832,45 @@ void GameScene::update(float timestep)
     ////////////////////////////////////////
     ///////End Player and Arm Animations////
     ////////////////////////////////////////
-    
+
+    //TODO: MAKE SURE MOVING THIS FROM BOTTOM OF UPDATE LOOP DOES NOT BREAK ANYTHING
+    _playerGlow->setPosition(_player->getPosition());
+    ////MELEE ARM MUST STAY AT BOTTOM
+    // Determining arm positions and offsets
+    float offsetArm2 = -3.1f;
+    if (!_player->isFacingRight()) {
+        offsetArm = -1 * offsetArm;
+    }
+
+    // change based on arm attacks
+    if ((!_player->isFacingRight() || // player facing left or attacks left
+        (_meleeArm->getLastType() == AttackController::MeleeState::h1_left
+            || _meleeArm->getLastType() == AttackController::MeleeState::h2_left
+            || _meleeArm->getLastType() == AttackController::MeleeState::h3_left)))// player facing left and attacking right
+    {
+        offsetArm2 = -1 * offsetArm2;
+    }
+
+    if (!_player->isFacingRight() && (_meleeArm->getLastType() == AttackController::MeleeState::h1_right
+        || _meleeArm->getLastType() == AttackController::MeleeState::h2_right
+        || _meleeArm->getLastType() == AttackController::MeleeState::h3_right)) {
+        offsetArm2 = -1 * offsetArm2;
+    }
+
+    float upDown2 = _meleeArm->getGlowTimer() + 0.5f;
+    float upDownY2 = fmod(upDown2 / 2, spacing);
+    if (upDownY2 > spacing / 4 && upDownY2 <= 3 * spacing / 4) {
+        upDownY2 = spacing / 2 - upDownY2;
+    }
+    else if (upDownY2 > 3 * spacing / 4) {
+        upDownY2 = -1 * spacing + upDownY2;
+    }
+    _meleeArm->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY2 / spacing / 3) + 0.1f);
+}
+
+void GameScene::updateEnemies(float timestep) {
     // Enemy AI logic
-    // For each enemy
+   // For each enemy
     std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("damaged"), Vec2(0, 0));
     std::shared_ptr<Texture> text = _assets->get<Texture>("star");
 
@@ -880,7 +901,8 @@ void GameScene::update(float timestep)
                     _worldnode->addChildWithTag(dmgd, 100);
                 }
                 sprite->setFrame(7);
-            } else if ((*it)->getIdleAnimationTimer() > 1.f ||
+            }
+            else if ((*it)->getIdleAnimationTimer() > 1.f ||
                 (!(sprite->getFrame() == 2) && (*it)->getIdleAnimationTimer() > 0.3f)
                 || (!(sprite->getFrame() == 2 || sprite->getFrame() == 5 || sprite->getFrame() == 6) && (*it)->getIdleAnimationTimer() > 0.1f)) {
                 sprite->setFrame((sprite->getFrame() + 1) % 7);
@@ -931,21 +953,21 @@ void GameScene::update(float timestep)
             }
             else {
                 shared_ptr<Seeker> seeker = dynamic_pointer_cast<Seeker>(*it);
-                
-                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 1.0f, 0.2f, 2.0f, AttackController::Type::e_melee, (vel.scale(0.2)).rotate((play_p - en_p).getAngle()), _timer, SEEKER_ATTACK, 0);
-                
+
+                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 1.0f, 0.2f, 2.0f, AttackController::Type::e_melee, (vel.scale(0.2)).rotate((play_p - en_p).getAngle()), _timer, SEEKER_ATTACK, 0);
+
             }
 
             if ((*it)->getName() == "Lost") {
-                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 1.0f, 0.2f, 1.0f, AttackController::Type::e_melee, vel.rotate((play_p - en_p).getAngle()), _timer, LOST_ATTACK, 0);
-                
+                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 1.0f, 0.2f, 1.0f, AttackController::Type::e_melee, vel.rotate((play_p - en_p).getAngle()), _timer, LOST_ATTACK, 0);
+
             }
             else if ((*it)->getName() == "Phantom")
             {
                 _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()), _timer, PHANTOM_ATTACK, PHANTOM_FRAMES);
             }
             else if ((*it)->getName() == "Glutton") {
-                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()) , 1.5f, 3.0f, 2.0f, AttackController::Type::e_range, (vel.scale(0.25)).rotate((play_p - en_p).getAngle()), _timer, GLUTTON_ATTACK, GLUTTON_FRAMES);
+                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 1.5f, 3.0f, 2.0f, AttackController::Type::e_range, (vel.scale(0.25)).rotate((play_p - en_p).getAngle()), _timer, GLUTTON_ATTACK, GLUTTON_FRAMES);
             }
 
         }
@@ -973,12 +995,15 @@ void GameScene::update(float timestep)
             _collider.setIndexSpawner(-1);
         }
     }
-    
+}
+
+void GameScene::updateSwipesAndAttacks(float timestep) {
     // if player is stunned, do not read swipe input
-    if(!_player->isStunned()){
+    float xPos = _tilt.getXpos();
+    if (!_player->isStunned()) {
         _swipes.update(_input, _player->isGrounded(), timestep);
     }
-    
+
     b2Vec2 playerPos = _player->getBody()->GetPosition();
     if (_player->getInvincibilityTimer() <= 0) {
         _attacks->attackLeft(Vec2(playerPos.x, playerPos.y), _swipes.getLeftSwipe(), _swipes.getLeftAngle(), _player->isGrounded(), _timer, _sound);
@@ -1173,14 +1198,14 @@ void GameScene::update(float timestep)
 
             }
             else if ((*it)->getAttackID() == PHANTOM_ATTACK) {
-                attackSprite->setScale(0.04*(*it)->getRadius());
-                attackSprite->setAngle((*it)->getAngle()+M_PI/2);
+                attackSprite->setScale(0.04 * (*it)->getRadius());
+                attackSprite->setAngle((*it)->getAngle() + M_PI / 2);
                 attackSprite->setPriority(2.2);
 
 
                 dynamic_pointer_cast<scene2::SpriteNode>(attackSprite)->setFrame(0);
             }
-            else if((*it)->getAttackID() == GLUTTON_ATTACK) {
+            else if ((*it)->getAttackID() == GLUTTON_ATTACK) {
                 attackSprite->setScale(.25 * (*it)->getRadius());
                 attackSprite->setAngle((*it)->getAngle() + M_PI);
                 attackSprite->setPriority(2);
@@ -1236,7 +1261,9 @@ void GameScene::update(float timestep)
     if (_player->getVY() < 0) {
         _player->setMovingUp(false);
     }
+}
 
+void GameScene::updateRemoveDeletedAttacks() {
     // Remove attacks
     auto ait = _attacks->_current.begin();
     while (ait != _attacks->_current.end())
@@ -1256,7 +1283,9 @@ void GameScene::update(float timestep)
             ait++;
         }
     }
+}
 
+void GameScene::updateRemoveDeletedEnemies() {
     // Remove enemies
     auto eit = _enemies.begin();
     while (eit != _enemies.end()) {
@@ -1277,14 +1306,18 @@ void GameScene::update(float timestep)
             eit++;
         }
     }
-    
+}
+
+void GameScene::updateText() {
     _text->setText(strtool::format("Wave: %d / %d", _nextWaveNum, _numWaves));
     _text->layout();
-    
-    int duration = _nextWaveNum < _spawn_times.size() ? (int) _spawn_times[_nextWaveNum] - (int) _timer : -1;
+
+    int duration = _nextWaveNum < _spawn_times.size() ? (int)_spawn_times[_nextWaveNum] - (int)_timer : -1;
     _timer_text->setText(strtool::format("Next Wave In: %d", duration > 0 ? duration : 0));
     _timer_text->layout();
+}
 
+void GameScene::updateSpawnTimes() {
     // Move wave spawn times up if all enemies killed
     if (_nextWaveNum < _numWaves && !_enemies.size()) {
         float nextSpawnTime = _spawn_times[_nextWaveNum];
@@ -1293,16 +1326,23 @@ void GameScene::update(float timestep)
             _spawn_times[i] -= diff;
         }
     }
+}
 
-    if (_player->isRemoved()) {
+void GameScene::updateRemoveDeletedPlayer()
+{
+     if (_player->isRemoved()) {
         reset();
         _player->markRemoved(false);
     }
+}
 
+void GameScene::updateHealthbar() {
     // Update the health meter
-    _health->setPolygon((Rect(0, 0, _player->getHealth()/ 4.0f, .5) * _scale));
+    _health->setPolygon((Rect(0, 0, _player->getHealth() / 4.0f, .5) * _scale));
     _health->setPriority(10);
-   
+}
+
+void GameScene::updateCamera() {
     // Camera following player, with some non-linear smoothing
     float dy = getChild(0)->getContentSize().height / 2 - _worldnode->getPaneTransform().transform(_player->getSceneNode()->getPosition()).y;
     Vec2 pan = Vec2(0, dy);
@@ -1311,7 +1351,9 @@ void GameScene::update(float timestep)
     // Copy World's zoom and transform
     _debugnode->applyPan(-_debugnode->getPaneTransform().transform(Vec2()));
     _debugnode->applyPan(_worldnode->getPaneTransform().transform(Vec2()) / _scale);
+}
 
+void GameScene::updateSpawnEnemies(float timestep){
     // Spawn new enemies if time for next wave
     _timer += timestep;
 
@@ -1344,7 +1386,9 @@ void GameScene::update(float timestep)
         }
         index++;
     }
+}
 
+void GameScene::updateWin() {
     // All waves created and all enemies cleared
     if (_nextWaveNum >= _numWaves && !_enemies.size() && !_spawnerCount) {
         // Create and layout win text
@@ -1354,40 +1398,42 @@ void GameScene::update(float timestep)
         _endText->setHorizontalAlignment(HorizontalAlign::CENTER);
         _endText->layout();
     }
+}
 
-    _playerGlow->setPosition(_player->getPosition());
-    ////MELEE ARM MUST STAY AT BOTTOM
-    // Determining arm positions and offsets
-    float offsetArm2 = -3.1f;
-    if (!_player->isFacingRight()) {
-        offsetArm = -1 * offsetArm;
-    }
+/**
+ * The method called to update the game mode.
+ *
+ * This method contains any gameplay code that is not an OpenGL call.
+ *
+ * @param timestep  The amount of time (in seconds) since the last frame
+ */
+void GameScene::update(float timestep)
+{
+    updateSoundInputParticlesAndTilt(timestep);
 
-    // change based on arm attacks
-    if ((!_player->isFacingRight() || // player facing left or attacks left
-        (_meleeArm->getLastType() == AttackController::MeleeState::h1_left
-            || _meleeArm->getLastType() == AttackController::MeleeState::h2_left
-            || _meleeArm->getLastType() == AttackController::MeleeState::h3_left)))// player facing left and attacking right
-    {
-        offsetArm2 = -1 * offsetArm2;
-    }
+    updateAnimations(timestep);
+    
+    updateEnemies(timestep);
+    
+    updateSwipesAndAttacks(timestep);
 
-    if (!_player->isFacingRight() && (_meleeArm->getLastType() == AttackController::MeleeState::h1_right
-        || _meleeArm->getLastType() == AttackController::MeleeState::h2_right
-        || _meleeArm->getLastType() == AttackController::MeleeState::h3_right)) {
-        offsetArm2 = -1 * offsetArm2;
-    }
+    updateRemoveDeletedAttacks();
 
-    float upDown2 = _meleeArm->getGlowTimer() + 0.5f;
-    float upDownY2 = fmod(upDown2 / 2, spacing);
-    if (upDownY2 > spacing / 4 && upDownY2 <= 3 * spacing / 4) {
-        upDownY2 = spacing / 2 - upDownY2;
-    }
-    else if (upDownY2 > 3 * spacing / 4) {
-        upDownY2 = -1 * spacing + upDownY2;
-    }
-    _meleeArm->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY2 / spacing / 3) + 0.1f);
+    updateRemoveDeletedEnemies();
 
+    updateText();
+
+    updateSpawnTimes();
+
+    updateRemoveDeletedPlayer();
+
+    updateHealthbar();
+
+    updateCamera();
+
+    updateSpawnEnemies(timestep);
+
+    updateWin();
 }
 
 std::shared_ptr<BaseEnemyModel> GameScene::getNearestNonMirror(cugl::Vec2 pos) {

@@ -252,6 +252,59 @@ public:
     void update(float timestep);
 
     /**
+     * helper method to update sound, input, particles, and tilt/
+     */
+    void updateSoundInputParticlesAndTilt(float timestep);
+    /**
+     * helper method to update all animations
+     */
+    void updateAnimations(float timestep);
+    /**
+     * helper method to update all enemies 
+     */
+    void updateEnemies(float timestep);
+    /** 
+     * helper method to update swipes and attacks 
+     */
+    void updateSwipesAndAttacks(float timestep);
+    /** 
+     * helper method to remove deleted attacks
+     */
+    void updateRemoveDeletedAttacks();
+    /**
+     * helper method to remove deleted enemies
+     */
+    void updateRemoveDeletedEnemies();
+    /**
+     * helper method to update text
+     */
+    void updateText();
+    /** 
+     * helper method to update spawning times 
+     */
+    void updateSpawnTimes();
+    /** 
+     * helper method to remove deleted player 
+     */
+    void updateRemoveDeletedPlayer();
+    /**
+     * helper method to update player healthbar
+     */
+    void updateHealthbar();
+    /**
+     * helper method to update camera 
+     */
+    void updateCamera();
+    /**
+     * helper method to spawn enemies 
+     */
+    void updateSpawnEnemies(float timestep);
+    /**
+     * helper method to win game
+     */
+    void updateWin();
+
+    /**
      * Resets the status of the game so that we can play again.
      */
     void reset();
