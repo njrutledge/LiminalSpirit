@@ -645,24 +645,30 @@ void GameScene::updateAnimations(float timestep) {
     // Ranged Arm
     if (_player->isStunned()) {
         rSprite->setFrame(8);
+        rSprite->setAnchor(0.5, 0.5);
+        _rangedArm->setAttackAngle(0);
         _rangedArm->setLastType(Glow::MeleeState::cool);
         _rangedArm->setAnimeTimer(0);
     }
     else if (_rangedArm->getLastType() == Glow::MeleeState::cool) {
         if (_player->isFacingRight()) {
-            rSprite->setFrame(5);
+            rSprite->setFrame(4);
+            rSprite->setAnchor(0.5, 0.5);
+            _rangedArm->setAttackAngle(0);
         }
         else {
             rSprite->setFrame(0);
+            rSprite->setAnchor(0.5, 0.5);
+            _rangedArm->setAttackAngle(0);
         }
     }
     else if (_rangedArm->getLastType() == Glow::MeleeState::first) {
         if (_rangedArm->getAnimeTimer() > 0.06f) {
-            if ((rSprite->getFrame() == 5 && !_player->isFacingRight()) ||
+            if ((rSprite->getFrame() == 4 && !_player->isFacingRight()) ||
                 (rSprite->getFrame() == 0 && _player->isFacingRight())) {
                 // Attack is finished
                 if (_player->isFacingRight()) {
-                    rSprite->setFrame(5);
+                    rSprite->setFrame(4);
                     rSprite->setAnchor(0.5, 0.5);
                     _rangedArm->setAttackAngle(0);
                 }
@@ -679,7 +685,7 @@ void GameScene::updateAnimations(float timestep) {
                 if (_player->isFacingRight()) {
                     rSprite->setAnchor(0.8, 0.8);
                     if (rSprite->getFrame() == 0) {
-                        rSprite->setFrame(5);
+                        rSprite->setFrame(4);
                     }
                     else {
                         rSprite->setFrame(rSprite->getFrame() - 1);
@@ -687,7 +693,7 @@ void GameScene::updateAnimations(float timestep) {
                 }
                 else {
                     rSprite->setAnchor(0.2, 0.8);
-                    rSprite->setFrame((rSprite->getFrame() + 1) % 6);
+                    rSprite->setFrame((rSprite->getFrame() + 1) % 4);
                 }
                 _rangedArm->setAnimeTimer(0);
             }
@@ -696,9 +702,13 @@ void GameScene::updateAnimations(float timestep) {
     else {
         if (_player->isFacingRight()) {
             rSprite->setFrame(5);
+            rSprite->setAnchor(0.5, 0.5);
+            _rangedArm->setAttackAngle(0);
         }
         else {
             rSprite->setFrame(0);
+            rSprite->setAnchor(0.5, 0.5);
+            _rangedArm->setAttackAngle(0);
         }
     }
 
@@ -851,7 +861,7 @@ void GameScene::updateAnimations(float timestep) {
         upDownY1 = -1 * spacing + upDownY1;
     }
 
-    if (_player->isFacingRight() && rSprite->getFrame() != 5) {
+    if (_player->isFacingRight() && rSprite->getFrame() != 4) {
         if (_rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270) {
             _rangedArm->setPosition(_player->getPosition().x + offsetArm - 2, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
         }
@@ -952,32 +962,35 @@ void GameScene::updateEnemies(float timestep) {
             }
         }
         else if ((*it)->getName() == "Lost") {
-            if ((*it)->getVX() > 0) {
-                sprite->flipHorizontal(false);
-            }
-            else {
-                sprite->flipHorizontal(true);
-            }
             if ((*it)->getInvincibilityTimer() > 0) {
                 if (sprite->getFrame() != 7 && sprite->getFrame() != 4) {
                     std::shared_ptr<ParticleNode> dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, text, pool);
                     dmgd->setScale(0.25f);
                     _worldnode->addChildWithTag(dmgd, 100);
                 }
-                if ((*it)->getVX() > 0) {
+                if (!sprite->isFlipHorizontal()) {
                     sprite->setFrame(4);
                 }
                 else {
                     sprite->setFrame(7);
                 }
-            } // Using idle timer for walking animation since lost has no idle
-            else if ((*it)->getIdleAnimationTimer() > .1f && (*it)->getVX() > 0) {
-                sprite->setFrame((sprite->getFrame() + 1) % 4);
-                (*it)->setIdleAnimationTimer(0);
             }
-            else if ((*it)->getIdleAnimationTimer() > .1f && (*it)->getVX() < 0) {
-                sprite->setFrame((sprite->getFrame() - 1) % 4);
-                (*it)->setIdleAnimationTimer(0);
+            else {
+                if ((*it)->getVX() > 0) {
+                    sprite->flipHorizontal(false);
+                }
+                else {
+                    sprite->flipHorizontal(true);
+                }
+                // Using idle timer for walking animation since lost has no idle
+                if (((*it)->getVX() > 0) && ((*it)->getIdleAnimationTimer() > .1f || sprite->getFrame() == 4 || sprite->getFrame() == 7)) {
+                    sprite->setFrame((sprite->getFrame() + 1) % 4);
+                    (*it)->setIdleAnimationTimer(0);
+                }
+                else if (((*it)->getVX() < 0) && ((*it)->getIdleAnimationTimer() > .1f || sprite->getFrame() == 4 || sprite->getFrame() == 7)) {
+                    sprite->setFrame((sprite->getFrame() - 1) % 4);
+                    (*it)->setIdleAnimationTimer(0);
+                }
             }
         }
 
@@ -1977,7 +1990,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     _rangedArm->setGlowTimer(0);
     _rangedArm->setAnimeTimer(0);
     _rangedArm->setLastType(Glow::MeleeState::cool);
-    std::shared_ptr<scene2::SpriteNode> rangeArmSprite = scene2::SpriteNode::alloc(rangeImage, 2, 6);
+    std::shared_ptr<scene2::SpriteNode> rangeArmSprite = scene2::SpriteNode::alloc(rangeImage, 2, 5);
     _rangedArm->setSceneNode(rangeArmSprite);
     rangeArmSprite->setFrame(0);
     rangeArmSprite->setScale(0.22);
