@@ -51,10 +51,10 @@ void ParticleNode::draw(const std::shared_ptr<SpriteBatch>& batch, const Affine2
 		}
 		if (_hasMultipleTextures) {
 			auto texture = _textures.at(p->getTexture());
-			batch->draw(texture, tintLerp, Vec2(texture->getWidth() / 2, texture->getHeight() / 2), transform.getScale(), p->getAngle(), transform.getTranslation() + p->getPosition());
+			batch->draw(texture, tintLerp, Vec2(texture->getWidth() / 2, texture->getHeight() / 2), transform.getScale()*p->getSize(), p->getAngle(), transform.getTranslation() + p->getPosition());
 		}
 		else {
-			batch->draw(_texture, tintLerp, Vec2(_texture->getWidth() / 2, _texture->getHeight() / 2), transform.getScale(), p->getAngle(), transform.getTranslation() + p->getPosition());
+			batch->draw(_texture, tintLerp, Vec2(_texture->getWidth() / 2, _texture->getHeight() / 2), transform.getScale()*p->getSize(), p->getAngle(), transform.getTranslation() + p->getPosition());
 		}
 	}
 }

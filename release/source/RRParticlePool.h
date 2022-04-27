@@ -39,6 +39,12 @@ protected:
 	cugl::Vec2 _speedRange;
 	// The range of particle fade in times
 	cugl::Vec2 _fadeinRange;
+	// The size range of the of the particles in the pool
+	cugl::Vec2 _sizeRange;
+	// The rates of change of the particles size in the pool
+	cugl::Vec2 _sizeChangeRateRange;
+	// The max time of the size change
+	float _maxChangeTime;
 	// The number of particles to emit in the burst if it is a temporary burst
 	int _numparticlesinburst;
 	// Whether particle fade in is enabled or not
