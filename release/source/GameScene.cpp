@@ -344,6 +344,7 @@ void GameScene::dispose()
 //    }
     // This should work because smart pointers free themselves when vector is cleared
     _enemies.clear();
+    _platformNodes.clear();
     _player = nullptr;
     _attacks = nullptr;
 
