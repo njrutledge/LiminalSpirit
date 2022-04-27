@@ -275,7 +275,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
 
     setDebug(false);
     buildScene(scene);
-    addChild(scene);
+    addChildWithName(scene, "scene");
 
     // Get font
     _font = assets->get<Font>("marker");
@@ -285,7 +285,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
     auto HUD = assets->get<scene2::SceneNode>("HUD");
     HUD->setContentSize(dimen);
     HUD->doLayout();
-    scene->addChild(HUD);
+    //check if the scene already has HUD, and remove it if it does.
+    scene->addChildWithName(HUD, "HUD");
 
 
     std::string msg = strtool::format("Wave: %d / %d", _nextWaveNum, _numWaves);
@@ -331,6 +332,7 @@ void GameScene::dispose()
     _timer_text = nullptr;
     _font = nullptr;
     _endText = nullptr;
+    _healthbar = nullptr;
 
     //TODO: CHECK IF THIS IS RIGHT FOR DISPOSING
 //    for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
@@ -348,6 +350,9 @@ void GameScene::dispose()
     _attacks = nullptr;
 
     _ai.dispose();
+    if (auto scene = getChildByName("scene")) {
+        scene->removeChildByName("HUD");
+    }
     removeAllChildren();
 }
 
