@@ -19,7 +19,7 @@ void AIController::reset() {
     // Add reset variables if needed
 };
 
-Vec2 AIController::getMovement(shared_ptr<BaseEnemyModel> e, Vec2 player_pos, float timestep) {
+Vec2 AIController::getMovement(shared_ptr<BaseEnemyModel> e, Vec2 player_pos, float timestep, float bottomwall, float worldwidth) {
 	std::string name = e->getName();
 
     if (e->getInvincibilityTimer() > 0) {
@@ -30,7 +30,7 @@ Vec2 AIController::getMovement(shared_ptr<BaseEnemyModel> e, Vec2 player_pos, fl
 		return Vec2(getLostMovement(e, player_pos, timestep), -9.8f);
 	} 
 	else if (name == "Phantom") {
-		return getPhantomMovement(e, player_pos, timestep);
+		return getPhantomMovement(dynamic_pointer_cast<Phantom>(e), player_pos, timestep, bottomwall, worldwidth);
 	}
 	else if (name == "Mirror") {
 		return getMirrorMovement(dynamic_cast<Mirror*>(e.get()), player_pos, timestep);
@@ -125,7 +125,7 @@ float AIController::getLostMovement(shared_ptr<BaseEnemyModel> lost, Vec2 player
 	}
 }
 
-Vec2 AIController::getPhantomMovement(shared_ptr<BaseEnemyModel> phantom, Vec2 player_pos, float timestep) {
+Vec2 AIController::getPhantomMovement(shared_ptr<Phantom> phantom, Vec2 player_pos, float timestep, float bottomwall, float worldwidth) {
 	//TODO: 
 	// Use line of sight to determine ranged attacks
     phantom->setTimePast(phantom->getTimePast() + timestep);
@@ -143,25 +143,45 @@ Vec2 AIController::getPhantomMovement(shared_ptr<BaseEnemyModel> phantom, Vec2 p
             }
 			return Vec2(); // Phantom stops moving
 		}
-		else if (phantom->getVY() == 0) {
-			return Vec2(phantom->getHorizontalSpeed(), -1 * phantom->getVerticalSpeed());
-		}
-		else if (player_pos.x > phantom->getPosition().x) {
-			if (player_pos.y >= phantom->getPosition().y) {
-				return Vec2(phantom->getHorizontalSpeed(), phantom->getVerticalSpeed());
-			}
-			else {
-				return Vec2(phantom->getHorizontalSpeed(), -1 * phantom->getVerticalSpeed());
-			}
-		}
-		else {
-			if (player_pos.y >= phantom->getPosition().y) {
-				return Vec2(-1 * phantom->getHorizontalSpeed(), phantom->getVerticalSpeed());
-			}
-			else {
-				return Vec2(-1 * phantom->getHorizontalSpeed(), -1 * phantom->getVerticalSpeed());
-			}
-		}
+        Vec2 vector = phantom->targetPosition - phantom->getPosition();
+        float distance = player_pos.distance(phantom->targetPosition);
+        while(phantom->targetPosition == Vec2() || phantom->targetPosition.distance(phantom->getPosition()) <= 1 || distance > 20 || !vector.x || !vector.y) {
+            float r = 10 + 10 * std::sqrt(static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
+            float alpha = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2 * M_PI;
+            phantom->targetPosition = Vec2(r * std::cos(alpha), r * std::sin(alpha)) + phantom->getPosition();
+            distance = player_pos.distance(phantom->targetPosition);
+            vector = phantom->targetPosition - phantom->getPosition();
+        }
+        if(phantom->getPosition().y - phantom->getHeight()/2 <= bottomwall) {
+            phantom->targetPosition = phantom->getPosition() + Vec2(vector.x, -vector.y);
+        }
+        else if(phantom->getPosition().x - phantom->getWidth()/2 <= 0) {
+            phantom->targetPosition = phantom->getPosition() + Vec2(-vector.x, vector.y);
+        }
+        else if(phantom->getPosition().x + phantom->getWidth()/2 >= worldwidth) {
+            phantom->targetPosition = phantom->getPosition() + Vec2(-vector.x, vector.y);
+        }
+        
+        
+        
+        
+        return movementHelper(phantom->targetPosition, phantom->getPosition(), phantom->getHorizontalSpeed(), phantom->getVerticalSpeed(), 1);
+//		else if (player_pos.x > phantom->getPosition().x) {
+//			if (player_pos.y >= phantom->getPosition().y) {
+//				return Vec2(phantom->getHorizontalSpeed(), phantom->getVerticalSpeed());
+//			}
+//			else {
+//				return Vec2(phantom->getHorizontalSpeed(), -1 * phantom->getVerticalSpeed());
+//			}
+//		}
+//		else {
+//			if (player_pos.y >= phantom->getPosition().y) {
+//				return Vec2(-1 * phantom->getHorizontalSpeed(), phantom->getVerticalSpeed());
+//			}
+//			else {
+//				return Vec2(-1 * phantom->getHorizontalSpeed(), -1 * phantom->getVerticalSpeed());
+//			}
+//		}
 	} 
 	else {
 		// Check if attack timer should be reset
