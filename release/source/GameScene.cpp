@@ -658,7 +658,7 @@ void GameScene::updateAnimations(float timestep) {
     }
     else if (_rangedArm->getLastType() == Glow::MeleeState::cool) {
         if (_player->isFacingRight()) {
-            rSprite->setFrame(5);
+            rSprite->setFrame(4);
             rSprite->setAnchor(0.5, 0.5);
             _rangedArm->setAttackAngle(0);
         }
@@ -670,11 +670,11 @@ void GameScene::updateAnimations(float timestep) {
     }
     else if (_rangedArm->getLastType() == Glow::MeleeState::first) {
         if (_rangedArm->getAnimeTimer() > 0.06f) {
-            if ((rSprite->getFrame() == 5 && !_player->isFacingRight()) ||
+            if ((rSprite->getFrame() == 4 && !_player->isFacingRight()) ||
                 (rSprite->getFrame() == 0 && _player->isFacingRight())) {
                 // Attack is finished
                 if (_player->isFacingRight()) {
-                    rSprite->setFrame(5);
+                    rSprite->setFrame(4);
                     rSprite->setAnchor(0.5, 0.5);
                     _rangedArm->setAttackAngle(0);
                 }
@@ -691,7 +691,7 @@ void GameScene::updateAnimations(float timestep) {
                 if (_player->isFacingRight()) {
                     rSprite->setAnchor(0.8, 0.8);
                     if (rSprite->getFrame() == 0) {
-                        rSprite->setFrame(5);
+                        rSprite->setFrame(4);
                     }
                     else {
                         rSprite->setFrame(rSprite->getFrame() - 1);
@@ -699,7 +699,7 @@ void GameScene::updateAnimations(float timestep) {
                 }
                 else {
                     rSprite->setAnchor(0.2, 0.8);
-                    rSprite->setFrame((rSprite->getFrame() + 1) % 6);
+                    rSprite->setFrame((rSprite->getFrame() + 1) % 4);
                 }
                 _rangedArm->setAnimeTimer(0);
             }
@@ -867,7 +867,7 @@ void GameScene::updateAnimations(float timestep) {
         upDownY1 = -1 * spacing + upDownY1;
     }
 
-    if (_player->isFacingRight() && rSprite->getFrame() != 5) {
+    if (_player->isFacingRight() && rSprite->getFrame() != 4) {
         if (_rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270) {
             _rangedArm->setPosition(_player->getPosition().x + offsetArm - 2, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
         }
@@ -1983,7 +1983,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     _rangedArm->setGlowTimer(0);
     _rangedArm->setAnimeTimer(0);
     _rangedArm->setLastType(Glow::MeleeState::cool);
-    std::shared_ptr<scene2::SpriteNode> rangeArmSprite = scene2::SpriteNode::alloc(rangeImage, 2, 6);
+    std::shared_ptr<scene2::SpriteNode> rangeArmSprite = scene2::SpriteNode::alloc(rangeImage, 2, 5);
     _rangedArm->setSceneNode(rangeArmSprite);
     rangeArmSprite->setFrame(0);
     rangeArmSprite->setScale(0.22);
