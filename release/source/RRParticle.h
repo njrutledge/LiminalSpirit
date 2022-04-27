@@ -177,7 +177,7 @@
 		/*
 		* Gets the size of the particle (scales invididual particle textures)
 		*/
-		int getSize() { return _size; }
+		float getSize() { return _size; }
 		
 		/**
 		* Sets the size (represented as a scaling value for the texture) of the particle
