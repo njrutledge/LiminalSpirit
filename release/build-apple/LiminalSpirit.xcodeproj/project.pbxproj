@@ -14,6 +14,7 @@
 		5783892927E2369B000CB5B9 /* BaseEnemyModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85D0B48527D010FC004EF4C8 /* BaseEnemyModel.cpp */; };
 		5783892A27E2369B000CB5B9 /* BaseEnemyModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85D0B48527D010FC004EF4C8 /* BaseEnemyModel.cpp */; };
 		5783892E27E23F49000CB5B9 /* AIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001627DFAC8500DAC3F2 /* AIController.cpp */; };
+		854C8F1C2819D27B00C83E4C /* saves in Resources */ = {isa = PBXBuildFile; fileRef = 854C8F1B2819D27B00C83E4C /* saves */; };
 		857201C827E25619006D48C6 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 857201C727E25619006D48C6 /* fonts */; };
 		857201C927E25619006D48C6 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 857201C727E25619006D48C6 /* fonts */; };
 		857201CA27E25619006D48C6 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 857201C727E25619006D48C6 /* fonts */; };
@@ -186,6 +187,7 @@
 /* Begin PBXFileReference section */
 		578388F827E1156D000CB5B9 /* Platform.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Platform.hpp; sourceTree = "<group>"; };
 		578388FC27E1156D000CB5B9 /* Platform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Platform.cpp; sourceTree = "<group>"; };
+		854C8F1B2819D27B00C83E4C /* saves */ = {isa = PBXFileReference; lastKnownFileType = folder; name = saves; path = ../saves; sourceTree = "<group>"; };
 		857201C727E25619006D48C6 /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
 		85841F3E2809F09300169F44 /* shaders */ = {isa = PBXFileReference; lastKnownFileType = folder; path = shaders; sourceTree = "<group>"; };
 		85841F3F2809F09300169F44 /* Phantom.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Phantom.hpp; sourceTree = "<group>"; };
@@ -433,6 +435,7 @@
 		EBBF18881D74904A008E2001 = {
 			isa = PBXGroup;
 			children = (
+				854C8F1B2819D27B00C83E4C /* saves */,
 				EBBF18B11D749176008E2001 /* Source */,
 				EB2BE9B71D749870002FE78B /* Assets */,
 				EBBF18931D74904A008E2001 /* Resources */,
@@ -693,6 +696,7 @@
 			files = (
 				85841F412809F09300169F44 /* shaders in Resources */,
 				F05BD2B327F29AB8005D1F38 /* sounds in Resources */,
+				854C8F1C2819D27B00C83E4C /* saves in Resources */,
 				EBFE7C091E19B4AC001007C2 /* json in Resources */,
 				EB2BE9BB1D7498D2002FE78B /* textures in Resources */,
 				EBBF189B1D74904A008E2001 /* Mac.xcassets in Resources */,
