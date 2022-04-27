@@ -53,7 +53,6 @@ bool Particle::initSizeChanging(cugl::Vec2 position, float size, cugl::Vec2 grav
 	}
 	else {
 		_shrinkOrEnlarge = 0;
-		CULog("Why would you do this...");
 	}
 
 	return true;
@@ -79,7 +78,6 @@ void Particle::update(float dt) {
 			_opacity = _lifetime / _maxlifetime;
 		}
 	}
-	CULog("ParticleUpdate: size is %f", _size);
 	if (_shrinkOrEnlarge != 0 && _sizetimer < _maxsizechangetime) {
 		_sizetimer += dt;
 		float prevSize = _size;
