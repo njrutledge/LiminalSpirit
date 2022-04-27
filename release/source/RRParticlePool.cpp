@@ -40,6 +40,9 @@ void ParticlePool::init(std::shared_ptr<JsonValue> constants) {
 	_lifetimeRange = floatArrayToVec(constants->get("lifetimeRange")->asFloatArray());
 	_angleRange = floatArrayToVec(constants->get("angleRange")->asFloatArray());
 	_speedRange = floatArrayToVec(constants->get("speedRange")->asFloatArray());
+	_sizeRange = floatArrayToVec(constants->get("startSizeRange")->asFloatArray());
+	_sizeChangeRateRange = floatArrayToVec(constants->get("sizeChangeRateRange")->asFloatArray());
+	_maxChangeTime = constants->getFloat("maxSizeChangeTime");
 	if (constants->get("fadeinRange") != nullptr) {
 		_fadeinRange = floatArrayToVec(constants->get("fadeinRange")->asFloatArray());
 		_fadein = constants->getBool("fadein");
@@ -47,6 +50,7 @@ void ParticlePool::init(std::shared_ptr<JsonValue> constants) {
 	else {
 		_fadein = false;
 	}
+
 	_complete = false;
 	_currentEmissionRate = 0;
 	_deadparticles = 0;
@@ -98,11 +102,15 @@ void ParticlePool::newParticle() {
 	float speed = randomLerp(_speedRange);
 	float lifetime = randomLerp(_lifetimeRange);
 	float angle = randomLerp(_angleRange);
+	float size = randomLerp(_sizeRange);
+	float changeRate = randomLerp(_sizeChangeRateRange);
 	if (_numTex > 0) {
-		_particles.push_back(Particle::alloc(_emissionPoint, _gravity, speed, lifetime, angle, _numTex));
+		std::shared_ptr<Particle> p = Particle::alloc(_emissionPoint, size, _gravity, speed, lifetime, angle, _numTex);
+		_particles.push_back(p);
 	}
 	else {
-		_particles.push_back(Particle::alloc(_emissionPoint, _gravity, speed, lifetime, angle));
+		std::shared_ptr<Particle> p = Particle::alloc(_emissionPoint, size, _gravity, speed, lifetime, angle, _maxChangeTime, changeRate);
+		_particles.push_back(p);
 	}
 }
 

@@ -108,6 +108,9 @@
 		F00746F327E91B2600AF5D7C /* SoundController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F00746F127E91B2600AF5D7C /* SoundController.cpp */; };
 		F00746F427E91B2600AF5D7C /* SoundController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F00746F127E91B2600AF5D7C /* SoundController.cpp */; };
 		F00746F527E91B2600AF5D7C /* SoundController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F00746F127E91B2600AF5D7C /* SoundController.cpp */; };
+		F01F990D281988F400701247 /* BossScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F01F990C281988F400701247 /* BossScene.cpp */; };
+		F01F990E2819891800701247 /* BossScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F01F990C281988F400701247 /* BossScene.cpp */; };
+		F01F990F2819891800701247 /* BossScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F01F990C281988F400701247 /* BossScene.cpp */; };
 		F025104027D02C6C00AB80AA /* InputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F025103B27D02C6C00AB80AA /* InputController.cpp */; };
 		F025104127D02C6C00AB80AA /* SwipeController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F025103D27D02C6C00AB80AA /* SwipeController.cpp */; };
 		F025104227D02C6C00AB80AA /* AttackController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F025103F27D02C6C00AB80AA /* AttackController.cpp */; };
@@ -248,6 +251,8 @@
 		EBFE7C041E19B496001007C2 /* json */ = {isa = PBXFileReference; lastKnownFileType = folder; path = json; sourceTree = "<group>"; };
 		F00746F127E91B2600AF5D7C /* SoundController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SoundController.cpp; sourceTree = "<group>"; };
 		F00746F227E91B2600AF5D7C /* SoundController.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SoundController.hpp; sourceTree = "<group>"; };
+		F01F9908281988F400701247 /* BossScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BossScene.hpp; sourceTree = "<group>"; };
+		F01F990C281988F400701247 /* BossScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BossScene.cpp; sourceTree = "<group>"; };
 		F025103A27D02C6C00AB80AA /* AttackController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AttackController.hpp; sourceTree = "<group>"; };
 		F025103B27D02C6C00AB80AA /* InputController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputController.cpp; sourceTree = "<group>"; };
 		F025103C27D02C6C00AB80AA /* InputController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = InputController.hpp; sourceTree = "<group>"; };
@@ -464,6 +469,8 @@
 		EBBF18B11D749176008E2001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				F01F990C281988F400701247 /* BossScene.cpp */,
+				F01F9908281988F400701247 /* BossScene.hpp */,
 				F0BE06F228132DCD00B22958 /* RRParticle.cpp */,
 				F0BE06F528132DCD00B22958 /* RRParticle.h */,
 				F0BE06F628132DCD00B22958 /* RRParticleNode.cpp */,
@@ -716,6 +723,7 @@
 				F05176E227D080DF00C0617F /* CollisionController.cpp in Sources */,
 				F0BE06FB28132DD000B22958 /* RRParticle.cpp in Sources */,
 				F05176E427D080E700C0617F /* InputController.cpp in Sources */,
+				F01F990F2819891800701247 /* BossScene.cpp in Sources */,
 				EB9CDA3925D0EAB100EE1A09 /* main.cpp in Sources */,
 				5783892A27E2369B000CB5B9 /* BaseEnemyModel.cpp in Sources */,
 				85DA524327EE3B93006DA122 /* Glutton.cpp in Sources */,
@@ -749,6 +757,7 @@
 				85B0004227E00AD600DAC3F2 /* TiltController.cpp in Sources */,
 				F0BE06FA28132DCF00B22958 /* RRParticle.cpp in Sources */,
 				F05176E127D080DF00C0617F /* CollisionController.cpp in Sources */,
+				F01F990E2819891800701247 /* BossScene.cpp in Sources */,
 				5783892E27E23F49000CB5B9 /* AIController.cpp in Sources */,
 				F05176E327D080E600C0617F /* InputController.cpp in Sources */,
 				85DA524227EE3B93006DA122 /* Glutton.cpp in Sources */,
@@ -782,6 +791,7 @@
 				F0D6C758280E29BF00A34038 /* Spawner.cpp in Sources */,
 				85B0002027DFAC8500DAC3F2 /* LoadingScene.cpp in Sources */,
 				F0BE06F728132DCD00B22958 /* RRParticle.cpp in Sources */,
+				F01F990D281988F400701247 /* BossScene.cpp in Sources */,
 				85B0004127E00AD600DAC3F2 /* TiltController.cpp in Sources */,
 				EB2BE9B61D74952A002FE78B /* main.cpp in Sources */,
 				F025104227D02C6C00AB80AA /* AttackController.cpp in Sources */,

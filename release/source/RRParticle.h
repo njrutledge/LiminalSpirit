@@ -29,6 +29,8 @@
 		float _angle;
 		/* The speed of this particle */
 		float _speed;
+		/* The size of the particle */
+		float _size;
 
 		// FADING AND OPACITY
 
@@ -40,6 +42,16 @@
 		float _maxfadetime;
 		/* The timer to keep track of the fade */
 		float _fadetimer;
+
+		//SIZE ALTERING 
+		/* 1 if enlarging, -1 if shrinking and 0 if neither */
+		int _shrinkOrEnlarge;
+		/* The time for the particle to increase/decrease in size */
+		float _maxsizechangetime;
+		/* The timer to keep track of size changing */
+		float _sizetimer;
+		/** The rate of which the particle changes size */
+		float _sizechangerate;
 
 		// TEXTURING
 		/* Whether random texturing is enabled or not */
@@ -65,9 +77,9 @@
 		*
 		* @return  A newly allocated particle
 		*/
-		static std::shared_ptr<Particle> alloc(cugl::Vec2 position, cugl::Vec2 gravity, float speed, float lifetime, float angle) {
+		static std::shared_ptr<Particle> alloc(cugl::Vec2 position, float size, cugl::Vec2 gravity, float speed, float lifetime, float angle) {
 			std::shared_ptr<Particle> result = std::make_shared<Particle>();
-			return (result->init(position, gravity, speed, lifetime, angle) ? result : nullptr);
+			return (result->init(position, size, gravity, speed, lifetime, angle) ? result : nullptr);
 		}
 
 		/**
@@ -75,9 +87,9 @@
 		*
 		* @return  A newly allocated particle
 		*/
-		static std::shared_ptr<Particle> alloc(cugl::Vec2 position, cugl::Vec2 gravity, float speed, float lifetime, float angle, int numTextures) {
+		static std::shared_ptr<Particle> alloc(cugl::Vec2 position, float size, cugl::Vec2 gravity, float speed, float lifetime, float angle, int numTextures) {
 			std::shared_ptr<Particle> result = std::make_shared<Particle>();
-			return (result->initRandomTexture(position, gravity, speed, lifetime, angle, numTextures) ? result : nullptr);
+			return (result->initRandomTexture(position, size, gravity, speed, lifetime, angle, numTextures) ? result : nullptr);
 		}
 
 		/**
@@ -85,9 +97,19 @@
 		*
 		* @return  A newly allocated particle with fade-in
 		*/
-		static std::shared_ptr<Particle> alloc(cugl::Vec2 position, cugl::Vec2 gravity, float speed, float lifetime, float angle, float maxFadeTime) {
+		static std::shared_ptr<Particle> alloc(cugl::Vec2 position, float size, cugl::Vec2 gravity, float speed, float lifetime, float angle, float maxFadeTime) {
 			std::shared_ptr<Particle> result = std::make_shared<Particle>();
-			return (result->initFading(position, gravity, speed, lifetime, angle, maxFadeTime) ? result : nullptr);
+			return (result->initFading(position, size, gravity, speed, lifetime, angle, maxFadeTime) ? result : nullptr);
+		}
+
+		/**
+		* Creates a new particle with size changing
+		*
+		* @return  A newly allocated particle with size changing
+		*/
+		static std::shared_ptr<Particle> alloc(cugl::Vec2 position, float size, cugl::Vec2 gravity, float speed, float lifetime, float angle, float maxChangeTime, float changeRate) {
+			std::shared_ptr<Particle> result = std::make_shared<Particle>();
+			return (result->initSizeChanging(position, size, gravity, speed, lifetime, angle, maxChangeTime, changeRate) ? result : nullptr);
 		}
 
 		/*
@@ -95,7 +117,7 @@
 		* 
 		* @return true if succesful
 		*/
-		bool initRandomTexture(cugl::Vec2 position, cugl::Vec2 gravity, float speed, float lifetime, float angle, int numTextures);
+		bool initRandomTexture(cugl::Vec2 position, float size, cugl::Vec2 gravity, float speed, float lifetime, float angle, int numTextures);
 
 
 		/**
@@ -103,15 +125,21 @@
 		*
 		* @return  true if successful
 		*/
-		bool init(cugl::Vec2 position, cugl::Vec2 gravity, float speed, float lifetime, float angle);
+		bool init(cugl::Vec2 position, float size, cugl::Vec2 gravity, float speed, float lifetime, float angle);
 
 		/**
 		* Creates a particle with fade-in
 		* 
 		* @return true if successful
 		*/
-		bool initFading(cugl::Vec2 position, cugl::Vec2 gravity, float speed, float lifetime, float angle, float maxFadeTime);
+		bool initFading(cugl::Vec2 position, float size, cugl::Vec2 gravity, float speed, float lifetime, float angle, float maxFadeTime);
 
+		/**
+		* Creates a particle with size increase/decreasing
+		*
+		* @return true if successful
+		*/
+		bool initSizeChanging(cugl::Vec2 position, float size, cugl::Vec2 gravity, float speed, float lifetime, float angle, float maxChangeTime, float changeRate);
 
 		/*Returns the position of this particle.
 			*
@@ -145,6 +173,16 @@
 		* Gets the texture ID of this particle
 		*/
 		int getTexture() { return _texID; }
+
+		/*
+		* Gets the size of the particle (scales invididual particle textures)
+		*/
+		float getSize() { return _size; }
+		
+		/**
+		* Sets the size (represented as a scaling value for the texture) of the particle
+		*/
+		void setSize(float scale) { _size = scale; }
 
 		/**
 		* Returns the angle of this particle

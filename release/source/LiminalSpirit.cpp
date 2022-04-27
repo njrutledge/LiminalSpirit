@@ -209,9 +209,10 @@ void LiminalSpirit::updateWorldSelectScene(float timestep)
         _scene = State::GAME;
         break;
     case WorldSelectScene::Choice::FOREST:
-        //_gameplay.init(_assets, _sound_controller, "stack");
-        _bossgame.init(_assets, _sound_controller);
-        _scene = State::BOSS;
+        _gameplay.init(_assets, _sound_controller, "stack");
+        _scene = State::GAME;
+//        _bossgame.init(_assets, _sound_controller);
+//        _scene = State::BOSS;
         break;
     }
 }

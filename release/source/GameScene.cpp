@@ -349,6 +349,7 @@ void GameScene::dispose()
         _attacks->_current.clear();
         _attacks->_pending.clear();
     }
+    _platformNodes.clear();
     _player = nullptr;
     _attacks = nullptr;
 
@@ -431,10 +432,10 @@ void GameScene::updateSoundInputParticlesAndTilt(float timestep) {
     ////Update all Particles
     for (std::shared_ptr<scene2::SceneNode> s : _worldnode->getChildren()) {
         if (s->getTag() == 100) {
-            if (!s->isVisible()) {
+            ParticleNode* pn = dynamic_cast<ParticleNode*>(s.get());
+            if (pn->getPool()->isComplete()) {
                 s->dispose();
             }
-            ParticleNode* pn = dynamic_cast<ParticleNode*>(s.get());
             pn->update(timestep);
         }
     };
