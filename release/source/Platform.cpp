@@ -18,6 +18,8 @@ bool PlatformModel::init(const cugl::Vec2& pos, const float width, const float h
     _leftBotPos = pos;
     nsize.height = height;
     _drawScale = scale;
+    _sensorFixtureTop = nullptr;
+    _sensorFixtureBottom = nullptr;
 
     if (BoxObstacle::init(pos+nsize/2, nsize)) {
         setDensity(0);
@@ -40,7 +42,7 @@ void PlatformModel::dispose() {
 
 /** Creates new fixtures for the body and defines shape*/
 void PlatformModel::createFixtures() {
-    if (_body == nullptr) {
+    if (_body != nullptr) {
         return;
     }
 
@@ -86,7 +88,7 @@ void PlatformModel::createFixtures() {
 
 /** Releases the fixtures for this body, resets the shape*/
 void PlatformModel::releaseFixtures() {
-    if (_body != nullptr) {
+    if (_body == nullptr) {
         return;
     }
 
