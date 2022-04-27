@@ -42,7 +42,7 @@ void PlatformModel::dispose() {
 
 /** Creates new fixtures for the body and defines shape*/
 void PlatformModel::createFixtures() {
-    if (_body != nullptr) {
+    if (_body == nullptr) {
         return;
     }
 
@@ -88,9 +88,9 @@ void PlatformModel::createFixtures() {
 
 /** Releases the fixtures for this body, resets the shape*/
 void PlatformModel::releaseFixtures() {
-    if (_body == nullptr) {
-        return;
-    }
+    //if (_body != nullptr) {
+    //    return;
+    //}
 
     BoxObstacle::releaseFixtures();
     if (_sensorFixtureTop != nullptr) {
