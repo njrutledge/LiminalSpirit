@@ -987,14 +987,15 @@ void GameScene::updateEnemies(float timestep) {
                     sprite->setFrame(7);
                 }
             } // Using idle timer for walking animation since lost has no idle
-            else if ((*it)->getIdleAnimationTimer() > .1f && (*it)->getVX() > 0) {
+            else if (((*it)->getIdleAnimationTimer() > .1f && (*it)->getVX() > 0) || sprite->getFrame() == 4 || sprite->getFrame() == 7) {
                 sprite->setFrame((sprite->getFrame() + 1) % 4);
                 (*it)->setIdleAnimationTimer(0);
             }
-            else if ((*it)->getIdleAnimationTimer() > .1f && (*it)->getVX() < 0) {
+            else if (((*it)->getIdleAnimationTimer() > .1f && (*it)->getVX() < 0) || sprite->getFrame() == 4 || sprite->getFrame() == 7) {
                 sprite->setFrame((sprite->getFrame() - 1) % 4);
                 (*it)->setIdleAnimationTimer(0);
             }
+            CULog("frame: %d",sprite->getFrame());
         }
 
 

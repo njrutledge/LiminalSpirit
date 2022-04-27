@@ -135,7 +135,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                     CULog("HEALTH SET");
                     if (attack->getDamage() > 0) {
                         //enemy->setInvincibility(true);
-                        enemy->setInvincibilityTimer(0.1f);
+                        enemy->setInvincibilityTimer(0.2f);
                     }
                     else {
                         CULog("NO DAMAGE ATTACK???");
