@@ -968,34 +968,36 @@ void GameScene::updateEnemies(float timestep) {
             }
         }
         else if ((*it)->getName() == "Lost") {
-            if ((*it)->getVX() > 0) {
-                sprite->flipHorizontal(false);
-            }
-            else {
-                sprite->flipHorizontal(true);
-            }
             if ((*it)->getInvincibilityTimer() > 0) {
                 if (sprite->getFrame() != 7 && sprite->getFrame() != 4) {
                     std::shared_ptr<ParticleNode> dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, text, pool);
                     dmgd->setScale(0.25f);
                     _worldnode->addChildWithTag(dmgd, 100);
                 }
-                if ((*it)->getVX() > 0) {
+                if (!sprite->isFlipHorizontal()) {
                     sprite->setFrame(4);
                 }
                 else {
                     sprite->setFrame(7);
                 }
-            } // Using idle timer for walking animation since lost has no idle
-            else if (((*it)->getIdleAnimationTimer() > .1f && (*it)->getVX() > 0) || sprite->getFrame() == 4 || sprite->getFrame() == 7) {
-                sprite->setFrame((sprite->getFrame() + 1) % 4);
-                (*it)->setIdleAnimationTimer(0);
             }
-            else if (((*it)->getIdleAnimationTimer() > .1f && (*it)->getVX() < 0) || sprite->getFrame() == 4 || sprite->getFrame() == 7) {
-                sprite->setFrame((sprite->getFrame() - 1) % 4);
-                (*it)->setIdleAnimationTimer(0);
+            else {
+                if ((*it)->getVX() > 0) {
+                    sprite->flipHorizontal(false);
+                }
+                else {
+                    sprite->flipHorizontal(true);
+                }
+                // Using idle timer for walking animation since lost has no idle
+                if (((*it)->getVX() > 0) && ((*it)->getIdleAnimationTimer() > .1f || sprite->getFrame() == 4 || sprite->getFrame() == 7)) {
+                    sprite->setFrame((sprite->getFrame() + 1) % 4);
+                    (*it)->setIdleAnimationTimer(0);
+                }
+                else if (((*it)->getVX() < 0) && ((*it)->getIdleAnimationTimer() > .1f || sprite->getFrame() == 4 || sprite->getFrame() == 7)) {
+                    sprite->setFrame((sprite->getFrame() - 1) % 4);
+                    (*it)->setIdleAnimationTimer(0);
+                }
             }
-            CULog("frame: %d",sprite->getFrame());
         }
 
 
