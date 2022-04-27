@@ -651,15 +651,21 @@ void GameScene::updateAnimations(float timestep) {
     // Ranged Arm
     if (_player->isStunned()) {
         rSprite->setFrame(8);
+        rSprite->setAnchor(0.5, 0.5);
+        _rangedArm->setAttackAngle(0);
         _rangedArm->setLastType(Glow::MeleeState::cool);
         _rangedArm->setAnimeTimer(0);
     }
     else if (_rangedArm->getLastType() == Glow::MeleeState::cool) {
         if (_player->isFacingRight()) {
             rSprite->setFrame(5);
+            rSprite->setAnchor(0.5, 0.5);
+            _rangedArm->setAttackAngle(0);
         }
         else {
             rSprite->setFrame(0);
+            rSprite->setAnchor(0.5, 0.5);
+            _rangedArm->setAttackAngle(0);
         }
     }
     else if (_rangedArm->getLastType() == Glow::MeleeState::first) {
@@ -702,9 +708,13 @@ void GameScene::updateAnimations(float timestep) {
     else {
         if (_player->isFacingRight()) {
             rSprite->setFrame(5);
+            rSprite->setAnchor(0.5, 0.5);
+            _rangedArm->setAttackAngle(0);
         }
         else {
             rSprite->setFrame(0);
+            rSprite->setAnchor(0.5, 0.5);
+            _rangedArm->setAttackAngle(0);
         }
     }
 
