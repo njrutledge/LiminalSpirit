@@ -6,7 +6,8 @@
 //  Copyright © 2022 Game Design Initiative at Cornell. All rights reserved.
 //
 
-#define FADE 0.003
+//Fade is determined in Seconds. A fade of 1.5 means the music fades in or out in 1.5 seconds.
+#define FADE 1.5
 #define MAX_LAYER_VOLUME 0.3
 
 #include "SoundController.hpp"
@@ -51,16 +52,16 @@ void SoundController::LevelMusic::play_music(std::vector<bool> e, GameState s) {
         switch (i) {
             case 0:
                 if (e[0]) {
-                    _gNode->setGain(clampf(_gNode->getGain() + FADE, 0.0f, MAX_LAYER_VOLUME));
+                    _gNode->setGain(clampf(_gNode->getGain() + (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME));
                 } else {
-                    _gNode->setGain(clampf(_gNode->getGain() - FADE, 0.0f, MAX_LAYER_VOLUME));
+                    _gNode->setGain(clampf(_gNode->getGain() - (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME));
                 }
                 break;
             case 1:
                 if (e[1]) {
-                    _pNode->setGain(clampf(_pNode->getGain() + FADE, 0.0f, MAX_LAYER_VOLUME * 1.3f));
+                    _pNode->setGain(clampf(_pNode->getGain() + (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME * 1.3f));
                 } else {
-                    _pNode->setGain(clampf(_pNode->getGain() - FADE, 0.0f, MAX_LAYER_VOLUME * 1.3f));
+                    _pNode->setGain(clampf(_pNode->getGain() - (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME * 1.3f));
                 }
                 break;
             default:
@@ -71,7 +72,9 @@ void SoundController::LevelMusic::play_music(std::vector<bool> e, GameState s) {
     
 };
 
+
 SoundController::SoundController(){};
+
 
 void SoundController::init(std::shared_ptr<cugl::AssetManager> &assets) {
     
@@ -99,16 +102,6 @@ void SoundController::init(std::shared_ptr<cugl::AssetManager> &assets) {
     _playerSlashEmpty = assets->get<cugl::Sound>("playerSlashEmpty");
     
     _playerSlashHit = assets->get<cugl::Sound>("playerSlashHit");
-    
-    //int playerslots = 12;
-    //_playerMixer = cugl::audio::AudioMixer::alloc(playerslots);
-    
-    //for (int i = 0; i < playerslots; i++) {
-    //    std::shared_ptr<cugl::audio::AudioScheduler> s = cugl::audio::AudioScheduler::alloc(2, 48000);//
-    //    _playerMixer->attach(i, s);
-    //    _player_sfx_slots.emplace_back(s);
-    //}
-    //cugl::AudioEngine::get()->play("playerMixer", _playerMixer);
 };
 
 void SoundController::play_menu_music() {
@@ -167,8 +160,6 @@ void SoundController::play_player_sound(playerSType sound) {
     switch (sound) {
         case slashEmpty:
             cugl::AudioEngine::get()->play("playerSlashEmpty", _playerSlashEmpty, false, 1.0, true);
-            //_player_sfx_slots[0]->trim();
-           // _player_sfx_slots[0]->play(_playerSlashEmpty->createNode());
             break;
         case slashHit:
             cugl::AudioEngine::get()->play("playerSlashEmpty", _playerSlashHit, false, 1.0, true);
@@ -195,5 +186,9 @@ void SoundController::reset_level_tracks() {
     _cave2->getMixer()->reset();
     _mushroom1->getMixer()->reset();
     _mushroom2->getMixer()->reset();
-    
 };
+
+void SoundController::dispose() {
+    CULog("kill");
+};
+

@@ -130,6 +130,11 @@ public:
     void play_player_sound(playerSType sound);
     
     void reset_level_tracks();
+    
+    /**
+            Kill
+     */
+    void dispose();
 };
 
 #endif /* SoundController_hpp */
