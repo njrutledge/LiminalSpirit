@@ -190,6 +190,8 @@ public:
 	/**Returns the health of the player */
 	float getHealth() const { return _health; }
 
+	float getMaxHealth() const { return PLAYER_HEALTH; }
+
 	/** Sets the player health */
 	void setHealth(float value) { _health = value; }
 

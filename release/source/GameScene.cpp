@@ -198,7 +198,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
     // Create a scene graph the same size as the window
     //_scene = Scene2::alloc(dimen.width, dimen.height);
     // default scene is forest for now
-    auto scene = _assets->get<scene2::SceneNode>("forest");
+   auto scene = (_assets->get<scene2::SceneNode>("forest"));
     if (!BIOME.compare("cave")) {
         scene = _assets->get<scene2::SceneNode>("cave");
     }
@@ -280,19 +280,13 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
     // Get font
     _font = assets->get<Font>("marker");
 
-    // Create and layout the health meter
-    _healthback = scene2::PolygonNode::allocWithPoly((Rect(0, 0, _player->getHealth() / 4.0f, .5) * _scale));
-    _healthback->setPriority(9);
-    _healthback->setColor(PLAYER_HEALTHBACK_COLOR);
-    _healthback->setAnchor(0, 1);
-    _healthback->setPosition(Vec2(bounds.getMinX() + 10, dimen.height - 10));
-    scene->addChild(_healthback);
-    _health = scene2::PolygonNode::allocWithPoly((Rect(0, 0, _player->getHealth() / 4.0f, .5) * _scale));
-    _health->setPriority(10);
-    _health->setColor(PLAYER_HEALTH_COLOR);
-    _health->setAnchor(0, 1);
-    _health->setPosition(Vec2(bounds.getMinX() + 10, dimen.height - 10));
-    scene->addChild(_health);
+    // Grab healthbar
+    _healthbar = std::dynamic_pointer_cast<scene2::ProgressBar>(assets->get<scene2::SceneNode>("HUD_healthbar"));
+    auto HUD = assets->get<scene2::SceneNode>("HUD");
+    HUD->setContentSize(dimen);
+    HUD->doLayout();
+    scene->addChild(HUD);
+
 
     std::string msg = strtool::format("Wave: %d / %d", _nextWaveNum, _numWaves);
     _text = TextLayout::allocWithText(msg, assets->get<Font>("marker"));
@@ -1386,8 +1380,19 @@ void GameScene::updateRemoveDeletedPlayer()
 
 void GameScene::updateHealthbar() {
     // Update the health meter
-    _health->setPolygon((Rect(0, 0, _player->getHealth() / 4.0f, .5) * _scale));
-    _health->setPriority(10);
+    //left offset is additive, makes progress end at most leftOff*rightOff from left edge
+    float leftOff = .2 ;
+    //right offset is multiplicative, scales down the progress to make the right edge start at correct spot
+    float rightOff = 0.77;
+    float progress = _player->getHealth() / _player->getMaxHealth();
+    float prog = (progress + leftOff) * rightOff;
+    if (prog != _healthbar->getProgress()) {
+        std::chrono::milliseconds start = std::chrono::duration_cast <std::chrono::milliseconds> (std::chrono::system_clock::now().time_since_epoch());
+        _healthbar->setProgress(prog);
+        std::chrono::milliseconds end = std::chrono::duration_cast <std::chrono::milliseconds> (std::chrono::system_clock::now().time_since_epoch());
+        start = start - end;
+        CULog("time: %d", start.count());
+    }
 }
 
 void GameScene::updateCamera() {

@@ -193,6 +193,8 @@ protected:
     /** health bar nodes */
     std::shared_ptr<scene2::PolygonNode> _healthback;
     std::shared_ptr<scene2::PolygonNode> _health;
+    /** healthbar */
+    std::shared_ptr<scene2::ProgressBar> _healthbar;
 
     /**
      * Internal helper to build the scene graph.

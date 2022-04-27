@@ -240,45 +240,45 @@
 			"minfilter": "linear",
 			"magfilter": "linear"
 		},
-        "cave_background": {
-            "file": "textures/backgrounds/cave_background.png"
-        },
-        "cave_small_platform": {
-            "file": "textures/cave/S-DOWN.png"
-        },
-        "cave_medium_platform": {
-            "file": "textures/cave/M-DOWN.png"
-        },
-        "cave_large_platform": {
-            "file": "textures/cave/L-DOWN.png"
-        },
-        "shroom_background": {
-            "file": "textures/backgrounds/shroom_background.png"
-        },
-        "shroom_small_platform": {
-            "file": "textures/shroom/3-S.png"
-        },
-        "shroom_medium_platform": {
-            "file": "textures/shroom/6-M.png"
-        },
-        "shroom_large_platform": {
-            "file": "textures/shroom/2-L.png"
-        },
-        "forest_background": {
-            "file": "textures/backgrounds/forest_background.png"
-        },
-        "forest_small_platform": {
-            "file": "textures/forest/forest_small_platform.png"
-        },
-        "forest_medium_platform": {
-            "file": "textures/forest/forest_medium_platform.png"
-        },
-        "forest_large_platform": {
-            "file": "textures/forest/forest_large_platform.png"
-        },
-        "platform": {
-            "file": "textures/platform.png"
-        },
+		"cave_background": {
+			"file": "textures/backgrounds/cave_background.png"
+		},
+		"cave_small_platform": {
+			"file": "textures/cave/S-DOWN.png"
+		},
+		"cave_medium_platform": {
+			"file": "textures/cave/M-DOWN.png"
+		},
+		"cave_large_platform": {
+			"file": "textures/cave/L-DOWN.png"
+		},
+		"shroom_background": {
+			"file": "textures/backgrounds/shroom_background.png"
+		},
+		"shroom_small_platform": {
+			"file": "textures/shroom/3-S.png"
+		},
+		"shroom_medium_platform": {
+			"file": "textures/shroom/6-M.png"
+		},
+		"shroom_large_platform": {
+			"file": "textures/shroom/2-L.png"
+		},
+		"forest_background": {
+			"file": "textures/backgrounds/forest_background.png"
+		},
+		"forest_small_platform": {
+			"file": "textures/forest/forest_small_platform.png"
+		},
+		"forest_medium_platform": {
+			"file": "textures/forest/forest_medium_platform.png"
+		},
+		"forest_large_platform": {
+			"file": "textures/forest/forest_large_platform.png"
+		},
+		"platform": {
+			"file": "textures/platform.png"
+		},
 		"home_background": {
 			"file": "textures/menus/home/home_background.png"
 		},
@@ -318,6 +318,19 @@
 		},
 		"background": {
 			"file": "textures/backgrounds/forest_background.png"
+		},
+		"healthbar": {
+			"file": "textures/hud/healthbar2.png",
+			"wrapS": "clamp",
+			"wrapT": "clamp",
+			"minfilter": "linear",
+			"magfilter": "linear",
+			"atlas": {
+				"background": [ 60, 30, 540, 140 ],
+				"foreground": [ 60, 202, 540, 312],
+				"leftcap": [ 60, 202, 61, 312 ],
+				"rightcap": [ 492, 202, 503, 312]
+			}
 		}
 	},
 	"fonts": {
@@ -331,78 +344,108 @@
 		}
 	},
 	"scene2s": {
-        "cave": {
-            "type": "Node",
-            "comment": "This is the root node of the scene",
-            "format": {
-                "type": "Anchored"
-            },
-            "children": {
-                "backdrop": {
-                    "type": "Image",
-                    "data": {
-                        "texture": "cave_background",
-                        "anchor": [
-                            0.5,
-                            0.5
-                        ],
-                        "scale": 0.75
-                    },
-                    "layout": {
-                        "x_anchor": "center",
-                        "y_anchor": "middle"
-                    }
-                }
-            }
-        },
-        "shroom": {
-            "type": "Node",
-            "comment": "This is the root node of the scene",
-            "format": {
-                "type": "Anchored"
-            },
-            "children": {
-                "backdrop": {
-                    "type": "Image",
-                    "data": {
-                        "texture": "shroom_background",
-                        "anchor": [
-                            0.5,
-                            0.5
-                        ],
-                        "scale": 0.75
-                    },
-                    "layout": {
-                        "x_anchor": "center",
-                        "y_anchor": "middle"
-                    }
-                }
-            }
-        },
-        "forest": {
-            "type": "Node",
-            "comment": "This is the root node of the scene",
-            "format": {
-                "type": "Anchored"
-            },
-            "children": {
-                "backdrop": {
-                    "type": "Image",
-                    "data": {
-                        "texture": "forest_background",
-                        "anchor": [
-                            0.5,
-                            0.5
-                        ],
-                        "scale": 0.75
-                    },
-                    "layout": {
-                        "x_anchor": "center",
-                        "y_anchor": "middle"
-                    }
-                }
-            }
-        },
+		"cave": {
+			"type": "Node",
+			"comment": "This is the root node of the scene",
+			"format": {
+				"type": "Anchored"
+			},
+			"children": {
+				"backdrop": {
+					"type": "Image",
+					"data": {
+						"texture": "cave_background",
+						"anchor": [
+							0.5,
+							0.5
+						],
+						"scale": 0.75
+					},
+					"layout": {
+						"x_anchor": "center",
+						"y_anchor": "middle"
+					}
+				}
+			}
+		},
+		"shroom": {
+			"type": "Node",
+			"comment": "This is the root node of the scene",
+			"format": {
+				"type": "Anchored"
+			},
+			"children": {
+				"backdrop": {
+					"type": "Image",
+					"data": {
+						"texture": "shroom_background",
+						"anchor": [
+							0.5,
+							0.5
+						],
+						"scale": 0.75
+					},
+					"layout": {
+						"x_anchor": "center",
+						"y_anchor": "middle"
+					}
+				}
+			}
+		},
+		"forest": {
+			"type": "Node",
+			"comment": "This is the root node of the scene",
+			"format": {
+				"type": "Anchored"
+			},
+			"children": {
+				"backdrop": {
+					"type": "Image",
+					"data": {
+						"texture": "forest_background",
+						"anchor": [
+							0.5,
+							0.5
+						],
+						"scale": 0.75
+					},
+					"layout": {
+						"x_anchor": "center",
+						"y_anchor": "middle"
+					}
+				}
+			}
+		},
+		"HUD": {
+			"type": "Node",
+			"comment": "This is the root node of the HUD",
+			"format": {
+				"type": "Anchored"
+			},
+			"children": {
+				"healthbar": {
+					"type": "Progress",
+					"data": {
+						"anchor": [
+							0,
+							1
+						],
+						"background": "healthbar_background",
+						"foreground": "healthbar_foreground",
+						"left_cap": "healthbar_leftcap",
+						"right_cap": "healthbar_rightcap",
+						"scale": 0.5
+					},
+					"layout": {
+						"x_anchor": "left",
+						"y_anchor": "top",
+						"x_offset": 0,
+						"y_offset": 0,
+						"absolute": false
+					}
+				}
+			}
+		},
 		"main_menu": {
 			"type": "Node",
 			"comment": "This is the root node of the menu scene",
