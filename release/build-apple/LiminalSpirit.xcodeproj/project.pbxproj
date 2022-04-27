@@ -14,6 +14,7 @@
 		5783892927E2369B000CB5B9 /* BaseEnemyModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85D0B48527D010FC004EF4C8 /* BaseEnemyModel.cpp */; };
 		5783892A27E2369B000CB5B9 /* BaseEnemyModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85D0B48527D010FC004EF4C8 /* BaseEnemyModel.cpp */; };
 		5783892E27E23F49000CB5B9 /* AIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001627DFAC8500DAC3F2 /* AIController.cpp */; };
+		854C8F1C2819D27B00C83E4C /* saves in Resources */ = {isa = PBXBuildFile; fileRef = 854C8F1B2819D27B00C83E4C /* saves */; };
 		857201C827E25619006D48C6 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 857201C727E25619006D48C6 /* fonts */; };
 		857201C927E25619006D48C6 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 857201C727E25619006D48C6 /* fonts */; };
 		857201CA27E25619006D48C6 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 857201C727E25619006D48C6 /* fonts */; };
@@ -186,6 +187,7 @@
 /* Begin PBXFileReference section */
 		578388F827E1156D000CB5B9 /* Platform.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Platform.hpp; sourceTree = "<group>"; };
 		578388FC27E1156D000CB5B9 /* Platform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Platform.cpp; sourceTree = "<group>"; };
+		854C8F1B2819D27B00C83E4C /* saves */ = {isa = PBXFileReference; lastKnownFileType = folder; name = saves; path = ../saves; sourceTree = "<group>"; };
 		857201C727E25619006D48C6 /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
 		85841F3E2809F09300169F44 /* shaders */ = {isa = PBXFileReference; lastKnownFileType = folder; path = shaders; sourceTree = "<group>"; };
 		85841F3F2809F09300169F44 /* Phantom.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Phantom.hpp; sourceTree = "<group>"; };
@@ -218,7 +220,7 @@
 		EB2BE9CB1D749937002FE78B /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		EB2BE9CD1D749953002FE78B /* ForceFeedback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ForceFeedback.framework; path = System/Library/Frameworks/ForceFeedback.framework; sourceTree = SDKROOT; };
 		EB2BE9CE1D749953002FE78B /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
-		EB74548C1D74D75C002FBAE6 /* LiminalSpirit (iOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LiminalSpirit (iOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB74548C1D74D75C002FBAE6 /* Liminal Spirit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Liminal Spirit.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB7454A61D74D846002FBAE6 /* iOS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "iOS-Info.plist"; sourceTree = "<group>"; };
 		EB7454A71D74D846002FBAE6 /* iOS.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = iOS.xcassets; sourceTree = "<group>"; };
 		EB7454A81D74D846002FBAE6 /* Landscape.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Landscape.storyboard; sourceTree = "<group>"; };
@@ -433,6 +435,7 @@
 		EBBF18881D74904A008E2001 = {
 			isa = PBXGroup;
 			children = (
+				854C8F1B2819D27B00C83E4C /* saves */,
 				EBBF18B11D749176008E2001 /* Source */,
 				EB2BE9B71D749870002FE78B /* Assets */,
 				EBBF18931D74904A008E2001 /* Resources */,
@@ -446,7 +449,7 @@
 			isa = PBXGroup;
 			children = (
 				EBBF18911D74904A008E2001 /* LiminalSpirit (Mac).app */,
-				EB74548C1D74D75C002FBAE6 /* LiminalSpirit (iOS).app */,
+				EB74548C1D74D75C002FBAE6 /* Liminal Spirit.app */,
 				EB22BF5E25D0E8BC002ACE41 /* LiminalSpirit (Sim).app */,
 			);
 			name = Products;
@@ -548,9 +551,9 @@
 			productReference = EB22BF5E25D0E8BC002ACE41 /* LiminalSpirit (Sim).app */;
 			productType = "com.apple.product-type.application";
 		};
-		EB74548B1D74D75C002FBAE6 /* LiminalSpirit (iOS) */ = {
+		EB74548B1D74D75C002FBAE6 /* Liminal Spirit */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EB7454A01D74D75C002FBAE6 /* Build configuration list for PBXNativeTarget "LiminalSpirit (iOS)" */;
+			buildConfigurationList = EB7454A01D74D75C002FBAE6 /* Build configuration list for PBXNativeTarget "Liminal Spirit" */;
 			buildPhases = (
 				EB7454881D74D75C002FBAE6 /* Sources */,
 				EB7454891D74D75C002FBAE6 /* Frameworks */,
@@ -560,9 +563,9 @@
 			);
 			dependencies = (
 			);
-			name = "LiminalSpirit (iOS)";
+			name = "Liminal Spirit";
 			productName = "CUGL Demo (iOS)";
-			productReference = EB74548C1D74D75C002FBAE6 /* LiminalSpirit (iOS).app */;
+			productReference = EB74548C1D74D75C002FBAE6 /* Liminal Spirit.app */;
 			productType = "com.apple.product-type.application";
 		};
 		EBBF18901D74904A008E2001 /* LiminalSpirit (Mac) */ = {
@@ -598,7 +601,7 @@
 					};
 					EB74548B1D74D75C002FBAE6 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = PXKGFP2M23;
+						DevelopmentTeam = H2MPDV89H8;
 					};
 					EBBF18901D74904A008E2001 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -626,7 +629,7 @@
 			projectRoot = "";
 			targets = (
 				EBBF18901D74904A008E2001 /* LiminalSpirit (Mac) */,
-				EB74548B1D74D75C002FBAE6 /* LiminalSpirit (iOS) */,
+				EB74548B1D74D75C002FBAE6 /* Liminal Spirit */,
 				EB22BF5D25D0E8BC002ACE41 /* LiminalSpirit (Sim) */,
 			);
 		};
@@ -693,6 +696,7 @@
 			files = (
 				85841F412809F09300169F44 /* shaders in Resources */,
 				F05BD2B327F29AB8005D1F38 /* sounds in Resources */,
+				854C8F1C2819D27B00C83E4C /* saves in Resources */,
 				EBFE7C091E19B4AC001007C2 /* json in Resources */,
 				EB2BE9BB1D7498D2002FE78B /* textures in Resources */,
 				EBBF189B1D74904A008E2001 /* Mac.xcassets in Resources */,
@@ -866,12 +870,12 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = PXKGFP2M23;
+				DEVELOPMENT_TEAM = H2MPDV89H8;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/iOS-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = gamedesign.LiminalSpirit2.11;
+				PRODUCT_BUNDLE_IDENTIFIER = devbuild.LiminalSpirit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -887,12 +891,12 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = PXKGFP2M23;
+				DEVELOPMENT_TEAM = H2MPDV89H8;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/iOS-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = gamedesign.LiminalSpirit2.11;
+				PRODUCT_BUNDLE_IDENTIFIER = devbuild.LiminalSpirit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1059,7 +1063,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EB7454A01D74D75C002FBAE6 /* Build configuration list for PBXNativeTarget "LiminalSpirit (iOS)" */ = {
+		EB7454A01D74D75C002FBAE6 /* Build configuration list for PBXNativeTarget "Liminal Spirit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EB7454A11D74D75C002FBAE6 /* Debug */,
