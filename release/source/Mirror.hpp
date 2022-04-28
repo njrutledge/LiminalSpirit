@@ -29,6 +29,7 @@
 #define MIRROR_SHARD_TEXTURE_5 "mirror_shard5"
 #define MIRROR_SHARD_TEXTURE_6 "mirror_shard6"
 
+#define MIRROR_HURT_TIME 0.5f
 
 #pragma mark - 
 #pragma mark Lost
@@ -76,6 +77,12 @@ protected:
 	cugl::Vec2 _shard3Positions[4];
 	int _shard3Index;
 
+	//hurt sprite
+	std::shared_ptr<cugl::scene2::PolygonNode> _hurtSprite;
+
+	float _hurtTime;
+
+
 	void updateShard(float* shardTime, int* shardIndex, std::shared_ptr<cugl::scene2::PolygonNode> shard, cugl::Vec2 shardPositions[4], float time);
 public:
 
@@ -106,6 +113,16 @@ public:
 		_shard1 = sprite1;
 		_shard2 = sprite2;
 		_shard3 = sprite3;
+	}
+
+	void setHurtSprite(std::shared_ptr<cugl::scene2::PolygonNode> hurtSprite) {
+		_hurtSprite = hurtSprite;
+		_hurtSprite->setVisible(false);
+		_hurtSprite->setPriority(3.01);
+	}
+
+	void setHurt() {
+		_hurtTime = MIRROR_HURT_TIME;
 	}
 
 #pragma mark - 

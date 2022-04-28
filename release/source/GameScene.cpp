@@ -1564,6 +1564,7 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch>& batch)
 
 void GameScene::createMirror(Vec2 enemyPos, Mirror::Type type, std::string assetName, std::shared_ptr<Glow> enemyGlow) {
     std::shared_ptr<Texture> mirrorImage = _assets->get<Texture>(assetName);
+    std::shared_ptr<Texture> mirrorHurtImage = _assets->get<Texture>(assetName + "_hurt");
     std::shared_ptr<Texture> mirror_reflectattackImage = _assets->get<Texture>(MIRROR_REFLECT_TEXTURE);
     //shards
     std::shared_ptr<scene2::PolygonNode> mirrorShards[6];
@@ -1577,8 +1578,10 @@ void GameScene::createMirror(Vec2 enemyPos, Mirror::Type type, std::string asset
 
     std::shared_ptr<Mirror> mirror = Mirror::alloc(enemyPos, mirrorImage->getSize(), mirrorImage->getSize() / _scale / 15, _scale, type); // TODO this is not right, fix this to be closest enemy
     std::shared_ptr<scene2::PolygonNode> mirrorSprite = scene2::PolygonNode::allocWithTexture(mirrorImage);
+    std::shared_ptr<scene2::PolygonNode> mirrorHurtSprite = scene2::PolygonNode::allocWithTexture(mirrorHurtImage);
     mirror->setGlow(enemyGlow);
     mirror->setAttackAnimationTimer(0);
+    mirror->setHurtSprite(mirrorHurtSprite);
     std::shared_ptr<scene2::SpriteNode> attackSprite = scene2::SpriteNode::alloc(mirror_reflectattackImage, MIRROR_REFLECT_ROWS, MIRROR_REFLECT_COLS);
     attackSprite->setFrame(0);
     attackSprite->setScale(1.15f);

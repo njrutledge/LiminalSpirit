@@ -48,8 +48,6 @@ bool Mirror::init(const cugl::Vec2& pos, const cugl::Size& realSize, const cugl:
 		_shard3Positions[2] = cugl::Vec2(_size.width * 7 / 8, _size.height / 6);
 		_shard3Positions[3] = cugl::Vec2(_size.width * 6 / 8, _size.height / 6);
 		_shard3Index = rand() % 4;
-
-
 		return true;
 	}
 	return false;
@@ -121,6 +119,20 @@ void Mirror::updateAnimations(float dt) {
 	updateShard(&_shard2Time, &_shard2Index, _shard2, _shard2Positions, 0.4f);
 	updateShard(&_shard3Time, &_shard3Index, _shard3, _shard3Positions, 0.5f);
 
+
+	//hurt animation
+	if (_node->getChildByName("hurt")) {
+		if (_hurtTime > 0) {
+			_hurtSprite->setVisible(true);
+			_hurtTime -= dt;
+		}
+		else {
+			_hurtSprite->setVisible(false);
+		}
+	}
+	else {
+		_node->addChildWithName(_hurtSprite, "hurt");
+	}
 
 
 }
