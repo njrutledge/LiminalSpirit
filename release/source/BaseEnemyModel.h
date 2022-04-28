@@ -119,6 +119,9 @@ protected:
     
     /** If the enemy is from a spawner, index of the spawner; otherwise, -1.*/
     int _spawnerIndex;
+    
+    bool _isJumping;
+    bool _isFalling;
 
 public:
 
@@ -249,6 +252,11 @@ public:
     int getSpawnerInd() {return _spawnerIndex; }
     
     void setSpawnerInd(int index) {_spawnerIndex = index; }
+    
+    bool isJumping() {return _isJumping; }
+    void setJumping(bool value) {_isJumping = value; }
+    bool isFalling() {return _isFalling; }
+    void setFalling(bool value) {_isFalling = value; }
 
 #pragma mark - 
 #pragma mark Physics Methods

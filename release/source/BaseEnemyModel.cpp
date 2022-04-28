@@ -51,6 +51,9 @@ bool BaseEnemyModel::init(const cugl::Vec2& pos, const cugl::Size& realSize, con
 	_enemyName = props.name;
 	_density = props.density;
     _spawnerIndex = -1;
+    _isJumping = false;
+    _isFalling = false;
+    _isGrounded = true;
 
 	if (CapsuleObstacle::init(pos, nsize)) {
 		setDensity(_density);
@@ -169,6 +172,14 @@ void BaseEnemyModel::update(float dt) {
 			_node->removeChildByName("healthbar");
 			_node->removeChildByName("healthbarback");
 		}
+        b2Filter filter = getFilterData();
+        if (getVY() > 0.1) {
+            filter.maskBits = 0b011000;
+        }
+        else {
+            filter.maskBits = 0b011100;
+        }
+        setFilterData(filter);
 	}
 
 }
