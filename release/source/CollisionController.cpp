@@ -166,12 +166,16 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                     AC->createAttack(attack->getPosition() /*cugl::Vec2(bd->getPosition().x, bd->getPosition().y)*/, 3, 0.1, 4, AttackController::p_exp, cugl::Vec2::ZERO, timer, PLAYER_RANGE, PLAYER_RANGE_FRAMES);
                 }
                 switch (attack->getType()) {
-                case AttackController::p_range:
-                case AttackController::p_exp_package:
-                    attack->setInactive();
-                    break;
+                    case AttackController::p_range:
+                        _sound->play_player_sound(SoundController::playerSType::shootHit);
+                        attack->setInactive();
+                        break;
+                    case AttackController::p_exp_package:
+                        attack->setInactive();
+                        break;
                     case AttackController::p_melee:
                         _sound->play_player_sound(SoundController::playerSType::slashHit);
+                        break;
                 default:
                     break;
                 }
