@@ -347,8 +347,8 @@
 			"minfilter": "linear",
 			"magfilter": "linear",
 			"atlas": {
-				"background": [ 60, 30, 540, 140 ],
-				"foreground": [ 60, 202, 540, 312 ],
+				"background": [ 60, 30, 560, 140 ],
+				"foreground": [ 60, 202, 560, 312 ],
 				"leftcap": [ 60, 202, 61, 312 ],
 				"rightcap": [ 492, 202, 503, 312 ]
 			}

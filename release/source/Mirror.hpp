@@ -125,6 +125,10 @@ public:
 		_hurtTime = MIRROR_HURT_TIME;
 	}
 
+	bool isHurt() {
+		return _hurtTime > 0;
+	}
+
 #pragma mark - 
 #pragma mark Static Constructors
 	/** Allocates a new mirror */
