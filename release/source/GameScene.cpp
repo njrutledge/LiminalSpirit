@@ -1052,6 +1052,7 @@ void GameScene::updateEnemies(float timestep) {
             if (mirror->getLinkedEnemy() == nullptr) {
                 mirror->setLinkedEnemy(getNearestNonMirror(mirror->getPosition()));
                 if (mirror->getLinkedEnemy() == nullptr) {
+                    mirror->setHurt();
                     mirror->markRemoved(true);
                 }
             }
@@ -1267,31 +1268,31 @@ void GameScene::updateSwipesAndAttacks(float timestep) {
             std::shared_ptr<Texture> attackTexture = _assets->get<Texture>((*it)->getAttackID());
             attackSprite = scene2::SpriteNode::alloc(attackTexture, 1, (*it)->getFrames()); // need to replace with animated texture
             if ((*it)->getAttackID() == PLAYER_RANGE) {
-                //this is mirrors
-                attackSprite->setScale(.85f * (*it)->getRadius());
-                attackSprite->setAngle((*it)->getAngle());
-                attackSprite->setColor(Color4::BLUE);
-                attackSprite->setPriority(2.1);
+//this is mirrors
+attackSprite->setScale(.85f * (*it)->getRadius());
+attackSprite->setAngle((*it)->getAngle());
+attackSprite->setColor(Color4::BLUE);
+attackSprite->setPriority(2.1);
 
             }
             else if ((*it)->getAttackID() == PHANTOM_ATTACK) {
-                attackSprite->setScale(0.04 * (*it)->getRadius());
-                attackSprite->setAngle((*it)->getAngle() + M_PI / 2);
-                attackSprite->setPriority(2.2);
+            attackSprite->setScale(0.04 * (*it)->getRadius());
+            attackSprite->setAngle((*it)->getAngle() + M_PI / 2);
+            attackSprite->setPriority(2.2);
 
 
-                dynamic_pointer_cast<scene2::SpriteNode>(attackSprite)->setFrame(0);
+            dynamic_pointer_cast<scene2::SpriteNode>(attackSprite)->setFrame(0);
             }
             else if ((*it)->getAttackID() == GLUTTON_ATTACK) {
-                attackSprite->setScale(.25 * (*it)->getRadius());
-                attackSprite->setAngle((*it)->getAngle() + M_PI);
-                attackSprite->setPriority(2);
+            attackSprite->setScale(.25 * (*it)->getRadius());
+            attackSprite->setAngle((*it)->getAngle() + M_PI);
+            attackSprite->setPriority(2);
             }
         }
         else {
-            attackSprite = scene2::PolygonNode::allocWithTexture(_pMeleeTexture);
-            attackSprite->setVisible(false);
-            attackSprite->setScale(.85f * (*it)->getRadius());
+        attackSprite = scene2::PolygonNode::allocWithTexture(_pMeleeTexture);
+        attackSprite->setVisible(false);
+        attackSprite->setScale(.85f * (*it)->getRadius());
         }
 
         (*it)->setDebugColor(Color4::YELLOW);
@@ -1366,7 +1367,14 @@ void GameScene::updateRemoveDeletedEnemies() {
     // Remove enemies
     auto eit = _enemies.begin();
     while (eit != _enemies.end()) {
-        if ((*eit)->isRemoved()) {
+        bool bypass = false;
+        if (std::shared_ptr<Mirror> mirror = dynamic_pointer_cast<Mirror> (*eit)) {
+            if (mirror->isHurt()) {
+                bypass = true;//don't remove until after hurt animation
+            }
+        }
+        if (!bypass && (*eit)->isRemoved()) {
+            
             //int log1 = _world->getObstacles().size();
             cugl::physics2::Obstacle* glowObj = dynamic_cast<cugl::physics2::Obstacle*>(&*(*eit)->getGlow());
             cugl::physics2::Obstacle* obj = dynamic_cast<cugl::physics2::Obstacle*>(&**eit);
@@ -1418,15 +1426,11 @@ void GameScene::updateHealthbar() {
     //left offset is additive, makes progress end at most leftOff*rightOff from left edge
     float leftOff = .2 ;
     //right offset is multiplicative, scales down the progress to make the right edge start at correct spot
-    float rightOff = 0.77;
+    float rightOff = 0.74;
     float progress = _player->getHealth() / _player->getMaxHealth();
     float prog = (progress + leftOff) * rightOff;
     if (prog != _healthbar->getProgress()) {
-        std::chrono::milliseconds start = std::chrono::duration_cast <std::chrono::milliseconds> (std::chrono::system_clock::now().time_since_epoch());
         _healthbar->setProgress(prog);
-        std::chrono::milliseconds end = std::chrono::duration_cast <std::chrono::milliseconds> (std::chrono::system_clock::now().time_since_epoch());
-        start = start - end;
-        CULog("time: %d", start.count());
     }
 }
 
