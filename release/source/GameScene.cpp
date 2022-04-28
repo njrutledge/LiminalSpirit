@@ -933,7 +933,7 @@ void GameScene::updateEnemies(float timestep) {
 
     for (auto it = _enemies.begin(); it != _enemies.end(); ++it)
     {
-        Vec2 direction = _ai.getMovement(*it, _player->getPosition(), timestep);
+        Vec2 direction = _ai.getMovement(*it, _player->getPosition(), timestep, 0, DEFAULT_WIDTH);
         (*it)->setVX(direction.x);
         (*it)->setVY(direction.y);
         (*it)->getGlow()->setPosition((*it)->getPosition());
