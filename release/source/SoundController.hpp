@@ -120,6 +120,8 @@ protected:
     
     std::shared_ptr<cugl::Sound> _playerShootHit;
     
+    std::shared_ptr<cugl::Sound> _playerHurt;
+    
     
     
 public:

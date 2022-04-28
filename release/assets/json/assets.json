@@ -821,6 +821,11 @@
             "type": "sample",
             "file": "sounds/playerSFX/Player_Shoot_Hit.wav",
             "volume": 0.4
+        },
+        "playerHurt": {
+            "type": "sample",
+            "file": "sounds/playerSFX/Player_Oof.wav",
+            "volume": 0.4
         }
     
 	},
