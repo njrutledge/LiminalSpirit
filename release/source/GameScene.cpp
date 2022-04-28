@@ -1048,8 +1048,8 @@ void GameScene::updateEnemies(float timestep) {
             }
 
         }
-        if (Mirror* mirror = dynamic_cast<Mirror*>((*it).get())) {
-            if (mirror->getLinkedEnemy() == nullptr) {
+        if (std::shared_ptr<Mirror> mirror = dynamic_pointer_cast<Mirror>(*it)) {
+            if (!mirror->isRemoved() && mirror->getLinkedEnemy() == nullptr) {
                 mirror->setLinkedEnemy(getNearestNonMirror(mirror->getPosition()));
                 if (mirror->getLinkedEnemy() == nullptr) {
                     mirror->setHurt();
