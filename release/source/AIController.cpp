@@ -27,7 +27,7 @@ Vec2 AIController::getMovement(shared_ptr<BaseEnemyModel> e, Vec2 player_pos, fl
         return Vec2(0, 0);
     } 
     else if (name == "Lost") {
-		return Vec2(getLostMovement(e, player_pos, timestep), -9.8f);
+		return Vec2(getLostMovement(dynamic_pointer_cast<Lost>(e), player_pos, timestep), -9.8f);
 	} 
 	else if (name == "Phantom") {
 		return getPhantomMovement(e, player_pos, timestep);
@@ -70,7 +70,7 @@ float AIController::getGluttonMovement(shared_ptr<BaseEnemyModel> glutton, Vec2 
 //(abs(player_pos.x - glutton->getPosition().x) < glutton->getAttackRadius() / 3) &&
 //(abs(player_pos.y - glutton->getPosition().y) < glutton->getAttackRadius() / 3)
 
-float AIController::getLostMovement(shared_ptr<BaseEnemyModel> lost, Vec2 player_pos, float timestep) {
+float AIController::getLostMovement(shared_ptr<Lost> lost, Vec2 player_pos, float timestep) {
 	//TODO: - check if grounded -> don't move if falling (unless flying enemy)
 	// - set states for the enemy -> more interesting ai
     lost->setTimePast(lost->getTimePast() + timestep);
@@ -89,8 +89,8 @@ float AIController::getLostMovement(shared_ptr<BaseEnemyModel> lost, Vec2 player
             return 0; // lost stops moving
 			
 		}
-		else if (abs(player_pos.y - lost->getPosition().y) > 5 && !lost->getHasSeenPlayer()) {
-			//This is jank -> will likely use some from of LoS instead once we can detect platforms and walls
+		else if (player_pos.distance(lost->getPosition()) > 8) {
+			
 			if ((abs(player_pos.x - lost->getPosition().x) < 5)) {
                 if (abs(player_pos.x - lost->getPosition().x) < 0.2) {
                     return 0;
@@ -102,8 +102,19 @@ float AIController::getLostMovement(shared_ptr<BaseEnemyModel> lost, Vec2 player
 				}
 			}
 			else {
-				return 0; 
-			}
+                
+                while (!lost->targetX || abs(lost->targetX - lost->getPosition().x) < 0.2) {
+                    lost->targetX = lost->getWidth() + (30-lost->getWidth()) *
+                    std::sqrt(static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
+                }
+                
+                
+                if (lost->targetX > lost->getPosition().x) {
+                    return lost->getHorizontalSpeed();
+                } else {
+                    return -1 * lost->getHorizontalSpeed();
+                }
+            }
         }
         else if (abs(player_pos.x - lost->getPosition().x) < 0.2) {
             return 0;

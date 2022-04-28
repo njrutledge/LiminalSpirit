@@ -31,6 +31,7 @@ class Lost : public BaseEnemyModel {
 			std::shared_ptr<Lost> result = std::make_shared<Lost>();
 			return (result->init(pos, realSize, size, scale, LOST_PROPS) ? result : nullptr);
 		}
+        float targetX;
 
 };
 

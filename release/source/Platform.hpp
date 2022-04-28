@@ -95,7 +95,6 @@ public:
     void releaseFixtures() override;
     /** Updates the object's physics state (not game logic) */
     void update(float dt) override;
-    /** Applies the force of the body of this enemy */
 
 };
 #endif /* Platform_hpp */

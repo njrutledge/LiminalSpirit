@@ -921,12 +921,29 @@ void GameScene::updateEnemies(float timestep) {
    // For each enemy
     std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("damaged"), Vec2(0, 0));
     std::shared_ptr<Texture> text = _assets->get<Texture>("star");
-
     for (auto it = _enemies.begin(); it != _enemies.end(); ++it)
     {
         Vec2 direction = _ai.getMovement(*it, _player->getPosition(), timestep);
         (*it)->setVX(direction.x);
-        (*it)->setVY(direction.y);
+        if((*it)->getName() == "Lost") {
+            float distance = _player->getPosition().distance((*it)->getPosition());
+            if (distance < 8 && _player->getY()-_player->getHeight()/2 > (*it)->getY()-(*it)->getHeight()/2+0.5) {
+                if((*it)->isGrounded() && abs((*it)->getVY()) < 0.01) {
+                    (*it)->setVY(25);
+                    (*it)->setJumping(true);
+                } else if ((*it)->isJumping() && abs((*it)->getVY()) < 0.01) {
+                    (*it)->setJumping(false);
+                    (*it)->setFalling(true);
+                } else if ((*it)->isFalling() && abs((*it)->getVY()) < 0.01) {
+                    (*it)->setFalling(false);
+                    (*it)->setGrounded(true);
+                }
+                        
+            } 
+        } else {
+            (*it)->setVY(direction.y);
+        }
+//        (*it)->setVY(direction.y);
         (*it)->getGlow()->setPosition((*it)->getPosition());
         (*it)->setInvincibilityTimer((*it)->getInvincibilityTimer() - timestep);
 
