@@ -89,33 +89,32 @@ float AIController::getLostMovement(shared_ptr<Lost> lost, Vec2 player_pos, floa
             return 0; // lost stops moving
 			
 		}
-		else if (player_pos.distance(lost->getPosition()) > 8) {
-			
-			if ((abs(player_pos.x - lost->getPosition().x) < 5)) {
-                if (abs(player_pos.x - lost->getPosition().x) < 0.2) {
-                    return 0;
-                }
-				else if (player_pos.x > lost->getPosition().x) {
-					return lost->getHorizontalSpeed(); // TODO: Change to behavior
-                } else {
-					return -1* lost->getHorizontalSpeed();
-				}
-			}
-			else {
+		else if (player_pos.distance(lost->getPosition()) > 8 || lost->getPosition().y - player_pos.y >1 ) {
+//			if ((abs(player_pos.x - lost->getPosition().x) < 5)) {
+//                if (abs(player_pos.x - lost->getPosition().x) < 0.2) {
+//                    return 0;
+//                }
+//				else if (player_pos.x > lost->getPosition().x) {
+//					return lost->getHorizontalSpeed(); // TODO: Change to behavior
+//                } else {
+//					return -1* lost->getHorizontalSpeed();
+//				}
+//			}
+//			else {
                 
-                while (!lost->targetX || abs(lost->targetX - lost->getPosition().x) < 0.2) {
-                    lost->targetX = lost->getWidth() + (30-lost->getWidth()) *
-                    std::sqrt(static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
-                }
+            while (!lost->targetX || abs(lost->targetX - lost->getPosition().x) < 0.2) {
+                lost->targetX = lost->getWidth() + (30-lost->getWidth()) *
+                std::sqrt(static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
+            }
                 
                 
-                if (lost->targetX > lost->getPosition().x) {
-                    return lost->getHorizontalSpeed();
-                } else {
-                    return -1 * lost->getHorizontalSpeed();
-                }
+            if (lost->targetX > lost->getPosition().x) {
+                return lost->getHorizontalSpeed();
+            } else {
+                return -1 * lost->getHorizontalSpeed();
             }
         }
+        
         else if (abs(player_pos.x - lost->getPosition().x) < 0.2) {
             return 0;
         }

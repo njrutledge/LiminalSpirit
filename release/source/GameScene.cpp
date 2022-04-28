@@ -927,7 +927,7 @@ void GameScene::updateEnemies(float timestep) {
         (*it)->setVX(direction.x);
         if((*it)->getName() == "Lost") {
             float distance = _player->getPosition().distance((*it)->getPosition());
-            if (distance < 8 && _player->getY()-_player->getHeight()/2 > (*it)->getY()-(*it)->getHeight()/2+0.5) {
+            if (distance < 8 && _player->getY()-_player->getHeight()/2 > (*it)->getY()-(*it)->getHeight()/2+0.5 && _player->isGrounded()) {
                 if((*it)->isGrounded() && abs((*it)->getVY()) < 0.01) {
                     (*it)->setVY(25);
                     (*it)->setJumping(true);
