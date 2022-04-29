@@ -173,7 +173,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
     _numWaves = index;
     // Set enemy wave number
     _nextWaveNum = 0;
-
+    _spawner_enemy_types.clear();
+    _living_spawners.clear();
     if(_constants->get("spawner_types")) {
         auto spawnTypes = _constants->get("spawner_types")->children();
         for(auto it = spawnTypes.begin(); it != spawnTypes.end(); ++it) {
@@ -182,6 +183,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
     
             for(int i = 0; i < entry->size(); i++) {
                 string enemy = entry->get(i)->asString();
+                std::transform(enemy.begin(), enemy.end(), enemy.begin(),
+                    [](unsigned char c) { return std::tolower(c); });
                 if(!enemy_types[enemy].max_count) {
                     enemy_types[enemy].max_count = 1;
                     enemy_types[enemy].current_count = 0;
@@ -1071,6 +1074,8 @@ void GameScene::updateEnemies(float timestep) {
         if (_collider.getIndexSpawner() != -1) {
             int i = _collider.getIndexSpawner();
             string name = _collider.getSpawnerEnemyName();
+            std::transform(name.begin(), name.end(), name.begin(),
+                [](unsigned char c) { return std::tolower(c); });
             _spawner_enemy_types[i][name].current_count = _spawner_enemy_types[i][name].current_count - 1;
             _collider.setIndexSpawner(-1);
         }
@@ -1466,10 +1471,13 @@ void GameScene::updateSpawnEnemies(float timestep){
     for (auto it = _spawner_enemy_types.begin(); it != _spawner_enemy_types.end(); ++it) {
         if (_living_spawners[index]) {
             for (auto i : (*it)) {
-                auto p = i.second;
-                int diff_count = p.max_count - p.current_count;
                 string name = i.first;
-                if (p.timer <= 0) {
+                float timer = _spawner_enemy_types[index][name].timer;
+                int diff_count = _spawner_enemy_types[index][name].max_count - _spawner_enemy_types[index][name].current_count;
+                
+                //cout << timestep << endl;
+                //cout << _spawner_enemy_types[index][name].timer << endl;
+                if (timer <= 0) {
                     while (diff_count != 0) {
                         createSpawnerEnemy(index, name);
                         _spawner_enemy_types[index][name].current_count++;
@@ -1803,6 +1811,7 @@ void GameScene::createEnemies(int wave) {
         else if (!enemyName.compare("spawner")) {
             _spawner_ind++;
             _spawnerCount++;
+            
             _spawner_pos.push_back(enemyPos);
             std::shared_ptr<Texture> spawnerImage = _assets->get<Texture>("glutton");
             std::shared_ptr<Spawner> spawner = Spawner::alloc(enemyPos, spawnerImage->getSize(), spawnerImage->getSize() / _scale / 10, _scale);
@@ -1810,6 +1819,7 @@ void GameScene::createEnemies(int wave) {
             spawner->setSceneNode(spawnerSprite);
             spawner->setDebugColor(Color4::BLACK);
             spawner->setGlow(enemyGlow);
+            spawner->setIndex(_spawner_ind);
             spawnerSprite->setScale(0.12f);
             spawnerSprite->setPriority(1);
             addObstacle(spawner, spawnerSprite, true);
@@ -1820,7 +1830,7 @@ void GameScene::createEnemies(int wave) {
                 string spawnerEnemyName = it->first;
                 while (index != 0) {
                     createSpawnerEnemy(_spawner_ind, spawnerEnemyName);
-                    _spawner_enemy_types.at(_spawner_ind).at(spawnerEnemyName).current_count++;
+                    _spawner_enemy_types[_spawner_ind][spawnerEnemyName].current_count++;
                     index--;
                 }
             }
@@ -2123,6 +2133,19 @@ void GameScene::reset()
     auto spawnTime = _constants->get("spawn_times");
     for (int i = 0; i < _numWaves; i++) {
         _spawn_times[i] = spawnTime->get(i)->asFloat();
+    }
+    _spawnerCount = 0;
+    _spawner_ind = -1;
+    int index = 0;
+    for (auto it = _spawner_enemy_types.begin(); it != _spawner_enemy_types.end(); ++it) {
+        if (_living_spawners[index]) {
+            _living_spawners[index] = 0;
+        }
+        for (auto i : (*it)) {
+            _spawner_enemy_types[index][(i.first)].timer = 10.0f;
+            _spawner_enemy_types[index][(i.first)].current_count = 0;
+        }
+        index++;
     }
 
     _endText = nullptr;
