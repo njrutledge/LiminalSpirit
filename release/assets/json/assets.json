@@ -297,9 +297,6 @@
 		"forest_large_platform": {
 			"file": "textures/forest/forest_large_platform.png"
 		},
-		"platform": {
-			"file": "textures/platform.png"
-		},
 		"home_background": {
 			"file": "textures/menus/home/home_background.png"
 		},
@@ -370,6 +367,120 @@
 			"file": "fonts/MarkerFelt.ttf",
 			"size": 32
 		}
+	},
+	"sounds": {
+		"cave1": {
+			"type": "sample",
+			"file": "sounds/cave/cave1/cave1.ogg",
+			"stream": true,
+			"volume": 0.3
+		},
+		"cave1Glutton": {
+			"type": "sample",
+			"file": "sounds/cave/cave1/cave1_glutton.ogg",
+			"stream": true,
+			"volume": 0.2
+		},
+		"cave1Phantom": {
+			"type": "sample",
+			"file": "sounds/cave/cave1/cave1_phantom.ogg",
+			"stream": true,
+			"volume": 0.2
+		},
+		"cave2": {
+			"type": "sample",
+			"file": "sounds/cave/cave2/cave2.ogg",
+			"stream": true,
+			"volume": 0.3
+		},
+		"cave2Glutton": {
+			"type": "sample",
+			"file": "sounds/cave/cave2/cave2_glutton.ogg",
+			"stream": true,
+			"volume": 0.2
+		},
+		"cave2Phantom": {
+			"type": "sample",
+			"file": "sounds/cave/cave2/cave2_phantom.ogg",
+			"stream": true,
+			"volume": 0.2
+		},
+		"mushroom1": {
+			"type": "sample",
+			"file": "sounds/mushroom/mush1/mushroom1.ogg",
+			"stream": true,
+			"volume": 0.3
+		},
+		"mushroom1Glutton": {
+			"type": "sample",
+			"file": "sounds/mushroom/mush1/mush1_glutton.ogg",
+			"stream": true,
+			"volume": 0.2
+		},
+		"mushroom1Phantom": {
+			"type": "sample",
+			"file": "sounds/mushroom/mush1/mush1_phantom.ogg",
+			"stream": true,
+			"volume": 0.2
+		},
+		"mushroom2": {
+			"type": "sample",
+			"file": "sounds/mushroom/mush2/mushroom2.ogg",
+			"stream": true,
+			"volume": 0.3
+		},
+		"mushroom2Glutton": {
+			"type": "sample",
+			"file": "sounds/mushroom/mush2/mush2_glutton.ogg",
+			"stream": true,
+			"volume": 0.2
+		},
+		"mushroom2Phantom": {
+			"type": "sample",
+			"file": "sounds/mushroom/mush2/mush2_phantom.ogg",
+			"stream": true,
+			"volume": 0.2
+		},
+		"menu": {
+			"type": "sample",
+			"file": "sounds/LiminalMenu.ogg",
+			"stream": true,
+			"volume": 0.3
+		},
+		"playerStep": {
+			"type": "sample",
+			"file": "sounds/playerSFX/Player_Step.wav",
+			"volume": 0.6
+		},
+		"playerShoot": {
+			"type": "sample",
+			"file": "sounds/playerSFX/Player_Shoot.wav",
+			"volume": 0.4
+		},
+		"playerSlashEmpty": {
+			"type": "sample",
+			"file": "sounds/playerSFX/Player_Empty_Swing.wav",
+			"volume": 0.4
+		},
+		"playerSlashHit": {
+			"type": "sample",
+			"file": "sounds/playerSFX/Player_Hit_Swing.wav",
+			"volume": 0.4
+		},
+		"playerShootHit": {
+			"type": "sample",
+			"file": "sounds/playerSFX/Player_Shoot_Hit.wav",
+			"volume": 0.4
+		},
+		"playerHurt": {
+			"type": "sample",
+			"file": "sounds/playerSFX/Player_Oof.wav",
+			"volume": 0.4
+		}
+
+	},
+	"widgets": {
+		"textbutton": "widgets/textbutton.json"
 	},
 	"scene2s": {
 		"cave": {
@@ -725,117 +836,6 @@
 			}
 		}
 	},
-	"sounds": {
-		"cave1": {
-			"type": "sample",
-			"file": "sounds/cave/cave1/cave1.ogg",
-			"stream": true,
-			"volume": 0.3
-		},
-        "cave1Glutton": {
-            "type": "sample",
-            "file": "sounds/cave/cave1/cave1_glutton.ogg",
-            "stream": true,
-            "volume": 0.2
-        },
-        "cave1Phantom": {
-            "type": "sample",
-            "file": "sounds/cave/cave1/cave1_phantom.ogg",
-            "stream": true,
-            "volume": 0.2
-        },
-		"cave2": {
-			"type": "sample",
-			"file": "sounds/cave/cave2/cave2.ogg",
-			"stream": true,
-			"volume": 0.3
-		},
-        "cave2Glutton": {
-            "type": "sample",
-            "file": "sounds/cave/cave2/cave2_glutton.ogg",
-            "stream": true,
-            "volume": 0.2
-        },
-        "cave2Phantom": {
-            "type": "sample",
-            "file": "sounds/cave/cave2/cave2_phantom.ogg",
-            "stream": true,
-            "volume": 0.2
-        },
-        "mushroom1": {
-            "type": "sample",
-            "file": "sounds/mushroom/mush1/mushroom1.ogg",
-            "stream": true,
-            "volume": 0.3
-        },
-        "mushroom1Glutton": {
-            "type": "sample",
-            "file": "sounds/mushroom/mush1/mush1_glutton.ogg",
-            "stream": true,
-            "volume": 0.2
-        },
-        "mushroom1Phantom": {
-            "type": "sample",
-            "file": "sounds/mushroom/mush1/mush1_phantom.ogg",
-            "stream": true,
-            "volume": 0.2
-        },
-        "mushroom2": {
-            "type": "sample",
-            "file": "sounds/mushroom/mush2/mushroom2.ogg",
-            "stream": true,
-            "volume": 0.3
-        },
-        "mushroom2Glutton": {
-            "type": "sample",
-            "file": "sounds/mushroom/mush2/mush2_glutton.ogg",
-            "stream": true,
-            "volume": 0.2
-        },
-        "mushroom2Phantom": {
-            "type": "sample",
-            "file": "sounds/mushroom/mush2/mush2_phantom.ogg",
-            "stream": true,
-            "volume": 0.2
-        },
-        "menu": {
-            "type": "sample",
-            "file": "sounds/LiminalMenu.ogg",
-            "stream": true,
-            "volume": 0.3
-        },
-        "playerStep": {
-            "type": "sample",
-            "file": "sounds/playerSFX/Player_Step.wav",
-            "volume": 0.6
-        },
-        "playerShoot": {
-            "type": "sample",
-            "file": "sounds/playerSFX/Player_Shoot.wav",
-            "volume": 0.4
-        },
-        "playerSlashEmpty": {
-            "type": "sample",
-            "file": "sounds/playerSFX/Player_Empty_Swing.wav",
-            "volume": 0.4
-        },
-        "playerSlashHit": {
-            "type": "sample",
-            "file": "sounds/playerSFX/Player_Hit_Swing.wav",
-            "volume": 0.4
-        },
-        "playerShootHit": {
-            "type": "sample",
-            "file": "sounds/playerSFX/Player_Shoot_Hit.wav",
-            "volume": 0.4
-        },
-        "playerHurt": {
-            "type": "sample",
-            "file": "sounds/playerSFX/Player_Oof.wav",
-            "volume": 0.4
-        }
-    
-	},
 	"jsons": {
 		"surround": "json/levels/surround.json",
 		"battlefield": "json/levels/battlefield.json",
@@ -844,6 +844,6 @@
 		"level2": "json/levels/level2.json",
 		"stack": "json/levels/stack.json",
 		"particles": "json/levels/particles.json",
-		"BOSS":  "json/levels/BOSS.json"
+		"BOSS": "json/levels/BOSS.json"
 	}
 }
