@@ -243,7 +243,7 @@ Vec2 AIController::getSeekerMovement(shared_ptr<Seeker> seeker, Vec2 player_pos,
             return Vec2();
         }
         if (!seeker->targetPosition.x) {
-            while (seeker->targetPosition.x < 2 || seeker->targetPosition.x > 30 || seeker->targetPosition.y < 2 || seeker->targetPosition.y > 22) {
+            while (seeker->targetPosition.distance(player_pos)>16 || seeker->targetPosition.x < 2 || seeker->targetPosition.x > 30 || seeker->targetPosition.y < 2 || seeker->targetPosition.y > 22) {
                 float r = 5 + 10 * std::sqrt(static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
                 float alpha = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2 * M_PI;
                 seeker->targetPosition = Vec2(r * std::cos(alpha), r * std::sin(alpha)) + seeker->getPosition();
@@ -264,7 +264,7 @@ Vec2 AIController::getSeekerMovement(shared_ptr<Seeker> seeker, Vec2 player_pos,
             }
             if (player_pos.distance(seeker->getPosition())>6) {
                 seeker->targetPosition = Vec2(0,0);
-                while (seeker->targetPosition.x < 2 || seeker->targetPosition.x > 30 || seeker->targetPosition.y < 2 || seeker->targetPosition.y > 22) {
+                while (seeker->targetPosition.distance(player_pos)>16 || seeker->targetPosition.x < 2 || seeker->targetPosition.x > 30 || seeker->targetPosition.y < 2 || seeker->targetPosition.y > 22) {
                     float r = 5 + 10 * std::sqrt(static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
                     float alpha = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2 * M_PI;
                     seeker->targetPosition = Vec2(r * std::cos(alpha), r * std::sin(alpha)) + seeker->getPosition();
