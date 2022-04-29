@@ -352,6 +352,13 @@
 				"leftcap": [ 60, 202, 61, 312 ],
 				"rightcap": [ 492, 202, 503, 312 ]
 			}
+		},
+		"seed": {
+			"file": "textures/pattack.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
 		}
 	},
 	"fonts": {

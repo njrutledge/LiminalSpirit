@@ -28,6 +28,7 @@
 //
 // Include the class header, which includes all of the CUGL classes
 #include "BossScene.hpp"
+
 #include <cugl/base/CUBase.h>
 #include <box2d/b2_contact.h>
 
@@ -70,6 +71,7 @@ using namespace cugl;
  */
 bool BossScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const std::shared_ptr<SoundController> sound)
 {
+    _seedBarrageTimer = 0;
     return GameScene::init(assets, sound, "BOSS");
 }
 
@@ -83,7 +85,59 @@ void BossScene::dispose()
 
 void BossScene::update(float timestep)
 {
-    GameScene::update(timestep);
+    updateSoundInputParticlesAndTilt(timestep);
+
+    updateAnimations(timestep);
+
+    updateEnemies(timestep);
+
+
+    _seedBarrageTimer += timestep;
+    if (_seedBarrageTimer > 2.0f) {
+        seedBarrage();
+        _seedBarrageTimer = 0;
+    }
+
+
+    updateSwipesAndAttacks(timestep);
+
+    
+
+    updateRemoveDeletedAttacks();
+
+    updateRemoveDeletedEnemies();
+
+    //updateText();
+
+    updateSpawnTimes();
+
+    updateRemoveDeletedPlayer();
+
+    updateHealthbar();
+
+    updateCamera();
+
+    updateSpawnEnemies(timestep);
+
+    updateMeleeArm(timestep);
+
+    //updateWin();
+}
+
+void BossScene::seedBarrage() {
+    int seeds = rand() % 5 + 10;
+    float radius = 0.5f;
+    float damage = 1.0f;
+    Vec2 play_p = _player->getPosition();
+    Vec2 en_p = Vec2(16.0, 4.0);
+    for (int ii = 0; ii < seeds; ii++) {
+        float age = 3.0f;//rand() % 20 / 5;
+        float random = rand() % 50;
+        Vec2 vel = Vec2(0.5, 0).scale(.2 + random / 75);
+        random = rand() % 100;
+        vel = vel.rotate((play_p - en_p).getAngle()).rotate((M_PI / 6.0f * (random) / 100) - M_PI / 12);
+        _attacks->createAttack(en_p, radius, age, damage, AttackController::Type::e_range, vel, 0, "seed", 1);
+    }
 }
 
 /**

@@ -1268,11 +1268,11 @@ void GameScene::updateSwipesAndAttacks(float timestep) {
             std::shared_ptr<Texture> attackTexture = _assets->get<Texture>((*it)->getAttackID());
             attackSprite = scene2::SpriteNode::alloc(attackTexture, 1, (*it)->getFrames()); // need to replace with animated texture
             if ((*it)->getAttackID() == PLAYER_RANGE) {
-//this is mirrors
-attackSprite->setScale(.85f * (*it)->getRadius());
-attackSprite->setAngle((*it)->getAngle());
-attackSprite->setColor(Color4::BLUE);
-attackSprite->setPriority(2.1);
+                //this is mirrors
+                attackSprite->setScale(.85f * (*it)->getRadius());
+                attackSprite->setAngle((*it)->getAngle());
+                attackSprite->setColor(Color4::BLUE);
+                attackSprite->setPriority(2.1);
 
             }
             else if ((*it)->getAttackID() == PHANTOM_ATTACK) {
@@ -1287,6 +1287,12 @@ attackSprite->setPriority(2.1);
             attackSprite->setScale(.25 * (*it)->getRadius());
             attackSprite->setAngle((*it)->getAngle() + M_PI);
             attackSprite->setPriority(2);
+            }
+            else if ((*it)->getAttackID() == "seed") {
+                attackSprite->setScale(0.5 * (*it)->getRadius());
+                //attackSprite->setAngle()
+                attackSprite->setVisible(true);
+                attackSprite->setPriority(2);
             }
         }
         else {

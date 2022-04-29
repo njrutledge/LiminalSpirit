@@ -38,6 +38,7 @@
 class BossScene : public GameScene
 {
 protected:
+    float _seedBarrageTimer;
 
 public:
     /**
@@ -65,6 +66,8 @@ public:
     *  The method called to draw the gameplay scene
     */
     void render(const std::shared_ptr<cugl::SpriteBatch>& batch);
+
+    void seedBarrage();
 
    
 };
