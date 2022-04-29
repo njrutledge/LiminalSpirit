@@ -934,17 +934,6 @@ void GameScene::updateEnemies(float timestep) {
     std::shared_ptr<Texture> text = _assets->get<Texture>("star");
     for (auto it = _enemies.begin(); it != _enemies.end(); ++it)
     {
-
-        b2Filter filter = (*it)->getFilterData();
-        if ((*it)->getVY() > 0.1) {
-            filter.maskBits = 0b011000;
-        }
-        else {
-            filter.maskBits = 0b011100;
-        }
-        (*it)->setFilterData(filter);
-
-
         Vec2 direction = _ai.getMovement(*it, _player->getPosition(), timestep, 0, DEFAULT_WIDTH);
         (*it)->setVX(direction.x);
         if((*it)->getName() == "Lost") {
