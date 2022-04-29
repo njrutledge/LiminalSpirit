@@ -479,9 +479,6 @@
 		}
 
 	},
-	"widgets": {
-		"textbutton": "widgets/textbutton.json"
-	},
 	"scene2s": {
 		"cave": {
 			"type": "Node",
