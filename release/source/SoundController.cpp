@@ -97,11 +97,16 @@ void SoundController::init(std::shared_ptr<cugl::AssetManager> &assets) {
     _mushroom2->init("mushroom2", _assets);
     
     _playerStep = assets->get<cugl::Sound>("playerStep");
+    
     _playerShoot = assets->get<cugl::Sound>("playerShoot");
+    
+    _playerShootHit = assets->get<cugl::Sound>("playerShootHit");
     
     _playerSlashEmpty = assets->get<cugl::Sound>("playerSlashEmpty");
     
     _playerSlashHit = assets->get<cugl::Sound>("playerSlashHit");
+    
+    _playerHurt = assets->get<cugl::Sound>("playerHurt");
 };
 
 void SoundController::play_menu_music() {
@@ -168,8 +173,13 @@ void SoundController::play_player_sound(playerSType sound) {
         case shoot:
             cugl::AudioEngine::get()->play("playerShoot", _playerShoot, false, 1.0, true);
             break;
+        case shootHit:
+            cugl::AudioEngine::get()->play("playerShoot", _playerShootHit, false, 1.0, true);
+            break;
         case shootCharge:
         case hurt:
+            cugl::AudioEngine::get()->play("playerShoot", _playerHurt, false, 1.0, true);
+            break;
         case death:
         case step:
             cugl::AudioEngine::get()->play("playerStep", _playerStep, false, 1.0, true);

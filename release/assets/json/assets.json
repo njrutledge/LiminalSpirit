@@ -807,7 +807,7 @@
         "playerStep": {
             "type": "sample",
             "file": "sounds/playerSFX/Player_Step.wav",
-            "volume": 0.4
+            "volume": 0.6
         },
         "playerShoot": {
             "type": "sample",
@@ -823,7 +823,18 @@
             "type": "sample",
             "file": "sounds/playerSFX/Player_Hit_Swing.wav",
             "volume": 0.4
+        },
+        "playerShootHit": {
+            "type": "sample",
+            "file": "sounds/playerSFX/Player_Shoot_Hit.wav",
+            "volume": 0.4
+        },
+        "playerHurt": {
+            "type": "sample",
+            "file": "sounds/playerSFX/Player_Oof.wav",
+            "volume": 0.4
         }
+    
 	},
 	"jsons": {
 		"surround": "json/levels/surround.json",

@@ -20,6 +20,7 @@ public:
         slashHit,
         slashDash,
         shoot,
+        shootHit,
         shootCharge,
         hurt,
         death,
@@ -116,6 +117,12 @@ protected:
     std::shared_ptr<cugl::Sound> _playerSlashEmpty;
     
     std::shared_ptr<cugl::Sound> _playerSlashHit;
+    
+    std::shared_ptr<cugl::Sound> _playerShootHit;
+    
+    std::shared_ptr<cugl::Sound> _playerHurt;
+    
+    
     
 public:
     
