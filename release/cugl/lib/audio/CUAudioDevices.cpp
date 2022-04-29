@@ -77,7 +77,7 @@ AudioDevices* AudioDevices::_gManager = nullptr;
 const Uint32 AudioDevices::DEFAULT_OUTPUT_BUFFER = 2048;
 #else
 /** The default input buffer size for each audio node */
-const Uint32 AudioDevices::DEFAULT_OUTPUT_BUFFER = 1024;
+const Uint32 AudioDevices::DEFAULT_OUTPUT_BUFFER = 2048;
 #endif
 
 /** The default input buffer size for each audio node */
