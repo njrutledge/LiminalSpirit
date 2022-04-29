@@ -110,12 +110,18 @@ public:
 
         /**Attack sensor */
         b2Fixture* _sensorFixture;
+        /**Attack sensor for inside player body (melee only) */
+        b2Fixture* _bodySensorFixture;
         /** Name of sensor */
         std::string _sensorName;
         /** Debug Sensor */
         std::shared_ptr<cugl::scene2::WireNode> _sensorNode;
 
+        std::shared_ptr<cugl::scene2::WireNode> _bodySensorNode;
+
         std::vector<cugl::Vec2> _debugVerticies;
+
+        std::vector<cugl::Vec2> _debugVerticies2;
 
         //can the attack split?
         bool _splitable;

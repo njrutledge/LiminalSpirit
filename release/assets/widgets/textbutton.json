@@ -1,0 +1,109 @@
+{
+  "variables": {
+    "text": [
+      "children",
+      "patchtext",
+      "children",
+      "label",
+      "data",
+      "text"
+    ],
+    "size": [
+      "data",
+      "size"
+    ],
+    "font": [
+      "children",
+      "patchtext",
+      "children",
+      "label",
+      "data",
+      "font"
+    ]
+  },
+  "contents": {
+    "type": "Button",
+    "data": {
+      "upnode": "menubutton",
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "size": [
+        300,
+        75
+      ]
+    },
+    "layout": {
+      "x_anchor": "center",
+      "y_anchor": "middle"
+    },
+    "children": {
+      "patchtext": {
+        "type": "node",
+        "format": {
+          "type": "Anchored"
+        },
+        "data": {
+          "upnode": "button1",
+          "size": [
+            300,
+            75
+          ]
+        },
+        "layout": {
+          "x_anchor": "fill",
+          "y_anchor": "fill"
+        },
+        "children": {
+          "menubutton": {
+            "type": "ninepatch",
+            "format": {
+              "type": "Anchored"
+            },
+            "data": {
+              "texture": "menubutton",
+              "scale": 1,
+              "interior": [
+                33,
+                40,
+                62,
+                55
+              ]
+            },
+            "layout": {
+              "x_anchor": "fill",
+              "y_anchor": "fill"
+            }
+          },
+          "label": {
+            "type": "Label",
+            "format": {
+              "type": "Anchored"
+            },
+            "data": {
+              "font": "gyparody",
+              "anchor": [
+                0.5,
+                0.5
+              ],
+              "text": "Click Me",
+              "foreground": [
+                255,
+                255,
+                255,
+                255
+              ],
+              "halign": "center",
+              "valign": "true middle"
+            },
+            "layout": {
+              "x_anchor": "fill",
+              "y_anchor": "fill"
+            }
+          }
+        }
+      }
+    }
+  }
+}

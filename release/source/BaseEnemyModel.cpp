@@ -138,6 +138,7 @@ void BaseEnemyModel::applyForce() {
 }
 
 void BaseEnemyModel::update(float dt) {
+	
 	CapsuleObstacle::update(dt);
 	if (_node != nullptr) {
 		_node->setPosition(getPosition() * _drawScale);
@@ -172,14 +173,17 @@ void BaseEnemyModel::update(float dt) {
 			_node->removeChildByName("healthbar");
 			_node->removeChildByName("healthbarback");
 		}
-        b2Filter filter = getFilterData();
-        if (getVY() > 0.1) {
-            filter.maskBits = 0b011000;
-        }
-        else {
-            filter.maskBits = 0b011100;
-        }
-        setFilterData(filter);
+
+
+		//TODO: THE CODE BELOW BREAKS ATTACKS
+		b2Filter filter = getFilterData();
+		if (getVY() > 0.1) {
+			filter.maskBits = 0b011000;
+		}
+		else {
+			filter.maskBits = 0b011100;
+		}
+		setFilterData(filter);
 	}
 
 }

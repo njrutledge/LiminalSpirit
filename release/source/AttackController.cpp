@@ -36,6 +36,8 @@ bool AttackController::Attack::init(const cugl::Vec2 p, float radius, float a, f
     _attackID = attackID;
     _timer = 0;
     _maxFrames = frames;
+    _sensorFixture = nullptr;
+    _bodySensorFixture = nullptr;
     if (CapsuleObstacle::init(_position, Size(_radius, _radius))) {
         // TODO change the sensor naming based on if its player attack
         b2Filter filter = b2Filter();
@@ -92,17 +94,44 @@ void AttackController::Attack::createFixtures() {
     sensorShape.Set(corners, 8);
     sensorDef.shape = &sensorShape;
     sensorDef.userData.pointer = reinterpret_cast<uintptr_t>(getSensorName());
-    _sensorFixture = _body->CreateFixture(&sensorDef);
+    //_sensorFixture = _body->CreateFixture(&sensorDef);
+
+
+    
+    if (_type == p_melee) {
+        b2FixtureDef sensorDef2;
+        sensorDef2.density = 0;
+        sensorDef2.isSensor = false;
+        b2PolygonShape sensorShape2;
+        b2Vec2 corners2[8];
+        cugl::Vec2 vec2(0, _radius /2.0f);
+
+        for (int i = 0; i < 8; i++) {
+            corners2[i] = b2Vec2(vec2.x, vec2.y) - b2Vec2(_offset.x, _offset.y);
+            _debugVerticies2.push_back(Vec2(corners2[i].x, corners2[i].y));
+            vec2.rotate(M_PI / 4.0f);
+        }
+        sensorShape2.Set(corners2, 8);
+        sensorDef2.shape = &sensorShape2;
+        sensorDef2.userData.pointer = reinterpret_cast<uintptr_t>(getSensorName());
+        _bodySensorFixture = _body->CreateFixture(&sensorDef2);
+    }
 }
 
 void AttackController::Attack::releaseFixtures() {
-    if (_body != nullptr) {
-        return;
-    }
+    //if (_body != nullptr) {
+    //    return;
+    //}
     CapsuleObstacle::releaseFixtures();
     if (_sensorFixture != nullptr) {
         _body->DestroyFixture(_sensorFixture);
         _sensorFixture = nullptr;
+    }
+
+    if (_bodySensorFixture != nullptr) {
+        _body->DestroyFixture(_bodySensorFixture);
+        _bodySensorFixture = nullptr;
+
     }
 }
 
@@ -137,6 +166,9 @@ void AttackController::Attack::dispose() {
     _core = nullptr;
     _node = nullptr;
     _sensorNode = nullptr;
+    _sensorFixture = nullptr;
+    _bodySensorFixture = nullptr;
+
 }
 
 AttackController::AttackController() {
@@ -370,13 +402,22 @@ void AttackController::createAttack(cugl::Vec2 p, float radius, float age, float
 void AttackController::Attack::resetDebug() {
     CapsuleObstacle::resetDebug();
     //Poly2 poly = _ball;
-    std::vector<Uint32> debugIndicies{ 0,1,2,   2,3,4,   4,5,6,   6,7,0 };
-    Poly2 poly(_debugVerticies, debugIndicies);
+    std::vector<Uint32> debugIndicies1{ 0,1,2,   2,3,4,   4,5,6,   6,7,0 };
+    Poly2 poly(_debugVerticies, debugIndicies1);
 
     _sensorNode = scene2::WireNode::allocWithTraversal(poly, poly2::Traversal::INTERIOR);
     _sensorNode->setColor(Color4::RED);
     _sensorNode->setPosition(Vec2(_debug->getContentSize().width/2.0f, _debug->getContentSize().height / 2.0f));
-    _debug->addChild(_sensorNode);
+    //_debug->addChild(_sensorNode);
+
+    if (_type == p_melee) {
+        //std::vector<Uint32> debugIndicies2{ 8,9,10,   10,11,12,   12,13,14,   14,15,8 };
+        Poly2 poly2(_debugVerticies2, debugIndicies1);
+        _bodySensorNode = scene2::WireNode::allocWithTraversal(poly2, poly2::Traversal::INTERIOR);
+        _bodySensorNode->setColor(Color4::ORANGE);
+        _bodySensorNode->setPosition(Vec2(_debug->getContentSize().width / 2.0f - _offset.x, _debug->getContentSize().height / 2.0f - _offset.y));
+        _debug->addChild(_bodySensorNode);
+    }
 }
 
 void AttackController::reset() {
