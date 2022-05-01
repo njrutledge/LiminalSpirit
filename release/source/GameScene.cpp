@@ -843,7 +843,7 @@ void GameScene::updateAnimations(float timestep) {
     }
 
     if ((!_player->isFacingRight() && rSprite->getFrame() != 0 && _rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270) ||
-        (_player->isFacingRight() && rSprite->getFrame() != 5 && (_rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270))) {
+        (_player->isFacingRight() && rSprite->getFrame() != 4 && (_rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270))) {
         offsetArm = -1 * offsetArm;
     }
 
@@ -921,8 +921,9 @@ void GameScene::updateMeleeArm(float timestep) {
 void GameScene::updateEnemies(float timestep) {
     // Enemy AI logic
    // For each enemy
-    std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("damaged"), Vec2(0, 0));
-    std::shared_ptr<Texture> text = _assets->get<Texture>("star");
+    std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("devil"), Vec2(0, 0));
+    std::shared_ptr<ParticlePool> pool2 = ParticlePool::allocPoint(_particleInfo->get("damaged"), Vec2(0, 0));
+    std::shared_ptr<Texture> text = _assets->get<Texture>("melee_impact");
     for (auto it = _enemies.begin(); it != _enemies.end(); ++it)
     {
         Vec2 direction = _ai.getMovement(*it, _player->getPosition(), timestep, 0, DEFAULT_WIDTH);
@@ -955,6 +956,11 @@ void GameScene::updateEnemies(float timestep) {
 
         // For running idle animations specific (for speed) to enemies
         if ((*it)->getName() == "Phantom") {
+            if ((*it)->getInvincibilityTimer() > 0) {
+                    std::shared_ptr<ParticleNode> dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, text, pool);
+                    dmgd->setScale(0.1f);
+                    _worldnode->addChildWithTag(dmgd, 100);
+            }
             if ((*it)->getIdleAnimationTimer() > 0.1f) {
                 sprite->setFrame((sprite->getFrame() + 1) % 7);
                 (*it)->setIdleAnimationTimer(0);
@@ -964,8 +970,11 @@ void GameScene::updateEnemies(float timestep) {
             if ((*it)->getInvincibilityTimer() > 0) {
                 if (sprite->getFrame() != 7) {
                     std::shared_ptr<ParticleNode> dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, text, pool);
-                    dmgd->setScale(0.25f);
+                    dmgd->setScale(0.2f);
                     _worldnode->addChildWithTag(dmgd, 100);
+                    std::shared_ptr<ParticleNode> dmgd2 = ParticleNode::alloc((*it)->getPosition() * _scale, text, pool2);
+                    dmgd2->setScale(0.05f);
+                    _worldnode->addChildWithTag(dmgd2, 100);
                 }
                 sprite->setFrame(7);
             }
@@ -980,7 +989,7 @@ void GameScene::updateEnemies(float timestep) {
             if ((*it)->getInvincibilityTimer() > 0) {
                 if (sprite->getFrame() != 7 && sprite->getFrame() != 4) {
                     std::shared_ptr<ParticleNode> dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, text, pool);
-                    dmgd->setScale(0.25f);
+                    dmgd->setScale(0.1f);
                     _worldnode->addChildWithTag(dmgd, 100);
                 }
                 if (!sprite->isFlipHorizontal()) {
@@ -997,6 +1006,13 @@ void GameScene::updateEnemies(float timestep) {
                 else {
                     sprite->flipHorizontal(true);
                 }
+
+                if ((*it)->getInvincibilityTimer() > 0) {
+                    std::shared_ptr<ParticleNode> dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, text, pool);
+                    dmgd->setScale(0.1f);
+                    _worldnode->addChildWithTag(dmgd, 100);
+                }
+
                 // Using idle timer for walking animation since lost has no idle
                 if (((*it)->getVX() > 0) && ((*it)->getIdleAnimationTimer() > .1f || sprite->getFrame() == 4 || sprite->getFrame() == 7)) {
                     sprite->setFrame((sprite->getFrame() + 1) % 4);
@@ -1006,6 +1022,13 @@ void GameScene::updateEnemies(float timestep) {
                     sprite->setFrame((sprite->getFrame() - 1) % 4);
                     (*it)->setIdleAnimationTimer(0);
                 }
+            }
+        }
+        else if ((*it)->getName() == "Seeker") {
+            if ((*it)->getInvincibilityTimer() > 0) {
+                std::shared_ptr<ParticleNode> dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, text, pool);
+                dmgd->setScale(0.1f);
+                _worldnode->addChildWithTag(dmgd, 100);
             }
         }
 

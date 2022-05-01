@@ -1,14 +1,13 @@
 {
     "damaged": {
-         "burstParticles": 6, 
-         "maxParticleCount": 6,
-         "gravity": [0, -30],
+         "burstParticles": 12, 
+         "maxParticleCount": 12,
+         "gravity": [0, 0],
          "emissionRateRange": [1, 1],
-         "lifetimeRange": [0.25, 0.5],
-         "angleRange": [0, 3.14],
-         "speedRange": [250, 375],
-         "fadeinRange": [0.5, 1],
-	 "startSizeRange": [1, 3],
+         "lifetimeRange": [0.2, 0.25],
+         "angleRange": [0, 6.28],
+         "speedRange": [500, 575],
+	 "startSizeRange": [1, 1],
 	 "sizeChangeRateRange": [0, 0],
 	 "maxSizeChangeTime": 10
      },
@@ -17,12 +16,11 @@
          "maxParticleCount": 1,
          "gravity": [0, 0],
          "emissionRateRange": [1, 1],
-         "lifetimeRange": [0.75, 1],
+         "lifetimeRange": [0.25, 0.5],
          "angleRange": [0, 0],
          "speedRange": [0, 0],
-         "fadeinRange": [0.5, 1],
 	 "startSizeRange": [5, 5],
-	 "sizeChangeRateRange": [-0.05, -0.05],
+	 "sizeChangeRateRange": [-0.25, -0.25],
 	 "maxSizeChangeTime": 10
      }
 }

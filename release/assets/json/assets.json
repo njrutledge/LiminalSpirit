@@ -212,6 +212,27 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
+		"melee_impact": {
+			"file": "textures/meleeimpact.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"ranged_impact": {
+			"file": "textures/rangedimpact.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"melee_slash": {
+			"file": "textures/meleeslash.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
 		"pattack": {
 			"file": "textures/nugget.png",
 			"minfilter": "nearest",
