@@ -635,7 +635,7 @@ void GameScene::updateAnimations(float timestep) {
         image->flipHorizontal(_player->isFacingRight());
     }
     if (arm1Image != nullptr) {
-        arm1Image->flipHorizontal(_player->isFacingRight());
+        arm1Image->flipHorizontal(_player->getRangedAttackRight());
     }
     if (arm2Image != nullptr) {
         arm2Image->flipHorizontal(_player->isFacingRight());
@@ -661,7 +661,7 @@ void GameScene::updateAnimations(float timestep) {
         _rangedArm->setAnimeTimer(0);
     }
     else if (_rangedArm->getLastType() == Glow::MeleeState::cool) {
-        if (_player->isFacingRight()) {
+        if (_player->getRangedAttackRight()) {
             rSprite->setFrame(4);
             rSprite->setAnchor(0.5, 0.5);
             _rangedArm->setAttackAngle(0);
@@ -671,13 +671,14 @@ void GameScene::updateAnimations(float timestep) {
             rSprite->setAnchor(0.5, 0.5);
             _rangedArm->setAttackAngle(0);
         }
+        _player->setRangedAttackRight(_player->isFacingRight());
     }
     else if (_rangedArm->getLastType() == Glow::MeleeState::first) {
         if (_rangedArm->getAnimeTimer() > 0.06f) {
-            if ((rSprite->getFrame() == 4 && !_player->isFacingRight()) ||
-                (rSprite->getFrame() == 0 && _player->isFacingRight())) {
+            if ((rSprite->getFrame() == 4 && !_player->getRangedAttackRight()) ||
+                (rSprite->getFrame() == 0 && _player->getRangedAttackRight())) {
                 // Attack is finished
-                if (_player->isFacingRight()) {
+                if (_player->getRangedAttackRight()) {
                     rSprite->setFrame(4);
                     rSprite->setAnchor(0.5, 0.5);
                     _rangedArm->setAttackAngle(0);
@@ -690,9 +691,10 @@ void GameScene::updateAnimations(float timestep) {
                 _rangedArm->setLastType(Glow::MeleeState::cool);
                 _rangedArm->setAnimeTimer(0);
                 arm1Image->flipHorizontal(_player->isFacingRight());
+                _player->setRangedAttackRight(_player->isFacingRight());
             }
             else {
-                if (_player->isFacingRight()) {
+                if (_player->getRangedAttackRight()) {
                     rSprite->setAnchor(0.8, 0.8);
                     if (rSprite->getFrame() == 0) {
                         rSprite->setFrame(4);
@@ -838,12 +840,12 @@ void GameScene::updateAnimations(float timestep) {
 
 
     float offsetArm = -2.7f;
-    if (!_player->isFacingRight()) {
+    if (!_player->getRangedAttackRight()) {
         offsetArm = -1 * offsetArm;
     }
 
-    if ((!_player->isFacingRight() && rSprite->getFrame() != 0 && _rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270) ||
-        (_player->isFacingRight() && rSprite->getFrame() != 5 && (_rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270))) {
+    if ((!_player->getRangedAttackRight() && rSprite->getFrame() != 0 && _rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270) ||
+        (_player->getRangedAttackRight() && rSprite->getFrame() != 5 && (_rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270))) {
         offsetArm = -1 * offsetArm;
     }
 
@@ -859,7 +861,7 @@ void GameScene::updateAnimations(float timestep) {
         upDownY1 = -1 * spacing + upDownY1;
     }
 
-    if (_player->isFacingRight() && rSprite->getFrame() != 4) {
+    if (_player->getRangedAttackRight() && rSprite->getFrame() != 4) {
         if (_rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270) {
             _rangedArm->setPosition(_player->getPosition().x + offsetArm - 2, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
         }
@@ -867,7 +869,7 @@ void GameScene::updateAnimations(float timestep) {
             _rangedArm->setPosition(_player->getPosition().x + offsetArm + 2, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
         }
     }
-    else if (!_player->isFacingRight() && rSprite->getFrame() != 0) {
+    else if (!_player->getRangedAttackRight() && rSprite->getFrame() != 0) {
         if (_rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270) {
             _rangedArm->setPosition(_player->getPosition().x + offsetArm + 2, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
         }
@@ -1179,7 +1181,7 @@ void GameScene::updateSwipesAndAttacks(float timestep) {
             attackSprite->setAngle((*it)->getAngle() * M_PI / 180);
             attackSprite->setPriority(3);
             _rangedArm->setLastType(Glow::MeleeState::first);
-            _player->setRangedDirection(_player->isFacingRight());
+            _player->setRangedAttackRight(_player->isFacingRight());
             if (_swipes.getLeftSwipe() == SwipeController::downAttack) {
                 _rangedArm->setAttackAngle(270);
             }
@@ -1198,7 +1200,7 @@ void GameScene::updateSwipesAndAttacks(float timestep) {
             attackSprite->setColor(Color4::RED);
             attackSprite->setPriority(3);
             _rangedArm->setLastType(Glow::MeleeState::first);
-            _player->setRangedDirection(_player->isFacingRight());
+            _player->setRangedAttackRight(_player->isFacingRight());
             if (_swipes.getLeftSwipe() == SwipeController::downAttack) {
                 _rangedArm->setAttackAngle(270);
             }
@@ -1217,7 +1219,7 @@ void GameScene::updateSwipesAndAttacks(float timestep) {
             attackSprite->setColor(Color4::RED);
             attackSprite->setPriority(3);
             _rangedArm->setLastType(Glow::MeleeState::first);
-            _player->setRangedDirection(_player->isFacingRight());
+            _player->setRangedAttackRight(_player->isFacingRight());
             if (_swipes.getLeftSwipe() == SwipeController::downAttack) {
                 _rangedArm->setAttackAngle(270);
             }
@@ -2016,7 +2018,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     std::shared_ptr<Texture> image = _assets->get<Texture>(PLAYER_WALK_TEXTURE);
     std::shared_ptr<Texture> hitboxImage = _assets->get<Texture>(PLAYER_TEXTURE);
     _player = PlayerModel::alloc(playerPos + Vec2(0, .5), hitboxImage->getSize() / _scale / 8, _scale);
-    _player->setRangedDirection(true);
+    _player->setRangedAttackRight(true);
     _player->setIsStunned(false);
     _player->setMovement(0);
     _player->setWalkAnimationTimer(0);
