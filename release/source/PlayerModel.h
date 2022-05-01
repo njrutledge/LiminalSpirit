@@ -113,6 +113,9 @@ protected:
     /** Time player will drop through platforms */
     float _dropTime;
 
+	/** True if the ranged attack for last fired to the right */
+	bool _rangedDirection;
+
 	/** Redraws outline of physics fixtures */
 	virtual void resetDebug() override;
 
@@ -278,6 +281,12 @@ public:
     
     /** Sets the drop time */
     void setDropTime(float value) { _dropTime = value; }
+
+	/** Whether or not the last ranged attack was when the player faced right */
+	bool getRangedDirection() { return _rangedDirection; }
+
+	/** Sets whether or not the last ranged attack was when the player faced right*/
+	void setRangedDirection(bool value) { _rangedDirection = value; }
 
 	/**
 	 * Returns how much force to apply to get the player moving

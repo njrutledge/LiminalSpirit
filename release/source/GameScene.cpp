@@ -703,22 +703,10 @@ void GameScene::updateAnimations(float timestep) {
                 }
                 else {
                     rSprite->setAnchor(0.2, 0.8);
-                    rSprite->setFrame((rSprite->getFrame() + 1) % 4);
+                    rSprite->setFrame((rSprite->getFrame() + 1) % 5);
                 }
                 _rangedArm->setAnimeTimer(0);
             }
-        }
-    }
-    else {
-        if (_player->isFacingRight()) {
-            rSprite->setFrame(5);
-            rSprite->setAnchor(0.5, 0.5);
-            _rangedArm->setAttackAngle(0);
-        }
-        else {
-            rSprite->setFrame(0);
-            rSprite->setAnchor(0.5, 0.5);
-            _rangedArm->setAttackAngle(0);
         }
     }
 
@@ -1191,6 +1179,7 @@ void GameScene::updateSwipesAndAttacks(float timestep) {
             attackSprite->setAngle((*it)->getAngle() * M_PI / 180);
             attackSprite->setPriority(3);
             _rangedArm->setLastType(Glow::MeleeState::first);
+            _player->setRangedDirection(_player->isFacingRight());
             if (_swipes.getLeftSwipe() == SwipeController::downAttack) {
                 _rangedArm->setAttackAngle(270);
             }
@@ -1209,6 +1198,7 @@ void GameScene::updateSwipesAndAttacks(float timestep) {
             attackSprite->setColor(Color4::RED);
             attackSprite->setPriority(3);
             _rangedArm->setLastType(Glow::MeleeState::first);
+            _player->setRangedDirection(_player->isFacingRight());
             if (_swipes.getLeftSwipe() == SwipeController::downAttack) {
                 _rangedArm->setAttackAngle(270);
             }
@@ -1227,6 +1217,7 @@ void GameScene::updateSwipesAndAttacks(float timestep) {
             attackSprite->setColor(Color4::RED);
             attackSprite->setPriority(3);
             _rangedArm->setLastType(Glow::MeleeState::first);
+            _player->setRangedDirection(_player->isFacingRight());
             if (_swipes.getLeftSwipe() == SwipeController::downAttack) {
                 _rangedArm->setAttackAngle(270);
             }
@@ -2025,6 +2016,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     std::shared_ptr<Texture> image = _assets->get<Texture>(PLAYER_WALK_TEXTURE);
     std::shared_ptr<Texture> hitboxImage = _assets->get<Texture>(PLAYER_TEXTURE);
     _player = PlayerModel::alloc(playerPos + Vec2(0, .5), hitboxImage->getSize() / _scale / 8, _scale);
+    _player->setRangedDirection(true);
     _player->setIsStunned(false);
     _player->setMovement(0);
     _player->setWalkAnimationTimer(0);
