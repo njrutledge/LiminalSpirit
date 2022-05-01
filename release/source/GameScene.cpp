@@ -923,7 +923,8 @@ void GameScene::updateEnemies(float timestep) {
    // For each enemy
     std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("devil"), Vec2(0, 0));
     std::shared_ptr<ParticlePool> pool2 = ParticlePool::allocPoint(_particleInfo->get("damaged"), Vec2(0, 0));
-    std::shared_ptr<Texture> text = _assets->get<Texture>("melee_impact");
+    std::shared_ptr<Texture> melee_impact = _assets->get<Texture>("melee_impact");
+    std::shared_ptr<Texture> ranged_impact = _assets->get<Texture>("ranged_impact");
     for (auto it = _enemies.begin(); it != _enemies.end(); ++it)
     {
         Vec2 direction = _ai.getMovement(*it, _player->getPosition(), timestep, 0, DEFAULT_WIDTH);
@@ -946,7 +947,6 @@ void GameScene::updateEnemies(float timestep) {
         } else {
             (*it)->setVY(direction.y);
         }
-//        (*it)->setVY(direction.y);
         (*it)->getGlow()->setPosition((*it)->getPosition());
         (*it)->setInvincibilityTimer((*it)->getInvincibilityTimer() - timestep);
 
@@ -957,7 +957,13 @@ void GameScene::updateEnemies(float timestep) {
         // For running idle animations specific (for speed) to enemies
         if ((*it)->getName() == "Phantom") {
             if ((*it)->getInvincibilityTimer() > 0) {
-                    std::shared_ptr<ParticleNode> dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, text, pool);
+                std::shared_ptr<ParticleNode> dmgd;
+                if ((*it)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee) {
+                    dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, melee_impact, pool);
+                }
+                else {
+                    dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, ranged_impact, pool);
+                }
                     dmgd->setScale(0.1f);
                     _worldnode->addChildWithTag(dmgd, 100);
             }
@@ -969,10 +975,22 @@ void GameScene::updateEnemies(float timestep) {
         else if ((*it)->getName() == "Glutton") {
             if ((*it)->getInvincibilityTimer() > 0) {
                 if (sprite->getFrame() != 7) {
-                    std::shared_ptr<ParticleNode> dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, text, pool);
+                    std::shared_ptr<ParticleNode> dmgd;
+                    if ((*it)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee) {
+                        dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, melee_impact, pool);
+                    }
+                    else {
+                        dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, ranged_impact, pool);
+                    }
                     dmgd->setScale(0.2f);
                     _worldnode->addChildWithTag(dmgd, 100);
-                    std::shared_ptr<ParticleNode> dmgd2 = ParticleNode::alloc((*it)->getPosition() * _scale, text, pool2);
+                    std::shared_ptr<ParticleNode> dmgd2;
+                    if ((*it)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee) {
+                        dmgd2 = ParticleNode::alloc((*it)->getPosition() * _scale, melee_impact, pool);
+                    }
+                    else {
+                        dmgd2 = ParticleNode::alloc((*it)->getPosition() * _scale, ranged_impact, pool);
+                    }
                     dmgd2->setScale(0.05f);
                     _worldnode->addChildWithTag(dmgd2, 100);
                 }
@@ -988,7 +1006,13 @@ void GameScene::updateEnemies(float timestep) {
         else if ((*it)->getName() == "Lost") {
             if ((*it)->getInvincibilityTimer() > 0) {
                 if (sprite->getFrame() != 7 && sprite->getFrame() != 4) {
-                    std::shared_ptr<ParticleNode> dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, text, pool);
+                    std::shared_ptr<ParticleNode> dmgd;
+                    if ((*it)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee) {
+                        dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, melee_impact, pool);
+                    }
+                    else {
+                        dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, ranged_impact, pool);
+                    }
                     dmgd->setScale(0.1f);
                     _worldnode->addChildWithTag(dmgd, 100);
                 }
@@ -1008,7 +1032,13 @@ void GameScene::updateEnemies(float timestep) {
                 }
 
                 if ((*it)->getInvincibilityTimer() > 0) {
-                    std::shared_ptr<ParticleNode> dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, text, pool);
+                    std::shared_ptr<ParticleNode> dmgd;
+                    if ((*it)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee) {
+                        dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, melee_impact, pool);
+                    }
+                    else {
+                        dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, ranged_impact, pool);
+                    }
                     dmgd->setScale(0.1f);
                     _worldnode->addChildWithTag(dmgd, 100);
                 }
@@ -1026,7 +1056,13 @@ void GameScene::updateEnemies(float timestep) {
         }
         else if ((*it)->getName() == "Seeker") {
             if ((*it)->getInvincibilityTimer() > 0) {
-                std::shared_ptr<ParticleNode> dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, text, pool);
+                std::shared_ptr<ParticleNode> dmgd;
+                if ((*it)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee) {
+                    dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, melee_impact, pool);
+                }
+                else {
+                    dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, ranged_impact, pool);
+                }
                 dmgd->setScale(0.1f);
                 _worldnode->addChildWithTag(dmgd, 100);
             }

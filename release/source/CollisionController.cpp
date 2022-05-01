@@ -144,6 +144,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                     if (attack->getDamage() > 0) {
                         //enemy->setInvincibility(true);
                         enemy->setInvincibilityTimer(0.2f);
+                        enemy->setLastDamagedBy(mapToBaseAttackType(attack->getType()));
                     }
                     else {
                         CULog("NO DAMAGE ATTACK???");
@@ -249,6 +250,34 @@ void CollisionController::handlePlayerCollision(PlayerModel* player, physics2::O
         }
     }
 }
+
+/**
+* helper to converting from attack controller attack type to base enemy model attack type
+*/
+BaseEnemyModel::AttackType CollisionController::mapToBaseAttackType(AttackController::Type attackType) {
+    if (attackType == AttackController::Type::e_melee) {
+        return BaseEnemyModel::AttackType::e_melee;
+    }
+    else if (attackType == AttackController::Type::e_range) {
+        return BaseEnemyModel::AttackType::e_range;
+    }
+    else if (attackType == AttackController::Type::p_dash) {
+        return BaseEnemyModel::AttackType::p_dash;
+    }
+    else if (attackType == AttackController::Type::p_exp) {
+        return BaseEnemyModel::AttackType::p_exp;
+    }
+    else if (attackType == AttackController::Type::p_exp_package) {
+        return BaseEnemyModel::AttackType::p_exp_package;
+    }
+    else if (attackType == AttackController::Type::p_range) {
+        return BaseEnemyModel::AttackType::p_range;
+    }
+    else {
+        return BaseEnemyModel::AttackType::p_melee;
+    }
+}
+
 
 void CollisionController::handleAttackCollision(AttackController::Attack* attack, physics2::Obstacle* bd, std::string* fd, std::shared_ptr<AttackController> AC, float timer) {
     if (!attack->isActive()) {

@@ -45,6 +45,19 @@ struct EnemyProperties {
 *
 */
 class BaseEnemyModel : public cugl::physics2::CapsuleObstacle {
+
+public:
+
+	enum AttackType {
+		p_melee,
+		p_dash,
+		p_range,
+		p_exp_package,
+		p_exp,
+		e_melee,
+		e_range
+	};
+
 protected:
 	/** Health */
 	int _health;
@@ -84,6 +97,9 @@ protected:
     
     /** Duration of enemy invincibility */
     float _invincibilityTime;
+
+	/** The type of attack the enemy was last damaged by*/
+	AttackType _lastDamagedBy;
 
 	/** Enemy name*/
 	std::string _enemyName;
@@ -230,6 +246,12 @@ public:
     
     /** Returns amount of invincibility time remaining */
     float getInvincibilityTimer() { return _invincibilityTime; }
+
+	/** Sets the type of attack the enemy was just damaged by*/
+	void setLastDamagedBy(AttackType value) { _lastDamagedBy = value; }
+
+	/** Returns type of attack the enemy was last damaged by */
+	float getLastDamagedBy() { return _lastDamagedBy; }
     
     /** Sets invincibility time (for after getting hit) */
     void setInvincibilityTimer(float value) { _invincibilityTime = value; }
