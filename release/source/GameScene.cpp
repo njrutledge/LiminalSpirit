@@ -1413,6 +1413,12 @@ void GameScene::updateSpawnTimes() {
     if (_nextWaveNum < _numWaves && !_enemies.size()) {
         float nextSpawnTime = _spawn_times[_nextWaveNum];
         float diff = nextSpawnTime - _timer;
+        // 3 second delay between waves
+        if (diff < 4.0f) {
+            diff = 0.0f;
+        } else {
+            diff -= 3.0f;
+        }
         for (int i = _nextWaveNum; i < _numWaves; i++) {
             _spawn_times[i] -= diff;
         }
