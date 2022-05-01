@@ -116,6 +116,7 @@ void AttackController::Attack::createFixtures() {
         sensorDef2.userData.pointer = reinterpret_cast<uintptr_t>(getSensorName());
         _bodySensorFixture = _body->CreateFixture(&sensorDef2);
     }
+    setFilterData(getFilterData());//fix attacks!
 }
 
 void AttackController::Attack::releaseFixtures() {
