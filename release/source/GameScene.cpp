@@ -371,13 +371,10 @@ void GameScene::dispose()
 void GameScene::update(float timestep)
 {
     updateSoundInputParticlesAndTilt(timestep);
-
+    
     updateAnimations(timestep);
-
     updateEnemies(timestep);
-
     updateSwipesAndAttacks(timestep);
-
     updateRemoveDeletedAttacks();
 
     updateRemoveDeletedEnemies();
@@ -385,7 +382,7 @@ void GameScene::update(float timestep)
     updateText();
 
     updateSpawnTimes();
-
+    
     updateRemoveDeletedPlayer();
 
     updateHealthbar();
@@ -927,7 +924,9 @@ void GameScene::updateEnemies(float timestep) {
     std::shared_ptr<Texture> text = _assets->get<Texture>("star");
     for (auto it = _enemies.begin(); it != _enemies.end(); ++it)
     {
+        cout << (*it)->getName() << endl;
         Vec2 direction = _ai.getMovement(*it, _player->getPosition(), timestep, 0, DEFAULT_WIDTH);
+
         (*it)->setVX(direction.x);
         if((*it)->getName() == "Lost") {
             float distance = _player->getPosition().distance((*it)->getPosition());
