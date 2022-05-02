@@ -1565,7 +1565,7 @@ void GameScene::createSpawnParticles() {
     std::shared_ptr<Texture> melee_impact = _assets->get<Texture>("melee_impact");
 
     for (int i = 0; i < positions.size(); i++) {
-        std::shared_ptr<ParticleNode> spawning = ParticleNode::alloc(positions[i], melee_impact, pool);
+        std::shared_ptr<ParticleNode> spawning = ParticleNode::alloc(positions[i] * _scale, melee_impact, pool);
         spawning->setScale(0.1f);
         _worldnode->addChildWithTag(spawning, 100);
     }
