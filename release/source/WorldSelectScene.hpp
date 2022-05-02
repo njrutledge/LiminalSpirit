@@ -60,6 +60,14 @@ protected:
   std::shared_ptr<cugl::scene2::Button> _shroomButton;
   std::shared_ptr<cugl::scene2::Button> _forestButton;
 
+  std::shared_ptr<cugl::scene2::SceneNode> _caveButtonBack;
+  std::shared_ptr<cugl::scene2::SceneNode> _shroomButtonBack;
+  std::shared_ptr<cugl::scene2::SceneNode> _forestButtonBack;
+
+  float _timer;
+
+
+
   /** the player choice of the world select menu */
   Choice _choice = Choice::MENU;
 
@@ -100,7 +108,8 @@ public:
 
   Choice getChoice() { return _choice; }
 
-  void setDefaultChoice() { _choice = Choice::MENU; }
+  /** sets _choice to default, and resets the timer */
+  void setDefaultChoice() { _choice = Choice::MENU; _timer = 0; }
 
 #pragma mark -
 #pragma mark Screen Handling

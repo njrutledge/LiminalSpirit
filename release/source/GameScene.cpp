@@ -1351,6 +1351,7 @@ void GameScene::updateSwipesAndAttacks(float timestep) {
             attackSprite = scene2::PolygonNode::allocWithTexture(_pMeleeTexture);
             attackSprite->setVisible(false);
             attackSprite->setPriority(3);
+            //it just works
             switch (meleeState) {
             case(AttackController::MeleeState::cool):
                 _meleeArm->setLastType(Glow::MeleeState::cool);

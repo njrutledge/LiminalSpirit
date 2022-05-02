@@ -128,6 +128,12 @@
 		F05BD2B327F29AB8005D1F38 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = F05BD2AF27F29AB8005D1F38 /* sounds */; };
 		F05BD2B427F29AB8005D1F38 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = F05BD2AF27F29AB8005D1F38 /* sounds */; };
 		F05BD2B527F29AB8005D1F38 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = F05BD2AF27F29AB8005D1F38 /* sounds */; };
+		F065698428207AAC00241218 /* LevelSelectScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F065697F28207AAC00241218 /* LevelSelectScene.cpp */; };
+		F065698528207AD400241218 /* LevelSelectScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F065697F28207AAC00241218 /* LevelSelectScene.cpp */; };
+		F065698628207AD500241218 /* LevelSelectScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F065697F28207AAC00241218 /* LevelSelectScene.cpp */; };
+		F065698828207BBA00241218 /* widgets in Resources */ = {isa = PBXBuildFile; fileRef = F065698728207BBA00241218 /* widgets */; };
+		F065698928207BBA00241218 /* widgets in Resources */ = {isa = PBXBuildFile; fileRef = F065698728207BBA00241218 /* widgets */; };
+		F065698A28207BBA00241218 /* widgets in Resources */ = {isa = PBXBuildFile; fileRef = F065698728207BBA00241218 /* widgets */; };
 		F0750174280CD94B00CBD6A3 /* Phantom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85841F402809F09300169F44 /* Phantom.cpp */; };
 		F0750178280CD94C00CBD6A3 /* Phantom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85841F402809F09300169F44 /* Phantom.cpp */; };
 		F09AF65027F64ACA003C6EA2 /* Seeker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F09AF64727F64ACA003C6EA2 /* Seeker.cpp */; };
@@ -264,6 +270,9 @@
 		F05176D727D071D900C0617F /* CollisionController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CollisionController.cpp; sourceTree = "<group>"; };
 		F05176D827D071D900C0617F /* PlayerModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayerModel.cpp; sourceTree = "<group>"; };
 		F05BD2AF27F29AB8005D1F38 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
+		F065697F28207AAC00241218 /* LevelSelectScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LevelSelectScene.cpp; sourceTree = "<group>"; };
+		F065698328207AAC00241218 /* LevelSelectScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LevelSelectScene.hpp; sourceTree = "<group>"; };
+		F065698728207BBA00241218 /* widgets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = widgets; sourceTree = "<group>"; };
 		F09AF64027F64ACA003C6EA2 /* Mirror.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Mirror.hpp; sourceTree = "<group>"; };
 		F09AF64527F64ACA003C6EA2 /* HomeScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HomeScene.hpp; sourceTree = "<group>"; };
 		F09AF64627F64ACA003C6EA2 /* Glow.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Glow.hpp; sourceTree = "<group>"; };
@@ -369,6 +378,7 @@
 		EB2BE9B71D749870002FE78B /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				F065698728207BBA00241218 /* widgets */,
 				F05BD2AF27F29AB8005D1F38 /* sounds */,
 				857201C727E25619006D48C6 /* fonts */,
 				EBFE7C041E19B496001007C2 /* json */,
@@ -469,6 +479,8 @@
 		EBBF18B11D749176008E2001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				F065697F28207AAC00241218 /* LevelSelectScene.cpp */,
+				F065698328207AAC00241218 /* LevelSelectScene.hpp */,
 				F01F990C281988F400701247 /* BossScene.cpp */,
 				F01F9908281988F400701247 /* BossScene.hpp */,
 				F0BE06F228132DCD00B22958 /* RRParticle.cpp */,
@@ -661,6 +673,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F065698A28207BBA00241218 /* widgets in Resources */,
 				EB22BF9B25D0EA5C002ACE41 /* DeviceMargins.plist in Resources */,
 				EB22BF9625D0EA50002ACE41 /* json in Resources */,
 				F05BD2B527F29AB8005D1F38 /* sounds in Resources */,
@@ -676,6 +689,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F065698928207BBA00241218 /* widgets in Resources */,
 				EB7454D01D750623002FBAE6 /* textures in Resources */,
 				EB7454AB1D74D846002FBAE6 /* iOS.xcassets in Resources */,
 				F05BD2B427F29AB8005D1F38 /* sounds in Resources */,
@@ -695,6 +709,7 @@
 				F05BD2B327F29AB8005D1F38 /* sounds in Resources */,
 				EBFE7C091E19B4AC001007C2 /* json in Resources */,
 				EB2BE9BB1D7498D2002FE78B /* textures in Resources */,
+				F065698828207BBA00241218 /* widgets in Resources */,
 				EBBF189B1D74904A008E2001 /* Mac.xcassets in Resources */,
 				857201C827E25619006D48C6 /* fonts in Resources */,
 			);
@@ -710,6 +725,7 @@
 				85B0001927DFAC8500DAC3F2 /* Lost.cpp in Sources */,
 				F00746F527E91B2600AF5D7C /* SoundController.cpp in Sources */,
 				F09AF65E27F64ACA003C6EA2 /* Glow.cpp in Sources */,
+				F065698628207AD500241218 /* LevelSelectScene.cpp in Sources */,
 				F09AF65227F64ACA003C6EA2 /* Seeker.cpp in Sources */,
 				F05176DE27D080C900C0617F /* SwipeController.cpp in Sources */,
 				F09AF65527F64ACA003C6EA2 /* Mirror.cpp in Sources */,
@@ -744,6 +760,7 @@
 				5783892727E2369B000CB5B9 /* SwipeController.cpp in Sources */,
 				F00746F427E91B2600AF5D7C /* SoundController.cpp in Sources */,
 				F09AF65D27F64ACA003C6EA2 /* Glow.cpp in Sources */,
+				F065698528207AD400241218 /* LevelSelectScene.cpp in Sources */,
 				F09AF65127F64ACA003C6EA2 /* Seeker.cpp in Sources */,
 				5783892827E2369B000CB5B9 /* Platform.cpp in Sources */,
 				F09AF65427F64ACA003C6EA2 /* Mirror.cpp in Sources */,
@@ -778,6 +795,7 @@
 				F025104127D02C6C00AB80AA /* SwipeController.cpp in Sources */,
 				F00746F327E91B2600AF5D7C /* SoundController.cpp in Sources */,
 				F09AF65C27F64ACA003C6EA2 /* Glow.cpp in Sources */,
+				F065698428207AAC00241218 /* LevelSelectScene.cpp in Sources */,
 				F09AF65027F64ACA003C6EA2 /* Seeker.cpp in Sources */,
 				578388FD27E1156D000CB5B9 /* Platform.cpp in Sources */,
 				F09AF65327F64ACA003C6EA2 /* Mirror.cpp in Sources */,
