@@ -74,7 +74,7 @@ void LevelSelectScene::dispose()
  */
 bool LevelSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets, string biome)
 {
-    Size dimen = Application::get()->getDisplaySize();
+    Size dimen = Application::get()->getSafeBounds().size;
     float boundScale = SCENE_WIDTH / dimen.width;
     dimen *= boundScale;
 
