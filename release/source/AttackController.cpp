@@ -101,7 +101,7 @@ void AttackController::Attack::createFixtures() {
     if (_type == p_melee) {
         b2FixtureDef sensorDef2;
         sensorDef2.density = 0;
-        sensorDef2.isSensor = false;
+        sensorDef2.isSensor = true;
         b2PolygonShape sensorShape2;
         b2Vec2 corners2[8];
         cugl::Vec2 vec2(0, _radius /2.0f);

@@ -292,6 +292,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
     auto HUD = assets->get<scene2::SceneNode>("HUD");
     HUD->setContentSize(dimen);
     HUD->doLayout();
+    HUD->setPosition(offset);
     //check if the scene already has HUD, and remove it if it does.
     scene->addChildWithName(HUD, "HUD");
 
@@ -394,10 +395,13 @@ void GameScene::update(float timestep)
             }
         }
         _player->setVX(_tilt.getXpos());
+        _player->setFacingRight(true);
+
 
         //perform necessary update loop
         updateAnimations(timestep);
         _world->update(timestep);
+        updateCamera();
         updateMeleeArm(timestep);
         return;
     }
