@@ -155,13 +155,29 @@ Vec2 AIController::getPhantomMovement(shared_ptr<Phantom> phantom, Vec2 player_p
 		}
         Vec2 vector = phantom->targetPosition - phantom->getPosition();
         float distance = player_pos.distance(phantom->targetPosition);
-        while(phantom->targetPosition == Vec2() || phantom->targetPosition.distance(phantom->getPosition()) <= 1 || distance > 20 || !vector.x || !vector.y) {
-            float r = 10 + 10 * std::sqrt(static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
-            float alpha = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2 * M_PI;
-            phantom->targetPosition = Vec2(r * std::cos(alpha), r * std::sin(alpha)) + phantom->getPosition();
-            distance = player_pos.distance(phantom->targetPosition);
-            vector = phantom->targetPosition - phantom->getPosition();
-        }
+        float target = distance;
+
+//        if (distance > 40) {
+//            float target_distance = distance;
+//            while(phantom->targetPosition == Vec2() || phantom->targetPosition.distance(phantom->getPosition()) <= 1 || !vector.x || !vector.y || target_distance >= distance) {
+//                float r = 10 + 10 * std::sqrt(static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
+//                float alpha = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2 * M_PI;
+//                phantom->targetPosition = Vec2(r * std::cos(alpha), r * std::sin(alpha)) + phantom->getPosition();
+//                target_distance = player_pos.distance(phantom->targetPosition);
+//                vector = phantom->targetPosition - phantom->getPosition();
+//            }
+//        }
+//        else {
+//
+            while(phantom->targetPosition.distance(phantom->getPosition()) <= 1 || target > distance || !vector.x || !vector.y) {
+                float r = 10 + 10 * std::sqrt(static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
+                float alpha = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2 * M_PI;
+                phantom->targetPosition = Vec2(r * std::cos(alpha), r * std::sin(alpha)) + phantom->getPosition();
+                target = player_pos.distance(phantom->targetPosition);
+                vector = phantom->targetPosition - phantom->getPosition();
+            }
+       // }
+       
         if(phantom->getPosition().y - phantom->getHeight()/2 <= bottomwall) {
             phantom->targetPosition = phantom->getPosition() + Vec2(vector.x, -vector.y);
         }
