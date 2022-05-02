@@ -966,6 +966,7 @@
 	"jsons": {
 		"cave1": "json/levels/surround.json",
 		"shroom1": "json/levels/battlefield.json",
+		"shroom2": "json/levels/wintest.json",
 		"levelt": "json/levels/levelt.json",
 		"cave2": "json/levels/scaffold.json",
 		"level2": "json/levels/level2.json",

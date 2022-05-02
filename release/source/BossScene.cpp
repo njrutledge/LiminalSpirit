@@ -72,7 +72,7 @@ using namespace cugl;
 bool BossScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const std::shared_ptr<SoundController> sound)
 {
     _seedBarrageTimer = 0;
-    return GameScene::init(assets, sound, "BOSS");
+    return GameScene::init(assets, sound, "BOSS", -1);
 }
 
 /**

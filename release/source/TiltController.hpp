@@ -46,11 +46,17 @@ public:
      * Resets tilt controller.
      */
     void reset();
+    /** 
+     * Returns the xFactor multiplier
+     */
+    float getXFactor();
 
     /**
      * Returns the current xpos
      */
     const float getXpos() { return _xpos; }
+
+    void winTime();
     
 };
 

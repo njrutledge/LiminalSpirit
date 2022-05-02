@@ -34,7 +34,7 @@
 
 
 #define CAVE_MAXLEVELS 2
-#define SHROOM_MAXLEVELS 1
+#define SHROOM_MAXLEVELS 2
 #define FOREST_MAXLEVELS 2
 /**
  * Class representing the Home screen. It links to world select and options menu.
@@ -149,6 +149,21 @@ public:
    * @param batch the batch to draw
    */
   void render(const std::shared_ptr<cugl::SpriteBatch> &batch);
+
+  int getMaxStages(string biome) {
+	  if (biome == "cave") {
+		  return CAVE_MAXLEVELS;
+	  }
+	  else if (biome == "shroom") {
+		  return SHROOM_MAXLEVELS;
+	  }
+	  else if (biome == "forest") {
+		  return FOREST_MAXLEVELS;
+	  }
+	  else {
+		  return -1;
+	  }
+  }
 };
 
 #endif /* __Level_Select_Scene_hpp__ */

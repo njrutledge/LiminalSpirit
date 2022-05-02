@@ -79,3 +79,11 @@ void TiltController::update(InputController& input, float width) {
 void TiltController::reset() {
     _xpos = 0;
 }
+
+float TiltController::getXFactor() {
+    return ACCELEROM_X_FACTOR;
+}
+
+void TiltController::winTime() {
+    _xpos = 0.4 * ACCELEROM_X_FACTOR;
+}

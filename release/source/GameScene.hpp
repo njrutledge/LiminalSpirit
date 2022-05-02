@@ -198,6 +198,15 @@ protected:
     /** healthbar */
     std::shared_ptr<scene2::ProgressBar> _healthbar;
 
+    bool _winInit;
+
+    float _winFadeTimer;
+
+    bool _next;
+
+    string _biome;
+
+    int _stageNum;
     /**
      * Internal helper to build the scene graph.
      *
@@ -240,9 +249,11 @@ public:
      *
      * @return true if the controller is initialized properly, false otherwise.
      */
-    bool init(const std::shared_ptr<cugl::AssetManager> &assets, const std::shared_ptr<SoundController> sound, string json);
+    bool init(const std::shared_ptr<cugl::AssetManager> &assets, const std::shared_ptr<SoundController> sound, string biome, int stageNum);
 
     bool goingBack() { return _back; }
+
+    bool next() { return _next; }
 
 #pragma mark -
 #pragma mark Gameplay Handling
@@ -312,7 +323,9 @@ public:
     /**
      * helper method to win game
      */
-    void updateWin();
+    bool updateWin();
+
+    void updateTilt();
 
     /**
      * Resets the status of the game so that we can play again.
@@ -378,6 +391,10 @@ public:
 
     /** Creates the intial particle pool */
     void createParticles();
+
+    string getBiome() { return _biome; }
+
+    int getStageNum() { return _stageNum; }
 
 };
 

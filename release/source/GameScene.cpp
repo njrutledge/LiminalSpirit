@@ -80,7 +80,6 @@ float DEFAULT_HEIGHT = DEFAULT_WIDTH / SCENE_WIDTH * SCENE_HEIGHT;
 /** The initial position of the player*/
 float PLAYER_POS[] = { 5.0f, 4.0f };
 
-string BIOME = "cave";
 float LEVEL_HEIGHT = 54;
 
 
@@ -95,10 +94,12 @@ float LEVEL_HEIGHT = 54;
  *
  * @return true if the controller is initialized properly, false otherwise.
  */
-bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const std::shared_ptr<SoundController> sound, string json)
+bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const std::shared_ptr<SoundController> sound, string biome, int stageNum)
 {
     _back = false;
     _step = false;
+    _winInit = true;
+    _next = false;
     Size dimen = Application::get()->getDisplaySize();
     float boundScale = SCENE_WIDTH / dimen.width;
     dimen *= boundScale;
@@ -123,8 +124,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
     _assets = assets;
 
     // Get constant values from assets/level.json
-    _constants = assets->get<JsonValue>(json);
-    BIOME = _constants->getString("biome");
+    _constants = assets->get<JsonValue>(biome + to_string(stageNum));
+    _biome = _constants->getString("biome");
+    _stageNum = stageNum;
     LEVEL_HEIGHT = _constants->getFloat("level_height");
     PLAYER_POS[0] = _constants->get("start_pos")->get(0)->asFloat();
     PLAYER_POS[1] = _constants->get("start_pos")->get(1)->asFloat();
@@ -204,10 +206,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
     //_scene = Scene2::alloc(dimen.width, dimen.height);
     // default scene is forest for now
    auto scene = (_assets->get<scene2::SceneNode>("forest"));
-    if (!BIOME.compare("cave")) {
+    if (!_biome.compare("cave")) {
         scene = _assets->get<scene2::SceneNode>("cave");
     }
-    else if (!BIOME.compare("shroom")) {
+    else if (!_biome.compare("shroom")) {
         scene = _assets->get<scene2::SceneNode>("shroom");
     }
     scene->setContentSize(dimen);
@@ -304,7 +306,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
     _timer_text->layout();
     
     _timer = 0.0f;
-
+    this->setColor(Color4::WHITE);
     return true;
 }
 
@@ -371,8 +373,41 @@ void GameScene::dispose()
 void GameScene::update(float timestep)
 {
     updateSoundInputParticlesAndTilt(timestep);
+
+    if (updateWin()) {
+        //let player fall through platforms
+        if (_winInit) {
+            b2Filter filter = _player->getFilterData();
+            filter.maskBits = 0b101000;
+            _player->setFilterData(filter);
+            //set tilt xpos to be constant for moving towards the portal
+            _tilt.winTime();
+            _winInit = false;
+            _winFadeTimer = 0;
+        }
+        if (_player->getX() >= 30) {
+            _tilt.reset();
+            this->setColor(Color4(255 - _winFadeTimer * 255 / 1.5, 255 - _winFadeTimer * 255 / 1.5, 255 - _winFadeTimer * 255 / 1.5, 255));
+            _winFadeTimer = _winFadeTimer + timestep <= 1.5 ? _winFadeTimer + timestep : 1.5;
+            if (_winFadeTimer == 1.5) {
+                _next = true;
+            }
+        }
+        _player->setVX(_tilt.getXpos());
+
+        //perform necessary update loop
+        updateAnimations(timestep);
+        _world->update(timestep);
+        updateMeleeArm(timestep);
+        return;
+    }
+
+    updateTilt();
     
     updateAnimations(timestep);
+
+  
+
     updateEnemies(timestep);
     updateSwipesAndAttacks(timestep);
     updateRemoveDeletedAttacks();
@@ -393,7 +428,6 @@ void GameScene::update(float timestep)
 
     updateMeleeArm(timestep);
 
-    updateWin();
 }
 
 void GameScene::updateSoundInputParticlesAndTilt(float timestep) {
@@ -409,7 +443,7 @@ void GameScene::updateSoundInputParticlesAndTilt(float timestep) {
         }
     }
 
-    _sound->play_level_music(BIOME, e);
+    _sound->play_level_music(_biome, e);
 
     // Update input controller
     _input.update();
@@ -440,7 +474,9 @@ void GameScene::updateSoundInputParticlesAndTilt(float timestep) {
             pn->update(timestep);
         }
     };
+}
 
+void GameScene::updateTilt() {
     // Update tilt controller
     _tilt.update(_input, SCENE_WIDTH);
     float xPos = _tilt.getXpos();
@@ -1572,7 +1608,7 @@ void GameScene::createSpawnParticles() {
 
 }
 
-void GameScene::updateWin() {
+bool GameScene::updateWin() {
     // All waves created and all enemies cleared
     if (_nextWaveNum >= _numWaves && !_enemies.size() && !_spawnerCount) {
         // Create and layout win text
@@ -1581,6 +1617,10 @@ void GameScene::updateWin() {
         _endText->setVerticalAlignment(VerticalAlign::MIDDLE);
         _endText->setHorizontalAlignment(HorizontalAlign::CENTER);
         _endText->layout();
+        return true;
+    }
+    else {
+        return false;
     }
 }
 
@@ -2031,7 +2071,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
         pos.x = _platforms_attr[i][0];
         pos.y = _platforms_attr[i][1];
         float width = _platforms_attr[i][2];
-        if (!BIOME.compare("shroom")) {
+        if (!_biome.compare("shroom")) {
             if (width < DEFAULT_WIDTH / 3) {
                 //use small platform
                 platformImage = _assets->get<Texture>("shroom_small_platform");
@@ -2043,7 +2083,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
                 platformImage = _assets->get<Texture>("shroom_large_platform");
             }
         }
-        else if (!BIOME.compare("forest")) {
+        else if (!_biome.compare("forest")) {
             if (width < DEFAULT_WIDTH / 3) {
                 platformImage = _assets->get<Texture>("forest_small_platform");
             } else if (width < (DEFAULT_WIDTH / 3) * 2) {

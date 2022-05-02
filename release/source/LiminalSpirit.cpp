@@ -245,6 +245,32 @@ void LiminalSpirit::updateGameScene(float timestep)
         _worldSelect.setDefaultChoice();
         _levelSelect.setDefaultChoice();
     }
+    else if (_gameplay.next()) {
+        _gameplay.dispose();
+        string biome = _gameplay.getBiome();
+        int nextStage = _gameplay.getStageNum() + 1;
+        if ( nextStage > _levelSelect.getMaxStages(biome)) {
+            if (biome == "cave") {
+                biome = "shroom";
+            }
+            else if (biome == "shroom") {
+                biome = "forest";
+            }
+            else {
+                //no more biomes, you won!
+                _scene = State::WORLDS;
+                _worldSelect.setDefaultChoice();
+                _levelSelect.setDefaultChoice();
+                return;
+            }
+            nextStage = 1;
+            _gameplay.init(_assets, _sound_controller, biome, nextStage);
+            //more levels to go!
+        }
+        else {
+            _gameplay.init(_assets, _sound_controller, biome, nextStage);
+        }
+    }
 }
 
 /**
@@ -260,7 +286,7 @@ void LiminalSpirit::updateLevelSelectScene(float timestep)
     _levelSelect.update(timestep);
     switch (_levelSelect.getChoice()) {
     case LevelSelectScene::Choice::selected:
-        _gameplay.init(_assets, _sound_controller, _levelSelect.getBiome() + to_string(_levelSelect.getStage()));
+        _gameplay.init(_assets, _sound_controller, _levelSelect.getBiome(), _levelSelect.getStage());
         _levelSelect.dispose();
         _scene = State::GAME;
         break;
