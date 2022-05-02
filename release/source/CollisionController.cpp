@@ -139,6 +139,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                     if (attack->getDamage() > 0) {
                         //enemy->setInvincibility(true);
                         enemy->setInvincibilityTimer(0.2f);
+                        enemy->setPlayedDamagedParticle(false);
                         enemy->setLastDamagedBy(mapToBaseAttackType(attack->getType()));
                     }
                     else {
