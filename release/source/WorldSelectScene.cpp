@@ -97,7 +97,12 @@ bool WorldSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _assets->attach<Texture>(TextureLoader::alloc()->getHook());
     _assets->attach<Font>(FontLoader::alloc()->getHook());
 
+    Rect bounds = Application::get()->getSafeBounds();
+    bounds.origin *= boundScale;
+    bounds.size *= boundScale;
+
     _caveButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("world_select_cave"));
+    _caveButton->setPositionX(bounds.getMinX() + _caveButton->getPositionX());
     _caveButton->addListener([=](const std::string& name, bool down)
         {
             if (down) {
