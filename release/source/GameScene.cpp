@@ -924,7 +924,6 @@ void GameScene::updateEnemies(float timestep) {
     std::shared_ptr<Texture> text = _assets->get<Texture>("star");
     for (auto it = _enemies.begin(); it != _enemies.end(); ++it)
     {
-        cout << (*it)->getName() << endl;
         Vec2 direction = _ai.getMovement(*it, _player->getPosition(), timestep, 0, DEFAULT_WIDTH);
 
         (*it)->setVX(direction.x);
