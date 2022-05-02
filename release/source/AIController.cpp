@@ -271,6 +271,9 @@ Vec2 AIController::getSeekerMovement(shared_ptr<Seeker> seeker, Vec2 player_pos,
         if (seeker->getAttackCooldown() < seeker->getTimePast()) {
             seeker->setIsAttacking(false);
             seeker->setTimePast(0.0f);
+            float r = 5 + 5 * std::sqrt(static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
+            float alpha = M_PI/4 + static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 3*M_PI/4;
+            seeker->targetPosition = seeker->getPosition() + Vec2(r * std::cos(alpha), r * std::sin(alpha));
         }
         seeker->justAttacked = false;
         return Vec2();
