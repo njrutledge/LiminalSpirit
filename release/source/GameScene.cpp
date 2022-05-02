@@ -1136,7 +1136,7 @@ void GameScene::updateEnemies(float timestep) {
                 _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()), _timer, PHANTOM_ATTACK, PHANTOM_FRAMES);
             }
             else if ((*it)->getName() == "Glutton") {
-                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 1.5f, 3.0f, 2.0f, AttackController::Type::e_range, (vel.scale(0.25)).rotate((play_p - en_p).getAngle()), _timer, GLUTTON_ATTACK, GLUTTON_FRAMES);
+                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 1.5f, 6.0f, 2.0f, AttackController::Type::e_range, (vel.scale(0.25)).rotate((play_p - en_p).getAngle()), _timer, GLUTTON_ATTACK, GLUTTON_FRAMES);
             }
 
         }
@@ -1942,7 +1942,7 @@ void GameScene::createEnemies(int wave) {
             spawner->setGlow(enemyGlow);
             spawner->setIndex(_spawner_ind);
             spawnerSprite->setScale(0.12f);
-            spawnerSprite->setPriority(1);
+            spawnerSprite->setPriority(1.01);
             addObstacle(spawner, spawnerSprite, true);
             _enemies.push_back(spawner);
             auto spawnerEnemiesMap = _spawner_enemy_types.at(_spawner_ind);
