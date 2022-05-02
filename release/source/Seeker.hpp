@@ -35,6 +35,7 @@ public:
     float velScale = 3.8;
     cugl::Vec2 targetPosition;
     bool justAttacked = false;
+    float attackTimer = 0;
     bool stop = false;
     float stopTimer = 0;
 
