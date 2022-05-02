@@ -91,7 +91,6 @@ bool LevelSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets, s
     _assets = assets;
     _biome = biome;
     auto scene = _assets->get<scene2::SceneNode>("level_select_" + biome);
-    auto rect = Application::get()->getSafeBounds();
     scene->setContentSize(dimen);
     scene->doLayout();
 
@@ -162,8 +161,11 @@ bool LevelSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets, s
             _stage = _stage - 3;
         }
         });
+    Rect bounds = Application::get()->getSafeBounds();
+    bounds.origin *= boundScale;
+    bounds.size *= boundScale;
 
-    _buttonBackward->setPositionX(rect.getMinX() + _buttonBackward->getPositionX());
+    _buttonBackward->setPositionX(bounds.getMinX() + _buttonBackward->getPositionX());
     addChild(scene);
 
     _stage = 0;
