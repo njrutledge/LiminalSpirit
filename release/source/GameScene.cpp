@@ -996,8 +996,9 @@ void GameScene::updateEnemies(float timestep) {
 
         // For running idle animations specific (for speed) to enemies
         if ((*it)->getName() == "Phantom") {
-            if ((*it)->getInvincibilityTimer() > 0) {
+            if ((*it)->getInvincibilityTimer() > 0 && !(*it)->getPlayedDamagedParticle()) {
                 std::shared_ptr<ParticleNode> dmgd;
+                (*it)->setPlayedDamagedParticle(true);
                 if ((*it)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee) {
                     dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, melee_impact, pool);
                 }
@@ -1014,8 +1015,9 @@ void GameScene::updateEnemies(float timestep) {
         }
         else if ((*it)->getName() == "Glutton") {
             if ((*it)->getInvincibilityTimer() > 0) {
-                if (sprite->getFrame() != 7) {
+                if (!(*it)->getPlayedDamagedParticle()) {
                     std::shared_ptr<ParticleNode> dmgd;
+                    (*it)->setPlayedDamagedParticle(true);
                     if ((*it)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee) {
                         dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, melee_impact, pool);
                     }
@@ -1045,8 +1047,9 @@ void GameScene::updateEnemies(float timestep) {
         }
         else if ((*it)->getName() == "Lost") {
             if ((*it)->getInvincibilityTimer() > 0) {
-                if (sprite->getFrame() != 7 && sprite->getFrame() != 4) {
+                if (!(*it)->getPlayedDamagedParticle()) {
                     std::shared_ptr<ParticleNode> dmgd;
+                    (*it)->setPlayedDamagedParticle(true);
                     if ((*it)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee) {
                         dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, melee_impact, pool);
                     }
@@ -1095,8 +1098,9 @@ void GameScene::updateEnemies(float timestep) {
             }
         }
         else if ((*it)->getName() == "Seeker") {
-            if ((*it)->getInvincibilityTimer() > 0) {
+            if ((*it)->getInvincibilityTimer() > 0 && !(*it)->getPlayedDamagedParticle()) {
                 std::shared_ptr<ParticleNode> dmgd;
+                (*it)->setPlayedDamagedParticle(true);
                 if ((*it)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee) {
                     dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, melee_impact, pool);
                 }
@@ -1106,6 +1110,20 @@ void GameScene::updateEnemies(float timestep) {
                 dmgd->setScale(0.1f);
                 _worldnode->addChildWithTag(dmgd, 100);
             }
+        }
+        else if ((*it)->getName() == "Spawner") {
+        if ((*it)->getInvincibilityTimer() > 0 && !(*it)->getPlayedDamagedParticle()) {
+            std::shared_ptr<ParticleNode> dmgd;
+            (*it)->setPlayedDamagedParticle(true);
+            if ((*it)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee) {
+                dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, melee_impact, pool);
+            }
+            else {
+                dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, ranged_impact, pool);
+            }
+            dmgd->setScale(0.1f);
+            _worldnode->addChildWithTag(dmgd, 100);
+        }
         }
 
 
@@ -1874,6 +1892,7 @@ void GameScene::createEnemies(int wave) {
             lost->setGlow(enemyGlow);
             lost->setSceneNode(lostSprite);
             lost->setDebugColor(Color4::RED);
+            lost->setPlayedDamagedParticle(false);
             lostSprite->setScale(0.15f);
             lostSprite->setPriority(1.3);
             addObstacle(lost, lostSprite, true);
@@ -1887,6 +1906,7 @@ void GameScene::createEnemies(int wave) {
             phantom->setSceneNode(phantomSprite);
             phantom->setDebugColor(Color4::BLUE);
             phantom->setGlow(enemyGlow);
+            phantom->setPlayedDamagedParticle(false);
             phantomSprite->setScale(0.05f);
             phantomSprite->setFrame(0);
             phantomSprite->setPriority(1.2);
@@ -1909,6 +1929,7 @@ void GameScene::createEnemies(int wave) {
             seeker->setSceneNode(seekerSprite);
             seeker->setDebugColor(Color4::GREEN);
             seeker->setGlow(enemyGlow);
+            seeker->setPlayedDamagedParticle(false);
             seekerSprite->setScale(0.15f);
             seekerSprite->setPriority(1.1);
             addObstacle(seeker, seekerSprite, true);
@@ -1924,6 +1945,7 @@ void GameScene::createEnemies(int wave) {
             glutton->setSceneNode(gluttonSprite);
             glutton->setDebugColor(Color4::BLUE);
             glutton->setGlow(enemyGlow);
+            glutton->setPlayedDamagedParticle(false);
             gluttonSprite->setScale(0.2f);
             gluttonSprite->setFrame(0);
             gluttonSprite->setPriority(1);
@@ -1942,6 +1964,7 @@ void GameScene::createEnemies(int wave) {
             spawner->setDebugColor(Color4::BLACK);
             spawner->setGlow(enemyGlow);
             spawner->setIndex(_spawner_ind);
+            spawner->setPlayedDamagedParticle(false);
             spawnerSprite->setScale(0.12f);
             spawnerSprite->setPriority(1.01);
             addObstacle(spawner, spawnerSprite, true);
