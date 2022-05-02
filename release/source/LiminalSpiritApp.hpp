@@ -19,7 +19,7 @@
 #include "SoundController.hpp"
 #include "HomeScene.hpp"
 #include "WorldSelectScene.hpp"
-#include <LevelSelectScene.hpp>
+#include "LevelSelectScene.hpp"
 
 /**
  * This class represents the application root for the ship demo.
