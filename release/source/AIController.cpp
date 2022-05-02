@@ -143,6 +143,7 @@ Vec2 AIController::getPhantomMovement(shared_ptr<Phantom> phantom, Vec2 player_p
 
 	//Check if enemy is already attacking
 	if (!phantom->isAttacking()) {
+        float angle = atan2(player_pos.y - phantom->getPosition().y, player_pos.x - phantom->getPosition().x);
 		if (player_pos.x <= phantom->getPosition().x + phantom->getAttackRadius()
 			&& player_pos.x >= phantom->getPosition().x - phantom->getAttackRadius()
 			&& player_pos.y <= phantom->getPosition().y + phantom->getAttackRadius()
@@ -154,29 +155,13 @@ Vec2 AIController::getPhantomMovement(shared_ptr<Phantom> phantom, Vec2 player_p
 			return Vec2(); // Phantom stops moving
 		}
         Vec2 vector = phantom->targetPosition - phantom->getPosition();
-        float distance = player_pos.distance(phantom->targetPosition);
-        float target = distance;
 
-//        if (distance > 40) {
-//            float target_distance = distance;
-//            while(phantom->targetPosition == Vec2() || phantom->targetPosition.distance(phantom->getPosition()) <= 1 || !vector.x || !vector.y || target_distance >= distance) {
-//                float r = 10 + 10 * std::sqrt(static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
-//                float alpha = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2 * M_PI;
-//                phantom->targetPosition = Vec2(r * std::cos(alpha), r * std::sin(alpha)) + phantom->getPosition();
-//                target_distance = player_pos.distance(phantom->targetPosition);
-//                vector = phantom->targetPosition - phantom->getPosition();
-//            }
-//        }
-//        else {
-//
-            while(phantom->targetPosition.distance(phantom->getPosition()) <= 1 || target > distance || !vector.x || !vector.y) {
-                float r = 10 + 10 * std::sqrt(static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
-                float alpha = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2 * M_PI;
-                phantom->targetPosition = Vec2(r * std::cos(alpha), r * std::sin(alpha)) + phantom->getPosition();
-                target = player_pos.distance(phantom->targetPosition);
-                vector = phantom->targetPosition - phantom->getPosition();
-            }
-       // }
+        while(phantom->targetPosition.distance(phantom->getPosition()) <= 1 || !vector.x || !vector.y) {
+            float r = 10 + 10 * std::sqrt(static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
+            float alpha = angle - M_PI/4 + static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * M_PI/2;
+            phantom->targetPosition = Vec2(r * std::cos(alpha), r * std::sin(alpha)) + phantom->getPosition();
+            vector = phantom->targetPosition - phantom->getPosition();
+        }
        
         if(phantom->getPosition().y - phantom->getHeight()/2 <= bottomwall) {
             phantom->targetPosition = phantom->getPosition() + Vec2(vector.x, -vector.y);
@@ -250,6 +235,7 @@ Vec2 AIController::getSeekerMovement(shared_ptr<Seeker> seeker, Vec2 player_pos,
 //    int flip = 1; // flips y direction
     //Check if enemy is already attacking
     if (!seeker->isAttacking()) {
+        float angle = atan2(player_pos.y - seeker->getPosition().y, player_pos.x - seeker->getPosition().x);
         if (seeker->stop) {
             seeker->stopTimer+=timestep;
             if (seeker->stopTimer >= 1) {
@@ -259,9 +245,9 @@ Vec2 AIController::getSeekerMovement(shared_ptr<Seeker> seeker, Vec2 player_pos,
             return Vec2();
         }
         if (!seeker->targetPosition.x) {
-            while (seeker->targetPosition.distance(player_pos)>16 || seeker->targetPosition.x < 2 || seeker->targetPosition.x > 30 || seeker->targetPosition.y < 2 || seeker->targetPosition.y > 22) {
+            while (seeker->targetPosition.x < 2 || seeker->targetPosition.x > 30 || seeker->targetPosition.y < 2) {
                 float r = 5 + 10 * std::sqrt(static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
-                float alpha = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2 * M_PI;
+                float alpha = angle - M_PI/4 + static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * M_PI/2;
                 seeker->targetPosition = Vec2(r * std::cos(alpha), r * std::sin(alpha)) + seeker->getPosition();
             }
         }
@@ -280,9 +266,9 @@ Vec2 AIController::getSeekerMovement(shared_ptr<Seeker> seeker, Vec2 player_pos,
             }
             if (player_pos.distance(seeker->getPosition())>6) {
                 seeker->targetPosition = Vec2(0,0);
-                while (seeker->targetPosition.distance(player_pos)>16 || seeker->targetPosition.x < 2 || seeker->targetPosition.x > 30 || seeker->targetPosition.y < 2 || seeker->targetPosition.y > 22) {
+                while ( seeker->targetPosition.x < 2 || seeker->targetPosition.x > 30 || seeker->targetPosition.y < 2) {
                     float r = 5 + 10 * std::sqrt(static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
-                    float alpha = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2 * M_PI;
+                    float alpha = angle - M_PI/4 + static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * M_PI/2;
                     seeker->targetPosition = Vec2(r * std::cos(alpha), r * std::sin(alpha)) + seeker->getPosition();
                 }
             } else {
