@@ -113,6 +113,9 @@ bool WorldSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             }
         });
 
+    auto _caveButtonBack = assets->get<scene2::SceneNode>("world_select_caveback");
+    _caveButtonBack->setPositionX(bounds.getMinX() + _caveButtonBack->getPositionX());
+
     _shroomButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("world_select_shroom"));
     _shroomButton->addListener([=](const std::string& name, bool down)
         {
