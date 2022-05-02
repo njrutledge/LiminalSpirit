@@ -97,7 +97,12 @@ bool WorldSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _assets->attach<Texture>(TextureLoader::alloc()->getHook());
     _assets->attach<Font>(FontLoader::alloc()->getHook());
 
+    Rect bounds = Application::get()->getSafeBounds();
+    bounds.origin *= boundScale;
+    bounds.size *= boundScale;
+
     _caveButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("world_select_cave"));
+    _caveButton->setPositionX(bounds.getMinX() + _caveButton->getPositionX());
     _caveButton->addListener([=](const std::string& name, bool down)
         {
             if (down) {
@@ -107,6 +112,9 @@ bool WorldSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
                 _choice = Choice::CAVE;
             }
         });
+
+    _caveButtonBack = assets->get<scene2::SceneNode>("world_select_caveback");
+    _caveButtonBack->setPositionX(bounds.getMinX() + _caveButtonBack->getPositionX());
 
     _shroomButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("world_select_shroom"));
     _shroomButton->addListener([=](const std::string& name, bool down)
@@ -118,6 +126,9 @@ bool WorldSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
                 _choice = Choice::SHROOM;
             }
         });
+
+    _shroomButtonBack = assets->get<scene2::SceneNode>("world_select_shroomback");
+
     _forestButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("world_select_forest"));
     _forestButton->addListener([=](const std::string& name, bool down)
         {
@@ -128,6 +139,11 @@ bool WorldSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
                 _choice = Choice::FOREST;
             }
         });
+
+    _forestButtonBack = assets->get<scene2::SceneNode>("world_select_forestback");
+
+    _timer = 0;
+
 
     addChild(scene);
     return true;
@@ -150,6 +166,53 @@ void WorldSelectScene::update(float timestep)
     _shroomButton->activate();
     _forestButton->setVisible(true);
     _forestButton->activate();
+
+    _timer += timestep;
+    int amplitude = 6;
+    if (_timer <= .5) {
+        _caveButton->setPositionY(_caveButton->getPositionY() + timestep * amplitude);
+        _caveButtonBack->setPositionY(_caveButtonBack->getPositionY() + timestep * amplitude);
+
+        _shroomButton->setPositionY(_shroomButton->getPositionY() + timestep * amplitude);
+        _shroomButtonBack->setPositionY(_shroomButtonBack->getPositionY() + timestep * amplitude);
+
+        _forestButton->setPositionY(_forestButton->getPositionY() - timestep * amplitude);
+        _forestButtonBack->setPositionY(_forestButtonBack->getPositionY() - timestep * amplitude);
+    }
+    else if (_timer <= 1) {
+        _caveButton->setPositionY(_caveButton->getPositionY() - timestep * amplitude);
+        _caveButtonBack->setPositionY(_caveButtonBack->getPositionY() - timestep * amplitude);
+
+        _shroomButton->setPositionY(_shroomButton->getPositionY() + timestep * amplitude);
+        _shroomButtonBack->setPositionY(_shroomButtonBack->getPositionY() + timestep * amplitude);
+
+        _forestButton->setPositionY(_forestButton->getPositionY() + timestep * amplitude);
+        _forestButtonBack->setPositionY(_forestButtonBack->getPositionY() + timestep * amplitude);
+    }
+    else if (_timer <= 1.5) {
+        _caveButton->setPositionY(_caveButton->getPositionY() - timestep * amplitude);
+        _caveButtonBack->setPositionY(_caveButtonBack->getPositionY() - timestep * amplitude);
+
+        _shroomButton->setPositionY(_shroomButton->getPositionY() - timestep * amplitude);
+        _shroomButtonBack->setPositionY(_shroomButtonBack->getPositionY() - timestep * amplitude);
+
+        _forestButton->setPositionY(_forestButton->getPositionY() + timestep * amplitude);
+        _forestButtonBack->setPositionY(_forestButtonBack->getPositionY() + timestep * amplitude);
+    }
+    else if (_timer <= 2.0) {
+        _caveButton->setPositionY(_caveButton->getPositionY() + timestep * amplitude);
+        _caveButtonBack->setPositionY(_caveButtonBack->getPositionY() + timestep * amplitude);
+
+        _shroomButton->setPositionY(_shroomButton->getPositionY() - timestep * amplitude);
+        _shroomButtonBack->setPositionY(_shroomButtonBack->getPositionY() - timestep * amplitude);
+
+        _forestButton->setPositionY(_forestButton->getPositionY() - timestep * amplitude);
+        _forestButtonBack->setPositionY(_forestButtonBack->getPositionY() - timestep * amplitude);
+    }
+
+    if (_timer > 2.0) {
+        _timer = 0;
+    }
 }
 
 /**

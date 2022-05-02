@@ -74,7 +74,7 @@ void LevelSelectScene::dispose()
  */
 bool LevelSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets, string biome)
 {
-    Size dimen = Application::get()->getSafeBounds().size;
+    Size dimen = Application::get()->getDisplaySize();
     float boundScale = SCENE_WIDTH / dimen.width;
     dimen *= boundScale;
 
@@ -94,10 +94,16 @@ bool LevelSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets, s
     scene->setContentSize(dimen);
     scene->doLayout();
 
+    Rect bounds = Application::get()->getSafeBounds();
+    bounds.origin *= boundScale;
+    bounds.size *= boundScale;
+
     // You have to attach the individual loaders for each asset type
     _assets->attach<Texture>(TextureLoader::alloc()->getHook());
     _assets->attach<Font>(FontLoader::alloc()->getHook());
     _button1 = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("level_select_" + biome + "_button1"));
+    _button1->setPositionX(bounds.getMinX() + _button1->getPositionX());
+
     _button1->addListener([=](const std::string& name, bool down) {
         if (down) {
             _stageChoice = Choice::button1_prep;
@@ -109,6 +115,8 @@ bool LevelSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets, s
         });
 
     _button2 = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("level_select_" + biome + "_button2"));
+    _button2->setPositionX(bounds.getMinX() + _button2->getPositionX());
+
     _button2->addListener([=](const std::string& name, bool down){
         if (down) {
             _stageChoice = Choice::button2_prep;
@@ -120,6 +128,7 @@ bool LevelSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets, s
         });
 
     _button3 = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("level_select_" + biome + "_button3"));
+    _button3->setPositionX(bounds.getMinX() + _button3->getPositionX());
     _button3->addListener([=](const std::string& name, bool down){
         if (down) {
             _stageChoice = Choice::button3_prep;
@@ -131,6 +140,8 @@ bool LevelSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets, s
         });
 
     _buttonHome = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("level_select_" + biome + "_home"));
+    _buttonHome->setPositionX(bounds.getMinX() + _buttonHome->getPositionX());
+
     _buttonHome->addListener([=](const std::string& name, bool down) {
         if (down) {
             _stageChoice = Choice::home_prep;
@@ -161,6 +172,9 @@ bool LevelSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets, s
             _stage = _stage - 3;
         }
         });
+    
+
+    _buttonBackward->setPositionX(bounds.getMinX() + _buttonBackward->getPositionX());
     addChild(scene);
 
     _stage = 0;

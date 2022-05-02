@@ -46,7 +46,8 @@
             0.5,
             0.4
           ],
-          "scale": 0.45
+          "scale": 0.45,
+          "visible": false
         },
         "children": {
           "up": {
@@ -60,7 +61,7 @@
           "x_anchor": "center",
           "y_anchor": "middle",
           "y_offset": -0.3,
-          "x_offset": -0.27,
+          "x_offset": -0.29,
           "absolute": false
         }
       },
@@ -72,7 +73,8 @@
             0.5,
             0.4
           ],
-          "scale": 0.45
+          "scale": 0.45,
+          "visible": false
         },
         "children": {
           "up": {
@@ -86,7 +88,7 @@
           "x_anchor": "center",
           "y_anchor": "middle",
           "y_offset": -0.3,
-          "x_offset": 0.0,
+          "x_offset": -0.02,
           "absolute": false
         }
       },
@@ -98,7 +100,8 @@
             0.5,
             0.4
           ],
-          "scale": 0.45
+          "scale": 0.45,
+          "visible": false
         },
         "children": {
           "up": {
@@ -112,7 +115,7 @@
           "x_anchor": "center",
           "y_anchor": "middle",
           "y_offset": -0.3,
-          "x_offset": 0.27,
+          "x_offset": 0.25,
           "absolute": false
         }
       },
@@ -152,7 +155,7 @@
         "layout": {
           "x_anchor": "left",
           "y_anchor": "top",
-          "x_offset": 0.01,
+          "x_offset": 0.0,
           "y_offset": -0.05,
           "absolute": false
         }
@@ -165,7 +168,8 @@
             1,
             0.5
           ],
-          "scale": 0.4
+          "scale": 0.4,
+          "visible": false
         },
         "children": {
           "up": {
@@ -188,7 +192,8 @@
             0,
             0.5
           ],
-          "scale": 0.4
+          "scale": 0.4,
+          "visible": false
         },
         "children": {
           "up": {
@@ -200,7 +205,8 @@
         },
         "layout": {
           "x_anchor": "left",
-          "y_anchor": "middle"
+          "y_anchor": "middle",
+          "x_offset": 0
         }
       }
     }

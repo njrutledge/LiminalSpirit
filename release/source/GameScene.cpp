@@ -292,6 +292,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
     auto HUD = assets->get<scene2::SceneNode>("HUD");
     HUD->setContentSize(dimen);
     HUD->doLayout();
+    HUD->setPosition(offset);
     //check if the scene already has HUD, and remove it if it does.
     scene->addChildWithName(HUD, "HUD");
 
@@ -394,10 +395,13 @@ void GameScene::update(float timestep)
             }
         }
         _player->setVX(_tilt.getXpos());
+        _player->setFacingRight(true);
+
 
         //perform necessary update loop
         updateAnimations(timestep);
         _world->update(timestep);
+        updateCamera();
         updateMeleeArm(timestep);
         return;
     }
@@ -1132,7 +1136,7 @@ void GameScene::updateEnemies(float timestep) {
                 _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 0.5f, 3.0f, 1.0f, AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()), _timer, PHANTOM_ATTACK, PHANTOM_FRAMES);
             }
             else if ((*it)->getName() == "Glutton") {
-                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 1.5f, 3.0f, 2.0f, AttackController::Type::e_range, (vel.scale(0.25)).rotate((play_p - en_p).getAngle()), _timer, GLUTTON_ATTACK, GLUTTON_FRAMES);
+                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 1.5f, 6.0f, 2.0f, AttackController::Type::e_range, (vel.scale(0.25)).rotate((play_p - en_p).getAngle()), _timer, GLUTTON_ATTACK, GLUTTON_FRAMES);
             }
 
         }
@@ -1329,6 +1333,7 @@ void GameScene::updateSwipesAndAttacks(float timestep) {
             attackSprite = scene2::PolygonNode::allocWithTexture(_pMeleeTexture);
             attackSprite->setVisible(false);
             attackSprite->setPriority(3);
+            //it just works
             switch (meleeState) {
             case(AttackController::MeleeState::cool):
                 _meleeArm->setLastType(Glow::MeleeState::cool);
@@ -1938,7 +1943,7 @@ void GameScene::createEnemies(int wave) {
             spawner->setGlow(enemyGlow);
             spawner->setIndex(_spawner_ind);
             spawnerSprite->setScale(0.12f);
-            spawnerSprite->setPriority(1);
+            spawnerSprite->setPriority(1.01);
             addObstacle(spawner, spawnerSprite, true);
             _enemies.push_back(spawner);
             auto spawnerEnemiesMap = _spawner_enemy_types.at(_spawner_ind);
@@ -1986,11 +1991,13 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
 
     // Create a button.  A button has an up image and a down image
     std::shared_ptr<Texture> up = _assets->get<Texture>("close-normal");
-    std::shared_ptr<Texture> down = _assets->get<Texture>("close-selected");
+    //std::shared_ptr<Texture> down = _assets->get<Texture>("close-selected");
 
     Size bsize = up->getSize();
-    std::shared_ptr<scene2::Button> button = scene2::Button::alloc(scene2::PolygonNode::allocWithTexture(up),
-        scene2::PolygonNode::allocWithTexture(down));
+    std::shared_ptr<scene2::Button> button = scene2::Button::alloc(scene2::PolygonNode::allocWithTexture(up));
+    button->setScale(0.75);
+    //button->setAnchor(Vec2(1, 1));
+        //scene2::PolygonNode::allocWithTexture(down));
 
     // Create a callback function for the button
     button->setName("close");
