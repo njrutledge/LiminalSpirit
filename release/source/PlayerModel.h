@@ -51,7 +51,7 @@
 #define PLAYER_HEALTH_COLOR Color4(200,240,200)
 
 /** Player health */
-#define PLAYER_HEALTH 40.0f
+#define PLAYER_HEALTH 100.0f
 
 #pragma mark - 
 #pragma mark Player Model
