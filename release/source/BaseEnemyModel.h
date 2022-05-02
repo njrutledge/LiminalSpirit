@@ -143,6 +143,8 @@ protected:
     bool _isJumping;
     bool _isFalling;
 
+	bool _playedDamagedParticles;
+
 public:
 
 #pragma mark Hidden Constructors
@@ -274,6 +276,10 @@ public:
 
 	/** Sets the pointer to the enemy's glow */
 	void setGlow(std::shared_ptr<Glow> glow) { _glow = glow; }
+
+	void setPlayedDamagedParticle(bool didIt) { _playedDamagedParticles = didIt; }
+
+	bool getPlayedDamagedParticle() { return _playedDamagedParticles; }
 
 	/** Returns the name of the ground sensor */
 	std::string* getSensorName() { return &_sensorName; }

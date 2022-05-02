@@ -789,7 +789,7 @@
 						"x_anchor": "center",
 						"y_anchor": "middle",
 						"y_offset": -0.055,
-						"x_offset": -0.385,
+						"x_offset": -0.25,
 						"absolute": false
 					}
 				},
@@ -815,7 +815,7 @@
 						"x_anchor": "center",
 						"y_anchor": "middle",
 						"y_offset": -0.060,
-						"x_offset": -0.380,
+						"x_offset": -0.245,
 						"absolute": false
 					}
 				},
@@ -876,8 +876,8 @@
 					"layout": {
 						"x_anchor": "center",
 						"y_anchor": "middle",
-						"y_offset": -0.265,
-						"x_offset": 0.377,
+						"y_offset": -0.24,
+						"x_offset": 0.247,
 						"absolute": false
 					}
 				},
@@ -902,8 +902,8 @@
 					"layout": {
 						"x_anchor": "center",
 						"y_anchor": "middle",
-						"y_offset": -0.275,
-						"x_offset": 0.380,
+						"y_offset": -0.25,
+						"x_offset": 0.25,
 						"absolute": false
 					}
 				}
@@ -964,20 +964,22 @@
 		}
 	},
 	"jsons": {
-		"cave1": "json/levels/surround.json",
-        "shroom1": "json/levels/musheasy.json",
-		"shroom2": "json/levels/battlefield.json",
-        "shroom3": "json/levels/mush0.json",
-        "shroom4": "json/levels/mush1.json",
-        "shroom5": "json/levels/mush2.json",
-        "shroom6": "json/levels/mush3.json",
-        "shroom7": "json/levels/mushmush.json",
+		"cave1": "json/levels/cave1.json",
+        "cave2": "json/levels/cave/cave2.json",
+        "shroom1": "json/levels/shroom/musheasy.json",
+        "shroom2": "json/levels/shroom/musheasy2.json",
+        "shroom3": "json/levels/shroom/musheasy3.json",
+        "shroom4": "json/levels/shroom/battlefield.json",
+        "shroom5": "json/levels/shroom/mush0.json",
+        "shroom6": "json/levels/shroom/mush1.json",
+        "shroom7": "json/levels/shroom/mush2.json",
+        "shroom8": "json/levels/shroom/mush3.json",
+        "shroom9": "json/levels/shroom/mushmush.json",
 		"levelt": "json/levels/levelt.json",
-		"cave2": "json/levels/scaffold.json",
 		"level2": "json/levels/level2.json",
-		"forest1": "json/levels/stack.json",
-		"forest2": "json/levels/forestation.json",
-		"particles": "json/levels/particles.json",
+        "forest1": "json/levels/forest/stack.json",
+        "forest2": "json/levels/forest/forestation.json",
+        "particles": "json/particles.json",
 		"BOSS": "json/levels/BOSS.json"
 	}
 }
