@@ -1,0 +1,208 @@
+{
+  "variables": {
+    "bg_scale": [ "children", "backdrop", "data", "scale" ],
+    "bg_texture": [ "children", "backdrop", "data", "texture" ],
+    "fg_scale": [ "children", "foreground", "data", "scale" ],
+    "fg_texture": [ "children", "foreground", "data", "texture" ],
+    "fg_layout_y": [ "children", "foreground", "layout", "y_anchor" ],
+    "fg_anchor": [ "children", "foreground", "data", "anchor" ],
+    "button1_texture": [ "children", "button1", "children", "up", "data", "texture" ],
+    "button2_texture": [ "children", "button2", "children", "up", "data", "texture" ],
+    "button3_texture": [ "children", "button3", "children", "up", "data", "texture" ],
+    "button1_yoff": [ "children", "button1", "layout", "y_offset" ],
+    "button2_yoff": [ "children", "button2", "layout", "y_offset" ],
+    "button3_yoff": [ "children", "button3", "layout", "y_offset" ],
+    "button1_scale": [ "children", "button1", "data", "scale" ],
+    "button2_scale": [ "children", "button2", "data", "scale" ],
+    "button3_scale": [ "children", "button3", "data", "scale" ]
+  },
+  "contents": {
+    "type": "Node",
+    "comment": "the root node for level select cave",
+    "format": {
+      "type": "Anchored"
+    },
+    "children": {
+      "backdrop": {
+        "type": "Image",
+        "data": {
+          "texture": "level_select_cave_background",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.75
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle"
+        }
+      },
+      "button1": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0.5,
+            0.4
+          ],
+          "scale": 0.45
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "level_select_cave_rock1"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "y_offset": -0.3,
+          "x_offset": -0.27,
+          "absolute": false
+        }
+      },
+      "button2": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0.5,
+            0.4
+          ],
+          "scale": 0.45
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "level_select_cave_rock2"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "y_offset": -0.3,
+          "x_offset": 0.0,
+          "absolute": false
+        }
+      },
+      "button3": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0.5,
+            0.4
+          ],
+          "scale": 0.45
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "level_select_cave_rock3"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "y_offset": -0.3,
+          "x_offset": 0.27,
+          "absolute": false
+        }
+      },
+      "foreground": {
+        "type": "Image",
+        "data": {
+          "texture": "level_select_cave_foreground",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.6
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle"
+        }
+      },
+      "home": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0,
+            1
+          ],
+          "scale": 0.4
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "level_select_home"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "left",
+          "y_anchor": "top",
+          "x_offset": 0.01,
+          "y_offset": -0.05,
+          "absolute": false
+        }
+      },
+      "forward": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            1,
+            0.5
+          ],
+          "scale": 0.4
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "level_select_forward"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "right",
+          "y_anchor": "middle"
+        }
+      },
+      "backward": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0,
+            0.5
+          ],
+          "scale": 0.4
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "level_select_backward"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "left",
+          "y_anchor": "middle"
+        }
+      }
+    }
+  }
+}

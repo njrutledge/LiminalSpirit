@@ -357,6 +357,15 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
+		"level_select_forward": {
+			"file": "textures/menus/level_select/arrow_forward.png"
+		},
+		"level_select_backward": {
+			"file": "textures/menus/level_select/arrow_backward.png"
+		},
+		"level_select_home": {
+			"file": "textures/menus/level_select/home.png"
+		},
 		"level_select_cave_background": {
 			"file": "textures/menus/level_select/cavebackground.png"
 		},
@@ -371,6 +380,36 @@
 		},
 		"level_select_cave_rock3": {
 			"file": "textures/menus/level_select/rock3.png"
+		},
+		"level_select_shroom_background": {
+			"file": "textures/menus/level_select/shroombackground.png"
+		},
+		"level_select_shroom_foreground": {
+			"file": "textures/menus/level_select/shroomforeground.png"
+		},
+		"level_select_shroom_shroom1": {
+			"file": "textures/menus/level_select/shroom1.png"
+		},
+		"level_select_shroom_shroom2": {
+			"file": "textures/menus/level_select/shroom2.png"
+		},
+		"level_select_shroom_shroom3": {
+			"file": "textures/menus/level_select/shroom3.png"
+		},
+		"level_select_forest_background": {
+			"file": "textures/menus/level_select/forestbackground.png"
+		},
+		"level_select_forest_foreground": {
+			"file": "textures/menus/level_select/forestbackground.png"
+		},
+		"level_select_forest_treehole1": {
+			"file": "textures/menus/level_select/treehole1.png"
+		},
+		"level_select_forest_treehole2": {
+			"file": "textures/menus/level_select/treehole2.png"
+		},
+		"level_select_forest_treehole3": {
+			"file": "textures/menus/level_select/treehole3.png"
 		}
 	},
 	"fonts": {
@@ -492,6 +531,9 @@
 			"file": "sounds/playerSFX/Player_Oof.wav",
 			"volume": 0.4
 		}
+	},
+	"widgets": {
+		"levelselect":  "widgets/levelselect.json"
 	},
 	"scene2s": {
 		"cave": {
@@ -847,122 +889,66 @@
 			}
 		},
 		"level_select_cave": {
-			"type": "Node",
-			"comment": "the root node for level select cave",
-			"format": {
-				"type": "Anchored"
-			},
-			"children": {
-				"backdrop": {
-					"type": "Image",
-					"data": {
-						"texture": "level_select_cave_background",
-						"anchor": [
-							0.5,
-							0.5
-						],
-						"scale": 0.75
-					},
-					"layout": {
-						"x_anchor": "center",
-						"y_anchor": "middle"
-					}
-				},
-				"button1": {
-					"type": "Button",
-					"data": {
-						"upnode": "up",
-						"anchor": [
-							0.5,
-							0.4
-						],
-						"scale": 0.55
-					},
-					"children": {
-						"up": {
-							"type": "Image",
-							"data": {
-								"texture": "level_select_cave_rock1"
-							}
-						}
-					},
-					"layout": {
-						"x_anchor": "center",
-						"y_anchor": "middle",
-						"y_offset": -0.2,
-						"x_offset": -0.3,
-						"absolute": false
-					}
-				},
-				"button2": {
-					"type": "Button",
-					"data": {
-						"upnode": "up",
-						"anchor": [
-							0.5,
-							0.4
-						],
-						"scale": 0.55
-					},
-					"children": {
-						"up": {
-							"type": "Image",
-							"data": {
-								"texture": "level_select_cave_rock2"
-							}
-						}
-					},
-					"layout": {
-						"x_anchor": "center",
-						"y_anchor": "middle",
-						"y_offset": -0.2,
-						"x_offset": 0.0,
-						"absolute": false
-					}
-				},
-				"button3": {
-					"type": "Button",
-					"data": {
-						"upnode": "up",
-						"anchor": [
-							0.5,
-							0.4
-						],
-						"scale": 0.55
-					},
-					"children": {
-						"up": {
-							"type": "Image",
-							"data": {
-								"texture": "level_select_cave_rock3"
-							}
-						}
-					},
-					"layout": {
-						"x_anchor": "center",
-						"y_anchor": "middle",
-						"y_offset": -0.2,
-						"x_offset": 0.3,
-						"absolute": false
-					}
-				},
-				"foreground": {
-					"type": "Image",
-					"data": {
-						"texture": "level_select_cave_foreground",
-						"scale": 0.55
-					}
+			"type": "widget",
+			"data": {
+				"key": "levelselect",
+				"variables": {
+					"bg_scale": 0.58,
+					"bg_texture": "level_select_cave_background",
+					"fg_scale": 0.58,
+					"fg_texture": "level_select_cave_foreground",
+					"button1_texture": "level_select_cave_rock1",
+					"button2_texture": "level_select_cave_rock2",
+					"button3_texture": "level_select_cave_rock3"
+				}
+			}
+		},
+		"level_select_shroom": {
+			"type": "widget",
+			"data": {
+				"key": "levelselect",
+				"variables": {
+					"bg_scale": 0.58,
+					"bg_texture": "level_select_shroom_background",
+					"fg_scale": 0.58,
+					"fg_texture": "level_select_shroom_foreground",
+					"fg_layout_y": "bottom",
+					"fg_anchor": [0.5, 0],
+					"button1_texture": "level_select_shroom_shroom1",
+					"button2_texture": "level_select_shroom_shroom2",
+					"button3_texture": "level_select_shroom_shroom3"
+				}
+			}
+		},
+		"level_select_forest": {
+			"type": "widget",
+			"data": {
+				"key": "levelselect",
+				"variables": {
+					"bg_scale": 0.58,
+					"bg_texture": "level_select_forest_background",
+					"fg_scale": 0.0,
+					"fg_texture": "level_select_forest_foreground",
+					"button1_texture": "level_select_forest_treehole1",
+					"button2_texture": "level_select_forest_treehole2",
+					"button3_texture": "level_select_forest_treehole3",
+					"button1_yoff": -0.1,
+					"button2_yoff": -0.1,
+					"button3_yoff": -0.1,
+					"button1_scale":0.5,
+					"button2_scale": 0.5,
+					"button3_scale":0.5
 				}
 			}
 		}
 	},
 	"jsons": {
-		"surround": "json/levels/surround.json",
-		"battlefield": "json/levels/battlefield.json",
+		"cave1": "json/levels/surround.json",
+		"shroom1": "json/levels/battlefield.json",
 		"levelt": "json/levels/levelt.json",
-		"scaffold": "json/levels/scaffold.json",
+		"cave2": "json/levels/scaffold.json",
 		"level2": "json/levels/level2.json",
-		"stack": "json/levels/stack.json",
+		"forest1": "json/levels/stack.json",
 		"particles": "json/levels/particles.json",
 		"BOSS": "json/levels/BOSS.json"
 	}
