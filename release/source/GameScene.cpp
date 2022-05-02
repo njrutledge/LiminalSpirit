@@ -1990,11 +1990,13 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
 
     // Create a button.  A button has an up image and a down image
     std::shared_ptr<Texture> up = _assets->get<Texture>("close-normal");
-    std::shared_ptr<Texture> down = _assets->get<Texture>("close-selected");
+    //std::shared_ptr<Texture> down = _assets->get<Texture>("close-selected");
 
     Size bsize = up->getSize();
-    std::shared_ptr<scene2::Button> button = scene2::Button::alloc(scene2::PolygonNode::allocWithTexture(up),
-        scene2::PolygonNode::allocWithTexture(down));
+    std::shared_ptr<scene2::Button> button = scene2::Button::alloc(scene2::PolygonNode::allocWithTexture(up));
+    button->setScale(0.75);
+    //button->setAnchor(Vec2(1, 1));
+        //scene2::PolygonNode::allocWithTexture(down));
 
     // Create a callback function for the button
     button->setName("close");
