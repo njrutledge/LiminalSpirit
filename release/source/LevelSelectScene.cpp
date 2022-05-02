@@ -238,7 +238,6 @@ void LevelSelectScene::update(float timestep)
         _buttonForward->setVisible(false);
         _buttonForward->deactivate();
     }
-    CULog("stage: %d", _stage);
 }
 
 /**
