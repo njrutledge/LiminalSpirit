@@ -154,9 +154,9 @@ Vec2 AIController::getPhantomMovement(shared_ptr<Phantom> phantom, Vec2 player_p
             }
 			return Vec2(); // Phantom stops moving
 		}
-        Vec2 vector = phantom->targetPosition - phantom->getPosition();
 
-        while(phantom->targetPosition.distance(phantom->getPosition()) <= 1 || !vector.x || !vector.y) {
+        Vec2 vector = phantom->targetPosition - phantom->getPosition();
+        while(phantom->targetPosition == Vec2() || phantom->targetPosition.distance(phantom->getPosition()) <= 1 || !vector.x || !vector.y) {
             float r = 10 + 10 * std::sqrt(static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
             float alpha = angle - M_PI/4 + static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * M_PI/2;
             phantom->targetPosition = Vec2(r * std::cos(alpha), r * std::sin(alpha)) + phantom->getPosition();
@@ -177,22 +177,7 @@ Vec2 AIController::getPhantomMovement(shared_ptr<Phantom> phantom, Vec2 player_p
         
         
         return movementHelper(phantom->targetPosition, phantom->getPosition(), phantom->getHorizontalSpeed(), phantom->getVerticalSpeed(), 1);
-//		else if (player_pos.x > phantom->getPosition().x) {
-//			if (player_pos.y >= phantom->getPosition().y) {
-//				return Vec2(phantom->getHorizontalSpeed(), phantom->getVerticalSpeed());
-//			}
-//			else {
-//				return Vec2(phantom->getHorizontalSpeed(), -1 * phantom->getVerticalSpeed());
-//			}
-//		}
-//		else {
-//			if (player_pos.y >= phantom->getPosition().y) {
-//				return Vec2(-1 * phantom->getHorizontalSpeed(), phantom->getVerticalSpeed());
-//			}
-//			else {
-//				return Vec2(-1 * phantom->getHorizontalSpeed(), -1 * phantom->getVerticalSpeed());
-//			}
-//		}
+
 	} 
 	else {
 		// Check if attack timer should be reset
@@ -281,32 +266,6 @@ Vec2 AIController::getSeekerMovement(shared_ptr<Seeker> seeker, Vec2 player_pos,
             
         return movementHelper(seeker->targetPosition, seeker->getPosition(), seeker->getHorizontalSpeed(), seeker->getVerticalSpeed(), seeker->velScale);
     }
-//        if (player_pos.distance(seeker->getPosition())>6 && !seeker->getHasSeenPlayer()) {
-//            if(seeker->targetPosition.distance(seeker->getPosition()) <= 1) {
-//                seeker->targetPosition = Vec2(0,0);
-//                while (seeker->targetPosition.x < 2 || seeker->targetPosition.x > 30 || seeker->targetPosition.y < 2 || seeker->targetPosition.y > 22) {
-//                    float r = 10 + 10 * std::sqrt(static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
-//                    float alpha = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2 * M_PI;
-//                    seeker->targetPosition = Vec2(r * std::cos(alpha), r * std::sin(alpha)) + seeker->getPosition();
-//                }
-//                seeker->stop = true;
-//                seeker->stopTimer = 0;
-//                return Vec2();
-//            }
-//
-//            return movementHelper(seeker->targetPosition, seeker->getPosition(), seeker->getHorizontalSpeed(), seeker->getVerticalSpeed(), seeker->velScale);
-//
-//        }
-        
-//        if (player_pos.distance(seeker->getPosition())>4) {
-//
-//            return movementHelper(player_pos, seeker->getPosition(), seeker->getHorizontalSpeed(), seeker->getVerticalSpeed(), 1);
-//        }
-//        else {
-//
-//            return movementHelper(player_pos, seeker->getPosition(), seeker->getHorizontalSpeed(), seeker->getVerticalSpeed(), 3);
-//        }
-//    }
     else {
         // Check if attack timer should be reset
         if (seeker->getAttackCooldown() < seeker->getTimePast()) {

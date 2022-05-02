@@ -32,7 +32,7 @@ public:
 		std::shared_ptr<Phantom> result = std::make_shared<Phantom>();
 		return (result->init(pos, realSize, size, scale, PHANTOM_PROPS) ? result : nullptr);
 	}
-    cugl::Vec2 targetPosition = getPosition();
+    cugl::Vec2 targetPosition;
 
 };
 
