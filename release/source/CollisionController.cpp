@@ -38,11 +38,6 @@ void CollisionController::beginContact(b2Contact* contact, std::shared_ptr<Attac
     else if (AttackController::Attack* attack = dynamic_cast<AttackController::Attack*>(bd2)) {
         handleAttackCollision(attack, bd1, fd1, AC, timer);
     }
-    else {
-        if (fd1 && *fd1 == "playerattacksensor") {
-            int breaking = 1;
-        }
-    }
 
     //handle enemy collision
     if (BaseEnemyModel* enemy = dynamic_cast<BaseEnemyModel*>(bd1)) {
@@ -138,7 +133,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                 }
             }
             else{
-                if (!attack->hasHitEnemy(enemy)) {//!enemy->getLastMelee()->isSame(attack)) {
+                if (!attack->hasHitEnemy(enemy)) {
                     enemy->setHealth(enemy->getHealth() - attack->getDamage());
                     CULog("HEALTH SET");
                     if (attack->getDamage() > 0) {

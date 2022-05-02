@@ -61,7 +61,7 @@ bool BaseEnemyModel::init(const cugl::Vec2& pos, const cugl::Size& realSize, con
 		setFixedRotation(true);
 		b2Filter filter = b2Filter();
 		filter.categoryBits = 0b10;
-		filter.maskBits = 0b011100;
+		filter.maskBits = 0b111100;
 		setFilterData(filter);
 		return true;
 	}
@@ -178,10 +178,10 @@ void BaseEnemyModel::update(float dt) {
 		//TODO: THE CODE BELOW BREAKS ATTACKS
 		b2Filter filter = getFilterData();
 		if (getVY() > 0.1) {
-			filter.maskBits = 0b011000;
+			filter.maskBits = 0b111000;
 		}
 		else {
-			filter.maskBits = 0b011100;
+			filter.maskBits = 0b111100;
 		}
 		setFilterData(filter);
 	}

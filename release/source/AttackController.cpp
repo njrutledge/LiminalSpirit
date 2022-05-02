@@ -56,7 +56,7 @@ bool AttackController::Attack::init(const cugl::Vec2 p, float radius, float a, f
             default:
                 _sensorName = "enemy"  + _sensorName;
                 filter.categoryBits = 0b100000;
-                filter.maskBits = 0b000001;
+                filter.maskBits = 0b000011;
                 setFilterData(filter);
                 break;
         }
@@ -94,7 +94,7 @@ void AttackController::Attack::createFixtures() {
     sensorShape.Set(corners, 8);
     sensorDef.shape = &sensorShape;
     sensorDef.userData.pointer = reinterpret_cast<uintptr_t>(getSensorName());
-    //_sensorFixture = _body->CreateFixture(&sensorDef);
+    _sensorFixture = _body->CreateFixture(&sensorDef);
 
 
     
@@ -409,7 +409,7 @@ void AttackController::Attack::resetDebug() {
     _sensorNode = scene2::WireNode::allocWithTraversal(poly, poly2::Traversal::INTERIOR);
     _sensorNode->setColor(Color4::RED);
     _sensorNode->setPosition(Vec2(_debug->getContentSize().width/2.0f, _debug->getContentSize().height / 2.0f));
-    //_debug->addChild(_sensorNode);
+    _debug->addChild(_sensorNode);
 
     if (_type == p_melee) {
         //std::vector<Uint32> debugIndicies2{ 8,9,10,   10,11,12,   12,13,14,   14,15,8 };
