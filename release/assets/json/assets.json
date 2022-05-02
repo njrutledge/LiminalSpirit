@@ -970,6 +970,7 @@
 		"cave2": "json/levels/scaffold.json",
 		"level2": "json/levels/level2.json",
 		"forest1": "json/levels/stack.json",
+		"forest2": "json/levels/forestation.json",
 		"particles": "json/levels/particles.json",
 		"BOSS": "json/levels/BOSS.json"
 	}

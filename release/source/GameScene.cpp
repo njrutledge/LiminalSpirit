@@ -1518,9 +1518,15 @@ void GameScene::updateSpawnEnemies(float timestep){
     // Spawn new enemies if time for next wave
     _timer += timestep;
 
+    if (_nextWaveNum < _numWaves && _timer >= _spawn_times[_nextWaveNum] - 3 && !_spawnParticlesDone) {
+        createSpawnParticles();
+        _spawnParticlesDone = true;
+    }
+
     if (_nextWaveNum < _numWaves && _timer >= _spawn_times[_nextWaveNum]) {
         createEnemies(_nextWaveNum);
         _nextWaveNum += 1;
+        _spawnParticlesDone = false;
     }
 
     int index = 0;
@@ -1549,6 +1555,21 @@ void GameScene::updateSpawnEnemies(float timestep){
         }
         index++;
     }
+}
+
+void GameScene::createSpawnParticles() {
+    std::vector<cugl::Vec2> positions;
+    positions = _spawn_pos.at(_nextWaveNum);
+
+    std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("spawning"), Vec2(0, 0));
+    std::shared_ptr<Texture> melee_impact = _assets->get<Texture>("melee_impact");
+
+    for (int i = 0; i < positions.size(); i++) {
+        std::shared_ptr<ParticleNode> spawning = ParticleNode::alloc(positions[i], melee_impact, pool);
+        spawning->setScale(0.1f);
+        _worldnode->addChildWithTag(spawning, 100);
+    }
+
 }
 
 void GameScene::updateWin() {

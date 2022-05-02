@@ -166,6 +166,8 @@ protected:
     int _numWaves;
     /** Next wave number for spawning, starts at 0 */
     int _nextWaveNum;
+    /** Whether or not spawn particles have been created already */
+    bool _spawnParticlesDone;
     /** A game timer used for spawn times */
     float _timer;
     /** living spawners */
@@ -305,6 +307,8 @@ public:
      * helper method to spawn enemies 
      */
     void updateSpawnEnemies(float timestep);
+    /** Creates the spawning particles of enemies 3 sec before they spawn*/
+    void createSpawnParticles();
     /**
      * helper method to win game
      */
