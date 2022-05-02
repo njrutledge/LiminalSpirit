@@ -313,6 +313,16 @@ int CollisionController::getDamageDealt(AttackController::Attack* attack, BaseEn
         case AttackController::p_range:
             if (enemy->getName() == "Glutton"){
                 return attack->getDamage() / 2;
+            } else if (enemy->getName() == "Seeker") {
+                return attack->getDamage() * 2;
+            } else {
+                return attack->getDamage();
+            }
+        case AttackController::p_exp:
+            if (enemy->getName() == "Glutton"){
+                return attack->getDamage() / 2;
+            } else if (enemy->getName() == "Seeker") {
+                return attack->getDamage() * 2;
             } else {
                 return attack->getDamage();
             }
