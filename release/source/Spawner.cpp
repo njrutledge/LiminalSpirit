@@ -10,7 +10,7 @@
 
 EnemyProperties SPAWNER_PROPS{
     /** Starting health of the spawner */
-    10,
+    100,
     /** Vertical speed of the spawner */
     0.0f,
     /** Horizontal speed of the spawner*/
@@ -21,6 +21,8 @@ EnemyProperties SPAWNER_PROPS{
     0.0f,
     /** Density of the spawner*/
     1.0f,
+    /** Damage of the spawner */
+    9001,
     /** Name of the spawner*/
     "Spawner",
 };

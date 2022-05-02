@@ -10,7 +10,7 @@
 
 EnemyProperties GLUTTON_PROPS{
     /** Starting health of the glutton */
-    10,
+    100,
     /** Vertical speed of the glutton */
     0.0f,
     /** Horizontal speed of the glutton*/
@@ -21,6 +21,8 @@ EnemyProperties GLUTTON_PROPS{
     12.0f,
     /** Density of the glutton*/
     1.0f,
+    /** Damage of the glutton */
+    25,
     /** Name of the glutton*/
     "Glutton",
 };
