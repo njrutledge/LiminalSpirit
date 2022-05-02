@@ -19,6 +19,7 @@
 #include "SoundController.hpp"
 #include "HomeScene.hpp"
 #include "WorldSelectScene.hpp"
+#include "LevelSelectScene.hpp"
 
 /**
  * This class represents the application root for the ship demo.
@@ -46,6 +47,8 @@ protected:
         OPTIONS,
         /** The world menu scene*/
         WORLDS,
+        /** The select menu scene */
+        SELECT,
         /** The cave level select screen*/
         CAVE_LEVELS,
         /** The fungi level select screen*/
@@ -71,6 +74,8 @@ protected:
     HomeScene _home;
     /** The controller for the world select screen */
     WorldSelectScene _worldSelect;
+    /** The controller for the world select screen */
+    LevelSelectScene _levelSelect;
     /** Whether or not we have finished loading all assets */
     bool _loaded;
 
@@ -155,6 +160,16 @@ public:
      * @param timestep  The amount of time (in seconds) since the last frame
      */
     void updateHomeScene(float timestep);
+
+    /**
+     * Individualized update method for the level select scene.
+     *
+     * This method keeps the primary {@link #update} from being a mess of switch
+     * statements. It also handles the transition logic from the home scene.
+     *
+     * @param timestep  The amount of time (in seconds) since the last frame
+     */
+    void updateLevelSelectScene(float timestep);
 
     /**
      * Individualized update method for the world select scene.

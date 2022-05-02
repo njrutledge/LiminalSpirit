@@ -114,7 +114,7 @@ protected:
     float _dropTime;
 
 	/** True if the ranged attack for last fired to the right */
-	bool _rangedDirection;
+	bool _rangedAttackRight;
 
 	/** Redraws outline of physics fixtures */
 	virtual void resetDebug() override;
@@ -283,10 +283,10 @@ public:
     void setDropTime(float value) { _dropTime = value; }
 
 	/** Whether or not the last ranged attack was when the player faced right */
-	bool getRangedDirection() { return _rangedDirection; }
+	bool getRangedAttackRight() { return _rangedAttackRight; }
 
 	/** Sets whether or not the last ranged attack was when the player faced right*/
-	void setRangedDirection(bool value) { _rangedDirection = value; }
+	void setRangedAttackRight(bool value) { _rangedAttackRight = value; }
 
 	/**
 	 * Returns how much force to apply to get the player moving

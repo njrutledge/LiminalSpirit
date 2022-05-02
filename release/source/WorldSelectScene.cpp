@@ -44,12 +44,14 @@ void WorldSelectScene::dispose()
 {
     if (_caveButton) _caveButton->deactivate();
     _caveButton = nullptr;
-    if (_caveButton) _caveButton->deactivate();
-    _caveButton = nullptr;
-    if (_caveButton) _caveButton->deactivate();
-    _caveButton = nullptr;
+    if (_shroomButton) _shroomButton->deactivate();
+    _shroomButton = nullptr;
+    if (_forestButton) _forestButton->deactivate();
+    _forestButton = nullptr;
     _batch = nullptr;
     _assets = nullptr;
+    removeAllChildren();
+
 }
 
 /**

@@ -41,6 +41,7 @@ void LiminalSpirit::onStartup()
 
     _assets->attach<Font>(FontLoader::alloc()->getHook());
     _assets->attach<Texture>(TextureLoader::alloc()->getHook());
+    _assets->attach<WidgetValue>(WidgetLoader::alloc()->getHook());
     _assets->attach<scene2::SceneNode>(Scene2Loader::alloc()->getHook());
     _assets->attach<Sound>(SoundLoader::alloc()->getHook());
 
@@ -78,6 +79,7 @@ void LiminalSpirit::onShutdown()
     _bossgame.dispose();
     _home.dispose();
     _worldSelect.dispose();
+    _levelSelect.dispose();
     _assets = nullptr;
     _batch = nullptr;
     _sound_controller = nullptr;
@@ -117,6 +119,9 @@ void LiminalSpirit::update(float timestep)
         break;
     case WORLDS:
         updateWorldSelectScene(timestep);
+        break;
+    case SELECT:
+        updateLevelSelectScene(timestep);
         break;
     case GAME:
         updateGameScene(timestep);
@@ -201,16 +206,22 @@ void LiminalSpirit::updateWorldSelectScene(float timestep)
     _sound_controller->play_menu_music();
     switch (_worldSelect.getChoice()) {
     case WorldSelectScene::Choice::CAVE:
-        _gameplay.init(_assets, _sound_controller, "surround");
-        _scene = State::GAME;
+        _levelSelect.init(_assets, "cave");
+        _scene = State::SELECT;
+        //_gameplay.init(_assets, _sound_controller, "surround");
+        //_scene = State::GAME;
         break;
     case WorldSelectScene::Choice::SHROOM:
-        _gameplay.init(_assets, _sound_controller, "battlefield");
-        _scene = State::GAME;
+        _levelSelect.init(_assets, "shroom");
+        _scene = State::SELECT;
+        //_gameplay.init(_assets, _sound_controller, "battlefield");
+        //_scene = State::GAME;
         break;
     case WorldSelectScene::Choice::FOREST:
-        _gameplay.init(_assets, _sound_controller, "stack");
-        _scene = State::GAME;
+        _levelSelect.init(_assets, "forest");
+        _scene = State::SELECT;
+        //_gameplay.init(_assets, _sound_controller, "stack");
+        //_scene = State::GAME;
 //        _bossgame.init(_assets, _sound_controller);
 //        _scene = State::BOSS;
         break;
@@ -232,6 +243,32 @@ void LiminalSpirit::updateGameScene(float timestep)
         _scene = State::WORLDS;
         _gameplay.dispose();
         _worldSelect.setDefaultChoice();
+        _levelSelect.setDefaultChoice();
+    }
+}
+
+/**
+ * Individualized update method for the game scene.
+ *
+ * This method keeps the primary {@link #update} from being a mess of switch
+ * statements. It also handles the transition logic from the game scene.
+ *
+ * @param timestep  The amount of time (in seconds) since the last frame
+ */
+void LiminalSpirit::updateLevelSelectScene(float timestep)
+{
+    _levelSelect.update(timestep);
+    switch (_levelSelect.getChoice()) {
+    case LevelSelectScene::Choice::selected:
+        _gameplay.init(_assets, _sound_controller, _levelSelect.getBiome() + to_string(_levelSelect.getStage()));
+        _levelSelect.dispose();
+        _scene = State::GAME;
+        break;
+    case LevelSelectScene::Choice::home:
+        _worldSelect.setDefaultChoice();
+        _levelSelect.dispose();
+        _scene = State::WORLDS;
+        break;
     }
 }
 
@@ -274,6 +311,9 @@ void LiminalSpirit::draw()
         break;
     case WORLDS:
         _worldSelect.render(_batch);
+        break;
+    case SELECT:
+        _levelSelect.render(_batch);
         break;
     case GAME:
         _gameplay.render(_batch);

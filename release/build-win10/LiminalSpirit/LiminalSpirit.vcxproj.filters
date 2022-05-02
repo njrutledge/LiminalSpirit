@@ -56,6 +56,7 @@
     <ClCompile Include="..\..\source\RRParticleNode.cpp" />
     <ClCompile Include="..\..\source\RRParticlePool.cpp" />
     <ClCompile Include="..\..\source\BossScene.cpp" />
+    <ClCompile Include="..\..\source\LevelSelectScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -113,6 +114,7 @@
     <ClInclude Include="..\..\source\RRParticleNode.h" />
     <ClInclude Include="..\..\source\RRParticlePool.h" />
     <ClInclude Include="..\..\source\BossScene.hpp" />
+    <ClInclude Include="..\..\source\LevelSelectScene.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LiminalSpirit.rc" />

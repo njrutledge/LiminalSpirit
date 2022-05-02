@@ -197,6 +197,7 @@
     <ClInclude Include="..\..\source\Glow.hpp" />
     <ClInclude Include="..\..\source\Glutton.hpp" />
     <ClInclude Include="..\..\source\InputController.hpp" />
+    <ClInclude Include="..\..\source\LevelSelectScene.hpp" />
     <ClInclude Include="..\..\source\LiminalSpiritApp.hpp" />
     <ClInclude Include="..\..\source\LoadingScene.hpp" />
     <ClInclude Include="..\..\source\Lost.hpp" />
@@ -228,6 +229,7 @@
     <ClCompile Include="..\..\source\Glow.cpp" />
     <ClCompile Include="..\..\source\Glutton.cpp" />
     <ClCompile Include="..\..\source\InputController.cpp" />
+    <ClCompile Include="..\..\source\LevelSelectScene.cpp" />
     <ClCompile Include="..\..\source\LiminalSpirit.cpp" />
     <ClCompile Include="..\..\source\HomeScene.cpp" />
     <ClCompile Include="..\..\source\LoadingScene.cpp" />
