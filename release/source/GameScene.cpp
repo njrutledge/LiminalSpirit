@@ -1621,10 +1621,10 @@ void GameScene::createSpawnParticles() {
     positions = _spawn_pos.at(_nextWaveNum);
 
     std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("spawning"), Vec2(0, 0));
-    std::shared_ptr<Texture> melee_impact = _assets->get<Texture>("melee_impact");
+    std::shared_ptr<Texture> portal_swirl = _assets->get<Texture>("enemy_swirl");
 
     for (int i = 0; i < positions.size(); i++) {
-        std::shared_ptr<ParticleNode> spawning = ParticleNode::alloc(positions[i] * _scale, melee_impact, pool);
+        std::shared_ptr<ParticleNode> spawning = ParticleNode::alloc(positions[i] * _scale, portal_swirl, pool);
         spawning->setScale(0.1f);
         _worldnode->addChildWithTag(spawning, 100);
     }

@@ -261,6 +261,13 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
+		"enemy_swirl": {
+			"file": "textures/enemy_portal_swirl.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
 		"platform": {
 			"file": "textures/platform.png",
 			"minfilter": "nearest",
@@ -976,8 +983,8 @@
         "shroom8": "json/levels/shroom/mushmush.json",
 		"levelt": "json/levels/levelt.json",
 		"level2": "json/levels/level2.json",
-		"forest1": "json/levels/stack.json",
-		"forest2": "json/levels/forestation.json",
+		"forest1": "json/levels/forest/stack.json",
+		"forest2": "json/levels/forest/forestation.json",
 		"particles": "json/particles.json",
 		"BOSS": "json/levels/BOSS.json"
 	}
