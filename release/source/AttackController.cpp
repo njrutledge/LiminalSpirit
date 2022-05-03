@@ -153,11 +153,18 @@ void AttackController::Attack::update(const cugl::Vec2 p, bool follow, float dt,
         //animations
         if (_maxFrames != 0) {
             _timer += dt;
-            if (_timer > .2) {
-                std::shared_ptr<scene2::SpriteNode> spriteNode = dynamic_pointer_cast<scene2::SpriteNode>(_node);
-                int frame = spriteNode->getFrame() + 1;
-                spriteNode->setFrame((spriteNode->getFrame() + 1) % _maxFrames);
-                _timer = 0;
+            if (_type == p_exp) {
+                if (_timer > .03) {
+                    std::shared_ptr<scene2::SpriteNode> spriteNode = dynamic_pointer_cast<scene2::SpriteNode>(_node);
+                    spriteNode->setFrame((spriteNode->getFrame() + 1) % _maxFrames);
+                    _timer = 0;
+                }
+            } else {
+                if (_timer > .2) {
+                    std::shared_ptr<scene2::SpriteNode> spriteNode = dynamic_pointer_cast<scene2::SpriteNode>(_node);
+                    spriteNode->setFrame((spriteNode->getFrame() + 1) % _maxFrames);
+                    _timer = 0;
+                }
             }
         }
     }

@@ -46,6 +46,8 @@
 #define PLAYER_RANGE_FRAMES 1
 #define PLAYER_EXP_PKG "player_charged_projectile"
 #define PLAYER_EXP_PKG_FRAMES 5
+#define PLAYER_EXP "player_explosion"
+#define PLAYER_EXP_FRAMES 6
 
 /** Color of HealthBar back */
 #define PLAYER_HEALTHBACK_COLOR Color4(160,160,220)

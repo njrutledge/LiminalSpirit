@@ -1516,13 +1516,13 @@ void GameScene::updateSwipesAndAttacks(float timestep)
                 _rangedArm->setAttackAngle(fmod(_rangedArm->getAttackAngle() + 180, 360));
             }
         }
-        else if (attackType == AttackController::Type::p_exp)
-        {
-            std::shared_ptr<Texture> attackTexture = _assets->get<Texture>("player_projectile"); // this string is wrong
-            attackSprite = scene2::SpriteNode::alloc(attackTexture, 1, 1);                       // this is wrong for sprite sheet
-            attackSprite->setScale(.85f * (*it)->getRadius());
+        else if (attackType == AttackController::Type::p_exp_package) {
+            std::shared_ptr<Texture> attackTexture = _assets->get<Texture>(PLAYER_EXP_PKG);
+            attackSprite = scene2::SpriteNode::alloc(attackTexture, 1, 5);
+            attackSprite->setAnchor(0.5, 0.5);
+            attackSprite->setScale(.10f * (*it)->getRadius());
+            dynamic_pointer_cast<scene2::SpriteNode>(attackSprite)->setFrame(0);
             attackSprite->setAngle((*it)->getAngle() * M_PI / 180);
-            attackSprite->setColor(Color4::RED);
             attackSprite->setPriority(3);
             _rangedArm->setLastType(Glow::MeleeState::first);
             _player->setRangedAttackRight(_player->isFacingRight());
@@ -1539,13 +1539,13 @@ void GameScene::updateSwipesAndAttacks(float timestep)
                 _rangedArm->setAttackAngle(fmod(_rangedArm->getAttackAngle() + 180, 360));
             }
         }
-        else if (attackType == AttackController::Type::p_exp_package) {
-            std::shared_ptr<Texture> attackTexture = _assets->get<Texture>(PLAYER_EXP_PKG);
-            attackSprite = scene2::SpriteNode::alloc(attackTexture, 1, 5);
+        else if (attackType == AttackController::Type::p_exp)
+        {
+            std::shared_ptr<Texture> attackTexture = _assets->get<Texture>("player_explosion");
+            attackSprite = scene2::SpriteNode::alloc(attackTexture, 1, 6);
             attackSprite->setAnchor(0.5, 0.5);
-            attackSprite->setScale(.10f * (*it)->getRadius());
-            dynamic_pointer_cast<scene2::SpriteNode>(attackSprite)->setFrame(0);
-            attackSprite->setAngle((*it)->getAngle() * M_PI / 180);
+            attackSprite->setScale(.05f * (*it)->getRadius());
+            dynamic_pointer_cast<scene2::SpriteNode>(attackSprite)->setFrame(1);
             attackSprite->setPriority(3);
             _rangedArm->setLastType(Glow::MeleeState::first);
             _player->setRangedAttackRight(_player->isFacingRight());
