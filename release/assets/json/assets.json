@@ -212,6 +212,20 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
+        "player_charged_projectile": {
+            "file": "textures/animations/ranged_charge_explosion.png",
+            "minfilter": "nearest",
+            "magfilter": "linear",
+            "wrapS": "clamp",
+            "wrapT": "clamp"
+        },
+        "player_explosion": {
+            "file": "textures/animations/ranged_charge_explosion.png",
+            "minfilter": "nearest",
+            "magfilter": "linear",
+            "wrapS": "clamp",
+            "wrapT": "clamp"
+        },
 		"melee_impact": {
 			"file": "textures/meleeimpact.png",
 			"minfilter": "nearest",
