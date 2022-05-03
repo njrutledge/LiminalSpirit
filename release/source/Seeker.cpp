@@ -22,7 +22,7 @@ EnemyProperties SEEKER_PROPS{
     /** Density of the seeker*/
     0.0f,
     /** Damage for the seeker */
-    15,
+    2,
     /** Name of the seeker*/
     "Seeker",
 };

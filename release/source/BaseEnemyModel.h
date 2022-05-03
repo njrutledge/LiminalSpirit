@@ -139,6 +139,9 @@ protected:
     
     /** If the enemy is from a spawner, index of the spawner; otherwise, -1.*/
     int _spawnerIndex;
+
+	/** True if the enemy just spawned another enemy (should only apply to spawner), false otherwise */
+	bool _spawned;
     
     bool _isJumping;
     bool _isFalling;
@@ -284,9 +287,17 @@ public:
 	/** Returns the name of the ground sensor */
 	std::string* getSensorName() { return &_sensorName; }
     
+	/** Gets the index the next enemy to be spawned from the spawner's list */
     int getSpawnerInd() {return _spawnerIndex; }
     
+	/** Sets the index the next enemy to be spawned from the spawner's list */
     void setSpawnerInd(int index) {_spawnerIndex = index; }
+
+	/** Gets the spawned field of the enemy */
+	int getSpawned() { return _spawned; }
+
+	/** Sets the spawned field of the enemy */
+	void setSpawned(int index) { _spawned = index; }
     
     bool isJumping() {return _isJumping; }
     void setJumping(bool value) {_isJumping = value; }

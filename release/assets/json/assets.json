@@ -163,6 +163,13 @@
 			"wrapT": "clamp"
 
 		},
+		"spawner_ani": {
+			"file": "textures/animations/spawner_spritesheet.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
 		"player": {
 			"file": "textures/player.png",
 			"minfilter": "nearest",

@@ -1302,6 +1302,14 @@ void GameScene::updateEnemies(float timestep)
                 dmgd->setScale(0.1f);
                 _worldnode->addChildWithTag(dmgd, 100);
             }
+            if ((*it)->getSpawned() || sprite->getFrame() != 0) {
+                // Using idle animation timer for spawning animation (not sure if it will have an idle)
+                if ((*it)->getIdleAnimationTimer() > 0.1f) {
+                    sprite->setFrame((sprite->getFrame() + 1) % 21);
+                    (*it)->setIdleAnimationTimer(0);
+                    (*it)->setSpawned(false);
+                }
+            }
         }
 
         if ((*it)->getInvincibilityTimer() <= 0)
@@ -1851,6 +1859,7 @@ void GameScene::updateSpawnEnemies(float timestep)
                     while (diff_count != 0)
                     {
                         createSpawnerEnemy(index, name);
+
                         _spawner_enemy_types[index][name].current_count++;
                         diff_count--;
                     }
@@ -2040,7 +2049,6 @@ void GameScene::createSpawnerEnemy(int spawnerInd, string enemyName)
     Vec2 enemyPos;
 
     enemyPos = _spawner_pos[spawnerInd];
-
     std::shared_ptr<Texture> enemyGlowImage = _assets->get<Texture>(GLOW_TEXTURE);
     std::shared_ptr<Glow> enemyGlow = Glow::alloc(enemyPos, enemyGlowImage->getSize() / _scale, _scale);
     std::shared_ptr<scene2::PolygonNode> enemyGlowSprite = scene2::PolygonNode::allocWithTexture(enemyGlowImage);
@@ -2243,16 +2251,20 @@ void GameScene::createEnemies(int wave)
             _spawnerCount++;
 
             _spawner_pos.push_back(enemyPos);
-            std::shared_ptr<Texture> spawnerImage = _assets->get<Texture>("glutton");
-            std::shared_ptr<Spawner> spawner = Spawner::alloc(enemyPos, spawnerImage->getSize(), spawnerImage->getSize() / _scale / 10, _scale);
-            std::shared_ptr<scene2::PolygonNode> spawnerSprite = scene2::PolygonNode::allocWithTexture(spawnerImage);
+            std::shared_ptr<Texture> spawnerHitBoxImage = _assets->get<Texture>("glutton");
+            std::shared_ptr<Texture> spawnerImage = _assets->get<Texture>("spawner_ani");
+            std::shared_ptr<Spawner> spawner = Spawner::alloc(enemyPos, spawnerImage->getSize(), spawnerHitBoxImage->getSize() / _scale / 10, _scale);
+            std::shared_ptr<scene2::SpriteNode> spawnerSprite = scene2::SpriteNode::alloc(spawnerImage, 5, 5);
+            spawner->setSpawned(false);
             spawner->setSceneNode(spawnerSprite);
             spawner->setDebugColor(Color4::BLACK);
             spawner->setGlow(enemyGlow);
             spawner->setIndex(_spawner_ind);
             spawner->setPlayedDamagedParticle(false);
-            spawnerSprite->setScale(0.12f);
+            spawnerSprite->setAnchor(0.5, 0.4);
+            spawnerSprite->setScale(0.075f);
             spawnerSprite->setPriority(1.01);
+            spawnerSprite->setFrame(0);
             addObstacle(spawner, spawnerSprite, true);
             _enemies.push_back(spawner);
             auto spawnerEnemiesMap = _spawner_enemy_types.at(_spawner_ind);
@@ -2495,6 +2507,9 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     sprite->setPriority(4);
     addObstacle(_player, sprite, true);
 
+    // Glow effect on Arm
+    std::shared_ptr<Gradient> unchargedgrad = Gradient::allocRadial(Color4(0, 0, 255), Color4(255, 0, 0), Vec2(0.5, 0.5), .3f);
+
     // Ranged Arm for the player
     Vec2 rangeArmPos = PLAYER_POS;
     std::shared_ptr<Texture> rangeHitboxImage = _assets->get<Texture>(PLAYER_RANGE_TEXTURE);
@@ -2506,6 +2521,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     _rangedArm->setLastType(Glow::MeleeState::cool);
     std::shared_ptr<scene2::SpriteNode> rangeArmSprite = scene2::SpriteNode::alloc(rangeImage, 2, 5);
     _rangedArm->setSceneNode(rangeArmSprite);
+    //rangeArmSprite->setGradient(unchargedgrad);
     rangeArmSprite->setFrame(0);
     rangeArmSprite->setScale(0.22);
     rangeArmSprite->setPriority(5);
