@@ -239,6 +239,7 @@ void CollisionController::handlePlayerCollision(PlayerModel* player, physics2::O
                 player->setIsInvincible(true);
                 player->setIsStunned(true);
                 player->setInvincibilityTimer(0.2f);
+                player->setFrameFreeze(true);
                 _sound->play_player_sound(SoundController::playerSType::hurt);
             }
             attack->setInactive();

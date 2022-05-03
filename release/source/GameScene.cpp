@@ -385,65 +385,71 @@ void GameScene::dispose()
  */
 void GameScene::update(float timestep)
 {
-    updateSoundInputParticlesAndTilt(timestep);
 
-    if (updateWin())
-    {
-        // let player fall through platforms
-        if (_winInit)
+    if (!_player->getFrameFreeze()) {
+        updateSoundInputParticlesAndTilt(timestep);
+
+        if (updateWin())
         {
-            b2Filter filter = _player->getFilterData();
-            filter.maskBits = 0b101000;
-            _player->setFilterData(filter);
-            // set tilt xpos to be constant for moving towards the portal
-            _tilt.winTime();
-            _winInit = false;
-            _winFadeTimer = 0;
-        }
-        if (_player->getX() >= 30)
-        {
-            _tilt.reset();
-            this->setColor(Color4(255 - _winFadeTimer * 255 / 1.5, 255 - _winFadeTimer * 255 / 1.5, 255 - _winFadeTimer * 255 / 1.5, 255));
-            _winFadeTimer = _winFadeTimer + timestep <= 1.5 ? _winFadeTimer + timestep : 1.5;
-            if (_winFadeTimer == 1.5)
+            // let player fall through platforms
+            if (_winInit)
             {
-                _next = true;
+                b2Filter filter = _player->getFilterData();
+                filter.maskBits = 0b101000;
+                _player->setFilterData(filter);
+                // set tilt xpos to be constant for moving towards the portal
+                _tilt.winTime();
+                _winInit = false;
+                _winFadeTimer = 0;
             }
+            if (_player->getX() >= 30)
+            {
+                _tilt.reset();
+                this->setColor(Color4(255 - _winFadeTimer * 255 / 1.5, 255 - _winFadeTimer * 255 / 1.5, 255 - _winFadeTimer * 255 / 1.5, 255));
+                _winFadeTimer = _winFadeTimer + timestep <= 1.5 ? _winFadeTimer + timestep : 1.5;
+                if (_winFadeTimer == 1.5)
+                {
+                    _next = true;
+                }
+            }
+            _player->setVX(_tilt.getXpos());
+            _player->setFacingRight(true);
+
+            // perform necessary update loop
+            updateAnimations(timestep);
+            _world->update(timestep);
+            updateCamera();
+            updateMeleeArm(timestep);
+            return;
         }
-        _player->setVX(_tilt.getXpos());
-        _player->setFacingRight(true);
 
-        // perform necessary update loop
+        updateTilt();
+
         updateAnimations(timestep);
-        _world->update(timestep);
+
+        updateEnemies(timestep);
+        updateSwipesAndAttacks(timestep);
+        updateRemoveDeletedAttacks();
+
+        updateRemoveDeletedEnemies();
+
+        updateText();
+
+        updateSpawnTimes();
+
+        updateRemoveDeletedPlayer();
+
+        updateHealthbar();
+
         updateCamera();
+
+        updateSpawnEnemies(timestep);
+
         updateMeleeArm(timestep);
-        return;
     }
-
-    updateTilt();
-
-    updateAnimations(timestep);
-
-    updateEnemies(timestep);
-    updateSwipesAndAttacks(timestep);
-    updateRemoveDeletedAttacks();
-
-    updateRemoveDeletedEnemies();
-
-    updateText();
-
-    updateSpawnTimes();
-
-    updateRemoveDeletedPlayer();
-
-    updateHealthbar();
-
-    updateCamera();
-
-    updateSpawnEnemies(timestep);
-
-    updateMeleeArm(timestep);
+    else {
+        _player->setFrameFreeze(false);
+    }
 }
 
 void GameScene::updateSoundInputParticlesAndTilt(float timestep)
@@ -2481,6 +2487,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     std::shared_ptr<Texture> hitboxImage = _assets->get<Texture>(PLAYER_TEXTURE);
     _player = PlayerModel::alloc(playerPos + Vec2(0, .5), hitboxImage->getSize() / _scale / 8, _scale);
     _player->setRangedAttackRight(true);
+    _player->setFrameFreeze(false);
     _player->setIsStunned(false);
     _player->setMovement(0);
     _player->setWalkAnimationTimer(0);

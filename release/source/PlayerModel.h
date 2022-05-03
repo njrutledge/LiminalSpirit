@@ -116,6 +116,9 @@ protected:
 	/** True if the ranged attack for last fired to the right */
 	bool _rangedAttackRight;
 
+	/** True if the next frame should be froze */
+	bool _frameFreeze;
+
 	/** Redraws outline of physics fixtures */
 	virtual void resetDebug() override;
 
@@ -287,6 +290,12 @@ public:
 
 	/** Sets whether or not the last ranged attack was when the player faced right*/
 	void setRangedAttackRight(bool value) { _rangedAttackRight = value; }
+
+	/** Gets the freeze frame */
+	bool getFrameFreeze() { return _frameFreeze; }
+
+	/** Sets the freeze frame */
+	void setFrameFreeze(bool value) { _frameFreeze = value; }
 
 	/**
 	 * Returns how much force to apply to get the player moving
