@@ -1000,7 +1000,11 @@ void GameScene::updateAnimations(float timestep)
         }
     }
 
-    float offsetArm = -2.7f;
+    float offsetArm = -2.6f;
+    if (_rangedArm->getLastType() != Glow::MeleeState::cool) {
+        offsetArm = -3.0f;
+    }
+    
     if (!_player->getRangedAttackRight())
     {
         offsetArm = -1 * offsetArm;
@@ -1064,7 +1068,7 @@ void GameScene::updateMeleeArm(float timestep)
 {
     ////MELEE ARM MUST STAY AT BOTTOM
     // Determining arm positions and offsets
-    float offsetArm2 = -3.1f;
+    float offsetArm2 = -3.5f;
 
     // change based on arm attacks
     if ((!_player->isFacingRight() ||                                                                                                                                                // player facing left or attacks left
@@ -1088,7 +1092,7 @@ void GameScene::updateMeleeArm(float timestep)
     {
         upDownY2 = -1 * spacing + upDownY2;
     }
-    _meleeArm->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY2 / spacing / 3) + 0.1f);
+    _meleeArm->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY2 / spacing / 3) - 0.1f);
 }
 
 void GameScene::updateEnemies(float timestep)
@@ -2519,7 +2523,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     _meleeArm->setAttackAngle(0);
     _meleeArm->setGlowTimer(0);
     _meleeArm->setLastType(Glow::MeleeState::cool);
-    std::shared_ptr<scene2::SpriteNode> meleeArmSprite = scene2::SpriteNode::alloc(meleeImage, 4, 7);
+    std::shared_ptr<scene2::SpriteNode> meleeArmSprite = scene2::SpriteNode::alloc(meleeImage, 5, 7);
     meleeArmSprite->setFrame(21);
     _meleeArm->setSceneNode(meleeArmSprite);
     _meleeArm->setAnimeTimer(0);
