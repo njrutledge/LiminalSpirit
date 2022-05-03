@@ -43,7 +43,11 @@ void SoundController::LevelMusic::init(string biome, std::shared_ptr<cugl::Asset
  */
 void SoundController::LevelMusic::play_music(std::vector<bool> e, GameState s) {
     
-    if (s != LEVEL) {
+    string b = _biome;
+    b.pop_back();
+    
+    
+    if ((s != LEVEL_CAVE && b == "cave")  ||  (s != LEVEL_SHROOM && b == "mushroom") || (s != LEVEL_FOREST && b == "forest")) {
         cugl::AudioEngine::get()->getMusicQueue()->advance(0, 0.2);
         cugl::AudioEngine::get()->getMusicQueue()->enqueue(_mixer, true, 0.3);
     }
@@ -71,6 +75,12 @@ void SoundController::LevelMusic::play_music(std::vector<bool> e, GameState s) {
     
     
 };
+
+void SoundController::LevelMusic::reset_mix() {
+    _mixer->reset();
+    _gNode->setGain(0.0f);
+    _pNode->setGain(0.0f);
+}
 
 
 SoundController::SoundController(){};
@@ -122,33 +132,33 @@ void SoundController::play_menu_music() {
 void SoundController::play_level_music(string biome, std::vector<bool> enemies) {
     
     if (biome == "cave") {
-        if (_state != LEVEL) {
+        if (_state != LEVEL_CAVE) {
             _track = rand()%2;
             reset_level_tracks();
         }
         switch (_track) {
             case 0:
                 _cave1->play_music(enemies, _state);
-                _state = LEVEL;
+                _state = LEVEL_CAVE;
                 break;
             case 1:
                 _cave2->play_music(enemies, _state);
-                _state = LEVEL;
+                _state = LEVEL_CAVE;
                 break;
         }
     } else if (biome == "shroom") {
-        if (_state != LEVEL) {
+        if (_state != LEVEL_SHROOM) {
             _track = rand()%2;
             reset_level_tracks();
         }
         switch (_track) {
             case 0:
                 _mushroom1->play_music(enemies, _state);
-                _state = LEVEL;
+                _state = LEVEL_SHROOM;
                 break;
             case 1:
                 _mushroom2->play_music(enemies, _state);
-                _state = LEVEL;
+                _state = LEVEL_SHROOM;
                 break;
         }
         
@@ -192,10 +202,10 @@ void SoundController::play_player_sound(playerSType sound) {
 };
 
 void SoundController::reset_level_tracks() {
-    _cave1->getMixer()->reset();
-    _cave2->getMixer()->reset();
-    _mushroom1->getMixer()->reset();
-    _mushroom2->getMixer()->reset();
+    _cave1->reset_mix();
+    _cave2->reset_mix();
+    _mushroom1->reset_mix();
+    _mushroom2->reset_mix();
 };
 
 void SoundController::dispose() {
