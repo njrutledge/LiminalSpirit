@@ -33,7 +33,8 @@
 #include "InputController.hpp"
 
 
-#define CAVE_MAXLEVELS 2
+
+#define CAVE_MAXLEVELS 8
 #define SHROOM_MAXLEVELS 9
 #define FOREST_MAXLEVELS 2
 /**

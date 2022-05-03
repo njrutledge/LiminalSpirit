@@ -964,8 +964,14 @@
 		}
 	},
 	"jsons": {
-		"cave1": "json/levels/cave1.json",
-        "cave2": "json/levels/cave/cave2.json",
+        "cave1": "json/levels/cave/cave0.json",
+		"cave2": "json/levels/cave/cave1.json",
+        "cave3": "json/levels/cave/cave2.json",
+        "cave4": "json/levels/cave/cave4.json",
+        "cave5": "json/levels/cave/cave5.json",
+        "cave6": "json/levels/cave/cave6.json",
+        "cave7": "json/levels/cave/cave7.json",
+        "cave8": "json/levels/cave/cave8.json",
         "shroom1": "json/levels/shroom/musheasy.json",
         "shroom2": "json/levels/shroom/musheasy2.json",
         "shroom3": "json/levels/shroom/musheasy3.json",
