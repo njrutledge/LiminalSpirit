@@ -1876,7 +1876,7 @@ void GameScene::createSpawnParticles()
 
     for (int i = 0; i < positions.size(); i++)
     {
-        std::shared_ptr<ParticleNode> spawning = ParticleNode::alloc(positions[i] * _scale, melee_impact, pool);
+        std::shared_ptr<ParticleNode> spawning = ParticleNode::alloc(positions[i] * _scale, portal_swirl, pool);
         spawning->setScale(0.1f);
         _worldnode->addChildWithTag(spawning, 100);
     }
