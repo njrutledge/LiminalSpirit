@@ -44,6 +44,8 @@
 #define PLAYER_MELEE "player_melee"
 #define PLAYER_RANGE "player_projectile"
 #define PLAYER_RANGE_FRAMES 1
+#define PLAYER_EXP_PKG "player_charged_projectile"
+#define PLAYER_EXP_PKG_FRAMES 5
 
 /** Color of HealthBar back */
 #define PLAYER_HEALTHBACK_COLOR Color4(160,160,220)

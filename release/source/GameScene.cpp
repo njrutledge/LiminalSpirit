@@ -1540,10 +1540,10 @@ void GameScene::updateSwipesAndAttacks(float timestep)
             }
         }
         else if (attackType == AttackController::Type::p_exp_package) {
-            std::shared_ptr<Texture> attackTexture = _assets->get<Texture>("player_charged_projectile");
+            std::shared_ptr<Texture> attackTexture = _assets->get<Texture>(PLAYER_EXP_PKG);
             attackSprite = scene2::SpriteNode::alloc(attackTexture, 1, 5);
-            attackSprite->setAnchor(0.4, 0.55);
-            attackSprite->setScale(.65f * (*it)->getRadius());
+            attackSprite->setAnchor(0.5, 0.5);
+            attackSprite->setScale(.10f * (*it)->getRadius());
             dynamic_pointer_cast<scene2::SpriteNode>(attackSprite)->setFrame(0);
             attackSprite->setAngle((*it)->getAngle() * M_PI / 180);
             attackSprite->setPriority(3);
