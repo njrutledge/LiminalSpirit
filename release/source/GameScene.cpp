@@ -1945,34 +1945,39 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
         // TODO Change this
         _player->getSceneNode()->setColor(Color4::GREEN);
     }
-    else if (_swipes.hasLeftChargedAttack() && _swipes.hasRightChargedAttack())
-    {
-        _player->getSceneNode()->setColor(Color4(125, 0, 255, 255));
-    }
-    else if (_swipes.hasLeftChargedAttack())
-    {
-        _player->getSceneNode()->setColor(Color4::RED);
-    }
-    else if (_swipes.hasRightChargedAttack())
-    {
-        _player->getSceneNode()->setColor(Color4::BLUE);
-    }
     else
     {
         _player->getSceneNode()->setColor(Color4::WHITE);
     }
-    // Make enemies flash red when invincible
-    for (auto it = _enemies.begin(); it != _enemies.end(); ++it)
+
+    if (_swipes.hasLeftChargedAttack())
     {
-        if ((*it)->getInvincibility())
-        {
-            (*it)->getSceneNode()->setColor(Color4::RED);
+        std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("charged"), Vec2(0, 0));
+        std::shared_ptr<Texture> melee_impact = _assets->get<Texture>("melee_impact");
+        int flip = 1;
+        if (_player->isFacingRight()) {
+            flip = -1;
         }
-        else
-        {
-            (*it)->getSceneNode()->setColor(Color4::WHITE);
-        }
+        std::shared_ptr<ParticleNode> charged = ParticleNode::alloc((_rangedArm->getPosition() - Vec2(1.25 * flip, 0)) * _scale, melee_impact, pool);
+        charged->setScale(0.025f);
+        charged->setColor(Color4::BLUE);
+        _worldnode->addChildWithTag(charged, 100);
     }
+
+    if (_swipes.hasRightChargedAttack())
+    {
+        std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("charged"), Vec2(0, 0));
+        std::shared_ptr<Texture> melee_impact = _assets->get<Texture>("melee_impact");
+        int flip = 1;
+        if (_player->isFacingRight()) {
+            flip = -1;
+        }
+        std::shared_ptr<ParticleNode> charged = ParticleNode::alloc((_meleeArm->getPosition() - Vec2(-1.5 * flip, 0)) * _scale, melee_impact, pool);
+        charged->setScale(0.025f);
+        charged->setColor(Color4::RED);
+        _worldnode->addChildWithTag(charged, 100);
+    }
+
     Scene2::render(batch);
     batch->begin(getCamera()->getCombined());
 
@@ -2507,9 +2512,6 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     sprite->setPriority(4);
     addObstacle(_player, sprite, true);
 
-    // Glow effect on Arm
-    std::shared_ptr<Gradient> unchargedgrad = Gradient::allocRadial(Color4(0, 0, 255), Color4(255, 0, 0), Vec2(0.5, 0.5), .3f);
-
     // Ranged Arm for the player
     Vec2 rangeArmPos = PLAYER_POS;
     std::shared_ptr<Texture> rangeHitboxImage = _assets->get<Texture>(PLAYER_RANGE_TEXTURE);
@@ -2521,7 +2523,6 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     _rangedArm->setLastType(Glow::MeleeState::cool);
     std::shared_ptr<scene2::SpriteNode> rangeArmSprite = scene2::SpriteNode::alloc(rangeImage, 2, 5);
     _rangedArm->setSceneNode(rangeArmSprite);
-    //rangeArmSprite->setGradient(unchargedgrad);
     rangeArmSprite->setFrame(0);
     rangeArmSprite->setScale(0.22);
     rangeArmSprite->setPriority(5);
