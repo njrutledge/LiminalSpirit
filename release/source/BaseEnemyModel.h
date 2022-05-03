@@ -34,6 +34,7 @@ struct EnemyProperties {
 	int attackCooldown;
 	float attackRadius;
 	float density;
+    int damage;
 	std::string name;
 };
 
@@ -88,6 +89,9 @@ protected:
 
 	/** The density of the enemy*/
 	float _density;
+    
+    /** The damage of the enemy */
+    int _damage;
 
 	/** True if the enemy has had line of sight of the player */
 	bool _hasSeenPlayer;
@@ -139,6 +143,8 @@ protected:
     bool _isJumping;
     bool _isFalling;
 
+	bool _playedDamagedParticles;
+
 public:
 
 #pragma mark Hidden Constructors
@@ -170,7 +176,7 @@ public:
 	/** Allocates a new enemy, using placeholder values, DO NOT MAKE IN-GAME ENEMIES USING THIS MODEL */
 	static std::shared_ptr<BaseEnemyModel> alloc(const cugl::Vec2& pos, const cugl::Size& realSize, const cugl::Size& size, float scale) {
 		std::shared_ptr<BaseEnemyModel> result = std::make_shared<BaseEnemyModel>();
-		return (result->init(pos, realSize, size, scale, { 10, 1.0f, 1.0f, 600, 1, 1.0f, "base" }) ? result : nullptr);
+		return (result->init(pos, realSize, size, scale, { 10, 1.0f, 1.0f, 600, 1, 1.0f, 1, "base" }) ? result : nullptr);
 	}
 
 #pragma mark -
@@ -192,6 +198,9 @@ public:
 
 	/** Sets the enemy health, reset healthbar timer */
 	void setHealth(int value) { _health = value; _healthTimer = HEALTH_SHOWTIME; }
+    
+    /**Returns the damage of the enemy's attack */
+    int getAttackDamage() const { return _damage; }
 
 	/** Returns true if the enemy is on the ground*/
 	bool isGrounded() const { return _isGrounded; }
@@ -267,6 +276,10 @@ public:
 
 	/** Sets the pointer to the enemy's glow */
 	void setGlow(std::shared_ptr<Glow> glow) { _glow = glow; }
+
+	void setPlayedDamagedParticle(bool didIt) { _playedDamagedParticles = didIt; }
+
+	bool getPlayedDamagedParticle() { return _playedDamagedParticles; }
 
 	/** Returns the name of the ground sensor */
 	std::string* getSensorName() { return &_sensorName; }
