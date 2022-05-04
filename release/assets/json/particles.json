@@ -28,7 +28,7 @@
          "maxParticleCount": 1,
          "gravity": [0, 0],
          "emissionRateRange": [1, 1],
-         "lifetimeRange": [10, 10],
+         "lifetimeRange": [3, 3],
          "angleRange": [1.57, 1.57],
          "speedRange": [1, 1],
 	 "startSizeRange": [1, 1],
