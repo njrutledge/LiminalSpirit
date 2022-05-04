@@ -2033,6 +2033,7 @@ void GameScene::updateHealthbar()
         _healthbar->setProgress(prog);
     }
     
+    _range_charge->setProgress(_swipes.getRangeCharge());
 }
 
 void GameScene::updateCamera()
