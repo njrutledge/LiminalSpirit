@@ -307,8 +307,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
 
     scene->addChildWithName(HUD, "HUD");
 
-    _pauseScene = _assets->get<scene2::SceneNode>("HUD_pauseScene");
-    _returnButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("HUD_pauseScene_resume"));
+    _pauseScene = _assets->get<scene2::SceneNode>("pauseScene");
+    addChildWithName(_pauseScene, "pause");
+    _returnButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("pauseScene_resume"));
     _returnButton->addListener([=](const std::string& name, bool down)
         {
             // Only quit when the button is released
@@ -316,7 +317,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
                 _pause = false;
             } });
 
-    _homeButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("HUD_pauseScene_home"));
+    _homeButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("pauseScene_home"));
     _homeButton->addListener([=](const std::string& name, bool down)
         {
             // Only quit when the button is released
@@ -324,7 +325,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
                 _back = true;
             } });
 
-    _optionButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("HUD_pauseScene_options"));
+    _optionButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("pauseScene_options"));
     _optionButton->addListener([=](const std::string& name, bool down)
         {
             // Only quit when the button is released
@@ -333,9 +334,11 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             } });
 
 
-    _optionScene = _assets->get<scene2::SceneNode>("HUD_optionScene");
+    _optionScene = _assets->get<scene2::SceneNode>("optionScene");
+
+    addChildWithName(_optionScene, "options");
     
-    _optionReturnButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("HUD_optionScene_return"));
+    _optionReturnButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_return"));
     _optionReturnButton->addListener([=](const std::string& name, bool down)
         {
             // Only quit when the button is released
@@ -344,14 +347,14 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
                 _pause = true;
             } });
 
-    _swapHandsButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("HUD_optionScene_swap"));
+    _swapHandsButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_swap"));
     _swapHandsButton->addListener([=](const std::string& name, bool down)
         {
             // Only quit when the button is released
             if (!down) {
 
             } });
-    _musicButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("HUD_optionScene_music"));
+    _musicButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_music"));
     _musicButton->addListener([=](const std::string& name, bool down)
         {
             // Only quit when the button is released
@@ -360,7 +363,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             } });
 
 
-    _sfxButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("HUD_optionScene_sfx"));
+    _sfxButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_sfx"));
     _sfxButton->addListener([=](const std::string& name, bool down)
         {
             // Only quit when the button is released

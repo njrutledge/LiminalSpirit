@@ -304,9 +304,6 @@ void CollisionController::handleAttackCollision(AttackController::Attack* attack
         AC->createAttack(attack->getPosition(), 3, 0.15, 40, AttackController::p_exp, cugl::Vec2::ZERO, timer, PLAYER_RANGE, PLAYER_EXP_FRAMES);
             attack->setInactive();
     }
-    if (bd && bd->getName() == "bottomwall") {
-        int breaking = 1;
-    }
 }
 
 /** determine the amount of damage an enemy is going to take from a particular attack */

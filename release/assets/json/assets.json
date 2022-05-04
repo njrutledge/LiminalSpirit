@@ -736,8 +736,9 @@
 						"y_offset": 0,
 						"absolute": false
 					}
-				},
-				"pauseScene": {
+				}
+			}
+		},"pauseScene": {
 					"type": "Widget",
 					"data": {
 						"key": "pause"
@@ -749,8 +750,6 @@
 						"key": "options"
 					}
 				}
-			}
-		},
 		"main_menu": {
 			"type": "Node",
 			"comment": "This is the root node of the menu scene",
