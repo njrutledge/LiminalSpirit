@@ -47,12 +47,18 @@ bool AttackController::Attack::init(const cugl::Vec2 p, float radius, float a, f
             case Type::p_melee:
             case Type::p_dash:
             case Type::p_exp:
-            case Type::p_exp_package:
                 _sensorName = "player" + _sensorName;
                 filter.categoryBits = 0b010000;
                 filter.maskBits = 0b000010;
                 setFilterData(filter);
                 break;
+            case Type::p_exp_package:
+                _sensorName = "player" + _sensorName;
+                filter.categoryBits = 0b010000;
+                filter.maskBits = 0b000110;
+                setFilterData(filter);
+                break;
+                
             default:
                 _sensorName = "enemy"  + _sensorName;
                 filter.categoryBits = 0b100000;
