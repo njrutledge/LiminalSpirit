@@ -483,9 +483,9 @@ void GameScene::update(float timestep)
         _returnButton->activate();
         _homeButton->activate();
         _optionButton->activate();
-        Vec2 pos1 = _optionScene->getPosition();
+        Size pos1 = _optionScene->getContentSize();
         Vec2 pos2 = _returnButton->getPosition();
-        CULog("pos: %f, %f || %f, %f", pos1.x, pos1.y, pos2.x, pos2.y);
+        CULog("pos: %f, %f || %f, %f", pos1.width, pos1.height, pos2.x, pos2.y);
         return;
     }
     else {
