@@ -145,6 +145,8 @@ protected:
 
     /** Enemies set */
     std::vector<std::shared_ptr<BaseEnemyModel>> _enemies;
+    /** Spawner  set */
+    std::vector<std::shared_ptr<BaseEnemyModel>> _spawners;
 
     /** Player character */
     std::shared_ptr<PlayerModel> _player;
@@ -192,11 +194,12 @@ protected:
     /** Boolean check for walking sound effect timing*/
     bool _step;
 
-    /** health bar nodes */
-    std::shared_ptr<scene2::PolygonNode> _healthback;
-    std::shared_ptr<scene2::PolygonNode> _health;
+
     /** healthbar */
     std::shared_ptr<scene2::ProgressBar> _healthbar;
+    
+    /** range charge indicator */
+    std::shared_ptr<scene2::ProgressBar> _range_charge;
 
     bool _winInit;
 
@@ -207,6 +210,30 @@ protected:
     string _biome;
 
     int _stageNum;
+
+    bool _pause;
+
+    bool _options;
+
+    std::shared_ptr<scene2::Button> _pauseButton;
+
+    std::shared_ptr<scene2::SceneNode> _pauseScene;
+
+    std::shared_ptr<scene2::Button> _returnButton;
+
+    std::shared_ptr<scene2::Button> _homeButton;
+
+    std::shared_ptr<scene2::Button> _optionButton;
+
+    std::shared_ptr<scene2::SceneNode> _optionScene;
+
+    std::shared_ptr<scene2::Button> _optionReturnButton;
+
+    std::shared_ptr<scene2::Button> _swapHandsButton;
+
+    std::shared_ptr<scene2::Button> _musicButton;
+
+    std::shared_ptr<scene2::Button> _sfxButton;
     /**
      * Internal helper to build the scene graph.
      *

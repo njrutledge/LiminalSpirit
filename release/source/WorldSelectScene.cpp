@@ -97,7 +97,12 @@ bool WorldSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _assets->attach<Texture>(TextureLoader::alloc()->getHook());
     _assets->attach<Font>(FontLoader::alloc()->getHook());
 
+    Rect bounds = Application::get()->getSafeBounds();
+    bounds.origin *= boundScale;
+    bounds.size *= boundScale;
+
     _caveButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("world_select_cave"));
+    _caveButton->setPositionX(bounds.getMinX() + _caveButton->getPositionX());
     _caveButton->addListener([=](const std::string& name, bool down)
         {
             if (down) {
@@ -107,6 +112,9 @@ bool WorldSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
                 _choice = Choice::CAVE;
             }
         });
+
+    _caveButtonBack = assets->get<scene2::SceneNode>("world_select_caveback");
+    _caveButtonBack->setPositionX(bounds.getMinX() + _caveButtonBack->getPositionX());
 
     _shroomButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("world_select_shroom"));
     _shroomButton->addListener([=](const std::string& name, bool down)
@@ -118,6 +126,9 @@ bool WorldSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
                 _choice = Choice::SHROOM;
             }
         });
+
+    _shroomButtonBack = assets->get<scene2::SceneNode>("world_select_shroomback");
+
     _forestButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("world_select_forest"));
     _forestButton->addListener([=](const std::string& name, bool down)
         {
@@ -129,12 +140,37 @@ bool WorldSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             }
         });
 
+    _forestButtonBack = assets->get<scene2::SceneNode>("world_select_forestback");
+
+    _timerA = 0.0f;
+    _timerB = 0.0f;
+    _timerC = 0.0f;
+
     addChild(scene);
     return true;
 }
 
 #pragma mark -
 #pragma mark Screen Handling
+
+float WorldSelectScene::easing(float time, float time_position, float amplitude) {
+    
+    float position = time_position / time;
+    
+    
+    if (position <= 0.25) {
+        return (amplitude) * (1 - ((time_position / (time / 4))));
+    } else if (position <= 0.5) {
+        return (amplitude) * (((time_position - time / 4) / (time / 4))) * -1;
+    } else if (position <= 0.75) {
+        return (amplitude) * (1 - ((time_position -  time / 2) / (time / 4))) * -1;
+    } else if (position <= 1.0f) {
+        return (amplitude) * (((time_position - (3 * time / 4)) / (time / 4)));
+    } else {
+        return 0.0f;
+    }
+    
+}
 /**
  * The method called to update the screen mode.
  *
@@ -150,6 +186,40 @@ void WorldSelectScene::update(float timestep)
     _shroomButton->activate();
     _forestButton->setVisible(true);
     _forestButton->activate();
+    
+    float threshA = 4.0f;
+    float threshB = 3.0f;
+    float threshC = 5.0f;
+    
+    
+    
+    _caveButton->setPositionY(_caveButton->getPositionY() + easing(threshA, _timerA, 0.25));
+    _caveButtonBack->setPositionY(_caveButtonBack->getPositionY() + easing(threshA, _timerA, 0.25));
+
+    _shroomButton->setPositionY(_shroomButton->getPositionY() + easing(threshB, _timerB, -0.25));
+    _shroomButtonBack->setPositionY(_shroomButtonBack->getPositionY() + easing(threshB, _timerB, -0.25));
+
+    _forestButton->setPositionY(_forestButton->getPositionY() + easing(threshC, _timerC, 0.25));
+    _forestButtonBack->setPositionY(_forestButtonBack->getPositionY() + easing(threshC, _timerC, 0.25));
+    
+    
+    _timerA += timestep;
+    _timerB += timestep;
+    _timerC += timestep;
+
+
+    if (_timerA > threshA) {
+        _timerA = 0.0f;
+    }
+    
+    if (_timerB > threshB) {
+        _timerB = 0.0f;
+    }
+    
+    if (_timerC > threshC) {
+        _timerC = 0.0f;
+    }
+
 }
 
 /**

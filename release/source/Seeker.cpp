@@ -10,7 +10,7 @@
 
 EnemyProperties SEEKER_PROPS{
     /** Starting health of the seeker */
-    4,
+    30,
     /** Vertical speed of the seeker */
     3.0f,
     /** Horizontal speed of the seeker*/
@@ -21,6 +21,8 @@ EnemyProperties SEEKER_PROPS{
     5.0f,
     /** Density of the seeker*/
     0.0f,
+    /** Damage for the seeker */
+    2,
     /** Name of the seeker*/
     "Seeker",
 };

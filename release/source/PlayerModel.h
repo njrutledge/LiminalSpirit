@@ -44,6 +44,10 @@
 #define PLAYER_MELEE "player_melee"
 #define PLAYER_RANGE "player_projectile"
 #define PLAYER_RANGE_FRAMES 1
+#define PLAYER_EXP_PKG "player_charged_projectile"
+#define PLAYER_EXP_PKG_FRAMES 5
+#define PLAYER_EXP "player_explosion"
+#define PLAYER_EXP_FRAMES 6
 
 /** Color of HealthBar back */
 #define PLAYER_HEALTHBACK_COLOR Color4(160,160,220)
@@ -51,7 +55,7 @@
 #define PLAYER_HEALTH_COLOR Color4(200,240,200)
 
 /** Player health */
-#define PLAYER_HEALTH 40.0f
+#define PLAYER_HEALTH 100.0f
 
 #pragma mark - 
 #pragma mark Player Model
@@ -98,6 +102,12 @@ protected:
     /** if player is invincible */
     bool _isInvincible;
     
+    /** if player is dash attacking*/
+    bool _isDashing;
+    
+    /** Angle the player is dashing at in degrees */
+    float _dashAngle;
+    
     /** Duration of enemy invincibility */
     float _invincibilityTime;
 
@@ -109,6 +119,9 @@ protected:
 
 	/** Time passed since last jump frame */
 	float _jumpTime;
+
+	/** Time passed since last post invinciblity blink */
+	float _postStunInvincibilityTimer;
     
     /** Time player will drop through platforms */
     float _dropTime;
@@ -252,6 +265,18 @@ public:
 	/** True if the player is stunned*/
 	bool isStunned() { return _isStunned; }
     
+    /** Sets whether the player is dashing */
+    void setIsDashing(bool dashing) { _isDashing = dashing; }
+
+    /** True if the player is dashing */
+    bool isDashing() { return _isDashing; }
+    
+    /** True if the player is dashing */
+    float getDashAngle() { return _dashAngle; }
+    
+    /** Sets whether the player is dashing */
+    void setDashAngle(float angle) { _dashAngle = angle; }
+
     /** Returns amount of invincibility time remaining */
     float getInvincibilityTimer() { return _invincibilityTime; }
     
@@ -275,6 +300,12 @@ public:
 
 	/** Sets the jump animation time */
 	void setJumpAnimationTimer(float value) { _jumpTime = value; }
+
+	/** Returns the amount of time left for post stunned invincibility */
+	float getPostStunnedInvincibilityTimer() { return _postStunInvincibilityTimer; }
+
+	/** Sets the post stun invincibility timer */
+	void setPostStunnedInvincibilityTimer(float value) { _postStunInvincibilityTimer = value; }
     
     /** Gets the drop time */
     float getDropTime() { return _dropTime; }

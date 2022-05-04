@@ -1,0 +1,194 @@
+{
+  "variables": {
+
+  },
+  "contents": {
+    "type": "Node",
+    "comment": "the root node for options",
+    "data": {
+      "visible": false
+    },
+    "format": {
+      "type": "Anchored"
+    },
+    "children": {
+      "rockbig": {
+        "type": "Image",
+        "data": {
+          "texture": "options_rockbig",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.33
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": 0,
+          "y_offset": 0,
+          "absolute": false
+        }
+      },
+      "return": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.4
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "options_rocksmol"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": -0.28,
+          "y_offset": -0.25,
+          "absolute": false
+        }
+      },
+      "swap": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.4
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "swap"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": 0.05,
+          "y_offset": 0.05,
+          "absolute": false
+        }
+      },
+      "music": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "downnode": "down",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.25
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "options_button_on"
+            }
+          },
+          "down": {
+            "type": "Image",
+            "data": {
+              "texture": "options_button_down"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": -0.05,
+          "y_offset": -0.15,
+          "absolute": false
+        }
+      },
+      "sfx": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.25
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "options_button_on"
+            }
+          },
+          "up2": {
+            "type": "Image",
+            "data": {
+              "texture": "options_button_down"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": 0.12,
+          "y_offset": -0.15,
+          "absolute": false
+        }
+      },
+      "lefthand": {
+        "type": "Image",
+        "data": {
+          "texture": "options_handleft",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.4
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": -0.05,
+          "y_offset": 0.05,
+          "absolute": false
+        }
+      },
+      "righthand": {
+        "type": "Image",
+        "data": {
+          "texture": "options_handright",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.4
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": 0.15,
+          "y_offset": 0.05,
+          "absolute": false
+        }
+      }
+
+
+
+
+
+
+    }
+  }
+}

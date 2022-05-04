@@ -1,0 +1,102 @@
+{
+  "variables": {
+
+  },
+  "contents": {
+    "type": "Node",
+    "comment": "the root node for pause",
+    "data": {
+      "visible": false
+    },
+    "format": {
+      "type": "Anchored"
+    },
+    "children": {
+      "resume": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.40
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "pause_resume"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": -0.1,
+          "y_offset": -0.2,
+          "absolute": false
+        }
+      },
+      "home": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.40
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "pause_home"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": 0,
+          "y_offset": 0.2,
+          "absolute": false
+        }
+      },
+      "options": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.40
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "pause_options"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": 0.15,
+          "y_offset": -0.1,
+          "absolute": false
+        }
+      }
+
+
+
+
+
+
+
+    }
+  }
+}

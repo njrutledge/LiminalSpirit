@@ -9,7 +9,7 @@
 
 EnemyProperties LOST_PROPS{
 	/** Starting health of the lost */
-	3,
+	30,
 	/** Vertical speed of the lost */
 	0.0f,
 	/** Horizontal speed of the lost*/
@@ -20,6 +20,8 @@ EnemyProperties LOST_PROPS{
 	5.0f,
 	/** Density of the lost*/
 	1.0f,
+    /** Damage of the lost */
+    10,
 	/** Name of the lost*/
 	"Lost",
 };

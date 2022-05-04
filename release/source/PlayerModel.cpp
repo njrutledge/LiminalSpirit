@@ -53,9 +53,20 @@ bool PlayerModel::init(const cugl::Vec2& pos, const cugl::Size& size, float scal
         _health = PLAYER_HEALTH;
         _faceRight = true;
         _isInvincible = false;
+        _isStunned = false;
         _isGrounded = true;
+        _isJumping = false;
         _isMovingUp = false;
         _hasJustLanded = false;
+        _isDashing = false;
+        _rangedAttackRight = true;
+        _isStunned = false;
+        _movement = 0;
+        _walkTime = 0;
+        _idleTime = 0;
+        _jumpTime = 0;
+        _invincibilityTime = 0;
+        _postStunInvincibilityTimer = 0;
 
         return true;
     }
@@ -153,6 +164,12 @@ void PlayerModel::reset(Vec2 pos) {
     _hasJustLanded = false;
     _isGrounded = true;
     _isInvincible = false;
+    _invincibilityTime = 0;
+    _postStunInvincibilityTimer = 0;
+    _walkTime = 0;
+    _idleTime = 0;
+    _jumpTime =  0;
+    _isStunned = false;
 }
 
 void PlayerModel::setVX(float value) {

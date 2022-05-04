@@ -9,7 +9,7 @@
 
 EnemyProperties PHANTOM_PROPS{
 	/** Starting health of the phantom */
-	4,
+	20,
 	/** Vertical speed of the phantom */
 	2.0f,
 	/** Horizontal speed of the phantom*/
@@ -20,6 +20,8 @@ EnemyProperties PHANTOM_PROPS{
 	8.0f,
 	/** Density of the phantom */
 	0.0f,
+    /** Damage of the phantom */
+    5,
 	/** Name of the phantom*/
 	"Phantom",
 };

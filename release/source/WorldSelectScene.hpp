@@ -60,6 +60,18 @@ protected:
   std::shared_ptr<cugl::scene2::Button> _shroomButton;
   std::shared_ptr<cugl::scene2::Button> _forestButton;
 
+  std::shared_ptr<cugl::scene2::SceneNode> _caveButtonBack;
+  std::shared_ptr<cugl::scene2::SceneNode> _shroomButtonBack;
+  std::shared_ptr<cugl::scene2::SceneNode> _forestButtonBack;
+
+  float _timerA;
+    
+    float _timerB;
+    
+    float _timerC;
+
+
+
   /** the player choice of the world select menu */
   Choice _choice = Choice::MENU;
 
@@ -100,10 +112,15 @@ public:
 
   Choice getChoice() { return _choice; }
 
-  void setDefaultChoice() { _choice = Choice::MENU; }
+  /** sets _choice to default, and resets the timer */
+    void setDefaultChoice() { _choice = Choice::MENU; _timerA = 0; _timerB = 0; _timerC = 0; }
 
 #pragma mark -
 #pragma mark Screen Handling
+    /**
+     * Eases motion based on relative time, and desired amplitude. [time] variable represents a full sine wave.
+     */
+    float easing(float time, float time_position, float amplitude);
   /**
    * The method called to update the screen mode.
    *

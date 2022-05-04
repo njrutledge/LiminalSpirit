@@ -152,7 +152,6 @@ bool LevelSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets, s
         });
 
     _buttonForward = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("level_select_" + biome + "_forward"));
-    _buttonForward->setPositionX(bounds.getMinX() + _buttonForward->getPositionX());
     _buttonForward->addListener([=](const std::string& name, bool down) {
         if (down) {
             _switchChoice = Choice::forward_prep;

@@ -9,7 +9,7 @@
 			"wrapT": "clamp"
 		},
 		"close-normal": {
-			"file": "textures/CloseNormal.png",
+			"file": "textures/pause_button.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
@@ -163,6 +163,13 @@
 			"wrapT": "clamp"
 
 		},
+		"spawner_ani": {
+			"file": "textures/animations/spawner_spritesheet.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
 		"player": {
 			"file": "textures/player.png",
 			"minfilter": "nearest",
@@ -212,6 +219,20 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
+		"player_charged_projectile": {
+			"file": "textures/animations/player_charge_projectile.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"player_explosion": {
+			"file": "textures/animations/player_charge_explosion.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
 		"melee_impact": {
 			"file": "textures/meleeimpact.png",
 			"minfilter": "nearest",
@@ -254,8 +275,15 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
-		"star": {
-			"file": "textures/star.png",
+		"enemy_portal": {
+			"file": "textures/enemy_portal.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"enemy_swirl": {
+			"file": "textures/enemy_portal_swirl.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
@@ -358,6 +386,28 @@
 		"background": {
 			"file": "textures/backgrounds/forest_background.png"
 		},
+		"melee_charge_HUD": {
+			"file": "textures/melee_charge_HUD.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp",
+            "atlas": {
+                "background": [ 305, 32, 409, 194 ],
+                "foreground": [ 62, 24, 166, 186 ]
+            }
+		},
+		"range_charge_HUD": {
+			"file": "textures/range_charge_HUD.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp",
+            "atlas": {
+                "background": [ 305, 32, 409, 194 ],
+                "foreground": [ 62, 24, 166, 186 ]
+            }
+		},
 		"healthbar": {
 			"file": "textures/hud/healthbar2.png",
 			"wrapS": "clamp",
@@ -378,14 +428,14 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
-		"level_select_forward": {
+		"forward_arrow": {
 			"file": "textures/menus/level_select/arrow_forward.png"
 		},
-		"level_select_backward": {
-			"file": "textures/menus/level_select/arrow_backward.png"
+		"backward_arrow": {
+			"file": "textures/menus/shared/arrow_backward.png"
 		},
-		"level_select_home": {
-			"file": "textures/menus/level_select/home.png"
+		"home": {
+			"file": "textures/menus/shared/home.png"
 		},
 		"level_select_cave_background": {
 			"file": "textures/menus/level_select/cavebackground.png"
@@ -431,6 +481,36 @@
 		},
 		"level_select_forest_treehole3": {
 			"file": "textures/menus/level_select/treehole3.png"
+		},
+		"pause_resume": {
+			"file": "textures/menus/pause/resume_button.png"
+		},
+		"pause_home": {
+			"file": "textures/menus/pause/home_button.png"
+		},
+		"pause_options": {
+			"file": "textures/menus/pause/options_button.png"
+		},
+		"swap": {
+			"file": "textures/menus/options/swap.png"
+		},
+		"options_handleft": {
+			"file": "textures/menus/options/handleft.png"
+		},
+		"options_handright": {
+			"file": "textures/menus/options/handright.png"
+		},
+		"options_button_on": {
+			"file": "textures/menus/options/button_on.png"
+		},
+		"options_button_off": {
+			"file": "textures/menus/options/button_off.png"
+		},
+		"options_rockbig": {
+			"file": "textures/menus/options/rockbig.png"
+		},
+		"options_rocksmol": {
+			"file": "textures/menus/options/rocksmol.png"
 		}
 	},
 	"fonts": {
@@ -462,6 +542,12 @@
 			"stream": true,
 			"volume": 0.2
 		},
+        "cave1Mirror": {
+            "type": "sample",
+            "file": "sounds/cave/cave1/cave1_mirror.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
 		"cave2": {
 			"type": "sample",
 			"file": "sounds/cave/cave2/cave2.ogg",
@@ -480,6 +566,12 @@
 			"stream": true,
 			"volume": 0.2
 		},
+        "cave2Mirror": {
+            "type": "sample",
+            "file": "sounds/cave/cave2/cave2_mirror.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
 		"mushroom1": {
 			"type": "sample",
 			"file": "sounds/mushroom/mush1/mushroom1.ogg",
@@ -498,6 +590,12 @@
 			"stream": true,
 			"volume": 0.2
 		},
+        "mushroom1Mirror": {
+            "type": "sample",
+            "file": "sounds/mushroom/mush1/mush1_mirror.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
 		"mushroom2": {
 			"type": "sample",
 			"file": "sounds/mushroom/mush2/mushroom2.ogg",
@@ -516,6 +614,12 @@
 			"stream": true,
 			"volume": 0.2
 		},
+        "mushroom2Mirror": {
+            "type": "sample",
+            "file": "sounds/mushroom/mush2/mush2_mirror.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
 		"menu": {
 			"type": "sample",
 			"file": "sounds/LiminalMenu.ogg",
@@ -554,7 +658,9 @@
 		}
 	},
 	"widgets": {
-		"levelselect":  "widgets/levelselect.json"
+		"levelselect": "widgets/levelselect.json",
+		"pause": "widgets/pause.json",
+		"options": "widgets/options.json"
 	},
 	"scene2s": {
 		"cave": {
@@ -652,11 +758,42 @@
 					"layout": {
 						"x_anchor": "left",
 						"y_anchor": "top",
-						"x_offset": 0,
+						"x_offset": 0.05,
 						"y_offset": 0,
 						"absolute": false
 					}
-				}
+				},
+                "range_charge":{
+                    "type": "Progress",
+                    "data": {
+                        "anchor": [
+                            1,
+                            1
+                        ],
+                        "background": "range_charge_HUD_background",
+                        "foreground": "range_charge_HUD_foreground",
+                        "scale": 0.4
+                    },
+                    "layout": {
+                        "x_anchor": "right",
+                        "y_anchor": "middle",
+                        "x_offset": -0.01,
+                        "y_offset": 0.25,
+                        "absolute": false
+                    }
+                }
+			}
+		},
+		"pauseScene": {
+			"type": "Widget",
+			"data": {
+				"key": "pause"
+			}
+		},
+		"optionScene": {
+			"type": "Widget",
+			"data": {
+				"key": "options"
 			}
 		},
 		"main_menu": {
@@ -789,7 +926,7 @@
 						"x_anchor": "center",
 						"y_anchor": "middle",
 						"y_offset": -0.055,
-						"x_offset": -0.385,
+						"x_offset": -0.25,
 						"absolute": false
 					}
 				},
@@ -815,7 +952,7 @@
 						"x_anchor": "center",
 						"y_anchor": "middle",
 						"y_offset": -0.060,
-						"x_offset": -0.380,
+						"x_offset": -0.245,
 						"absolute": false
 					}
 				},
@@ -876,8 +1013,8 @@
 					"layout": {
 						"x_anchor": "center",
 						"y_anchor": "middle",
-						"y_offset": -0.265,
-						"x_offset": 0.377,
+						"y_offset": -0.24,
+						"x_offset": 0.247,
 						"absolute": false
 					}
 				},
@@ -902,8 +1039,8 @@
 					"layout": {
 						"x_anchor": "center",
 						"y_anchor": "middle",
-						"y_offset": -0.275,
-						"x_offset": 0.380,
+						"y_offset": -0.25,
+						"x_offset": 0.25,
 						"absolute": false
 					}
 				}
@@ -934,7 +1071,7 @@
 					"fg_scale": 0.58,
 					"fg_texture": "level_select_shroom_foreground",
 					"fg_layout_y": "bottom",
-					"fg_anchor": [0.5, 0],
+					"fg_anchor": [ 0.5, 0 ],
 					"button1_texture": "level_select_shroom_shroom1",
 					"button2_texture": "level_select_shroom_shroom2",
 					"button3_texture": "level_select_shroom_shroom3"
@@ -956,28 +1093,36 @@
 					"button1_yoff": -0.1,
 					"button2_yoff": -0.1,
 					"button3_yoff": -0.1,
-					"button1_scale":0.5,
+					"button1_scale": 0.5,
 					"button2_scale": 0.5,
-					"button3_scale":0.5
+					"button3_scale": 0.5
 				}
 			}
 		}
 	},
 	"jsons": {
-		"cave1": "json/levels/surround.json",
-        "shroom1": "json/levels/musheasy.json",
-		"shroom2": "json/levels/battlefield.json",
-        "shroom3": "json/levels/mush0.json",
-        "shroom4": "json/levels/mush1.json",
-        "shroom5": "json/levels/mush2.json",
-        "shroom6": "json/levels/mush3.json",
-        "shroom7": "json/levels/mushmush.json",
+		"cave1": "json/levels/cave/cave0.json",
+		"cave2": "json/levels/cave/cave1.json",
+		"cave3": "json/levels/cave/cave2.json",
+		"cave4": "json/levels/cave/cave4.json",
+		"cave5": "json/levels/cave/cave5.json",
+		"cave6": "json/levels/cave/cave6.json",
+		"cave7": "json/levels/cave/cave7.json",
+		"cave8": "json/levels/cave/cave8.json",
+		"shroom1": "json/levels/unused/testspawner.json",
+		"shroom2": "json/levels/shroom/musheasy2.json",
+		"shroom3": "json/levels/shroom/musheasy3.json",
+		"shroom4": "json/levels/shroom/battlefield.json",
+		"shroom5": "json/levels/shroom/mush0.json",
+		"shroom6": "json/levels/shroom/mush1.json",
+		"shroom7": "json/levels/shroom/mush2.json",
+		"shroom8": "json/levels/shroom/mush3.json",
+		"shroom9": "json/levels/shroom/mushmush.json",
 		"levelt": "json/levels/levelt.json",
-		"cave2": "json/levels/scaffold.json",
 		"level2": "json/levels/level2.json",
-		"forest1": "json/levels/stack.json",
-		"forest2": "json/levels/forestation.json",
-		"particles": "json/levels/particles.json",
+		"forest1": "json/levels/forest/stack.json",
+		"forest2": "json/levels/forest/forestation.json",
+		"particles": "json/particles.json",
 		"BOSS": "json/levels/BOSS.json"
 	}
 }
