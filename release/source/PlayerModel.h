@@ -119,6 +119,9 @@ protected:
 
 	/** Time passed since last jump frame */
 	float _jumpTime;
+
+	/** Time passed since last post invinciblity blink */
+	float _postStunInvincibilityTimer;
     
     /** Time player will drop through platforms */
     float _dropTime;
@@ -297,6 +300,12 @@ public:
 
 	/** Sets the jump animation time */
 	void setJumpAnimationTimer(float value) { _jumpTime = value; }
+
+	/** Returns the amount of time left for post stunned invincibility */
+	float getPostStunnedInvincibilityTimer() { return _postStunInvincibilityTimer; }
+
+	/** Sets the post stun invincibility timer */
+	void setPostStunnedInvincibilityTimer(float value) { _postStunInvincibilityTimer = value; }
     
     /** Gets the drop time */
     float getDropTime() { return _dropTime; }

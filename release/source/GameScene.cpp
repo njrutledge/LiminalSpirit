@@ -1658,8 +1658,17 @@ void GameScene::updateSwipesAndAttacks(float timestep)
         }
     }
 
-    if (_player->getInvincibilityTimer() <= 1) {
+    if (_player->getInvincibilityTimer() <= .5f) {
         _player->setIsStunned(false);
+    }
+
+    if (_player->getInvincibilityTimer() > 0 && _player->getPostStunnedInvincibilityTimer() >= 0.15 && !_player->isStunned()) {
+        _player->getSceneNode()->setVisible(!_player->getSceneNode()->isVisible());
+        _player->setPostStunnedInvincibilityTimer(0);
+    }
+
+    if (_player->getInvincibilityTimer() < 0) {
+        _player->getSceneNode()->setVisible(true);
     }
 
     if (_dashTime > 0 && _dashTime < 0.6f)
@@ -1668,6 +1677,7 @@ void GameScene::updateSwipesAndAttacks(float timestep)
     }
 
     _player->setInvincibilityTimer(_player->getInvincibilityTimer() - timestep);
+    _player->setPostStunnedInvincibilityTimer(_player->getPostStunnedInvincibilityTimer() + timestep);
     _world->update(timestep);
 
     for (auto it = _attacks->_pending.begin(); it != _attacks->_pending.end(); ++it)
@@ -2672,12 +2682,6 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     std::shared_ptr<Texture> image = _assets->get<Texture>(PLAYER_WALK_TEXTURE);
     std::shared_ptr<Texture> hitboxImage = _assets->get<Texture>(PLAYER_TEXTURE);
     _player = PlayerModel::alloc(playerPos + Vec2(0, .5), hitboxImage->getSize() / _scale / 8, _scale);
-    _player->setRangedAttackRight(true);
-    _player->setIsStunned(false);
-    _player->setMovement(0);
-    _player->setWalkAnimationTimer(0);
-    _player->setIdleAnimationTimer(0);
-    _player->setJumpAnimationTimer(0);
     std::shared_ptr<scene2::SpriteNode> sprite = scene2::SpriteNode::alloc(image, 4, 8);
     sprite->setFrame(0);
     _prevFrame = 0;
@@ -2766,6 +2770,7 @@ void GameScene::reset()
     // Reset player position & health & other member fields
     Vec2 playerPos = PLAYER_POS;
     _player->reset(playerPos);
+    _player->getSceneNode()->setVisible(true);
 
     // Remove all enemies
     auto eit = _enemies.begin();
