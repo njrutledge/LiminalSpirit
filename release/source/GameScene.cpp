@@ -312,6 +312,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _pauseScene->setContentSize(dimen);
     _pauseScene->doLayout();
 
+    float buttonScale = _scale/32.0f;
+
     addChildWithName(_pauseScene, "pause");
     _returnButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("pauseScene_resume"));
     _returnButton->addListener([=](const std::string& name, bool down)
@@ -320,7 +322,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
                 _pause = false;
             } });
-    _returnButton->setScale(.4*boundScale);
+    _returnButton->setScale(.4*buttonScale);
 
     _homeButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("pauseScene_home"));
     _homeButton->addListener([=](const std::string& name, bool down)
@@ -329,7 +331,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
                 _back = true;
             } });
-    _homeButton->setScale(.4*boundScale);
+    _homeButton->setScale(.4*buttonScale);
 
     _optionButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("pauseScene_options"));
     _optionButton->addListener([=](const std::string& name, bool down)
@@ -338,7 +340,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
                 _options = true;
             } });
-    _optionButton->setScale(.4 * boundScale);
+    _optionButton->setScale(.4 * buttonScale);
 
 
 
@@ -356,7 +358,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
                 _options = false;
                 _pause = true;
             } });
-    _optionReturnButton->setScale(.4 * boundScale);
+    _optionReturnButton->setScale(.4 * buttonScale);
 
     _swapHandsButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_swap"));
     _swapHandsButton->addListener([=](const std::string& name, bool down)
@@ -365,7 +367,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
 
             } });
-    _swapHandsButton->setScale(.4 * boundScale);
+    _swapHandsButton->setScale(.4 * buttonScale);
 
     
     _musicButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_music"));
@@ -375,7 +377,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
 
             } });
-    _musicButton->setScale(.4 * boundScale);
+    _musicButton->setScale(.4 * buttonScale);
 
     _sfxButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_sfx"));
     _sfxButton->addListener([=](const std::string& name, bool down)
@@ -384,7 +386,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
 
             } });
-    _sfxButton->setScale(.4 * boundScale);
+    _sfxButton->setScale(.4 * buttonScale);
 
 
 
