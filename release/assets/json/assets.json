@@ -387,10 +387,18 @@
 			"file": "textures/backgrounds/forest_background.png"
 		},
         "melee_charge_HUD": {
-            "file": "textures/backgrounds/melee_charge_HUD.png"
+            "file": "textures/melee_charge_HUD.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
         },
         "range_charge_HUD": {
-            "file": "textures/backgrounds/range_charge_HUD.png"
+            "file": "textures/range_charge_HUD.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
         },
 		"healthbar": {
 			"file": "textures/hud/healthbar2.png",
