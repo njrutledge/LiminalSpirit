@@ -300,10 +300,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
 
     // Grab healthbar
     _healthbar = std::dynamic_pointer_cast<scene2::ProgressBar>(assets->get<scene2::SceneNode>("HUD_healthbar"));
+    _range_charge = std::dynamic_pointer_cast<scene2::ProgressBar>(assets->get<scene2::SceneNode>("HUD_range_charge"));
     auto HUD = assets->get<scene2::SceneNode>("HUD");
     HUD->setContentSize(dimen);
     HUD->doLayout();
-    HUD->setPosition(offset);
 
     scene->addChildWithName(HUD, "HUD");
 
@@ -2032,8 +2032,7 @@ void GameScene::updateHealthbar()
     {
         _healthbar->setProgress(prog);
     }
-    _healthbar->setAngle(M_PI/2.0f);
-    _healthbar->setPosition(50, 50);
+    
 }
 
 void GameScene::updateCamera()
