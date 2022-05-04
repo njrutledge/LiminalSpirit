@@ -25,26 +25,8 @@
         "layout": {
           "x_anchor": "center",
           "y_anchor": "middle",
-          "x_offset": -0.15,
-          "y_offset": -0.2,
-          "absolute": false
-        }
-      },
-      "options_rocksmol": {
-        "type": "Image",
-        "data": {
-          "texture": "options_rocksmol",
-          "anchor": [
-            0.5,
-            0.5
-          ],
-          "scale": 0.4
-        },
-        "layout": {
-          "x_anchor": "center",
-          "y_anchor": "middle",
-          "x_offset": -0.33,
-          "y_offset": -0.33,
+          "x_offset": 0,
+          "y_offset": 0,
           "absolute": false
         }
       },
@@ -62,15 +44,15 @@
           "up": {
             "type": "Image",
             "data": {
-              "texture": "backward_arrow"
+              "texture": "options_rocksmol"
             }
           }
         },
         "layout": {
           "x_anchor": "center",
           "y_anchor": "middle",
-          "x_offset": -0.33,
-          "y_offset": -0.33,
+          "x_offset": -0.28,
+          "y_offset": -0.25,
           "absolute": false
         }
       },
@@ -95,8 +77,8 @@
         "layout": {
           "x_anchor": "center",
           "y_anchor": "middle",
-          "x_offset": -0.12,
-          "y_offset": -0.17,
+          "x_offset": 0.05,
+          "y_offset": 0.1,
           "absolute": false
         }
       },
@@ -128,8 +110,8 @@
         "layout": {
           "x_anchor": "center",
           "y_anchor": "middle",
-          "x_offset": -0.18,
-          "y_offset": -0.3,
+          "x_offset": -0.05,
+          "y_offset": -0.15,
           "absolute": false
         }
       },
@@ -161,8 +143,8 @@
         "layout": {
           "x_anchor": "center",
           "y_anchor": "middle",
-          "x_offset": -0.07,
-          "y_offset": -0.3,
+          "x_offset": 0.12,
+          "y_offset": -0.15,
           "absolute": false
         }
       },
@@ -179,8 +161,8 @@
         "layout": {
           "x_anchor": "center",
           "y_anchor": "middle",
-          "x_offset": -0.18,
-          "y_offset": -0.17,
+          "x_offset": -0.05,
+          "y_offset": 0.1,
           "absolute": false
         }
       },
@@ -197,26 +179,8 @@
         "layout": {
           "x_anchor": "center",
           "y_anchor": "middle",
-          "x_offset": -0.06,
-          "y_offset": -0.17,
-          "absolute": false
-        }
-      },
-      "options": {
-        "type": "Image",
-        "data": {
-          "texture": "pause_options",
-          "anchor": [
-            0.5,
-            0.5
-          ],
-          "scale": 0.33
-        },
-        "layout": {
-          "x_anchor": "center",
-          "y_anchor": "middle",
-          "x_offset": -0.2,
-          "y_offset": -0.07,
+          "x_offset": 0.15,
+          "y_offset": 0.1,
           "absolute": false
         }
       }

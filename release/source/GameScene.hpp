@@ -214,6 +214,8 @@ protected:
 
     bool _options;
 
+    std::shared_ptr<scene2::Button> _pauseButton;
+
     std::shared_ptr<scene2::SceneNode> _pauseScene;
 
     std::shared_ptr<scene2::Button> _returnButton;
