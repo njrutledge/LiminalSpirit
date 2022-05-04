@@ -75,9 +75,9 @@ void SoundController::LevelMusic::play_music(std::vector<bool> e, GameState s) {
                 break;
             case 2:
                 if (e[2]) {
-                    _mNode->setGain(clampf(_mNode->getGain() + (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME * 0.8f));
+                    _mNode->setGain(clampf(_mNode->getGain() + (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME * 0.9f));
                 } else {
-                    _mNode->setGain(clampf(_mNode->getGain() - (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME * 0.8f));
+                    _mNode->setGain(clampf(_mNode->getGain() - (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME * 0.9f));
                 }
             default:
                 break;
