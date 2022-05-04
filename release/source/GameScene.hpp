@@ -194,11 +194,12 @@ protected:
     /** Boolean check for walking sound effect timing*/
     bool _step;
 
-    /** health bar nodes */
-    std::shared_ptr<scene2::PolygonNode> _healthback;
-    std::shared_ptr<scene2::PolygonNode> _health;
+
     /** healthbar */
     std::shared_ptr<scene2::ProgressBar> _healthbar;
+    
+    /** range charge indicator */
+    std::shared_ptr<scene2::ProgressBar> _range_charge;
 
     bool _winInit;
 

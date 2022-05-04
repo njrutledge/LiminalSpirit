@@ -391,14 +391,22 @@
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
-			"wrapT": "clamp"
+			"wrapT": "clamp",
+            "atlas": {
+                "background": [ 305, 32, 409, 194 ],
+                "foreground": [ 62, 24, 166, 186 ]
+            }
 		},
 		"range_charge_HUD": {
 			"file": "textures/range_charge_HUD.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
-			"wrapT": "clamp"
+			"wrapT": "clamp",
+            "atlas": {
+                "background": [ 305, 32, 409, 194 ],
+                "foreground": [ 62, 24, 166, 186 ]
+            }
 		},
 		"healthbar": {
 			"file": "textures/hud/healthbar2.png",
@@ -750,11 +758,30 @@
 					"layout": {
 						"x_anchor": "left",
 						"y_anchor": "top",
-						"x_offset": 0,
+						"x_offset": 0.05,
 						"y_offset": 0,
 						"absolute": false
 					}
-				}
+				},
+                "range_charge":{
+                    "type": "Progress",
+                    "data": {
+                        "anchor": [
+                            1,
+                            1
+                        ],
+                        "background": "range_charge_HUD_background",
+                        "foreground": "range_charge_HUD_foreground",
+                        "scale": 0.4
+                    },
+                    "layout": {
+                        "x_anchor": "right",
+                        "y_anchor": "middle",
+                        "x_offset": -0.01,
+                        "y_offset": 0.25,
+                        "absolute": false
+                    }
+                }
 			}
 		},
 		"pauseScene": {
