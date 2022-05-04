@@ -1697,6 +1697,7 @@ void GameScene::updateSwipesAndAttacks(float timestep)
 
     if (_player->getInvincibilityTimer() < 0) {
         _player->getSceneNode()->setVisible(true);
+        _player->getSceneNode()->setColor(Color4(255,255,255,255));
     }
 
     if (_dashTime > 0 && _dashTime < 0.6f)
