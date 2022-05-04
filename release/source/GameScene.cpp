@@ -834,12 +834,53 @@ void GameScene::updateAnimations(float timestep)
         }
     }
 
+    _meleeArm->setAttackAngle(0);
     // Melee Arm
     if (_player->isStunned())
     {
         mSprite->setFrame(22);
         _meleeArm->setLastType(Glow::MeleeState::cool);
         _meleeArm->setAnimeTimer(0);
+    }
+    else if (_player->isDashing()) {
+        if (_player->isFacingRight()){
+            _meleeArm->setAttackAngle(_player->getDashAngle());
+        }
+        else {
+            _meleeArm->setAttackAngle(fmod(_player->getDashAngle() + 180, 360));
+        }
+        if (mSprite->getFrame() < 28) {
+            if (_player->isFacingRight())
+            {
+                mSprite->setFrame(34);
+            }
+            else
+            {
+                mSprite->setFrame(28);
+            }
+            _meleeArm->setAnimeTimer(0);
+        }
+        else {
+            if (_meleeArm->getAnimeTimer() > 0.06f) {
+                if (_player->isFacingRight())
+                {
+                    int nextFrame = mSprite->getFrame() - 1;
+                    if (nextFrame < 29) {
+                        nextFrame = 33;
+                    }
+                    mSprite->setFrame(nextFrame);
+                }
+                else
+                {
+                    int nextFrame = mSprite->getFrame() + 1;
+                    if (nextFrame > 33) {
+                        nextFrame = 29;
+                    }
+                    mSprite->setFrame(nextFrame);
+                }
+                _meleeArm->setAnimeTimer(0);
+            }
+        }
     }
     else if (_meleeArm->getLastType() == Glow::MeleeState::cool)
     {
@@ -1069,6 +1110,9 @@ void GameScene::updateMeleeArm(float timestep)
     ////MELEE ARM MUST STAY AT BOTTOM
     // Determining arm positions and offsets
     float offsetArm2 = -3.5f;
+    if (_player->isDashing()) {
+        offsetArm2 = 1.0f;
+    }
 
     // change based on arm attacks
     if ((!_player->isFacingRight() ||                                                                                                                                                // player facing left or attacks left
@@ -1092,7 +1136,11 @@ void GameScene::updateMeleeArm(float timestep)
     {
         upDownY2 = -1 * spacing + upDownY2;
     }
-    _meleeArm->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY2 / spacing / 3) - 0.1f);
+    if (_player->isDashing()) {
+        _meleeArm->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY2 / spacing / 3) + 1.0f);
+    } else {
+        _meleeArm->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY2 / spacing / 3) - 0.1f);
+    }
 }
 
 void GameScene::updateEnemies(float timestep)
@@ -1397,22 +1445,30 @@ void GameScene::updateSwipesAndAttacks(float timestep)
             _dashXVel = 20;
             _dashYVel = 1;
             _dashTime = 0;
+            _player->setIsDashing(true);
+            _player->setDashAngle(0);
         }
         else if (_swipes.getRightSwipe() == SwipeController::chargedLeft)
         {
             _dashXVel = -20;
             _dashYVel = 1;
             _dashTime = 0;
+            _player->setIsDashing(true);
+            _player->setDashAngle(180);
         }
         else if (_swipes.getRightSwipe() == SwipeController::chargedUp)
         {
             _dashYVel = 20;
             _dashTime = 0;
+            _player->setIsDashing(true);
+            _player->setDashAngle(90);
         }
         else if (_swipes.getRightSwipe() == SwipeController::chargedDown)
         {
             _dashYVel = -23;
             _dashTime = 0;
+            _player->setIsDashing(true);
+            _player->setDashAngle(270);
         }
         // If the dash velocities are set, change player velocity if dash time is not complete
         if (_dashXVel || _dashYVel)
@@ -1464,6 +1520,7 @@ void GameScene::updateSwipesAndAttacks(float timestep)
             {
                 _dashXVel = 0;
                 _dashYVel = 0;
+                _player->setIsDashing(false);
             }
         }
         else

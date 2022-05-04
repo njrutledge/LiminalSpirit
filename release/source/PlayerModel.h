@@ -102,6 +102,12 @@ protected:
     /** if player is invincible */
     bool _isInvincible;
     
+    /** if player is dash attacking*/
+    bool _isDashing;
+    
+    /** Angle the player is dashing at in degrees */
+    float _dashAngle;
+    
     /** Duration of enemy invincibility */
     float _invincibilityTime;
 
@@ -256,6 +262,18 @@ public:
 	/** True if the player is stunned*/
 	bool isStunned() { return _isStunned; }
     
+    /** Sets whether the player is dashing */
+    void setIsDashing(bool dashing) { _isDashing = dashing; }
+
+    /** True if the player is dashing */
+    bool isDashing() { return _isDashing; }
+    
+    /** True if the player is dashing */
+    float getDashAngle() { return _dashAngle; }
+    
+    /** Sets whether the player is dashing */
+    void setDashAngle(float angle) { _dashAngle = angle; }
+
     /** Returns amount of invincibility time remaining */
     float getInvincibilityTimer() { return _invincibilityTime; }
     
