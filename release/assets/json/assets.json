@@ -1043,7 +1043,7 @@
         "cave6": "json/levels/cave/cave6.json",
         "cave7": "json/levels/cave/cave7.json",
         "cave8": "json/levels/cave/cave8.json",
-        "shroom1": "json/levels/shroom/musheasy.json",
+        "shroom1": "json/levels/unused/testspawner.json",
         "shroom2": "json/levels/shroom/musheasy2.json",
         "shroom3": "json/levels/shroom/musheasy3.json",
         "shroom4": "json/levels/shroom/battlefield.json",
