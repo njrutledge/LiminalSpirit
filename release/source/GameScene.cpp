@@ -320,6 +320,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
                 _pause = false;
             } });
+    _returnButton->setScale(boundScale);
 
     _homeButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("pauseScene_home"));
     _homeButton->addListener([=](const std::string& name, bool down)
@@ -328,6 +329,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
                 _back = true;
             } });
+    _homeButton->setScale(boundScale);
 
     _optionButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("pauseScene_options"));
     _optionButton->addListener([=](const std::string& name, bool down)
@@ -336,6 +338,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
                 _options = true;
             } });
+    _optionButton->setScale(boundScale);
+
 
 
     _optionScene = _assets->get<scene2::SceneNode>("optionScene");
@@ -352,6 +356,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
                 _options = false;
                 _pause = true;
             } });
+    _optionReturnButton->setScale(boundScale);
 
     _swapHandsButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_swap"));
     _swapHandsButton->addListener([=](const std::string& name, bool down)
@@ -360,6 +365,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
 
             } });
+    _swapHandsButton->setScale(boundScale);
+
+    
     _musicButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_music"));
     _musicButton->addListener([=](const std::string& name, bool down)
         {
@@ -367,7 +375,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
 
             } });
-
+    _musicButton->setScale(boundScale);
 
     _sfxButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_sfx"));
     _sfxButton->addListener([=](const std::string& name, bool down)
@@ -376,6 +384,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
 
             } });
+    _sfxButton->setScale(boundScale);
 
 
 
@@ -1670,8 +1679,15 @@ void GameScene::updateSwipesAndAttacks(float timestep)
         _player->setIsStunned(false);
     }
 
-    if (_player->getInvincibilityTimer() > 0 && _player->getPostStunnedInvincibilityTimer() >= 0.15 && !_player->isStunned()) {
-        _player->getSceneNode()->setVisible(!_player->getSceneNode()->isVisible());
+    if (_player->getInvincibilityTimer() > 0 && _player->getPostStunnedInvincibilityTimer() >= 0.1 && !_player->isStunned()) {
+        //_player->getSceneNode()->setVisible(!_player->getSceneNode()->isVisible());
+        int a = _player->getSceneNode()->getColor().a;
+        if (a == 255){
+            a = 255/2;
+        } else {
+            a = 255;
+        }
+        _player->getSceneNode()->setColor(Color4(255,255,255,a));
         _player->setPostStunnedInvincibilityTimer(0);
     }
 
@@ -2779,6 +2795,7 @@ void GameScene::reset()
     Vec2 playerPos = PLAYER_POS;
     _player->reset(playerPos);
     _player->getSceneNode()->setVisible(true);
+    _player->getSceneNode()->setColor(Color4::WHITE);
 
     // Remove all enemies
     auto eit = _enemies.begin();
