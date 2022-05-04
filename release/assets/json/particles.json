@@ -33,7 +33,7 @@
          "speedRange": [1, 1],
 	 "startSizeRange": [1, 1],
 	 "sizeChangeRateRange": [0.005, 0.005],
-	 "maxSizeChangeTime": 10
+	 "maxSizeChangeTime": 100
      },
     "charged": {
 	 "burstParticles": 1, 

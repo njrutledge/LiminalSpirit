@@ -2048,12 +2048,17 @@ void GameScene::createSpawnParticles()
     positions = _spawn_pos.at(_nextWaveNum);
 
     std::shared_ptr<Texture> portal_swirl = _assets->get<Texture>("enemy_swirl");
+    std::shared_ptr<Texture> portal = _assets->get<Texture>("enemy_portal");
 
     for (int i = 0; i < positions.size(); i++)
     {
         std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("spawning"), Vec2(0, 0));
+        std::shared_ptr<ParticlePool> pool2 = ParticlePool::allocPoint(_particleInfo->get("spawning"), Vec2(0, 0));
         std::shared_ptr<ParticleNode> spawning = ParticleNode::alloc(positions[i] * _scale, portal_swirl, pool);
-        spawning->setScale(0.1f);
+        std::shared_ptr<ParticleNode> spawning2 = ParticleNode::alloc(positions[i] * _scale, portal, pool2);
+        spawning->setScale(0.15f);
+        spawning2->setScale(0.15f);
+        _worldnode->addChildWithTag(spawning2, 100);
         _worldnode->addChildWithTag(spawning, 100);
     }
 }
@@ -2419,7 +2424,7 @@ void GameScene::createEnemies(int wave)
             _spawner_pos.push_back(enemyPos);
             std::shared_ptr<Texture> spawnerHitBoxImage = _assets->get<Texture>("glutton");
             std::shared_ptr<Texture> spawnerImage = _assets->get<Texture>("spawner_ani");
-            std::shared_ptr<Spawner> spawner = Spawner::alloc(enemyPos, spawnerImage->getSize(), spawnerHitBoxImage->getSize() / _scale / 10, _scale);
+            std::shared_ptr<Spawner> spawner = Spawner::alloc(enemyPos, Vec2(spawnerHitBoxImage->getSize().width, spawnerHitBoxImage->getSize().height), spawnerHitBoxImage->getSize() / _scale / 10, _scale);
             std::shared_ptr<scene2::SpriteNode> spawnerSprite = scene2::SpriteNode::alloc(spawnerImage, 5, 5);
             spawner->setSpawned(false);
             spawner->setSceneNode(spawnerSprite);

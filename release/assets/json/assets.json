@@ -275,6 +275,13 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
+		"enemy_portal": {
+			"file": "textures/enemy_portal.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
 		"enemy_swirl": {
 			"file": "textures/enemy_portal_swirl.png",
 			"minfilter": "nearest",
