@@ -359,6 +359,7 @@ void GameScene::dispose()
     // This should work because smart pointers free themselves when vector is cleared
     _enemies.clear();
     _platforms.clear();
+    _spawners.clear();
     if (_attacks)
     {
         _attacks->_current.clear();
@@ -1919,6 +1920,7 @@ void GameScene::updateSpawnEnemies(float timestep)
                 {
                     while (diff_count != 0)
                     {
+                        _spawners.at(index)->setSpawned(true);
                         createSpawnerEnemy(index, name);
 
                         _spawner_enemy_types[index][name].current_count++;
@@ -2333,6 +2335,7 @@ void GameScene::createEnemies(int wave)
             spawnerSprite->setFrame(0);
             addObstacle(spawner, spawnerSprite, true);
             _enemies.push_back(spawner);
+            _spawners.push_back(spawner);
             auto spawnerEnemiesMap = _spawner_enemy_types.at(_spawner_ind);
             for (auto it = spawnerEnemiesMap.begin(); it != spawnerEnemiesMap.end(); ++it)
             {
@@ -2340,6 +2343,7 @@ void GameScene::createEnemies(int wave)
                 string spawnerEnemyName = it->first;
                 while (index != 0)
                 {
+                    spawner->setSpawned(true);
                     createSpawnerEnemy(_spawner_ind, spawnerEnemyName);
                     _spawner_enemy_types[_spawner_ind][spawnerEnemyName].current_count++;
                     index--;
@@ -2661,6 +2665,7 @@ void GameScene::reset()
         eit = _enemies.erase(eit);
     }
 
+    _spawners.clear();
     // Reset wave spawning
     _timer = 0.0f;
     _nextWaveNum = 0;
