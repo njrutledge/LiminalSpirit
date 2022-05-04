@@ -134,10 +134,10 @@ void SoundController::init(std::shared_ptr<cugl::AssetManager> &assets) {
 void SoundController::play_menu_music() {
     
     if (_state != MENU) {
-        _state = MENU;
         cugl::AudioEngine::get()->getMusicQueue()->advance(0, 0.2);
         cugl::AudioEngine::get()->getMusicQueue()->enqueue(_menu, true, 0.4);
     }
+    _state = MENU;
     
 }
 
