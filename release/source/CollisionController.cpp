@@ -298,7 +298,7 @@ void CollisionController::handleAttackCollision(AttackController::Attack* attack
         }
     }
     else if ((bd && (bd->getName() == "platform" || bd->getName().find("wall")!= std::string::npos)) && attack->getType() == AttackController::p_exp_package) {
-        AC->createAttack(attack->getPosition(), 3, 0.15, 4, AttackController::p_exp, cugl::Vec2::ZERO, timer, PLAYER_RANGE, PLAYER_EXP_FRAMES);
+        AC->createAttack(attack->getPosition(), 3, 0.15, 40, AttackController::p_exp, cugl::Vec2::ZERO, timer, PLAYER_RANGE, PLAYER_EXP_FRAMES);
             attack->setInactive();
     }
     if (bd && bd->getName() == "bottomwall") {
