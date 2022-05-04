@@ -2424,7 +2424,7 @@ void GameScene::createEnemies(int wave)
             _spawner_pos.push_back(enemyPos);
             std::shared_ptr<Texture> spawnerHitBoxImage = _assets->get<Texture>("glutton");
             std::shared_ptr<Texture> spawnerImage = _assets->get<Texture>("spawner_ani");
-            std::shared_ptr<Spawner> spawner = Spawner::alloc(enemyPos, Vec2(spawnerHitBoxImage->getSize().width, spawnerHitBoxImage->getSize().height), spawnerHitBoxImage->getSize() / _scale / 10, _scale);
+            std::shared_ptr<Spawner> spawner = Spawner::alloc(enemyPos, Vec2(spawnerHitBoxImage->getSize().width, spawnerHitBoxImage->getSize().height) / _scale * 7.5, spawnerHitBoxImage->getSize() / _scale / 10, _scale);
             std::shared_ptr<scene2::SpriteNode> spawnerSprite = scene2::SpriteNode::alloc(spawnerImage, 5, 5);
             spawner->setSpawned(false);
             spawner->setSceneNode(spawnerSprite);
