@@ -25,8 +25,8 @@
         "layout": {
           "x_anchor": "center",
           "y_anchor": "middle",
-          "x_offset": -0.33,
-          "y_offset": -0.33,
+          "x_offset": -0.1,
+          "y_offset": -0.2,
           "absolute": false
         }
       },
@@ -51,8 +51,8 @@
         "layout": {
           "x_anchor": "center",
           "y_anchor": "middle",
-          "x_offset": -0.33,
-          "y_offset": -0.33,
+          "x_offset": -0.1,
+          "y_offset": -0.2,
           "absolute": false
         }
       },
@@ -69,8 +69,8 @@
         "layout": {
           "x_anchor": "center",
           "y_anchor": "middle",
-          "x_offset": -0.2,
-          "y_offset": 0,
+          "x_offset": 0,
+          "y_offset": 0.2,
           "absolute": false
         }
       },
@@ -95,8 +95,8 @@
         "layout": {
           "x_anchor": "center",
           "y_anchor": "middle",
-          "x_offset": -0.2,
-          "y_offset": -0,
+          "x_offset": 0,
+          "y_offset": 0.2,
           "absolute": false
         }
       },
@@ -113,8 +113,8 @@
         "layout": {
           "x_anchor": "center",
           "y_anchor": "middle",
-          "x_offset": -0.1,
-          "y_offset": -0.25,
+          "x_offset": 0.15,
+          "y_offset": -0.1,
           "absolute": false
         }
       },
@@ -139,8 +139,8 @@
         "layout": {
           "x_anchor": "center",
           "y_anchor": "middle",
-          "x_offset": -0.1,
-          "y_offset": -0.25,
+          "x_offset": 0.15,
+          "y_offset": -0.1,
           "absolute": false
         }
       }

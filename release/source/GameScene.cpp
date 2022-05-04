@@ -2516,12 +2516,12 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
 
     Size bsize = up->getSize();
     std::shared_ptr<scene2::Button> button = scene2::Button::alloc(scene2::PolygonNode::allocWithTexture(up));
-    button->setScale(0.75);
+    button->setScale(0.55);
     // button->setAnchor(Vec2(1, 1));
     // scene2::PolygonNode::allocWithTexture(down));
 
     // Create a callback function for the button
-    button->setName("close");
+    button->setName("pause");
     button->addListener([=](const std::string &name, bool down)
                         {
             // Only quit when the button is released
@@ -2585,7 +2585,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     addObstacle(right, rightNode, 1);
 
     // Position the button in the bottom right corner
-    button->setAnchor(Vec2::ANCHOR_CENTER);
+    button->setAnchor(Vec2(0,1));
     button->setPosition(size.width - (bsize.width + rOffset) / 2, (bsize.height + bOffset) / 2);
 
     // Add platforms to the world
