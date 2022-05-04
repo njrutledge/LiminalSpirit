@@ -1550,7 +1550,7 @@ void GameScene::updateSwipesAndAttacks(float timestep)
     }
 
     b2Vec2 playerPos = _player->getBody()->GetPosition();
-    if (_player->getInvincibilityTimer() <= 0)
+    if (!_player->isStunned())
     {
         _attacks->attackLeft(Vec2(playerPos.x, playerPos.y), _swipes.getLeftSwipe(), _swipes.getLeftAngle(), _player->isGrounded(), _timer, _sound);
         _attacks->attackRight(Vec2(playerPos.x, playerPos.y), _swipes.getRightSwipe(), _swipes.getRightAngle(), _player->isGrounded(), _timer, _sound);
@@ -1652,8 +1652,11 @@ void GameScene::updateSwipesAndAttacks(float timestep)
         if (_dashXVel == 0 && _dashYVel == 0 && _player->getInvincibilityTimer() <= 0)
         {
             _player->setIsInvincible(false);
-            _player->setIsStunned(false);
         }
+    }
+
+    if (_player->getInvincibilityTimer() <= 1) {
+        _player->setIsStunned(false);
     }
 
     if (_dashTime > 0 && _dashTime < 0.6f)
