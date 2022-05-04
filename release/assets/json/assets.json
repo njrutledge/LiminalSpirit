@@ -744,12 +744,12 @@
 						"key": "pause"
 					}
 				},
-				"optionScene": {
-					"type": "Widget",
-					"data": {
-						"key": "options"
-					}
-				}
+		"optionScene": {
+			"type": "Widget",
+			"data": {
+				"key": "options"
+			}
+		},
 		"main_menu": {
 			"type": "Node",
 			"comment": "This is the root node of the menu scene",
