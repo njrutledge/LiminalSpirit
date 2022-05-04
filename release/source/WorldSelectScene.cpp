@@ -144,7 +144,6 @@ bool WorldSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     _timer = 0;
 
-
     addChild(scene);
     return true;
 }
@@ -213,6 +212,7 @@ void WorldSelectScene::update(float timestep)
     if (_timer > 2.0) {
         _timer = 0;
     }
+
 }
 
 /**

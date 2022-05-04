@@ -56,6 +56,8 @@ protected:
   std::shared_ptr<cugl::scene2::Button> _playButton;
   std::shared_ptr<cugl::scene2::Button> _optionsButton;
 
+
+  std::shared_ptr<cugl::scene2::SceneNode> _optionScene;
   /** the player choice of this menu */
   Choice _choice = Choice::MENU;
 

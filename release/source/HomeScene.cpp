@@ -92,15 +92,15 @@ bool HomeScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
   _optionsButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("main_menu_options"));
   _optionsButton->addListener([=](const std::string& name, bool down)
       {
-          if (down) {
-              _choice = Choice::OPTIONS_PREP;
-          }
-          else if (_choice == Choice::OPTIONS_PREP) {
+          if (!down) {
               _choice = Choice::OPTIONS;
           }
       });
 
   // set buttons here
+
+  //_optionScene = _assets->get<scene2::SceneNode>("main_menu_optionScene");
+
   addChild(scene);
   return true;
 }
@@ -129,11 +129,16 @@ void HomeScene::dispose()
  */
 void HomeScene::update(float timestep)
 {
-
-    _playButton->setVisible(true);
-    _playButton->activate();
-    _optionsButton->setVisible(true);
-    _optionsButton->activate();
+    if (_choice != Choice::OPTIONS) {
+        _playButton->setVisible(true);
+        _playButton->activate();
+        _optionsButton->setVisible(true);
+        _optionsButton->activate();
+        //_optionScene->setVisible(false);
+    }
+    else {
+        //_optionScene->setVisible(true);
+    }
 }
 
 /**

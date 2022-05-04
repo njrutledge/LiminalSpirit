@@ -231,6 +231,9 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
 */
 void CollisionController::handlePlayerCollision(PlayerModel* player, physics2::Obstacle* bd, std::string* fd) {
     if (AttackController::Attack* attack = dynamic_cast<AttackController::Attack*>(bd)) {
+        if (!attack->isActive()) {
+            return;
+        }
         //TODO: Make "enemyattacksensor" a constant somewhere
         if (*(attack->getSensorName()) == "enemyattacksensor") {
             if (!player->isInvincible()) {
