@@ -474,20 +474,14 @@
 		"level_select_forest_treehole3": {
 			"file": "textures/menus/level_select/treehole3.png"
 		},
-		"pause_resume_back": {
-			"file": "textures/menus/pause/resume_shroom.png"
-		},
 		"pause_resume": {
-			"file": "textures/menus/pause/resume.png"
+			"file": "textures/menus/pause/resume_button.png"
 		},
-		"pause_home_back": {
-			"file": "textures/menus/pause/home_shroom.png"
-		},
-		"pause_options_back": {
-			"file": "textures/menus/pause/options_shroom.png"
+		"pause_home": {
+			"file": "textures/menus/pause/home_button.png"
 		},
 		"pause_options": {
-			"file": "textures/menus/pause/options.png"
+			"file": "textures/menus/pause/options_button.png"
 		},
 		"swap": {
 			"file": "textures/menus/options/swap.png"
