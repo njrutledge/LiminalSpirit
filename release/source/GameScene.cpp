@@ -587,6 +587,10 @@ void GameScene::updateSoundInputParticlesAndTilt(float timestep)
         {
             e[1] = true;
         }
+        else if (n == "Mirror")
+        {
+            e[2] = true;
+        }
     }
 
     _sound->play_level_music(_biome, e);
@@ -2602,7 +2606,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
 
     // Position the button in the bottom right corner
     button->setAnchor(Vec2(0,1));
-    button->setPosition(size.width - (bsize.width + rOffset) / 2, (bsize.height + bOffset) / 2);
+    button->setPosition(size.width - (bsize.width + rOffset) / 2, size.height - (bsize.height + bOffset) / 2);
 
     // Add platforms to the world
     Vec2 pos;

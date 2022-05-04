@@ -53,6 +53,9 @@ public:
         std::shared_ptr<cugl::Sound> _phantom;
         std::shared_ptr<cugl::audio::AudioNode> _pNode;
         
+        std::shared_ptr<cugl::Sound> _mirror;
+        std::shared_ptr<cugl::audio::AudioNode> _mNode;
+        
         std::shared_ptr<cugl::audio::AudioMixer> _mixer;
         
     public:

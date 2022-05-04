@@ -474,20 +474,14 @@
 		"level_select_forest_treehole3": {
 			"file": "textures/menus/level_select/treehole3.png"
 		},
-		"pause_resume_back": {
-			"file": "textures/menus/pause/resume_shroom.png"
-		},
 		"pause_resume": {
-			"file": "textures/menus/pause/resume.png"
+			"file": "textures/menus/pause/resume_button.png"
 		},
-		"pause_home_back": {
-			"file": "textures/menus/pause/home_shroom.png"
-		},
-		"pause_options_back": {
-			"file": "textures/menus/pause/options_shroom.png"
+		"pause_home": {
+			"file": "textures/menus/pause/home_button.png"
 		},
 		"pause_options": {
-			"file": "textures/menus/pause/options.png"
+			"file": "textures/menus/pause/options_button.png"
 		},
 		"swap": {
 			"file": "textures/menus/options/swap.png"
@@ -540,6 +534,12 @@
 			"stream": true,
 			"volume": 0.2
 		},
+        "cave1Mirror": {
+            "type": "sample",
+            "file": "sounds/cave/cave1/cave1_mirror.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
 		"cave2": {
 			"type": "sample",
 			"file": "sounds/cave/cave2/cave2.ogg",
@@ -558,6 +558,12 @@
 			"stream": true,
 			"volume": 0.2
 		},
+        "cave2Mirror": {
+            "type": "sample",
+            "file": "sounds/cave/cave2/cave2_mirror.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
 		"mushroom1": {
 			"type": "sample",
 			"file": "sounds/mushroom/mush1/mushroom1.ogg",
@@ -576,6 +582,12 @@
 			"stream": true,
 			"volume": 0.2
 		},
+        "mushroom1Mirror": {
+            "type": "sample",
+            "file": "sounds/mushroom/mush1/mush1_mirror.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
 		"mushroom2": {
 			"type": "sample",
 			"file": "sounds/mushroom/mush2/mushroom2.ogg",
@@ -594,6 +606,12 @@
 			"stream": true,
 			"volume": 0.2
 		},
+        "mushroom2Mirror": {
+            "type": "sample",
+            "file": "sounds/mushroom/mush2/mush2_mirror.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
 		"menu": {
 			"type": "sample",
 			"file": "sounds/LiminalMenu.ogg",

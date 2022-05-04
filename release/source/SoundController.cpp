@@ -31,11 +31,16 @@ void SoundController::LevelMusic::init(string biome, std::shared_ptr<cugl::Asset
     _phantom->setVolume(0.0);
     _pNode = _phantom->createNode();
     
+    _mirror = assets->get<cugl::Sound>(biome + "Mirror");
+    _mirror->setVolume(0.0);
+    _mNode = _mirror->createNode();
+    
     _mixer = cugl::audio::AudioMixer::alloc(8);
     
     _mixer->attach(7, _themeAsset->createNode());
     _mixer->attach(0, _gNode);
     _mixer->attach(1, _pNode);
+    _mixer->attach(2, _mNode);
 };
 
 /**
@@ -68,6 +73,12 @@ void SoundController::LevelMusic::play_music(std::vector<bool> e, GameState s) {
                     _pNode->setGain(clampf(_pNode->getGain() - (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME * 1.3f));
                 }
                 break;
+            case 2:
+                if (e[2]) {
+                    _mNode->setGain(clampf(_mNode->getGain() + (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME * 0.9f));
+                } else {
+                    _mNode->setGain(clampf(_mNode->getGain() - (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME * 0.9f));
+                }
             default:
                 break;
         }
@@ -80,6 +91,7 @@ void SoundController::LevelMusic::reset_mix() {
     _mixer->reset();
     _gNode->setGain(0.0f);
     _pNode->setGain(0.0f);
+    _mNode->setGain(0.0f);
 }
 
 
