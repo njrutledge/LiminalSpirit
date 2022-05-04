@@ -1354,6 +1354,14 @@ void GameScene::updateEnemies(float timestep)
                 dmgd->setScale(0.1f);
                 _worldnode->addChildWithTag(dmgd, 100);
             }
+            if ((*it)->getSpawned() || sprite->getFrame() != 0) {
+                // Using idle animation timer for spawning animation (not sure if it will have an idle)
+                if ((*it)->getIdleAnimationTimer() > 0.1f) {
+                    sprite->setFrame((sprite->getFrame() + 1) % 21);
+                    (*it)->setIdleAnimationTimer(0);
+                    (*it)->setSpawned(false);
+                }
+            }
         }
 
         if ((*it)->getInvincibilityTimer() <= 0)
@@ -1912,6 +1920,7 @@ void GameScene::updateSpawnEnemies(float timestep)
                     while (diff_count != 0)
                     {
                         createSpawnerEnemy(index, name);
+
                         _spawner_enemy_types[index][name].current_count++;
                         diff_count--;
                     }
@@ -1997,34 +2006,39 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
         // TODO Change this
         _player->getSceneNode()->setColor(Color4::GREEN);
     }
-    else if (_swipes.hasLeftChargedAttack() && _swipes.hasRightChargedAttack())
-    {
-        _player->getSceneNode()->setColor(Color4(125, 0, 255, 255));
-    }
-    else if (_swipes.hasLeftChargedAttack())
-    {
-        _player->getSceneNode()->setColor(Color4::RED);
-    }
-    else if (_swipes.hasRightChargedAttack())
-    {
-        _player->getSceneNode()->setColor(Color4::BLUE);
-    }
     else
     {
         _player->getSceneNode()->setColor(Color4::WHITE);
     }
-    // Make enemies flash red when invincible
-    for (auto it = _enemies.begin(); it != _enemies.end(); ++it)
+
+    if (_swipes.hasLeftChargedAttack())
     {
-        if ((*it)->getInvincibility())
-        {
-            (*it)->getSceneNode()->setColor(Color4::RED);
+        std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("charged"), Vec2(0, 0));
+        std::shared_ptr<Texture> melee_impact = _assets->get<Texture>("melee_impact");
+        int flip = 1;
+        if (_player->isFacingRight()) {
+            flip = -1;
         }
-        else
-        {
-            (*it)->getSceneNode()->setColor(Color4::WHITE);
-        }
+        std::shared_ptr<ParticleNode> charged = ParticleNode::alloc((_rangedArm->getPosition() - Vec2(1.25 * flip, 0)) * _scale, melee_impact, pool);
+        charged->setScale(0.025f);
+        charged->setColor(Color4::BLUE);
+        _worldnode->addChildWithTag(charged, 100);
     }
+
+    if (_swipes.hasRightChargedAttack())
+    {
+        std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("charged"), Vec2(0, 0));
+        std::shared_ptr<Texture> melee_impact = _assets->get<Texture>("melee_impact");
+        int flip = 1;
+        if (_player->isFacingRight()) {
+            flip = -1;
+        }
+        std::shared_ptr<ParticleNode> charged = ParticleNode::alloc((_meleeArm->getPosition() - Vec2(-1.5 * flip, 0)) * _scale, melee_impact, pool);
+        charged->setScale(0.025f);
+        charged->setColor(Color4::RED);
+        _worldnode->addChildWithTag(charged, 100);
+    }
+
     Scene2::render(batch);
     batch->begin(getCamera()->getCombined());
 
@@ -2101,7 +2115,6 @@ void GameScene::createSpawnerEnemy(int spawnerInd, string enemyName)
     Vec2 enemyPos;
 
     enemyPos = _spawner_pos[spawnerInd];
-
     std::shared_ptr<Texture> enemyGlowImage = _assets->get<Texture>(GLOW_TEXTURE);
     std::shared_ptr<Glow> enemyGlow = Glow::alloc(enemyPos, enemyGlowImage->getSize() / _scale, _scale);
     std::shared_ptr<scene2::PolygonNode> enemyGlowSprite = scene2::PolygonNode::allocWithTexture(enemyGlowImage);
@@ -2304,16 +2317,20 @@ void GameScene::createEnemies(int wave)
             _spawnerCount++;
 
             _spawner_pos.push_back(enemyPos);
-            std::shared_ptr<Texture> spawnerImage = _assets->get<Texture>("glutton");
-            std::shared_ptr<Spawner> spawner = Spawner::alloc(enemyPos, spawnerImage->getSize(), spawnerImage->getSize() / _scale / 10, _scale);
-            std::shared_ptr<scene2::PolygonNode> spawnerSprite = scene2::PolygonNode::allocWithTexture(spawnerImage);
+            std::shared_ptr<Texture> spawnerHitBoxImage = _assets->get<Texture>("glutton");
+            std::shared_ptr<Texture> spawnerImage = _assets->get<Texture>("spawner_ani");
+            std::shared_ptr<Spawner> spawner = Spawner::alloc(enemyPos, spawnerImage->getSize(), spawnerHitBoxImage->getSize() / _scale / 10, _scale);
+            std::shared_ptr<scene2::SpriteNode> spawnerSprite = scene2::SpriteNode::alloc(spawnerImage, 5, 5);
+            spawner->setSpawned(false);
             spawner->setSceneNode(spawnerSprite);
             spawner->setDebugColor(Color4::BLACK);
             spawner->setGlow(enemyGlow);
             spawner->setIndex(_spawner_ind);
             spawner->setPlayedDamagedParticle(false);
-            spawnerSprite->setScale(0.12f);
+            spawnerSprite->setAnchor(0.5, 0.4);
+            spawnerSprite->setScale(0.075f);
             spawnerSprite->setPriority(1.01);
+            spawnerSprite->setFrame(0);
             addObstacle(spawner, spawnerSprite, true);
             _enemies.push_back(spawner);
             auto spawnerEnemiesMap = _spawner_enemy_types.at(_spawner_ind);

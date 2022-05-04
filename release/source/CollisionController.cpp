@@ -134,7 +134,6 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
             }
             else{
                 if (!attack->hasHitEnemy(enemy)) {
-                    int fffff;
                     int damage = getDamageDealt(attack, enemy);
                     enemy->setHealth(enemy->getHealth() - damage);
                     CULog("HEALTH SET");
