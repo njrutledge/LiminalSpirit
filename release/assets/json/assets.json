@@ -763,25 +763,25 @@
 						"absolute": false
 					}
 				},
-                "range_charge":{
-                    "type": "Progress",
-                    "data": {
-                        "anchor": [
-                            1,
-                            1
-                        ],
-                        "background": "range_charge_HUD_background",
-                        "foreground": "range_charge_HUD_foreground",
-                        "scale": 0.4
-                    },
-                    "layout": {
-                        "x_anchor": "right",
-                        "y_anchor": "middle",
-                        "x_offset": -0.01,
-                        "y_offset": 0.25,
-                        "absolute": false
-                    }
-                }
+				"range_charge": {
+					"type": "Progress",
+					"data": {
+						"anchor": [
+							1,
+							1
+						],
+						"background": "range_charge_HUD_background",
+						"foreground": "range_charge_HUD_foreground",
+						"scale": 0.4
+					},
+					"layout": {
+						"x_anchor": "right",
+						"y_anchor": "middle",
+						"x_offset": -0.01,
+						"y_offset": 0.25,
+						"absolute": false
+					}
+				}
 			}
 		},
 		"pauseScene": {
@@ -970,7 +970,7 @@
 						"x_anchor": "center",
 						"y_anchor": "middle",
 						"y_offset": 0.215,
-						"x_offset": 0.025,
+						"x_offset": 0.0,
 						"absolute": false
 					}
 				},
@@ -996,7 +996,7 @@
 						"x_anchor": "center",
 						"y_anchor": "middle",
 						"y_offset": 0.205,
-						"x_offset": 0.030,
+						"x_offset": 0.005,
 						"absolute": false
 					}
 				},
@@ -1013,8 +1013,8 @@
 					"layout": {
 						"x_anchor": "center",
 						"y_anchor": "middle",
-						"y_offset": -0.24,
-						"x_offset": 0.247,
+						"y_offset": -0.14,
+						"x_offset": 0.202,
 						"absolute": false
 					}
 				},
@@ -1039,8 +1039,8 @@
 					"layout": {
 						"x_anchor": "center",
 						"y_anchor": "middle",
-						"y_offset": -0.25,
-						"x_offset": 0.25,
+						"y_offset": -0.15,
+						"x_offset": 0.2,
 						"absolute": false
 					}
 				}
