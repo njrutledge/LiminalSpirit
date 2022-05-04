@@ -312,7 +312,7 @@ void AttackController::attackRight(cugl::Vec2 p, SwipeController::SwipeAttack at
                     _melee = h3_left;
                     sound->play_player_sound(SoundController::playerSType::slashEmpty);
                 } else if (_melee == h3_left && _multiCounter < _hit_window) {
-                    _pending.emplace(Attack::alloc(p, 3, 0.1, 30, _scale, Type::p_melee, h3_left, _leftOff, ballMakyr, cugl::Vec2::ZERO, 180, left, timer, PLAYER_MELEE, 0));
+                    _pending.emplace(Attack::alloc(p, 3, 0.1, 20, _scale, Type::p_melee, h3_left, _leftOff, ballMakyr, cugl::Vec2::ZERO, 180, left, timer, PLAYER_MELEE, 0));
                     _meleeCounter = 0;
                     _melee = cool;
                     sound->play_player_sound(SoundController::playerSType::slashEmpty);
@@ -332,7 +332,7 @@ void AttackController::attackRight(cugl::Vec2 p, SwipeController::SwipeAttack at
                     _melee = h3_right;
                     sound->play_player_sound(SoundController::playerSType::slashEmpty);
                 } else if (_melee == h3_right && _multiCounter < _hit_window) {
-                    _pending.emplace(Attack::alloc(p, 3, 0.1, 30, _scale, Type::p_melee, h3_right, _rightOff, ballMakyr, cugl::Vec2::ZERO, 0, right, timer, PLAYER_MELEE, 0));
+                    _pending.emplace(Attack::alloc(p, 3, 0.1, 20, _scale, Type::p_melee, h3_right, _rightOff, ballMakyr, cugl::Vec2::ZERO, 0, right, timer, PLAYER_MELEE, 0));
                     _meleeCounter = 0;
                     _melee = cool;
                     sound->play_player_sound(SoundController::playerSType::slashEmpty);
