@@ -1,0 +1,94 @@
+{
+  "start": {
+    "type": "Button",
+    "data": {
+      "upnode": "up",
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "scale": 0.75
+    },
+    "layout": {
+      "x_anchor": "center",
+      "y_anchor": "middle",
+      "y_offset": -0.25,
+      "x_offset": 0,
+      "absolute": false
+    },
+    "children": {
+      "patchtext": {
+        "type": "Node",
+        "format": {
+          "type": "Anchored"
+        },
+        "data": {
+          "upnode": "up",
+          "size": [
+            300,
+            75
+          ]
+        },
+        "layout": {
+          "x_anchor": "fill",
+          "y_anchor": "fill"
+        },
+        "children": {
+          "up": {
+            "type": "ninepatch",
+            "format": {
+              "type": "Anchored"
+            },
+            "data": {
+              "texture": "textbutton_base",
+              "scale": 1,
+              "interior": [
+                30,
+                48,
+                604,
+                38
+              ]
+            },
+            "layout": {
+              "x_anchor": "fill",
+              "y_anchor": "fill"
+            }
+          },
+          "label": {
+            "type": "Label",
+            "format": {
+              "type": "Anchored"
+            },
+            "data": {
+              "font": "spectral",
+              "anchor": [
+                0.5,
+                0.5
+              ],
+              "text": "Click Me",
+              "foreground": [
+                255,
+                255,
+                255,
+                255
+              ],
+              "halign": "center",
+              "valign": "true middle"
+            },
+            "layout": {
+              "x_anchor": "fill",
+              "y_anchor": "fill"
+            }
+          }
+        }
+      }
+    }
+  },
+  "type": "Widget",
+  "data": {
+    "key": "textbutton",
+    "variables": {
+      "text": "Start"
+    }
+  }
+}
