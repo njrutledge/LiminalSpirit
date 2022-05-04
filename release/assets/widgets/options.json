@@ -78,7 +78,7 @@
           "x_anchor": "center",
           "y_anchor": "middle",
           "x_offset": 0.05,
-          "y_offset": 0.1,
+          "y_offset": 0.05,
           "absolute": false
         }
       },
@@ -119,7 +119,6 @@
         "type": "Button",
         "data": {
           "upnode": "up",
-          "downnode": "down",
           "anchor": [
             0.5,
             0.5
@@ -133,7 +132,7 @@
               "texture": "options_button_on"
             }
           },
-          "down": {
+          "up2": {
             "type": "Image",
             "data": {
               "texture": "options_button_down"
@@ -162,7 +161,7 @@
           "x_anchor": "center",
           "y_anchor": "middle",
           "x_offset": -0.05,
-          "y_offset": 0.1,
+          "y_offset": 0.05,
           "absolute": false
         }
       },
@@ -180,7 +179,7 @@
           "x_anchor": "center",
           "y_anchor": "middle",
           "x_offset": 0.15,
-          "y_offset": 0.1,
+          "y_offset": 0.05,
           "absolute": false
         }
       }

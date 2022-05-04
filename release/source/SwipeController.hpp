@@ -186,6 +186,10 @@ protected:
     void chargeRightAttack() {
         _rightState.isCharged = true;
     }
+
+    float getRangeCharge() {
+        return _cRangeCount / _cRCool;
+    }
     
     /**
      * Calculates the direction of the swipe and sets the state/swipe.
