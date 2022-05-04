@@ -216,6 +216,15 @@ void PlayerModel::applyForce() {
     }
 }
 
+void PlayerModel::applyAerialSustain() {
+    if (!isGrounded()) {
+        b2Vec2 vel(_body->GetLinearVelocity().x, 0);
+        _body->SetLinearVelocity(vel);
+        b2Vec2 force(0, 90);
+        _body->ApplyLinearImpulse(force, _body->GetPosition(), true);
+    }
+}
+
 /** Updates the object's physics state (outside of game logic) */
 void PlayerModel::update(float dt) {
     CapsuleObstacle::update(dt);

@@ -358,6 +358,8 @@ public:
 	void update(float dt) override;
 	/** Applies the force of the body of this enemy */
 	void applyForce();
+    
+    void applyAerialSustain();
 
 };
 

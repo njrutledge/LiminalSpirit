@@ -391,35 +391,21 @@
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
-			"wrapT": "clamp",
-            "atlas": {
-                "background": [ 305, 32, 409, 194 ],
-                "foreground": [ 62, 24, 166, 186 ]
-            }
+			"wrapT": "clamp"
 		},
 		"range_charge_HUD": {
 			"file": "textures/range_charge_HUD.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
-			"wrapT": "clamp",
-            "atlas": {
-                "background": [ 305, 32, 409, 194 ],
-                "foreground": [ 62, 24, 166, 186 ]
-            }
+			"wrapT": "clamp"
 		},
 		"healthbar": {
 			"file": "textures/hud/healthbar2.png",
 			"wrapS": "clamp",
 			"wrapT": "clamp",
 			"minfilter": "linear",
-			"magfilter": "linear",
-			"atlas": {
-				"background": [ 60, 30, 560, 140 ],
-				"foreground": [ 60, 202, 560, 312 ],
-				"leftcap": [ 60, 202, 61, 312 ],
-				"rightcap": [ 492, 202, 503, 312 ]
-			}
+			"magfilter": "linear"
 		},
 		"seed": {
 			"file": "textures/pattack.png",

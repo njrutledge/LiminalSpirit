@@ -1051,6 +1051,7 @@ void GameScene::updateAnimations(float timestep)
                 if (mSprite->getFrame() == 13)
                 {
                     mSprite->setFrame(7);
+                    _player->applyAerialSustain();
                 }
                 else
                 {
@@ -1075,6 +1076,7 @@ void GameScene::updateAnimations(float timestep)
                 if (mSprite->getFrame() > 6)
                 {
                     mSprite->setFrame(0);
+                    _player->applyAerialSustain();
                 }
                 else
                 {
@@ -1099,6 +1101,7 @@ void GameScene::updateAnimations(float timestep)
                 if (mSprite->getFrame() < 14)
                 {
                     mSprite->setFrame(14);
+                    _player->applyAerialSustain();
                 }
                 else
                 {
@@ -1123,6 +1126,7 @@ void GameScene::updateAnimations(float timestep)
                 if (mSprite->getFrame() <= 7)
                 {
                     mSprite->setFrame(13);
+                    _player->applyAerialSustain();
                 }
                 mSprite->setFrame(mSprite->getFrame() - 1);
                 _meleeArm->setAnimeTimer(0);
@@ -1145,6 +1149,7 @@ void GameScene::updateAnimations(float timestep)
                 if (mSprite->getFrame() >= 7)
                 {
                     mSprite->setFrame(6);
+                    _player->applyAerialSustain();
                 }
                 mSprite->setFrame(mSprite->getFrame() - 1);
                 _meleeArm->setAnimeTimer(0);
@@ -1166,6 +1171,7 @@ void GameScene::updateAnimations(float timestep)
                 if (mSprite->getFrame() < 13)
                 {
                     mSprite->setFrame(20);
+                    _player->applyAerialSustain();
                 }
                 mSprite->setFrame(mSprite->getFrame() - 1);
                 _meleeArm->setAnimeTimer(0);
