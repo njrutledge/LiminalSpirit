@@ -540,6 +540,12 @@
 			"stream": true,
 			"volume": 0.2
 		},
+        "cave1Mirror": {
+            "type": "sample",
+            "file": "sounds/cave/cave1/cave1_mirror.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
 		"cave2": {
 			"type": "sample",
 			"file": "sounds/cave/cave2/cave2.ogg",
@@ -558,6 +564,12 @@
 			"stream": true,
 			"volume": 0.2
 		},
+        "cave2Mirror": {
+            "type": "sample",
+            "file": "sounds/cave/cave2/cave2_mirror.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
 		"mushroom1": {
 			"type": "sample",
 			"file": "sounds/mushroom/mush1/mushroom1.ogg",
@@ -576,6 +588,12 @@
 			"stream": true,
 			"volume": 0.2
 		},
+        "mushroom1Mirror": {
+            "type": "sample",
+            "file": "sounds/mushroom/mush1/mush1_mirror.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
 		"mushroom2": {
 			"type": "sample",
 			"file": "sounds/mushroom/mush2/mushroom2.ogg",
@@ -594,6 +612,12 @@
 			"stream": true,
 			"volume": 0.2
 		},
+        "mushroom2Mirror": {
+            "type": "sample",
+            "file": "sounds/mushroom/mush2/mush2_mirror.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
 		"menu": {
 			"type": "sample",
 			"file": "sounds/LiminalMenu.ogg",

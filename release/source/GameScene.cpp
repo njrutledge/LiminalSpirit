@@ -578,6 +578,10 @@ void GameScene::updateSoundInputParticlesAndTilt(float timestep)
         {
             e[1] = true;
         }
+        else if (n == "Mirror")
+        {
+            e[2] = true;
+        }
     }
 
     _sound->play_level_music(_biome, e);
