@@ -1,2 +1,2 @@
-{"name":"level","start_pos":[5,4],"biome":"cave","level_height":54,"spawn_order":[["spawner"], ["spawner"]],"spawn_pos":[[[5,4]],[[20,5]]],"spawn_times":[0, 6],"spawner_types":[["lost","phantom"],["phantom"]],"platforms":[[5,5,3]]}
+{"name":"level","start_pos":[5,4],"biome":"shroom","level_height":54,"spawn_order":[["spawner"], ["spawner"]],"spawn_pos":[[[5,4]],[[27,5]]],"spawn_times":[4, 8],"spawner_types":[["lost","phantom"],["phantom"]],"platforms":[[10,5,10]]}
 

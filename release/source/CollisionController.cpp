@@ -121,14 +121,14 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                         attack->hitEnemy(mirror);
                         //mirror->setInvincibility(true);
                         mirror->setInvincibilityTimer(0.1f);
-                        CULog("NEW ATTACK~~~~~~~~~~~~~~~~~~");
+                        //CULog("NEW ATTACK~~~~~~~~~~~~~~~~~~");
                         if (mirror->getHealth() <= 0) {
                             mirror->markRemoved(true);
                         }
                         _sound->play_player_sound(SoundController::playerSType::slashHit);
                     }
                     else {
-                        CULog("SAME ATTACK");
+                        //CULog("SAME ATTACK");
                     }
                 }
             }
@@ -136,7 +136,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                 if (!attack->hasHitEnemy(enemy)) {
                     int damage = getDamageDealt(attack, enemy);
                     enemy->setHealth(enemy->getHealth() - damage);
-                    CULog("HEALTH SET");
+                    //CULog("HEALTH SET");
                     if (damage > 0) {
                         //enemy->setInvincibility(true);
                         enemy->setInvincibilityTimer(0.2f);
@@ -144,7 +144,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                         enemy->setLastDamagedBy(mapToBaseAttackType(attack->getType()));
                     }
                     else {
-                        CULog("NO DAMAGE ATTACK???");
+                        //CULog("NO DAMAGE ATTACK???");
                     }
                     if (attack->getType() == AttackController::Type::p_melee ||
                         attack->getType() == AttackController::Type::p_dash) {
@@ -163,7 +163,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                     }
                 }
                 else {
-                    CULog("SAME ATTACK? timer = %f", timer);                    
+                    //CULog("SAME ATTACK? timer = %f", timer);                    
                 }
 
 
@@ -240,7 +240,7 @@ void CollisionController::handlePlayerCollision(PlayerModel* player, physics2::O
                 player->setHealth(player->getHealth() - attack->getDamage());
                 player->setIsInvincible(true);
                 player->setIsStunned(true);
-                player->setInvincibilityTimer(0.2f);
+                player->setInvincibilityTimer(2.f);
                 _sound->play_player_sound(SoundController::playerSType::hurt);
             }
             attack->setInactive();

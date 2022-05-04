@@ -178,6 +178,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _nextWaveNum = 0;
     _spawner_enemy_types.clear();
     _living_spawners.clear();
+    _spawnParticlesDone = false;
     if (_constants->get("spawner_types"))
     {
         auto spawnTypes = _constants->get("spawner_types")->children();
@@ -428,6 +429,7 @@ void GameScene::dispose()
     // This should work because smart pointers free themselves when vector is cleared
     _enemies.clear();
     _platforms.clear();
+    _spawners.clear();
     if (_attacks)
     {
         _attacks->_current.clear();
@@ -1548,7 +1550,7 @@ void GameScene::updateSwipesAndAttacks(float timestep)
     }
 
     b2Vec2 playerPos = _player->getBody()->GetPosition();
-    if (_player->getInvincibilityTimer() <= 0)
+    if (!_player->isStunned())
     {
         _attacks->attackLeft(Vec2(playerPos.x, playerPos.y), _swipes.getLeftSwipe(), _swipes.getLeftAngle(), _player->isGrounded(), _timer, _sound);
         _attacks->attackRight(Vec2(playerPos.x, playerPos.y), _swipes.getRightSwipe(), _swipes.getRightAngle(), _player->isGrounded(), _timer, _sound);
@@ -1650,8 +1652,11 @@ void GameScene::updateSwipesAndAttacks(float timestep)
         if (_dashXVel == 0 && _dashYVel == 0 && _player->getInvincibilityTimer() <= 0)
         {
             _player->setIsInvincible(false);
-            _player->setIsStunned(false);
         }
+    }
+
+    if (_player->getInvincibilityTimer() <= 1) {
+        _player->setIsStunned(false);
     }
 
     if (_dashTime > 0 && _dashTime < 0.6f)
@@ -1693,7 +1698,7 @@ void GameScene::updateSwipesAndAttacks(float timestep)
             std::shared_ptr<Texture> attackTexture = _assets->get<Texture>(PLAYER_EXP_PKG);
             attackSprite = scene2::SpriteNode::alloc(attackTexture, 1, 5);
             attackSprite->setAnchor(0.5, 0.5);
-            attackSprite->setScale(.10f * (*it)->getRadius());
+            attackSprite->setScale(.75f * (*it)->getRadius());
             dynamic_pointer_cast<scene2::SpriteNode>(attackSprite)->setFrame(0);
             attackSprite->setAngle((*it)->getAngle() * M_PI / 180);
             attackSprite->setPriority(3);
@@ -1715,9 +1720,9 @@ void GameScene::updateSwipesAndAttacks(float timestep)
         else if (attackType == AttackController::Type::p_exp)
         {
             std::shared_ptr<Texture> attackTexture = _assets->get<Texture>("player_explosion");
-            attackSprite = scene2::SpriteNode::alloc(attackTexture, 1, 6);
+            attackSprite = scene2::SpriteNode::alloc(attackTexture, 1, 7);
             attackSprite->setAnchor(0.5, 0.5);
-            attackSprite->setScale(.05f * (*it)->getRadius());
+            attackSprite->setScale(.35f * (*it)->getRadius());
             dynamic_pointer_cast<scene2::SpriteNode>(attackSprite)->setFrame(1);
             attackSprite->setPriority(3);
             _rangedArm->setLastType(Glow::MeleeState::first);
@@ -1785,7 +1790,7 @@ void GameScene::updateSwipesAndAttacks(float timestep)
             }
             else if ((*it)->getAttackID() == PHANTOM_ATTACK)
             {
-                attackSprite->setScale(0.04 * (*it)->getRadius());
+                attackSprite->setScale(0.4 * (*it)->getRadius());
                 attackSprite->setAngle((*it)->getAngle() + M_PI / 2);
                 attackSprite->setPriority(2.2);
 
@@ -2023,6 +2028,7 @@ void GameScene::updateSpawnEnemies(float timestep)
                 {
                     while (diff_count != 0)
                     {
+                        _spawners.at(index)->setSpawned(true);
                         createSpawnerEnemy(index, name);
 
                         _spawner_enemy_types[index][name].current_count++;
@@ -2045,13 +2051,18 @@ void GameScene::createSpawnParticles()
     std::vector<cugl::Vec2> positions;
     positions = _spawn_pos.at(_nextWaveNum);
 
-    std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("spawning"), Vec2(0, 0));
     std::shared_ptr<Texture> portal_swirl = _assets->get<Texture>("enemy_swirl");
+    std::shared_ptr<Texture> portal = _assets->get<Texture>("enemy_portal");
 
     for (int i = 0; i < positions.size(); i++)
     {
+        std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("spawning"), Vec2(0, 0));
+        std::shared_ptr<ParticlePool> pool2 = ParticlePool::allocPoint(_particleInfo->get("spawning"), Vec2(0, 0));
         std::shared_ptr<ParticleNode> spawning = ParticleNode::alloc(positions[i] * _scale, portal_swirl, pool);
-        spawning->setScale(0.1f);
+        std::shared_ptr<ParticleNode> spawning2 = ParticleNode::alloc(positions[i] * _scale, portal, pool2);
+        spawning->setScale(0.15f);
+        spawning2->setScale(0.15f);
+        _worldnode->addChildWithTag(spawning2, 100);
         _worldnode->addChildWithTag(spawning, 100);
     }
 }
@@ -2107,12 +2118,6 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     //_scene->render(batch);
     if (_player->isInvincible() && !_player->isStunned())
     {
-        // TODO Change this
-        _player->getSceneNode()->setColor(Color4::GREEN);
-    }
-    else
-    {
-        _player->getSceneNode()->setColor(Color4::WHITE);
     }
 
     if (_swipes.hasLeftChargedAttack())
@@ -2259,7 +2264,7 @@ void GameScene::createSpawnerEnemy(int spawnerInd, string enemyName)
         phantom->setDebugColor(Color4::BLUE);
         phantom->setGlow(enemyGlow);
         phantom->setSpawnerInd(spawnerInd);
-        phantomSprite->setScale(0.05f);
+        phantomSprite->setScale(0.2f);
         phantomSprite->setFrame(0);
         phantomSprite->setPriority(1.2);
         addObstacle(phantom, phantomSprite, true);
@@ -2365,7 +2370,7 @@ void GameScene::createEnemies(int wave)
             phantom->setDebugColor(Color4::BLUE);
             phantom->setGlow(enemyGlow);
             phantom->setPlayedDamagedParticle(false);
-            phantomSprite->setScale(0.05f);
+            phantomSprite->setScale(0.2f);
             phantomSprite->setFrame(0);
             phantomSprite->setPriority(1.2);
             addObstacle(phantom, phantomSprite, true);
@@ -2423,7 +2428,7 @@ void GameScene::createEnemies(int wave)
             _spawner_pos.push_back(enemyPos);
             std::shared_ptr<Texture> spawnerHitBoxImage = _assets->get<Texture>("glutton");
             std::shared_ptr<Texture> spawnerImage = _assets->get<Texture>("spawner_ani");
-            std::shared_ptr<Spawner> spawner = Spawner::alloc(enemyPos, spawnerImage->getSize(), spawnerHitBoxImage->getSize() / _scale / 10, _scale);
+            std::shared_ptr<Spawner> spawner = Spawner::alloc(enemyPos, Vec2(spawnerHitBoxImage->getSize().width, spawnerHitBoxImage->getSize().height) / _scale * 7.5, spawnerHitBoxImage->getSize() / _scale / 10, _scale);
             std::shared_ptr<scene2::SpriteNode> spawnerSprite = scene2::SpriteNode::alloc(spawnerImage, 5, 5);
             spawner->setSpawned(false);
             spawner->setSceneNode(spawnerSprite);
@@ -2432,11 +2437,12 @@ void GameScene::createEnemies(int wave)
             spawner->setIndex(_spawner_ind);
             spawner->setPlayedDamagedParticle(false);
             spawnerSprite->setAnchor(0.5, 0.4);
-            spawnerSprite->setScale(0.075f);
+            spawnerSprite->setScale(0.75f);
             spawnerSprite->setPriority(1.01);
             spawnerSprite->setFrame(0);
             addObstacle(spawner, spawnerSprite, true);
             _enemies.push_back(spawner);
+            _spawners.push_back(spawner);
             auto spawnerEnemiesMap = _spawner_enemy_types.at(_spawner_ind);
             for (auto it = spawnerEnemiesMap.begin(); it != spawnerEnemiesMap.end(); ++it)
             {
@@ -2444,6 +2450,7 @@ void GameScene::createEnemies(int wave)
                 string spawnerEnemyName = it->first;
                 while (index != 0)
                 {
+                    spawner->setSpawned(true);
                     createSpawnerEnemy(_spawner_ind, spawnerEnemyName);
                     _spawner_enemy_types[_spawner_ind][spawnerEnemyName].current_count++;
                     index--;
@@ -2721,6 +2728,12 @@ void GameScene::reset()
     _input.reset();
     _swipes.reset();
     _tilt.reset();
+    for (std::shared_ptr<scene2::SceneNode> s : _worldnode->getChildren())
+    {
+        if (s->getTag() == 100) {
+            s->dispose();
+        }
+    };
     auto ac_it = _attacks->_current.begin();
     while (ac_it != _attacks->_current.end())
     {
@@ -2765,6 +2778,7 @@ void GameScene::reset()
         eit = _enemies.erase(eit);
     }
 
+    _spawners.clear();
     // Reset wave spawning
     _timer = 0.0f;
     _nextWaveNum = 0;

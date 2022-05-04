@@ -104,7 +104,7 @@ void AttackController::Attack::createFixtures() {
 
 
     
-    if (_type == p_melee) {
+    if (_type == p_melee || _type == p_dash) {
         b2FixtureDef sensorDef2;
         sensorDef2.density = 0;
         sensorDef2.isSensor = true;

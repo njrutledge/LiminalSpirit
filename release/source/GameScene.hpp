@@ -145,6 +145,8 @@ protected:
 
     /** Enemies set */
     std::vector<std::shared_ptr<BaseEnemyModel>> _enemies;
+    /** Spawner  set */
+    std::vector<std::shared_ptr<BaseEnemyModel>> _spawners;
 
     /** Player character */
     std::shared_ptr<PlayerModel> _player;
