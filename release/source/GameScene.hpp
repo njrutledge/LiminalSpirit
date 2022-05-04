@@ -207,6 +207,28 @@ protected:
     string _biome;
 
     int _stageNum;
+
+    bool _pause;
+
+    bool _options;
+
+    std::shared_ptr<scene2::SceneNode> _pauseScene;
+
+    std::shared_ptr<scene2::Button> _returnButton;
+
+    std::shared_ptr<scene2::Button> _homeButton;
+
+    std::shared_ptr<scene2::Button> _optionButton;
+
+    std::shared_ptr<scene2::SceneNode> _optionScene;
+
+    std::shared_ptr<scene2::Button> _optionReturnButton;
+
+    std::shared_ptr<scene2::Button> _swapHandsButton;
+
+    std::shared_ptr<scene2::Button> _musicButton;
+
+    std::shared_ptr<scene2::Button> _sfxButton;
     /**
      * Internal helper to build the scene graph.
      *

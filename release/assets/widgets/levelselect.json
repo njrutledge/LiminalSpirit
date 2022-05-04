@@ -148,7 +148,7 @@
           "up": {
             "type": "Image",
             "data": {
-              "texture": "level_select_home"
+              "texture": "home"
             }
           }
         },
@@ -175,7 +175,7 @@
           "up": {
             "type": "Image",
             "data": {
-              "texture": "level_select_forward"
+              "texture": "forward_arrow"
             }
           }
         },
@@ -199,7 +199,7 @@
           "up": {
             "type": "Image",
             "data": {
-              "texture": "level_select_backward"
+              "texture": "backward_arrow"
             }
           }
         },

@@ -378,14 +378,14 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
-		"level_select_forward": {
+		"forward_arrow": {
 			"file": "textures/menus/level_select/arrow_forward.png"
 		},
-		"level_select_backward": {
-			"file": "textures/menus/level_select/arrow_backward.png"
+		"backward_arrow": {
+			"file": "textures/menus/shared/arrow_backward.png"
 		},
-		"level_select_home": {
-			"file": "textures/menus/level_select/home.png"
+		"home": {
+			"file": "textures/menus/shared/home.png"
 		},
 		"level_select_cave_background": {
 			"file": "textures/menus/level_select/cavebackground.png"
@@ -431,6 +431,42 @@
 		},
 		"level_select_forest_treehole3": {
 			"file": "textures/menus/level_select/treehole3.png"
+		},
+		"pause_resume_back": {
+			"file": "textures/menus/pause/resume_shroom.png"
+		},
+		"pause_resume": {
+			"file": "textures/menus/pause/resume.png"
+		},
+		"pause_home_back": {
+			"file": "textures/menus/pause/home_shroom.png"
+		},
+		"pause_options_back": {
+			"file": "textures/menus/pause/options_shroom.png"
+		},
+		"pause_options": {
+			"file": "textures/menus/pause/options.png"
+		},
+		"swap": {
+			"file": "textures/menus/options/swap.png"
+		},
+		"options_handleft": {
+			"file": "textures/menus/options/handleft.png"
+		},
+		"options_handright": {
+			"file": "textures/menus/options/handright.png"
+		},
+		"options_button_on": {
+			"file": "textures/menus/options/button_on.png"
+		},
+		"options_button_off": {
+			"file": "textures/menus/options/button_off.png"
+		},
+		"options_rockbig": {
+			"file": "textures/menus/options/rockbig.png"
+		},
+		"options_rocksmol": {
+			"file": "textures/menus/options/rocksmol.png"
 		}
 	},
 	"fonts": {
@@ -554,7 +590,9 @@
 		}
 	},
 	"widgets": {
-		"levelselect":  "widgets/levelselect.json"
+		"levelselect": "widgets/levelselect.json",
+		"pause": "widgets/pause.json",
+		"options": "widgets/options.json"
 	},
 	"scene2s": {
 		"cave": {
@@ -655,6 +693,18 @@
 						"x_offset": 0,
 						"y_offset": 0,
 						"absolute": false
+					}
+				},
+				"pauseScene": {
+					"type": "Widget",
+					"data": {
+						"key": "pause"
+					}
+				},
+				"optionScene": {
+					"type": "Widget",
+					"data": {
+						"key": "options"
 					}
 				}
 			}

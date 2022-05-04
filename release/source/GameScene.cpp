@@ -100,6 +100,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
     _step = false;
     _winInit = true;
     _next = false;
+    _pause = false;
+    _options = false;
     Size dimen = Application::get()->getDisplaySize();
     float boundScale = SCENE_WIDTH / dimen.width;
     dimen *= boundScale;
@@ -293,8 +295,74 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets, const st
     HUD->setContentSize(dimen);
     HUD->doLayout();
     HUD->setPosition(offset);
-    //check if the scene already has HUD, and remove it if it does.
+
     scene->addChildWithName(HUD, "HUD");
+
+    _pauseScene = _assets->get<scene2::SceneNode>("HUD_pauseScene");
+    _returnButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("HUD_pauseScene_resume"));
+    _returnButton->addListener([=](const std::string& name, bool down)
+        {
+            // Only quit when the button is released
+            if (!down) {
+                _pause = false;
+            } });
+
+    _homeButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("HUD_pauseScene_home"));
+    _homeButton->addListener([=](const std::string& name, bool down)
+        {
+            // Only quit when the button is released
+            if (!down) {
+                _back = true;
+            } });
+
+    _optionButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("HUD_pauseScene_options"));
+    _optionButton->addListener([=](const std::string& name, bool down)
+        {
+            // Only quit when the button is released
+            if (!down) {
+                _options = true;
+            } });
+
+
+    _optionScene = _assets->get<scene2::SceneNode>("HUD_optionScene");
+    
+    _optionReturnButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("HUD_optionScene_return"));
+    _optionReturnButton->addListener([=](const std::string& name, bool down)
+        {
+            // Only quit when the button is released
+            if (!down) {
+                _options = false;
+                _pause = true;
+            } });
+
+    _swapHandsButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("HUD_optionScene_swap"));
+    _swapHandsButton->addListener([=](const std::string& name, bool down)
+        {
+            // Only quit when the button is released
+            if (!down) {
+
+            } });
+    _musicButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("HUD_optionScene_music"));
+    _musicButton->addListener([=](const std::string& name, bool down)
+        {
+            // Only quit when the button is released
+            if (!down) {
+
+            } });
+
+
+    _sfxButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("HUD_optionScene_sfx"));
+    _sfxButton->addListener([=](const std::string& name, bool down)
+        {
+            // Only quit when the button is released
+            if (!down) {
+
+            } });
+
+
+
+
+
 
 
     std::string msg = strtool::format("Wave: %d / %d", _nextWaveNum, _numWaves);
@@ -373,6 +441,38 @@ void GameScene::dispose()
  */
 void GameScene::update(float timestep)
 {
+    if (_options) {
+        _optionScene->setVisible(true);
+        _pauseScene->setVisible(false);
+        _optionReturnButton->activate();
+        _musicButton->activate();
+        _sfxButton->activate();
+        _swapHandsButton->activate();
+        return;
+    }
+    else {
+        _optionReturnButton->deactivate();
+        _musicButton->deactivate();
+        _sfxButton->deactivate();
+        _swapHandsButton->deactivate();
+    }
+    
+    if (_pause) {
+        _pauseScene->setVisible(true);
+        _optionScene->setVisible(false);
+        _returnButton->activate();
+        _homeButton->activate();
+        _optionButton->activate();
+        return;
+    }
+    else {
+        _pauseScene->setVisible(false);
+        _returnButton->deactivate();
+        _homeButton->deactivate();
+        _optionButton->deactivate();
+    }
+
+    
     updateSoundInputParticlesAndTilt(timestep);
 
     if (updateWin()) {
@@ -2005,7 +2105,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
         {
             // Only quit when the button is released
             if (!down) {
-                _back = true;
+                _pause = true;
             } });
 
     // Find the safe area, adapting to the iPhone X
