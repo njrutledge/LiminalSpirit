@@ -308,6 +308,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     scene->addChildWithName(HUD, "HUD");
 
     _pauseScene = _assets->get<scene2::SceneNode>("pauseScene");
+
+    _pauseScene->setContentSize(dimen);
+    _pauseScene->doLayout();
+
     addChildWithName(_pauseScene, "pause");
     _returnButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("pauseScene_resume"));
     _returnButton->addListener([=](const std::string& name, bool down)
@@ -335,6 +339,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
 
 
     _optionScene = _assets->get<scene2::SceneNode>("optionScene");
+    _optionScene->setContentSize(dimen);
+    _optionScene->doLayout();
 
     addChildWithName(_optionScene, "options");
     
@@ -370,7 +376,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
 
             } });
-
 
 
 
