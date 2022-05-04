@@ -2255,7 +2255,7 @@ void GameScene::createSpawnerEnemy(int spawnerInd, string enemyName)
         phantom->setDebugColor(Color4::BLUE);
         phantom->setGlow(enemyGlow);
         phantom->setSpawnerInd(spawnerInd);
-        phantomSprite->setScale(0.05f);
+        phantomSprite->setScale(0.2f);
         phantomSprite->setFrame(0);
         phantomSprite->setPriority(1.2);
         addObstacle(phantom, phantomSprite, true);
