@@ -142,7 +142,9 @@ bool WorldSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     _forestButtonBack = assets->get<scene2::SceneNode>("world_select_forestback");
 
-    _timer = 0;
+    _timerA = 0.0f;
+    _timerB = 0.0f;
+    _timerC = 0.0f;
 
     addChild(scene);
     return true;
@@ -150,6 +152,25 @@ bool WorldSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
 #pragma mark -
 #pragma mark Screen Handling
+
+float WorldSelectScene::easing(float time, float time_position, float amplitude) {
+    
+    float position = time_position / time;
+    
+    
+    if (position <= 0.25) {
+        return (amplitude) * (1 - ((time_position / (time / 4))));
+    } else if (position <= 0.5) {
+        return (amplitude) * (((time_position - time / 4) / (time / 4))) * -1;
+    } else if (position <= 0.75) {
+        return (amplitude) * (1 - ((time_position -  time / 2) / (time / 4))) * -1;
+    } else if (position <= 1.0f) {
+        return (amplitude) * (((time_position - (3 * time / 4)) / (time / 4)));
+    } else {
+        return 0.0f;
+    }
+    
+}
 /**
  * The method called to update the screen mode.
  *
@@ -165,52 +186,38 @@ void WorldSelectScene::update(float timestep)
     _shroomButton->activate();
     _forestButton->setVisible(true);
     _forestButton->activate();
+    
+    float threshA = 4.0f;
+    float threshB = 3.0f;
+    float threshC = 5.0f;
+    
+    
+    
+    _caveButton->setPositionY(_caveButton->getPositionY() + easing(threshA, _timerA, 0.25));
+    _caveButtonBack->setPositionY(_caveButtonBack->getPositionY() + easing(threshA, _timerA, 0.25));
 
-    _timer += timestep;
-    int amplitude = 6;
-    if (_timer <= .5) {
-        _caveButton->setPositionY(_caveButton->getPositionY() + timestep * amplitude);
-        _caveButtonBack->setPositionY(_caveButtonBack->getPositionY() + timestep * amplitude);
+    _shroomButton->setPositionY(_shroomButton->getPositionY() + easing(threshB, _timerB, -0.25));
+    _shroomButtonBack->setPositionY(_shroomButtonBack->getPositionY() + easing(threshB, _timerB, -0.25));
 
-        _shroomButton->setPositionY(_shroomButton->getPositionY() + timestep * amplitude);
-        _shroomButtonBack->setPositionY(_shroomButtonBack->getPositionY() + timestep * amplitude);
+    _forestButton->setPositionY(_forestButton->getPositionY() + easing(threshC, _timerC, 0.25));
+    _forestButtonBack->setPositionY(_forestButtonBack->getPositionY() + easing(threshC, _timerC, 0.25));
+    
+    
+    _timerA += timestep;
+    _timerB += timestep;
+    _timerC += timestep;
 
-        _forestButton->setPositionY(_forestButton->getPositionY() - timestep * amplitude);
-        _forestButtonBack->setPositionY(_forestButtonBack->getPositionY() - timestep * amplitude);
+
+    if (_timerA > threshA) {
+        _timerA = 0.0f;
     }
-    else if (_timer <= 1) {
-        _caveButton->setPositionY(_caveButton->getPositionY() - timestep * amplitude);
-        _caveButtonBack->setPositionY(_caveButtonBack->getPositionY() - timestep * amplitude);
-
-        _shroomButton->setPositionY(_shroomButton->getPositionY() + timestep * amplitude);
-        _shroomButtonBack->setPositionY(_shroomButtonBack->getPositionY() + timestep * amplitude);
-
-        _forestButton->setPositionY(_forestButton->getPositionY() + timestep * amplitude);
-        _forestButtonBack->setPositionY(_forestButtonBack->getPositionY() + timestep * amplitude);
+    
+    if (_timerB > threshB) {
+        _timerB = 0.0f;
     }
-    else if (_timer <= 1.5) {
-        _caveButton->setPositionY(_caveButton->getPositionY() - timestep * amplitude);
-        _caveButtonBack->setPositionY(_caveButtonBack->getPositionY() - timestep * amplitude);
-
-        _shroomButton->setPositionY(_shroomButton->getPositionY() - timestep * amplitude);
-        _shroomButtonBack->setPositionY(_shroomButtonBack->getPositionY() - timestep * amplitude);
-
-        _forestButton->setPositionY(_forestButton->getPositionY() + timestep * amplitude);
-        _forestButtonBack->setPositionY(_forestButtonBack->getPositionY() + timestep * amplitude);
-    }
-    else if (_timer <= 2.0) {
-        _caveButton->setPositionY(_caveButton->getPositionY() + timestep * amplitude);
-        _caveButtonBack->setPositionY(_caveButtonBack->getPositionY() + timestep * amplitude);
-
-        _shroomButton->setPositionY(_shroomButton->getPositionY() - timestep * amplitude);
-        _shroomButtonBack->setPositionY(_shroomButtonBack->getPositionY() - timestep * amplitude);
-
-        _forestButton->setPositionY(_forestButton->getPositionY() - timestep * amplitude);
-        _forestButtonBack->setPositionY(_forestButtonBack->getPositionY() - timestep * amplitude);
-    }
-
-    if (_timer > 2.0) {
-        _timer = 0;
+    
+    if (_timerC > threshC) {
+        _timerC = 0.0f;
     }
 
 }
