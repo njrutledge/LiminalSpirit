@@ -386,6 +386,12 @@
 		"background": {
 			"file": "textures/backgrounds/forest_background.png"
 		},
+        "melee_charge_HUD": {
+            "file": "textures/backgrounds/melee_charge_HUD.png"
+        },
+        "range_charge_HUD": {
+            "file": "textures/backgrounds/range_charge_HUD.png"
+        },
 		"healthbar": {
 			"file": "textures/hud/healthbar2.png",
 			"wrapS": "clamp",
