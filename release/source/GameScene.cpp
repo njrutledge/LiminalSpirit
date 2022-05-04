@@ -464,6 +464,8 @@ void GameScene::update(float timestep)
         return;
     }
     else {
+        _optionScene->setVisible(false);
+        _pauseScene->setVisible(false);
         _optionReturnButton->deactivate();
         _musicButton->deactivate();
         _sfxButton->deactivate();
@@ -480,6 +482,7 @@ void GameScene::update(float timestep)
     }
     else {
         _pauseScene->setVisible(false);
+        _optionScene->setVisible(false);
         _returnButton->deactivate();
         _homeButton->deactivate();
         _optionButton->deactivate();
