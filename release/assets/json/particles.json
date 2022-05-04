@@ -1,0 +1,51 @@
+{
+    "damaged": {
+         "burstParticles": 12, 
+         "maxParticleCount": 12,
+         "gravity": [0, 0],
+         "emissionRateRange": [1, 1],
+         "lifetimeRange": [0.2, 0.25],
+         "angleRange": [0, 6.28],
+         "speedRange": [500, 575],
+	 "startSizeRange": [1, 1],
+	 "sizeChangeRateRange": [0, 0],
+	 "maxSizeChangeTime": 10
+     },
+    "devil": {
+         "burstParticles": 1, 
+         "maxParticleCount": 1,
+         "gravity": [0, 0],
+         "emissionRateRange": [1, 1],
+         "lifetimeRange": [0.25, 0.5],
+         "angleRange": [0, 0],
+         "speedRange": [0, 0],
+	 "startSizeRange": [5, 5],
+	 "sizeChangeRateRange": [-0.25, -0.25],
+	 "maxSizeChangeTime": 10
+     },
+    "spawning": {
+         "burstParticles": 1, 
+         "maxParticleCount": 1,
+         "gravity": [0, 0],
+         "emissionRateRange": [1, 1],
+         "lifetimeRange": [10, 10],
+         "angleRange": [1.57, 1.57],
+         "speedRange": [1, 1],
+	 "startSizeRange": [1, 1],
+	 "sizeChangeRateRange": [0.005, 0.005],
+	 "maxSizeChangeTime": 10
+     },
+    "charged": {
+	 "burstParticles": 1, 
+         "maxParticleCount": 1,
+         "gravity": [-20, -30],
+         "emissionRateRange": [1, 1],
+         "lifetimeRange": [0.5, 0.75],
+         "angleRange": [0, 3.14],
+         "speedRange": [30, 50],
+	 "startSizeRange": [1, 1],
+	 "sizeChangeRateRange": [-0.01, -0.01],
+	 "maxSizeChangeTime": 10
+     }
+
+}

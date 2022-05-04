@@ -34,7 +34,9 @@ public:
         LOAD,
         MENU,
         PAUSE,
-        LEVEL
+        LEVEL_CAVE,
+        LEVEL_SHROOM,
+        LEVEL_FOREST
     };
     
     class LevelMusic {
@@ -62,6 +64,8 @@ public:
         void play_music(std::vector<bool> e, SoundController::GameState s);
         
         std::shared_ptr<cugl::audio::AudioMixer> getMixer() {return _mixer;}
+        
+        void reset_mix();
         
     };
     

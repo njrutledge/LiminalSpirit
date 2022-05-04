@@ -53,9 +53,12 @@ bool PlayerModel::init(const cugl::Vec2& pos, const cugl::Size& size, float scal
         _health = PLAYER_HEALTH;
         _faceRight = true;
         _isInvincible = false;
+        _isStunned = false;
         _isGrounded = true;
+        _isJumping = false;
         _isMovingUp = false;
         _hasJustLanded = false;
+        _isDashing = false;
 
         return true;
     }

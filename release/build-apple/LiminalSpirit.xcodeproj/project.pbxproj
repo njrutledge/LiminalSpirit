@@ -14,6 +14,10 @@
 		5783892927E2369B000CB5B9 /* BaseEnemyModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85D0B48527D010FC004EF4C8 /* BaseEnemyModel.cpp */; };
 		5783892A27E2369B000CB5B9 /* BaseEnemyModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85D0B48527D010FC004EF4C8 /* BaseEnemyModel.cpp */; };
 		5783892E27E23F49000CB5B9 /* AIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85B0001627DFAC8500DAC3F2 /* AIController.cpp */; };
+		8502D9A628205AA70007A787 /* LevelSelectScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8502D9A528205AA70007A787 /* LevelSelectScene.cpp */; };
+		8502D9A728205AA70007A787 /* LevelSelectScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8502D9A528205AA70007A787 /* LevelSelectScene.cpp */; };
+		8502D9A928205AF30007A787 /* widgets in Resources */ = {isa = PBXBuildFile; fileRef = 8502D9A828205AF30007A787 /* widgets */; };
+		8502D9AA28205AF30007A787 /* widgets in Resources */ = {isa = PBXBuildFile; fileRef = 8502D9A828205AF30007A787 /* widgets */; };
 		857201C827E25619006D48C6 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 857201C727E25619006D48C6 /* fonts */; };
 		857201C927E25619006D48C6 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 857201C727E25619006D48C6 /* fonts */; };
 		857201CA27E25619006D48C6 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 857201C727E25619006D48C6 /* fonts */; };
@@ -128,11 +132,7 @@
 		F05BD2B327F29AB8005D1F38 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = F05BD2AF27F29AB8005D1F38 /* sounds */; };
 		F05BD2B427F29AB8005D1F38 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = F05BD2AF27F29AB8005D1F38 /* sounds */; };
 		F05BD2B527F29AB8005D1F38 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = F05BD2AF27F29AB8005D1F38 /* sounds */; };
-		F065698428207AAC00241218 /* LevelSelectScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F065697F28207AAC00241218 /* LevelSelectScene.cpp */; };
-		F065698528207AD400241218 /* LevelSelectScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F065697F28207AAC00241218 /* LevelSelectScene.cpp */; };
 		F065698628207AD500241218 /* LevelSelectScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F065697F28207AAC00241218 /* LevelSelectScene.cpp */; };
-		F065698828207BBA00241218 /* widgets in Resources */ = {isa = PBXBuildFile; fileRef = F065698728207BBA00241218 /* widgets */; };
-		F065698928207BBA00241218 /* widgets in Resources */ = {isa = PBXBuildFile; fileRef = F065698728207BBA00241218 /* widgets */; };
 		F065698A28207BBA00241218 /* widgets in Resources */ = {isa = PBXBuildFile; fileRef = F065698728207BBA00241218 /* widgets */; };
 		F0750174280CD94B00CBD6A3 /* Phantom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85841F402809F09300169F44 /* Phantom.cpp */; };
 		F0750178280CD94C00CBD6A3 /* Phantom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85841F402809F09300169F44 /* Phantom.cpp */; };
@@ -192,6 +192,9 @@
 /* Begin PBXFileReference section */
 		578388F827E1156D000CB5B9 /* Platform.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Platform.hpp; sourceTree = "<group>"; };
 		578388FC27E1156D000CB5B9 /* Platform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Platform.cpp; sourceTree = "<group>"; };
+		8502D9A128205AA70007A787 /* LevelSelectScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LevelSelectScene.hpp; sourceTree = "<group>"; };
+		8502D9A528205AA70007A787 /* LevelSelectScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LevelSelectScene.cpp; sourceTree = "<group>"; };
+		8502D9A828205AF30007A787 /* widgets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = widgets; sourceTree = "<group>"; };
 		857201C727E25619006D48C6 /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
 		85841F3E2809F09300169F44 /* shaders */ = {isa = PBXFileReference; lastKnownFileType = folder; path = shaders; sourceTree = "<group>"; };
 		85841F3F2809F09300169F44 /* Phantom.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Phantom.hpp; sourceTree = "<group>"; };
@@ -271,7 +274,6 @@
 		F05176D827D071D900C0617F /* PlayerModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayerModel.cpp; sourceTree = "<group>"; };
 		F05BD2AF27F29AB8005D1F38 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
 		F065697F28207AAC00241218 /* LevelSelectScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LevelSelectScene.cpp; sourceTree = "<group>"; };
-		F065698328207AAC00241218 /* LevelSelectScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LevelSelectScene.hpp; sourceTree = "<group>"; };
 		F065698728207BBA00241218 /* widgets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = widgets; sourceTree = "<group>"; };
 		F09AF64027F64ACA003C6EA2 /* Mirror.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Mirror.hpp; sourceTree = "<group>"; };
 		F09AF64527F64ACA003C6EA2 /* HomeScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HomeScene.hpp; sourceTree = "<group>"; };
@@ -365,6 +367,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8502D9AD2820A3ED0007A787 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				F065697F28207AAC00241218 /* LevelSelectScene.cpp */,
+				F065698728207BBA00241218 /* widgets */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		EB22BDC325D0DE75002ACE41 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -378,7 +389,7 @@
 		EB2BE9B71D749870002FE78B /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				F065698728207BBA00241218 /* widgets */,
+				8502D9A828205AF30007A787 /* widgets */,
 				F05BD2AF27F29AB8005D1F38 /* sounds */,
 				857201C727E25619006D48C6 /* fonts */,
 				EBFE7C041E19B496001007C2 /* json */,
@@ -449,6 +460,7 @@
 				EB4880FC1D74AAB600EFC946 /* Frameworks */,
 				EBBF18921D74904A008E2001 /* Products */,
 				EBB3D284201444B300E6A7CD /* CUGL.xcodeproj */,
+				8502D9AD2820A3ED0007A787 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -479,8 +491,8 @@
 		EBBF18B11D749176008E2001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				F065697F28207AAC00241218 /* LevelSelectScene.cpp */,
-				F065698328207AAC00241218 /* LevelSelectScene.hpp */,
+				8502D9A128205AA70007A787 /* LevelSelectScene.hpp */,
+				8502D9A528205AA70007A787 /* LevelSelectScene.cpp */,
 				F01F990C281988F400701247 /* BossScene.cpp */,
 				F01F9908281988F400701247 /* BossScene.hpp */,
 				F0BE06F228132DCD00B22958 /* RRParticle.cpp */,
@@ -610,7 +622,7 @@
 					};
 					EB74548B1D74D75C002FBAE6 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = PXKGFP2M23;
+						DevelopmentTeam = H2MPDV89H8;
 					};
 					EBBF18901D74904A008E2001 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -689,7 +701,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F065698928207BBA00241218 /* widgets in Resources */,
+				8502D9AA28205AF30007A787 /* widgets in Resources */,
 				EB7454D01D750623002FBAE6 /* textures in Resources */,
 				EB7454AB1D74D846002FBAE6 /* iOS.xcassets in Resources */,
 				F05BD2B427F29AB8005D1F38 /* sounds in Resources */,
@@ -709,7 +721,7 @@
 				F05BD2B327F29AB8005D1F38 /* sounds in Resources */,
 				EBFE7C091E19B4AC001007C2 /* json in Resources */,
 				EB2BE9BB1D7498D2002FE78B /* textures in Resources */,
-				F065698828207BBA00241218 /* widgets in Resources */,
+				8502D9A928205AF30007A787 /* widgets in Resources */,
 				EBBF189B1D74904A008E2001 /* Mac.xcassets in Resources */,
 				857201C827E25619006D48C6 /* fonts in Resources */,
 			);
@@ -760,7 +772,7 @@
 				5783892727E2369B000CB5B9 /* SwipeController.cpp in Sources */,
 				F00746F427E91B2600AF5D7C /* SoundController.cpp in Sources */,
 				F09AF65D27F64ACA003C6EA2 /* Glow.cpp in Sources */,
-				F065698528207AD400241218 /* LevelSelectScene.cpp in Sources */,
+				8502D9A728205AA70007A787 /* LevelSelectScene.cpp in Sources */,
 				F09AF65127F64ACA003C6EA2 /* Seeker.cpp in Sources */,
 				5783892827E2369B000CB5B9 /* Platform.cpp in Sources */,
 				F09AF65427F64ACA003C6EA2 /* Mirror.cpp in Sources */,
@@ -795,7 +807,7 @@
 				F025104127D02C6C00AB80AA /* SwipeController.cpp in Sources */,
 				F00746F327E91B2600AF5D7C /* SoundController.cpp in Sources */,
 				F09AF65C27F64ACA003C6EA2 /* Glow.cpp in Sources */,
-				F065698428207AAC00241218 /* LevelSelectScene.cpp in Sources */,
+				8502D9A628205AA70007A787 /* LevelSelectScene.cpp in Sources */,
 				F09AF65027F64ACA003C6EA2 /* Seeker.cpp in Sources */,
 				578388FD27E1156D000CB5B9 /* Platform.cpp in Sources */,
 				F09AF65327F64ACA003C6EA2 /* Mirror.cpp in Sources */,
@@ -884,12 +896,12 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = PXKGFP2M23;
+				DEVELOPMENT_TEAM = H2MPDV89H8;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/iOS-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = devbuild.LiminalSpirit.1;
+				PRODUCT_BUNDLE_IDENTIFIER = devbuild.LiminalSpirit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -905,12 +917,12 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = PXKGFP2M23;
+				DEVELOPMENT_TEAM = H2MPDV89H8;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/iOS-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = devbuild.LiminalSpirit.1;
+				PRODUCT_BUNDLE_IDENTIFIER = devbuild.LiminalSpirit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
