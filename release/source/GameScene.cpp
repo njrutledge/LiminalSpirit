@@ -2719,6 +2719,11 @@ void GameScene::reset()
     _input.reset();
     _swipes.reset();
     _tilt.reset();
+    for (std::shared_ptr<scene2::SceneNode> s : _worldnode->getChildren())
+    {
+        s->dispose();
+    };
+    _worldnode->removeAllChildren();
     auto ac_it = _attacks->_current.begin();
     while (ac_it != _attacks->_current.end())
     {
