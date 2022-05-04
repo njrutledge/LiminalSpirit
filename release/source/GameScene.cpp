@@ -178,6 +178,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _nextWaveNum = 0;
     _spawner_enemy_types.clear();
     _living_spawners.clear();
+    _spawnParticlesDone = false;
     if (_constants->get("spawner_types"))
     {
         auto spawnTypes = _constants->get("spawner_types")->children();
