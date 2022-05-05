@@ -394,7 +394,9 @@
 			"wrapT": "clamp",
 			"atlas": {
 				"background": [ 50, 32, 206, 131 ],
-				"foreground": [ 270, 32, 426, 131]
+				"foreground": [ 270, 32, 426, 131 ],
+				"leftcap": [ 50, 70, 70, 90],
+				"rightcap": [ 185, 70, 205, 90]
 			}
 		},
 		"range_charge_HUD": {
