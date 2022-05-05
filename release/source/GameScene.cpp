@@ -1775,7 +1775,7 @@ void GameScene::updateSwipesAndAttacks(float timestep)
             attackSprite->setPriority(3);
             _rangedArm->setLastType(Glow::MeleeState::first);
             _player->setRangedAttackRight(_player->isFacingRight());
-            if (_swipes.getLeftSwipe() == SwipeController::downAttack)
+            if (_swipes.getLeftSwipe(_swap) == SwipeController::downAttack)
             {
                 _rangedArm->setAttackAngle(270);
             }
@@ -1798,7 +1798,7 @@ void GameScene::updateSwipesAndAttacks(float timestep)
             attackSprite->setPriority(3);
             _rangedArm->setLastType(Glow::MeleeState::first);
             _player->setRangedAttackRight(_player->isFacingRight());
-            if (_swipes.getLeftSwipe() == SwipeController::downAttack)
+            if (_swipes.getLeftSwipe(_swap) == SwipeController::downAttack)
             {
                 _rangedArm->setAttackAngle(270);
             }
@@ -1821,7 +1821,7 @@ void GameScene::updateSwipesAndAttacks(float timestep)
             attackSprite->setPriority(3);
             _rangedArm->setLastType(Glow::MeleeState::first);
             _player->setRangedAttackRight(_player->isFacingRight());
-            if (_swipes.getLeftSwipe() == SwipeController::downAttack)
+            if (_swipes.getLeftSwipe(_swap) == SwipeController::downAttack)
             {
                 _rangedArm->setAttackAngle(270);
             }
@@ -1916,7 +1916,7 @@ void GameScene::updateSwipesAndAttacks(float timestep)
     }
     _attacks->update(_player->getPosition(), _player->getBody()->GetLinearVelocity(), timestep);
     // DO NOT MOVE THE ABOVE LINE
-    if (_swipes.getRightSwipe() == SwipeController::upAttack || _swipes.getLeftSwipe() == SwipeController::jump || _swipes.getRightSwipe() == SwipeController::jump)
+    if (_swipes.getRightSwipe(_swap) == SwipeController::upAttack || _swipes.getLeftSwipe(_swap) == SwipeController::jump || _swipes.getRightSwipe(_swap) == SwipeController::jump)
     {
         _player->setJumping(true);
         _player->setIsFirstFrame(true);
@@ -1926,7 +1926,7 @@ void GameScene::updateSwipesAndAttacks(float timestep)
             _player->setJumpAnimationTimer(0);
         }
     }
-    else if (_swipes.getRightSwipe() == _swipes.downAttack)
+    else if (_swipes.getRightSwipe(_swap) == _swipes.downAttack)
     {
         // IDK
         _player->setDropTime(0.4f);
