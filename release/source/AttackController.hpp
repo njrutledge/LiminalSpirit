@@ -114,6 +114,8 @@ public:
         b2Fixture* _bodySensorFixture;
         /** Name of sensor */
         std::string _sensorName;
+
+        std::string _homingSensorName;
         /** Debug Sensor */
         std::shared_ptr<cugl::scene2::WireNode> _sensorNode;
 
@@ -183,6 +185,9 @@ public:
         MeleeState getMeleeState(){ return _meleeState; }
 
         std::string* getSensorName() { return &_sensorName; }
+
+        std::string* getHomingSensorName() { return &_homingSensorName; }
+
         void setSensorName(string s) { _sensorName = s; }
 
         bool isSplitable() { return _splitable; }

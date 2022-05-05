@@ -44,9 +44,10 @@ bool AttackController::Attack::init(const cugl::Vec2 p, float radius, float a, f
         setBodyType(b2BodyType::b2_dynamicBody);
         switch (_type) {
             case Type::p_range:
-            case Type::p_melee:
-            case Type::p_dash:
             case Type::p_exp:
+                _homingSensorName = "player" + _sensorName + "homing";
+            case Type::p_dash:
+            case Type::p_melee:
                 _sensorName = "player" + _sensorName;
                 filter.categoryBits = 0b010000;
                 filter.maskBits = 0b001010;
@@ -83,25 +84,20 @@ void AttackController::Attack::createFixtures() {
     sensorDef.isSensor = true;
     b2PolygonShape sensorShape;
     
-    b2Vec2 corners[8];
-    cugl::Vec2 vec(0, _radius);
-    for(int i = 0; i < 8; i++){
-        corners[i] = b2Vec2(vec.x, vec.y);
-        _debugVerticies.push_back(Vec2(vec));
-        vec.rotate(M_PI/4.0f);
-    }
-//    std::vector<cugl::Vec2> cuglVerts = ball.getVertices();
-//    int n = cuglVerts.size();
-//    std::vector<b2Vec2>* verts = new vector<b2Vec2>(0);
-//    //Following is a temporary copy fix, hopefully will find a better solution.
-//    for (auto it = cuglVerts.begin(); it != cuglVerts.end();  ++it) {
-//        verts->push_back(b2Vec2((*it).x, (*it).y));
-//    }
-    sensorShape.Set(corners, 8);
-    sensorDef.shape = &sensorShape;
-    sensorDef.userData.pointer = reinterpret_cast<uintptr_t>(getSensorName());
-    _sensorFixture = _body->CreateFixture(&sensorDef);
+    if (_type == p_range || _type == p_exp_package) {
+        b2Vec2 corners[8];
+        cugl::Vec2 vec(0, _radius * 5.0);//TODO: 5.0 is random
+        for (int i = 0; i < 8; i++) {
+            corners[i] = b2Vec2(vec.x, vec.y);
+            _debugVerticies.push_back(Vec2(vec));
+            vec.rotate(M_PI / 4.0f);
+        }
 
+        sensorShape.Set(corners, 8);
+        sensorDef.shape = &sensorShape;
+        sensorDef.userData.pointer = reinterpret_cast<uintptr_t>(getHomingSensorName());
+        _sensorFixture = _body->CreateFixture(&sensorDef);
+    }
 
     
     if (_type == p_melee || _type == p_dash) {
