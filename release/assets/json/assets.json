@@ -392,10 +392,10 @@
 			"magfilter": "linear",
 			"wrapS": "clamp",
 			"wrapT": "clamp",
-            "atlas": {
-                "background": [ 305, 32, 409, 194 ],
-                "foreground": [ 62, 24, 166, 186 ]
-            }
+			"atlas": {
+				"background": [ 50, 32, 206, 131 ],
+				"foreground": [ 270, 32, 426, 131]
+			}
 		},
 		"range_charge_HUD": {
 			"file": "textures/range_charge_HUD.png",
@@ -403,10 +403,10 @@
 			"magfilter": "linear",
 			"wrapS": "clamp",
 			"wrapT": "clamp",
-            "atlas": {
-                "background": [ 305, 32, 409, 194 ],
-                "foreground": [ 62, 24, 166, 186 ]
-            }
+			"atlas": {
+				"background": [ 50, 32, 206, 131 ],
+				"foreground": [ 270, 32, 426, 131 ]
+			}
 		},
 		"healthbar": {
 			"file": "textures/hud/healthbar2.png",
@@ -770,8 +770,8 @@
 							1,
 							1
 						],
-						"background": "range_charge_HUD_background",
-						"foreground": "range_charge_HUD_foreground",
+						"background": "melee_charge_HUD_background",
+						"foreground": "melee_charge_HUD_foreground",
 						"scale": 0.4
 					},
 					"layout": {
