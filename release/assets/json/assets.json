@@ -206,12 +206,19 @@
 			"wrapT": "clamp"
 		},
 		"player_melee_three": {
-			"file": "textures/animations/melee_arm_spritesheet.png",
+			"file": "textures/animations/melee_spritesheet_final.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
+        "player_melee_dash": {
+            "file": "textures/animations/melee_charge.png",
+            "minfilter": "nearest",
+            "magfilter": "linear",
+            "wrapS": "clamp",
+            "wrapT": "clamp"
+        },
 		"player_projectile": {
 			"file": "textures/interloper_projectile.png",
 			"minfilter": "nearest",

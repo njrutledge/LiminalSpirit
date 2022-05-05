@@ -96,6 +96,8 @@ protected:
     std::shared_ptr<Glow> _rangedArm;
     /** Melee arm texture */
     std::shared_ptr<Glow> _meleeArm;
+    /** Melee arm dash texture */
+    std::shared_ptr<Glow> _meleeArmDash;
     /** A shader */
     std::shared_ptr<cugl::Shader> _shader;
     /** A vertex buffer */
