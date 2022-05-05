@@ -2641,10 +2641,10 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     Rect leftRect = Rect(0, 0, 0.5, DEFAULT_HEIGHT);
     std::shared_ptr<physics2::PolygonObstacle> left = physics2::PolygonObstacle::allocWithAnchor(leftRect, Vec2::ANCHOR_CENTER);
     left->setBodyType(b2_staticBody);
+    left->setName("leftwall");
     left->setFilterData(filter);
 
     std::shared_ptr<scene2::PolygonNode> leftNode = scene2::PolygonNode::allocWithPoly(leftRect * _scale);
-    leftNode->setName("leftwall");
     leftNode->setColor(Color4::CLEAR);
     addObstacle(left, leftNode, 1);
 
@@ -2652,9 +2652,9 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     Rect rightRect = Rect(DEFAULT_WIDTH - 0.5, 0, 0.5, DEFAULT_HEIGHT);
     std::shared_ptr<physics2::PolygonObstacle> right = physics2::PolygonObstacle::allocWithAnchor(rightRect, Vec2::ANCHOR_CENTER);
     right->setBodyType(b2_staticBody);
+    right->setName("rightwall");
     right->setFilterData(filter);
     std::shared_ptr<scene2::PolygonNode> rightNode = scene2::PolygonNode::allocWithPoly(rightRect * _scale);
-    rightNode->setName("rightwall");
     rightNode->setColor(Color4::CLEAR);
     addObstacle(right, rightNode, 1);
 

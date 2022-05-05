@@ -300,9 +300,16 @@ void CollisionController::handleAttackCollision(AttackController::Attack* attack
             //TODO: stun both player and enemy?
         }
     }
-    else if ((bd && (bd->getName() == "platform" || bd->getName().find("wall")!= std::string::npos)) && attack->getType() == AttackController::p_exp_package) {
-        AC->createAttack(attack->getPosition(), 3, 0.15, 40, AttackController::p_exp, cugl::Vec2::ZERO, timer, PLAYER_RANGE, PLAYER_EXP_FRAMES);
+    else if ((bd && (bd->getName().find("wall")!= std::string::npos))){
+        switch(attack->getType()) {
+        case AttackController::p_exp_package:
+            AC->createAttack(attack->getPosition(), 3, 0.15, 40, AttackController::p_exp, cugl::Vec2::ZERO, timer, PLAYER_RANGE, PLAYER_EXP_FRAMES);
             attack->setInactive();
+            break;
+        case AttackController::p_range:
+            attack->setInactive();
+            break;
+        }
     }
 }
 

@@ -49,13 +49,13 @@ bool AttackController::Attack::init(const cugl::Vec2 p, float radius, float a, f
             case Type::p_exp:
                 _sensorName = "player" + _sensorName;
                 filter.categoryBits = 0b010000;
-                filter.maskBits = 0b000010;
+                filter.maskBits = 0b001010;
                 setFilterData(filter);
                 break;
             case Type::p_exp_package:
                 _sensorName = "player" + _sensorName;
                 filter.categoryBits = 0b010000;
-                filter.maskBits = 0b001110;
+                filter.maskBits = 0b001010;
                 setFilterData(filter);
                 break;
                 
