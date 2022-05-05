@@ -319,6 +319,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
 
     addChildWithName(_pauseScene, "pause");
     _returnButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("pauseScene_resume"));
+    if (_returnButton->hasListener()) {
+        _returnButton->removeListener(1);
+    }
     _returnButton->addListener([=](const std::string& name, bool down)
         {
             // Only quit when the button is released
@@ -328,6 +331,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _returnButton->setScale(.4*buttonScale);
 
     _homeButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("pauseScene_home"));
+    if (_homeButton->hasListener()) {
+        _homeButton->removeListener(1);
+    }
     _homeButton->addListener([=](const std::string& name, bool down)
         {
             // Only quit when the button is released
@@ -354,6 +360,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     addChildWithName(_optionScene, "options");
     
     _optionReturnButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_return"));
+    if (_optionReturnButton->hasListener()) {
+        _optionReturnButton->removeListener(1);
+    }
     _optionReturnButton->addListener([=](const std::string& name, bool down)
         {
             // Only quit when the button is released
@@ -364,6 +373,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _optionReturnButton->setScale(.4 * buttonScale);
 
     _swapHandsButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_swap"));
+    if (_swapHandsButton->hasListener()) {
+        _swapHandsButton->removeListener(1);
+    }
     _swapHandsButton->addListener([=](const std::string& name, bool down)
         {
             // Only quit when the button is released
@@ -374,6 +386,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
 
     
     _musicButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_music"));
+    if (_musicButton->hasListener()) {
+        _musicButton->removeListener(1);
+    }
     _musicButton->addListener([=](const std::string& name, bool down)
         {
             // Only quit when the button is released
@@ -383,6 +398,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _musicButton->setScale(.4 * buttonScale);
 
     _sfxButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_sfx"));
+    if (_sfxButton->hasListener()) {
+        _sfxButton->removeListener(1);
+    }
     _sfxButton->addListener([=](const std::string& name, bool down)
         {
             // Only quit when the button is released
@@ -443,6 +461,7 @@ void GameScene::dispose()
     _font = nullptr;
     _endText = nullptr;
     _healthbar = nullptr;
+    _swapHandsButton->removeListener(0);
 
     // TODO: CHECK IF THIS IS RIGHT FOR DISPOSING
     //    for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
@@ -492,6 +511,12 @@ void GameScene::update(float timestep)
         _optionButton->deactivate();
         _pauseButton->setVisible(false);
         _pauseButton->deactivate();
+        if (_swap) {
+            CULog("SWAP!!!!!!!!");
+        }
+        else {
+            CULog("No swap...");
+        }
         return;
     }
     else {
