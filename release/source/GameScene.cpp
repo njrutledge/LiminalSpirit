@@ -460,7 +460,6 @@ void GameScene::dispose()
     _font = nullptr;
     _endText = nullptr;
     _healthbar = nullptr;
-    _swapHandsButton->removeListener(0);
 
     // TODO: CHECK IF THIS IS RIGHT FOR DISPOSING
     //    for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
