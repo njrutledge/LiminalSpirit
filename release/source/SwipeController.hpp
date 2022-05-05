@@ -286,6 +286,10 @@ public:
         return _rightAngle;
     };
     
+    float getRangeCharge() {
+        return std::min(_cRangeCount / _cRCool, 1.0f);
+    }
+    
     /**
      * Returns whether the left attack is charged
      *

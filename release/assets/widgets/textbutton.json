@@ -2,106 +2,66 @@
   "variables": {
     "text": [
       "children",
-      "patchtext",
-      "children",
       "label",
-      "data",
       "text"
     ],
-    "size": [
+    "scale": [
       "data",
-      "size"
-    ],
-    "font": [
-      "children",
-      "patchtext",
-      "children",
-      "label",
-      "data",
-      "font"
+      "scale"
     ]
   },
   "contents": {
     "type": "Button",
     "data": {
-      "upnode": "menubutton",
+      "upnode": "up",
       "anchor": [
         0.5,
         0.5
       ],
-      "size": [
-        300,
-        75
-      ]
+      "scale": 0.75
     },
     "layout": {
       "x_anchor": "center",
-      "y_anchor": "middle"
+      "y_anchor": "middle",
+      "y_offset": -0.25,
+      "x_offset": 0,
+      "absolute": false
     },
     "children": {
-      "patchtext": {
-        "type": "node",
-        "format": {
-          "type": "Anchored"
-        },
+      "up": {
+        "type": "Image",
         "data": {
-          "upnode": "button1",
-          "size": [
-            300,
-            75
-          ]
+          "texture": "textbutton_base"
         },
         "layout": {
           "x_anchor": "fill",
           "y_anchor": "fill"
+        }
+      },
+      "label": {
+        "type": "Label",
+        "format": {
+          "type": "Anchored"
         },
-        "children": {
-          "menubutton": {
-            "type": "ninepatch",
-            "format": {
-              "type": "Anchored"
-            },
-            "data": {
-              "texture": "menubutton",
-              "scale": 1,
-              "interior": [
-                33,
-                40,
-                62,
-                55
-              ]
-            },
-            "layout": {
-              "x_anchor": "fill",
-              "y_anchor": "fill"
-            }
-          },
-          "label": {
-            "type": "Label",
-            "format": {
-              "type": "Anchored"
-            },
-            "data": {
-              "font": "gyparody",
-              "anchor": [
-                0.5,
-                0.5
-              ],
-              "text": "Click Me",
-              "foreground": [
-                255,
-                255,
-                255,
-                255
-              ],
-              "halign": "center",
-              "valign": "true middle"
-            },
-            "layout": {
-              "x_anchor": "fill",
-              "y_anchor": "fill"
-            }
-          }
+        "data": {
+          "font": "spectral",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "text": "Click Me",
+          "foreground": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "halign": "true center",
+          "valign": "true middle"
+        },
+        "layout": {
+          "x_anchor": "fill",
+          "y_anchor": "fill"
         }
       }
     }

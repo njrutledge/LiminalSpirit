@@ -301,10 +301,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
 
     // Grab healthbar
     _healthbar = std::dynamic_pointer_cast<scene2::ProgressBar>(assets->get<scene2::SceneNode>("HUD_healthbar"));
+    _range_charge = std::dynamic_pointer_cast<scene2::ProgressBar>(assets->get<scene2::SceneNode>("HUD_range_charge"));
     auto HUD = assets->get<scene2::SceneNode>("HUD");
     HUD->setContentSize(dimen);
     HUD->doLayout();
-    HUD->setPosition(offset);
 
     scene->addChildWithName(HUD, "HUD");
 
@@ -312,6 +312,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
 
     _pauseScene->setContentSize(dimen);
     _pauseScene->doLayout();
+
+    float buttonScale = _scale/32.0f;
 
     addChildWithName(_pauseScene, "pause");
     _returnButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("pauseScene_resume"));
@@ -321,7 +323,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
                 _pause = false;
             } });
-    _returnButton->setScale(boundScale);
+    _returnButton->setScale(.4*buttonScale);
 
     _homeButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("pauseScene_home"));
     _homeButton->addListener([=](const std::string& name, bool down)
@@ -330,7 +332,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
                 _back = true;
             } });
-    _homeButton->setScale(boundScale);
+    _homeButton->setScale(.4*buttonScale);
 
     _optionButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("pauseScene_options"));
     _optionButton->addListener([=](const std::string& name, bool down)
@@ -339,7 +341,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
                 _options = true;
             } });
-    _optionButton->setScale(boundScale);
+    _optionButton->setScale(.4 * buttonScale);
 
 
 
@@ -357,7 +359,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
                 _options = false;
                 _pause = true;
             } });
-    _optionReturnButton->setScale(boundScale);
+    _optionReturnButton->setScale(.4 * buttonScale);
 
     _swapHandsButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_swap"));
     _swapHandsButton->addListener([=](const std::string& name, bool down)
@@ -366,7 +368,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
 
             } });
-    _swapHandsButton->setScale(boundScale);
+    _swapHandsButton->setScale(.4 * buttonScale);
 
     
     _musicButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_music"));
@@ -376,7 +378,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
 
             } });
-    _musicButton->setScale(boundScale);
+    _musicButton->setScale(.4 * buttonScale);
 
     _sfxButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_sfx"));
     _sfxButton->addListener([=](const std::string& name, bool down)
@@ -385,7 +387,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
 
             } });
-    _sfxButton->setScale(boundScale);
+    _sfxButton->setScale(.4 * buttonScale);
 
 
 
@@ -482,6 +484,12 @@ void GameScene::update(float timestep)
         _musicButton->activate();
         _sfxButton->activate();
         _swapHandsButton->activate();
+
+        _returnButton->deactivate();
+        _homeButton->deactivate();
+        _optionButton->deactivate();
+        _pauseButton->setVisible(false);
+        _pauseButton->deactivate();
         return;
     }
     else {
@@ -491,6 +499,7 @@ void GameScene::update(float timestep)
         _musicButton->deactivate();
         _sfxButton->deactivate();
         _swapHandsButton->deactivate();
+        
     }
     
     if (_pause) {
@@ -502,6 +511,8 @@ void GameScene::update(float timestep)
         Size pos1 = _optionScene->getContentSize();
         Vec2 pos2 = _returnButton->getPosition();
         CULog("pos: %f, %f || %f, %f", pos1.width, pos1.height, pos2.x, pos2.y);
+        _pauseButton->setVisible(false);
+        _pauseButton->deactivate();
         return;
     }
     else {
@@ -510,6 +521,8 @@ void GameScene::update(float timestep)
         _returnButton->deactivate();
         _homeButton->deactivate();
         _optionButton->deactivate();
+        _pauseButton->setVisible(true);
+        _pauseButton->activate();
     }
 
     
@@ -2023,6 +2036,8 @@ void GameScene::updateHealthbar()
     {
         _healthbar->setProgress(prog);
     }
+    
+    _range_charge->setProgress(_swipes.getRangeCharge());
 }
 
 void GameScene::updateCamera()
@@ -2539,14 +2554,14 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     // std::shared_ptr<Texture> down = _assets->get<Texture>("close-selected");
 
     Size bsize = up->getSize();
-    std::shared_ptr<scene2::Button> button = scene2::Button::alloc(scene2::PolygonNode::allocWithTexture(up));
-    button->setScale(0.55);
+    _pauseButton = scene2::Button::alloc(scene2::PolygonNode::allocWithTexture(up));
+    _pauseButton->setScale(0.55);
     // button->setAnchor(Vec2(1, 1));
     // scene2::PolygonNode::allocWithTexture(down));
 
     // Create a callback function for the button
-    button->setName("pause");
-    button->addListener([=](const std::string &name, bool down)
+    _pauseButton->setName("pause");
+    _pauseButton->addListener([=](const std::string &name, bool down)
                         {
             // Only quit when the button is released
             if (!down) {
@@ -2609,8 +2624,8 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     addObstacle(right, rightNode, 1);
 
     // Position the button in the bottom right corner
-    button->setAnchor(Vec2(0,1));
-    button->setPosition(size.width - (bsize.width + rOffset) / 2, size.height - (bsize.height + bOffset) / 2 + 70);
+    _pauseButton->setAnchor(Vec2(0,1));
+    _pauseButton->setPosition(size.width - (bsize.width + rOffset) / 2, size.height - (bsize.height + bOffset) / 2);
 
     // Add platforms to the world
     Vec2 pos;
@@ -2690,7 +2705,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
 
     // Add the logo and button to the scene graph
     // TODO get rid of this
-    scene->addChild(button);
+    scene->addChild(_pauseButton);
 
     // Create particles
     // TODO: THIS IS BAD AND MAKING A FAKE "PLAYER"
@@ -2756,7 +2771,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     addObstacle(_meleeArm, meleeArmSprite, true);
 
     // We can only activate a button AFTER it is added to a scene
-    button->activate();
+    _pauseButton->activate();
 }
 
 /**
