@@ -99,6 +99,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _next = false;
     _pause = false;
     _options = false;
+    _swap = false;
     Size dimen = Application::get()->getDisplaySize();
     float boundScale = SCENE_WIDTH / dimen.width;
     dimen *= boundScale;
