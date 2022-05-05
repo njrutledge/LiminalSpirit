@@ -307,6 +307,7 @@ void CollisionController::handleAttackCollision(AttackController::Attack* attack
             attack->setInactive();
             break;
         case AttackController::p_range:
+        case AttackController::e_range:
             attack->setInactive();
             break;
         }
