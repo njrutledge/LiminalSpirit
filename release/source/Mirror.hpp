@@ -16,7 +16,11 @@
 //distance from linked Enemy
 #define MIRROR_DISTANCE 1.0f
 //amplification power
-#define MIRROR_AMPLIFY 1.5f
+#define MIRROR_SQUARE_AMP 1.5f
+
+#define MIRROR_TRI_AMP .66f
+
+#define MIRROR_CIRC_AMP .5f
 //attack texture definitions
 #define MIRROR_REFLECT_TEXTURE "mirror_reflectattack"
 #define MIRROR_REFLECT_ROWS 1

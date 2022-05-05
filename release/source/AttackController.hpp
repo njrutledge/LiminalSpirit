@@ -114,6 +114,8 @@ public:
         b2Fixture* _bodySensorFixture;
         /** Name of sensor */
         std::string _sensorName;
+
+        std::string _homingSensorName;
         /** Debug Sensor */
         std::shared_ptr<cugl::scene2::WireNode> _sensorNode;
 
@@ -183,6 +185,9 @@ public:
         MeleeState getMeleeState(){ return _meleeState; }
 
         std::string* getSensorName() { return &_sensorName; }
+
+        std::string* getHomingSensorName() { return &_homingSensorName; }
+
         void setSensorName(string s) { _sensorName = s; }
 
         bool isSplitable() { return _splitable; }
@@ -316,7 +321,7 @@ public:
     /**
      *  Creates an attack for a right sided swipe.
      */
-    void attackRight(cugl::Vec2 p, SwipeController::SwipeAttack attack, float angle, bool grounded, float timer, std::shared_ptr<SoundController> sound);
+    void attackRight(cugl::Vec2 p, SwipeController::SwipeAttack attack, float angle, bool grounded, bool facingRight, float timer, std::shared_ptr<SoundController> sound);
     
     /**
      *  Creates an attack for a left sided swipe.
