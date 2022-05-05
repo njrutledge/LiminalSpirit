@@ -106,6 +106,12 @@ protected:
     float _cRangeCount;
     /** Charge threshold for range*/
     float _cRCool;
+    /** Charge count value for melee*/
+    int _mChargeCount;
+    /** Charge melee swipe window*/
+    float _mChargeWindow;
+    /** Charge melee swipe timer */
+    float _mChargeTimer;
     
     /** Timestamp to get the current time for charge calculations */
     cugl::Timestamp _currTime;
@@ -223,7 +229,13 @@ protected:
     void resetRightState() {
         _rightState.direction = none;
         _rightState.isCharged = false;
+        _mChargeTimer = 0;
     }
+    
+    /**
+     * Updates right state for triple dash mechanic
+     */
+    void updateRightState(float timestep);
     
     /**
      * Print the side and direction of the swipe (for testing only)
