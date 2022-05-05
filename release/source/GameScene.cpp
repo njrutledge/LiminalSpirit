@@ -179,6 +179,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _spawner_enemy_types.clear();
     _living_spawners.clear();
     _spawnParticlesDone = false;
+    _spawner_pos.clear();
     if (_constants->get("spawner_types"))
     {
         auto spawnTypes = _constants->get("spawner_types")->children();
@@ -447,6 +448,7 @@ void GameScene::dispose()
     _enemies.clear();
     _platforms.clear();
     _spawners.clear();
+    _spawner_pos.clear();
     if (_attacks)
     {
         _attacks->_current.clear();
@@ -2058,6 +2060,7 @@ void GameScene::updateSpawnEnemies(float timestep)
     {
         if (_living_spawners[index])
         {
+            cout << index << endl;
             for (auto i : (*it))
             {
                 string name = i.first;
