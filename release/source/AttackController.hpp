@@ -316,7 +316,7 @@ public:
     /**
      *  Creates an attack for a right sided swipe.
      */
-    void attackRight(cugl::Vec2 p, SwipeController::SwipeAttack attack, float angle, bool grounded, float timer, std::shared_ptr<SoundController> sound);
+    void attackRight(cugl::Vec2 p, SwipeController::SwipeAttack attack, float angle, bool grounded, bool facingRight, float timer, std::shared_ptr<SoundController> sound);
     
     /**
      *  Creates an attack for a left sided swipe.
