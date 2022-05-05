@@ -25,7 +25,7 @@ SwipeController::SwipeController() : _leftSwipe(noAttack),
     _cRCool = 5.0f;
     
     _mChargeCount = 0;
-    _mChargeWindow = 0.5;
+    _mChargeWindow = 0.9;
     _mChargeTimer = 0.0f;
 }
 
