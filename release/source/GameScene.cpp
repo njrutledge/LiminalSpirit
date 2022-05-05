@@ -2075,7 +2075,6 @@ void GameScene::updateSpawnEnemies(float timestep)
     {
         if (_living_spawners[index])
         {
-            cout << index << endl;
             for (auto i : (*it))
             {
                 string name = i.first;
