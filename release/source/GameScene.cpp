@@ -367,7 +367,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
         {
             // Only quit when the button is released
             if (!down) {
-
+                _swap = !_swap;
             } });
     _swapHandsButton->setScale(.4 * buttonScale);
 
@@ -1624,9 +1624,9 @@ void GameScene::updateSwipesAndAttacks(float timestep)
     b2Vec2 playerPos = _player->getBody()->GetPosition();
     if (!_player->isStunned())
     {
-        _attacks->attackLeft(Vec2(playerPos.x, playerPos.y), _swipes.getLeftSwipe(), _swipes.getLeftAngle(), _player->isGrounded(), _timer, _sound);
-        _attacks->attackRight(Vec2(playerPos.x, playerPos.y), _swipes.getRightSwipe(), _swipes.getRightAngle(), _player->isGrounded(), _player->isFacingRight(), _timer, _sound);
-        if (_swipes.getRightSwipe() == SwipeController::chargedRight)
+        _attacks->attackLeft(Vec2(playerPos.x, playerPos.y), _swipes.getLeftSwipe(_swap), _swipes.getLeftAngle(_swap), _player->isGrounded(), _timer, _sound);
+        _attacks->attackRight(Vec2(playerPos.x, playerPos.y), _swipes.getRightSwipe(_swap), _swipes.getRightAngle(_swap), _player->isGrounded(), _player->isFacingRight(), _timer, _sound);
+        if (_swipes.getRightSwipe(_swap) == SwipeController::chargedRight)
         {
             _dashXVel = 20;
             _dashYVel = 1;
@@ -1635,7 +1635,7 @@ void GameScene::updateSwipesAndAttacks(float timestep)
             _player->setDashingLastFrame(false);
             _player->setDashAngle(0);
         }
-        else if (_swipes.getRightSwipe() == SwipeController::chargedLeft)
+        else if (_swipes.getRightSwipe(_swap) == SwipeController::chargedLeft)
         {
             _dashXVel = -20;
             _dashYVel = 1;
@@ -1644,7 +1644,7 @@ void GameScene::updateSwipesAndAttacks(float timestep)
             _player->setDashingLastFrame(false);
             _player->setDashAngle(180);
         }
-        else if (_swipes.getRightSwipe() == SwipeController::chargedUp)
+        else if (_swipes.getRightSwipe(_swap) == SwipeController::chargedUp)
         {
             _dashYVel = 20;
             _dashTime = 0;
@@ -1652,7 +1652,7 @@ void GameScene::updateSwipesAndAttacks(float timestep)
             _player->setDashingLastFrame(false);
             _player->setDashAngle(90);
         }
-        else if (_swipes.getRightSwipe() == SwipeController::chargedDown)
+        else if (_swipes.getRightSwipe(_swap) == SwipeController::chargedDown)
         {
             _dashYVel = -23;
             _dashTime = 0;

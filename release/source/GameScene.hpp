@@ -233,6 +233,8 @@ protected:
 
     std::shared_ptr<scene2::Button> _swapHandsButton;
 
+    bool _swap;
+
     std::shared_ptr<scene2::Button> _musicButton;
 
     std::shared_ptr<scene2::Button> _sfxButton;
