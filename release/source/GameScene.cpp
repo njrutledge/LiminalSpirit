@@ -1379,6 +1379,7 @@ void GameScene::updateEnemies(float timestep)
     // For each enemy
     std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("devil"), Vec2(0, 0));
     std::shared_ptr<ParticlePool> pool2 = ParticlePool::allocPoint(_particleInfo->get("damaged"), Vec2(0, 0));
+    std::shared_ptr<ParticlePool> numPool = ParticlePool::allocPoint(_particleInfo->get("number"), Vec2(0, 0));
     std::shared_ptr<Texture> melee_impact = _assets->get<Texture>("melee_impact");
     std::shared_ptr<Texture> ranged_impact = _assets->get<Texture>("ranged_impact");
     for (auto it = _enemies.begin(); it != _enemies.end(); ++it)
@@ -1489,7 +1490,7 @@ void GameScene::updateEnemies(float timestep)
                 if (!(*it)->getPlayedDamagedParticle())
                 {
                     //std::shared_ptr<ParticleNode> dmgd;
-                    //(*it)->setPlayedDamagedParticle(true);
+                    (*it)->setPlayedDamagedParticle(true);
                     //if ((*it)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee)
                     //{
                     //    dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, melee_impact, pool);
@@ -1508,9 +1509,10 @@ void GameScene::updateEnemies(float timestep)
                     }
                     else {
                         std::vector<std::shared_ptr<Texture>> num = getTexturesFromNumber((*it)->getLastDamageAmount());
-                        numDmg = ParticleNode::alloc((*it)->getPosition() * _scale, num, pool, true, Vec2(10, 10));
+                        Vec2 offset = Vec2(-40, 0);
+                        numDmg = ParticleNode::alloc((*it)->getPosition() * _scale, num, numPool, true, offset);
                     }
-                    numDmg->setScale(0.1f);
+                    numDmg->setScale(0.5f);
                     _worldnode->addChildWithTag(numDmg, 100);
                 }
                 if (!sprite->isFlipHorizontal())

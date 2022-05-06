@@ -18,7 +18,7 @@ bool ParticleNode::init(const Vec2& pos, const std::shared_ptr<Texture> texture,
 		_particlePool = particles;
 		_hasMultipleTextures = false;
 		_hasTwoLinkedTextures = false;
-		_linkOffset = 0;
+		_linkOffset = Vec2();
 		return true;
 	}
     // added to fix none-void function does not return value in control path
@@ -35,7 +35,7 @@ bool ParticleNode::init(const Vec2& pos, std::vector<std::shared_ptr<Texture>> t
 		if (!linked) {
 			_hasMultipleTextures = true;
 			_hasTwoLinkedTextures = false;
-			_linkOffset = 0;
+			_linkOffset = Vec2();
 		}
 		else {
 			_hasMultipleTextures = false;

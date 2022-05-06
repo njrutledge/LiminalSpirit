@@ -431,7 +431,7 @@ public:
     void createParticles();
 
     /** Helper to convert numbers into Textures **/
-    std::vector<std::shared_ptr<Texture>> GameScene::getTexturesFromNumber(int num);
+    std::vector<std::shared_ptr<Texture>> getTexturesFromNumber(int num);
 
     string getBiome() { return _biome; }
 
