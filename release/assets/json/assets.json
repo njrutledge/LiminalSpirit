@@ -317,6 +317,76 @@
 			"minfilter": "linear",
 			"magfilter": "linear"
 		},
+		"zero": {
+			"file": "textures/numbers/0.png",
+			"wrapS": "clamp",
+			"wrapT": "clamp",
+			"minfilter": "linear",
+			"magfilter": "linear"
+		},
+		"one": {
+			"file": "textures/numbers/1.png",
+			"wrapS": "clamp",
+			"wrapT": "clamp",
+			"minfilter": "linear",
+			"magfilter": "linear"
+		},
+		"two": {
+			"file": "textures/numbers/2.png",
+			"wrapS": "clamp",
+			"wrapT": "clamp",
+			"minfilter": "linear",
+			"magfilter": "linear"
+		},
+		"three": {
+			"file": "textures/numbers/3.png",
+			"wrapS": "clamp",
+			"wrapT": "clamp",
+			"minfilter": "linear",
+			"magfilter": "linear"
+		},
+		"four": {
+			"file": "textures/numbers/4.png",
+			"wrapS": "clamp",
+			"wrapT": "clamp",
+			"minfilter": "linear",
+			"magfilter": "linear"
+		},
+		"five": {
+			"file": "textures/numbers/5.png",
+			"wrapS": "clamp",
+			"wrapT": "clamp",
+			"minfilter": "linear",
+			"magfilter": "linear"
+		},
+		"six": {
+			"file": "textures/numbers/6.png",
+			"wrapS": "clamp",
+			"wrapT": "clamp",
+			"minfilter": "linear",
+			"magfilter": "linear"
+		},
+		"seven": {
+			"file": "textures/numbers/7.png",
+			"wrapS": "clamp",
+			"wrapT": "clamp",
+			"minfilter": "linear",
+			"magfilter": "linear"
+		},
+		"eight": {
+			"file": "textures/numbers/8.png",
+			"wrapS": "clamp",
+			"wrapT": "clamp",
+			"minfilter": "linear",
+			"magfilter": "linear"
+		},
+		"nine": {
+			"file": "textures/numbers/9.png",
+			"wrapS": "clamp",
+			"wrapT": "clamp",
+			"minfilter": "linear",
+			"magfilter": "linear"
+		},
 		"cave_background": {
 			"file": "textures/backgrounds/cave_background.png"
 		},

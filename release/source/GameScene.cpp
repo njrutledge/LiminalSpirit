@@ -411,9 +411,19 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             } });
     _sfxButton->setScale(.4 * buttonScale);
 
-
-
-
+    std::vector<std::shared_ptr<Texture>> numTexts;
+    numTexts.push_back(_assets->get<Texture>("zero"));
+    numTexts.push_back(_assets->get<Texture>("one"));
+    numTexts.push_back(_assets->get<Texture>("two"));
+    numTexts.push_back(_assets->get<Texture>("three"));
+    numTexts.push_back(_assets->get<Texture>("four"));
+    numTexts.push_back(_assets->get<Texture>("five"));
+    numTexts.push_back(_assets->get<Texture>("six"));
+    numTexts.push_back(_assets->get<Texture>("seven"));
+    numTexts.push_back(_assets->get<Texture>("eight"));
+    numTexts.push_back(_assets->get<Texture>("nine"));
+    
+    _numberTextures = numTexts;
 
 
     std::string msg = strtool::format("Wave: %d / %d", _nextWaveNum, _numWaves);
@@ -700,17 +710,6 @@ void GameScene::updateAnimations(float timestep)
     // Player (body) Animations
     if (_player->isStunned())
     {
-
-        // Play damaged particles once when stunned
-        // if ((sprite->getFrame() != 31 && _player->isFacingRight()) || (sprite->getFrame() != 24 && !_player->isFacingRight())) {
-        //    std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("damaged"), Vec2(0, 0));
-        //    std::shared_ptr<Texture> text = _assets->get<Texture>("star");
-        //    std::shared_ptr<ParticleNode> dmgd = ParticleNode::alloc(_player->getPosition() * _scale, text, pool);
-        //    dmgd->setColor(Color4::RED);
-        //    dmgd->setScale(0.25f);
-        //    _worldnode->addChildWithTag(dmgd, 100);
-        //}
-
         // Store the frame being played before stun
         if (sprite->getFrame() != 31 && sprite->getFrame() != 24)
         {
@@ -1463,18 +1462,30 @@ void GameScene::updateEnemies(float timestep)
             {
                 if (!(*it)->getPlayedDamagedParticle())
                 {
-                    std::shared_ptr<ParticleNode> dmgd;
-                    (*it)->setPlayedDamagedParticle(true);
-                    if ((*it)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee)
-                    {
-                        dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, melee_impact, pool);
+                    //std::shared_ptr<ParticleNode> dmgd;
+                    //(*it)->setPlayedDamagedParticle(true);
+                    //if ((*it)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee)
+                    //{
+                    //    dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, melee_impact, pool);
+                    //}
+                    //else
+                    //{
+                    //    dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, ranged_impact, pool);
+                    //}
+                    //dmgd->setScale(0.1f);
+                    //_worldnode->addChildWithTag(dmgd, 100);
+                    std::shared_ptr<ParticleNode> numDmg;
+                    
+                    if ((*it)->getLastDamageAmount() < 10) {
+                        std::shared_ptr<Texture> num = _numberTextures[(*it)->getLastDamageAmount()];
+                        numDmg = ParticleNode::alloc((*it)->getPosition() * _scale, num, pool);
                     }
-                    else
-                    {
-                        dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, ranged_impact, pool);
+                    else {
+                        std::vector<std::shared_ptr<Texture>> num = getTexturesFromNumber((*it)->getLastDamageAmount());
+                        numDmg = ParticleNode::alloc((*it)->getPosition() * _scale, num, pool, true, Vec2(10, 10));
                     }
-                    dmgd->setScale(0.1f);
-                    _worldnode->addChildWithTag(dmgd, 100);
+                    numDmg->setScale(0.1f);
+                    _worldnode->addChildWithTag(numDmg, 100);
                 }
                 if (!sprite->isFlipHorizontal())
                 {
@@ -1637,6 +1648,18 @@ void GameScene::updateEnemies(float timestep)
             _collider.setIndexSpawner(-1);
         }
     }
+}
+
+std::vector<std::shared_ptr<Texture>> GameScene::getTexturesFromNumber(int num) {
+    std::vector<std::shared_ptr<Texture>> nums;
+
+    while (num > 0) {
+        int digit = num % 10;
+        nums.push_back(_numberTextures[digit]);
+        num = num / 10;
+    }
+
+    return nums; 
 }
 
 void GameScene::updateSwipesAndAttacks(float timestep)

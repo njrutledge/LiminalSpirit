@@ -29,6 +29,13 @@ protected:
 
     // If multiple textures are enabled
     bool _hasMultipleTextures;
+
+    // If made up of two linked textures
+    bool _hasTwoLinkedTextures;
+
+    // The offset between two linked textures
+    Vec2 _linkOffset;
+
 public:
     /*
     * Creates a new particle node at the origin.
@@ -54,9 +61,9 @@ public:
     *
     * @return  A newly allocated particle node, at the given position, with the given particle pool
     */
-    static std::shared_ptr<ParticleNode> alloc(const Vec2& pos, std::vector<std::shared_ptr<Texture>> textures, std::shared_ptr<ParticlePool> particles) {
+    static std::shared_ptr<ParticleNode> alloc(const Vec2& pos, std::vector<std::shared_ptr<Texture>> textures, std::shared_ptr<ParticlePool> particles, bool linked, Vec2& offset) {
         std::shared_ptr<ParticleNode> result = std::make_shared<ParticleNode>();
-        return (result->init(pos, textures, particles) ? result : nullptr);
+        return (result->init(pos, textures, particles, linked, offset) ? result : nullptr);
     }   
 
 
@@ -72,7 +79,7 @@ public:
     *
     * @return  A newly allocated particle node, at the given position, with the given particle pool
      */
-    bool init(const Vec2& pos, std::vector<std::shared_ptr<Texture>> textures, std::shared_ptr<ParticlePool> particles);
+    bool init(const Vec2& pos, std::vector<std::shared_ptr<Texture>> textures, std::shared_ptr<ParticlePool> particles, bool linked, Vec2& offset);
 
     /*
     * Updates the particles in this node

@@ -46,6 +46,18 @@
 	 "startSizeRange": [1, 1],
 	 "sizeChangeRateRange": [-0.01, -0.01],
 	 "maxSizeChangeTime": 10
+     },
+    "devil2": {
+         "burstParticles": 1, 
+         "maxParticleCount": 1,
+         "gravity": [0, 0],
+         "emissionRateRange": [1, 1],
+         "lifetimeRange": [50,50],
+         "angleRange": [0, 0],
+         "speedRange": [0, 0],
+	 "startSizeRange": [5, 5],
+	 "sizeChangeRateRange": [0,0],
+	 "maxSizeChangeTime": 10
      }
 
 }

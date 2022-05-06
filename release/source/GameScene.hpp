@@ -115,6 +115,10 @@ protected:
     std::shared_ptr<cugl::TextLayout> _timer_text;
     /** Text font */
     std::shared_ptr<cugl::Font> _font;
+
+    /** Textures for numbers 0-9 */
+    std::vector<std::shared_ptr<Texture>> _numberTextures;
+
     /** The temp text with the ending win message */
     std::shared_ptr<cugl::TextLayout> _endText;
     
@@ -425,6 +429,9 @@ public:
 
     /** Creates the intial particle pool */
     void createParticles();
+
+    /** Helper to convert numbers into Textures **/
+    std::vector<std::shared_ptr<Texture>> GameScene::getTexturesFromNumber(int num);
 
     string getBiome() { return _biome; }
 
