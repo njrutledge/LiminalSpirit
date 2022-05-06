@@ -1035,15 +1035,16 @@ void GameScene::updateAnimations(float timestep)
     if (_player->isStunned())
     {
         if (_player->isFacingRight()){
-            mSprite->setFrame(22);
+            mSprite->setFrame(21);
         }
         else {
-            mSprite->setFrame(26);
+            mSprite->setFrame(27);
         }
         _meleeArm->setLastType(Glow::MeleeState::cool);
         _meleeArm->setAnimeTimer(0);
     }
-    else if (_player->isDashing()) {
+    else if (_player->isDashing())
+    {
         if (_player->isFacingRight()){
             _meleeArmDash->setAttackAngle(_player->getDashAngle());
         }
@@ -1063,7 +1064,7 @@ void GameScene::updateAnimations(float timestep)
             _player->setDashingLastFrame(true);
         }
         else {
-            if (_meleeArmDash->getAnimeTimer() > 0.06f) {
+            if (_meleeArmDash->getAnimeTimer() > 0.085f) {
                 if (_player->isFacingRight())
                 {
                     int nextFrame = mdSprite->getFrame() - 1;
@@ -1086,13 +1087,38 @@ void GameScene::updateAnimations(float timestep)
     }
     else if (_meleeArm->getLastType() == Glow::MeleeState::cool)
     {
-        if (_player->isFacingRight())
-        {
-            mSprite->setFrame(7);
+        if (_swipes.getRightChargingTime() >= 100 && _swipes.getRightChargingTime() < 100 + ((CHARGE_TIME - 100) / 2)) {
+            if (_player->isFacingRight())
+            {
+                mSprite->setFrame(26);
+            }
+            else
+            {
+                mSprite->setFrame(22);
+            }
         }
-        else
-        {
-            mSprite->setFrame(13);
+        else if (_swipes.getRightChargingTime() >= 100 + ((CHARGE_TIME - 100) / 2) && _swipes.getRightChargingTime() < CHARGE_TIME) {
+            if (_player->isFacingRight())
+            {
+                mSprite->setFrame(25);
+            }
+            else
+            {
+                mSprite->setFrame(23);
+            }
+        }
+        else if (_swipes.getRightChargingTime() >= CHARGE_TIME) {
+            mSprite->setFrame(24);
+        }
+        else {
+            if (_player->isFacingRight())
+            {
+                mSprite->setFrame(7);
+            }
+            else
+            {
+                mSprite->setFrame(13);
+            }
         }
     }
     else if (_meleeArm->getLastType() == Glow::MeleeState::h1_left)
@@ -1311,7 +1337,7 @@ void GameScene::updateMeleeArm(float timestep)
 {
     ////MELEE ARM MUST STAY AT BOTTOM
     // Determining arm positions and offsets
-    float offsetArm2 = -3.0f;
+    float offsetArm2 = -3.2f;
     if (_player->isDashing()) {
         offsetArm2 = -1.0f;
     }
@@ -1869,20 +1895,6 @@ void GameScene::updateSwipesAndAttacks(float timestep)
             attackSprite->setScale(.35f * (*it)->getRadius());
             dynamic_pointer_cast<scene2::SpriteNode>(attackSprite)->setFrame(1);
             attackSprite->setPriority(3);
-            _rangedArm->setLastType(Glow::MeleeState::first);
-            _player->setRangedAttackRight(_player->isFacingRight());
-            if (_swipes.getLeftSwipe(_swap) == SwipeController::downAttack)
-            {
-                _rangedArm->setAttackAngle(270);
-            }
-            else
-            {
-                _rangedArm->setAttackAngle((*it)->getAngle());
-            }
-            if (_player->isFacingRight())
-            {
-                _rangedArm->setAttackAngle(fmod(_rangedArm->getAttackAngle() + 180, 360));
-            }
         }
         else if (attackType == AttackController::Type::p_melee)
         {
@@ -2670,14 +2682,39 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     floor->setBodyType(b2_staticBody);
 
     std::shared_ptr<scene2::PolygonNode> floorNode = scene2::PolygonNode::allocWithPoly(floorRect * _scale);
-    floorNode->setColor(Color4::BLACK);
+    floorNode->setColor(Color4::CLEAR);
     floor->setName("bottomwall");
     b2Filter filter = b2Filter();
     filter.categoryBits = 0b1000;
     // filter.maskBits = 0b1100;
     floor->setFilterData(filter);
     addObstacle(floor, floorNode, 1);
+    
+    // Split floor into 4 to repeat texture
+    int split = 3;
+    for (int i = 0; i < split; i++) {
+        Rect floorRect = Rect(DEFAULT_WIDTH / split * i, 0, DEFAULT_WIDTH / split, 0.5);
+        std::shared_ptr<physics2::PolygonObstacle> floor = physics2::PolygonObstacle::allocWithAnchor(floorRect, Vec2::ANCHOR_CENTER);
+        floor->setBodyType(b2_staticBody);
 
+        std::shared_ptr<Texture> floorImage = _assets->get<Texture>("platform");
+        if (!_biome.compare("cave")) {
+            floorImage = _assets->get<Texture>("cave_floor");
+        }
+        else if (!_biome.compare("shroom")) {
+            floorImage = _assets->get<Texture>("shroom_floor");
+        }
+        else if (!_biome.compare("forest")) {
+            floorImage = _assets->get<Texture>("forest_floor");
+        }
+        std::shared_ptr<scene2::PolygonNode> floorSprite = scene2::PolygonNode::allocWithTexture(floorImage);
+        float desiredWidth = DEFAULT_WIDTH * _scale;
+        float floorScale = desiredWidth / floorSprite->getWidth() / split;
+        floorSprite->setScale(floorScale);
+        floorSprite->setPriority(.1);
+        addObstacle(floor, floorSprite, 1);
+    }
+    
     // Making the ceiling -jdg274
     Rect ceilingRect = Rect(0, DEFAULT_HEIGHT - 0.5, DEFAULT_WIDTH, 0.5);
     std::shared_ptr<physics2::PolygonObstacle> ceiling = physics2::PolygonObstacle::allocWithAnchor(ceilingRect, Vec2::ANCHOR_CENTER);
