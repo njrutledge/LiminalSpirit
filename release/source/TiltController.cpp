@@ -60,12 +60,10 @@ void TiltController::update(InputController& input, float width) {
     // MOBILE CONTROLS
     Vec3 acc = input.getAcceleration();
     float xAcc = acc.x;
-    CULog("before %f", xAcc);
     
     if (_lastLandscape == cugl::Display::Orientation::LANDSCAPE_REVERSED){
         xAcc *= -1;
     }
-    CULog("after %f", xAcc);
     
     // Only process accelerometer if tilt is more than 0.1 so
     // player does not move when phone is straight
