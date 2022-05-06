@@ -142,6 +142,9 @@ protected:
 
 	/** True if the enemy just spawned another enemy (should only apply to spawner), false otherwise */
 	bool _spawned;
+
+	/** The amount of damage last taken by the enemy */
+	int _lastDamageAmount;
     
     bool _isJumping;
     bool _isFalling;
@@ -200,7 +203,7 @@ public:
 	int getHealth() const { return _health; }
 
 	/** Sets the enemy health, reset healthbar timer */
-	void setHealth(int value) { _health = value; _healthTimer = HEALTH_SHOWTIME; }
+	void setHealth(int value);
     
     /**Returns the damage of the enemy's attack */
     int getAttackDamage() const { return _damage; }
@@ -259,6 +262,12 @@ public:
     /** Returns amount of invincibility time remaining */
     float getInvincibilityTimer() { return _invincibilityTime; }
 
+	/** Returns the amount of damage last taken */
+	int getLastDamageAmount() { return _lastDamageAmount; }
+
+	/** Sets the amount of damage last taken */
+	void setLastDamageAmount(int value) { _lastDamageAmount = value; }
+
 	/** Sets the type of attack the enemy was just damaged by*/
 	void setLastDamagedBy(AttackType value) { _lastDamagedBy = value; }
 
@@ -280,8 +289,10 @@ public:
 	/** Sets the pointer to the enemy's glow */
 	void setGlow(std::shared_ptr<Glow> glow) { _glow = glow; }
 
+	/** Sets whether or not the enemy has played their damage particles */
 	void setPlayedDamagedParticle(bool didIt) { _playedDamagedParticles = didIt; }
 
+	/** Gets whether or not the enemy has played their damage particles */
 	bool getPlayedDamagedParticle() { return _playedDamagedParticles; }
 
 	/** Returns the name of the ground sensor */

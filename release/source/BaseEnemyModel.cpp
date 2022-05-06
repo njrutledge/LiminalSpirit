@@ -138,6 +138,12 @@ void BaseEnemyModel::applyForce() {
 	}
 }
 
+void BaseEnemyModel::setHealth(int value) {
+	_lastDamageAmount = _health - value;
+	_health = value; 
+	_healthTimer = HEALTH_SHOWTIME;
+}
+
 void BaseEnemyModel::update(float dt) {
 	
 	CapsuleObstacle::update(dt);
