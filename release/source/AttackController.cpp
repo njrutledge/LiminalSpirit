@@ -37,6 +37,7 @@ bool AttackController::Attack::init(const cugl::Vec2 p, float radius, float a, f
     _timer = 0;
     _maxFrames = frames;
     _sensorFixture = nullptr;
+    _homingSensorFixture = nullptr;
     _bodySensorFixture = nullptr;
     if (CapsuleObstacle::init(_position, Size(_radius, _radius))) {
         // TODO change the sensor naming based on if its player attack
@@ -44,18 +45,19 @@ bool AttackController::Attack::init(const cugl::Vec2 p, float radius, float a, f
         setBodyType(b2BodyType::b2_dynamicBody);
         switch (_type) {
             case Type::p_range:
-            case Type::p_melee:
-            case Type::p_dash:
             case Type::p_exp:
+                _homingSensorName = "player" + _sensorName + "homing";
+            case Type::p_dash:
+            case Type::p_melee:
                 _sensorName = "player" + _sensorName;
                 filter.categoryBits = 0b010000;
-                filter.maskBits = 0b000010;
+                filter.maskBits = 0b001010;
                 setFilterData(filter);
                 break;
             case Type::p_exp_package:
                 _sensorName = "player" + _sensorName;
                 filter.categoryBits = 0b010000;
-                filter.maskBits = 0b001110;
+                filter.maskBits = 0b001010;
                 setFilterData(filter);
                 break;
                 
@@ -85,23 +87,36 @@ void AttackController::Attack::createFixtures() {
     
     b2Vec2 corners[8];
     cugl::Vec2 vec(0, _radius);
-    for(int i = 0; i < 8; i++){
+    for (int i = 0; i < 8; i++) {
         corners[i] = b2Vec2(vec.x, vec.y);
         _debugVerticies.push_back(Vec2(vec));
-        vec.rotate(M_PI/4.0f);
+        vec.rotate(M_PI / 4.0f);
     }
-//    std::vector<cugl::Vec2> cuglVerts = ball.getVertices();
-//    int n = cuglVerts.size();
-//    std::vector<b2Vec2>* verts = new vector<b2Vec2>(0);
-//    //Following is a temporary copy fix, hopefully will find a better solution.
-//    for (auto it = cuglVerts.begin(); it != cuglVerts.end();  ++it) {
-//        verts->push_back(b2Vec2((*it).x, (*it).y));
-//    }
+
     sensorShape.Set(corners, 8);
     sensorDef.shape = &sensorShape;
     sensorDef.userData.pointer = reinterpret_cast<uintptr_t>(getSensorName());
     _sensorFixture = _body->CreateFixture(&sensorDef);
 
+
+    if (_type == p_range || _type == p_exp_package) {
+        b2FixtureDef sensorDef3;
+        sensorDef3.density = 0;
+        sensorDef3.isSensor = true;
+        b2PolygonShape sensorShape3;
+        b2Vec2 corners3[8];
+        cugl::Vec2 vec(0, _radius * 5.0);//TODO: 5.0 is random
+        for (int i = 0; i < 8; i++) {
+            corners3[i] = b2Vec2(vec.x, vec.y);
+            _debugVerticies3.push_back(Vec2(vec));
+            vec.rotate(M_PI / 4.0f);
+        }
+
+        sensorShape3.Set(corners3, 8);
+        sensorDef3.shape = &sensorShape;
+        sensorDef3.userData.pointer = reinterpret_cast<uintptr_t>(getHomingSensorName());
+        _homingSensorFixture = _body->CreateFixture(&sensorDef3);
+    }
 
     
     if (_type == p_melee || _type == p_dash) {
@@ -134,6 +149,12 @@ void AttackController::Attack::releaseFixtures() {
         _body->DestroyFixture(_sensorFixture);
         _sensorFixture = nullptr;
     }
+
+    if (_homingSensorFixture != nullptr) {
+        _body->DestroyFixture(_homingSensorFixture);
+        _homingSensorFixture = nullptr;
+    }
+
 
     if (_bodySensorFixture != nullptr) {
         _body->DestroyFixture(_bodySensorFixture);
@@ -300,7 +321,7 @@ void AttackController::attackLeft(cugl::Vec2 p, SwipeController::SwipeAttack att
 /**
  * Right size represents melee in this case.
  */
-void AttackController::attackRight(cugl::Vec2 p, SwipeController::SwipeAttack attack, float angle, bool grounded, float timer, std::shared_ptr<SoundController> sound) {
+void AttackController::attackRight(cugl::Vec2 p, SwipeController::SwipeAttack attack, float angle, bool grounded, bool facingRight, float timer, std::shared_ptr<SoundController> sound) {
     if (_meleeCounter > _swing) {
         switch (attack) {
             case SwipeController::leftAttack:
@@ -355,23 +376,34 @@ void AttackController::attackRight(cugl::Vec2 p, SwipeController::SwipeAttack at
 //                }
                 break;
             case SwipeController::chargedLeft:
-                _pending.emplace(Attack::alloc(p, 1.25, 0.5, 20, _scale, Type::p_dash, first, _leftOff + Vec2(-0.5,0), ballMakyr, cugl::Vec2(-20,0), 180, left, timer, PLAYER_MELEE, 0));
+                _pending.emplace(Attack::alloc(p, 1.5, 0.5, 20, _scale, Type::p_dash, first, _leftOff + Vec2(-0.5,0), ballMakyr, cugl::Vec2(-20,0), 180, left, timer, PLAYER_MELEE, 0));
                 _meleeCounter = 0;
                 _melee = cool;
                 break;
             case SwipeController::chargedRight:
-                _pending.emplace(Attack::alloc(p, 1.25, 0.5, 20, _scale, Type::p_dash, first, _rightOff + Vec2(0.5,0), ballMakyr, cugl::Vec2(20,0), 0, right, timer, PLAYER_MELEE, 0));
+                _pending.emplace(Attack::alloc(p, 1.5, 0.5, 20, _scale, Type::p_dash, first, _rightOff + Vec2(0.5,0), ballMakyr, cugl::Vec2(20,0), 0, right, timer, PLAYER_MELEE, 0));
                 _meleeCounter = 0;
                 _melee = cool;
                 break;
             case SwipeController::chargedUp:
-                _pending.emplace(Attack::alloc(p, 1.25, 0.5, 20, _scale, Type::p_dash, first, _upOff + Vec2(0,0.5), ballMakyr, cugl::Vec2(0,20), 90, up, timer, PLAYER_MELEE, 0));
+            {
+                float xOffset = 0.5;
+                if (!facingRight) {
+                    xOffset *= -1;
+                }
+                _pending.emplace(Attack::alloc(p, 1.5, 0.5, 20, _scale, Type::p_dash, first, _upOff + Vec2(xOffset,0.5), ballMakyr, cugl::Vec2(0,20), 90, up, timer, PLAYER_MELEE, 0));
                 _meleeCounter = 0;
                 _melee = cool;
                 break;
+            }
             case SwipeController::chargedDown:
+            {
                 if(!grounded){
-                    _pending.emplace(Attack::alloc(p, 1.25, 0.5, 20, _scale, Type::p_dash, first, _downOff + Vec2(0,-0.5), ballMakyr, cugl::Vec2(0,-20), 270, down, timer, PLAYER_MELEE, 0));
+                    float xOffset = 0.5;
+                    if (!facingRight) {
+                        xOffset *= -1;
+                    }
+                    _pending.emplace(Attack::alloc(p, 1.5, 0.5, 20, _scale, Type::p_dash, first, _downOff + Vec2(xOffset,0.5), ballMakyr, cugl::Vec2(0,-20), 270, down, timer, PLAYER_MELEE, 0));
                     _meleeCounter = 0;
                 } else {
 //                    _pending.emplace(Attack::alloc(p, 2, 0.05, 2, _scale, Type::p_melee, first, _leftOff, ballMakyr, cugl::Vec2::ZERO, 180, left, timer, PLAYER_MELEE, 0));
@@ -381,6 +413,7 @@ void AttackController::attackRight(cugl::Vec2 p, SwipeController::SwipeAttack at
                 }
                 _melee = cool;
                 break;
+            }
             default:
                 break;
         }
@@ -413,7 +446,16 @@ void AttackController::Attack::resetDebug() {
     _sensorNode->setPosition(Vec2(_debug->getContentSize().width/2.0f, _debug->getContentSize().height / 2.0f));
     _debug->addChild(_sensorNode);
 
-    if (_type == p_melee) {
+    if (_type == p_range || _type == p_exp_package) {
+        //std::vector<Uint32> debugIndicies2{ 8,9,10,   10,11,12,   12,13,14,   14,15,8 };
+        Poly2 poly2(_debugVerticies3, debugIndicies1);
+        _homingSensorNode = scene2::WireNode::allocWithTraversal(poly2, poly2::Traversal::INTERIOR);
+        _homingSensorNode->setColor(Color4::PAPYRUS);
+        _homingSensorNode->setPosition(Vec2(_debug->getContentSize().width / 2.0f - _offset.x, _debug->getContentSize().height / 2.0f - _offset.y));
+        _debug->addChild(_homingSensorNode);
+    }
+
+    if (_type == p_melee || _type == p_dash) {
         //std::vector<Uint32> debugIndicies2{ 8,9,10,   10,11,12,   12,13,14,   14,15,8 };
         Poly2 poly2(_debugVerticies2, debugIndicies1);
         _bodySensorNode = scene2::WireNode::allocWithTraversal(poly2, poly2::Traversal::INTERIOR);

@@ -45,7 +45,7 @@ private:
     void handlePlayerCollision(PlayerModel* player, cugl::physics2::Obstacle* bd, std::string* fd);
 
     /** handle collision between attack and a non-enemy obstacle (i.e, if bd is an enemy, nothing will happen) */
-    void handleAttackCollision(AttackController::Attack* attack1, cugl::physics2::Obstacle* bd, std::string* fd, std::shared_ptr<AttackController> AC, float timer);
+    void handleAttackCollision(AttackController::Attack* attack1, std::string* fd1, cugl::physics2::Obstacle* bd, std::string* fd2, std::shared_ptr<AttackController> AC, float timer);
     
     /** determine the amount of damage an enemy is going to take from a particular attack */
     int getDamageDealt(AttackController::Attack* attack, BaseEnemyModel* enemy);

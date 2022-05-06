@@ -102,6 +102,9 @@ protected:
     /** if player is invincible */
     bool _isInvincible;
     
+    /** if player was dash attacking last frame*/
+    bool _dashingLastFrame;
+    
     /** if player is dash attacking*/
     bool _isDashing;
     
@@ -264,6 +267,12 @@ public:
 
 	/** True if the player is stunned*/
 	bool isStunned() { return _isStunned; }
+    
+    /** Sets whether the player was dashing last frame*/
+    void setDashingLastFrame(bool dashing) { _dashingLastFrame = dashing; }
+
+    /** True if the player was dashing last frame */
+    bool dashingLastFrame() { return _dashingLastFrame; }
     
     /** Sets whether the player is dashing */
     void setIsDashing(bool dashing) { _isDashing = dashing; }

@@ -106,6 +106,12 @@ protected:
     float _cRangeCount;
     /** Charge threshold for range*/
     float _cRCool;
+    /** Charge count value for melee*/
+    int _mChargeCount;
+    /** Charge melee swipe window*/
+    float _mChargeWindow;
+    /** Charge melee swipe timer */
+    float _mChargeTimer;
     
     /** Timestamp to get the current time for charge calculations */
     cugl::Timestamp _currTime;
@@ -223,7 +229,13 @@ protected:
     void resetRightState() {
         _rightState.direction = none;
         _rightState.isCharged = false;
+        _mChargeTimer = 0;
     }
+    
+    /**
+     * Updates right state for triple dash mechanic
+     */
+    void updateRightState(float timestep);
     
     /**
      * Print the side and direction of the swipe (for testing only)
@@ -255,8 +267,8 @@ public:
      *
      * @return the left-sided swipe attack
      */
-    SwipeAttack getLeftSwipe() {
-        return _leftSwipe;
+    SwipeAttack getLeftSwipe(bool swap) {
+        return swap ? _rightSwipe : _leftSwipe;
     };
     
     /**
@@ -264,8 +276,8 @@ public:
      *
      * @return the left-sided swipe angle
      */
-    float getLeftAngle() {
-        return _leftAngle;
+    float getLeftAngle(bool swap) {
+        return swap ? _rightAngle : _leftAngle;
     };
     
     /**
@@ -273,8 +285,8 @@ public:
      *
      * @return the right-sided swipe attack
      */
-    SwipeAttack getRightSwipe() {
-        return _rightSwipe;
+    SwipeAttack getRightSwipe(bool swap) {
+        return swap ? _leftSwipe : _rightSwipe;
     };
     
     /**
@@ -282,12 +294,16 @@ public:
      *
      * @return the right-sided swipe angle
      */
-    float getRightAngle() {
-        return _rightAngle;
+    float getRightAngle(bool swap) {
+        return swap ? _leftAngle : _rightAngle;
     };
     
     float getRangeCharge() {
         return std::min(_cRangeCount / _cRCool, 1.0f);
+    }
+    
+    float getMeleeCharge() {
+        return std::min(_cMeleeCount / _cMCool, 1.0f);
     }
     
     /**

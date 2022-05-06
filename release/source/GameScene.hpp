@@ -96,6 +96,8 @@ protected:
     std::shared_ptr<Glow> _rangedArm;
     /** Melee arm texture */
     std::shared_ptr<Glow> _meleeArm;
+    /** Melee arm dash texture */
+    std::shared_ptr<Glow> _meleeArmDash;
     /** A shader */
     std::shared_ptr<cugl::Shader> _shader;
     /** A vertex buffer */
@@ -200,6 +202,9 @@ protected:
     
     /** range charge indicator */
     std::shared_ptr<scene2::ProgressBar> _range_charge;
+    
+    /** melee charge indicator */
+    std::shared_ptr<scene2::ProgressBar> _melee_charge;
 
     bool _winInit;
 
@@ -230,6 +235,8 @@ protected:
     std::shared_ptr<scene2::Button> _optionReturnButton;
 
     std::shared_ptr<scene2::Button> _swapHandsButton;
+
+    bool _swap;
 
     std::shared_ptr<scene2::Button> _musicButton;
 

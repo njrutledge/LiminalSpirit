@@ -22,7 +22,7 @@ EnemyProperties MIRROR_PROPS{
 	/** Density of the Mirror*/
 	0.0f,
     /** Damage for Mirror */
-    9001,
+    8,
 	/** Name of the Mirror*/
 	"Mirror",
 };
