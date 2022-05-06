@@ -33,6 +33,15 @@ protected:
     std::shared_ptr<cugl::AssetManager> _assets;
     
     std::shared_ptr<SoundController> _sound_controller;
+    
+    /** The highest biome the player has access to */
+    int _biome;
+    
+    /** The highest level the player has access to (within the highest biome) */
+    int _highest_level;
+    
+    /** Whether or not the player's hands are swapped */
+    bool _swap;
 
     /**
      * The current active scene

@@ -58,6 +58,24 @@ void LiminalSpirit::onStartup()
     
     AudioEngine::start();
     
+    if (!filetool::file_exists(Application::get()->getSaveDirectory() + "savedGame.json")) {
+        std::shared_ptr<TextWriter> writer = TextWriter::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
+        writer->write("{\"progress\":{\"biome\": 1, \"highest_level\": 1}, \"settings\":{\"swap\": false}}");
+        writer->close();
+    }
+    
+    std::shared_ptr<JsonReader> reader = JsonReader::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
+    std::shared_ptr<JsonValue> save = reader->readJson();
+    std::shared_ptr<JsonValue> progress = save->get("progress");
+    std::shared_ptr<JsonValue> settings = save->get("settings");
+    reader->close();
+    
+    _biome = progress->get("biome")->asInt();
+    _highest_level = progress->get("highest_level")->asInt();
+    _swap = settings->get("swap")->asBool();
+    
+    CULog("Biome: %d, Level: %d, Swap: %d", _biome, _highest_level, _swap);
+    
     Application::onStartup(); // YOU MUST END with call to parent
 }
 
