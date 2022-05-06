@@ -22,6 +22,13 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
+        "lose-text": {
+            "file": "textures/menus/lose/losetext.png",
+            "minfilter": "nearest",
+            "magfilter": "linear",
+            "wrapS": "clamp",
+            "wrapT": "clamp"
+        },
 		"seeker": {
 			"file": "textures/seeker_static.png",
 			"minfilter": "nearest",
@@ -498,6 +505,15 @@
 		"pause_options": {
 			"file": "textures/menus/pause/options_button.png"
 		},
+        "lose_level": {
+            "file": "textures/menus/lose/level_button.png"
+        },
+        "lose_home": {
+            "file": "textures/menus/lose/home_button.png"
+        },
+        "lose_restart": {
+            "file": "textures/menus/lose/restart_button.png"
+        },
 		"swap": {
 			"file": "textures/menus/options/swap.png"
 		},
@@ -667,7 +683,8 @@
 	"widgets": {
 		"levelselect": "widgets/levelselect.json",
 		"pause": "widgets/pause.json",
-		"options": "widgets/options.json"
+		"options": "widgets/options.json",
+        "lose": "widgets/lose.json"
 	},
 	"scene2s": {
 		"cave": {
@@ -797,6 +814,12 @@
 				"key": "pause"
 			}
 		},
+        "loseScene": {
+            "type": "Widget",
+            "data": {
+                "key": "lose"
+            }
+        },
 		"optionScene": {
 			"type": "Widget",
 			"data": {

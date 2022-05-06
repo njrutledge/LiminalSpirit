@@ -94,8 +94,10 @@ float LEVEL_HEIGHT = 54;
 bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const std::shared_ptr<SoundController> sound, string biome, int stageNum)
 {
     _back = false;
+    _levelselect = false;
     _step = false;
     _winInit = true;
+    _lose = false;
     _next = false;
     _pause = false;
     _options = false;
@@ -389,8 +391,41 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             } });
     _sfxButton->setScale(.4 * buttonScale);
 
+    //lose screen
+    _loseScene = _assets->get<scene2::SceneNode>("loseScene");
 
+    _loseScene->setContentSize(dimen);
+    _loseScene->doLayout();
 
+    addChildWithName(_loseScene, "lose");
+    _loseRestartButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("loseScene_restart"));
+    _loseRestartButton->addListener([=](const std::string& name, bool down)
+        {
+            // Only quit when the button is released
+            if (!down) {
+                _lose = false;
+                reset();
+                _player->markRemoved(false);
+            } });
+    _loseRestartButton->setScale(.4*buttonScale);
+
+    _loseHomeButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("loseScene_home"));
+    _loseHomeButton->addListener([=](const std::string& name, bool down)
+        {
+            // Only quit when the button is released
+            if (!down) {
+                _back = true;
+            } });
+    _loseHomeButton->setScale(.4*buttonScale);
+
+    _loseLevelButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("loseScene_level"));
+    _loseLevelButton->addListener([=](const std::string& name, bool down)
+        {
+            // Only quit when the button is released
+            if (!down) {
+                _levelselect = true;
+            } });
+    _loseLevelButton->setScale(.4 * buttonScale);
 
 
 
@@ -477,9 +512,31 @@ void GameScene::dispose()
  */
 void GameScene::update(float timestep)
 {
+    if (_lose) {
+        _pauseScene->setVisible(false);
+        _optionScene->setVisible(false);
+        _loseScene->setVisible(true);
+        _loseHomeButton->activate();
+        _loseLevelButton->activate();
+        _loseRestartButton->activate();
+        _pauseButton->setVisible(true);
+        _pauseButton->deactivate();
+        return;
+    }
+    else {
+        _pauseScene->setVisible(false);
+        _optionScene->setVisible(false);
+        _loseScene->setVisible(false);
+        _loseHomeButton->deactivate();
+        _loseLevelButton->deactivate();
+        _loseRestartButton->deactivate();
+        _pauseButton->setVisible(true);
+        _pauseButton->activate();
+    }
     if (_options) {
         _optionScene->setVisible(true);
         _pauseScene->setVisible(false);
+        _loseScene->setVisible(false);
         _optionReturnButton->activate();
         _musicButton->activate();
         _sfxButton->activate();
@@ -495,6 +552,7 @@ void GameScene::update(float timestep)
     else {
         _optionScene->setVisible(false);
         _pauseScene->setVisible(false);
+        _loseScene->setVisible(false);
         _optionReturnButton->deactivate();
         _musicButton->deactivate();
         _sfxButton->deactivate();
@@ -524,7 +582,6 @@ void GameScene::update(float timestep)
         _pauseButton->setVisible(true);
         _pauseButton->activate();
     }
-
     
     updateSoundInputParticlesAndTilt(timestep);
 
@@ -2054,8 +2111,12 @@ void GameScene::updateRemoveDeletedPlayer()
 {
     if (_player->isRemoved())
     {
-        reset();
-        _player->markRemoved(false);
+        _lose = true;
+        _player->getSceneNode()->setVisible(false);
+        _rangedArm->getSceneNode()->setVisible(false);
+        _meleeArm->getSceneNode()->setVisible(false);
+//        reset();
+//        _player->markRemoved(false);
     }
 }
 
@@ -2869,7 +2930,8 @@ void GameScene::reset()
     _player->reset(playerPos);
     _player->getSceneNode()->setVisible(true);
     _player->getSceneNode()->setColor(Color4::WHITE);
-
+    _rangedArm->getSceneNode()->setVisible(true);
+    _meleeArm->getSceneNode()->setVisible(true);
     // Remove all enemies
     auto eit = _enemies.begin();
     while (eit != _enemies.end())
