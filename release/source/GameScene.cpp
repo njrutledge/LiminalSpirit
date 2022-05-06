@@ -56,8 +56,6 @@
 // This keeps us from having to write cugl:: all the time
 using namespace cugl;
 
-// The number of frames before moving the logo to a new position
-#define TIME_STEP 60
 /** This is the size of the active portion of the screen */
 #define SCENE_WIDTH 1024
 // #define SCENE_HEIGHT 576
@@ -76,7 +74,7 @@ float DEFAULT_HEIGHT = DEFAULT_WIDTH / SCENE_WIDTH * SCENE_HEIGHT;
 #define PLATFORMTEXTURE "platform"
 
 /** The initial position of the player*/
-float PLAYER_POS[] = {5.0f, 4.0f};
+float PLAYER_POS[] = {1.0f, 1.0f};
 
 float LEVEL_HEIGHT = 54;
 
