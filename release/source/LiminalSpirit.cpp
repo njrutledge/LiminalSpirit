@@ -220,7 +220,7 @@ void LiminalSpirit::updateHomeScene(float timestep)
  */
 void LiminalSpirit::updateWorldSelectScene(float timestep)
 {
-    _worldSelect.update(timestep);
+    _worldSelect.update(timestep, _biome);
     _sound_controller->play_menu_music();
     switch (_worldSelect.getChoice()) {
     case WorldSelectScene::Choice::CAVE:
@@ -277,9 +277,15 @@ void LiminalSpirit::updateGameScene(float timestep)
         if ( nextStage > _levelSelect.getMaxStages(biome)) {
             if (biome == "cave") {
                 biome = "shroom";
+                if(_biome < 2){
+                    updateBiomeSave(2);
+                }
             }
             else if (biome == "shroom") {
                 biome = "forest";
+                if(_biome < 3){
+                    updateBiomeSave(3);
+                }
             }
             else {
                 //no more biomes, you won!
@@ -339,6 +345,17 @@ void LiminalSpirit::updateBossScene(float timestep)
         _bossgame.dispose();
         _worldSelect.setDefaultChoice();
     }
+}
+
+/** updates the save file to increment the biome if player advances to the next one
+ *
+ *  @param biome the new value for biome in the json
+ */
+void LiminalSpirit::updateBiomeSave(int biome){
+    std::shared_ptr<TextWriter> writer = TextWriter::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
+    writer->write("{\"progress\":{\"biome\": " + to_string(biome) + ", \"highest_level\": 1}, \"settings\":{\"swap\": " + to_string(_swap) +"}}");
+    _biome = biome;
+    writer->close();
 }
 
 /**

@@ -126,8 +126,10 @@ bool WorldSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
                 _choice = Choice::SHROOM;
             }
         });
-
+    _shroomButton->setColor(Color4(24,25,26));
+    
     _shroomButtonBack = assets->get<scene2::SceneNode>("world_select_shroomback");
+    _shroomButtonBack->setColor(Color4(24,25,26));
 
     _forestButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("world_select_forest"));
     _forestButton->addListener([=](const std::string& name, bool down)
@@ -139,8 +141,10 @@ bool WorldSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
                 _choice = Choice::FOREST;
             }
         });
+    _forestButton->setColor(Color4(24,25,26));
 
     _forestButtonBack = assets->get<scene2::SceneNode>("world_select_forestback");
+    _forestButtonBack->setColor(Color4(24,25,26));
 
     _timerA = 0.0f;
     _timerB = 0.0f;
@@ -178,14 +182,25 @@ float WorldSelectScene::easing(float time, float time_position, float amplitude)
  *
  * @param timestep  The amount of time (in seconds) since the last frame
  */
-void WorldSelectScene::update(float timestep)
+void WorldSelectScene::update(float timestep, int biome)
 {
     _caveButton->setVisible(true);
-    _caveButton->activate();
     _shroomButton->setVisible(true);
-    _shroomButton->activate();
     _forestButton->setVisible(true);
-    _forestButton->activate();
+    
+    
+    switch (biome){
+        case 3:
+            _forestButton->activate();
+            _forestButton->setColor(Color4::WHITE);
+            _forestButtonBack->setColor(Color4::WHITE);
+        case 2:
+            _shroomButton->activate();
+            _shroomButton->setColor(Color4::WHITE);
+            _shroomButtonBack->setColor(Color4::WHITE);
+        default:
+            _caveButton->activate();
+    }
     
     float threshA = 4.0f;
     float threshB = 3.0f;

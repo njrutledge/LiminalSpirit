@@ -90,6 +90,12 @@ protected:
 
     /** The current active scene*/
     State _scene;
+    
+    /** updates the save file to increment the biome if player advances to the next one
+     *
+     *  @param biome the new value for biome in the json
+     */
+    void updateBiomeSave(int biome);
 
 public:
     /**
