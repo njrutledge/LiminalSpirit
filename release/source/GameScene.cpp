@@ -271,7 +271,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _worldnode->setInterior(Rect(0, 0, bounds.size.width, SCENE_HEIGHT));
     _worldnode->setConstrained(true);
     scene->addChild(_worldnode);
-
+    _worldnode->setColor(Color4::WHITE);
     _worldnode2 = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND, bounds.size);
     _worldnode2->setPosition(Vec2(0, 0));
     _worldnode->addChild(_worldnode2);
@@ -476,6 +476,11 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _timer_text->layout();
 
     _timer = 0.0f;
+    _worldnode->setColor(Color4::WHITE);
+    _healthbar->setColor(Color4::WHITE);
+    _pauseButton->setColor(Color4::WHITE);
+    _range_charge->setColor(Color4::WHITE);
+    _melee_charge->setColor(Color4::WHITE);
     this->setColor(Color4::WHITE);
     return true;
 }
@@ -2172,6 +2177,11 @@ void GameScene::updateRemoveDeletedPlayer()
         _player->getSceneNode()->setVisible(false);
         _rangedArm->getSceneNode()->setVisible(false);
         _meleeArm->getSceneNode()->setVisible(false);
+        _worldnode->setColor(Color4(255 - 255 / 1.5, 255 - 255 / 1.5, 255 - 255 / 1.5, 255));
+        _healthbar->setColor(Color4(255 - 255 / 3, 255 - 255 / 3, 255 - 255 / 3, 255));
+        _pauseButton->setColor(Color4(255 - 255 / 3, 255 - 255 / 3, 255 - 255 / 3, 255));
+        _range_charge->setColor(Color4(255 - 255 / 1.5, 255 - 255 / 1.5, 255 - 255 / 1.5, 255));
+        _melee_charge->setColor(Color4(255 - 255 / 1.5, 255 - 255 / 1.5, 255 - 255 / 1.5, 255));
 //        reset();
 //        _player->markRemoved(false);
     }
@@ -3057,7 +3067,11 @@ void GameScene::reset()
         }
         index++;
     }
-
+    _worldnode->setColor(Color4::WHITE);
+    _healthbar->setColor(Color4::WHITE);
+    _pauseButton->setColor(Color4::WHITE);
+    _range_charge->setColor(Color4::WHITE);
+    _melee_charge->setColor(Color4::WHITE);
     _endText = nullptr;
 }
 
