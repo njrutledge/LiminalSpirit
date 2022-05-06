@@ -1036,15 +1036,16 @@ void GameScene::updateAnimations(float timestep)
     if (_player->isStunned())
     {
         if (_player->isFacingRight()){
-            mSprite->setFrame(22);
+            mSprite->setFrame(21);
         }
         else {
-            mSprite->setFrame(26);
+            mSprite->setFrame(27);
         }
         _meleeArm->setLastType(Glow::MeleeState::cool);
         _meleeArm->setAnimeTimer(0);
     }
-    else if (_player->isDashing()) {
+    else if (_player->isDashing())
+    {
         if (_player->isFacingRight()){
             _meleeArmDash->setAttackAngle(_player->getDashAngle());
         }
@@ -1064,7 +1065,7 @@ void GameScene::updateAnimations(float timestep)
             _player->setDashingLastFrame(true);
         }
         else {
-            if (_meleeArmDash->getAnimeTimer() > 0.06f) {
+            if (_meleeArmDash->getAnimeTimer() > 0.085f) {
                 if (_player->isFacingRight())
                 {
                     int nextFrame = mdSprite->getFrame() - 1;
@@ -1087,13 +1088,38 @@ void GameScene::updateAnimations(float timestep)
     }
     else if (_meleeArm->getLastType() == Glow::MeleeState::cool)
     {
-        if (_player->isFacingRight())
-        {
-            mSprite->setFrame(7);
+        if (_swipes.getRightChargingTime() >= 100 && _swipes.getRightChargingTime() < 100 + ((CHARGE_TIME - 100) / 2)) {
+            if (_player->isFacingRight())
+            {
+                mSprite->setFrame(26);
+            }
+            else
+            {
+                mSprite->setFrame(22);
+            }
         }
-        else
-        {
-            mSprite->setFrame(13);
+        else if (_swipes.getRightChargingTime() >= 100 + ((CHARGE_TIME - 100) / 2) && _swipes.getRightChargingTime() < CHARGE_TIME) {
+            if (_player->isFacingRight())
+            {
+                mSprite->setFrame(25);
+            }
+            else
+            {
+                mSprite->setFrame(23);
+            }
+        }
+        else if (_swipes.getRightChargingTime() >= CHARGE_TIME) {
+            mSprite->setFrame(24);
+        }
+        else {
+            if (_player->isFacingRight())
+            {
+                mSprite->setFrame(7);
+            }
+            else
+            {
+                mSprite->setFrame(13);
+            }
         }
     }
     else if (_meleeArm->getLastType() == Glow::MeleeState::h1_left)
@@ -1312,7 +1338,7 @@ void GameScene::updateMeleeArm(float timestep)
 {
     ////MELEE ARM MUST STAY AT BOTTOM
     // Determining arm positions and offsets
-    float offsetArm2 = -3.0f;
+    float offsetArm2 = -3.2f;
     if (_player->isDashing()) {
         offsetArm2 = -1.0f;
     }

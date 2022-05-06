@@ -13,6 +13,8 @@
 #include <vector>
 #include "InputController.hpp"
 
+#define CHARGE_TIME 500
+
 /**
  * This class figures out what type of swipe was drawn based on the input
  */
@@ -106,6 +108,10 @@ protected:
     float _cRangeCount;
     /** Charge threshold for range*/
     float _cRCool;
+    
+    /** Time spent charging in milliseconds */
+    Uint64 _leftChargingTime;
+    Uint64 _rightChargingTime;
     
     /** Timestamp to get the current time for charge calculations */
     cugl::Timestamp _currTime;
@@ -209,6 +215,7 @@ protected:
     void resetLeftState() {
         _leftState.direction = none;
         _leftState.isCharged = false;
+        _leftChargingTime = 0;
     }
     
     /**
@@ -223,6 +230,7 @@ protected:
     void resetRightState() {
         _rightState.direction = none;
         _rightState.isCharged = false;
+        _rightChargingTime = 0;
     }
     
     /**
@@ -292,6 +300,14 @@ public:
     
     float getMeleeCharge() {
         return std::min(_cMeleeCount / _cMCool, 1.0f);
+    }
+    
+    Uint64 getRightChargingTime() {
+        return _rightChargingTime;
+    }
+    
+    Uint64 getLeftChargingTime() {
+        return _leftChargingTime;
     }
     
     /**

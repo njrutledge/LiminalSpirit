@@ -23,6 +23,9 @@ SwipeController::SwipeController() : _leftSwipe(noAttack),
     
     _cMCool = 2.0f;
     _cRCool = 5.0f;
+    
+    _leftChargingTime = 0;
+    _rightChargingTime = 0;
 }
 
 /**
@@ -170,6 +173,15 @@ void SwipeController::update(InputController &input, bool grounded, float dt)
  */
 void SwipeController::calculateChargeAttack(cugl::Timestamp startTime, bool isLeftSidedCharge) {
     
+    // Don't increment charge countdown on cooldown, return
+    if (isLeftSidedCharge && _cRCool >= _cRangeCount) {
+        return;
+    }
+    
+    if (!isLeftSidedCharge && _cMCool >= _cMeleeCount) {
+        return;
+    }
+    
     // If the attack is already charged, stop calculating the time diff
     if (isLeftSidedCharge) {
         if (hasLeftChargedAttack()) return;
@@ -180,9 +192,14 @@ void SwipeController::calculateChargeAttack(cugl::Timestamp startTime, bool isLe
     _currTime.mark();
 
     Uint64 chargeTime = cugl::Timestamp::ellapsedMillis(startTime, _currTime);
+    if (isLeftSidedCharge) {
+        _leftChargingTime = chargeTime;
+    } else {
+        _rightChargingTime = chargeTime;
+    }
     
     // half second charge time
-    if (chargeTime >= 500) {
+    if (chargeTime >= CHARGE_TIME) {
         if (isLeftSidedCharge) {
             if (_cRCool <= _cRangeCount) {
                 chargeLeftAttack();
@@ -225,7 +242,7 @@ void SwipeController::calculateSwipeDirection(cugl::Vec2 startPos, cugl::Vec2 en
         Uint64 tapTime = cugl::Timestamp::ellapsedMillis(startTime, _currTime);
         
         // if the tap time is less than half a second the intent of the tap was a jump
-        if (tapTime < 500) {
+        if (tapTime < CHARGE_TIME) {
             if (isLeftSidedSwipe) {
                 setLeftSwipe(jump);
             } else {
@@ -535,4 +552,6 @@ void SwipeController::reset()
     _rightSwipe = noAttack;
     _cMeleeCount = _cMCool;
     _cRangeCount = _cRCool;
+    _leftChargingTime = 0;
+    _rightChargingTime = 0;
 }
