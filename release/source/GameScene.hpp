@@ -202,6 +202,9 @@ protected:
     
     /** range charge indicator */
     std::shared_ptr<scene2::ProgressBar> _range_charge;
+    
+    /** melee charge indicator */
+    std::shared_ptr<scene2::ProgressBar> _melee_charge;
 
     bool _winInit;
 

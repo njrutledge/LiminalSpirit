@@ -302,6 +302,10 @@ public:
         return std::min(_cRangeCount / _cRCool, 1.0f);
     }
     
+    float getMeleeCharge() {
+        return std::min(_cMeleeCount / _cMCool, 1.0f);
+    }
+    
     /**
      * Returns whether the left attack is charged
      *
