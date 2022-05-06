@@ -112,16 +112,26 @@ public:
         b2Fixture* _sensorFixture;
         /**Attack sensor for inside player body (melee only) */
         b2Fixture* _bodySensorFixture;
+        /**homing sensor for projectiles */
+        b2Fixture* _homingSensorFixture;
         /** Name of sensor */
         std::string _sensorName;
+
+        std::string _homingSensorName;
         /** Debug Sensor */
         std::shared_ptr<cugl::scene2::WireNode> _sensorNode;
 
         std::shared_ptr<cugl::scene2::WireNode> _bodySensorNode;
 
+        std::shared_ptr<cugl::scene2::WireNode> _homingSensorNode;
+
+
         std::vector<cugl::Vec2> _debugVerticies;
 
         std::vector<cugl::Vec2> _debugVerticies2;
+
+        std::vector<cugl::Vec2> _debugVerticies3;
+
 
         //can the attack split?
         bool _splitable;
@@ -183,6 +193,9 @@ public:
         MeleeState getMeleeState(){ return _meleeState; }
 
         std::string* getSensorName() { return &_sensorName; }
+
+        std::string* getHomingSensorName() { return &_homingSensorName; }
+
         void setSensorName(string s) { _sensorName = s; }
 
         bool isSplitable() { return _splitable; }

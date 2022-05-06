@@ -101,6 +101,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _next = false;
     _pause = false;
     _options = false;
+    _swap = false;
     Size dimen = Application::get()->getDisplaySize();
     float boundScale = SCENE_WIDTH / dimen.width;
     dimen *= boundScale;
@@ -303,7 +304,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
 
     // Grab healthbar
     _healthbar = std::dynamic_pointer_cast<scene2::ProgressBar>(assets->get<scene2::SceneNode>("HUD_healthbar"));
+    _melee_charge = std::dynamic_pointer_cast<scene2::ProgressBar>(assets->get<scene2::SceneNode>("HUD_melee_charge"));
+    _melee_charge->setAngle(M_PI_2);
     _range_charge = std::dynamic_pointer_cast<scene2::ProgressBar>(assets->get<scene2::SceneNode>("HUD_range_charge"));
+    _range_charge->setAngle(M_PI_2);
     auto HUD = assets->get<scene2::SceneNode>("HUD");
     HUD->setContentSize(dimen);
     HUD->doLayout();
@@ -319,6 +323,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
 
     addChildWithName(_pauseScene, "pause");
     _returnButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("pauseScene_resume"));
+    if (_returnButton->hasListener()) {
+        _returnButton->removeListener(1);
+    }
     _returnButton->addListener([=](const std::string& name, bool down)
         {
             // Only quit when the button is released
@@ -328,6 +335,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _returnButton->setScale(.4*buttonScale);
 
     _homeButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("pauseScene_home"));
+    if (_homeButton->hasListener()) {
+        _homeButton->removeListener(1);
+    }
     _homeButton->addListener([=](const std::string& name, bool down)
         {
             // Only quit when the button is released
@@ -354,6 +364,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     addChildWithName(_optionScene, "options");
     
     _optionReturnButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_return"));
+    if (_optionReturnButton->hasListener()) {
+        _optionReturnButton->removeListener(1);
+    }
     _optionReturnButton->addListener([=](const std::string& name, bool down)
         {
             // Only quit when the button is released
@@ -364,16 +377,22 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _optionReturnButton->setScale(.4 * buttonScale);
 
     _swapHandsButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_swap"));
+    if (_swapHandsButton->hasListener()) {
+        _swapHandsButton->removeListener(1);
+    }
     _swapHandsButton->addListener([=](const std::string& name, bool down)
         {
             // Only quit when the button is released
             if (!down) {
-
+                _swap = !_swap;
             } });
     _swapHandsButton->setScale(.4 * buttonScale);
 
     
     _musicButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_music"));
+    if (_musicButton->hasListener()) {
+        _musicButton->removeListener(1);
+    }
     _musicButton->addListener([=](const std::string& name, bool down)
         {
             // Only quit when the button is released
@@ -383,6 +402,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _musicButton->setScale(.4 * buttonScale);
 
     _sfxButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_sfx"));
+    if (_sfxButton->hasListener()) {
+        _sfxButton->removeListener(1);
+    }
     _sfxButton->addListener([=](const std::string& name, bool down)
         {
             // Only quit when the button is released
@@ -547,6 +569,12 @@ void GameScene::update(float timestep)
         _optionButton->deactivate();
         _pauseButton->setVisible(false);
         _pauseButton->deactivate();
+        if (_swap) {
+            CULog("SWAP!!!!!!!!");
+        }
+        else {
+            CULog("No swap...");
+        }
         return;
     }
     else {
@@ -1065,15 +1093,16 @@ void GameScene::updateAnimations(float timestep)
     if (_player->isStunned())
     {
         if (_player->isFacingRight()){
-            mSprite->setFrame(22);
+            mSprite->setFrame(21);
         }
         else {
-            mSprite->setFrame(26);
+            mSprite->setFrame(27);
         }
         _meleeArm->setLastType(Glow::MeleeState::cool);
         _meleeArm->setAnimeTimer(0);
     }
-    else if (_player->isDashing()) {
+    else if (_player->isDashing())
+    {
         if (_player->isFacingRight()){
             _meleeArmDash->setAttackAngle(_player->getDashAngle());
         }
@@ -1093,7 +1122,7 @@ void GameScene::updateAnimations(float timestep)
             _player->setDashingLastFrame(true);
         }
         else {
-            if (_meleeArmDash->getAnimeTimer() > 0.06f) {
+            if (_meleeArmDash->getAnimeTimer() > 0.085f) {
                 if (_player->isFacingRight())
                 {
                     int nextFrame = mdSprite->getFrame() - 1;
@@ -1116,13 +1145,38 @@ void GameScene::updateAnimations(float timestep)
     }
     else if (_meleeArm->getLastType() == Glow::MeleeState::cool)
     {
-        if (_player->isFacingRight())
-        {
-            mSprite->setFrame(7);
+        if (_swipes.getRightChargingTime() >= 100 && _swipes.getRightChargingTime() < 100 + ((CHARGE_TIME - 100) / 2)) {
+            if (_player->isFacingRight())
+            {
+                mSprite->setFrame(26);
+            }
+            else
+            {
+                mSprite->setFrame(22);
+            }
         }
-        else
-        {
-            mSprite->setFrame(13);
+        else if (_swipes.getRightChargingTime() >= 100 + ((CHARGE_TIME - 100) / 2) && _swipes.getRightChargingTime() < CHARGE_TIME) {
+            if (_player->isFacingRight())
+            {
+                mSprite->setFrame(25);
+            }
+            else
+            {
+                mSprite->setFrame(23);
+            }
+        }
+        else if (_swipes.getRightChargingTime() >= CHARGE_TIME) {
+            mSprite->setFrame(24);
+        }
+        else {
+            if (_player->isFacingRight())
+            {
+                mSprite->setFrame(7);
+            }
+            else
+            {
+                mSprite->setFrame(13);
+            }
         }
     }
     else if (_meleeArm->getLastType() == Glow::MeleeState::h1_left)
@@ -1341,7 +1395,7 @@ void GameScene::updateMeleeArm(float timestep)
 {
     ////MELEE ARM MUST STAY AT BOTTOM
     // Determining arm positions and offsets
-    float offsetArm2 = -3.0f;
+    float offsetArm2 = -3.2f;
     if (_player->isDashing()) {
         offsetArm2 = -1.0f;
     }
@@ -1680,9 +1734,9 @@ void GameScene::updateSwipesAndAttacks(float timestep)
     b2Vec2 playerPos = _player->getBody()->GetPosition();
     if (!_player->isStunned())
     {
-        _attacks->attackLeft(Vec2(playerPos.x, playerPos.y), _swipes.getLeftSwipe(), _swipes.getLeftAngle(), _player->isGrounded(), _timer, _sound);
-        _attacks->attackRight(Vec2(playerPos.x, playerPos.y), _swipes.getRightSwipe(), _swipes.getRightAngle(), _player->isGrounded(), _player->isFacingRight(), _timer, _sound);
-        if (_swipes.getRightSwipe() == SwipeController::chargedRight)
+        _attacks->attackLeft(Vec2(playerPos.x, playerPos.y), _swipes.getLeftSwipe(_swap), _swipes.getLeftAngle(_swap), _player->isGrounded(), _timer, _sound);
+        _attacks->attackRight(Vec2(playerPos.x, playerPos.y), _swipes.getRightSwipe(_swap), _swipes.getRightAngle(_swap), _player->isGrounded(), _player->isFacingRight(), _timer, _sound);
+        if (_swipes.getRightSwipe(_swap) == SwipeController::chargedRight)
         {
             _dashXVel = 20;
             _dashYVel = 1;
@@ -1691,7 +1745,7 @@ void GameScene::updateSwipesAndAttacks(float timestep)
             _player->setDashingLastFrame(false);
             _player->setDashAngle(0);
         }
-        else if (_swipes.getRightSwipe() == SwipeController::chargedLeft)
+        else if (_swipes.getRightSwipe(_swap) == SwipeController::chargedLeft)
         {
             _dashXVel = -20;
             _dashYVel = 1;
@@ -1700,7 +1754,7 @@ void GameScene::updateSwipesAndAttacks(float timestep)
             _player->setDashingLastFrame(false);
             _player->setDashAngle(180);
         }
-        else if (_swipes.getRightSwipe() == SwipeController::chargedUp)
+        else if (_swipes.getRightSwipe(_swap) == SwipeController::chargedUp)
         {
             _dashYVel = 20;
             _dashTime = 0;
@@ -1708,7 +1762,7 @@ void GameScene::updateSwipesAndAttacks(float timestep)
             _player->setDashingLastFrame(false);
             _player->setDashAngle(90);
         }
-        else if (_swipes.getRightSwipe() == SwipeController::chargedDown)
+        else if (_swipes.getRightSwipe(_swap) == SwipeController::chargedDown)
         {
             _dashYVel = -23;
             _dashTime = 0;
@@ -1831,7 +1885,7 @@ void GameScene::updateSwipesAndAttacks(float timestep)
             attackSprite->setPriority(3);
             _rangedArm->setLastType(Glow::MeleeState::first);
             _player->setRangedAttackRight(_player->isFacingRight());
-            if (_swipes.getLeftSwipe() == SwipeController::downAttack)
+            if (_swipes.getLeftSwipe(_swap) == SwipeController::downAttack)
             {
                 _rangedArm->setAttackAngle(270);
             }
@@ -1854,7 +1908,7 @@ void GameScene::updateSwipesAndAttacks(float timestep)
             attackSprite->setPriority(3);
             _rangedArm->setLastType(Glow::MeleeState::first);
             _player->setRangedAttackRight(_player->isFacingRight());
-            if (_swipes.getLeftSwipe() == SwipeController::downAttack)
+            if (_swipes.getLeftSwipe(_swap) == SwipeController::downAttack)
             {
                 _rangedArm->setAttackAngle(270);
             }
@@ -1875,20 +1929,6 @@ void GameScene::updateSwipesAndAttacks(float timestep)
             attackSprite->setScale(.35f * (*it)->getRadius());
             dynamic_pointer_cast<scene2::SpriteNode>(attackSprite)->setFrame(1);
             attackSprite->setPriority(3);
-            _rangedArm->setLastType(Glow::MeleeState::first);
-            _player->setRangedAttackRight(_player->isFacingRight());
-            if (_swipes.getLeftSwipe() == SwipeController::downAttack)
-            {
-                _rangedArm->setAttackAngle(270);
-            }
-            else
-            {
-                _rangedArm->setAttackAngle((*it)->getAngle());
-            }
-            if (_player->isFacingRight())
-            {
-                _rangedArm->setAttackAngle(fmod(_rangedArm->getAttackAngle() + 180, 360));
-            }
         }
         else if (attackType == AttackController::Type::p_melee)
         {
@@ -1972,7 +2012,7 @@ void GameScene::updateSwipesAndAttacks(float timestep)
     }
     _attacks->update(_player->getPosition(), _player->getBody()->GetLinearVelocity(), timestep);
     // DO NOT MOVE THE ABOVE LINE
-    if (_swipes.getRightSwipe() == SwipeController::upAttack || _swipes.getLeftSwipe() == SwipeController::jump || _swipes.getRightSwipe() == SwipeController::jump)
+    if (_swipes.getRightSwipe(_swap) == SwipeController::upAttack || _swipes.getLeftSwipe(_swap) == SwipeController::jump || _swipes.getRightSwipe(_swap) == SwipeController::jump)
     {
         _player->setJumping(true);
         _player->setIsFirstFrame(true);
@@ -1982,7 +2022,7 @@ void GameScene::updateSwipesAndAttacks(float timestep)
             _player->setJumpAnimationTimer(0);
         }
     }
-    else if (_swipes.getRightSwipe() == _swipes.downAttack)
+    else if (_swipes.getRightSwipe(_swap) == _swipes.downAttack)
     {
         // IDK
         _player->setDropTime(0.4f);
@@ -2134,6 +2174,7 @@ void GameScene::updateHealthbar()
         _healthbar->setProgress(prog);
     }
     
+    _melee_charge->setProgress(_swipes.getMeleeCharge());
     _range_charge->setProgress(_swipes.getRangeCharge());
 }
 
@@ -2679,14 +2720,39 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     floor->setBodyType(b2_staticBody);
 
     std::shared_ptr<scene2::PolygonNode> floorNode = scene2::PolygonNode::allocWithPoly(floorRect * _scale);
-    floorNode->setColor(Color4::BLACK);
+    floorNode->setColor(Color4::CLEAR);
     floor->setName("bottomwall");
     b2Filter filter = b2Filter();
     filter.categoryBits = 0b1000;
     // filter.maskBits = 0b1100;
     floor->setFilterData(filter);
     addObstacle(floor, floorNode, 1);
+    
+    // Split floor into 4 to repeat texture
+    int split = 3;
+    for (int i = 0; i < split; i++) {
+        Rect floorRect = Rect(DEFAULT_WIDTH / split * i, 0, DEFAULT_WIDTH / split, 0.5);
+        std::shared_ptr<physics2::PolygonObstacle> floor = physics2::PolygonObstacle::allocWithAnchor(floorRect, Vec2::ANCHOR_CENTER);
+        floor->setBodyType(b2_staticBody);
 
+        std::shared_ptr<Texture> floorImage = _assets->get<Texture>("platform");
+        if (!_biome.compare("cave")) {
+            floorImage = _assets->get<Texture>("cave_floor");
+        }
+        else if (!_biome.compare("shroom")) {
+            floorImage = _assets->get<Texture>("shroom_floor");
+        }
+        else if (!_biome.compare("forest")) {
+            floorImage = _assets->get<Texture>("forest_floor");
+        }
+        std::shared_ptr<scene2::PolygonNode> floorSprite = scene2::PolygonNode::allocWithTexture(floorImage);
+        float desiredWidth = DEFAULT_WIDTH * _scale;
+        float floorScale = desiredWidth / floorSprite->getWidth() / split;
+        floorSprite->setScale(floorScale);
+        floorSprite->setPriority(.1);
+        addObstacle(floor, floorSprite, 1);
+    }
+    
     // Making the ceiling -jdg274
     Rect ceilingRect = Rect(0, DEFAULT_HEIGHT - 0.5, DEFAULT_WIDTH, 0.5);
     std::shared_ptr<physics2::PolygonObstacle> ceiling = physics2::PolygonObstacle::allocWithAnchor(ceilingRect, Vec2::ANCHOR_CENTER);
@@ -2702,10 +2768,10 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     Rect leftRect = Rect(0, 0, 0.5, DEFAULT_HEIGHT);
     std::shared_ptr<physics2::PolygonObstacle> left = physics2::PolygonObstacle::allocWithAnchor(leftRect, Vec2::ANCHOR_CENTER);
     left->setBodyType(b2_staticBody);
+    left->setName("leftwall");
     left->setFilterData(filter);
 
     std::shared_ptr<scene2::PolygonNode> leftNode = scene2::PolygonNode::allocWithPoly(leftRect * _scale);
-    leftNode->setName("leftwall");
     leftNode->setColor(Color4::CLEAR);
     addObstacle(left, leftNode, 1);
 
@@ -2713,9 +2779,9 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     Rect rightRect = Rect(DEFAULT_WIDTH - 0.5, 0, 0.5, DEFAULT_HEIGHT);
     std::shared_ptr<physics2::PolygonObstacle> right = physics2::PolygonObstacle::allocWithAnchor(rightRect, Vec2::ANCHOR_CENTER);
     right->setBodyType(b2_staticBody);
+    right->setName("rightwall");
     right->setFilterData(filter);
     std::shared_ptr<scene2::PolygonNode> rightNode = scene2::PolygonNode::allocWithPoly(rightRect * _scale);
-    rightNode->setName("rightwall");
     rightNode->setColor(Color4::CLEAR);
     addObstacle(right, rightNode, 1);
 

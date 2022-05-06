@@ -205,6 +205,9 @@ protected:
     
     /** range charge indicator */
     std::shared_ptr<scene2::ProgressBar> _range_charge;
+    
+    /** melee charge indicator */
+    std::shared_ptr<scene2::ProgressBar> _melee_charge;
 
     bool _winInit;
 
@@ -237,6 +240,8 @@ protected:
     std::shared_ptr<scene2::Button> _optionReturnButton;
 
     std::shared_ptr<scene2::Button> _swapHandsButton;
+
+    bool _swap;
 
     std::shared_ptr<scene2::Button> _musicButton;
 

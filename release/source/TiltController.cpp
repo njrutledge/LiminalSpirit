@@ -24,7 +24,8 @@ using namespace cugl;
  * Creates a new tilt controller.
  */
 TiltController::TiltController() :
-_xpos(0)
+_xpos(0),
+_lastLandscape(cugl::Display::Orientation::LANDSCAPE)
 {
 }
 
@@ -35,6 +36,17 @@ TiltController::~TiltController() {
     //Nothing to release
 }
 
+void TiltController::updateLandscapeOrientation() {
+    
+    if (Display::get()->getDeviceOrientation() == cugl::Display::Orientation::LANDSCAPE_REVERSED) {
+        _lastLandscape = cugl::Display::Orientation::LANDSCAPE_REVERSED;
+    }
+    else if (Display::get()->getDeviceOrientation() == cugl::Display::Orientation::LANDSCAPE) {
+        _lastLandscape = cugl::Display::Orientation::LANDSCAPE;
+    }
+    
+}
+
 /**
  * Processes the currently cached inputs.
  *
@@ -42,11 +54,16 @@ TiltController::~TiltController() {
  * keyboard or accelerometer.
  */
 void TiltController::update(InputController& input, float width) {
-// TODO: Leaving the keyboard input stuff here for now, will fix when merging with Nick's keyboard stuff
+    updateLandscapeOrientation();
+    
 #ifdef CU_TOUCH_SCREEN
     // MOBILE CONTROLS
     Vec3 acc = input.getAcceleration();
     float xAcc = acc.x;
+    
+    if (_lastLandscape == cugl::Display::Orientation::LANDSCAPE_REVERSED){
+        xAcc *= -1;
+    }
     
     // Only process accelerometer if tilt is more than 0.1 so
     // player does not move when phone is straight
