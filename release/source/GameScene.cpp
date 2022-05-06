@@ -1377,9 +1377,6 @@ void GameScene::updateEnemies(float timestep)
 {
     // Enemy AI logic
     // For each enemy
-    std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("devil"), Vec2(0, 0));
-    std::shared_ptr<ParticlePool> pool2 = ParticlePool::allocPoint(_particleInfo->get("damaged"), Vec2(0, 0));
-    std::shared_ptr<ParticlePool> numPool = ParticlePool::allocPoint(_particleInfo->get("number"), Vec2(0, 0));
     std::shared_ptr<Texture> melee_impact = _assets->get<Texture>("melee_impact");
     std::shared_ptr<Texture> ranged_impact = _assets->get<Texture>("ranged_impact");
     for (auto it = _enemies.begin(); it != _enemies.end(); ++it)
@@ -1420,24 +1417,37 @@ void GameScene::updateEnemies(float timestep)
 
         scene2::SpriteNode *sprite = dynamic_cast<scene2::SpriteNode *>((*it)->getSceneNode().get());
 
-        // For running idle animations specific (for speed) to enemies
-        if ((*it)->getName() == "Phantom")
-        {
-            if ((*it)->getInvincibilityTimer() > 0 && !(*it)->getPlayedDamagedParticle())
-            {
-                std::shared_ptr<ParticleNode> dmgd;
+        float devilScale;
+        if ((*it)->getName() == "Glutton" || (*it)->getName() == "Spawner") {
+            devilScale = 0.2;
+        }
+        else {
+            devilScale = 0.1;
+        }
+
+        if ((*it)->getInvincibilityTimer() > 0 && !(*it)->getPlayedDamagedParticle()) {
                 (*it)->setPlayedDamagedParticle(true);
                 if ((*it)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee)
                 {
-                    dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, melee_impact, pool);
+                    createParticles(melee_impact, (*it)->getPosition() * _scale, "devil", Vec2(0, 0), 0.1f);
                 }
                 else
                 {
-                    dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, ranged_impact, pool);
+                    createParticles(ranged_impact, (*it)->getPosition() * _scale, "devil", Vec2(0, 0), 0.1f);
                 }
-                dmgd->setScale(0.1f);
-                _worldnode->addChildWithTag(dmgd, 100);
-            }
+                if ((*it)->getLastDamageAmount() < 10) {
+                    std::shared_ptr<Texture> num = _numberTextures[(*it)->getLastDamageAmount()];
+                    createParticles(num, (*it)->getPosition() * _scale, "number", Vec2(0, 0), 0.5f);
+                }
+                else {
+                    std::vector<std::shared_ptr<Texture>> num = getTexturesFromNumber((*it)->getLastDamageAmount());
+                    createParticles(num, (*it)->getPosition() * _scale, "number", Vec2(0, 0), 0.5f, true, Vec2(-40, 0));
+                }
+        }
+
+        // For running idle animations specific (for speed) to enemies
+        if ((*it)->getName() == "Phantom")
+        {
             if ((*it)->getIdleAnimationTimer() > 0.1f)
             {
                 sprite->setFrame((sprite->getFrame() + 1) % 7);
@@ -1448,32 +1458,6 @@ void GameScene::updateEnemies(float timestep)
         {
             if ((*it)->getInvincibilityTimer() > 0)
             {
-                if (!(*it)->getPlayedDamagedParticle())
-                {
-                    std::shared_ptr<ParticleNode> dmgd;
-                    (*it)->setPlayedDamagedParticle(true);
-                    if ((*it)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee)
-                    {
-                        dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, melee_impact, pool);
-                    }
-                    else
-                    {
-                        dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, ranged_impact, pool);
-                    }
-                    dmgd->setScale(0.2f);
-                    _worldnode->addChildWithTag(dmgd, 100);
-                    std::shared_ptr<ParticleNode> dmgd2;
-                    if ((*it)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee)
-                    {
-                        dmgd2 = ParticleNode::alloc((*it)->getPosition() * _scale, melee_impact, pool);
-                    }
-                    else
-                    {
-                        dmgd2 = ParticleNode::alloc((*it)->getPosition() * _scale, ranged_impact, pool);
-                    }
-                    dmgd2->setScale(0.05f);
-                    _worldnode->addChildWithTag(dmgd2, 100);
-                }
                 sprite->setFrame(7);
             }
             else if ((*it)->getIdleAnimationTimer() > 1.f ||
@@ -1487,34 +1471,6 @@ void GameScene::updateEnemies(float timestep)
         {
             if ((*it)->getInvincibilityTimer() > 0)
             {
-                if (!(*it)->getPlayedDamagedParticle())
-                {
-                    //std::shared_ptr<ParticleNode> dmgd;
-                    (*it)->setPlayedDamagedParticle(true);
-                    //if ((*it)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee)
-                    //{
-                    //    dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, melee_impact, pool);
-                    //}
-                    //else
-                    //{
-                    //    dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, ranged_impact, pool);
-                    //}
-                    //dmgd->setScale(0.1f);
-                    //_worldnode->addChildWithTag(dmgd, 100);
-                    std::shared_ptr<ParticleNode> numDmg;
-                    
-                    if ((*it)->getLastDamageAmount() < 10) {
-                        std::shared_ptr<Texture> num = _numberTextures[(*it)->getLastDamageAmount()];
-                        numDmg = ParticleNode::alloc((*it)->getPosition() * _scale, num, pool);
-                    }
-                    else {
-                        std::vector<std::shared_ptr<Texture>> num = getTexturesFromNumber((*it)->getLastDamageAmount());
-                        Vec2 offset = Vec2(-40, 0);
-                        numDmg = ParticleNode::alloc((*it)->getPosition() * _scale, num, numPool, true, offset);
-                    }
-                    numDmg->setScale(0.5f);
-                    _worldnode->addChildWithTag(numDmg, 100);
-                }
                 if (!sprite->isFlipHorizontal())
                 {
                     sprite->setFrame(4);
@@ -1535,21 +1491,6 @@ void GameScene::updateEnemies(float timestep)
                     sprite->flipHorizontal(true);
                 }
 
-                if ((*it)->getInvincibilityTimer() > 0)
-                {
-                    std::shared_ptr<ParticleNode> dmgd;
-                    if ((*it)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee)
-                    {
-                        dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, melee_impact, pool);
-                    }
-                    else
-                    {
-                        dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, ranged_impact, pool);
-                    }
-                    dmgd->setScale(0.1f);
-                    _worldnode->addChildWithTag(dmgd, 100);
-                }
-
                 // Using idle timer for walking animation since lost has no idle
                 if (((*it)->getVX() > 0) && ((*it)->getIdleAnimationTimer() > .1f || sprite->getFrame() == 4 || sprite->getFrame() == 7))
                 {
@@ -1565,39 +1506,10 @@ void GameScene::updateEnemies(float timestep)
         }
         else if ((*it)->getName() == "Seeker")
         {
-            if ((*it)->getInvincibilityTimer() > 0 && !(*it)->getPlayedDamagedParticle())
-            {
-                std::shared_ptr<ParticleNode> dmgd;
-                (*it)->setPlayedDamagedParticle(true);
-                if ((*it)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee)
-                {
-                    dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, melee_impact, pool);
-                }
-                else
-                {
-                    dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, ranged_impact, pool);
-                }
-                dmgd->setScale(0.1f);
-                _worldnode->addChildWithTag(dmgd, 100);
-            }
+          
         }
         else if ((*it)->getName() == "Spawner")
         {
-            if ((*it)->getInvincibilityTimer() > 0 && !(*it)->getPlayedDamagedParticle())
-            {
-                std::shared_ptr<ParticleNode> dmgd;
-                (*it)->setPlayedDamagedParticle(true);
-                if ((*it)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee)
-                {
-                    dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, melee_impact, pool);
-                }
-                else
-                {
-                    dmgd = ParticleNode::alloc((*it)->getPosition() * _scale, ranged_impact, pool);
-                }
-                dmgd->setScale(0.1f);
-                _worldnode->addChildWithTag(dmgd, 100);
-            }
             if ((*it)->getSpawned() || sprite->getFrame() != 0) {
                 // Using idle animation timer for spawning animation (not sure if it will have an idle)
                 if ((*it)->getIdleAnimationTimer() > 0.1f) {
@@ -1688,6 +1600,22 @@ std::vector<std::shared_ptr<Texture>> GameScene::getTexturesFromNumber(int num) 
     }
 
     return nums; 
+}
+
+void GameScene::createParticles(std::shared_ptr<Texture> texture, Vec2 pos, string poolName, Vec2 pointOffset, float scale) {
+    std::shared_ptr<ParticleNode> pn;
+    std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get(poolName), pointOffset);
+    pn = ParticleNode::alloc(pos, texture, pool);
+    pn->setScale(scale);
+    _worldnode->addChildWithTag(pn, 100);
+}
+
+void GameScene::createParticles(std::vector<std::shared_ptr<Texture>> textures, Vec2 pos, string poolName, Vec2 pointOffset, float scale, bool hasMultipleLinkedTextures, Vec2 linkOffset) {
+    std::shared_ptr<ParticleNode> pn;
+    std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get(poolName), pointOffset);
+    pn = ParticleNode::alloc(pos, textures, pool, hasMultipleLinkedTextures, linkOffset);
+    pn->setScale(scale);
+    _worldnode->addChildWithTag(pn, 100);
 }
 
 void GameScene::updateSwipesAndAttacks(float timestep)

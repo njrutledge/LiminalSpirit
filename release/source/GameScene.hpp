@@ -427,8 +427,10 @@ public:
 
     std::shared_ptr<BaseEnemyModel> getNearestNonMirror(cugl::Vec2 pos);
 
-    /** Creates the intial particle pool */
-    void createParticles();
+    /** Helpers to create particles in GameScene */
+    void createParticles(std::shared_ptr<Texture> texture, Vec2 pos, string poolName, Vec2 pointOffset, float scale);
+    void createParticles(std::vector<std::shared_ptr<Texture>> textures, Vec2 pos, string poolName, Vec2 pointOffset, float scale, bool hasMultipleLinkedTextures, Vec2 linkOffset);
+
 
     /** Helper to convert numbers into Textures **/
     std::vector<std::shared_ptr<Texture>> getTexturesFromNumber(int num);
