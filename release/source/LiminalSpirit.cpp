@@ -13,6 +13,15 @@
 
 using namespace cugl;
 
+// CAVE UNLOCKS
+#define RANGED_UNLOCK 5
+// SHROOM UNLOCKS
+#define CHARGED_RANGED_UNLOCK 1
+#define ATTACK_UPGRADE_1 4
+// FOREST UNLOCKS
+#define CHARGED_MELEE_UNLOCK 1
+#define ATTACK_UPGRADE_2 2
+
 #pragma mark -
 #pragma mark Gameplay Control
 
@@ -60,7 +69,7 @@ void LiminalSpirit::onStartup()
     
     if (!filetool::file_exists(Application::get()->getSaveDirectory() + "savedGame.json")) {
         std::shared_ptr<TextWriter> writer = TextWriter::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
-        writer->write("{\"progress\":{\"biome\": 1, \"highest_level\": 1}, \"settings\":{\"swap\": false}}");
+        writer->write("{\"progress\":{\"biome\": 1, \"highest_level\": 1, \"unlock_count\": 0}, \"settings\":{\"swap\": false}}");
         writer->close();
     }
     
@@ -72,9 +81,10 @@ void LiminalSpirit::onStartup()
     
     _biome = progress->get("biome")->asInt();
     _highest_level = progress->get("highest_level")->asInt();
+    _unlock_count = progress->get("unlock_count")->asInt();
     _swap = settings->get("swap")->asBool();
     
-    CULog("Biome: %d, Level: %d, Swap: %d", _biome, _highest_level, _swap);
+    CULog("Biome: %d, Level: %d, Unlocks: %d, Swap: %d", _biome, _highest_level, _unlock_count, _swap);
     
     Application::onStartup(); // YOU MUST END with call to parent
 }
@@ -256,7 +266,7 @@ void LiminalSpirit::updateWorldSelectScene(float timestep)
  */
 void LiminalSpirit::updateGameScene(float timestep)
 {
-    _gameplay.update(timestep);
+    _gameplay.update(timestep, _unlock_count);
     if (_gameplay.goingBack()) {
         _scene = State::WORLDS;
         _gameplay.dispose();
@@ -278,13 +288,13 @@ void LiminalSpirit::updateGameScene(float timestep)
             if (biome == "cave") {
                 biome = "shroom";
                 if(_biome < 2){
-                    updateBiomeSave(2);
+                    _biome = 2;
                 }
             }
             else if (biome == "shroom") {
                 biome = "forest";
                 if(_biome < 3){
-                    updateBiomeSave(3);
+                    _biome = 3;
                 }
             }
             else {
@@ -295,12 +305,15 @@ void LiminalSpirit::updateGameScene(float timestep)
                 return;
             }
             nextStage = 1;
+            _highest_level = 1;
             //more levels to go!
         }
         bool checkLevels = (biome == "cave" && _biome == 1) || (biome == "shroom" && _biome == 2) || (biome == "forest" && _biome == 3);
         if(checkLevels && nextStage > _highest_level){
-            updateLevelSave(nextStage);
+            _highest_level = nextStage;
         }
+        checkPlayerUnlocks();
+        save();
         _gameplay.init(_assets, _sound_controller, biome, nextStage);
     }
 }
@@ -360,26 +373,36 @@ void LiminalSpirit::updateBossScene(float timestep)
     }
 }
 
-/** updates the save file to increment the biome if player advances to the next one
- *
- *  @param biome the new value for biome in the json
+/** Grants the player abilities once they have access to certain stages
  */
-void LiminalSpirit::updateBiomeSave(int biome){
-    std::shared_ptr<TextWriter> writer = TextWriter::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
-    writer->write("{\"progress\":{\"biome\": " + to_string(biome) + ", \"highest_level\": 1}, \"settings\":{\"swap\": " + to_string(_swap) +"}}");
-    _biome = biome;
-    _highest_level = 1;
-    writer->close();
+void LiminalSpirit::checkPlayerUnlocks(){
+    switch(_biome){
+        case 1:
+            if(_highest_level >= RANGED_UNLOCK){
+                _unlock_count = 1;
+            }
+            break;
+        case 2:
+            if (_highest_level >= ATTACK_UPGRADE_1){
+                _unlock_count = 3;
+            } else if (_highest_level >= CHARGED_RANGED_UNLOCK){
+                _unlock_count = 2;
+            }
+            break;
+        case 3:
+            if (_highest_level >= ATTACK_UPGRADE_2){
+                _unlock_count = 5;
+            } else if (_highest_level >= CHARGED_MELEE_UNLOCK){
+                _unlock_count = 4;
+            }
+            break;
+    }
 }
 
-/** updates the save file to increment the biome if player advances to the next one
- *
- *  @param biome the new value for biome in the json
- */
-void LiminalSpirit::updateLevelSave(int highestLevel){
+/** Saves progress */
+void LiminalSpirit::save(){
     std::shared_ptr<TextWriter> writer = TextWriter::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
-    writer->write("{\"progress\":{\"biome\": " + to_string(_biome) + ", \"highest_level\": " + to_string(highestLevel) + "}, \"settings\":{\"swap\": " + to_string(_swap) +"}}");
-    _highest_level = highestLevel;
+    writer->write("{\"progress\":{\"biome\": " + to_string(_biome) + ", \"highest_level\": " + to_string(_highest_level) + ", \"unlock_count\": " + to_string(_unlock_count) + "}, \"settings\":{\"swap\": " + to_string(_swap) +"}}");
     writer->close();
 }
 

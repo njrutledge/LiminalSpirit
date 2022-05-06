@@ -547,8 +547,14 @@ void GameScene::dispose()
  * This method contains any gameplay code that is not an OpenGL call.
  *
  * @param timestep  The amount of time (in seconds) since the last frame
+ * @param unlockCount The amount of unlocks the player has.
+ *                  1 - ranged attack
+ *                  2 - charged ranged attack
+ *                  3 - attack upgrade 1
+ *                  4 - charged melee attack
+ *                  5 - attack upgrade 2
  */
-void GameScene::update(float timestep)
+void GameScene::update(float timestep, int unlockCount)
 {
     if (_options) {
         _optionScene->setVisible(true);
@@ -655,7 +661,7 @@ void GameScene::update(float timestep)
         _player->setFacingRight(true);
 
         // perform necessary update loop
-        updateAnimations(timestep);
+        updateAnimations(timestep, unlockCount, SwipeController::noAttack, SwipeController::noAttack);
         _world->update(timestep);
         updateCamera();
         updateMeleeArm(timestep);
@@ -663,11 +669,20 @@ void GameScene::update(float timestep)
     }
 
     updateTilt();
+    
+    if (!_player->isStunned())
+    {
+        _swipes.update(_input, _player->isGrounded(), timestep);
+    }
+    
+    SwipeController::SwipeAttack left = updateLeftSwipe(unlockCount);
+    SwipeController::SwipeAttack right = updateRightSwipe(unlockCount);
 
-    updateAnimations(timestep);
+    updateAnimations(timestep, unlockCount, left, right);
 
     updateEnemies(timestep);
-    updateSwipesAndAttacks(timestep);
+    
+    updateAttacks(timestep, unlockCount, left, right);
     updateRemoveDeletedAttacks();
 
     updateRemoveDeletedEnemies();
@@ -678,7 +693,7 @@ void GameScene::update(float timestep)
 
     updateRemoveDeletedPlayer();
 
-    updateHealthbar();
+    updateHUD(unlockCount);
 
     updateCamera();
 
@@ -759,7 +774,7 @@ void GameScene::updateTilt()
     }
 }
 
-void GameScene::updateAnimations(float timestep)
+void GameScene::updateAnimations(float timestep, int unlockCount, SwipeController::SwipeAttack left, SwipeController::SwipeAttack right)
 {
     ///////////////////////////////////////
     // Start Player and Arm Animations ////
@@ -767,6 +782,8 @@ void GameScene::updateAnimations(float timestep)
     float xPos = _tilt.getXpos();
     int nextFrame;
     scene2::SpriteNode *sprite = dynamic_cast<scene2::SpriteNode *>(_player->getSceneNode().get());
+    
+    _rangedArm->getSceneNode()->setVisible(unlockCount > 1);
 
     sprite->setAnchor(0.5, 0.3);
     // Player (body) Animations
@@ -1160,7 +1177,7 @@ void GameScene::updateAnimations(float timestep)
     }
     else if (_meleeArm->getLastType() == Glow::MeleeState::cool)
     {
-        if (_swipes.getRightChargingTime() >= 100 && _swipes.getRightChargingTime() < 100 + ((CHARGE_TIME - 100) / 2)) {
+        if (_swipes.getRightChargingTime() >= 100 && _swipes.getRightChargingTime() < 100 + ((CHARGE_TIME - 100) / 2) && unlockCount >= 4) {
             if (_player->isFacingRight())
             {
                 mSprite->setFrame(26);
@@ -1170,7 +1187,7 @@ void GameScene::updateAnimations(float timestep)
                 mSprite->setFrame(22);
             }
         }
-        else if (_swipes.getRightChargingTime() >= 100 + ((CHARGE_TIME - 100) / 2) && _swipes.getRightChargingTime() < CHARGE_TIME) {
+        else if (_swipes.getRightChargingTime() >= 100 + ((CHARGE_TIME - 100) / 2) && _swipes.getRightChargingTime() < CHARGE_TIME && unlockCount >= 4) {
             if (_player->isFacingRight())
             {
                 mSprite->setFrame(25);
@@ -1180,7 +1197,7 @@ void GameScene::updateAnimations(float timestep)
                 mSprite->setFrame(23);
             }
         }
-        else if (_swipes.getRightChargingTime() >= CHARGE_TIME) {
+        else if (_swipes.getRightChargingTime() >= CHARGE_TIME && unlockCount >= 4) {
             mSprite->setFrame(24);
         }
         else {
@@ -1737,21 +1754,116 @@ void GameScene::updateEnemies(float timestep)
     }
 }
 
-void GameScene::updateSwipesAndAttacks(float timestep)
+SwipeController::SwipeAttack GameScene::updateLeftSwipe(int unlockCount){
+    SwipeController::SwipeAttack left = _swipes.getLeftSwipe(_swap);
+    
+    switch (left) {
+        case SwipeController::upAttack:
+        case SwipeController::rightAttack:
+        case SwipeController::downAttack:
+        case SwipeController::leftAttack:
+            if(unlockCount < 1){
+                left = SwipeController::noAttack;
+            }
+            break;
+        case SwipeController::chargedUp:
+            switch(unlockCount){
+                case 0:
+                    left = SwipeController::noAttack;
+                    break;
+                case 1:
+                    left = SwipeController::upAttack;
+                    break;
+                default:
+                    break;
+            }
+            break;
+        case SwipeController::chargedRight:
+            switch(unlockCount){
+                case 0:
+                    left = SwipeController::noAttack;
+                    break;
+                case 1:
+                    left = SwipeController::rightAttack;
+                    break;
+                default:
+                    break;
+            }
+            break;
+        case SwipeController::chargedDown:
+            switch(unlockCount){
+                case 0:
+                    left = SwipeController::noAttack;
+                    break;
+                case 1:
+                    left = SwipeController::downAttack;
+                    break;
+                default:
+                    break;
+            }
+            break;
+        case SwipeController::chargedLeft:
+            switch(unlockCount){
+                case 0:
+                    left = SwipeController::noAttack;
+                    break;
+                case 1:
+                    left = SwipeController::leftAttack;
+                    break;
+                default:
+                    break;
+            }
+            break;
+        default:
+            break;
+    }
+    
+    return left;
+}
+
+SwipeController::SwipeAttack GameScene::updateRightSwipe(int unlockCount){
+    SwipeController::SwipeAttack right = _swipes.getRightSwipe(_swap);
+    
+    switch (right) {
+        case SwipeController::chargedUp:
+            if(unlockCount < 4){
+                right = SwipeController::upAttack;
+            }
+            break;
+        case SwipeController::chargedRight:
+            if(unlockCount < 4){
+                right = SwipeController::rightAttack;
+            }
+            break;
+        case SwipeController::chargedDown:
+            if(unlockCount < 4){
+                right = SwipeController::downAttack;
+            }
+            break;
+        case SwipeController::chargedLeft:
+            if(unlockCount < 4){
+                right = SwipeController::leftAttack;
+            }
+            break;
+        default:
+            break;
+    }
+    
+    return right;
+}
+
+void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::SwipeAttack left, SwipeController::SwipeAttack right)
 {
     // if player is stunned, do not read swipe input
     float xPos = _tilt.getXpos();
-    if (!_player->isStunned())
-    {
-        _swipes.update(_input, _player->isGrounded(), timestep);
-    }
 
     b2Vec2 playerPos = _player->getBody()->GetPosition();
+    
     if (!_player->isStunned())
     {
-        _attacks->attackLeft(Vec2(playerPos.x, playerPos.y), _swipes.getLeftSwipe(_swap), _swipes.getLeftAngle(_swap), _player->isGrounded(), _timer, _sound);
-        _attacks->attackRight(Vec2(playerPos.x, playerPos.y), _swipes.getRightSwipe(_swap), _swipes.getRightAngle(_swap), _player->isGrounded(), _player->isFacingRight(), _timer, _sound);
-        if (_swipes.getRightSwipe(_swap) == SwipeController::chargedRight)
+        _attacks->attackLeft(Vec2(playerPos.x, playerPos.y), left, _swipes.getLeftAngle(_swap), _player->isGrounded(), _timer, _sound);
+        _attacks->attackRight(Vec2(playerPos.x, playerPos.y), right, _swipes.getRightAngle(_swap), _player->isGrounded(), _player->isFacingRight(), _timer, _sound);
+        if (right == SwipeController::chargedRight)
         {
             _dashXVel = 20;
             _dashYVel = 1;
@@ -1760,7 +1872,7 @@ void GameScene::updateSwipesAndAttacks(float timestep)
             _player->setDashingLastFrame(false);
             _player->setDashAngle(0);
         }
-        else if (_swipes.getRightSwipe(_swap) == SwipeController::chargedLeft)
+        else if (right == SwipeController::chargedLeft)
         {
             _dashXVel = -20;
             _dashYVel = 1;
@@ -1769,7 +1881,7 @@ void GameScene::updateSwipesAndAttacks(float timestep)
             _player->setDashingLastFrame(false);
             _player->setDashAngle(180);
         }
-        else if (_swipes.getRightSwipe(_swap) == SwipeController::chargedUp)
+        else if (right == SwipeController::chargedUp)
         {
             _dashYVel = 20;
             _dashTime = 0;
@@ -1777,7 +1889,7 @@ void GameScene::updateSwipesAndAttacks(float timestep)
             _player->setDashingLastFrame(false);
             _player->setDashAngle(90);
         }
-        else if (_swipes.getRightSwipe(_swap) == SwipeController::chargedDown)
+        else if (right == SwipeController::chargedDown)
         {
             _dashYVel = -23;
             _dashTime = 0;
@@ -1900,7 +2012,7 @@ void GameScene::updateSwipesAndAttacks(float timestep)
             attackSprite->setPriority(3);
             _rangedArm->setLastType(Glow::MeleeState::first);
             _player->setRangedAttackRight(_player->isFacingRight());
-            if (_swipes.getLeftSwipe(_swap) == SwipeController::downAttack)
+            if (left == SwipeController::downAttack)
             {
                 _rangedArm->setAttackAngle(270);
             }
@@ -1923,7 +2035,7 @@ void GameScene::updateSwipesAndAttacks(float timestep)
             attackSprite->setPriority(3);
             _rangedArm->setLastType(Glow::MeleeState::first);
             _player->setRangedAttackRight(_player->isFacingRight());
-            if (_swipes.getLeftSwipe(_swap) == SwipeController::downAttack)
+            if (left == SwipeController::downAttack)
             {
                 _rangedArm->setAttackAngle(270);
             }
@@ -2027,7 +2139,7 @@ void GameScene::updateSwipesAndAttacks(float timestep)
     }
     _attacks->update(_player->getPosition(), _player->getBody()->GetLinearVelocity(), timestep);
     // DO NOT MOVE THE ABOVE LINE
-    if (_swipes.getRightSwipe(_swap) == SwipeController::upAttack || _swipes.getLeftSwipe(_swap) == SwipeController::jump || _swipes.getRightSwipe(_swap) == SwipeController::jump)
+    if (right == SwipeController::upAttack || left == SwipeController::jump || right == SwipeController::jump)
     {
         _player->setJumping(true);
         _player->setIsFirstFrame(true);
@@ -2037,7 +2149,7 @@ void GameScene::updateSwipesAndAttacks(float timestep)
             _player->setJumpAnimationTimer(0);
         }
     }
-    else if (_swipes.getRightSwipe(_swap) == _swipes.downAttack)
+    else if (right == _swipes.downAttack)
     {
         // IDK
         _player->setDropTime(0.4f);
@@ -2175,7 +2287,7 @@ void GameScene::updateRemoveDeletedPlayer()
     }
 }
 
-void GameScene::updateHealthbar()
+void GameScene::updateHUD(int unlockCount)
 {
     // Update the health meter
     // left offset is additive, makes progress end at most leftOff*rightOff from left edge
@@ -2189,6 +2301,21 @@ void GameScene::updateHealthbar()
         _healthbar->setProgress(prog);
     }
     
+    switch(unlockCount){
+        case 0:
+        case 1:
+            _range_charge->setVisible(false);
+            _melee_charge->setVisible(false);
+            break;
+        case 2:
+        case 3:
+            _range_charge->setVisible(true);
+            _melee_charge->setVisible(false);
+            break;
+        default:
+            _range_charge->setVisible(true);
+            _melee_charge->setVisible(true);
+    }
     _melee_charge->setProgress(_swipes.getMeleeCharge());
     _range_charge->setProgress(_swipes.getRangeCharge());
 }

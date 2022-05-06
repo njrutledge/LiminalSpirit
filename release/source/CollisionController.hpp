@@ -34,6 +34,9 @@ public:
 
 private:
     std::shared_ptr<SoundController> _sound;
+    
+    int _unlock_count;
+    
     /** the index of spawner that is been killed */
     int _spawner_killed;
     string _name_of_killed_spawner_enemy;

@@ -6,6 +6,11 @@ using namespace cugl;
 
 void CollisionController::init(std::shared_ptr<SoundController> sound) {
     _sound = sound;
+    
+    std::shared_ptr<JsonReader> reader = JsonReader::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
+    std::shared_ptr<JsonValue> save = reader->readJson();
+    std::shared_ptr<JsonValue> progress = save->get("progress");
+    _unlock_count = progress->get("unlock_count")->asInt();
 }
 
 /**
@@ -144,6 +149,16 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
             else{
                 if (!attack->hasHitEnemy(enemy)) {
                     int damage = getDamageDealt(attack, enemy);
+                    switch (_unlock_count) {
+                        case 3:
+                        case 4:
+                            damage *= 2;
+                            break;
+                        case 5:
+                            damage *= 3;
+                        default:
+                            break;
+                    }
                     enemy->setHealth(enemy->getHealth() - damage);
                     //CULog("HEALTH SET");
                     if (damage > 0) {
@@ -177,7 +192,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
 
 
                 if (attack->getType() == AttackController::p_exp_package) {
-                    AC->createAttack(attack->getPosition() /*cugl::Vec2(bd->getPosition().x, bd->getPosition().y)*/, 3, 0.15, 40, AttackController::p_exp, cugl::Vec2::ZERO, timer, PLAYER_RANGE, PLAYER_EXP_FRAMES);
+                    AC->createAttack(attack->getPosition() /*cugl::Vec2(bd->getPosition().x, bd->getPosition().y)*/, 3, 0.15, 30, AttackController::p_exp, cugl::Vec2::ZERO, timer, PLAYER_RANGE, PLAYER_EXP_FRAMES);
                 }
                 switch (attack->getType()) {
                     case AttackController::p_range:
@@ -313,7 +328,7 @@ void CollisionController::handleAttackCollision(AttackController::Attack* attack
     else if ((bd && (bd->getName().find("wall")!= std::string::npos))){
         switch(attack->getType()) {
         case AttackController::p_exp_package:
-            AC->createAttack(attack->getPosition(), 3, 0.15, 40, AttackController::p_exp, cugl::Vec2::ZERO, timer, PLAYER_RANGE, PLAYER_EXP_FRAMES);
+            AC->createAttack(attack->getPosition(), 3, 0.15, 30, AttackController::p_exp, cugl::Vec2::ZERO, timer, PLAYER_RANGE, PLAYER_EXP_FRAMES);
             attack->setInactive();
             break;
         case AttackController::p_range:

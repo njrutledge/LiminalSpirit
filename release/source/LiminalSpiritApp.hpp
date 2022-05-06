@@ -40,6 +40,9 @@ protected:
     /** The highest level the player has access to (within the highest biome) */
     int _highest_level;
     
+    /** The amount of upgrades the player has unlocked */
+    int _unlock_count;
+    
     /** Whether or not the player's hands are swapped */
     bool _swap;
 
@@ -91,17 +94,12 @@ protected:
     /** The current active scene*/
     State _scene;
     
-    /** updates the save file to increment the biome if player advances to the next one. Resets highest level to 1.
-     *
-     *  @param biome the new value for biome in the json
-     */
-    void updateBiomeSave(int biome);
+    /** Saves progress */
+    void save();
     
-    /** updates the save file to increment the level if player advances to the next one
-     *
-     *  @param highestLevel the new value for level in the json
+    /** Grants the player abilities once they have access to certain stages
      */
-    void updateLevelSave(int highestLevel);
+    void checkPlayerUnlocks();
 
 public:
     /**
