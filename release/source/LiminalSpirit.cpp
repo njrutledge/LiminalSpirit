@@ -297,6 +297,10 @@ void LiminalSpirit::updateGameScene(float timestep)
             nextStage = 1;
             //more levels to go!
         }
+        bool checkLevels = (biome == "cave" && _biome == 1) || (biome == "shroom" && _biome == 2) || (biome == "forest" && _biome == 3);
+        if(checkLevels && nextStage > _highest_level){
+            updateLevelSave(nextStage);
+        }
         _gameplay.init(_assets, _sound_controller, biome, nextStage);
     }
 }
@@ -311,7 +315,19 @@ void LiminalSpirit::updateGameScene(float timestep)
  */
 void LiminalSpirit::updateLevelSelectScene(float timestep)
 {
-    _levelSelect.update(timestep);
+    string biome;
+    switch(_biome){
+        case 1:
+            biome = "cave";
+            break;
+        case 2:
+            biome = "shroom";
+            break;
+        default:
+            biome = "forest";
+            break;
+    }
+    _levelSelect.update(timestep, biome, _highest_level);
     switch (_levelSelect.getChoice()) {
     case LevelSelectScene::Choice::selected:
         _gameplay.init(_assets, _sound_controller, _levelSelect.getBiome(), _levelSelect.getStage());
@@ -352,6 +368,18 @@ void LiminalSpirit::updateBiomeSave(int biome){
     std::shared_ptr<TextWriter> writer = TextWriter::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
     writer->write("{\"progress\":{\"biome\": " + to_string(biome) + ", \"highest_level\": 1}, \"settings\":{\"swap\": " + to_string(_swap) +"}}");
     _biome = biome;
+    _highest_level = 1;
+    writer->close();
+}
+
+/** updates the save file to increment the biome if player advances to the next one
+ *
+ *  @param biome the new value for biome in the json
+ */
+void LiminalSpirit::updateLevelSave(int highestLevel){
+    std::shared_ptr<TextWriter> writer = TextWriter::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
+    writer->write("{\"progress\":{\"biome\": " + to_string(_biome) + ", \"highest_level\": " + to_string(highestLevel) + "}, \"settings\":{\"swap\": " + to_string(_swap) +"}}");
+    _highest_level = highestLevel;
     writer->close();
 }
 

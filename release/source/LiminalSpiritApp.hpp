@@ -91,11 +91,17 @@ protected:
     /** The current active scene*/
     State _scene;
     
-    /** updates the save file to increment the biome if player advances to the next one
+    /** updates the save file to increment the biome if player advances to the next one. Resets highest level to 1.
      *
      *  @param biome the new value for biome in the json
      */
     void updateBiomeSave(int biome);
+    
+    /** updates the save file to increment the level if player advances to the next one
+     *
+     *  @param highestLevel the new value for level in the json
+     */
+    void updateLevelSave(int highestLevel);
 
 public:
     /**
