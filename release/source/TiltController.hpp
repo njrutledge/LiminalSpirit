@@ -17,6 +17,11 @@ class TiltController {
     /** x position */
     float _xpos;
     
+    /** store the latest landscape orientation of the phone*/
+    cugl::Display::Orientation _lastLandscape;
+    
+    void updateLandscapeOrientation();
+    
 public:
 
 #pragma mark -
