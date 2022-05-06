@@ -1872,20 +1872,6 @@ void GameScene::updateSwipesAndAttacks(float timestep)
             attackSprite->setScale(.35f * (*it)->getRadius());
             dynamic_pointer_cast<scene2::SpriteNode>(attackSprite)->setFrame(1);
             attackSprite->setPriority(3);
-            _rangedArm->setLastType(Glow::MeleeState::first);
-            _player->setRangedAttackRight(_player->isFacingRight());
-            if (_swipes.getLeftSwipe(_swap) == SwipeController::downAttack)
-            {
-                _rangedArm->setAttackAngle(270);
-            }
-            else
-            {
-                _rangedArm->setAttackAngle((*it)->getAngle());
-            }
-            if (_player->isFacingRight())
-            {
-                _rangedArm->setAttackAngle(fmod(_rangedArm->getAttackAngle() + 180, 360));
-            }
         }
         else if (attackType == AttackController::Type::p_melee)
         {
