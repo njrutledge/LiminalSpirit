@@ -295,12 +295,9 @@ void LiminalSpirit::updateGameScene(float timestep)
                 return;
             }
             nextStage = 1;
-            _gameplay.init(_assets, _sound_controller, biome, nextStage);
             //more levels to go!
         }
-        else {
-            _gameplay.init(_assets, _sound_controller, biome, nextStage);
-        }
+        _gameplay.init(_assets, _sound_controller, biome, nextStage);
     }
 }
 
