@@ -18,15 +18,11 @@ SwipeController::SwipeController() : _leftSwipe(noAttack),
     _leftState.construct();
     _rightState.construct();
     
-    _cMeleeCount = 5.0f;
+    _cMeleeCount = 2.0f;
     _cRangeCount = 5.0f;
     
-    _cMCool = 5.0f;
+    _cMCool = 2.0f;
     _cRCool = 5.0f;
-    
-    _mChargeCount = 0;
-    _mChargeWindow = 0.9;
-    _mChargeTimer = 0.0f;
 }
 
 /**
@@ -37,20 +33,13 @@ SwipeController::~SwipeController()
     // Nothing to release
 }
 
-/*
+/**
  * Updates the swipe controller based on the latest inputs.
  */
 void SwipeController::update(InputController &input, bool grounded, float dt)
 {
-    if (!hasRightChargedAttack()) {
-        _cMeleeCount += dt;
-    } else {
-        updateRightState(dt);
-    }
-    if (!hasLeftChargedAttack()) {
-        _cRangeCount += dt;
-    }
-    
+    _cMeleeCount += dt;
+    _cRangeCount += dt;
 #ifdef CU_TOUCH_SCREEN
 
     // If the left finger is pressed down, check if it has been pressed long enough for
@@ -193,7 +182,7 @@ void SwipeController::calculateChargeAttack(cugl::Timestamp startTime, bool isLe
     Uint64 chargeTime = cugl::Timestamp::ellapsedMillis(startTime, _currTime);
     
     // half second charge time
-    if (chargeTime >= 250) {
+    if (chargeTime >= 500) {
         if (isLeftSidedCharge) {
             if (_cRCool <= _cRangeCount) {
                 chargeLeftAttack();
@@ -204,8 +193,6 @@ void SwipeController::calculateChargeAttack(cugl::Timestamp startTime, bool isLe
             if (_cMCool <= _cMeleeCount) {
                 chargeRightAttack();
                 _cMeleeCount = 0;
-                _mChargeCount = 3;
-                _mChargeTimer = 0;
             }
             
         }
@@ -412,38 +399,33 @@ void SwipeController::processRightState(bool grounded){
     
     bool charged = hasRightChargedAttack();
     SwipeDirection dir = _rightState.direction;
-//    if (!grounded && charged && dir == up) {
-//        return;
-//    }
+    if (!grounded && charged && dir == up) {
+        return;
+    }
+    resetRightState();
     
     if(charged) {
         switch (dir) {
             case up:
                 setRightSwipe(chargedUp);
-                updateRightState(-1.0f);
                 break;
             case right:
                 setRightSwipe(chargedRight);
-                updateRightState(-1.0f);
                 break;
             case left:
                 setRightSwipe(chargedLeft);
-                updateRightState(-1.0f);
                 break;
             case down:
                 setRightSwipe(chargedDown);
-                updateRightState(-1.0f);
                 break;
             default:
                 setRightSwipe(noAttack);
                 break;
         }
     } else {
-        resetRightState();
         switch (dir) {
             case up:
                 setRightSwipe(upAttack);
-                
                 break;
             case right:
                 setRightSwipe(rightAttack);
@@ -460,25 +442,6 @@ void SwipeController::processRightState(bool grounded){
         }
     }
 };
-
-void SwipeController::updateRightState(float timestep) {
-    if (timestep < 0) {
-        if (hasRightChargedAttack()) {
-            _mChargeCount -= 1;
-            _mChargeTimer = 0;
-            if (_mChargeCount <= 0) {
-                resetRightState();
-            }
-        }
-    } else {
-        if (_mChargeCount < 3) {
-            _mChargeTimer += timestep;
-            if (_mChargeTimer > _mChargeWindow) {
-                resetRightState();
-            }
-        }
-    }
-}
 
 /**
  * Print the side and direction of the swipe (for testing only)
@@ -572,6 +535,4 @@ void SwipeController::reset()
     _rightSwipe = noAttack;
     _cMeleeCount = _cMCool;
     _cRangeCount = _cRCool;
-    _mChargeTimer = 0;
-    _mChargeCount = 0;
 }
