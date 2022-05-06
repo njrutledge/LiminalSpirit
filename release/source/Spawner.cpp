@@ -10,7 +10,7 @@
 
 EnemyProperties SPAWNER_PROPS{
     /** Starting health of the spawner */
-    100,
+    360,
     /** Vertical speed of the spawner */
     0.0f,
     /** Horizontal speed of the spawner*/

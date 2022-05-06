@@ -94,8 +94,10 @@ float LEVEL_HEIGHT = 54;
 bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const std::shared_ptr<SoundController> sound, string biome, int stageNum)
 {
     _back = false;
+    _levelselect = false;
     _step = false;
     _winInit = true;
+    _lose = false;
     _next = false;
     _pause = false;
     _options = false;
@@ -269,7 +271,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _worldnode->setInterior(Rect(0, 0, bounds.size.width, SCENE_HEIGHT));
     _worldnode->setConstrained(true);
     scene->addChild(_worldnode);
-
+    _worldnode->setColor(Color4::WHITE);
     _worldnode2 = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND, bounds.size);
     _worldnode2->setPosition(Vec2(0, 0));
     _worldnode->addChild(_worldnode2);
@@ -425,6 +427,58 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     
     _numberTextures = numTexts;
 
+    //lose screen
+    _loseScene = _assets->get<scene2::SceneNode>("loseScene");
+
+    _loseScene->setContentSize(dimen);
+    _loseScene->doLayout();
+
+    addChildWithName(_loseScene, "lose");
+    _loseRestartButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("loseScene_restart"));
+    _loseRestartButton->addListener([=](const std::string& name, bool down)
+        {
+            // Only quit when the button is released
+            if (!down) {
+                _lose = false;
+                reset();
+                _player->markRemoved(false);
+            } });
+    _loseRestartButton->setScale(.4*buttonScale);
+
+    _loseHomeButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("loseScene_home"));
+    _loseHomeButton->addListener([=](const std::string& name, bool down)
+        {
+            // Only quit when the button is released
+            if (!down) {
+                _back = true;
+            } });
+    _loseHomeButton->setScale(.4*buttonScale);
+
+    _loseLevelButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("loseScene_level"));
+    _loseLevelButton->addListener([=](const std::string& name, bool down)
+        {
+            // Only quit when the button is released
+            if (!down) {
+                _levelselect = true;
+            } });
+    _loseLevelButton->setScale(.4 * buttonScale);
+
+
+    _optionScene->setVisible(false);
+    _pauseScene->setVisible(false);
+    _loseScene->setVisible(false);
+    _optionReturnButton->deactivate();
+    _musicButton->deactivate();
+    _sfxButton->deactivate();
+    _swapHandsButton->deactivate();
+    _returnButton->deactivate();
+    _homeButton->deactivate();
+    _optionButton->deactivate();
+    _pauseButton->setVisible(true);
+    _pauseButton->activate();
+    _loseHomeButton->deactivate();
+    _loseLevelButton->deactivate();
+    _loseRestartButton->deactivate();
 
     std::string msg = strtool::format("Wave: %d / %d", _nextWaveNum, _numWaves);
     _text = TextLayout::allocWithText(msg, assets->get<Font>("marker"));
@@ -436,6 +490,11 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _timer_text->layout();
 
     _timer = 0.0f;
+    _worldnode->setColor(Color4::WHITE);
+    _healthbar->setColor(Color4::WHITE);
+    _pauseButton->setColor(Color4::WHITE);
+    _range_charge->setColor(Color4::WHITE);
+    _melee_charge->setColor(Color4::WHITE);
     this->setColor(Color4::WHITE);
     return true;
 }
@@ -473,7 +532,10 @@ void GameScene::dispose()
     _font = nullptr;
     _endText = nullptr;
     _healthbar = nullptr;
-
+    _lose = false;
+    _loseHomeButton->deactivate();
+    _loseLevelButton->deactivate();
+    _loseRestartButton->deactivate();
     // TODO: CHECK IF THIS IS RIGHT FOR DISPOSING
     //    for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
     //        (*it).~shared_ptr();
@@ -512,6 +574,7 @@ void GameScene::update(float timestep)
     if (_options) {
         _optionScene->setVisible(true);
         _pauseScene->setVisible(false);
+        _loseScene->setVisible(false);
         _optionReturnButton->activate();
         _musicButton->activate();
         _sfxButton->activate();
@@ -543,6 +606,7 @@ void GameScene::update(float timestep)
     if (_pause) {
         _pauseScene->setVisible(true);
         _optionScene->setVisible(false);
+        _loseScene->setVisible(false);
         _returnButton->activate();
         _homeButton->activate();
         _optionButton->activate();
@@ -562,7 +626,26 @@ void GameScene::update(float timestep)
         _pauseButton->setVisible(true);
         _pauseButton->activate();
     }
-
+    
+    if (_lose) {
+        _pauseScene->setVisible(false);
+        _optionScene->setVisible(false);
+        _loseScene->setVisible(true);
+        _loseHomeButton->activate();
+        _loseLevelButton->activate();
+        _loseRestartButton->activate();
+        _pauseButton->setVisible(true);
+        _pauseButton->deactivate();
+        return;
+    }
+    else {
+        _loseScene->setVisible(false);
+        _loseHomeButton->deactivate();
+        _loseLevelButton->deactivate();
+        _loseRestartButton->deactivate();
+        _pauseButton->setVisible(true);
+        _pauseButton->activate();
+    }
     
     updateSoundInputParticlesAndTilt(timestep);
 
@@ -2047,8 +2130,17 @@ void GameScene::updateRemoveDeletedPlayer()
 {
     if (_player->isRemoved())
     {
-        reset();
-        _player->markRemoved(false);
+        _lose = true;
+        _player->getSceneNode()->setVisible(false);
+        _rangedArm->getSceneNode()->setVisible(false);
+        _meleeArm->getSceneNode()->setVisible(false);
+        _worldnode->setColor(Color4(255 - 255 / 1.5, 255 - 255 / 1.5, 255 - 255 / 1.5, 255));
+        _healthbar->setColor(Color4(255 - 255 / 3, 255 - 255 / 3, 255 - 255 / 3, 255));
+        _pauseButton->setColor(Color4(255 - 255 / 3, 255 - 255 / 3, 255 - 255 / 3, 255));
+        _range_charge->setColor(Color4(255 - 255 / 1.5, 255 - 255 / 1.5, 255 - 255 / 1.5, 255));
+        _melee_charge->setColor(Color4(255 - 255 / 1.5, 255 - 255 / 1.5, 255 - 255 / 1.5, 255));
+//        reset();
+//        _player->markRemoved(false);
     }
 }
 
@@ -2851,12 +2943,15 @@ void GameScene::reset()
     _input.reset();
     _swipes.reset();
     _tilt.reset();
-    for (std::shared_ptr<scene2::SceneNode> s : _worldnode->getChildren())
-    {
-        if (s->getTag() == 100) {
-            s->dispose();
-        }
-    };
+    if(_worldnode) {
+        for (std::shared_ptr<scene2::SceneNode> s : _worldnode->getChildren())
+        {
+            if (s->getTag() == 100) {
+                s->dispose();
+            }
+        };
+    }
+    
     auto ac_it = _attacks->_current.begin();
     while (ac_it != _attacks->_current.end())
     {
@@ -2888,7 +2983,8 @@ void GameScene::reset()
     _player->reset(playerPos);
     _player->getSceneNode()->setVisible(true);
     _player->getSceneNode()->setColor(Color4::WHITE);
-
+    _rangedArm->getSceneNode()->setVisible(true);
+    _meleeArm->getSceneNode()->setVisible(true);
     // Remove all enemies
     auto eit = _enemies.begin();
     while (eit != _enemies.end())
@@ -2928,7 +3024,11 @@ void GameScene::reset()
         }
         index++;
     }
-
+    _worldnode->setColor(Color4::WHITE);
+    _healthbar->setColor(Color4::WHITE);
+    _pauseButton->setColor(Color4::WHITE);
+    _range_charge->setColor(Color4::WHITE);
+    _melee_charge->setColor(Color4::WHITE);
     _endText = nullptr;
 }
 

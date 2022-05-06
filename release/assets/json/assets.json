@@ -22,6 +22,13 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
+        "lose-text": {
+            "file": "textures/menus/lose/losetext.png",
+            "minfilter": "nearest",
+            "magfilter": "linear",
+            "wrapS": "clamp",
+            "wrapT": "clamp"
+        },
 		"seeker": {
 			"file": "textures/seeker_static.png",
 			"minfilter": "nearest",
@@ -581,6 +588,15 @@
 		"pause_options": {
 			"file": "textures/menus/pause/options_button.png"
 		},
+        "lose_level": {
+            "file": "textures/menus/lose/level_button.png"
+        },
+        "lose_home": {
+            "file": "textures/menus/lose/home_button.png"
+        },
+        "lose_restart": {
+            "file": "textures/menus/lose/restart_button.png"
+        },
 		"swap": {
 			"file": "textures/menus/options/swap.png"
 		},
@@ -618,7 +634,7 @@
 			"type": "sample",
 			"file": "sounds/cave/cave1/cave1.ogg",
 			"stream": true,
-			"volume": 0.3
+			"volume": 0.5
 		},
 		"cave1Glutton": {
 			"type": "sample",
@@ -642,7 +658,7 @@
 			"type": "sample",
 			"file": "sounds/cave/cave2/cave2.ogg",
 			"stream": true,
-			"volume": 0.3
+			"volume": 0.5
 		},
 		"cave2Glutton": {
 			"type": "sample",
@@ -660,13 +676,13 @@
             "type": "sample",
             "file": "sounds/cave/cave2/cave2_mirror.ogg",
             "stream": true,
-            "volume": 0.2
+            "volume": 0.1
         },
 		"mushroom1": {
 			"type": "sample",
 			"file": "sounds/mushroom/mush1/mushroom1.ogg",
 			"stream": true,
-			"volume": 0.3
+			"volume": 0.5
 		},
 		"mushroom1Glutton": {
 			"type": "sample",
@@ -690,7 +706,7 @@
 			"type": "sample",
 			"file": "sounds/mushroom/mush2/mushroom2.ogg",
 			"stream": true,
-			"volume": 0.3
+			"volume": 0.5
 		},
 		"mushroom2Glutton": {
 			"type": "sample",
@@ -708,7 +724,31 @@
             "type": "sample",
             "file": "sounds/mushroom/mush2/mush2_mirror.ogg",
             "stream": true,
+            "volume": 0.1
+        },
+        "forest1": {
+            "type": "sample",
+            "file": "sounds/forest/forest1.ogg",
+            "stream": true,
+            "volume": 0.5
+        },
+        "forest1Glutton": {
+            "type": "sample",
+            "file": "sounds/forest/forest1_glutton.ogg",
+            "stream": true,
             "volume": 0.2
+        },
+        "forest1Phantom": {
+            "type": "sample",
+            "file": "sounds/forest/forest1_phantom.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
+        "forest1Mirror": {
+            "type": "sample",
+            "file": "sounds/forest/forest1_mirror.ogg",
+            "stream": true,
+            "volume": 0.1
         },
 		"menu": {
 			"type": "sample",
@@ -719,7 +759,7 @@
 		"playerStep": {
 			"type": "sample",
 			"file": "sounds/playerSFX/Player_Step.wav",
-			"volume": 0.6
+			"volume": 0.7
 		},
 		"playerShoot": {
 			"type": "sample",
@@ -750,7 +790,8 @@
 	"widgets": {
 		"levelselect": "widgets/levelselect.json",
 		"pause": "widgets/pause.json",
-		"options": "widgets/options.json"
+		"options": "widgets/options.json",
+        "lose": "widgets/lose.json"
 	},
 	"scene2s": {
 		"cave": {
@@ -903,6 +944,12 @@
 				"key": "pause"
 			}
 		},
+        "loseScene": {
+            "type": "Widget",
+            "data": {
+                "key": "lose"
+            }
+        },
 		"optionScene": {
 			"type": "Widget",
 			"data": {
@@ -1217,20 +1264,21 @@
 		"cave1": "json/levels/cave/cave0.json",
 		"cave2": "json/levels/cave/cave1.json",
 		"cave3": "json/levels/cave/cave2.json",
-		"cave4": "json/levels/cave/cave4.json",
-		"cave5": "json/levels/cave/cave5.json",
-		"cave6": "json/levels/cave/cave6.json",
-		"cave7": "json/levels/cave/cave7.json",
-		"cave8": "json/levels/cave/cave8.json",
-		"shroom1": "json/levels/unused/testspawner.json",
-		"shroom2": "json/levels/shroom/musheasy2.json",
-		"shroom3": "json/levels/shroom/musheasy3.json",
-		"shroom4": "json/levels/shroom/battlefield.json",
-		"shroom5": "json/levels/shroom/mush0.json",
-		"shroom6": "json/levels/shroom/mush1.json",
-		"shroom7": "json/levels/shroom/mush2.json",
-		"shroom8": "json/levels/shroom/mush3.json",
-		"shroom9": "json/levels/shroom/mushmush.json",
+        "cave4": "json/levels/cave/cave3.json",
+		"cave5": "json/levels/cave/cave4.json",
+		"cave6": "json/levels/cave/cave5.json",
+		"cave7": "json/levels/cave/cave6.json",
+		"cave8": "json/levels/cave/cave7.json",
+		"cave9": "json/levels/cave/cave8.json",
+		"shroom1": "json/levels/shroom/mush1.json",
+		"shroom2": "json/levels/shroom/old/musheasy2.json",
+		"shroom3": "json/levels/shroom/old/musheasy3.json",
+		"shroom4": "json/levels/shroom/old/battlefield.json",
+		"shroom5": "json/levels/shroom/old/mush0.json",
+		"shroom6": "json/levels/shroom/old/mush1.json",
+		"shroom7": "json/levels/shroom/old/mush2.json",
+		"shroom8": "json/levels/shroom/old/mush3.json",
+		"shroom9": "json/levels/shroom/old/mushmush.json",
 		"levelt": "json/levels/levelt.json",
 		"level2": "json/levels/level2.json",
 		"forest1": "json/levels/forest/stack.json",

@@ -197,6 +197,9 @@ protected:
     /** true if going back to world select */
     bool _back;
     
+    /** true if going to level select */
+    bool _levelselect;
+    
     /** Boolean check for walking sound effect timing*/
     bool _step;
 
@@ -223,6 +226,8 @@ protected:
     bool _pause;
 
     bool _options;
+    
+    bool _lose;
 
     std::shared_ptr<scene2::Button> _pauseButton;
 
@@ -245,6 +250,15 @@ protected:
     std::shared_ptr<scene2::Button> _musicButton;
 
     std::shared_ptr<scene2::Button> _sfxButton;
+    
+    std::shared_ptr<scene2::SceneNode> _loseScene;
+    
+    std::shared_ptr<scene2::Button> _loseHomeButton;
+
+    std::shared_ptr<scene2::Button> _loseLevelButton;
+    
+    std::shared_ptr<scene2::Button> _loseRestartButton;
+    
     /**
      * Internal helper to build the scene graph.
      *
@@ -290,6 +304,8 @@ public:
     bool init(const std::shared_ptr<cugl::AssetManager> &assets, const std::shared_ptr<SoundController> sound, string biome, int stageNum);
 
     bool goingBack() { return _back; }
+    
+    bool goingLevelSelect() {return _levelselect; }
 
     bool next() { return _next; }
 

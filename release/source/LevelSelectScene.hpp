@@ -34,7 +34,7 @@
 
 
 
-#define CAVE_MAXLEVELS 8
+#define CAVE_MAXLEVELS 9
 #define SHROOM_MAXLEVELS 9
 #define FOREST_MAXLEVELS 2
 /**
