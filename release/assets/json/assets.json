@@ -413,8 +413,10 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp",
 			"atlas": {
-				"background": [ 50, 32, 206, 131 ],
-				"foreground": [ 270, 32, 426, 131 ]
+				"background": [ 22, 40, 180, 138 ],
+				"foreground": [ 268, 40, 422, 138 ],
+                "leftcap": [ 268, 40, 270, 138],
+                "rightcap": [ 420, 40, 422, 138]
 			}
 		},
 		"healthbar": {
@@ -802,6 +804,8 @@
                         ],
                         "background": "range_charge_HUD_background",
                         "foreground": "range_charge_HUD_foreground",
+                        "left_cap": "range_charge_HUD_leftcap",
+                        "right_cap": "range_charge_HUD_rightcap",
                         "scale": 0.4
                     },
                     "layout": {
