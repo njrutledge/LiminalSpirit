@@ -450,6 +450,21 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _loseLevelButton->setScale(.4 * buttonScale);
 
 
+    _optionScene->setVisible(false);
+    _pauseScene->setVisible(false);
+    _loseScene->setVisible(false);
+    _optionReturnButton->deactivate();
+    _musicButton->deactivate();
+    _sfxButton->deactivate();
+    _swapHandsButton->deactivate();
+    _returnButton->deactivate();
+    _homeButton->deactivate();
+    _optionButton->deactivate();
+    _pauseButton->setVisible(true);
+    _pauseButton->activate();
+    _loseHomeButton->deactivate();
+    _loseLevelButton->deactivate();
+    _loseRestartButton->deactivate();
 
     std::string msg = strtool::format("Wave: %d / %d", _nextWaveNum, _numWaves);
     _text = TextLayout::allocWithText(msg, assets->get<Font>("marker"));
@@ -498,7 +513,7 @@ void GameScene::dispose()
     _font = nullptr;
     _endText = nullptr;
     _healthbar = nullptr;
-
+    _lose = false;
     // TODO: CHECK IF THIS IS RIGHT FOR DISPOSING
     //    for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
     //        (*it).~shared_ptr();
@@ -534,27 +549,6 @@ void GameScene::dispose()
  */
 void GameScene::update(float timestep)
 {
-    if (_lose) {
-        _pauseScene->setVisible(false);
-        _optionScene->setVisible(false);
-        _loseScene->setVisible(true);
-        _loseHomeButton->activate();
-        _loseLevelButton->activate();
-        _loseRestartButton->activate();
-        _pauseButton->setVisible(true);
-        _pauseButton->deactivate();
-        return;
-    }
-    else {
-        _pauseScene->setVisible(false);
-        _optionScene->setVisible(false);
-        _loseScene->setVisible(false);
-        _loseHomeButton->deactivate();
-        _loseLevelButton->deactivate();
-        _loseRestartButton->deactivate();
-        _pauseButton->setVisible(true);
-        _pauseButton->activate();
-    }
     if (_options) {
         _optionScene->setVisible(true);
         _pauseScene->setVisible(false);
@@ -580,7 +574,6 @@ void GameScene::update(float timestep)
     else {
         _optionScene->setVisible(false);
         _pauseScene->setVisible(false);
-        _loseScene->setVisible(false);
         _optionReturnButton->deactivate();
         _musicButton->deactivate();
         _sfxButton->deactivate();
@@ -591,6 +584,7 @@ void GameScene::update(float timestep)
     if (_pause) {
         _pauseScene->setVisible(true);
         _optionScene->setVisible(false);
+        _loseScene->setVisible(false);
         _returnButton->activate();
         _homeButton->activate();
         _optionButton->activate();
@@ -607,6 +601,26 @@ void GameScene::update(float timestep)
         _returnButton->deactivate();
         _homeButton->deactivate();
         _optionButton->deactivate();
+        _pauseButton->setVisible(true);
+        _pauseButton->activate();
+    }
+    
+    if (_lose) {
+        _pauseScene->setVisible(false);
+        _optionScene->setVisible(false);
+        _loseScene->setVisible(true);
+        _loseHomeButton->activate();
+        _loseLevelButton->activate();
+        _loseRestartButton->activate();
+        _pauseButton->setVisible(true);
+        _pauseButton->deactivate();
+        return;
+    }
+    else {
+        _loseScene->setVisible(false);
+        _loseHomeButton->deactivate();
+        _loseLevelButton->deactivate();
+        _loseRestartButton->deactivate();
         _pauseButton->setVisible(true);
         _pauseButton->activate();
     }
