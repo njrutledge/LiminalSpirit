@@ -72,8 +72,13 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
         if (!attack->isActive()) {
             return;
         }
+        if (!fd) {
+            //TODO:: IDK BRUH NO FIXTURE WHAT DO
+           int breaking = 1;
+           return;
+        }
         //TODO: Make "playerattacksensor" a constant somewhere
-        if (*(attack->getSensorName()) == "playerattacksensor") {
+        if (*fd == "playerattacksensor") {
             if (Mirror* mirror = dynamic_cast<Mirror*>(enemy)) {
                 if (attack->getType() == AttackController::p_range) {
                     //attack->markRemoved();
@@ -190,7 +195,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                 }
             }
         }
-        else if (*(attack->getSensorName()) == "enemyattacksensor" && attack->isSplitable() && attack->getType() == AttackController::Type::e_range) {
+        else if (*fd == "enemyattacksensor" && attack->isSplitable() && attack->getType() == AttackController::Type::e_range) {
             if (Mirror* mirror = dynamic_cast<Mirror*>(enemy)) {
                 attack->setInactive();
                 float angle_change;

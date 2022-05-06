@@ -37,6 +37,7 @@ bool AttackController::Attack::init(const cugl::Vec2 p, float radius, float a, f
     _timer = 0;
     _maxFrames = frames;
     _sensorFixture = nullptr;
+    _homingSensorFixture = nullptr;
     _bodySensorFixture = nullptr;
     if (CapsuleObstacle::init(_position, Size(_radius, _radius))) {
         // TODO change the sensor naming based on if its player attack
@@ -84,19 +85,37 @@ void AttackController::Attack::createFixtures() {
     sensorDef.isSensor = true;
     b2PolygonShape sensorShape;
     
+    b2Vec2 corners[8];
+    cugl::Vec2 vec(0, _radius);
+    for (int i = 0; i < 8; i++) {
+        corners[i] = b2Vec2(vec.x, vec.y);
+        _debugVerticies.push_back(Vec2(vec));
+        vec.rotate(M_PI / 4.0f);
+    }
+
+    sensorShape.Set(corners, 8);
+    sensorDef.shape = &sensorShape;
+    sensorDef.userData.pointer = reinterpret_cast<uintptr_t>(getSensorName());
+    _sensorFixture = _body->CreateFixture(&sensorDef);
+
+
     if (_type == p_range || _type == p_exp_package) {
-        b2Vec2 corners[8];
+        b2FixtureDef sensorDef3;
+        sensorDef3.density = 0;
+        sensorDef3.isSensor = true;
+        b2PolygonShape sensorShape3;
+        b2Vec2 corners3[8];
         cugl::Vec2 vec(0, _radius * 5.0);//TODO: 5.0 is random
         for (int i = 0; i < 8; i++) {
-            corners[i] = b2Vec2(vec.x, vec.y);
-            _debugVerticies.push_back(Vec2(vec));
+            corners3[i] = b2Vec2(vec.x, vec.y);
+            _debugVerticies3.push_back(Vec2(vec));
             vec.rotate(M_PI / 4.0f);
         }
 
-        sensorShape.Set(corners, 8);
-        sensorDef.shape = &sensorShape;
-        sensorDef.userData.pointer = reinterpret_cast<uintptr_t>(getHomingSensorName());
-        _sensorFixture = _body->CreateFixture(&sensorDef);
+        sensorShape3.Set(corners3, 8);
+        sensorDef3.shape = &sensorShape;
+        sensorDef3.userData.pointer = reinterpret_cast<uintptr_t>(getHomingSensorName());
+        _homingSensorFixture = _body->CreateFixture(&sensorDef3);
     }
 
     
@@ -130,6 +149,12 @@ void AttackController::Attack::releaseFixtures() {
         _body->DestroyFixture(_sensorFixture);
         _sensorFixture = nullptr;
     }
+
+    if (_homingSensorFixture != nullptr) {
+        _body->DestroyFixture(_homingSensorFixture);
+        _homingSensorFixture = nullptr;
+    }
+
 
     if (_bodySensorFixture != nullptr) {
         _body->DestroyFixture(_bodySensorFixture);
@@ -421,7 +446,16 @@ void AttackController::Attack::resetDebug() {
     _sensorNode->setPosition(Vec2(_debug->getContentSize().width/2.0f, _debug->getContentSize().height / 2.0f));
     _debug->addChild(_sensorNode);
 
-    if (_type == p_melee) {
+    if (_type == p_range || _type == p_exp_package) {
+        //std::vector<Uint32> debugIndicies2{ 8,9,10,   10,11,12,   12,13,14,   14,15,8 };
+        Poly2 poly2(_debugVerticies3, debugIndicies1);
+        _homingSensorNode = scene2::WireNode::allocWithTraversal(poly2, poly2::Traversal::INTERIOR);
+        _homingSensorNode->setColor(Color4::PAPYRUS);
+        _homingSensorNode->setPosition(Vec2(_debug->getContentSize().width / 2.0f - _offset.x, _debug->getContentSize().height / 2.0f - _offset.y));
+        _debug->addChild(_homingSensorNode);
+    }
+
+    if (_type == p_melee || _type == p_dash) {
         //std::vector<Uint32> debugIndicies2{ 8,9,10,   10,11,12,   12,13,14,   14,15,8 };
         Poly2 poly2(_debugVerticies2, debugIndicies1);
         _bodySensorNode = scene2::WireNode::allocWithTraversal(poly2, poly2::Traversal::INTERIOR);
