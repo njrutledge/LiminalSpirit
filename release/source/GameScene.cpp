@@ -2659,14 +2659,39 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     floor->setBodyType(b2_staticBody);
 
     std::shared_ptr<scene2::PolygonNode> floorNode = scene2::PolygonNode::allocWithPoly(floorRect * _scale);
-    floorNode->setColor(Color4::BLACK);
+    floorNode->setColor(Color4::CLEAR);
     floor->setName("bottomwall");
     b2Filter filter = b2Filter();
     filter.categoryBits = 0b1000;
     // filter.maskBits = 0b1100;
     floor->setFilterData(filter);
     addObstacle(floor, floorNode, 1);
+    
+    // Split floor into 4 to repeat texture
+    int split = 3;
+    for (int i = 0; i < split; i++) {
+        Rect floorRect = Rect(DEFAULT_WIDTH / split * i, 0, DEFAULT_WIDTH / split, 0.5);
+        std::shared_ptr<physics2::PolygonObstacle> floor = physics2::PolygonObstacle::allocWithAnchor(floorRect, Vec2::ANCHOR_CENTER);
+        floor->setBodyType(b2_staticBody);
 
+        std::shared_ptr<Texture> floorImage = _assets->get<Texture>("platform");
+        if (!_biome.compare("cave")) {
+            floorImage = _assets->get<Texture>("cave_floor");
+        }
+        else if (!_biome.compare("shroom")) {
+            floorImage = _assets->get<Texture>("shroom_floor");
+        }
+        else if (!_biome.compare("forest")) {
+            floorImage = _assets->get<Texture>("forest_floor");
+        }
+        std::shared_ptr<scene2::PolygonNode> floorSprite = scene2::PolygonNode::allocWithTexture(floorImage);
+        float desiredWidth = DEFAULT_WIDTH * _scale;
+        float floorScale = desiredWidth / floorSprite->getWidth() / split;
+        floorSprite->setScale(floorScale);
+        floorSprite->setPriority(.1);
+        addObstacle(floor, floorSprite, 1);
+    }
+    
     // Making the ceiling -jdg274
     Rect ceilingRect = Rect(0, DEFAULT_HEIGHT - 0.5, DEFAULT_WIDTH, 0.5);
     std::shared_ptr<physics2::PolygonObstacle> ceiling = physics2::PolygonObstacle::allocWithAnchor(ceilingRect, Vec2::ANCHOR_CENTER);

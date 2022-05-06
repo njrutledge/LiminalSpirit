@@ -329,6 +329,9 @@
 		"cave_large_platform": {
 			"file": "textures/cave/L-DOWN.png"
 		},
+        "cave_floor": {
+            "file": "textures/cave/cave_floor.png"
+        },
 		"shroom_background": {
 			"file": "textures/backgrounds/shroom_background.png"
 		},
@@ -341,6 +344,9 @@
 		"shroom_large_platform": {
 			"file": "textures/shroom/2-L.png"
 		},
+        "shroom_floor": {
+            "file": "textures/shroom/shroom_floor.png"
+        },
 		"forest_background": {
 			"file": "textures/backgrounds/forest_background.png"
 		},
@@ -353,6 +359,9 @@
 		"forest_large_platform": {
 			"file": "textures/forest/forest_large_platform.png"
 		},
+        "forest_floor": {
+            "file": "textures/forest/forest_floor.png"
+        },
 		"home_background": {
 			"file": "textures/menus/home/home_background.png"
 		},
