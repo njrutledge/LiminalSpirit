@@ -247,6 +247,7 @@ void LiminalSpirit::updateGameScene(float timestep)
     }
     else if (_gameplay.goingLevelSelect()) {
         string biome = _gameplay.getBiome();
+        _worldSelect.setDefaultChoice();
         _levelSelect.init(_assets, biome);
         _scene = State::SELECT;
         _gameplay.dispose();

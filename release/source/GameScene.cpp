@@ -514,6 +514,9 @@ void GameScene::dispose()
     _endText = nullptr;
     _healthbar = nullptr;
     _lose = false;
+    _loseHomeButton->deactivate();
+    _loseLevelButton->deactivate();
+    _loseRestartButton->deactivate();
     // TODO: CHECK IF THIS IS RIGHT FOR DISPOSING
     //    for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
     //        (*it).~shared_ptr();
@@ -2973,12 +2976,15 @@ void GameScene::reset()
     _input.reset();
     _swipes.reset();
     _tilt.reset();
-    for (std::shared_ptr<scene2::SceneNode> s : _worldnode->getChildren())
-    {
-        if (s->getTag() == 100) {
-            s->dispose();
-        }
-    };
+    if(_worldnode) {
+        for (std::shared_ptr<scene2::SceneNode> s : _worldnode->getChildren())
+        {
+            if (s->getTag() == 100) {
+                s->dispose();
+            }
+        };
+    }
+    
     auto ac_it = _attacks->_current.begin();
     while (ac_it != _attacks->_current.end())
     {
