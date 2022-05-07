@@ -33,7 +33,7 @@
 using namespace cugl;
 
 /** This is the size of the active portion of the screen */
-//TODO: MAKE THIS IN ONE SPOT ONLY
+// TODO: MAKE THIS IN ONE SPOT ONLY
 #define SCENE_WIDTH 1024
 
 /**
@@ -41,17 +41,26 @@ using namespace cugl;
  */
 void LevelSelectScene::dispose()
 {
-    if (_button1) _button1->deactivate();
+    _text1 = nullptr;
+    _text2 = nullptr;
+    _text3 = nullptr;
+    if (_button1)
+        _button1->deactivate();
     _button1 = nullptr;
-    if (_button2) _button2->deactivate();
+    if (_button2)
+        _button2->deactivate();
     _button1 = nullptr;
-    if (_button3) _button3->deactivate();
+    if (_button3)
+        _button3->deactivate();
     _button3 = nullptr;
-    if (_buttonHome) _buttonHome->deactivate();
+    if (_buttonHome)
+        _buttonHome->deactivate();
     _buttonHome = nullptr;
-    if (_buttonForward) _buttonForward->deactivate();
+    if (_buttonForward)
+        _buttonForward->deactivate();
     _buttonForward = nullptr;
-    if (_buttonBackward) _buttonBackward->deactivate();
+    if (_buttonBackward)
+        _buttonBackward->deactivate();
     _buttonBackward = nullptr;
 
     _batch = nullptr;
@@ -104,91 +113,94 @@ bool LevelSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets, s
     _button1 = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("level_select_" + biome + "_button1"));
     _button1->setPositionX(bounds.getMinX() + _button1->getPositionX());
 
-    _button1->addListener([=](const std::string& name, bool down) {
+    _button1->addListener([=](const std::string &name, bool down)
+                          {
         if (down) {
             _stageChoice = Choice::button1_prep;
         }
         else if (_stageChoice == Choice::button1_prep) {
             _stage = _stage + 1;
             _stageChoice = Choice::selected;
-        }
-        });
+        } });
+    // adding text
+    //_text1 = TextLayout::allocWithText("Stage:" + to_string(_stage), assets->get<Font>("spectral"));
+    //_text1->layout();
 
     _button2 = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("level_select_" + biome + "_button2"));
     _button2->setPositionX(bounds.getMinX() + _button2->getPositionX());
 
-    _button2->addListener([=](const std::string& name, bool down){
+    _button2->addListener([=](const std::string &name, bool down)
+                          {
         if (down) {
             _stageChoice = Choice::button2_prep;
         }
         else if (_stageChoice == Choice::button2_prep) {
             _stage = _stage + 2;
             _stageChoice = Choice::selected;
-        }
-        });
+        } });
 
     _button3 = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("level_select_" + biome + "_button3"));
     _button3->setPositionX(bounds.getMinX() + _button3->getPositionX());
-    _button3->addListener([=](const std::string& name, bool down){
+    _button3->addListener([=](const std::string &name, bool down)
+                          {
         if (down) {
             _stageChoice = Choice::button3_prep;
         }
         else if (_stageChoice == Choice::button3_prep) {
             _stage = _stage + 3;
             _stageChoice = Choice::selected;
-        }
-        });
+        } });
 
     _buttonHome = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("level_select_" + biome + "_home"));
     _buttonHome->setPositionX(bounds.getMinX() + _buttonHome->getPositionX());
 
-    _buttonHome->addListener([=](const std::string& name, bool down) {
+    _buttonHome->addListener([=](const std::string &name, bool down)
+                             {
         if (down) {
             _stageChoice = Choice::home_prep;
         }
         else if (_stageChoice == Choice::home_prep) {
             _stageChoice = Choice::home;
-        }
-        });
+        } });
 
     _buttonForward = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("level_select_" + biome + "_forward"));
-    _buttonForward->addListener([=](const std::string& name, bool down) {
+    _buttonForward->addListener([=](const std::string &name, bool down)
+                                {
         if (down) {
             _switchChoice = Choice::forward_prep;
         }
         else if (_switchChoice == Choice::forward_prep) {
             _switchChoice = Choice::forward;
             _stage = _stage + 3;
-        }
-        });
+        } });
 
     _buttonBackward = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("level_select_" + biome + "_backward"));
-    _buttonBackward->addListener([=](const std::string& name, bool down) {
+    _buttonBackward->addListener([=](const std::string &name, bool down)
+                                 {
         if (down) {
             _switchChoice = Choice::backward_prep;
         }
         else if (_switchChoice == Choice::backward_prep) {
             _switchChoice = Choice::backward;
             _stage = _stage - 3;
-        }
-        });
-    
+        } });
 
     _buttonBackward->setPositionX(bounds.getMinX() + _buttonBackward->getPositionX());
     addChild(scene);
 
     _stage = 0;
-    if (_biome == "cave") {
+    if (_biome == "cave")
+    {
         _maxStages = CAVE_MAXLEVELS;
     }
-    else if (_biome == "shroom") {
+    else if (_biome == "shroom")
+    {
         _maxStages = SHROOM_MAXLEVELS;
     }
-    else {
+    else
+    {
         _maxStages = FOREST_MAXLEVELS;
     }
-
-
 
     return true;
 }
@@ -204,51 +216,64 @@ bool LevelSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets, s
  */
 void LevelSelectScene::update(float timestep)
 {
-    if (_stage + 1 <= _maxStages) {
+    if (_stage + 1 <= _maxStages)
+    {
         _button1->setVisible(true);
         _button1->activate();
+        //_text1->setText("Stage:" + to_string(_stage + 1));
     }
-    else {
+    else
+    {
         _button1->setVisible(false);
         _button1->deactivate();
+        //_text1->setText("");
     }
 
-    if (_stage + 2 <= _maxStages) {
+    if (_stage + 2 <= _maxStages)
+    {
         _button2->setVisible(true);
         _button2->activate();
     }
-    else {
+    else
+    {
         _button2->setVisible(false);
         _button2->deactivate();
+        _text2->setText("");
     }
 
-    if (_stage + 3 <= _maxStages) {
+    if (_stage + 3 <= _maxStages)
+    {
         _button3->setVisible(true);
         _button3->activate();
     }
-    else {
+    else
+    {
         _button3->setVisible(false);
         _button3->deactivate();
+        _text3->setText("");
     }
-    
 
     _buttonHome->setVisible(true);
     _buttonHome->activate();
-    
-    if (_stage > 0) {
+
+    if (_stage > 0)
+    {
         _buttonBackward->setVisible(true);
         _buttonBackward->activate();
     }
-    else {
+    else
+    {
         _buttonBackward->setVisible(false);
         _buttonBackward->deactivate();
     }
 
-    if (_stage + 3 < _maxStages) {
+    if (_stage + 3 < _maxStages)
+    {
         _buttonForward->setVisible(true);
         _buttonForward->activate();
     }
-    else {
+    else
+    {
         _buttonForward->setVisible(false);
         _buttonForward->deactivate();
     }
@@ -262,4 +287,7 @@ void LevelSelectScene::update(float timestep)
 void LevelSelectScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
 {
     Scene2::render(batch);
+    /*batch->begin(getCamera()->getCombined());
+    batch->drawText(_text1, Vec2(getSize().width / 2 - _text1->getBounds().size.width / 2, getSize().height - _text1->getBounds().size.height - 10));
+    batch->end();*/
 }

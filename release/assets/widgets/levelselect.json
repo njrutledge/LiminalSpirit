@@ -1,20 +1,101 @@
 {
   "variables": {
-    "bg_scale": [ "children", "backdrop", "data", "scale" ],
-    "bg_texture": [ "children", "backdrop", "data", "texture" ],
-    "fg_scale": [ "children", "foreground", "data", "scale" ],
-    "fg_texture": [ "children", "foreground", "data", "texture" ],
-    "fg_layout_y": [ "children", "foreground", "layout", "y_anchor" ],
-    "fg_anchor": [ "children", "foreground", "data", "anchor" ],
-    "button1_texture": [ "children", "button1", "children", "up", "data", "texture" ],
-    "button2_texture": [ "children", "button2", "children", "up", "data", "texture" ],
-    "button3_texture": [ "children", "button3", "children", "up", "data", "texture" ],
-    "button1_yoff": [ "children", "button1", "layout", "y_offset" ],
-    "button2_yoff": [ "children", "button2", "layout", "y_offset" ],
-    "button3_yoff": [ "children", "button3", "layout", "y_offset" ],
-    "button1_scale": [ "children", "button1", "data", "scale" ],
-    "button2_scale": [ "children", "button2", "data", "scale" ],
-    "button3_scale": [ "children", "button3", "data", "scale" ]
+    "bg_scale": [
+      "children",
+      "backdrop",
+      "data",
+      "scale"
+    ],
+    "bg_texture": [
+      "children",
+      "backdrop",
+      "data",
+      "texture"
+    ],
+    "fg_scale": [
+      "children",
+      "foreground",
+      "data",
+      "scale"
+    ],
+    "fg_texture": [
+      "children",
+      "foreground",
+      "data",
+      "texture"
+    ],
+    "fg_layout_y": [
+      "children",
+      "foreground",
+      "layout",
+      "y_anchor"
+    ],
+    "fg_anchor": [
+      "children",
+      "foreground",
+      "data",
+      "anchor"
+    ],
+    "button1_texture": [
+      "children",
+      "button1",
+      "children",
+      "up",
+      "data",
+      "texture"
+    ],
+    "button2_texture": [
+      "children",
+      "button2",
+      "children",
+      "up",
+      "data",
+      "texture"
+    ],
+    "button3_texture": [
+      "children",
+      "button3",
+      "children",
+      "up",
+      "data",
+      "texture"
+    ],
+    "button1_yoff": [
+      "children",
+      "button1",
+      "layout",
+      "y_offset"
+    ],
+    "button2_yoff": [
+      "children",
+      "button2",
+      "layout",
+      "y_offset"
+    ],
+    "button3_yoff": [
+      "children",
+      "button3",
+      "layout",
+      "y_offset"
+    ],
+    "button1_scale": [
+      "children",
+      "button1",
+      "data",
+      "scale"
+    ],
+    "button2_scale": [
+      "children",
+      "button2",
+      "data",
+      "scale"
+    ],
+    "button3_scale": [
+      "children",
+      "button3",
+      "data",
+      "scale"
+    ]
   },
   "contents": {
     "type": "Node",
@@ -54,6 +135,40 @@
             "type": "Image",
             "data": {
               "texture": "level_select_cave_rock1"
+            },
+            "layout": {
+              "x_anchor": "fill",
+              "y_anchor": "fill"
+            },
+            "children": {}
+          },
+          "text1": {
+            "type": "Label",
+            "format": {
+              "type": "Anchored"
+            },
+            "data": {
+              "font": "spectral",
+              "anchor": [
+                0.5,
+                0
+              ],
+              "visible": true,
+              "text": "1",
+              "foreground": [
+                255,
+                255,
+                255,
+                255
+              ],
+              "halign": "center",
+              "valign": "middle",
+              "scale": 5
+            },
+            "layout": {
+              "x_anchor": "fill",
+              "y_anchor": "fill",
+              "x_offset": 0.5
             }
           }
         },
@@ -127,7 +242,8 @@
             0.5,
             0.5
           ],
-          "scale": 0.6
+          "scale": 0.6,
+          "visible": false
         },
         "layout": {
           "x_anchor": "center",
