@@ -26,6 +26,12 @@ SwipeController::SwipeController() : _leftSwipe(noAttack),
     
     _leftChargingTime = 0;
     _rightChargingTime = 0;
+    
+    _lStart = true;
+    _rStart = true;
+    
+    _lCoolStart = 0;
+    _rCoolStart = 0;
 }
 
 /**
@@ -61,6 +67,8 @@ void SwipeController::update(InputController &input, bool grounded, float dt)
     else if (input.didLeftRelease())
     {
         calculateSwipeDirection(input.getLeftStartPosition(), input.getLeftEndPosition(), true, grounded, input.getLeftStartTime());
+        _lStart = true;
+        _lCoolStart = 0;
     }
     // Otherwise note that no left swipe was completed this frame
     else
@@ -76,6 +84,8 @@ void SwipeController::update(InputController &input, bool grounded, float dt)
     // If right finger lifted, process right swipe
     else if(input.didRightRelease()) {
         calculateSwipeDirection(input.getRightStartPosition(), input.getRightEndPosition(), false, grounded, input.getRightStartTime());
+        _rStart = true;
+        _rCoolStart = 0;
     }
     // Otherwise note that no right swipe was completed this frame
     else
@@ -181,13 +191,13 @@ void SwipeController::update(InputController &input, bool grounded, float dt)
 void SwipeController::calculateChargeAttack(cugl::Timestamp startTime, bool isLeftSidedCharge) {
     
     // Don't increment charge countdown on cooldown, return
-    if (isLeftSidedCharge && _cRCool >= _cRangeCount) {
-        return;
-    }
-    
-    if (!isLeftSidedCharge && _cMCool >= _cMeleeCount) {
-        return;
-    }
+//    if (isLeftSidedCharge && _cRCool < _cRangeCount) {
+//        return;
+//    }
+//
+//    if (!isLeftSidedCharge && _cMCool >= _cMeleeCount) {
+//        return;
+//    }
     
     // If the attack is already charged, stop calculating the time diff
     if (isLeftSidedCharge) {
@@ -197,13 +207,26 @@ void SwipeController::calculateChargeAttack(cugl::Timestamp startTime, bool isLe
     }
         
     _currTime.mark();
+    
+    if (_lStart) {
+        _lStart = false;
+        _lCoolStart = _cRCool - _cRangeCount;
+    }
+    
+    if (_rStart) {
+        _rStart = false;
+        _rCoolStart = _cMCool - _cMeleeCount;
+    }
 
     Uint64 chargeTime = cugl::Timestamp::ellapsedMillis(startTime, _currTime);
     if (isLeftSidedCharge) {
+        chargeTime = chargeTime - _lCoolStart * 1000;
         _leftChargingTime = chargeTime;
     } else {
+        chargeTime = chargeTime - _rCoolStart * 1000;
         _rightChargingTime = chargeTime;
     }
+    
     
     // half second charge time
     if (chargeTime >= CHARGE_TIME) {
@@ -211,12 +234,16 @@ void SwipeController::calculateChargeAttack(cugl::Timestamp startTime, bool isLe
             if (_cRCool <= _cRangeCount) {
                 chargeLeftAttack();
                 _cRangeCount = 0;
+                _lCoolStart = 0;
+                _lStart = true;
             }
             
         } else {
             if (_cMCool <= _cMeleeCount) {
                 chargeRightAttack();
                 _cMeleeCount = 0;
+                _rCoolStart = 0;
+                _rStart = true;
             }
             
         }
@@ -561,4 +588,8 @@ void SwipeController::reset()
     _cRangeCount = _cRCool;
     _leftChargingTime = 0;
     _rightChargingTime = 0;
+    _lStart = true;
+    _lCoolStart = 0;
+    _rStart = true;
+    _rCoolStart = 0;
 }

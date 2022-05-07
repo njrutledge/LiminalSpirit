@@ -109,6 +109,12 @@ protected:
     /** Charge threshold for range*/
     float _cRCool;
     
+    bool _lStart;
+    float _lCoolStart;
+    
+    bool _rStart;
+    float _rCoolStart;
+    
     /** Time spent charging in milliseconds */
     Uint64 _leftChargingTime;
     Uint64 _rightChargingTime;
