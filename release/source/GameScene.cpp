@@ -509,19 +509,30 @@ void GameScene::dispose()
     _swipes.reset();
     _tilt.reset();
 
-    _loseHomeButton->deactivate();
-    _loseLevelButton->deactivate();
-    _loseRestartButton->deactivate();
+    if(_loseHomeButton)
+        _loseHomeButton->deactivate();
+    if(_loseLevelButton)
+        _loseLevelButton->deactivate();
+    if(_loseRestartButton)
+        _loseRestartButton->deactivate();
 
-    _optionReturnButton->deactivate();
-    _musicButton->deactivate();
-    _sfxButton->deactivate();
-    _swapHandsButton->deactivate();
+    if(_optionReturnButton)
+        _optionReturnButton->deactivate();
+    if(_musicButton)
+        _musicButton->deactivate();
+    if(_sfxButton)
+        _sfxButton->deactivate();
+    if(_swapHandsButton)
+        _swapHandsButton->deactivate();
 
-    _returnButton->deactivate();
-    _homeButton->deactivate();
-    _optionButton->deactivate();
-    _pauseButton->deactivate();
+    if(_returnButton)
+        _returnButton->deactivate();
+    if(_homeButton)
+        _homeButton->deactivate();
+    if(_optionButton)
+        _optionButton->deactivate();
+    if(_pauseButton)
+        _pauseButton->deactivate();
 
     // Delete all smart pointers
     _logo = nullptr;

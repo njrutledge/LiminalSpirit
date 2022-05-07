@@ -122,9 +122,6 @@ bool LevelSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets, s
             _stage = _stage + 1;
             _stageChoice = Choice::selected;
         } });
-    // adding text
-    //_text1 = TextLayout::allocWithText("Stage:" + to_string(_stage), assets->get<Font>("spectral"));
-    //_text1->layout();
 
     _button2 = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("level_select_" + biome + "_button2"));
     _button2->setPositionX(bounds.getMinX() + _button2->getPositionX());
@@ -201,7 +198,13 @@ bool LevelSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets, s
     {
         _maxStages = FOREST_MAXLEVELS;
     }
-
+    // adding text
+    _text1 = TextLayout::allocWithText("" + to_string(_stage), assets->get<Font>("spectral"));
+    _text1->layout();
+    _text2 = TextLayout::allocWithText("" + to_string(_stage), assets->get<Font>("spectral"));
+    _text1->layout();
+    _text3 = TextLayout::allocWithText("" + to_string(_stage), assets->get<Font>("spectral"));
+    _text1->layout();
     return true;
 }
 
@@ -232,12 +235,14 @@ void LevelSelectScene::update(float timestep, string highestBiome, int highestLe
             _button1->setColor(Color4::WHITE);
             _button1->activate();
         }
+        _text1->setText("" + to_string(_stage + 1));
+        _text1->layout();
     }
     else
     {
         _button1->setVisible(false);
         _button1->deactivate();
-        //_text1->setText("");
+        _text1->setText("");
     }
 
     if (_stage + 2 <= _maxStages)
@@ -253,6 +258,8 @@ void LevelSelectScene::update(float timestep, string highestBiome, int highestLe
             _button2->setColor(Color4::WHITE);
             _button2->activate();
         }
+        _text2->setText("" + to_string(_stage + 2));
+        _text2->layout();
     }
     else
     {
@@ -274,6 +281,8 @@ void LevelSelectScene::update(float timestep, string highestBiome, int highestLe
             _button3->setColor(Color4::WHITE);
             _button3->activate();
         }
+        _text3->setText("" + to_string(_stage + 3));
+        _text3->layout();
     }
     else
     {
@@ -316,7 +325,10 @@ void LevelSelectScene::update(float timestep, string highestBiome, int highestLe
 void LevelSelectScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
 {
     Scene2::render(batch);
-    /*batch->begin(getCamera()->getCombined());
-    batch->drawText(_text1, Vec2(getSize().width / 2 - _text1->getBounds().size.width / 2, getSize().height - _text1->getBounds().size.height - 10));
-    batch->end();*/
+    batch->begin(getCamera()->getCombined());
+
+    batch->drawText(_text1, Vec2(_button1->getPositionX(), _button1->getPositionY()));
+    batch->drawText(_text2, Vec2(_button2->getPositionX(), _button2->getPositionY()));
+    batch->drawText(_text3, Vec2(_button3->getPositionX(), _button2->getPositionY()));
+    batch->end();
 }
