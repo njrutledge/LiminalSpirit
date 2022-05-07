@@ -903,8 +903,8 @@
 						],
 						"background": "melee_charge_HUD_background",
 						"foreground": "melee_charge_HUD_foreground",
-                        "left_cap": "melee_charge_HUD_leftcap",
-                        "right_cap": "melee_charge_HUD_rightcap",
+						"left_cap": "melee_charge_HUD_leftcap",
+						"right_cap": "melee_charge_HUD_rightcap",
 						"scale": 0.4
 					},
 					"layout": {
@@ -915,27 +915,27 @@
 						"absolute": false
 					}
 				},
-                "range_charge": {
-                    "type": "Progress",
-                    "data": {
-                        "anchor": [
-                            0.5,
-                            0.5
-                        ],
-                        "background": "range_charge_HUD_background",
-                        "foreground": "range_charge_HUD_foreground",
-                        "left_cap": "range_charge_HUD_leftcap",
-                        "right_cap": "range_charge_HUD_rightcap",
-                        "scale": 0.4
-                    },
-                    "layout": {
-                        "x_anchor": "right",
-                        "y_anchor": "middle",
-                        "x_offset": -0.05,
-                        "y_offset": 0.1,
-                        "absolute": false
-                    }
-                }
+				"range_charge": {
+					"type": "Progress",
+					"data": {
+						"anchor": [
+							0.5,
+							0.5
+						],
+						"background": "range_charge_HUD_background",
+						"foreground": "range_charge_HUD_foreground",
+						"left_cap": "range_charge_HUD_leftcap",
+						"right_cap": "range_charge_HUD_rightcap",
+						"scale": 0.4
+					},
+					"layout": {
+						"x_anchor": "right",
+						"y_anchor": "middle",
+						"x_offset": -0.05,
+						"y_offset": 0.1,
+						"absolute": false
+					}
+				}
 			}
 		},
 		"pauseScene": {
@@ -1174,7 +1174,7 @@
 						"x_anchor": "center",
 						"y_anchor": "middle",
 						"y_offset": -0.14,
-						"x_offset": 0.202,
+						"x_offset": 0.2,
 						"absolute": false
 					}
 				},
@@ -1200,7 +1200,7 @@
 						"x_anchor": "center",
 						"y_anchor": "middle",
 						"y_offset": -0.15,
-						"x_offset": 0.2,
+						"x_offset": 0.202,
 						"absolute": false
 					}
 				}
