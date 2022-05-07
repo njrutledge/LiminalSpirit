@@ -41,8 +41,15 @@ SwipeController::~SwipeController()
  */
 void SwipeController::update(InputController &input, bool grounded, float dt)
 {
-    _cMeleeCount += dt;
-    _cRangeCount += dt;
+    if (!hasLeftChargedAttack()) {
+        _cRangeCount += dt;
+    }
+    
+    if (!hasRightChargedAttack()) {
+        _cMeleeCount += dt;
+    }
+    
+    
 #ifdef CU_TOUCH_SCREEN
 
     // If the left finger is pressed down, check if it has been pressed long enough for

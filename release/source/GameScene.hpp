@@ -115,6 +115,10 @@ protected:
     std::shared_ptr<cugl::TextLayout> _timer_text;
     /** Text font */
     std::shared_ptr<cugl::Font> _font;
+
+    /** Textures for numbers 0-9 */
+    std::vector<std::shared_ptr<Texture>> _numberTextures;
+
     /** The temp text with the ending win message */
     std::shared_ptr<cugl::TextLayout> _endText;
     
@@ -313,8 +317,14 @@ public:
      * This method contains any gameplay code that is not an OpenGL call.
      *
      * @param timestep  The amount of time (in seconds) since the last frame
+     * @param unlockCount The amount of unlocks the player has.
+     *                  1 - ranged attack
+     *                  2 - charged ranged attack
+     *                  3 - attack upgrade 1
+     *                  4 - charged melee attack
+     *                  5 - attack upgrade 2
      */
-    void update(float timestep);
+    void update(float timestep, int unlockCount);
 
     /**
      * helper method to update sound, input, particles, and tilt/
@@ -323,7 +333,7 @@ public:
     /**
      * helper method to update all animations
      */
-    void updateAnimations(float timestep);
+    void updateAnimations(float timestep, int unlockCount, SwipeController::SwipeAttack left, SwipeController::SwipeAttack right);
     /**
     * helper method to update melee arm animations
     */
@@ -332,10 +342,14 @@ public:
      * helper method to update all enemies 
      */
     void updateEnemies(float timestep);
+    /** helper method to update left swipe */
+    SwipeController::SwipeAttack updateLeftSwipe(int unlockCount);
+    /** helper method to update right swipe */
+    SwipeController::SwipeAttack updateRightSwipe(int unlockCount);
     /** 
-     * helper method to update swipes and attacks 
+     * helper method to update attacks
      */
-    void updateSwipesAndAttacks(float timestep);
+    void updateAttacks(float timestep, int unlockCount, SwipeController::SwipeAttack left, SwipeController::SwipeAttack right);
     /** 
      * helper method to remove deleted attacks
      */
@@ -357,9 +371,9 @@ public:
      */
     void updateRemoveDeletedPlayer();
     /**
-     * helper method to update player healthbar
+     * helper method to update player HUD
      */
-    void updateHealthbar();
+    void updateHUD(int unlockCount);
     /**
      * helper method to update camera 
      */
@@ -439,8 +453,13 @@ public:
 
     std::shared_ptr<BaseEnemyModel> getNearestNonMirror(cugl::Vec2 pos);
 
-    /** Creates the intial particle pool */
-    void createParticles();
+    /** Helpers to create particles in GameScene */
+    void createParticles(std::shared_ptr<Texture> texture, Vec2 pos, string poolName, Color4 tint, Vec2 pointOffset, float scale);
+    void createParticles(std::vector<std::shared_ptr<Texture>> textures, Vec2 pos, string poolName, Color4 tint, Vec2 pointOffset, float scale, bool hasMultipleLinkedTextures, Vec2 linkOffset);
+
+
+    /** Helper to convert numbers into Textures **/
+    std::vector<std::shared_ptr<Texture>> getTexturesFromNumber(int num);
 
     string getBiome() { return _biome; }
 

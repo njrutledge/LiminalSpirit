@@ -127,8 +127,9 @@ public:
    * There is not much we need to do here unless a button is pressed
    *
    * @param timestep  The amount of time (in seconds) since the last frame
+   * @param biome The highest biome the player has unlocked
    */
-  void update(float timestep);
+  void update(float timestep, int biome);
 
   /**
    * @brief Overrides the Scene2 render to render the scene.

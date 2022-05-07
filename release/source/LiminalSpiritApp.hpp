@@ -33,6 +33,18 @@ protected:
     std::shared_ptr<cugl::AssetManager> _assets;
     
     std::shared_ptr<SoundController> _sound_controller;
+    
+    /** The highest biome the player has access to */
+    int _biome;
+    
+    /** The highest level the player has access to (within the highest biome) */
+    int _highest_level;
+    
+    /** The amount of upgrades the player has unlocked */
+    int _unlock_count;
+    
+    /** Whether or not the player's hands are swapped */
+    bool _swap;
 
     /**
      * The current active scene
@@ -81,6 +93,13 @@ protected:
 
     /** The current active scene*/
     State _scene;
+    
+    /** Saves progress */
+    void save();
+    
+    /** Grants the player abilities once they have access to certain stages
+     */
+    void checkPlayerUnlocks();
 
 public:
     /**
