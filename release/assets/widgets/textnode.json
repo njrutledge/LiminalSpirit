@@ -1,0 +1,51 @@
+{
+  "variables": {
+    "text": [
+      "children",
+      "text",
+      "data",
+      "text"
+    ]
+  },
+  "contents": {
+    "type": "Node",
+    "comment": "This is the root node of the scene",
+    "format": {
+      "type": "Anchored"
+    },
+    "layout": {
+      "x_anchor": "center",
+      "y_anchor": "middle"
+    },
+    "children": {
+      "text": {
+        "type": "Label",
+        "format": {
+          "type": "Anchored"
+        },
+        "data": {
+          "font": "spectral",
+          "anchor": [
+            0.5,
+            0
+          ],
+          "visible": true,
+          "text": "1",
+          "foreground": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "halign": "true center",
+          "valign": "true middle",
+          "scale": 5
+        },
+        "layout": {
+          "x_anchor": "fill",
+          "y_anchor": "fill"
+        }
+      }
+    }
+  }
+}

@@ -32,8 +32,6 @@
 #include <cugl/cugl.h>
 #include "InputController.hpp"
 
-
-
 #define CAVE_MAXLEVELS 9
 #define SHROOM_MAXLEVELS 9
 #define FOREST_MAXLEVELS 2
@@ -43,19 +41,21 @@
 class LevelSelectScene : public cugl::Scene2
 {
 public:
-	enum Choice {
-		none,
-		button1_prep,
-		button2_prep,
-		button3_prep,
-		forward_prep,
-		backward_prep,
-		forward,
-		backward,
-		selected,
-		home_prep,
-		home
-	};
+  enum Choice
+  {
+    none,
+    button1_prep,
+    button2_prep,
+    button3_prep,
+    forward_prep,
+    backward_prep,
+    forward,
+    backward,
+    selected,
+    home_prep,
+    home
+  };
+
 protected:
   /** The loaders to (synchronously) load in assets */
   std::shared_ptr<cugl::AssetManager> _assets;
@@ -66,8 +66,11 @@ protected:
 
   /** buttons for the world selection */
   std::shared_ptr<cugl::scene2::Button> _button1;
+  std::shared_ptr<cugl::TextLayout> _text1;
   std::shared_ptr<cugl::scene2::Button> _button2;
+  std::shared_ptr<cugl::TextLayout> _text2;
   std::shared_ptr<cugl::scene2::Button> _button3;
+  std::shared_ptr<cugl::TextLayout> _text3;
 
   std::shared_ptr<cugl::scene2::Button> _buttonHome;
   std::shared_ptr<cugl::scene2::Button> _buttonForward;
@@ -84,7 +87,6 @@ protected:
   int _unlockedStages;
 
   string _biome;
-  
 
 public:
   /**
@@ -122,17 +124,21 @@ public:
    */
   bool init(const std::shared_ptr<cugl::AssetManager> &assets, string biome);
 
-
-  void setDefaultChoice() { _stageChoice = Choice::none; _switchChoice = Choice::none; _stage = 0; }
+  void setDefaultChoice()
+  {
+    _stageChoice = Choice::none;
+    _switchChoice = Choice::none;
+    _stage = 0;
+  }
 
   Choice getChoice() { return _stageChoice; }
 
   string getBiome() { return _biome; }
 
   int getStage() { return _stage; }
-  //Choice getChoice() { return _choice; }
+  // Choice getChoice() { return _choice; }
 
-  //void setDefaultChoice() { _choice = Choice::MENU; }
+  // void setDefaultChoice() { _choice = Choice::MENU; }
 
 #pragma mark -
 #pragma mark Screen Handling
@@ -154,19 +160,24 @@ public:
    */
   void render(const std::shared_ptr<cugl::SpriteBatch> &batch);
 
-  int getMaxStages(string biome) {
-	  if (biome == "cave") {
-		  return CAVE_MAXLEVELS;
-	  }
-	  else if (biome == "shroom") {
-		  return SHROOM_MAXLEVELS;
-	  }
-	  else if (biome == "forest") {
-		  return FOREST_MAXLEVELS;
-	  }
-	  else {
-		  return -1;
-	  }
+  int getMaxStages(string biome)
+  {
+    if (biome == "cave")
+    {
+      return CAVE_MAXLEVELS;
+    }
+    else if (biome == "shroom")
+    {
+      return SHROOM_MAXLEVELS;
+    }
+    else if (biome == "forest")
+    {
+      return FOREST_MAXLEVELS;
+    }
+    else
+    {
+      return -1;
+    }
   }
 };
 
