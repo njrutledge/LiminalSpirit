@@ -222,6 +222,8 @@ protected:
         _leftState.direction = none;
         _leftState.isCharged = false;
         _leftChargingTime = 0;
+        _lStart = true;
+        _lCoolStart = 0;
     }
     
     /**
@@ -237,6 +239,8 @@ protected:
         _rightState.direction = none;
         _rightState.isCharged = false;
         _rightChargingTime = 0;
+        _rStart = true;
+        _rCoolStart = 0;
     }
     
     /**

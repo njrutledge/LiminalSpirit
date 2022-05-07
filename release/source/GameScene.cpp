@@ -495,6 +495,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _pauseButton->setColor(Color4::WHITE);
     _range_charge->setColor(Color4::WHITE);
     _melee_charge->setColor(Color4::WHITE);
+    _frameIncrement = 1;
     this->setColor(Color4::WHITE);
     return true;
 }
@@ -509,19 +510,30 @@ void GameScene::dispose()
     _swipes.reset();
     _tilt.reset();
 
-    _loseHomeButton->deactivate();
-    _loseLevelButton->deactivate();
-    _loseRestartButton->deactivate();
+    if(_loseHomeButton)
+        _loseHomeButton->deactivate();
+    if(_loseLevelButton)
+        _loseLevelButton->deactivate();
+    if(_loseRestartButton)
+        _loseRestartButton->deactivate();
 
-    _optionReturnButton->deactivate();
-    _musicButton->deactivate();
-    _sfxButton->deactivate();
-    _swapHandsButton->deactivate();
+    if(_optionReturnButton)
+        _optionReturnButton->deactivate();
+    if(_musicButton)
+        _musicButton->deactivate();
+    if(_sfxButton)
+        _sfxButton->deactivate();
+    if(_swapHandsButton)
+        _swapHandsButton->deactivate();
 
-    _returnButton->deactivate();
-    _homeButton->deactivate();
-    _optionButton->deactivate();
-    _pauseButton->deactivate();
+    if(_returnButton)
+        _returnButton->deactivate();
+    if(_homeButton)
+        _homeButton->deactivate();
+    if(_optionButton)
+        _optionButton->deactivate();
+    if(_pauseButton)
+        _pauseButton->deactivate();
 
     // Delete all smart pointers
     _logo = nullptr;
@@ -1050,14 +1062,6 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
     if (armDashImage != nullptr)
     {
         armDashImage->flipHorizontal(_player->isFacingRight());
-        //        if (_meleeArmDash->getLastType() == Glow::MeleeState::h1_left || _meleeArmDash->getLastType() == Glow::MeleeState::h2_left || _meleeArmDash->getLastType() == Glow::MeleeState::h3_left)
-        //        {
-        //            armDashImage->flipHorizontal(false);
-        //        }
-        //        else if (_meleeArmDash->getLastType() == Glow::MeleeState::h1_right || _meleeArmDash->getLastType() == Glow::MeleeState::h2_right || _meleeArmDash->getLastType() == Glow::MeleeState::h3_right)
-        //        {
-        //            armDashImage->flipHorizontal(true);
-        //        }
     }
 
     scene2::SpriteNode *mSprite = dynamic_cast<scene2::SpriteNode *>(_meleeArm->getSceneNode().get());
@@ -1141,7 +1145,7 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
         }
     }
 
-    if (_player->isDashing())
+    if (_player->isDashing() || _meleeArm->getLastType() == Glow::MeleeState::jump_attack)
     {
         _meleeArm->getSceneNode()->setVisible(false);
         _meleeArmDash->getSceneNode()->setVisible(true);
@@ -1150,6 +1154,12 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
     {
         _meleeArm->getSceneNode()->setVisible(true);
         _meleeArmDash->getSceneNode()->setVisible(false);
+        if (_player->isFacingRight()) {
+            mdSprite->setFrame(6);
+        } else {
+            mdSprite->setFrame(0);
+        }
+        
     }
 
     _meleeArm->setAttackAngle(0);
@@ -1157,6 +1167,8 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
     // Melee Arm
     if (_player->isStunned())
     {
+        _meleeArm->getSceneNode()->setVisible(true);
+        _meleeArmDash->getSceneNode()->setVisible(false);
         if (_player->isFacingRight())
         {
             mSprite->setFrame(21);
@@ -1254,6 +1266,59 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
             else
             {
                 mSprite->setFrame(13);
+            }
+        }
+    }
+    else if (_meleeArm->getLastType() == Glow::MeleeState::jump_attack)
+    {
+        if (_player->isFacingRight())
+        {
+            _meleeArmDash->setAttackAngle(90);
+        }
+        else
+        {
+            _meleeArmDash->setAttackAngle(270);
+        }
+        if (_player->isFacingRight()){
+            if (mdSprite->getFrame() > 2) {
+                mdSprite->setFrame(0);
+                _meleeArmDash->setAnimeTimer(0);
+                _frameIncrement = 1;
+            }
+            else {
+                if (_meleeArmDash->getAnimeTimer() > 0.06f) {
+                    nextFrame = mdSprite->getFrame() + _frameIncrement;
+                    if (nextFrame > 2) {
+                        nextFrame = 2;
+                        _frameIncrement = -1;
+                    }
+                    if (nextFrame < 0) {
+                        nextFrame = 0;
+                    }
+                    mdSprite->setFrame(nextFrame);
+                    _meleeArmDash->setAnimeTimer(0);
+                }
+            }
+        }
+        else {
+            if (mdSprite->getFrame() < 4) {
+                mdSprite->setFrame(6);
+                _meleeArmDash->setAnimeTimer(0);
+                _frameIncrement = 1;
+            }
+            else {
+                if (_meleeArmDash->getAnimeTimer() > 0.06f) {
+                    nextFrame = mdSprite->getFrame() - _frameIncrement;
+                    if (nextFrame < 4) {
+                        nextFrame = 4;
+                        _frameIncrement = -1;
+                    }
+                    if (nextFrame > 6) {
+                        nextFrame = 6;
+                    }
+                    mdSprite->setFrame(nextFrame);
+                    _meleeArmDash->setAnimeTimer(0);
+                }
             }
         }
     }
@@ -1475,7 +1540,7 @@ void GameScene::updateMeleeArm(float timestep)
     ////MELEE ARM MUST STAY AT BOTTOM
     // Determining arm positions and offsets
     float offsetArm2 = -3.2f;
-    if (_player->isDashing())
+    if (_player->isDashing() || _meleeArm->getLastType() == Glow::MeleeState::jump_attack)
     {
         offsetArm2 = -1.0f;
     }
@@ -1506,6 +1571,10 @@ void GameScene::updateMeleeArm(float timestep)
     {
         _meleeArm->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY2 / spacing / 3) + 0.6f);
         _meleeArmDash->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY2 / spacing / 3) + 0.6f);
+    }
+    else if (_meleeArm->getLastType() == Glow::MeleeState::jump_attack) {
+        _meleeArm->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY2 / spacing / 3) + 0.5f);
+        _meleeArmDash->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY2 / spacing / 3) + 0.5f);
     }
     else
     {
@@ -1629,6 +1698,12 @@ void GameScene::updateEnemies(float timestep)
             }
             else
             {
+                if (sprite->getFrame() == 4) {
+                    sprite->setFrame(0);
+                }
+                else if (sprite->getFrame() == 7) {
+                    sprite->setFrame(3);
+                }
                 if ((*it)->getVX() > 0)
                 {
                     sprite->flipHorizontal(false);
@@ -1699,7 +1774,7 @@ void GameScene::updateEnemies(float timestep)
             }
             else if ((*it)->getName() == "Glutton")
             {
-                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 1.5f, 3.0f, (*it)->getAttackDamage(), AttackController::Type::e_range, (vel.scale(0.25)).rotate((play_p - en_p).getAngle()), _timer, GLUTTON_ATTACK, GLUTTON_FRAMES);
+                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 1.5f, 10.0f, (*it)->getAttackDamage(), AttackController::Type::e_range, (vel.scale(0.25)).rotate((play_p - en_p).getAngle()), _timer, GLUTTON_ATTACK, GLUTTON_FRAMES);
             }
         }
         if (std::shared_ptr<Mirror> mirror = dynamic_pointer_cast<Mirror>(*it))
@@ -1715,7 +1790,7 @@ void GameScene::updateEnemies(float timestep)
             }
         }
     }
-
+    
     // update spawners
     if (_spawnerCount)
     {
@@ -2111,6 +2186,9 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
             case (AttackController::MeleeState::first):
                 _meleeArm->setLastType(Glow::MeleeState::first);
                 break;
+            case (AttackController::MeleeState::jump_attack):
+                _meleeArm->setLastType(Glow::MeleeState::jump_attack);
+                break;
             case (AttackController::MeleeState::h1_left):
                 _meleeArm->setLastType(Glow::MeleeState::h1_left);
                 break;
@@ -2218,6 +2296,9 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
     if (_player->getVY() < 0)
     {
         _player->setMovingUp(false);
+        if (_meleeArm->getLastType() == Glow::MeleeState::jump_attack) {
+            _meleeArm->setLastType(Glow::MeleeState::cool);
+        }
     }
 }
 
@@ -2260,7 +2341,20 @@ void GameScene::updateRemoveDeletedEnemies()
         }
         if (!bypass && (*eit)->isRemoved())
         {
-
+            createParticles(_assets->get<Texture>("melee_impact"), (*eit)->getPosition() * _scale, "devil", Color4::WHITE, Vec2(0, 0), 0.1f);
+            
+            if ((*eit)->getLastDamageAmount() < 10)
+            {
+                std::vector<std::shared_ptr<Texture> > num;
+                num.push_back(_numberTextures[(*eit)->getLastDamageAmount()]);
+                createParticles(num, (*eit)->getPosition() * _scale, "number", Color4::WHITE, Vec2(0, 10), 0.1f, true, Vec2());
+            }
+            else
+            {
+                std::vector<std::shared_ptr<Texture> > num = getTexturesFromNumber((*eit)->getLastDamageAmount());
+                createParticles(num, (*eit)->getPosition() * _scale, "number", Color4::WHITE, Vec2(0, 10), 0.1f, true, Vec2(-10, 0));
+            }
+            
             // int log1 = _world->getObstacles().size();
             cugl::physics2::Obstacle *glowObj = dynamic_cast<cugl::physics2::Obstacle *>(&*(*eit)->getGlow());
             cugl::physics2::Obstacle *obj = dynamic_cast<cugl::physics2::Obstacle *>(&**eit);

@@ -331,6 +331,7 @@ void LiminalSpirit::updateGameScene(float timestep)
  */
 void LiminalSpirit::updateLevelSelectScene(float timestep)
 {
+    _sound_controller->play_menu_music();
     string biome;
     switch(_biome){
         case 1:

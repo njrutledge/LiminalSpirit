@@ -98,6 +98,8 @@ protected:
     std::shared_ptr<Glow> _meleeArm;
     /** Melee arm dash texture */
     std::shared_ptr<Glow> _meleeArmDash;
+    /** Melee arm jump frame increment */
+    int _frameIncrement;
     /** A shader */
     std::shared_ptr<cugl::Shader> _shader;
     /** A vertex buffer */
