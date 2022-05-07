@@ -31,7 +31,7 @@ struct EnemyProperties {
 	int health;
 	float vspeed;
 	float hspeed;
-	int attackCooldown;
+	float attackCooldown;
 	float attackRadius;
 	float density;
     int damage;
@@ -72,6 +72,9 @@ protected:
 	/** True if the enemy is currently attacking */
 	bool _isAttacking;
 
+	/** True if the enemy has released their attack */
+	bool _completedAttack;
+
 	/** The vertical speed of the enemy */
 	float _verticalSpeed;
 
@@ -81,8 +84,8 @@ protected:
 	/** Current time (in ms) since intializing most recent attack */
 	float _timePast;
 
-	/** The cooldown for attacking (in frames) */
-	int _attackCooldown;
+	/** The cooldown for attacking (in seconds) */
+	float _attackCooldown;
 
 	/** The attack radius for the enemy*/
 	float _attackRadius;
@@ -219,6 +222,12 @@ public:
 
 	/** Sets whether the enemy is attacking*/
 	void setIsAttacking(bool value) { _isAttacking = value; }
+
+	/** Returns true if the enemy has completed their attack*/
+	bool attackIsCompleted() { return _completedAttack; }
+
+	/** Sets whether the enemy has completed their attack */
+	void setAttackCompleted(bool value) { _completedAttack = value; }
 
 	/** Returns the vertical speed of the enemy*/
 	float getVerticalSpeed() const { return _verticalSpeed; }
