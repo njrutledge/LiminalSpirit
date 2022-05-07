@@ -115,6 +115,10 @@ protected:
     std::shared_ptr<cugl::TextLayout> _timer_text;
     /** Text font */
     std::shared_ptr<cugl::Font> _font;
+
+    /** Textures for numbers 0-9 */
+    std::vector<std::shared_ptr<Texture>> _numberTextures;
+
     /** The temp text with the ending win message */
     std::shared_ptr<cugl::TextLayout> _endText;
     
@@ -439,8 +443,13 @@ public:
 
     std::shared_ptr<BaseEnemyModel> getNearestNonMirror(cugl::Vec2 pos);
 
-    /** Creates the intial particle pool */
-    void createParticles();
+    /** Helpers to create particles in GameScene */
+    void createParticles(std::shared_ptr<Texture> texture, Vec2 pos, string poolName, Color4 tint, Vec2 pointOffset, float scale);
+    void createParticles(std::vector<std::shared_ptr<Texture>> textures, Vec2 pos, string poolName, Color4 tint, Vec2 pointOffset, float scale, bool hasMultipleLinkedTextures, Vec2 linkOffset);
+
+
+    /** Helper to convert numbers into Textures **/
+    std::vector<std::shared_ptr<Texture>> getTexturesFromNumber(int num);
 
     string getBiome() { return _biome; }
 
