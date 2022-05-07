@@ -1271,7 +1271,7 @@
 		"cave8": "json/levels/cave/cave7.json",
 		"cave9": "json/levels/cave/cave8.json",
 		"shroom1": "json/levels/shroom/mush1.json",
-		"shroom2": "json/levels/shroom/old/musheasy2.json",
+		"shroom2": "json/levels/shroom/mush2.json",
 		"shroom3": "json/levels/shroom/old/musheasy3.json",
 		"shroom4": "json/levels/shroom/old/battlefield.json",
 		"shroom5": "json/levels/shroom/old/mush0.json",

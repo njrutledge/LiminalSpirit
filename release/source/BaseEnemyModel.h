@@ -314,6 +314,9 @@ public:
     void setJumping(bool value) {_isJumping = value; }
     bool isFalling() {return _isFalling; }
     void setFalling(bool value) {_isFalling = value; }
+    
+    /** Gets the desired healthbar scaling for the enemy */
+    float getHealthBarScale();
 
 #pragma mark - 
 #pragma mark Physics Methods
