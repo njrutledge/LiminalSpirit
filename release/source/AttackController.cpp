@@ -365,8 +365,10 @@ void AttackController::attackRight(cugl::Vec2 p, SwipeController::SwipeAttack at
                 }
                 break;
             case SwipeController::upAttack:
-//                _pending.emplace(Attack::alloc(p, 1, 0.08, 9001, _scale, Type::p_melee, _upOff, ballMakyr, cugl::Vec2::ZERO, up));
-                break;
+                if(grounded){
+                    _pending.emplace(Attack::alloc(p, 1.5, 0.5, 8, _scale, Type::p_melee, jump_attack, _upOff, ballMakyr, cugl::Vec2::ZERO, 0, up, timer, PLAYER_MELEE, 0));
+                    break;
+                }
             case SwipeController::downAttack:
 //                if(!grounded){
 //                _pending.emplace(Attack::alloc(p, 1, 0.08, 9001, _scale, Type::p_melee, _downOff, ballMakyr, cugl::Vec2::ZERO, down));

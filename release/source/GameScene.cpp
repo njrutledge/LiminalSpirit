@@ -495,6 +495,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _pauseButton->setColor(Color4::WHITE);
     _range_charge->setColor(Color4::WHITE);
     _melee_charge->setColor(Color4::WHITE);
+    _frameIncrement = 1;
     this->setColor(Color4::WHITE);
     return true;
 }
@@ -1050,14 +1051,6 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
     if (armDashImage != nullptr)
     {
         armDashImage->flipHorizontal(_player->isFacingRight());
-        //        if (_meleeArmDash->getLastType() == Glow::MeleeState::h1_left || _meleeArmDash->getLastType() == Glow::MeleeState::h2_left || _meleeArmDash->getLastType() == Glow::MeleeState::h3_left)
-        //        {
-        //            armDashImage->flipHorizontal(false);
-        //        }
-        //        else if (_meleeArmDash->getLastType() == Glow::MeleeState::h1_right || _meleeArmDash->getLastType() == Glow::MeleeState::h2_right || _meleeArmDash->getLastType() == Glow::MeleeState::h3_right)
-        //        {
-        //            armDashImage->flipHorizontal(true);
-        //        }
     }
 
     scene2::SpriteNode *mSprite = dynamic_cast<scene2::SpriteNode *>(_meleeArm->getSceneNode().get());
@@ -1141,7 +1134,7 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
         }
     }
 
-    if (_player->isDashing())
+    if (_player->isDashing() || _meleeArm->getLastType() == Glow::MeleeState::jump_attack)
     {
         _meleeArm->getSceneNode()->setVisible(false);
         _meleeArmDash->getSceneNode()->setVisible(true);
@@ -1150,6 +1143,12 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
     {
         _meleeArm->getSceneNode()->setVisible(true);
         _meleeArmDash->getSceneNode()->setVisible(false);
+        if (_player->isFacingRight()) {
+            mdSprite->setFrame(6);
+        } else {
+            mdSprite->setFrame(0);
+        }
+        
     }
 
     _meleeArm->setAttackAngle(0);
@@ -1157,6 +1156,8 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
     // Melee Arm
     if (_player->isStunned())
     {
+        _meleeArm->getSceneNode()->setVisible(true);
+        _meleeArmDash->getSceneNode()->setVisible(false);
         if (_player->isFacingRight())
         {
             mSprite->setFrame(21);
@@ -1254,6 +1255,59 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
             else
             {
                 mSprite->setFrame(13);
+            }
+        }
+    }
+    else if (_meleeArm->getLastType() == Glow::MeleeState::jump_attack)
+    {
+        if (_player->isFacingRight())
+        {
+            _meleeArmDash->setAttackAngle(90);
+        }
+        else
+        {
+            _meleeArmDash->setAttackAngle(270);
+        }
+        if (_player->isFacingRight()){
+            if (mdSprite->getFrame() > 2) {
+                mdSprite->setFrame(0);
+                _meleeArmDash->setAnimeTimer(0);
+                _frameIncrement = 1;
+            }
+            else {
+                if (_meleeArmDash->getAnimeTimer() > 0.06f) {
+                    nextFrame = mdSprite->getFrame() + _frameIncrement;
+                    if (nextFrame > 2) {
+                        nextFrame = 2;
+                        _frameIncrement = -1;
+                    }
+                    if (nextFrame < 0) {
+                        nextFrame = 0;
+                    }
+                    mdSprite->setFrame(nextFrame);
+                    _meleeArmDash->setAnimeTimer(0);
+                }
+            }
+        }
+        else {
+            if (mdSprite->getFrame() < 4) {
+                mdSprite->setFrame(6);
+                _meleeArmDash->setAnimeTimer(0);
+                _frameIncrement = 1;
+            }
+            else {
+                if (_meleeArmDash->getAnimeTimer() > 0.06f) {
+                    nextFrame = mdSprite->getFrame() - _frameIncrement;
+                    if (nextFrame < 4) {
+                        nextFrame = 4;
+                        _frameIncrement = -1;
+                    }
+                    if (nextFrame > 6) {
+                        nextFrame = 6;
+                    }
+                    mdSprite->setFrame(nextFrame);
+                    _meleeArmDash->setAnimeTimer(0);
+                }
             }
         }
     }
@@ -1475,7 +1529,7 @@ void GameScene::updateMeleeArm(float timestep)
     ////MELEE ARM MUST STAY AT BOTTOM
     // Determining arm positions and offsets
     float offsetArm2 = -3.2f;
-    if (_player->isDashing())
+    if (_player->isDashing() || _meleeArm->getLastType() == Glow::MeleeState::jump_attack)
     {
         offsetArm2 = -1.0f;
     }
@@ -1506,6 +1560,10 @@ void GameScene::updateMeleeArm(float timestep)
     {
         _meleeArm->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY2 / spacing / 3) + 0.6f);
         _meleeArmDash->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY2 / spacing / 3) + 0.6f);
+    }
+    else if (_meleeArm->getLastType() == Glow::MeleeState::jump_attack) {
+        _meleeArm->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY2 / spacing / 3) + 0.5f);
+        _meleeArmDash->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY2 / spacing / 3) + 0.5f);
     }
     else
     {
@@ -2117,6 +2175,9 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
             case (AttackController::MeleeState::first):
                 _meleeArm->setLastType(Glow::MeleeState::first);
                 break;
+            case (AttackController::MeleeState::jump_attack):
+                _meleeArm->setLastType(Glow::MeleeState::jump_attack);
+                break;
             case (AttackController::MeleeState::h1_left):
                 _meleeArm->setLastType(Glow::MeleeState::h1_left);
                 break;
@@ -2224,6 +2285,9 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
     if (_player->getVY() < 0)
     {
         _player->setMovingUp(false);
+        if (_meleeArm->getLastType() == Glow::MeleeState::jump_attack) {
+            _meleeArm->setLastType(Glow::MeleeState::cool);
+        }
     }
 }
 
