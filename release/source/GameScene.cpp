@@ -783,7 +783,7 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
     int nextFrame;
     scene2::SpriteNode *sprite = dynamic_cast<scene2::SpriteNode *>(_player->getSceneNode().get());
     
-    _rangedArm->getSceneNode()->setVisible(unlockCount > 1);
+    _rangedArm->getSceneNode()->setVisible(unlockCount >= 1);
 
     sprite->setAnchor(0.5, 0.3);
     // Player (body) Animations
