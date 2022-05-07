@@ -2266,7 +2266,20 @@ void GameScene::updateRemoveDeletedEnemies()
         }
         if (!bypass && (*eit)->isRemoved())
         {
-
+            createParticles(_assets->get<Texture>("melee_impact"), (*eit)->getPosition() * _scale, "devil", Color4::WHITE, Vec2(0, 0), 0.1f);
+            
+            if ((*eit)->getLastDamageAmount() < 10)
+            {
+                std::vector<std::shared_ptr<Texture> > num;
+                num.push_back(_numberTextures[(*eit)->getLastDamageAmount()]);
+                createParticles(num, (*eit)->getPosition() * _scale, "number", Color4::WHITE, Vec2(0, 10), 0.1f, true, Vec2());
+            }
+            else
+            {
+                std::vector<std::shared_ptr<Texture> > num = getTexturesFromNumber((*eit)->getLastDamageAmount());
+                createParticles(num, (*eit)->getPosition() * _scale, "number", Color4::WHITE, Vec2(0, 10), 0.1f, true, Vec2(-10, 0));
+            }
+            
             // int log1 = _world->getObstacles().size();
             cugl::physics2::Obstacle *glowObj = dynamic_cast<cugl::physics2::Obstacle *>(&*(*eit)->getGlow());
             cugl::physics2::Obstacle *obj = dynamic_cast<cugl::physics2::Obstacle *>(&**eit);
