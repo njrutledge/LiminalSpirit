@@ -2755,8 +2755,11 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     floor->setFilterData(filter);
     addObstacle(floor, floorNode, 1);
     
-    // Split floor into 4 to repeat texture
+    // Split floor into parts to repeat texture
     int split = 3;
+    if (!_biome.compare("shroom")) {
+        split = 2;
+    }
     for (int i = 0; i < split; i++) {
         Rect floorRect = Rect(DEFAULT_WIDTH / split * i, 0, DEFAULT_WIDTH / split, 0.5);
         std::shared_ptr<physics2::PolygonObstacle> floor = physics2::PolygonObstacle::allocWithAnchor(floorRect, Vec2::ANCHOR_CENTER);
@@ -2777,6 +2780,9 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
         float floorScale = desiredWidth / floorSprite->getWidth() / split;
         floorSprite->setScale(floorScale);
         floorSprite->setPriority(.1);
+        if (!_biome.compare("shroom")) {
+            floorSprite->setAnchor(0.5, 0.45);
+        }
         addObstacle(floor, floorSprite, 1);
     }
     
