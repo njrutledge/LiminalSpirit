@@ -1629,6 +1629,12 @@ void GameScene::updateEnemies(float timestep)
             }
             else
             {
+                if (sprite->getFrame() == 4) {
+                    sprite->setFrame(0);
+                }
+                else if (sprite->getFrame() == 7) {
+                    sprite->setFrame(3);
+                }
                 if ((*it)->getVX() > 0)
                 {
                     sprite->flipHorizontal(false);
