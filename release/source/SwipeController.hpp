@@ -13,6 +13,8 @@
 #include <vector>
 #include "InputController.hpp"
 
+#define CHARGE_TIME 500
+
 /**
  * This class figures out what type of swipe was drawn based on the input
  */
@@ -106,6 +108,16 @@ protected:
     float _cRangeCount;
     /** Charge threshold for range*/
     float _cRCool;
+    
+    bool _lStart;
+    float _lCoolStart;
+    
+    bool _rStart;
+    float _rCoolStart;
+    
+    /** Time spent charging in milliseconds */
+    Uint64 _leftChargingTime;
+    Uint64 _rightChargingTime;
     
     /** Timestamp to get the current time for charge calculations */
     cugl::Timestamp _currTime;
@@ -209,6 +221,9 @@ protected:
     void resetLeftState() {
         _leftState.direction = none;
         _leftState.isCharged = false;
+        _leftChargingTime = 0;
+        _lStart = true;
+        _lCoolStart = 0;
     }
     
     /**
@@ -223,6 +238,9 @@ protected:
     void resetRightState() {
         _rightState.direction = none;
         _rightState.isCharged = false;
+        _rightChargingTime = 0;
+        _rStart = true;
+        _rCoolStart = 0;
     }
     
     /**
@@ -255,8 +273,8 @@ public:
      *
      * @return the left-sided swipe attack
      */
-    SwipeAttack getLeftSwipe() {
-        return _leftSwipe;
+    SwipeAttack getLeftSwipe(bool swap) {
+        return swap ? _rightSwipe : _leftSwipe;
     };
     
     /**
@@ -264,8 +282,8 @@ public:
      *
      * @return the left-sided swipe angle
      */
-    float getLeftAngle() {
-        return _leftAngle;
+    float getLeftAngle(bool swap) {
+        return swap ? _rightAngle : _leftAngle;
     };
     
     /**
@@ -273,8 +291,8 @@ public:
      *
      * @return the right-sided swipe attack
      */
-    SwipeAttack getRightSwipe() {
-        return _rightSwipe;
+    SwipeAttack getRightSwipe(bool swap) {
+        return swap ? _leftSwipe : _rightSwipe;
     };
     
     /**
@@ -282,12 +300,24 @@ public:
      *
      * @return the right-sided swipe angle
      */
-    float getRightAngle() {
-        return _rightAngle;
+    float getRightAngle(bool swap) {
+        return swap ? _leftAngle : _rightAngle;
     };
     
     float getRangeCharge() {
         return std::min(_cRangeCount / _cRCool, 1.0f);
+    }
+    
+    float getMeleeCharge() {
+        return std::min(_cMeleeCount / _cMCool, 1.0f);
+    }
+    
+    Uint64 getRightChargingTime() {
+        return _rightChargingTime;
+    }
+    
+    Uint64 getLeftChargingTime() {
+        return _leftChargingTime;
     }
     
     /**

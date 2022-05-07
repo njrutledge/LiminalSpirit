@@ -6,6 +6,11 @@ using namespace cugl;
 
 void CollisionController::init(std::shared_ptr<SoundController> sound) {
     _sound = sound;
+    
+    std::shared_ptr<JsonReader> reader = JsonReader::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
+    std::shared_ptr<JsonValue> save = reader->readJson();
+    std::shared_ptr<JsonValue> progress = save->get("progress");
+    _unlock_count = progress->get("unlock_count")->asInt();
 }
 
 /**
@@ -33,10 +38,12 @@ void CollisionController::beginContact(b2Contact* contact, std::shared_ptr<Attac
 
 
     if (AttackController::Attack* attack = dynamic_cast<AttackController::Attack*>(bd1)) {
-        handleAttackCollision(attack, bd2, fd2, AC, timer);
+        string test = fd1 ? *fd1 : "NULLLLLLL";
+        handleAttackCollision(attack, fd1, bd2, fd2, AC, timer);
     }
     else if (AttackController::Attack* attack = dynamic_cast<AttackController::Attack*>(bd2)) {
-        handleAttackCollision(attack, bd1, fd1, AC, timer);
+        string test = fd2 ? *fd2 : "NULLLLLLL";
+        handleAttackCollision(attack, fd2, bd1, fd1, AC, timer);
     }
 
     //handle enemy collision
@@ -70,39 +77,46 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
         if (!attack->isActive()) {
             return;
         }
+        if (!fd) {
+            //TODO:: IDK BRUH NO FIXTURE WHAT DO
+           int breaking = 1;
+           return;
+        }
         //TODO: Make "playerattacksensor" a constant somewhere
-        if (*(attack->getSensorName()) == "playerattacksensor") {
+        if (*fd == "playerattacksensor") {
             if (Mirror* mirror = dynamic_cast<Mirror*>(enemy)) {
                 if (attack->getType() == AttackController::p_range) {
                     //attack->markRemoved();
                     attack->setInactive();
                     float angle_change;
                     cugl::Vec2 linvel = attack->getVel();
-                    
+                    int angle = 60;
+                    float randAngle = (rand() % angle) - angle / 2.0f;
+                    randAngle = randAngle * M_PI / 180.0f;
                     switch (mirror->getType()) {
                     case Mirror::Type::square:
                         //just reflect the attack
-                        AC->createAttack(attack->getPosition(), attack->getRadius()*MIRROR_AMPLIFY, attack->getMaxAge(),
-                            attack->getDamage(), AttackController::Type::e_range,
-                            linvel.rotate(M_PI), timer, attack->getAttackID(), attack->getFrames(), false);
+                        AC->createAttack(attack->getPosition(), attack->getRadius()*MIRROR_SQUARE_SCALE, attack->getMaxAge(),
+                            mirror->getAttackDamage(), AttackController::Type::e_range,
+                            linvel.rotate(M_PI+randAngle), timer, attack->getAttackID(), attack->getFrames(), false);
                         break;
                     case Mirror::Type::triangle:
                         //reflect three back at you
-                        linvel.rotate(4 * M_PI / 6);
+                        linvel.rotate(4 * M_PI / 6 + randAngle);
                         angle_change = M_PI / 6.0f;
                         for (int i = 0; i < 3; i++) {
-                            AC->createAttack(attack->getPosition(), attack->getRadius(), attack->getMaxAge(),
-                                attack->getDamage(), AttackController::Type::e_range,
-                                linvel.rotate(angle_change)*.66f, timer, attack->getAttackID(), attack->getFrames(), false);
+                            AC->createAttack(attack->getPosition(), attack->getRadius()*MIRROR_TRI_SCALE, attack->getMaxAge(),
+                                mirror->getAttackDamage()*MIRROR_TRI_AMP, AttackController::Type::e_range,
+                                linvel.rotate(angle_change)*MIRROR_TRI_AMP, timer, attack->getAttackID(), attack->getFrames(), false);
                         }
                         break;
                     case Mirror::Type::circle:
                         //bullet hell all around!
                         angle_change = M_PI / 4;
                         for (float i = 0; i < 8; i++) {
-                            AC->createAttack(attack->getPosition(), attack->getRadius(), attack->getMaxAge(),
-                                attack->getDamage(), AttackController::Type::e_range,
-                                linvel.rotate(angle_change)*.5f, timer, attack->getAttackID(), attack->getFrames(), false);
+                            AC->createAttack(attack->getPosition(), attack->getRadius()*MIRROR_CIRC_SCALE, attack->getMaxAge(),
+                                mirror->getAttackDamage()*MIRROR_CIRC_AMP, AttackController::Type::e_range,
+                                linvel.rotate(angle_change)*MIRROR_CIRC_AMP, timer, attack->getAttackID(), attack->getFrames(), false);
                         }
                         break;
                     }
@@ -135,6 +149,16 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
             else{
                 if (!attack->hasHitEnemy(enemy)) {
                     int damage = getDamageDealt(attack, enemy);
+                    switch (_unlock_count) {
+                        case 3:
+                        case 4:
+                            damage *= 2;
+                            break;
+                        case 5:
+                            damage *= 3;
+                        default:
+                            break;
+                    }
                     enemy->setHealth(enemy->getHealth() - damage);
                     //CULog("HEALTH SET");
                     if (damage > 0) {
@@ -168,7 +192,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
 
 
                 if (attack->getType() == AttackController::p_exp_package) {
-                    AC->createAttack(attack->getPosition() /*cugl::Vec2(bd->getPosition().x, bd->getPosition().y)*/, 3, 0.15, 40, AttackController::p_exp, cugl::Vec2::ZERO, timer, PLAYER_RANGE, PLAYER_EXP_FRAMES);
+                    AC->createAttack(attack->getPosition() /*cugl::Vec2(bd->getPosition().x, bd->getPosition().y)*/, 3, 0.15, 30, AttackController::p_exp, cugl::Vec2::ZERO, timer, PLAYER_RANGE, PLAYER_EXP_FRAMES);
                 }
                 switch (attack->getType()) {
                     case AttackController::p_range:
@@ -186,17 +210,16 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                 }
             }
         }
-        else if (*(attack->getSensorName()) == "enemyattacksensor" && attack->isSplitable() && attack->getType() == AttackController::Type::e_range) {
+        else if (*fd == "enemyattacksensor" && attack->isSplitable() && attack->getType() == AttackController::Type::e_range) {
             if (Mirror* mirror = dynamic_cast<Mirror*>(enemy)) {
                 attack->setInactive();
                 float angle_change;
                 cugl::Vec2 linvel = attack->getVel();
-
                 switch (mirror->getType()) {
                 case Mirror::Type::square:
                     //just amplify the attack
-                    AC->createAttack(attack->getPosition(), attack->getRadius()*MIRROR_AMPLIFY, attack->getMaxAge(),
-                        attack->getDamage()*MIRROR_AMPLIFY, AttackController::Type::e_range,
+                    AC->createAttack(attack->getPosition(), attack->getRadius()*MIRROR_SQUARE_SCALE, attack->getMaxAge(),
+                        attack->getDamage()*MIRROR_SQUARE_AMP, AttackController::Type::e_range,
                         linvel, timer, attack->getAttackID(), attack->getFrames(), false);
                     break;
                 case Mirror::Type::triangle:
@@ -204,18 +227,18 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                     linvel.rotate(-2*M_PI / 6);
                     angle_change = M_PI / 6.0f;
                     for (int i = 0; i < 3; i++) {
-                        AC->createAttack(attack->getPosition(), attack->getRadius(), attack->getMaxAge(),
-                            attack->getDamage(), AttackController::Type::e_range,
-                            linvel.rotate(angle_change)*.66f, timer, attack->getAttackID(), attack->getFrames(), false);
+                        AC->createAttack(attack->getPosition(), attack->getRadius()*MIRROR_TRI_SCALE, attack->getMaxAge(),
+                            attack->getDamage()*MIRROR_TRI_AMP, AttackController::Type::e_range,
+                            linvel.rotate(angle_change)*MIRROR_TRI_AMP, timer, attack->getAttackID(), attack->getFrames(), false);
                     }
                     break;
                 case Mirror::Type::circle:
                     //bullet hell all around!
                     angle_change = M_PI / 4;
                     for (float i = 0; i < 8; i++) {
-                        AC->createAttack(attack->getPosition(), attack->getRadius(), attack->getMaxAge(),
-                            attack->getDamage(), AttackController::Type::e_range,
-                            linvel.rotate(angle_change)*.5f, timer, attack->getAttackID(), attack->getFrames(), false);
+                        AC->createAttack(attack->getPosition(), attack->getRadius()*MIRROR_CIRC_SCALE, attack->getMaxAge(),
+                            attack->getDamage()*MIRROR_CIRC_AMP, AttackController::Type::e_range,
+                            linvel.rotate(angle_change)*MIRROR_CIRC_AMP, timer, attack->getAttackID(), attack->getFrames(), false);
                     }
                     break;
                 }
@@ -279,12 +302,14 @@ BaseEnemyModel::AttackType CollisionController::mapToBaseAttackType(AttackContro
 }
 
 
-void CollisionController::handleAttackCollision(AttackController::Attack* attack, physics2::Obstacle* bd, std::string* fd, std::shared_ptr<AttackController> AC, float timer) {
+void CollisionController::handleAttackCollision(AttackController::Attack* attack, std::string* fd1, physics2::Obstacle* bd, std::string* fd2, std::shared_ptr<AttackController> AC, float timer) {
     if (!attack->isActive()) {
         return;
     }
+    if (fd1 && *fd1 == "playerattacksensorhoming") {
+        //TODO FOR HOMING
 
-    if (AttackController::Attack* attack2 = dynamic_cast<AttackController::Attack*>(bd)) {
+    }else if (AttackController::Attack* attack2 = dynamic_cast<AttackController::Attack*>(bd)) {
         if (!attack2->isActive()) {
             return;
         }
@@ -300,9 +325,17 @@ void CollisionController::handleAttackCollision(AttackController::Attack* attack
             //TODO: stun both player and enemy?
         }
     }
-    else if ((bd && (bd->getName() == "platform" || bd->getName().find("wall")!= std::string::npos)) && attack->getType() == AttackController::p_exp_package) {
-        AC->createAttack(attack->getPosition(), 3, 0.15, 40, AttackController::p_exp, cugl::Vec2::ZERO, timer, PLAYER_RANGE, PLAYER_EXP_FRAMES);
+    else if ((bd && (bd->getName().find("wall")!= std::string::npos))){
+        switch(attack->getType()) {
+        case AttackController::p_exp_package:
+            AC->createAttack(attack->getPosition(), 3, 0.15, 30, AttackController::p_exp, cugl::Vec2::ZERO, timer, PLAYER_RANGE, PLAYER_EXP_FRAMES);
             attack->setInactive();
+            break;
+        case AttackController::p_range:
+        case AttackController::e_range:
+            attack->setInactive();
+            break;
+        }
     }
 }
 

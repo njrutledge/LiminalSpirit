@@ -54,7 +54,7 @@ void SoundController::LevelMusic::play_music(std::vector<bool> e, GameState s) {
     
     if ((s != LEVEL_CAVE && b == "cave")  ||  (s != LEVEL_SHROOM && b == "mushroom") || (s != LEVEL_FOREST && b == "forest")) {
         cugl::AudioEngine::get()->getMusicQueue()->advance(0, 0.2);
-        cugl::AudioEngine::get()->getMusicQueue()->enqueue(_mixer, true, 0.3);
+        cugl::AudioEngine::get()->getMusicQueue()->enqueue(_mixer, true, 0.4);
     }
     
     for (int i = 0; i < 7; i++) {
@@ -68,16 +68,16 @@ void SoundController::LevelMusic::play_music(std::vector<bool> e, GameState s) {
                 break;
             case 1:
                 if (e[1]) {
-                    _pNode->setGain(clampf(_pNode->getGain() + (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME * 1.3f));
+                    _pNode->setGain(clampf(_pNode->getGain() + (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME * 1.1f));
                 } else {
-                    _pNode->setGain(clampf(_pNode->getGain() - (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME * 1.3f));
+                    _pNode->setGain(clampf(_pNode->getGain() - (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME * 1.1f));
                 }
                 break;
             case 2:
                 if (e[2]) {
-                    _mNode->setGain(clampf(_mNode->getGain() + (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME * 0.9f));
+                    _mNode->setGain(clampf(_mNode->getGain() + (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME * 0.4f));
                 } else {
-                    _mNode->setGain(clampf(_mNode->getGain() - (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME * 0.9f));
+                    _mNode->setGain(clampf(_mNode->getGain() - (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME * 0.4f));
                 }
             default:
                 break;
@@ -118,6 +118,9 @@ void SoundController::init(std::shared_ptr<cugl::AssetManager> &assets) {
     _mushroom2 = make_shared<LevelMusic>();
     _mushroom2->init("mushroom2", _assets);
     
+    _forest1 = make_shared<LevelMusic>();
+    _forest1->init("forest1", _assets);
+    
     _playerStep = assets->get<cugl::Sound>("playerStep");
     
     _playerShoot = assets->get<cugl::Sound>("playerShoot");
@@ -134,10 +137,10 @@ void SoundController::init(std::shared_ptr<cugl::AssetManager> &assets) {
 void SoundController::play_menu_music() {
     
     if (_state != MENU) {
-        _state = MENU;
         cugl::AudioEngine::get()->getMusicQueue()->advance(0, 0.2);
         cugl::AudioEngine::get()->getMusicQueue()->enqueue(_menu, true, 0.4);
     }
+    _state = MENU;
     
 }
 
@@ -176,8 +179,13 @@ void SoundController::play_level_music(string biome, std::vector<bool> enemies) 
         
         
     } else {
-        
+        if (_state != LEVEL_FOREST) {
+            reset_level_tracks();
+        }
+            _forest1->play_music(enemies, _state);
+            _state = LEVEL_FOREST;
     }
+    
     
     
     
@@ -218,6 +226,7 @@ void SoundController::reset_level_tracks() {
     _cave2->reset_mix();
     _mushroom1->reset_mix();
     _mushroom2->reset_mix();
+    _forest1->reset_mix();
 };
 
 void SoundController::dispose() {

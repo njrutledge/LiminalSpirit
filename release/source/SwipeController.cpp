@@ -23,6 +23,15 @@ SwipeController::SwipeController() : _leftSwipe(noAttack),
     
     _cMCool = 2.0f;
     _cRCool = 5.0f;
+    
+    _leftChargingTime = 0;
+    _rightChargingTime = 0;
+    
+    _lStart = true;
+    _rStart = true;
+    
+    _lCoolStart = 0;
+    _rCoolStart = 0;
 }
 
 /**
@@ -38,8 +47,15 @@ SwipeController::~SwipeController()
  */
 void SwipeController::update(InputController &input, bool grounded, float dt)
 {
-    _cMeleeCount += dt;
-    _cRangeCount += dt;
+    if (!hasLeftChargedAttack()) {
+        _cRangeCount += dt;
+    }
+    
+    if (!hasRightChargedAttack()) {
+        _cMeleeCount += dt;
+    }
+    
+    
 #ifdef CU_TOUCH_SCREEN
 
     // If the left finger is pressed down, check if it has been pressed long enough for
@@ -50,12 +66,16 @@ void SwipeController::update(InputController &input, bool grounded, float dt)
     // If left finger lifted, process left swipe
     else if (input.didLeftRelease())
     {
+        _lStart = true;
+        _lCoolStart = 0;
         calculateSwipeDirection(input.getLeftStartPosition(), input.getLeftEndPosition(), true, grounded, input.getLeftStartTime());
     }
     // Otherwise note that no left swipe was completed this frame
     else
     {
         setLeftSwipe(noAttack);
+        _lStart = true;
+        _lCoolStart = 0;
     }
     
     // If the right finger is pressed down, check if it has been pressed long enough for
@@ -65,12 +85,16 @@ void SwipeController::update(InputController &input, bool grounded, float dt)
     }
     // If right finger lifted, process right swipe
     else if(input.didRightRelease()) {
+        _rStart = true;
+        _rCoolStart = 0;
         calculateSwipeDirection(input.getRightStartPosition(), input.getRightEndPosition(), false, grounded, input.getRightStartTime());
     }
     // Otherwise note that no right swipe was completed this frame
     else
     {
         setRightSwipe(noAttack);
+        _rStart = true;
+        _rCoolStart = 0;
     }
 #else
     switch (input._leftCode)
@@ -170,6 +194,15 @@ void SwipeController::update(InputController &input, bool grounded, float dt)
  */
 void SwipeController::calculateChargeAttack(cugl::Timestamp startTime, bool isLeftSidedCharge) {
     
+    // Don't increment charge countdown on cooldown, return
+//    if (isLeftSidedCharge && _cRCool < _cRangeCount) {
+//        return;
+//    }
+//
+//    if (!isLeftSidedCharge && _cMCool >= _cMeleeCount) {
+//        return;
+//    }
+    
     // If the attack is already charged, stop calculating the time diff
     if (isLeftSidedCharge) {
         if (hasLeftChargedAttack()) return;
@@ -178,21 +211,44 @@ void SwipeController::calculateChargeAttack(cugl::Timestamp startTime, bool isLe
     }
         
     _currTime.mark();
+    
+    if (_lStart && isLeftSidedCharge) {
+        _lStart = false;
+        _lCoolStart = clampf(_cRCool - _cRangeCount, 0, _cRCool);
+    }
+    
+    if (_rStart && !isLeftSidedCharge) {
+        _rStart = false;
+        _rCoolStart = clampf(_cMCool - _cMeleeCount, 0, _cMCool);
+    }
 
     Uint64 chargeTime = cugl::Timestamp::ellapsedMillis(startTime, _currTime);
+    if (isLeftSidedCharge) {
+        chargeTime = chargeTime - (_lCoolStart * 1000) ;
+        _leftChargingTime = chargeTime;
+    } else {
+        chargeTime = chargeTime - (_rCoolStart * 1000);
+        _rightChargingTime = chargeTime;
+    }
+    
+    CULog("%llu, %f, %llu", chargeTime, _rCoolStart, _rightChargingTime);
     
     // half second charge time
-    if (chargeTime >= 500) {
+    if (chargeTime >= CHARGE_TIME) {
         if (isLeftSidedCharge) {
             if (_cRCool <= _cRangeCount) {
                 chargeLeftAttack();
                 _cRangeCount = 0;
+                _lCoolStart = 0;
+                _lStart = true;
             }
             
         } else {
             if (_cMCool <= _cMeleeCount) {
                 chargeRightAttack();
                 _cMeleeCount = 0;
+                _rCoolStart = 0;
+                _rStart = true;
             }
             
         }
@@ -225,7 +281,7 @@ void SwipeController::calculateSwipeDirection(cugl::Vec2 startPos, cugl::Vec2 en
         Uint64 tapTime = cugl::Timestamp::ellapsedMillis(startTime, _currTime);
         
         // if the tap time is less than half a second the intent of the tap was a jump
-        if (tapTime < 500) {
+        if (tapTime < CHARGE_TIME) {
             if (isLeftSidedSwipe) {
                 setLeftSwipe(jump);
             } else {
@@ -535,4 +591,10 @@ void SwipeController::reset()
     _rightSwipe = noAttack;
     _cMeleeCount = _cMCool;
     _cRangeCount = _cRCool;
+    _leftChargingTime = 0;
+    _rightChargingTime = 0;
+    _lStart = true;
+    _lCoolStart = 0;
+    _rStart = true;
+    _rCoolStart = 0;
 }

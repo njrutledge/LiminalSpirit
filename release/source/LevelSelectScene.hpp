@@ -32,7 +32,7 @@
 #include <cugl/cugl.h>
 #include "InputController.hpp"
 
-#define CAVE_MAXLEVELS 8
+#define CAVE_MAXLEVELS 9
 #define SHROOM_MAXLEVELS 9
 #define FOREST_MAXLEVELS 2
 /**
@@ -118,6 +118,7 @@ public:
    * memory allocation.  Instead, allocation happens in this method.
    *
    * @param assets    The (loaded) assets for this game mode
+   * @param biome      The current biome
    *
    * @return true if the controller is initialized properly, false otherwise.
    */
@@ -147,8 +148,10 @@ public:
    * There is not much we need to do here unless a button is pressed
    *
    * @param timestep  The amount of time (in seconds) since the last frame
+   * @param highestBiome    The highest biome the player has achieved
+   * @param highestLevel    The highest level the player has achieved in the highest biome
    */
-  void update(float timestep);
+  void update(float timestep, string highestBiome, int highestLevel);
 
   /**
    * @brief Overrides the Scene2 render to render the scene.

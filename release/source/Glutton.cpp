@@ -10,7 +10,7 @@
 
 EnemyProperties GLUTTON_PROPS{
     /** Starting health of the glutton */
-    100,
+    240,
     /** Vertical speed of the glutton */
     0.0f,
     /** Horizontal speed of the glutton*/

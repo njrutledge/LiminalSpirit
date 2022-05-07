@@ -213,14 +213,25 @@ bool LevelSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets, s
  * There is not much we need to do here unless a button is pressed
  *
  * @param timestep  The amount of time (in seconds) since the last frame
+ * @param highestBiome    The highest biome the player has achieved
+ * @param highestLevel    The highest level the player has achieved in the highest biome
  */
-void LevelSelectScene::update(float timestep)
+void LevelSelectScene::update(float timestep, string highestBiome, int highestLevel)
 {
+    bool iterateLevel = highestBiome == _biome;
     if (_stage + 1 <= _maxStages)
     {
         _button1->setVisible(true);
-        _button1->activate();
-        //_text1->setText("Stage:" + to_string(_stage + 1));
+        if (iterateLevel && _stage + 1 > highestLevel)
+        {
+            _button1->setColor(Color4(24, 25, 26));
+            _button1->deactivate();
+        }
+        else
+        {
+            _button1->setColor(Color4::WHITE);
+            _button1->activate();
+        }
     }
     else
     {
@@ -232,7 +243,16 @@ void LevelSelectScene::update(float timestep)
     if (_stage + 2 <= _maxStages)
     {
         _button2->setVisible(true);
-        _button2->activate();
+        if (iterateLevel && _stage + 2 > highestLevel)
+        {
+            _button2->setColor(Color4(24, 25, 26));
+            _button2->deactivate();
+        }
+        else
+        {
+            _button2->setColor(Color4::WHITE);
+            _button2->activate();
+        }
     }
     else
     {
@@ -244,7 +264,16 @@ void LevelSelectScene::update(float timestep)
     if (_stage + 3 <= _maxStages)
     {
         _button3->setVisible(true);
-        _button3->activate();
+        if (iterateLevel && _stage + 3 > highestLevel)
+        {
+            _button3->setColor(Color4(24, 25, 26));
+            _button3->deactivate();
+        }
+        else
+        {
+            _button3->setColor(Color4::WHITE);
+            _button3->activate();
+        }
     }
     else
     {

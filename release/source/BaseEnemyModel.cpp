@@ -28,6 +28,8 @@
 /** Color of HealthBar health */
 #define HEALTH_COLOR Color4(200,240,200)
 
+#define HEALTH_BAR_SIZE 1.3
+
 
 using namespace cugl;
 
@@ -138,6 +140,25 @@ void BaseEnemyModel::applyForce() {
 	}
 }
 
+void BaseEnemyModel::setHealth(int value) {
+	_lastDamageAmount = _health - value;
+	_health = value; 
+	_healthTimer = HEALTH_SHOWTIME;
+}
+
+float BaseEnemyModel::getHealthBarScale() {
+    
+    float scale = HEALTH_BAR_SIZE / (float)_maxhealth;
+    
+    if (_enemyName == "Glutton") {
+        return scale * 3;
+    } else if (_enemyName == "Spawner") {
+        return scale * 4;
+    } else {
+        return scale;
+    }
+}
+
 void BaseEnemyModel::update(float dt) {
 	
 	CapsuleObstacle::update(dt);
@@ -147,26 +168,36 @@ void BaseEnemyModel::update(float dt) {
 		//update healthbar
 		if (_healthTimer > 0) {
 			if (std::shared_ptr<scene2::PolygonNode> foundHealthBar = dynamic_pointer_cast<scene2::PolygonNode>(_node->getChildByName("healthbar"))) {
-				foundHealthBar->setPolygon((Rect(0, 0, _health / 20.0f / _node->getScaleX(), .1 / _node->getScaleY()) * _drawScale));
+				foundHealthBar->setPolygon((Rect(0, 0, _health * getHealthBarScale() / _node->getScaleX(), .1 / _node->getScaleY()) * _drawScale));
 				foundHealthBar->setPriority(8);
-				foundHealthBar->setPosition(Vec2(_size.width / 2, _size.height) - Vec2((_maxhealth - _health) / 40.0 / _node->getScaleX() *_drawScale,0));
+				foundHealthBar->setAnchor(.5, 0.5);
+                if (_enemyName == "Glutton") {
+                    foundHealthBar->setPosition(Vec2(_size.width / 2, _size.height * 2) - Vec2((_maxhealth - _health) * getHealthBarScale() / 2 / _node->getScaleX() * _drawScale, 0));
+                } else {
+                    foundHealthBar->setPosition(Vec2(_size.width / 2, _size.height) - Vec2((_maxhealth - _health) * getHealthBarScale() / 2 / _node->getScaleX() * _drawScale, 0));
+                }
+				
 			}
 			else {
 				//add health bars
 				_node->setPriority(1);
-				std::shared_ptr<scene2::PolygonNode> healthBarBack = scene2::PolygonNode::allocWithPoly(Rect(0, 0, _maxhealth / 20.0f/ _node->getScaleX(), .1/_node->getScaleY()) * _drawScale);
+				std::shared_ptr<scene2::PolygonNode> healthBarBack = scene2::PolygonNode::allocWithPoly(Rect(0, 0, getHealthBarScale() * _maxhealth / _node->getScaleX(), .1/_node->getScaleY()) * _drawScale);
 				healthBarBack->setColor(HEALTHBACK_COLOR);
-				healthBarBack->setAnchor(.5, 0);
+				healthBarBack->setAnchor(.5, 0.5);
 				healthBarBack->setPosition(Vec2(_size.width / 2, _size.height));
 				healthBarBack->setPriority(7);
 				_node->addChildWithName(healthBarBack, "healthbarback");
 
-				std::shared_ptr<scene2::PolygonNode> healthBar = scene2::PolygonNode::allocWithPoly(Rect(0, 0, _health / 20.0f / _node->getScaleX(), .1/ _node->getScaleY()) * _drawScale);
+                std::shared_ptr<scene2::PolygonNode> healthBar = scene2::PolygonNode::allocWithPoly(Rect(0, 0, _health * getHealthBarScale() / _node->getScaleX(), .1/ _node->getScaleY()) * _drawScale);
 				healthBar->setColor(HEALTH_COLOR);
-				healthBar->setAnchor(.5, 0);
+				healthBar->setAnchor(.5, 0.5);
 				healthBar->setPosition(Vec2(_size.width / 2, _size.height));
 				healthBarBack->setPriority(8);
 				_node->addChildWithName(healthBar, "healthbar");
+                if (_enemyName == "Glutton") {
+                    healthBar->setPosition(Vec2(_size.width / 2, _size.height * 2));
+                    healthBarBack->setPosition(Vec2(_size.width / 2, _size.height * 2));
+                }
 			}
 			_healthTimer -= dt;
 		}

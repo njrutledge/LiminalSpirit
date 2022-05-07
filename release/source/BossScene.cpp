@@ -87,7 +87,7 @@ void BossScene::update(float timestep)
 {
     updateSoundInputParticlesAndTilt(timestep);
 
-    updateAnimations(timestep);
+    //updateAnimations(timestep);
 
     updateEnemies(timestep);
 
@@ -99,7 +99,7 @@ void BossScene::update(float timestep)
     }
 
 
-    updateSwipesAndAttacks(timestep);
+    //updateSwipesAndAttacks(timestep, 0);
 
     
 
@@ -113,7 +113,7 @@ void BossScene::update(float timestep)
 
     updateRemoveDeletedPlayer();
 
-    updateHealthbar();
+    //updateHealthbar();
 
     updateCamera();
 
