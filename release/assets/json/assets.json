@@ -479,8 +479,14 @@
 		"background": {
 			"file": "textures/backgrounds/forest_background.png"
 		},
+        "wave_bar_background": {
+            "file": "textures/hud/bar.png"
+        },
+        "wave_bar_foreground": {
+            "file": "textures/hud/content.png"
+        },
 		"melee_charge_HUD": {
-			"file": "textures/melee_charge_HUD.png",
+			"file": "textures/hud/melee_charge_HUD.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
@@ -493,7 +499,7 @@
 			}
 		},
 		"range_charge_HUD": {
-			"file": "textures/range_charge_HUD.png",
+			"file": "textures/hud/range_charge_HUD.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
