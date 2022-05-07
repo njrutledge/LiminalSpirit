@@ -1694,12 +1694,10 @@ void GameScene::updateEnemies(float timestep)
             Vec2 play_p = _player->getPosition();
             Vec2 en_p = (*it)->getPosition();
             Vec2 vel = Vec2(0.5, 0);
+
+            (*it)->setAttackCompleted(true);
             // TODO: Need to variablize attack variables based on enemy type
-            if ((*it)->getName() != "Seeker")
-            {
-                (*it)->setAttackCompleted(true);
-            }
-            else
+            if ((*it)->getName() == "Seeker")
             {
                 shared_ptr<Seeker> seeker = dynamic_pointer_cast<Seeker>(*it);
                 (*it)->setAttackCompleted(true);

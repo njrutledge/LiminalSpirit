@@ -51,7 +51,6 @@ float AIController::getGluttonMovement(shared_ptr<BaseEnemyModel> glutton, Vec2 
     if (!glutton->isAttacking()) {
         if (glutton->getAttackCooldown() < glutton->getTimePast()
             && glutton->getInvincibilityTimer() <= 0) {
-            glutton->setAttackCompleted(false);
             glutton->setIsAttacking(true);
             glutton->setTimePast(0.0f);
         } else
@@ -63,6 +62,14 @@ float AIController::getGluttonMovement(shared_ptr<BaseEnemyModel> glutton, Vec2 
                     return glutton->getHorizontalSpeed();
                 }
             }
+    }
+    else {
+        // Check if attack timer should be reset
+        if (glutton->getAttackCooldown() < glutton->getTimePast()) {
+            glutton->setAttackCompleted(false);
+            glutton->setIsAttacking(false);
+            glutton->setTimePast(0.0f);
+        }
     }
     return 0;
 }
