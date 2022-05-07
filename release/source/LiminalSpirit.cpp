@@ -76,7 +76,6 @@ void LiminalSpirit::onShutdown()
 {
     _loading.dispose();
     _gameplay.dispose();
-    _bossgame.dispose();
     _home.dispose();
     _worldSelect.dispose();
     _levelSelect.dispose();

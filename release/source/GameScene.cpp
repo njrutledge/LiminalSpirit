@@ -495,6 +495,20 @@ void GameScene::dispose()
     _swipes.reset();
     _tilt.reset();
 
+    _loseHomeButton->deactivate();
+    _loseLevelButton->deactivate();
+    _loseRestartButton->deactivate();
+
+    _optionReturnButton->deactivate();
+    _musicButton->deactivate();
+    _sfxButton->deactivate();
+    _swapHandsButton->deactivate();
+
+    _returnButton->deactivate();
+    _homeButton->deactivate();
+    _optionButton->deactivate();
+    _pauseButton->deactivate();
+
     // Delete all smart pointers
     _logo = nullptr;
     //    scene = nullptr;
@@ -519,9 +533,7 @@ void GameScene::dispose()
     _endText = nullptr;
     _healthbar = nullptr;
     _lose = false;
-    _loseHomeButton->deactivate();
-    _loseLevelButton->deactivate();
-    _loseRestartButton->deactivate();
+    
     // TODO: CHECK IF THIS IS RIGHT FOR DISPOSING
     //    for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
     //        (*it).~shared_ptr();
@@ -2571,7 +2583,7 @@ void GameScene::createEnemies(int wave)
         {
             std::shared_ptr<Texture> lostHitBoxImage = _assets->get<Texture>("lost");
             std::shared_ptr<Texture> lostImage = _assets->get<Texture>("lost_ani");
-            std::shared_ptr<Lost> lost = Lost::alloc(enemyPos, lostHitBoxImage->getSize(), lostHitBoxImage->getSize() / _scale / 10, _scale);
+            std::shared_ptr<Lost> lost = Lost::alloc(enemyPos, Size(lostImage->getSize().width/4.0f, lostImage->getSize().height/2.0f), lostHitBoxImage->getSize() / _scale / 10, _scale);
             std::shared_ptr<scene2::SpriteNode> lostSprite = scene2::SpriteNode::alloc(lostImage, 2, 4);
             lostSprite->setFrame(0);
             lostSprite->setAnchor(Vec2(0.5, 0.25));
@@ -2630,7 +2642,7 @@ void GameScene::createEnemies(int wave)
         {
             std::shared_ptr<Texture> gluttonHitboxImage = _assets->get<Texture>("glutton");
             std::shared_ptr<Texture> gluttonImage = _assets->get<Texture>("glutton_ani");
-            std::shared_ptr<Glutton> glutton = Glutton::alloc(enemyPos + Vec2(0, 2), Vec2(gluttonHitboxImage->getSize().width, gluttonHitboxImage->getSize().height), gluttonHitboxImage->getSize() / _scale / 5, _scale);
+            std::shared_ptr<Glutton> glutton = Glutton::alloc(enemyPos + Vec2(0, 2), Vec2(gluttonImage->getSize().width/7.0f, gluttonHitboxImage->getSize().height/2.0f), gluttonHitboxImage->getSize() / _scale / 5, _scale);
             std::shared_ptr<scene2::SpriteNode> gluttonSprite = scene2::SpriteNode::alloc(gluttonImage, 2, 7);
             // fix the anchor slightly for glutton only
             gluttonSprite->setAnchor(.5, .4);
@@ -2652,7 +2664,7 @@ void GameScene::createEnemies(int wave)
             _spawner_pos.push_back(enemyPos);
             std::shared_ptr<Texture> spawnerHitBoxImage = _assets->get<Texture>("glutton");
             std::shared_ptr<Texture> spawnerImage = _assets->get<Texture>("spawner_ani");
-            std::shared_ptr<Spawner> spawner = Spawner::alloc(enemyPos, Vec2(spawnerHitBoxImage->getSize().width, spawnerHitBoxImage->getSize().height) / _scale * 7.5, spawnerHitBoxImage->getSize() / _scale / 10, _scale);
+            std::shared_ptr<Spawner> spawner = Spawner::alloc(enemyPos, Vec2(spawnerImage->getSize().width/5.0f, spawnerImage->getSize().height/5.0f), spawnerHitBoxImage->getSize() / _scale / 10, _scale);
             std::shared_ptr<scene2::SpriteNode> spawnerSprite = scene2::SpriteNode::alloc(spawnerImage, 5, 5);
             spawner->setSpawned(false);
             spawner->setSceneNode(spawnerSprite);
