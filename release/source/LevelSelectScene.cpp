@@ -326,9 +326,24 @@ void LevelSelectScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
 {
     Scene2::render(batch);
     batch->begin(getCamera()->getCombined());
-
-    batch->drawText(_text1, Vec2(_button1->getPositionX(), _button1->getPositionY()));
-    batch->drawText(_text2, Vec2(_button2->getPositionX(), _button2->getPositionY()));
-    batch->drawText(_text3, Vec2(_button3->getPositionX(), _button2->getPositionY()));
+    int xOff = 0;
+    int yOff = 0;
+    if (_biome == "cave")
+    {
+        yOff = 30;
+    }
+    else if (_biome == "shroom")
+    {
+        yOff = 100;
+        xOff = -10;
+    }
+    else
+    {
+        xOff = -5;
+        yOff = 50;
+    }
+    batch->drawText(_text1, Vec2(_button1->getPositionX() + xOff, _button1->getPositionY() + yOff));
+    batch->drawText(_text2, Vec2(_button2->getPositionX() + xOff, _button2->getPositionY() + yOff));
+    batch->drawText(_text3, Vec2(_button3->getPositionX() + xOff, _button2->getPositionY() + yOff));
     batch->end();
 }
