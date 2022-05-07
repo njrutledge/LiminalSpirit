@@ -13,6 +13,15 @@
 
 using namespace cugl;
 
+// CAVE UNLOCKS
+#define RANGED_UNLOCK 5
+// SHROOM UNLOCKS
+#define CHARGED_RANGED_UNLOCK 1
+#define ATTACK_UPGRADE_1 4
+// FOREST UNLOCKS
+#define CHARGED_MELEE_UNLOCK 1
+#define ATTACK_UPGRADE_2 2
+
 #pragma mark -
 #pragma mark Gameplay Control
 
@@ -57,6 +66,25 @@ void LiminalSpirit::onStartup()
     //_assets->loadDirectory("json/assets.json");
     
     AudioEngine::start();
+    
+    if (!filetool::file_exists(Application::get()->getSaveDirectory() + "savedGame.json")) {
+        std::shared_ptr<TextWriter> writer = TextWriter::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
+        writer->write("{\"progress\":{\"biome\": 1, \"highest_level\": 1, \"unlock_count\": 0}, \"settings\":{\"swap\": false}}");
+        writer->close();
+    }
+    
+    std::shared_ptr<JsonReader> reader = JsonReader::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
+    std::shared_ptr<JsonValue> save = reader->readJson();
+    std::shared_ptr<JsonValue> progress = save->get("progress");
+    std::shared_ptr<JsonValue> settings = save->get("settings");
+    reader->close();
+    
+    _biome = progress->get("biome")->asInt();
+    _highest_level = progress->get("highest_level")->asInt();
+    _unlock_count = progress->get("unlock_count")->asInt();
+    _swap = settings->get("swap")->asBool();
+    
+    CULog("Biome: %d, Level: %d, Unlocks: %d, Swap: %d", _biome, _highest_level, _unlock_count, _swap);
     
     Application::onStartup(); // YOU MUST END with call to parent
 }
@@ -202,7 +230,7 @@ void LiminalSpirit::updateHomeScene(float timestep)
  */
 void LiminalSpirit::updateWorldSelectScene(float timestep)
 {
-    _worldSelect.update(timestep);
+    _worldSelect.update(timestep, _biome);
     _sound_controller->play_menu_music();
     switch (_worldSelect.getChoice()) {
     case WorldSelectScene::Choice::CAVE:
@@ -238,7 +266,7 @@ void LiminalSpirit::updateWorldSelectScene(float timestep)
  */
 void LiminalSpirit::updateGameScene(float timestep)
 {
-    _gameplay.update(timestep);
+    _gameplay.update(timestep, _unlock_count);
     if (_gameplay.goingBack()) {
         _scene = State::WORLDS;
         _gameplay.dispose();
@@ -259,9 +287,15 @@ void LiminalSpirit::updateGameScene(float timestep)
         if ( nextStage > _levelSelect.getMaxStages(biome)) {
             if (biome == "cave") {
                 biome = "shroom";
+                if(_biome < 2){
+                    _biome = 2;
+                }
             }
             else if (biome == "shroom") {
                 biome = "forest";
+                if(_biome < 3){
+                    _biome = 3;
+                }
             }
             else {
                 //no more biomes, you won!
@@ -271,12 +305,16 @@ void LiminalSpirit::updateGameScene(float timestep)
                 return;
             }
             nextStage = 1;
-            _gameplay.init(_assets, _sound_controller, biome, nextStage);
+            _highest_level = 1;
             //more levels to go!
         }
-        else {
-            _gameplay.init(_assets, _sound_controller, biome, nextStage);
+        bool checkLevels = (biome == "cave" && _biome == 1) || (biome == "shroom" && _biome == 2) || (biome == "forest" && _biome == 3);
+        if(checkLevels && nextStage > _highest_level){
+            _highest_level = nextStage;
         }
+        checkPlayerUnlocks();
+        save();
+        _gameplay.init(_assets, _sound_controller, biome, nextStage);
     }
 }
 
@@ -290,7 +328,19 @@ void LiminalSpirit::updateGameScene(float timestep)
  */
 void LiminalSpirit::updateLevelSelectScene(float timestep)
 {
-    _levelSelect.update(timestep);
+    string biome;
+    switch(_biome){
+        case 1:
+            biome = "cave";
+            break;
+        case 2:
+            biome = "shroom";
+            break;
+        default:
+            biome = "forest";
+            break;
+    }
+    _levelSelect.update(timestep, biome, _highest_level);
     switch (_levelSelect.getChoice()) {
     case LevelSelectScene::Choice::selected:
         _gameplay.init(_assets, _sound_controller, _levelSelect.getBiome(), _levelSelect.getStage());
@@ -321,6 +371,39 @@ void LiminalSpirit::updateBossScene(float timestep)
         _bossgame.dispose();
         _worldSelect.setDefaultChoice();
     }
+}
+
+/** Grants the player abilities once they have access to certain stages
+ */
+void LiminalSpirit::checkPlayerUnlocks(){
+    switch(_biome){
+        case 1:
+            if(_highest_level >= RANGED_UNLOCK){
+                _unlock_count = 1;
+            }
+            break;
+        case 2:
+            if (_highest_level >= ATTACK_UPGRADE_1){
+                _unlock_count = 3;
+            } else if (_highest_level >= CHARGED_RANGED_UNLOCK){
+                _unlock_count = 2;
+            }
+            break;
+        case 3:
+            if (_highest_level >= ATTACK_UPGRADE_2){
+                _unlock_count = 5;
+            } else if (_highest_level >= CHARGED_MELEE_UNLOCK){
+                _unlock_count = 4;
+            }
+            break;
+    }
+}
+
+/** Saves progress */
+void LiminalSpirit::save(){
+    std::shared_ptr<TextWriter> writer = TextWriter::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
+    writer->write("{\"progress\":{\"biome\": " + to_string(_biome) + ", \"highest_level\": " + to_string(_highest_level) + ", \"unlock_count\": " + to_string(_unlock_count) + "}, \"settings\":{\"swap\": " + to_string(_swap) +"}}");
+    writer->close();
 }
 
 /**

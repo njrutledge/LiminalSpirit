@@ -317,8 +317,14 @@ public:
      * This method contains any gameplay code that is not an OpenGL call.
      *
      * @param timestep  The amount of time (in seconds) since the last frame
+     * @param unlockCount The amount of unlocks the player has.
+     *                  1 - ranged attack
+     *                  2 - charged ranged attack
+     *                  3 - attack upgrade 1
+     *                  4 - charged melee attack
+     *                  5 - attack upgrade 2
      */
-    void update(float timestep);
+    void update(float timestep, int unlockCount);
 
     /**
      * helper method to update sound, input, particles, and tilt/
@@ -327,7 +333,7 @@ public:
     /**
      * helper method to update all animations
      */
-    void updateAnimations(float timestep);
+    void updateAnimations(float timestep, int unlockCount, SwipeController::SwipeAttack left, SwipeController::SwipeAttack right);
     /**
     * helper method to update melee arm animations
     */
@@ -336,10 +342,14 @@ public:
      * helper method to update all enemies 
      */
     void updateEnemies(float timestep);
+    /** helper method to update left swipe */
+    SwipeController::SwipeAttack updateLeftSwipe(int unlockCount);
+    /** helper method to update right swipe */
+    SwipeController::SwipeAttack updateRightSwipe(int unlockCount);
     /** 
-     * helper method to update swipes and attacks 
+     * helper method to update attacks
      */
-    void updateSwipesAndAttacks(float timestep);
+    void updateAttacks(float timestep, int unlockCount, SwipeController::SwipeAttack left, SwipeController::SwipeAttack right);
     /** 
      * helper method to remove deleted attacks
      */
@@ -361,9 +371,9 @@ public:
      */
     void updateRemoveDeletedPlayer();
     /**
-     * helper method to update player healthbar
+     * helper method to update player HUD
      */
-    void updateHealthbar();
+    void updateHUD(int unlockCount);
     /**
      * helper method to update camera 
      */
