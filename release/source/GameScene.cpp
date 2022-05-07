@@ -1512,19 +1512,20 @@ void GameScene::updateEnemies(float timestep)
                 (*it)->setPlayedDamagedParticle(true);
                 if ((*it)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee)
                 {
-                    createParticles(melee_impact, (*it)->getPosition() * _scale, "devil", Vec2(0, 0), 0.1f);
+                    createParticles(melee_impact, (*it)->getPosition() * _scale, "devil", Color4::WHITE, Vec2(0, 0), 0.1f);
                 }
                 else
                 {
-                    createParticles(ranged_impact, (*it)->getPosition() * _scale, "devil", Vec2(0, 0), 0.1f);
+                    createParticles(ranged_impact, (*it)->getPosition() * _scale, "devil", Color4::WHITE, Vec2(0, 0), 0.1f);
                 }
                 if ((*it)->getLastDamageAmount() < 10) {
-                    std::shared_ptr<Texture> num = _numberTextures[(*it)->getLastDamageAmount()];
-                    createParticles(num, (*it)->getPosition() * _scale, "number", Vec2(0, 0), 0.5f);
+                    std::vector<std::shared_ptr<Texture>> num;
+                    num.push_back(_numberTextures[(*it)->getLastDamageAmount()]);
+                    createParticles(num, (*it)->getPosition() * _scale, "number", Color4::WHITE, Vec2(0, 10), 0.1f, true, Vec2());
                 }
                 else {
                     std::vector<std::shared_ptr<Texture>> num = getTexturesFromNumber((*it)->getLastDamageAmount());
-                    createParticles(num, (*it)->getPosition() * _scale, "number", Vec2(0, 0), 0.5f, true, Vec2(-40, 0));
+                    createParticles(num, (*it)->getPosition() * _scale, "number", Color4::WHITE, Vec2(0, 10), 0.1f, true, Vec2(-10, 0));
                 }
         }
 
@@ -1685,19 +1686,21 @@ std::vector<std::shared_ptr<Texture>> GameScene::getTexturesFromNumber(int num) 
     return nums; 
 }
 
-void GameScene::createParticles(std::shared_ptr<Texture> texture, Vec2 pos, string poolName, Vec2 pointOffset, float scale) {
+void GameScene::createParticles(std::shared_ptr<Texture> texture, Vec2 pos, string poolName, Color4 tint, Vec2 pointOffset, float scale) {
     std::shared_ptr<ParticleNode> pn;
     std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get(poolName), pointOffset);
     pn = ParticleNode::alloc(pos, texture, pool);
     pn->setScale(scale);
+    pn->setColor(tint);
     _worldnode->addChildWithTag(pn, 100);
 }
 
-void GameScene::createParticles(std::vector<std::shared_ptr<Texture>> textures, Vec2 pos, string poolName, Vec2 pointOffset, float scale, bool hasMultipleLinkedTextures, Vec2 linkOffset) {
+void GameScene::createParticles(std::vector<std::shared_ptr<Texture>> textures, Vec2 pos, string poolName, Color4 tint, Vec2 pointOffset, float scale, bool hasMultipleLinkedTextures, Vec2 linkOffset) {
     std::shared_ptr<ParticleNode> pn;
     std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get(poolName), pointOffset);
     pn = ParticleNode::alloc(pos, textures, pool, hasMultipleLinkedTextures, linkOffset);
     pn->setScale(scale);
+    pn->setColor(tint);
     _worldnode->addChildWithTag(pn, 100);
 }
 
@@ -2850,12 +2853,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     }
 
     // Add the logo and button to the scene graph
-    // TODO get rid of this
     scene->addChild(_pauseButton);
-
-    // Create particles
-    // TODO: THIS IS BAD AND MAKING A FAKE "PLAYER"
-    // createParticles();
 
     // Glow effect on player
     Vec2 testPos = PLAYER_POS;

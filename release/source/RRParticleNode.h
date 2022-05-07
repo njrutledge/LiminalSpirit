@@ -31,7 +31,7 @@ protected:
     bool _hasMultipleTextures;
 
     // If made up of two linked textures
-    bool _hasTwoLinkedTextures;
+    bool _hasLinkedTextures;
 
     // The offset between two linked textures
     Vec2 _linkOffset;

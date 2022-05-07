@@ -48,13 +48,13 @@
 	 "maxSizeChangeTime": 10
      },
     "number": {
-         "burstParticles": 1, 
-         "maxParticleCount": 1,
-         "gravity": [0, 0],
-         "emissionRateRange": [1, 1],
-         "lifetimeRange": [2,3],
-         "angleRange": [0, 0],
-         "speedRange": [0, 0],
+     "burstParticles": 1, 
+     "maxParticleCount": 1,
+     "gravity": [0, 0],
+     "emissionRateRange": [1, 1],
+     "lifetimeRange": [2,2],
+     "angleRange": [1.5, 1.57],
+     "speedRange": [50, 80],
 	 "startSizeRange": [5, 5],
 	 "sizeChangeRateRange": [0,0],
 	 "maxSizeChangeTime": 10

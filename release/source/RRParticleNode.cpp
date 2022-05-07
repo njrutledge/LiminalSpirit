@@ -17,7 +17,7 @@ bool ParticleNode::init(const Vec2& pos, const std::shared_ptr<Texture> texture,
 		_texture = texture;
 		_particlePool = particles;
 		_hasMultipleTextures = false;
-		_hasTwoLinkedTextures = false;
+		_hasLinkedTextures = false;
 		_linkOffset = Vec2();
 		return true;
 	}
@@ -34,12 +34,12 @@ bool ParticleNode::init(const Vec2& pos, std::vector<std::shared_ptr<Texture>> t
 		_particlePool = particles;
 		if (!linked) {
 			_hasMultipleTextures = true;
-			_hasTwoLinkedTextures = false;
+			_hasLinkedTextures = false;
 			_linkOffset = Vec2();
 		}
 		else {
 			_hasMultipleTextures = false;
-			_hasTwoLinkedTextures = true;
+			_hasLinkedTextures = true;
 			_linkOffset = offset;
 		}
 		return true;
@@ -64,11 +64,14 @@ void ParticleNode::draw(const std::shared_ptr<SpriteBatch>& batch, const Affine2
 			std::shared_ptr<Texture> texture = _textures.at(p->getTexture());
 			batch->draw(texture, tintLerp, Vec2(texture->getWidth() / 2, texture->getHeight() / 2), transform.getScale()*p->getSize(), p->getAngle(), transform.getTranslation() + p->getPosition());
 		}
-		else if (_hasTwoLinkedTextures) {
-			std::shared_ptr<Texture> texture1 = _textures.at(0);
-			std::shared_ptr<Texture> texture2 = _textures.at(1);
-			batch->draw(texture1, tintLerp, Vec2(texture1->getWidth() / 2, texture1->getHeight() / 2), transform.getScale() * p->getSize(), p->getAngle(), transform.getTranslation() + p->getPosition());
-			batch->draw(texture2, tintLerp, Vec2(texture1->getWidth() / 2, texture1->getHeight() / 2), transform.getScale() * p->getSize(), p->getAngle(), transform.getTranslation() + p->getPosition() + _linkOffset);
+		else if (_hasLinkedTextures) {
+			Vec2 continuedOffset = Vec2(0, 0);
+			for (int i = 0; i < _textures.size(); i++) {
+				std::shared_ptr<Texture> texture = _textures.at(i);
+				//Angle is set to zero since we are only using this for numbers could potentially pull out if wanted
+				batch->draw(texture, tintLerp, Vec2(texture->getWidth() / 2, texture->getHeight() / 2), transform.getScale() * p->getSize(), 0, transform.getTranslation() + p->getPosition() + continuedOffset);
+				continuedOffset = continuedOffset + _linkOffset;
+			}
 		}
 		else {
 			batch->draw(_texture, tintLerp, Vec2(_texture->getWidth() / 2, _texture->getHeight() / 2), transform.getScale()*p->getSize(), p->getAngle(), transform.getTranslation() + p->getPosition());
