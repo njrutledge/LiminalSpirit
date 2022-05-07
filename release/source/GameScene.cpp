@@ -1716,7 +1716,7 @@ void GameScene::updateEnemies(float timestep)
             }
             else if ((*it)->getName() == "Glutton")
             {
-                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 1.5f, 3.0f, (*it)->getAttackDamage(), AttackController::Type::e_range, (vel.scale(0.25)).rotate((play_p - en_p).getAngle()), _timer, GLUTTON_ATTACK, GLUTTON_FRAMES);
+                _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 1.5f, 10.0f, (*it)->getAttackDamage(), AttackController::Type::e_range, (vel.scale(0.25)).rotate((play_p - en_p).getAngle()), _timer, GLUTTON_ATTACK, GLUTTON_FRAMES);
             }
         }
         if (std::shared_ptr<Mirror> mirror = dynamic_pointer_cast<Mirror>(*it))
@@ -1732,7 +1732,7 @@ void GameScene::updateEnemies(float timestep)
             }
         }
     }
-
+    
     // update spawners
     if (_spawnerCount)
     {
