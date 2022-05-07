@@ -74,6 +74,8 @@ void SwipeController::update(InputController &input, bool grounded, float dt)
     else
     {
         setLeftSwipe(noAttack);
+        _lStart = true;
+        _lCoolStart = 0;
     }
     
     // If the right finger is pressed down, check if it has been pressed long enough for
@@ -91,6 +93,8 @@ void SwipeController::update(InputController &input, bool grounded, float dt)
     else
     {
         setRightSwipe(noAttack);
+        _rStart = true;
+        _rCoolStart = 0;
     }
 #else
     switch (input._leftCode)
