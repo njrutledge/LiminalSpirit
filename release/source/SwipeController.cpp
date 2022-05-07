@@ -66,9 +66,9 @@ void SwipeController::update(InputController &input, bool grounded, float dt)
     // If left finger lifted, process left swipe
     else if (input.didLeftRelease())
     {
-        calculateSwipeDirection(input.getLeftStartPosition(), input.getLeftEndPosition(), true, grounded, input.getLeftStartTime());
         _lStart = true;
         _lCoolStart = 0;
+        calculateSwipeDirection(input.getLeftStartPosition(), input.getLeftEndPosition(), true, grounded, input.getLeftStartTime());
     }
     // Otherwise note that no left swipe was completed this frame
     else
@@ -85,9 +85,9 @@ void SwipeController::update(InputController &input, bool grounded, float dt)
     }
     // If right finger lifted, process right swipe
     else if(input.didRightRelease()) {
-        calculateSwipeDirection(input.getRightStartPosition(), input.getRightEndPosition(), false, grounded, input.getRightStartTime());
         _rStart = true;
         _rCoolStart = 0;
+        calculateSwipeDirection(input.getRightStartPosition(), input.getRightEndPosition(), false, grounded, input.getRightStartTime());
     }
     // Otherwise note that no right swipe was completed this frame
     else
@@ -212,25 +212,26 @@ void SwipeController::calculateChargeAttack(cugl::Timestamp startTime, bool isLe
         
     _currTime.mark();
     
-    if (_lStart) {
+    if (_lStart && isLeftSidedCharge) {
         _lStart = false;
-        _lCoolStart = _cRCool - _cRangeCount;
+        _lCoolStart = clampf(_cRCool - _cRangeCount, 0, _cRCool);
     }
     
-    if (_rStart) {
+    if (_rStart && !isLeftSidedCharge) {
         _rStart = false;
-        _rCoolStart = _cMCool - _cMeleeCount;
+        _rCoolStart = clampf(_cMCool - _cMeleeCount, 0, _cMCool);
     }
 
     Uint64 chargeTime = cugl::Timestamp::ellapsedMillis(startTime, _currTime);
     if (isLeftSidedCharge) {
-        chargeTime = chargeTime - _lCoolStart * 1000;
+        chargeTime = chargeTime - (_lCoolStart * 1000) ;
         _leftChargingTime = chargeTime;
     } else {
-        chargeTime = chargeTime - _rCoolStart * 1000;
+        chargeTime = chargeTime - (_rCoolStart * 1000);
         _rightChargingTime = chargeTime;
     }
     
+    CULog("%llu, %f, %llu", chargeTime, _rCoolStart, _rightChargingTime);
     
     // half second charge time
     if (chargeTime >= CHARGE_TIME) {
