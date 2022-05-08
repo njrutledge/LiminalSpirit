@@ -1074,7 +1074,11 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
     // Ranged Arm
     if (_player->isStunned())
     {
-        rSprite->setFrame(8);
+        if(_player->getRangedAttackRight()) {
+            rSprite->setFrame(5);
+        } else {
+            rSprite->setFrame(9);
+        }
         rSprite->setAnchor(0.5, 0.5);
         _rangedArm->setAttackAngle(0);
         _rangedArm->setLastType(Glow::MeleeState::cool);
@@ -1082,18 +1086,45 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
     }
     else if (_rangedArm->getLastType() == Glow::MeleeState::cool)
     {
-        if (_player->getRangedAttackRight())
+        if (_swipes.getLeftChargingTime() >= 100 && _swipes.getLeftChargingTime() < 100 + ((CHARGE_TIME - 100) / 2) && unlockCount >= 4)
         {
-            rSprite->setFrame(4);
-            rSprite->setAnchor(0.5, 0.5);
-            _rangedArm->setAttackAngle(0);
+            if (_player->getRangedAttackRight())
+            {
+                rSprite->setFrame(8);
+            }
+            else
+            {
+                rSprite->setFrame(6);
+            }
+        }
+        else if (_swipes.getLeftChargingTime() >= 100 + ((CHARGE_TIME - 100) / 2) && _swipes.getLeftChargingTime() < CHARGE_TIME && unlockCount >= 4)
+        {
+            rSprite->setFrame(7);
+        }
+        else if (_swipes.getLeftChargingTime() >= CHARGE_TIME && unlockCount >= 4)
+        {
+            if (_player->getRangedAttackRight())
+            {
+                rSprite->setFrame(6);
+            }
+            else
+            {
+                rSprite->setFrame(8);
+            }
         }
         else
         {
-            rSprite->setFrame(0);
-            rSprite->setAnchor(0.5, 0.5);
-            _rangedArm->setAttackAngle(0);
+            if (_player->getRangedAttackRight())
+            {
+                rSprite->setFrame(4);
+            }
+            else
+            {
+                rSprite->setFrame(0);
+            }
         }
+        rSprite->setAnchor(0.5, 0.5);
+        _rangedArm->setAttackAngle(0);
         _player->setRangedAttackRight(_player->isFacingRight());
     }
     else if (_rangedArm->getLastType() == Glow::MeleeState::first)
@@ -1500,7 +1531,7 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
         upDownY1 = -1 * spacing + upDownY1;
     }
 
-    if (_player->getRangedAttackRight() && rSprite->getFrame() != 4)
+    if (_player->getRangedAttackRight() && (rSprite->getFrame() != 4 && rSprite->getFrame() != 6 && rSprite->getFrame() != 7 && rSprite->getFrame() != 8))
     {
         if (_rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270)
         {
@@ -1511,7 +1542,7 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
             _rangedArm->setPosition(_player->getPosition().x + offsetArm + 2, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
         }
     }
-    else if (!_player->getRangedAttackRight() && rSprite->getFrame() != 0)
+    else if (!_player->getRangedAttackRight() && (rSprite->getFrame() != 0 && rSprite->getFrame() != 6 && rSprite->getFrame() != 7 && rSprite->getFrame() != 8))
     {
         if (_rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270)
         {
