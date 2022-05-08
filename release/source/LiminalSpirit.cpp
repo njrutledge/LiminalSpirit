@@ -79,14 +79,15 @@ void LiminalSpirit::onStartup()
     std::shared_ptr<JsonValue> settings = save->get("settings");
     reader->close();
     
-    //Note: UNCOMMENT THESE TO ENABLE PROGRESSION!!!!!!!!
-//    _biome = progress->get("biome")->asInt();
-//    _highest_level = progress->get("highest_level")->asInt();
-//    _unlock_count = progress->get("unlock_count")->asInt();
-    _biome = 3;
-    _highest_level = 2;
-    _unlock_count = 5;
-    this->save();
+    // Note: COMMENT THESE OUT TO DISABLE PROGRESSION!!!!!!!!
+    _biome = progress->get("biome")->asInt();
+    _highest_level = progress->get("highest_level")->asInt();
+    _unlock_count = progress->get("unlock_count")->asInt();
+    // Note: COMMENT THESE OUT TO ENABLE PROGRESSION!!!!!!!!
+//    _biome = 3;
+//    _highest_level = 2;
+//    _unlock_count = 5;
+//    this->save();
     _swap = settings->get("swap")->asBool();
     
     CULog("Biome: %d, Level: %d, Unlocks: %d, Swap: %d", _biome, _highest_level, _unlock_count, _swap);
