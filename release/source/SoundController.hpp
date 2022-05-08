@@ -134,6 +134,8 @@ protected:
     
     std::shared_ptr<cugl::Sound> _playerExp;
     
+    std::shared_ptr<cugl::Sound> _playerExpPckg;
+    
     
     
 public:

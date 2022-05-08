@@ -802,6 +802,11 @@
             "type": "sample",
             "file": "sounds/playerSFX/Player_Exp.wav",
             "volume": 0.4
+        },
+        "playerExpPck": {
+            "type": "sample",
+            "file": "sounds/playerSFX/Player_Exp_Pkg.wav",
+            "volume": 0.3
         }
 	},
 	"widgets": {

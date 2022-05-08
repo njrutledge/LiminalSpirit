@@ -134,6 +134,8 @@ void SoundController::init(std::shared_ptr<cugl::AssetManager> &assets) {
     _playerHurt = assets->get<cugl::Sound>("playerHurt");
     
     _playerExp = assets->get<cugl::Sound>("playerExp");
+    
+    _playerExpPckg = assets->get<cugl::Sound>("playerExpPck");
 };
 
 void SoundController::play_menu_music() {
@@ -209,6 +211,8 @@ void SoundController::play_player_sound(playerSType sound) {
             cugl::AudioEngine::get()->play("playerShoot", _playerShootHit, false, 1.0, true);
             break;
         case shootCharge:
+            cugl::AudioEngine::get()->play("playerChargeShoot", _playerExpPckg, false, 1.0, true);
+            break;
         case explosion:
             cugl::AudioEngine::get()->play("playerExp", _playerExp, false, 1.0, true);
             break;
