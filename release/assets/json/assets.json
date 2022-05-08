@@ -797,7 +797,12 @@
 			"type": "sample",
 			"file": "sounds/playerSFX/Player_Oof.wav",
 			"volume": 0.4
-		}
+		},
+        "playerExp": {
+            "type": "sample",
+            "file": "sounds/playerSFX/Player_Exp.wav",
+            "volume": 0.4
+        }
 	},
 	"widgets": {
 		"levelselect": "widgets/levelselect.json",

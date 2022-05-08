@@ -193,6 +193,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
 
                 if (attack->getType() == AttackController::p_exp_package) {
                     AC->createAttack(attack->getPosition() /*cugl::Vec2(bd->getPosition().x, bd->getPosition().y)*/, 3, 0.15, 30, AttackController::p_exp, cugl::Vec2::ZERO, timer, PLAYER_RANGE, PLAYER_EXP_FRAMES);
+                    _sound->play_player_sound(SoundController::playerSType::explosion);
                 }
                 switch (attack->getType()) {
                     case AttackController::p_range:
@@ -329,6 +330,7 @@ void CollisionController::handleAttackCollision(AttackController::Attack* attack
         switch(attack->getType()) {
         case AttackController::p_exp_package:
             AC->createAttack(attack->getPosition(), 3, 0.15, 30, AttackController::p_exp, cugl::Vec2::ZERO, timer, PLAYER_RANGE, PLAYER_EXP_FRAMES);
+                _sound->play_player_sound(SoundController::playerSType::explosion);
             attack->setInactive();
             break;
         case AttackController::p_range:
