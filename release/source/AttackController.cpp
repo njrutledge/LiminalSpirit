@@ -187,7 +187,7 @@ void AttackController::Attack::update(const cugl::Vec2 p, bool follow, float dt,
                     _timer = 0;
                 }
             } else {
-                if (_timer > .2) {
+                if (_timer > .06) {
                     std::shared_ptr<scene2::SpriteNode> spriteNode = dynamic_pointer_cast<scene2::SpriteNode>(_node);
                     spriteNode->setFrame((spriteNode->getFrame() + 1) % _maxFrames);
                     _timer = 0;
