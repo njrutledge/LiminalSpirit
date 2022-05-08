@@ -485,6 +485,12 @@
         "wave_bar_foreground": {
             "file": "textures/hud/content.png"
         },
+        "wave_bar_checkpoint": {
+            "file": "textures/hud/eye.png"
+        },
+        "wave_bar_indicator": {
+            "file": "textures/hud/projectile.png"
+        },
 		"melee_charge_HUD": {
 			"file": "textures/hud/melee_charge_HUD.png",
 			"minfilter": "nearest",
@@ -900,6 +906,25 @@
 						"absolute": false
 					}
 				},
+                "wavebar": {
+                    "type": "Progress",
+                    "data": {
+                        "anchor": [
+                            1,
+                            1
+                        ],
+                        "background": "wave_bar_background",
+                        "foreground": "wave_bar_foreground",
+                        "scale": 0.5
+                    },
+                    "layout": {
+                        "x_anchor": "right",
+                        "y_anchor": "top",
+                        "x_offset": -0.1,
+                        "y_offset": -0.05,
+                        "absolute": false
+                    }
+                },
 				"melee_charge": {
 					"type": "Progress",
 					"data": {

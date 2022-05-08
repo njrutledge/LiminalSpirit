@@ -205,7 +205,6 @@ protected:
     /** Boolean check for walking sound effect timing*/
     bool _step;
 
-
     /** healthbar */
     std::shared_ptr<scene2::ProgressBar> _healthbar;
     
@@ -214,6 +213,8 @@ protected:
     
     /** melee charge indicator */
     std::shared_ptr<scene2::ProgressBar> _melee_charge;
+    
+    std::shared_ptr<scene2::ProgressBar> _wavebar;
 
     bool _winInit;
 

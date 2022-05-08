@@ -86,10 +86,10 @@ void LiminalSpirit::onStartup()
     _biome = 3;
     _highest_level = 2;
     _unlock_count = 5;
+    this->save();
     _swap = settings->get("swap")->asBool();
     
     CULog("Biome: %d, Level: %d, Unlocks: %d, Swap: %d", _biome, _highest_level, _unlock_count, _swap);
-    
     Application::onStartup(); // YOU MUST END with call to parent
 }
 

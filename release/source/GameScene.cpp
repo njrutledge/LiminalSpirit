@@ -300,8 +300,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     // Get font
     _font = assets->get<Font>("marker");
 
-    // Grab healthbar
+    // Grab HUD elements
     _healthbar = std::dynamic_pointer_cast<scene2::ProgressBar>(assets->get<scene2::SceneNode>("HUD_healthbar"));
+    _wavebar = std::dynamic_pointer_cast<scene2::ProgressBar>(assets->get<scene2::SceneNode>("HUD_wavebar"));
     _melee_charge = std::dynamic_pointer_cast<scene2::ProgressBar>(assets->get<scene2::SceneNode>("HUD_melee_charge"));
     _melee_charge->setAngle(M_PI_2);
     _range_charge = std::dynamic_pointer_cast<scene2::ProgressBar>(assets->get<scene2::SceneNode>("HUD_range_charge"));
@@ -558,6 +559,9 @@ void GameScene::dispose()
     _font = nullptr;
     _endText = nullptr;
     _healthbar = nullptr;
+    _range_charge = nullptr;
+    _melee_charge = nullptr;
+    _wavebar = nullptr;
     _lose = false;
     
     // TODO: CHECK IF THIS IS RIGHT FOR DISPOSING
@@ -2454,6 +2458,11 @@ void GameScene::updateHUD(int unlockCount)
         _range_charge->setVisible(true);
         _melee_charge->setVisible(true);
     }
+    
+    // TODO fix this next sprint
+    _wavebar->setProgress(1.0f);
+    _wavebar->setVisible(false);
+    
     _melee_charge->setProgress(_swipes.getMeleeCharge());
     _range_charge->setProgress(_swipes.getRangeCharge());
 }
