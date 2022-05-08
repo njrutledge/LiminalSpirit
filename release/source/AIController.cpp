@@ -50,7 +50,6 @@ float AIController::getGluttonMovement(shared_ptr<BaseEnemyModel> glutton, Vec2 
     glutton->setTimePast(glutton->getTimePast() + timestep);
     if (!glutton->isAttacking()) {
         if (glutton->getAttackCooldown() < glutton->getTimePast()
-            && rand() % 100 <= 2.5
             && glutton->getInvincibilityTimer() <= 0) {
             glutton->setIsAttacking(true);
             glutton->setTimePast(0.0f);
@@ -63,6 +62,14 @@ float AIController::getGluttonMovement(shared_ptr<BaseEnemyModel> glutton, Vec2 
                     return glutton->getHorizontalSpeed();
                 }
             }
+    }
+    else {
+        // Check if attack timer should be reset
+        if (glutton->getAttackCooldown() < glutton->getTimePast()) {
+            glutton->setAttackCompleted(false);
+            glutton->setIsAttacking(false);
+            glutton->setTimePast(0.0f);
+        }
     }
     return 0;
 }
@@ -128,6 +135,7 @@ float AIController::getLostMovement(shared_ptr<Lost> lost, Vec2 player_pos, floa
 	else {
 		// Check if attack timer should be reset
 		if (lost->getAttackCooldown() < lost->getTimePast()) {
+            lost->setAttackCompleted(false);
 			lost->setIsAttacking(false);
 			lost->setTimePast(0.0f);
 		}
@@ -182,6 +190,7 @@ Vec2 AIController::getPhantomMovement(shared_ptr<Phantom> phantom, Vec2 player_p
 	else {
 		// Check if attack timer should be reset
 		if (phantom->getAttackCooldown() < phantom->getTimePast()) {
+            phantom->setAttackCompleted(false);
 			phantom->setIsAttacking(false);
 			phantom->setTimePast(0.0f);
 		}
@@ -270,6 +279,7 @@ Vec2 AIController::getSeekerMovement(shared_ptr<Seeker> seeker, Vec2 player_pos,
         // Check if attack timer should be reset
         if (seeker->getAttackCooldown() < seeker->getTimePast()) {
             seeker->setIsAttacking(false);
+            seeker->setAttackCompleted(false);
             seeker->setTimePast(0.0f);
             float r = 5 + 5 * std::sqrt(static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
             float alpha = M_PI/4 + static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 3*M_PI/4;

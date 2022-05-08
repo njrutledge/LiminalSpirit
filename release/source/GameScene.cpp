@@ -1765,7 +1765,7 @@ void GameScene::updateEnemies(float timestep)
             if ((*it)->getSpawned() || sprite->getFrame() != 0)
             {
                 // Using idle animation timer for spawning animation (not sure if it will have an idle)
-                if ((*it)->getIdleAnimationTimer() > 0.1f)
+                if ((*it)->getIdleAnimationTimer() > 0.05f)
                 {
                     sprite->setFrame((sprite->getFrame() + 1) % 21);
                     (*it)->setIdleAnimationTimer(0);
@@ -1778,19 +1778,18 @@ void GameScene::updateEnemies(float timestep)
         {
             (*it)->setInvincibility(false);
         }
-        if ((*it)->isAttacking())
+        if (!(*it)->attackIsCompleted())
         {
             Vec2 play_p = _player->getPosition();
             Vec2 en_p = (*it)->getPosition();
             Vec2 vel = Vec2(0.5, 0);
+
+            (*it)->setAttackCompleted(true);
             // TODO: Need to variablize attack variables based on enemy type
-            if ((*it)->getName() != "Seeker")
-            {
-                (*it)->setIsAttacking(false);
-            }
-            else
+            if ((*it)->getName() == "Seeker")
             {
                 shared_ptr<Seeker> seeker = dynamic_pointer_cast<Seeker>(*it);
+                (*it)->setAttackCompleted(true);
 
                 _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 1.0f, 0.2f, seeker->getAttackDamage(), AttackController::Type::e_melee, (vel.scale(0.2)).rotate((play_p - en_p).getAngle()), _timer, SEEKER_ATTACK, 0);
             }

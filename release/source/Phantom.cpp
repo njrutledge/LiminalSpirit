@@ -15,7 +15,7 @@ EnemyProperties PHANTOM_PROPS{
 	/** Horizontal speed of the phantom*/
 	4.0f,
 	/** Cooldown for attack(s) in seconds*/
-	2,
+	1,
 	/** Attack radius of the phantom*/
 	8.0f,
 	/** Density of the phantom */
