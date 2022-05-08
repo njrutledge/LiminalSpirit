@@ -199,7 +199,7 @@
 			"wrapT": "clamp"
 		},
 		"player_range_arm_ani": {
-			"file": "textures/animations/range_arm.png",
+			"file": "textures/animations/range_arm_full.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",

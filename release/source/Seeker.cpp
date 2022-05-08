@@ -16,7 +16,7 @@ EnemyProperties SEEKER_PROPS{
     /** Horizontal speed of the seeker*/
     6.0f,
     /** Cooldown for attack(s) in seconds*/
-    1,
+    0.2,
     /** Attack radius of the seeker*/
     5.0f,
     /** Density of the seeker*/
