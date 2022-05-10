@@ -54,7 +54,8 @@ public:
         h1_left,
         h2_left,
         h3_left,
-        cool
+        cool,
+        jump_attack
     };
     
 

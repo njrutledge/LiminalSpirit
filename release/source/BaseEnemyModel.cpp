@@ -57,6 +57,8 @@ bool BaseEnemyModel::init(const cugl::Vec2& pos, const cugl::Size& realSize, con
     _isJumping = false;
     _isFalling = false;
     _isGrounded = true;
+	_isAttacking = false;
+	_completedAttack = true;
 
 	if (CapsuleObstacle::init(pos, nsize)) {
 		setDensity(_density);

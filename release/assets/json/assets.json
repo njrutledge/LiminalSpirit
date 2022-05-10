@@ -199,7 +199,7 @@
 			"wrapT": "clamp"
 		},
 		"player_range_arm_ani": {
-			"file": "textures/animations/range_arm.png",
+			"file": "textures/animations/range_arm_full.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
@@ -479,8 +479,20 @@
 		"background": {
 			"file": "textures/backgrounds/forest_background.png"
 		},
+        "wave_bar_background": {
+            "file": "textures/hud/bar.png"
+        },
+        "wave_bar_foreground": {
+            "file": "textures/hud/content.png"
+        },
+        "wave_bar_checkpoint": {
+            "file": "textures/hud/eye.png"
+        },
+        "wave_bar_indicator": {
+            "file": "textures/hud/projectile.png"
+        },
 		"melee_charge_HUD": {
-			"file": "textures/melee_charge_HUD.png",
+			"file": "textures/hud/melee_charge_HUD.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
@@ -493,7 +505,7 @@
 			}
 		},
 		"range_charge_HUD": {
-			"file": "textures/range_charge_HUD.png",
+			"file": "textures/hud/range_charge_HUD.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
@@ -785,7 +797,17 @@
 			"type": "sample",
 			"file": "sounds/playerSFX/Player_Oof.wav",
 			"volume": 0.4
-		}
+		},
+        "playerExp": {
+            "type": "sample",
+            "file": "sounds/playerSFX/Player_Exp.wav",
+            "volume": 0.4
+        },
+        "playerExpPck": {
+            "type": "sample",
+            "file": "sounds/playerSFX/Player_Exp_Pkg.wav",
+            "volume": 0.3
+        }
 	},
 	"widgets": {
 		"levelselect": "widgets/levelselect.json",
@@ -894,6 +916,25 @@
 						"absolute": false
 					}
 				},
+                "wavebar": {
+                    "type": "Progress",
+                    "data": {
+                        "anchor": [
+                            1,
+                            1
+                        ],
+                        "background": "wave_bar_background",
+                        "foreground": "wave_bar_foreground",
+                        "scale": 0.5
+                    },
+                    "layout": {
+                        "x_anchor": "right",
+                        "y_anchor": "top",
+                        "x_offset": -0.1,
+                        "y_offset": -0.05,
+                        "absolute": false
+                    }
+                },
 				"melee_charge": {
 					"type": "Progress",
 					"data": {
@@ -1275,9 +1316,9 @@
 		"shroom3": "json/levels/shroom/mush3.json",
 		"shroom4": "json/levels/shroom/mush4.json",
 		"shroom5": "json/levels/shroom/mush5.json",
-		"shroom6": "json/levels/shroom/old/mush1.json",
-		"shroom7": "json/levels/shroom/old/mush2.json",
-		"shroom8": "json/levels/shroom/old/mush3.json",
+		"shroom6": "json/levels/shroom/mush6.json",
+		"shroom7": "json/levels/shroom/old/battlefield.json",
+		"shroom8": "json/levels/shroom/mush6.json",
 		"shroom9": "json/levels/shroom/mush9.json",
 		"levelt": "json/levels/levelt.json",
 		"level2": "json/levels/level2.json",

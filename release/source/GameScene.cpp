@@ -300,8 +300,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     // Get font
     _font = assets->get<Font>("marker");
 
-    // Grab healthbar
+    // Grab HUD elements
     _healthbar = std::dynamic_pointer_cast<scene2::ProgressBar>(assets->get<scene2::SceneNode>("HUD_healthbar"));
+    _wavebar = std::dynamic_pointer_cast<scene2::ProgressBar>(assets->get<scene2::SceneNode>("HUD_wavebar"));
     _melee_charge = std::dynamic_pointer_cast<scene2::ProgressBar>(assets->get<scene2::SceneNode>("HUD_melee_charge"));
     _melee_charge->setAngle(M_PI_2);
     _range_charge = std::dynamic_pointer_cast<scene2::ProgressBar>(assets->get<scene2::SceneNode>("HUD_range_charge"));
@@ -495,6 +496,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _pauseButton->setColor(Color4::WHITE);
     _range_charge->setColor(Color4::WHITE);
     _melee_charge->setColor(Color4::WHITE);
+    _frameIncrement = 1;
     this->setColor(Color4::WHITE);
     return true;
 }
@@ -557,6 +559,9 @@ void GameScene::dispose()
     _font = nullptr;
     _endText = nullptr;
     _healthbar = nullptr;
+    _range_charge = nullptr;
+    _melee_charge = nullptr;
+    _wavebar = nullptr;
     _lose = false;
     
     // TODO: CHECK IF THIS IS RIGHT FOR DISPOSING
@@ -1061,14 +1066,6 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
     if (armDashImage != nullptr)
     {
         armDashImage->flipHorizontal(_player->isFacingRight());
-        //        if (_meleeArmDash->getLastType() == Glow::MeleeState::h1_left || _meleeArmDash->getLastType() == Glow::MeleeState::h2_left || _meleeArmDash->getLastType() == Glow::MeleeState::h3_left)
-        //        {
-        //            armDashImage->flipHorizontal(false);
-        //        }
-        //        else if (_meleeArmDash->getLastType() == Glow::MeleeState::h1_right || _meleeArmDash->getLastType() == Glow::MeleeState::h2_right || _meleeArmDash->getLastType() == Glow::MeleeState::h3_right)
-        //        {
-        //            armDashImage->flipHorizontal(true);
-        //        }
     }
 
     scene2::SpriteNode *mSprite = dynamic_cast<scene2::SpriteNode *>(_meleeArm->getSceneNode().get());
@@ -1081,7 +1078,11 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
     // Ranged Arm
     if (_player->isStunned())
     {
-        rSprite->setFrame(8);
+        if(_player->getRangedAttackRight()) {
+            rSprite->setFrame(5);
+        } else {
+            rSprite->setFrame(9);
+        }
         rSprite->setAnchor(0.5, 0.5);
         _rangedArm->setAttackAngle(0);
         _rangedArm->setLastType(Glow::MeleeState::cool);
@@ -1089,18 +1090,45 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
     }
     else if (_rangedArm->getLastType() == Glow::MeleeState::cool)
     {
-        if (_player->getRangedAttackRight())
+        if (_swipes.getLeftChargingTime() >= 100 && _swipes.getLeftChargingTime() < 100 + ((CHARGE_TIME - 100) / 2) && unlockCount >= 4)
         {
-            rSprite->setFrame(4);
-            rSprite->setAnchor(0.5, 0.5);
-            _rangedArm->setAttackAngle(0);
+            if (_player->getRangedAttackRight())
+            {
+                rSprite->setFrame(8);
+            }
+            else
+            {
+                rSprite->setFrame(6);
+            }
+        }
+        else if (_swipes.getLeftChargingTime() >= 100 + ((CHARGE_TIME - 100) / 2) && _swipes.getLeftChargingTime() < CHARGE_TIME && unlockCount >= 4)
+        {
+            rSprite->setFrame(7);
+        }
+        else if (_swipes.getLeftChargingTime() >= CHARGE_TIME && unlockCount >= 4)
+        {
+            if (_player->getRangedAttackRight())
+            {
+                rSprite->setFrame(6);
+            }
+            else
+            {
+                rSprite->setFrame(8);
+            }
         }
         else
         {
-            rSprite->setFrame(0);
-            rSprite->setAnchor(0.5, 0.5);
-            _rangedArm->setAttackAngle(0);
+            if (_player->getRangedAttackRight())
+            {
+                rSprite->setFrame(4);
+            }
+            else
+            {
+                rSprite->setFrame(0);
+            }
         }
+        rSprite->setAnchor(0.5, 0.5);
+        _rangedArm->setAttackAngle(0);
         _player->setRangedAttackRight(_player->isFacingRight());
     }
     else if (_rangedArm->getLastType() == Glow::MeleeState::first)
@@ -1152,7 +1180,7 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
         }
     }
 
-    if (_player->isDashing())
+    if (_player->isDashing() || _meleeArm->getLastType() == Glow::MeleeState::jump_attack)
     {
         _meleeArm->getSceneNode()->setVisible(false);
         _meleeArmDash->getSceneNode()->setVisible(true);
@@ -1161,6 +1189,12 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
     {
         _meleeArm->getSceneNode()->setVisible(true);
         _meleeArmDash->getSceneNode()->setVisible(false);
+        if (_player->isFacingRight()) {
+            mdSprite->setFrame(6);
+        } else {
+            mdSprite->setFrame(0);
+        }
+        
     }
 
     _meleeArm->setAttackAngle(0);
@@ -1168,6 +1202,8 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
     // Melee Arm
     if (_player->isStunned())
     {
+        _meleeArm->getSceneNode()->setVisible(true);
+        _meleeArmDash->getSceneNode()->setVisible(false);
         if (_player->isFacingRight())
         {
             mSprite->setFrame(21);
@@ -1265,6 +1301,59 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
             else
             {
                 mSprite->setFrame(13);
+            }
+        }
+    }
+    else if (_meleeArm->getLastType() == Glow::MeleeState::jump_attack)
+    {
+        if (_player->isFacingRight())
+        {
+            _meleeArmDash->setAttackAngle(90);
+        }
+        else
+        {
+            _meleeArmDash->setAttackAngle(270);
+        }
+        if (_player->isFacingRight()){
+            if (mdSprite->getFrame() > 2) {
+                mdSprite->setFrame(0);
+                _meleeArmDash->setAnimeTimer(0);
+                _frameIncrement = 1;
+            }
+            else {
+                if (_meleeArmDash->getAnimeTimer() > 0.06f) {
+                    nextFrame = mdSprite->getFrame() + _frameIncrement;
+                    if (nextFrame > 2) {
+                        nextFrame = 2;
+                        _frameIncrement = -1;
+                    }
+                    if (nextFrame < 0) {
+                        nextFrame = 0;
+                    }
+                    mdSprite->setFrame(nextFrame);
+                    _meleeArmDash->setAnimeTimer(0);
+                }
+            }
+        }
+        else {
+            if (mdSprite->getFrame() < 4) {
+                mdSprite->setFrame(6);
+                _meleeArmDash->setAnimeTimer(0);
+                _frameIncrement = 1;
+            }
+            else {
+                if (_meleeArmDash->getAnimeTimer() > 0.06f) {
+                    nextFrame = mdSprite->getFrame() - _frameIncrement;
+                    if (nextFrame < 4) {
+                        nextFrame = 4;
+                        _frameIncrement = -1;
+                    }
+                    if (nextFrame > 6) {
+                        nextFrame = 6;
+                    }
+                    mdSprite->setFrame(nextFrame);
+                    _meleeArmDash->setAnimeTimer(0);
+                }
             }
         }
     }
@@ -1446,7 +1535,7 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
         upDownY1 = -1 * spacing + upDownY1;
     }
 
-    if (_player->getRangedAttackRight() && rSprite->getFrame() != 4)
+    if (_player->getRangedAttackRight() && (rSprite->getFrame() != 4 && rSprite->getFrame() != 6 && rSprite->getFrame() != 7 && rSprite->getFrame() != 8))
     {
         if (_rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270)
         {
@@ -1457,7 +1546,7 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
             _rangedArm->setPosition(_player->getPosition().x + offsetArm + 2, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
         }
     }
-    else if (!_player->getRangedAttackRight() && rSprite->getFrame() != 0)
+    else if (!_player->getRangedAttackRight() && (rSprite->getFrame() != 0 && rSprite->getFrame() != 6 && rSprite->getFrame() != 7 && rSprite->getFrame() != 8))
     {
         if (_rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270)
         {
@@ -1486,7 +1575,7 @@ void GameScene::updateMeleeArm(float timestep)
     ////MELEE ARM MUST STAY AT BOTTOM
     // Determining arm positions and offsets
     float offsetArm2 = -3.2f;
-    if (_player->isDashing())
+    if (_player->isDashing() || _meleeArm->getLastType() == Glow::MeleeState::jump_attack)
     {
         offsetArm2 = -1.0f;
     }
@@ -1517,6 +1606,10 @@ void GameScene::updateMeleeArm(float timestep)
     {
         _meleeArm->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY2 / spacing / 3) + 0.6f);
         _meleeArmDash->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY2 / spacing / 3) + 0.6f);
+    }
+    else if (_meleeArm->getLastType() == Glow::MeleeState::jump_attack) {
+        _meleeArm->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY2 / spacing / 3) + 0.5f);
+        _meleeArmDash->setPosition(_player->getPosition().x - offsetArm2, _player->getPosition().y + (upDownY2 / spacing / 3) + 0.5f);
     }
     else
     {
@@ -1676,7 +1769,7 @@ void GameScene::updateEnemies(float timestep)
             if ((*it)->getSpawned() || sprite->getFrame() != 0)
             {
                 // Using idle animation timer for spawning animation (not sure if it will have an idle)
-                if ((*it)->getIdleAnimationTimer() > 0.1f)
+                if ((*it)->getIdleAnimationTimer() > 0.05f)
                 {
                     sprite->setFrame((sprite->getFrame() + 1) % 21);
                     (*it)->setIdleAnimationTimer(0);
@@ -1689,19 +1782,18 @@ void GameScene::updateEnemies(float timestep)
         {
             (*it)->setInvincibility(false);
         }
-        if ((*it)->isAttacking())
+        if (!(*it)->attackIsCompleted())
         {
             Vec2 play_p = _player->getPosition();
             Vec2 en_p = (*it)->getPosition();
             Vec2 vel = Vec2(0.5, 0);
+
+            (*it)->setAttackCompleted(true);
             // TODO: Need to variablize attack variables based on enemy type
-            if ((*it)->getName() != "Seeker")
-            {
-                (*it)->setIsAttacking(false);
-            }
-            else
+            if ((*it)->getName() == "Seeker")
             {
                 shared_ptr<Seeker> seeker = dynamic_pointer_cast<Seeker>(*it);
+                (*it)->setAttackCompleted(true);
 
                 _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 1.0f, 0.2f, seeker->getAttackDamage(), AttackController::Type::e_melee, (vel.scale(0.2)).rotate((play_p - en_p).getAngle()), _timer, SEEKER_ATTACK, 0);
             }
@@ -2128,6 +2220,9 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
             case (AttackController::MeleeState::first):
                 _meleeArm->setLastType(Glow::MeleeState::first);
                 break;
+            case (AttackController::MeleeState::jump_attack):
+                _meleeArm->setLastType(Glow::MeleeState::jump_attack);
+                break;
             case (AttackController::MeleeState::h1_left):
                 _meleeArm->setLastType(Glow::MeleeState::h1_left);
                 break;
@@ -2235,6 +2330,9 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
     if (_player->getVY() < 0)
     {
         _player->setMovingUp(false);
+        if (_meleeArm->getLastType() == Glow::MeleeState::jump_attack) {
+            _meleeArm->setLastType(Glow::MeleeState::cool);
+        }
     }
 }
 
@@ -2390,6 +2488,11 @@ void GameScene::updateHUD(int unlockCount)
         _range_charge->setVisible(true);
         _melee_charge->setVisible(true);
     }
+    
+    // TODO fix this next sprint
+    _wavebar->setProgress(1.0f);
+    _wavebar->setVisible(false);
+    
     _melee_charge->setProgress(_swipes.getMeleeCharge());
     _range_charge->setProgress(_swipes.getRangeCharge());
 }
