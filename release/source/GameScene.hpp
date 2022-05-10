@@ -428,6 +428,10 @@ public:
      */
     bool isDebug() const { return _debug; }
 
+
+    /** Helper for creating an uninteractable obstacle with Texture textureName at startPos with scale scale */
+    void createAndAddDeathAnimationObstacle(string textureName, Vec2 startPos, float scale, int frames);
+
     /**
      * Sets whether debug mode is active.
      *

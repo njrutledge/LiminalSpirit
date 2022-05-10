@@ -155,6 +155,13 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
+		"lost_death": {
+			"file": "textures/animations/lost_death.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
 		"glutton": {
 			"file": "textures/glutton.png",
 			"minfilter": "nearest",

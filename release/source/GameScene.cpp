@@ -821,6 +821,17 @@ void GameScene::updateSoundInputParticlesAndTilt(float timestep)
             }
             pn->update(timestep);
         }
+        else if (s->getTag() == 200) {
+            
+            scene2::SpriteNode* sp = dynamic_cast<scene2::SpriteNode*>(s.get());
+            if (sp->getFrame() == 4) {
+                sp->setVisible(false);
+            }
+            else {
+                sp->setFrame(sp->getFrame() + 1);
+            }
+            
+        }
     };
 }
 
@@ -2409,8 +2420,8 @@ void GameScene::updateRemoveDeletedEnemies()
             if (std::shared_ptr<Mirror> mirror = dynamic_pointer_cast<Mirror>(*eit)) {
                 createParticles(_mirrorShardList, (*eit)->getPosition() * _scale, "mirror_death", Color4::WHITE, Vec2(0, 10), 0.05f, false, Vec2());
             }
-            else {
-
+            else if (std::shared_ptr<Lost> lost = dynamic_pointer_cast<Lost>(*eit)) {
+                createAndAddDeathAnimationObstacle("lost_death", (*eit)->getPosition(), 0.125f, 5);
             }
             
             // int log1 = _world->getObstacles().size();
@@ -2430,6 +2441,21 @@ void GameScene::updateRemoveDeletedEnemies()
         }
     }
 }
+
+void GameScene::createAndAddDeathAnimationObstacle(string textureName, Vec2 startPos, float scale, int frames) {
+    std::shared_ptr<Texture> image = _assets->get<Texture>(textureName);
+    std::shared_ptr<Glow> glow = Glow::alloc(startPos, image->getSize() / _scale, _scale);
+    std::shared_ptr<scene2::SpriteNode> sprite = scene2::SpriteNode::alloc(image, 1, frames);
+    glow->setSceneNode(sprite);
+    glow->setAnimeTimer(0.f);
+    glow->setGlowTimer(0.f);
+    sprite->setPriority(1.29);
+    sprite->setFrame(0);
+    sprite->setRelativeColor(false);
+    sprite->setScale(scale);
+    _worldnode->addChildWithTag(glow->getSceneNode(), 200);
+}
+
 
 void GameScene::updateText()
 {
