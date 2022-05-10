@@ -178,6 +178,8 @@ protected:
     int _nextWaveNum;
     /** Whether or not spawn particles have been created already */
     bool _spawnParticlesDone;
+    /** Mirror Shard Texture vector*/
+    std::vector<std::shared_ptr<Texture>> _mirrorShardList;
     /** A game timer used for spawn times */
     float _timer;
     /** living spawners */

@@ -490,6 +490,15 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _timer_text = TextLayout::allocWithText(msg, assets->get<Font>("marker"));
     _timer_text->layout();
 
+    //Mirror shared getting (reducing _assets->get overhead)
+        
+     _mirrorShardList.push_back(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_1));
+     _mirrorShardList.push_back(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_2));
+     _mirrorShardList.push_back(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_3));
+     _mirrorShardList.push_back(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_4));
+     _mirrorShardList.push_back(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_5));
+     _mirrorShardList.push_back(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_6));
+
     _timer = 0.0f;
     _worldnode->setColor(Color4::WHITE);
     _healthbar->setColor(Color4::WHITE);
@@ -1874,7 +1883,13 @@ void GameScene::createParticles(std::shared_ptr<Texture> texture, Vec2 pos, stri
 void GameScene::createParticles(std::vector<std::shared_ptr<Texture> > textures, Vec2 pos, string poolName, Color4 tint, Vec2 pointOffset, float scale, bool hasMultipleLinkedTextures, Vec2 linkOffset)
 {
     std::shared_ptr<ParticleNode> pn;
-    std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get(poolName), pointOffset);
+    std::shared_ptr<ParticlePool> pool;
+    if (!hasMultipleLinkedTextures) {
+        pool = ParticlePool::allocPoint(_particleInfo->get(poolName), pointOffset, 6);
+    }
+    else {
+        pool = ParticlePool::allocPoint(_particleInfo->get(poolName), pointOffset);
+    }
     pn = ParticleNode::alloc(pos, textures, pool, hasMultipleLinkedTextures, linkOffset);
     pn->setScale(scale);
     pn->setColor(tint);
@@ -2375,6 +2390,7 @@ void GameScene::updateRemoveDeletedEnemies()
         }
         if (!bypass && (*eit)->isRemoved())
         {
+            //Plays damage particles then death particles shortly after (they fade-in on a delay)
             createParticles(_assets->get<Texture>("melee_impact"), (*eit)->getPosition() * _scale, "devil", Color4::WHITE, Vec2(0, 0), 0.1f);
             
             if ((*eit)->getLastDamageAmount() < 10)
@@ -2387,6 +2403,14 @@ void GameScene::updateRemoveDeletedEnemies()
             {
                 std::vector<std::shared_ptr<Texture> > num = getTexturesFromNumber((*eit)->getLastDamageAmount());
                 createParticles(num, (*eit)->getPosition() * _scale, "number", Color4::WHITE, Vec2(0, 10), 0.1f, true, Vec2(-10, 0));
+            }
+
+            //Mirror shard breaking
+            if (std::shared_ptr<Mirror> mirror = dynamic_pointer_cast<Mirror>(*eit)) {
+                createParticles(_mirrorShardList, (*eit)->getPosition() * _scale, "mirror_death", Color4::WHITE, Vec2(0, 10), 0.05f, false, Vec2());
+            }
+            else {
+
             }
             
             // int log1 = _world->getObstacles().size();
@@ -2699,12 +2723,12 @@ void GameScene::createMirror(Vec2 enemyPos, Mirror::Type type, std::string asset
     std::shared_ptr<Texture> mirror_reflectattackImage = _assets->get<Texture>(MIRROR_REFLECT_TEXTURE);
     // shards
     std::shared_ptr<scene2::PolygonNode> mirrorShards[6];
-    mirrorShards[0] = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_1));
-    mirrorShards[1] = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_2));
-    mirrorShards[2] = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_3));
-    mirrorShards[3] = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_4));
-    mirrorShards[4] = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_5));
-    mirrorShards[5] = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_6));
+    mirrorShards[0] = scene2::PolygonNode::allocWithTexture(_mirrorShardList[0]);
+    mirrorShards[1] = scene2::PolygonNode::allocWithTexture(_mirrorShardList[1]);
+    mirrorShards[2] = scene2::PolygonNode::allocWithTexture(_mirrorShardList[2]);
+    mirrorShards[3] = scene2::PolygonNode::allocWithTexture(_mirrorShardList[3]);
+    mirrorShards[4] = scene2::PolygonNode::allocWithTexture(_mirrorShardList[4]);
+    mirrorShards[5] = scene2::PolygonNode::allocWithTexture(_mirrorShardList[5]);
 
     std::shared_ptr<Mirror> mirror = Mirror::alloc(enemyPos, mirrorImage->getSize(), mirrorImage->getSize() / _scale / 15, _scale, type); // TODO this is not right, fix this to be closest enemy
     std::shared_ptr<scene2::PolygonNode> mirrorSprite = scene2::PolygonNode::allocWithTexture(mirrorImage);
