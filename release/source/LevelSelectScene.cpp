@@ -331,10 +331,11 @@ void LevelSelectScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     if (_biome == "cave")
     {
         yOff = 30;
+        xOff = -10;
     }
     else if (_biome == "shroom")
     {
-        yOff = 100;
+        yOff = 130;
         xOff = -10;
     }
     else

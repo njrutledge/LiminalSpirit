@@ -185,6 +185,17 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                         }
                         enemy->markRemoved(true);
                     }
+                    switch (attack->getType()) {
+                        case AttackController::p_range:
+                            _sound->play_player_sound(SoundController::playerSType::shootHit);
+                            attack->setInactive();
+                            break;
+                        case AttackController::p_melee:
+                            _sound->play_player_sound(SoundController::playerSType::slashHit);
+                            break;
+                    default:
+                        break;
+                    }
                 }
                 else {
                     //CULog("SAME ATTACK? timer = %f", timer);                    
@@ -194,21 +205,9 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                 if (attack->getType() == AttackController::p_exp_package) {
                     AC->createAttack(attack->getPosition() /*cugl::Vec2(bd->getPosition().x, bd->getPosition().y)*/, 3, 0.15, 30, AttackController::p_exp, cugl::Vec2::ZERO, timer, PLAYER_RANGE, PLAYER_EXP_FRAMES);
                     _sound->play_player_sound(SoundController::playerSType::explosion);
+                    attack->setInactive();
                 }
-                switch (attack->getType()) {
-                    case AttackController::p_range:
-                        _sound->play_player_sound(SoundController::playerSType::shootHit);
-                        attack->setInactive();
-                        break;
-                    case AttackController::p_exp_package:
-                        attack->setInactive();
-                        break;
-                    case AttackController::p_melee:
-                        _sound->play_player_sound(SoundController::playerSType::slashHit);
-                        break;
-                default:
-                    break;
-                }
+               
             }
         }
         else if (*fd == "enemyattacksensor" && attack->isSplitable() && attack->getType() == AttackController::Type::e_range) {
