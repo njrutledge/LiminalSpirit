@@ -13,7 +13,7 @@
 #include <vector>
 #include "InputController.hpp"
 
-#define CHARGE_TIME 500
+#define CHARGE_TIME 200
 
 /**
  * This class figures out what type of swipe was drawn based on the input
