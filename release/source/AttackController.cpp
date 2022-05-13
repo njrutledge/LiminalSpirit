@@ -45,7 +45,7 @@ bool AttackController::Attack::init(const cugl::Vec2 p, float radius, float a, f
         setBodyType(b2BodyType::b2_dynamicBody);
         switch (_type) {
             case Type::p_range:
-            case Type::p_exp:
+            case Type::p_exp_package:
                 _homingSensorName = "player" + _sensorName + "homing";
             case Type::p_dash:
             case Type::p_melee:
@@ -54,7 +54,7 @@ bool AttackController::Attack::init(const cugl::Vec2 p, float radius, float a, f
                 filter.maskBits = 0b001010;
                 setFilterData(filter);
                 break;
-            case Type::p_exp_package:
+            case Type::p_exp:
                 _sensorName = "player" + _sensorName;
                 filter.categoryBits = 0b010000;
                 filter.maskBits = 0b001010;
@@ -113,7 +113,7 @@ void AttackController::Attack::createFixtures() {
         }
 
         sensorShape3.Set(corners3, 8);
-        sensorDef3.shape = &sensorShape;
+        sensorDef3.shape = &sensorShape3;
         sensorDef3.userData.pointer = reinterpret_cast<uintptr_t>(getHomingSensorName());
         _homingSensorFixture = _body->CreateFixture(&sensorDef3);
     }
