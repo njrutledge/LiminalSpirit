@@ -1720,15 +1720,25 @@ void GameScene::updateEnemies(float timestep)
         if ((*it)->getInvincibilityTimer() > 0 && !(*it)->getPlayedDamagedParticle())
         {
             (*it)->setPlayedDamagedParticle(true);
+            float damageParticleScale;
+            if ((*it)->getName() == "Spawner") {
+                damageParticleScale = 0.15;
+            }
+            else if ((*it)->getName() == "Glutton") {
+                damageParticleScale = 0.2;
+            }
+            else {
+                damageParticleScale = 0.1;
+            }
             if ((*it)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee || (*it)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_dash)
             {
-                createParticles(melee_impact, (*it)->getPosition() * _scale, "devil", Color4::WHITE, Vec2(0, 0), 0.1f);
-                createParticles(_meleeParticleList, (*it)->getPosition() * _scale, "sparks", Color4::WHITE, Vec2(0, 0), 0.2f, false, Vec2(), 7);
+                createParticles(melee_impact, (*it)->getPosition() * _scale, "devil", Color4::WHITE, Vec2(0, 0), damageParticleScale);
+                createParticles(_meleeParticleList, (*it)->getPosition() * _scale, "sparks", Color4::WHITE, Vec2(0, 0), damageParticleScale*2, false, Vec2(), 7);
             }
             else
             {
-                createParticles(ranged_impact, (*it)->getPosition() * _scale, "devil", Color4::WHITE, Vec2(0, 0), 0.1f);
-                createParticles(_rangeParticleList, (*it)->getPosition() * _scale, "sparks", Color4::WHITE, Vec2(0, 0), 0.2f, false, Vec2(), 7);
+                createParticles(ranged_impact, (*it)->getPosition() * _scale, "devil", Color4::WHITE, Vec2(0, 0), damageParticleScale);
+                createParticles(_rangeParticleList, (*it)->getPosition() * _scale, "sparks", Color4::WHITE, Vec2(0, 0), damageParticleScale*2, false, Vec2(), 7);
             }
             if ((*it)->getLastDamageAmount() < 10)
             {
@@ -2428,14 +2438,25 @@ void GameScene::updateRemoveDeletedEnemies()
         }
         if (!bypass && (*eit)->isRemoved())
         {
-            //Plays damage particles then death particles shortly after (they fade-in on a delay)
-            if ((*eit)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee || (*eit)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_dash) {
-                createParticles(_assets->get<Texture>("melee_impact"), (*eit)->getPosition() * _scale, "devil", Color4::WHITE, Vec2(0, 0), 0.1f);
-                createParticles(_meleeParticleList, (*eit)->getPosition() * _scale, "sparks", Color4::WHITE, Vec2(0, 0), 0.2f, false, Vec2(), 7);
+
+            float damageParticleScale;
+            if ((*eit)->getName() == "Spawner") {
+                damageParticleScale = 0.15;
+            }
+            else if ((*eit)->getName() == "Glutton") {
+                damageParticleScale = 0.2;
             }
             else {
-                createParticles(_assets->get<Texture>("ranged_impact"), (*eit)->getPosition() * _scale, "devil", Color4::WHITE, Vec2(0, 0), 0.1f);
-                createParticles(_rangeParticleList, (*eit)->getPosition() * _scale, "sparks", Color4::WHITE, Vec2(0, 0), 0.2f, false, Vec2(), 7);
+                damageParticleScale = 0.1;
+            }
+            //Plays damage particles then death particles shortly after (they fade-in on a delay)
+            if ((*eit)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee || (*eit)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_dash) {
+                createParticles(_assets->get<Texture>("melee_impact"), (*eit)->getPosition() * _scale, "devil", Color4::WHITE, Vec2(0, 0), damageParticleScale);
+                createParticles(_meleeParticleList, (*eit)->getPosition() * _scale, "sparks", Color4::WHITE, Vec2(0, 0), damageParticleScale*2, false, Vec2(), 7);
+            }
+            else {
+                createParticles(_assets->get<Texture>("ranged_impact"), (*eit)->getPosition() * _scale, "devil", Color4::WHITE, Vec2(0, 0), damageParticleScale);
+                createParticles(_rangeParticleList, (*eit)->getPosition() * _scale, "sparks", Color4::WHITE, Vec2(0, 0), damageParticleScale*2, false, Vec2(), 7);
             }
             
             if ((*eit)->getLastDamageAmount() < 10)
