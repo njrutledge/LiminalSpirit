@@ -184,6 +184,13 @@ protected:
     bool _spawnParticlesDone;
     /** Mirror Shard Texture vector*/
     std::vector<std::shared_ptr<Texture>> _mirrorShardList;
+    /** Death Particle Texture Vector */
+    std::vector<std::shared_ptr<Texture>> _deathParticleList;
+    /** Melee Particle Texture Vector */
+    std::vector<std::shared_ptr<Texture>> _meleeParticleList;
+    /** Range Particle Texture Vector */
+    std::vector<std::shared_ptr<Texture>> _rangeParticleList;
+
     /** A game timer used for spawn times */
     float _timer;
     /** living spawners */
@@ -477,7 +484,7 @@ public:
 
     /** Helpers to create particles in GameScene */
     void createParticles(std::shared_ptr<Texture> texture, Vec2 pos, string poolName, Color4 tint, Vec2 pointOffset, float scale);
-    void createParticles(std::vector<std::shared_ptr<Texture>> textures, Vec2 pos, string poolName, Color4 tint, Vec2 pointOffset, float scale, bool hasMultipleLinkedTextures, Vec2 linkOffset);
+    void createParticles(std::vector<std::shared_ptr<Texture>> textures, Vec2 pos, string poolName, Color4 tint, Vec2 pointOffset, float scale, bool hasMultipleLinkedTextures, Vec2 linkOffset, int numTex);
 
 
     /** Helper to convert numbers into Textures **/

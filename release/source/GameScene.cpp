@@ -428,20 +428,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             } });
     _sfxButton->setScale(.4 * buttonScale);
 
-    std::vector<std::shared_ptr<Texture> > numTexts;
-    numTexts.push_back(_assets->get<Texture>("zero"));
-    numTexts.push_back(_assets->get<Texture>("one"));
-    numTexts.push_back(_assets->get<Texture>("two"));
-    numTexts.push_back(_assets->get<Texture>("three"));
-    numTexts.push_back(_assets->get<Texture>("four"));
-    numTexts.push_back(_assets->get<Texture>("five"));
-    numTexts.push_back(_assets->get<Texture>("six"));
-    numTexts.push_back(_assets->get<Texture>("seven"));
-    numTexts.push_back(_assets->get<Texture>("eight"));
-    numTexts.push_back(_assets->get<Texture>("nine"));
-
-    _numberTextures = numTexts;
-
     // lose screen
     _loseScene = _assets->get<scene2::SceneNode>("loseScene");
 
@@ -503,6 +489,19 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _timer_text = TextLayout::allocWithText(msg, assets->get<Font>("marker"));
     _timer_text->layout();
 
+    //Number Texture getting
+
+    _numberTextures.push_back(_assets->get<Texture>("zero"));
+    _numberTextures.push_back(_assets->get<Texture>("one"));
+    _numberTextures.push_back(_assets->get<Texture>("two"));
+    _numberTextures.push_back(_assets->get<Texture>("three"));
+    _numberTextures.push_back(_assets->get<Texture>("four"));
+    _numberTextures.push_back(_assets->get<Texture>("five"));
+    _numberTextures.push_back(_assets->get<Texture>("six"));
+    _numberTextures.push_back(_assets->get<Texture>("seven"));
+    _numberTextures.push_back(_assets->get<Texture>("eight"));
+    _numberTextures.push_back(_assets->get<Texture>("nine"));
+
     //Mirror shared getting (reducing _assets->get overhead)
         
      _mirrorShardList.push_back(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_1));
@@ -511,6 +510,30 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
      _mirrorShardList.push_back(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_4));
      _mirrorShardList.push_back(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_5));
      _mirrorShardList.push_back(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_6));
+
+     //Death Particle getting
+     _deathParticleList.push_back(_assets->get<Texture>("death_particle1"));
+     _deathParticleList.push_back(_assets->get<Texture>("death_particle2"));
+     _deathParticleList.push_back(_assets->get<Texture>("death_particle3"));
+     _deathParticleList.push_back(_assets->get<Texture>("death_particle4"));
+
+     //Melee Hit Particle getting
+     _meleeParticleList.push_back(_assets->get<Texture>("melee_attack_particle1"));
+     _meleeParticleList.push_back(_assets->get<Texture>("melee_attack_particle2"));
+     _meleeParticleList.push_back(_assets->get<Texture>("melee_attack_particle3"));
+     _meleeParticleList.push_back(_assets->get<Texture>("attack_particle1"));
+     _meleeParticleList.push_back(_assets->get<Texture>("attack_particle2"));
+     _meleeParticleList.push_back(_assets->get<Texture>("attack_particle3"));
+     _meleeParticleList.push_back(_assets->get<Texture>("attack_particle4"));
+
+     //Range Hit Particle getting
+     _rangeParticleList.push_back(_assets->get<Texture>("range_attack_particle1"));
+     _rangeParticleList.push_back(_assets->get<Texture>("range_attack_particle2"));
+     _rangeParticleList.push_back(_assets->get<Texture>("range_attack_particle3"));
+     _rangeParticleList.push_back(_assets->get<Texture>("attack_particle1"));
+     _rangeParticleList.push_back(_assets->get<Texture>("attack_particle2"));
+     _rangeParticleList.push_back(_assets->get<Texture>("attack_particle3"));
+     _rangeParticleList.push_back(_assets->get<Texture>("attack_particle4"));
 
     _timer = 0.0f;
     _worldnode->setColor(Color4::WHITE);
@@ -1697,24 +1720,26 @@ void GameScene::updateEnemies(float timestep)
         if ((*it)->getInvincibilityTimer() > 0 && !(*it)->getPlayedDamagedParticle())
         {
             (*it)->setPlayedDamagedParticle(true);
-            if ((*it)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee)
+            if ((*it)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee || (*it)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_dash)
             {
                 createParticles(melee_impact, (*it)->getPosition() * _scale, "devil", Color4::WHITE, Vec2(0, 0), 0.1f);
+                createParticles(_meleeParticleList, (*it)->getPosition() * _scale, "sparks", Color4::WHITE, Vec2(0, 0), 0.2f, false, Vec2(), 7);
             }
             else
             {
                 createParticles(ranged_impact, (*it)->getPosition() * _scale, "devil", Color4::WHITE, Vec2(0, 0), 0.1f);
+                createParticles(_rangeParticleList, (*it)->getPosition() * _scale, "sparks", Color4::WHITE, Vec2(0, 0), 0.2f, false, Vec2(), 7);
             }
             if ((*it)->getLastDamageAmount() < 10)
             {
                 std::vector<std::shared_ptr<Texture> > num;
                 num.push_back(_numberTextures[(*it)->getLastDamageAmount()]);
-                createParticles(num, (*it)->getPosition() * _scale, "number", Color4::WHITE, Vec2(0, 10), 0.1f, true, Vec2());
+                createParticles(num, (*it)->getPosition() * _scale, "number", Color4::WHITE, Vec2(0, 10), 0.1f, true, Vec2(), 0);
             }
             else
             {
                 std::vector<std::shared_ptr<Texture> > num = getTexturesFromNumber((*it)->getLastDamageAmount());
-                createParticles(num, (*it)->getPosition() * _scale, "number", Color4::WHITE, Vec2(0, 10), 0.1f, true, Vec2(-10, 0));
+                createParticles(num, (*it)->getPosition() * _scale, "number", Color4::WHITE, Vec2(0, 10), 0.1f, true, Vec2(-10, 0), 0);
             }
         }
 
@@ -1893,12 +1918,12 @@ void GameScene::createParticles(std::shared_ptr<Texture> texture, Vec2 pos, stri
     _worldnode->addChildWithTag(pn, 100);
 }
 
-void GameScene::createParticles(std::vector<std::shared_ptr<Texture> > textures, Vec2 pos, string poolName, Color4 tint, Vec2 pointOffset, float scale, bool hasMultipleLinkedTextures, Vec2 linkOffset)
+void GameScene::createParticles(std::vector<std::shared_ptr<Texture> > textures, Vec2 pos, string poolName, Color4 tint, Vec2 pointOffset, float scale, bool hasMultipleLinkedTextures, Vec2 linkOffset, int numTex)
 {
     std::shared_ptr<ParticleNode> pn;
     std::shared_ptr<ParticlePool> pool;
     if (!hasMultipleLinkedTextures) {
-        pool = ParticlePool::allocPoint(_particleInfo->get(poolName), pointOffset, 6);
+        pool = ParticlePool::allocPoint(_particleInfo->get(poolName), pointOffset, numTex);
     }
     else {
         pool = ParticlePool::allocPoint(_particleInfo->get(poolName), pointOffset);
@@ -2404,27 +2429,34 @@ void GameScene::updateRemoveDeletedEnemies()
         if (!bypass && (*eit)->isRemoved())
         {
             //Plays damage particles then death particles shortly after (they fade-in on a delay)
-            createParticles(_assets->get<Texture>("melee_impact"), (*eit)->getPosition() * _scale, "devil", Color4::WHITE, Vec2(0, 0), 0.1f);
+            if ((*eit)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee || (*eit)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_dash) {
+                createParticles(_assets->get<Texture>("melee_impact"), (*eit)->getPosition() * _scale, "devil", Color4::WHITE, Vec2(0, 0), 0.1f);
+                createParticles(_meleeParticleList, (*eit)->getPosition() * _scale, "sparks", Color4::WHITE, Vec2(0, 0), 0.2f, false, Vec2(), 7);
+            }
+            else {
+                createParticles(_assets->get<Texture>("ranged_impact"), (*eit)->getPosition() * _scale, "devil", Color4::WHITE, Vec2(0, 0), 0.1f);
+                createParticles(_rangeParticleList, (*eit)->getPosition() * _scale, "sparks", Color4::WHITE, Vec2(0, 0), 0.2f, false, Vec2(), 7);
+            }
             
             if ((*eit)->getLastDamageAmount() < 10)
             {
                 std::vector<std::shared_ptr<Texture> > num;
                 num.push_back(_numberTextures[(*eit)->getLastDamageAmount()]);
-                createParticles(num, (*eit)->getPosition() * _scale, "number", Color4::WHITE, Vec2(0, 10), 0.1f, true, Vec2());
+                createParticles(num, (*eit)->getPosition() * _scale, "number", Color4::WHITE, Vec2(0, 10), 0.1f, true, Vec2(), 0);
             }
             else
             {
                 std::vector<std::shared_ptr<Texture> > num = getTexturesFromNumber((*eit)->getLastDamageAmount());
-                createParticles(num, (*eit)->getPosition() * _scale, "number", Color4::WHITE, Vec2(0, 10), 0.1f, true, Vec2(-10, 0));
+                createParticles(num, (*eit)->getPosition() * _scale, "number", Color4::WHITE, Vec2(0, 10), 0.1f, true, Vec2(-10, 0), 0);
             }
 
             //Mirror shard breaking
             if (std::shared_ptr<Mirror> mirror = dynamic_pointer_cast<Mirror>(*eit)) {
-                createParticles(_mirrorShardList, (*eit)->getPosition() * _scale, "mirror_death", Color4::WHITE, Vec2(0, 10), 0.05f, false, Vec2());
+                createParticles(_mirrorShardList, (*eit)->getPosition() * _scale, "mirror_death", Color4::WHITE, Vec2(0, 10), 0.05f, false, Vec2(), 6);
             }
             else if (std::shared_ptr<Lost> lost = dynamic_pointer_cast<Lost>(*eit)) {
                 createAndAddDeathAnimationObstacle("lost_death", (*eit)->getPosition(), 0.125f, 5);
-                createParticles(_assets->get<Texture>("melee_impact"), (*eit)->getPosition() * _scale, "lost_death", Color4::ORANGE, Vec2(0, -20), 0.03f);
+                createParticles(_deathParticleList, (*eit)->getPosition() * _scale, "lost_death", Color4::WHITE, Vec2(0, -20), 0.15f, false, Vec2(), 4);
             }
             
             // int log1 = _world->getObstacles().size();
