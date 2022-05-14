@@ -32,7 +32,7 @@
           "angleRange": [1.57, 1.57],
           "speedRange": [1, 1],
           "startSizeRange": [1, 1],
-          "sizeChangeRateRange": [0.005, 0.005],
+          "sizeChangeRateRange": [0, 0],
           "maxSizeChangeTime": 100
      },
     "charged": {
@@ -68,6 +68,20 @@
           "angleRange": [0, 6.28],
           "speedRange": [30, 50],
           "startSizeRange": [1, 3],
+          "sizeChangeRateRange": [0,0],
+          "maxSizeChangeTime": 10
+     },
+     "lost_death": {
+          "fadein": true,
+          "fadeinRange": [0.5, 0.5],
+          "burstParticles": 36, 
+          "maxParticleCount": 36,
+          "gravity": [20, 30],
+          "emissionRateRange": [1, 1],
+          "lifetimeRange": [0.5, 1.5],
+          "angleRange": [0, 3.14],
+          "speedRange": [10, 30],
+          "startSizeRange": [1, 2],
           "sizeChangeRateRange": [0,0],
           "maxSizeChangeTime": 10
      }

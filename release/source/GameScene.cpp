@@ -811,17 +811,6 @@ void GameScene::updateSoundInputParticlesAndTilt(float timestep)
         setDebug(!isDebug());
     }
 
-    // Some Particle Stuff
-    // ********* this is how you'd make a new node of particles ***********/
-    // if (_meleeArm->getLastType() == AttackController::MeleeState::h1_left) { ///////////////////////////////////////A way to trigger
-    //    std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("collision"), Vec2(0,0));//Create the pool for the effect based on defined values in json
-    //    std::shared_ptr<Texture> text = _assets->get<Texture>(PLAYER_RANGE);////////////////////////////////////////Create a texture or vector of textures to use for the particle effect
-
-    //    std::shared_ptr<ParticleNode> newParts = ParticleNode::alloc(Vec2(10*_scale,10*_scale), text, pool);///////Create a node
-    //    newParts->setVisible(true);////////////////////////////////////////////////////////////////////////////////Make visible (not usually necessary)
-    //    _worldnode->addChildWithTag(newParts, 100);///////////////////////////////////////////////////////////////Add to worldnode with 100 tag (necessary)
-    //}
-
     ////Update all Particles
     for (std::shared_ptr<scene2::SceneNode> s : _worldnode->getChildren())
     {
@@ -840,7 +829,7 @@ void GameScene::updateSoundInputParticlesAndTilt(float timestep)
             if (sp->getFrame() == 4) {
                 sp->setVisible(false);
             }
-            else {
+            else if (rand() % 100 < 25) { // dead bodies decay at random rate
                 sp->setFrame(sp->getFrame() + 1);
             }
             
@@ -2435,6 +2424,7 @@ void GameScene::updateRemoveDeletedEnemies()
             }
             else if (std::shared_ptr<Lost> lost = dynamic_pointer_cast<Lost>(*eit)) {
                 createAndAddDeathAnimationObstacle("lost_death", (*eit)->getPosition(), 0.125f, 5);
+                createParticles(_assets->get<Texture>("melee_impact"), (*eit)->getPosition() * _scale, "lost_death", Color4::ORANGE, Vec2(0, -20), 0.03f);
             }
             
             // int log1 = _world->getObstacles().size();
@@ -2639,8 +2629,8 @@ void GameScene::createSpawnParticles()
         std::shared_ptr<ParticlePool> pool2 = ParticlePool::allocPoint(_particleInfo->get("spawning"), Vec2(0, 0));
         std::shared_ptr<ParticleNode> spawning = ParticleNode::alloc(positions[i] * _scale, portal_swirl, pool);
         std::shared_ptr<ParticleNode> spawning2 = ParticleNode::alloc(positions[i] * _scale, portal, pool2);
-        spawning->setScale(0.15f);
-        spawning2->setScale(0.15f);
+        spawning->setScale(0.25f);
+        spawning2->setScale(0.25f);
         _worldnode->addChildWithTag(spawning2, 100);
         _worldnode->addChildWithTag(spawning, 100);
     }
