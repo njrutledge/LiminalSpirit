@@ -35,6 +35,12 @@ void CollisionController::beginContact(b2Contact* contact, std::shared_ptr<Attac
     physics2::Obstacle* bd1 = reinterpret_cast<physics2::Obstacle*>(body1->GetUserData().pointer);
     physics2::Obstacle* bd2 = reinterpret_cast<physics2::Obstacle*>(body2->GetUserData().pointer);
 
+    if (fd1 && *fd1 == "playerattacksensorhoming") {
+        int breaking = 1;
+    }
+    if (fd2 && *fd2 == "playerattacksensorhoming") {
+        int breaking = 2;
+    }
 
 
     if (AttackController::Attack* attack = dynamic_cast<AttackController::Attack*>(bd1)) {
@@ -307,7 +313,17 @@ void CollisionController::handleAttackCollision(AttackController::Attack* attack
         return;
     }
     if (fd1 && *fd1 == "playerattacksensorhoming") {
-        //TODO FOR HOMING
+        if (BaseEnemyModel* enemy = dynamic_cast<BaseEnemyModel*>(bd)) {
+            Vec2 enemyPos = enemy->getPosition();
+            Vec2 attackPos = attack->getPosition();
+            Vec2 diffDirection = enemyPos - attackPos;
+            //diffDirection.normalize();
+            Vec2 start = attack->getLinearVelocity();
+            Vec2 end = start + diffDirection;
+            attack->setLinearVelocity(diffDirection.scale(start.length() / diffDirection.length()));
+            //CULog("%f, %f", attack->getLinearVelocity().x, attack->getLinearVelocity().y);
+
+        }
 
     }else if (AttackController::Attack* attack2 = dynamic_cast<AttackController::Attack*>(bd)) {
         if (!attack2->isActive()) {
@@ -326,6 +342,7 @@ void CollisionController::handleAttackCollision(AttackController::Attack* attack
         }
     }
     else if ((bd && (bd->getName().find("wall")!= std::string::npos))){
+        string text = fd1 ? *fd1 : "NULLLL";
         switch(attack->getType()) {
         case AttackController::p_exp_package:
             AC->createAttack(attack->getPosition(), 3, 0.15, 30, AttackController::p_exp, cugl::Vec2::ZERO, timer, PLAYER_RANGE, PLAYER_EXP_FRAMES);
