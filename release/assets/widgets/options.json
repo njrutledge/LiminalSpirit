@@ -1,6 +1,17 @@
 {
   "variables": {
-
+    "text_left": [
+      "children",
+      "text_left",
+      "data",
+      "text"
+    ],
+    "text_right": [
+      "children",
+      "text_right",
+      "data",
+      "text"
+    ]
   },
   "contents": {
     "type": "Node",
@@ -181,6 +192,69 @@
           "x_offset": 0.15,
           "y_offset": 0.05,
           "absolute": false
+        }
+      },
+      "text_left": {
+        "type": "Label",
+        "format": {
+          "type": "Anchored"
+        },
+        "data": {
+          "font": "spectral",
+          "anchor": [
+            0.5,
+            0
+          ],
+          "visible": true,
+          "text": "L_ERROR",
+          "foreground": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "halign": "center",
+          "valign": "middle",
+          "scale": 0.66
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": 0.005,
+          "y_offset": 0.025,
+          "absolute": false
+        }
+      },
+      "text_right": {
+        "type": "Label",
+        "format": {
+          "type": "Anchored"
+        },
+        "data": {
+          "font": "spectral",
+          "anchor": [
+            0.5,
+            0
+          ],
+          "visible": true,
+          "text": "R_ERROR",
+          "foreground": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "halign": "center",
+          "valign": "middle",
+          "scale": 0.66
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": 0.095,
+          "y_offset": 0.025,
+          "absolute": false
+
         }
       }
 

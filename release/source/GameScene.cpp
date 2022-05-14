@@ -99,7 +99,15 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _next = false;
     _pause = false;
     _options = false;
-    _swap = false;
+    std::shared_ptr<JsonReader> reader = JsonReader::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
+    std::shared_ptr<JsonValue> save = reader->readJson();
+    _progress = save->get("progress");
+    std::shared_ptr<JsonValue> settings = save->get("settings");
+    reader->close();
+    _swap = settings->get("swap")->asInt();
+    //_sxf = settings->get("sfx")->asInt();
+    //_music = settings->get("music")->asInt();
+
     Size dimen = Application::get()->getDisplaySize();
     float boundScale = SCENE_WIDTH / dimen.width;
     dimen *= boundScale;
@@ -376,6 +384,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             } });
     _optionReturnButton->setScale(.4 * buttonScale);
 
+    _leftText = std::dynamic_pointer_cast<scene2::Label>(_assets->get<scene2::SceneNode>("optionScene_text_left"));
+    _rightText = std::dynamic_pointer_cast<scene2::Label>(_assets->get<scene2::SceneNode>("optionScene_text_right"));
+
+
     _swapHandsButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_swap"));
     if (_swapHandsButton->hasListener())
     {
@@ -386,6 +398,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             // Only quit when the button is released
             if (!down) {
                 _swap = !_swap;
+                this->save();
             } });
     _swapHandsButton->setScale(.4 * buttonScale);
 
@@ -620,13 +633,13 @@ void GameScene::update(float timestep, int unlockCount)
         _optionButton->deactivate();
         _pauseButton->setVisible(false);
         _pauseButton->deactivate();
-        if (_swap)
-        {
-            CULog("SWAP!!!!!!!!");
+        if (!_swap) {
+            _leftText->setText("range");
+            _rightText->setText("melee");
         }
-        else
-        {
-            CULog("No swap...");
+        else {
+            _leftText->setText("melee");
+            _rightText->setText("range");
         }
         return;
     }
@@ -3411,4 +3424,11 @@ void GameScene::addObstacle(const std::shared_ptr<cugl::physics2::Obstacle> &obj
                 weak->setPosition(obs->getPosition() * _scale);
                 weak->setAngle(node->getAngle()); });
     }
+}
+
+/** Saves progress */
+void GameScene::save() {
+    std::shared_ptr<TextWriter> writer = TextWriter::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
+    writer->write("{\"progress\":" + _progress->toString() + ", \"settings\":{\"swap\": " + to_string(_swap) + "}}");
+    writer->close();
 }

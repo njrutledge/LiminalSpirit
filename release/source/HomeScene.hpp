@@ -40,9 +40,7 @@ class HomeScene : public cugl::Scene2
 public:
 	enum class Choice {
 		MENU,
-		PLAY_PREP,
 		PLAY,
-		OPTIONS_PREP,
 		OPTIONS,
 	};
 protected:
@@ -56,10 +54,33 @@ protected:
   std::shared_ptr<cugl::scene2::Button> _playButton;
   std::shared_ptr<cugl::scene2::Button> _optionsButton;
 
+  std::shared_ptr<cugl::scene2::Label> _leftText;
+  std::shared_ptr<cugl::scene2::Label> _rightText;
+
+  std::shared_ptr<cugl::scene2::Button> _optionReturnButton;
+
+  std::shared_ptr<cugl::scene2::Button> _swapHandsButton;
+
+  std::shared_ptr<cugl::scene2::Button> _musicButton;
+
+  std::shared_ptr<cugl::scene2::Button> _sfxButton;
+
+
 
   std::shared_ptr<cugl::scene2::SceneNode> _optionScene;
   /** the player choice of this menu */
   Choice _choice = Choice::MENU;
+
+  /** Whether or not the player's hands are swapped */
+  bool _swap;
+
+  int _music;
+
+  int _sfx;
+
+  std::shared_ptr<cugl::JsonValue> _progress;
+
+  void save();
 
 public:
   /**
