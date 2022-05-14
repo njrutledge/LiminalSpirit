@@ -53,6 +53,15 @@
 		/** The rate of which the particle changes size */
 		float _sizechangerate;
 
+		//ANGLE ALTERING
+		/** Whether or not this particle's angle changes*/
+		bool _anglechange;
+		/* The timer to keep track of angle changing */
+		float _angletimer;
+		/** The rate of which the particle change angles */
+		float _anglechangerate;
+
+
 		// TEXTURING
 		/* Whether random texturing is enabled or not */
 		bool _randomTexturing;
@@ -107,9 +116,9 @@
 		*
 		* @return  A newly allocated particle with size changing
 		*/
-		static std::shared_ptr<Particle> alloc(cugl::Vec2 position, float size, cugl::Vec2 gravity, float speed, float lifetime, float angle, float maxChangeTime, float changeRate) {
+		static std::shared_ptr<Particle> alloc(cugl::Vec2 position, float size, cugl::Vec2 gravity, float speed, float lifetime, float angle, float maxChangeTime, float changeRate, float angleChange) {
 			std::shared_ptr<Particle> result = std::make_shared<Particle>();
-			return (result->initSizeChanging(position, size, gravity, speed, lifetime, angle, maxChangeTime, changeRate) ? result : nullptr);
+			return (result->initSizeChanging(position, size, gravity, speed, lifetime, angle, maxChangeTime, changeRate, angleChange) ? result : nullptr);
 		}
 
 		/*
@@ -139,7 +148,7 @@
 		*
 		* @return true if successful
 		*/
-		bool initSizeChanging(cugl::Vec2 position, float size, cugl::Vec2 gravity, float speed, float lifetime, float angle, float maxChangeTime, float changeRate);
+		bool initSizeChanging(cugl::Vec2 position, float size, cugl::Vec2 gravity, float speed, float lifetime, float angle, float maxChangeTime, float changeRate, float angleChange);
 
 		/*Returns the position of this particle.
 			*

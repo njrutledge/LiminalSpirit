@@ -43,6 +43,10 @@ protected:
 	cugl::Vec2 _sizeRange;
 	// The rates of change of the particles size in the pool
 	cugl::Vec2 _sizeChangeRateRange;
+	// The rates of change of the particles angle in the pool
+	cugl::Vec2 _angleChangeRange;
+	// Whether or not the particles are changing angles
+	bool _angleChange;
 	// The max time of the size change
 	float _maxChangeTime;
 	// The number of particles to emit in the burst if it is a temporary burst

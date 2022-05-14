@@ -23,7 +23,20 @@
           "sizeChangeRateRange": [-0.25, -0.25],
           "maxSizeChangeTime": 10
      },
-    "spawning": {
+    "spawning_swirl": {
+          "burstParticles": 1, 
+          "maxParticleCount": 1,
+          "gravity": [0, 0],
+          "emissionRateRange": [1, 1],
+          "lifetimeRange": [3, 3],
+          "angleRange": [1.57, 1.57],
+          "speedRange": [1, 1],
+          "startSizeRange": [1, 1],
+          "sizeChangeRateRange": [0, 0],
+          "angleChangeRange": [-0.06, -0.06],
+          "maxSizeChangeTime": 100
+     },
+     "spawning": {
           "burstParticles": 1, 
           "maxParticleCount": 1,
           "gravity": [0, 0],
@@ -56,7 +69,7 @@
           "angleRange": [1.5, 1.57],
           "speedRange": [50, 80],
           "startSizeRange": [5, 5],
-          "sizeChangeRateRange": [0,0],
+          "sizeChangeRateRange": [0.01, 0.01],
           "maxSizeChangeTime": 10
      },
      "mirror_death": {

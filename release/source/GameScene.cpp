@@ -2625,7 +2625,7 @@ void GameScene::createSpawnParticles()
 
     for (int i = 0; i < positions.size(); i++)
     {
-        std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("spawning"), Vec2(0, 0));
+        std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("spawning_swirl"), Vec2(0, 0));
         std::shared_ptr<ParticlePool> pool2 = ParticlePool::allocPoint(_particleInfo->get("spawning"), Vec2(0, 0));
         std::shared_ptr<ParticleNode> spawning = ParticleNode::alloc(positions[i] * _scale, portal_swirl, pool);
         std::shared_ptr<ParticleNode> spawning2 = ParticleNode::alloc(positions[i] * _scale, portal, pool2);
