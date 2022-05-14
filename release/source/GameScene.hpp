@@ -118,6 +118,10 @@ protected:
     /** Text font */
     std::shared_ptr<cugl::Font> _font;
 
+    std::shared_ptr<scene2::Label> _leftText;
+
+    std::shared_ptr<scene2::Label> _rightText;
+
     /** Textures for numbers 0-9 */
     std::vector<std::shared_ptr<Texture>> _numberTextures;
 
@@ -254,7 +258,11 @@ protected:
 
     std::shared_ptr<scene2::Button> _musicButton;
 
+    int _music;
+
     std::shared_ptr<scene2::Button> _sfxButton;
+
+    int _sfx;
     
     std::shared_ptr<scene2::SceneNode> _loseScene;
     
@@ -263,6 +271,11 @@ protected:
     std::shared_ptr<scene2::Button> _loseLevelButton;
     
     std::shared_ptr<scene2::Button> _loseRestartButton;
+
+    std::shared_ptr<JsonValue> _progress;
+
+    void save();
+
     
     /**
      * Internal helper to build the scene graph.
@@ -473,6 +486,7 @@ public:
     string getBiome() { return _biome; }
 
     int getStageNum() { return _stageNum; }
+
 
 };
 

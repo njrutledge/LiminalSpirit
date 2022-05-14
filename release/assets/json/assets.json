@@ -923,25 +923,25 @@
 						"absolute": false
 					}
 				},
-                "wavebar": {
-                    "type": "Progress",
-                    "data": {
-                        "anchor": [
-                            1,
-                            1
-                        ],
-                        "background": "wave_bar_background",
-                        "foreground": "wave_bar_foreground",
-                        "scale": 0.5
-                    },
-                    "layout": {
-                        "x_anchor": "right",
-                        "y_anchor": "top",
-                        "x_offset": -0.1,
-                        "y_offset": -0.05,
-                        "absolute": false
-                    }
-                },
+				"wavebar": {
+					"type": "Progress",
+					"data": {
+						"anchor": [
+							1,
+							1
+						],
+						"background": "wave_bar_background",
+						"foreground": "wave_bar_foreground",
+						"scale": 0.5
+					},
+					"layout": {
+						"x_anchor": "right",
+						"y_anchor": "top",
+						"x_offset": -0.1,
+						"y_offset": -0.05,
+						"absolute": false
+					}
+				},
 				"melee_charge": {
 					"type": "Progress",
 					"data": {
@@ -984,24 +984,6 @@
 						"absolute": false
 					}
 				}
-			}
-		},
-		"pauseScene": {
-			"type": "Widget",
-			"data": {
-				"key": "pause"
-			}
-		},
-        "loseScene": {
-            "type": "Widget",
-            "data": {
-                "key": "lose"
-            }
-        },
-		"optionScene": {
-			"type": "Widget",
-			"data": {
-				"key": "options"
 			}
 		},
 		"main_menu": {
@@ -1096,6 +1078,24 @@
 						"absolute": false
 					}
 				}
+			}
+		},
+		"optionScene": {
+			"type": "Widget",
+			"data": {
+				"key": "options"
+			}
+		},
+		"pauseScene": {
+			"type": "Widget",
+			"data": {
+				"key": "pause"
+			}
+		},
+		"loseScene": {
+			"type": "Widget",
+			"data": {
+				"key": "lose"
 			}
 		},
 		"world_select": {
