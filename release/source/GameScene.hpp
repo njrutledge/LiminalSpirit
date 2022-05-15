@@ -468,6 +468,11 @@ public:
     }
 
     /**
+    * Creates a single enemy
+    */
+    void createEnemy(string enemyName, Vec2 enemyPos);
+
+    /**
      * Creates all enemies and adds to _enemies.
      */
     void createEnemies(int wave);

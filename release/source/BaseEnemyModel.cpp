@@ -51,6 +51,7 @@ bool BaseEnemyModel::init(const cugl::Vec2& pos, const cugl::Size& realSize, con
 	_attackRadius = props.attackRadius;
     _damage = props.damage;
 	_timePast = 0.0f;
+	_attackAnimationTime = 0;
 	_enemyName = props.name;
 	_density = props.density;
     _spawnerIndex = -1;
