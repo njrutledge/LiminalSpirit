@@ -577,11 +577,18 @@
 		"background": {
 			"file": "textures/backgrounds/forest_background.png"
 		},
-        "wave_bar_background": {
-            "file": "textures/hud/bar.png"
-        },
-        "wave_bar_foreground": {
-            "file": "textures/hud/content.png"
+        "wave_bar": {
+            "file": "textures/hud/progress_wave.png",
+            "minfilter": "nearest",
+            "magfilter": "linear",
+            "wrapS": "clamp",
+            "wrapT": "clamp",
+            "atlas": {
+                "background": [ 0, 4, 385, 36],
+                "foreground": [ 2, 38, 385, 70],
+                "leftcap": [ 2, 38, 4, 70],
+                "rightcap": [ 383, 38, 385, 70]
+            }
         },
         "wave_bar_checkpoint": {
             "file": "textures/hud/eye.png"
@@ -1023,7 +1030,9 @@
 						],
 						"background": "wave_bar_background",
 						"foreground": "wave_bar_foreground",
-						"scale": 0.5
+                        "left_cap": "wave_bar_leftcap",
+                        "right_cap": "wave_bar_rightcap",
+						"scale": 0.75
 					},
 					"layout": {
 						"x_anchor": "right",

@@ -321,6 +321,14 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     HUD->doLayout();
 
     scene->addChildWithName(HUD, "HUD");
+    
+    for(int i = 0; i < _numWaves; i++){
+        std::shared_ptr<scene2::SceneNode> eye = scene2::TexturedNode::allocWithTex();
+        
+        eye->setTexture
+        
+        _wavebar->addChild(eye);
+    }
 
     _pauseScene = _assets->get<scene2::SceneNode>("pauseScene");
 
@@ -472,9 +480,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _text->layout();
 
     int duration = (int)_spawn_times[_nextWaveNum] - (int)_timer;
-    std::string timer = strtool::format("Next Wave In: %d", duration);
-    _timer_text = TextLayout::allocWithText(msg, assets->get<Font>("marker"));
-    _timer_text->layout();
+    //std::string timer = strtool::format("Next Wave In: %d", duration);
+    //_timer_text = TextLayout::allocWithText(msg, assets->get<Font>("marker"));
+    //_timer_text->layout();
 
     //Number Texture getting
 
@@ -2591,8 +2599,8 @@ void GameScene::updateText()
     _text->layout();
 
     int duration = _nextWaveNum < _spawn_times.size() ? (int)_spawn_times[_nextWaveNum] - (int)_timer : -1;
-    _timer_text->setText(strtool::format("Next Wave In: %d", duration > 0 ? duration : 0));
-    _timer_text->layout();
+    //_timer_text->setText(strtool::format("Next Wave In: %d", duration > 0 ? duration : 0));
+   // _timer_text->layout();
 }
 
 void GameScene::updateSpawnTimes()
@@ -2668,8 +2676,10 @@ void GameScene::updateHUD(int unlockCount)
     }
     
     // TODO fix this next sprint
-    _wavebar->setProgress(1.0f);
-    _wavebar->setVisible(false);
+    
+    float time = _timer / _spawn_times[_numWaves - 1];
+    _wavebar->setProgress(time > 1 ? 1 : time);
+    //_wavebar->setVisible(false);
     
     _melee_charge->setProgress(_swipes.getMeleeCharge());
     _range_charge->setProgress(_swipes.getRangeCharge());
@@ -2850,8 +2860,8 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     //_attacks.draw(batch);
     batch->drawText(_text, Vec2(getSize().width / 2 - _text->getBounds().size.width / 2, getSize().height - _text->getBounds().size.height - 10));
 
-    if (_nextWaveNum < _spawn_times.size())
-        batch->drawText(_timer_text, Vec2(getSize().width - _timer_text->getBounds().size.width - 20, getSize().height - _timer_text->getBounds().size.height - 10));
+//    if (_nextWaveNum < _spawn_times.size())
+//        batch->drawText(_timer_text, Vec2(getSize().width - _timer_text->getBounds().size.width - 20, getSize().height - _timer_text->getBounds().size.height - 10));
 
     batch->setColor(Color4::GREEN);
     Affine2 trans;
