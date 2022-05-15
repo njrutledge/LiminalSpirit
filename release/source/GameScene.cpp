@@ -73,6 +73,10 @@ float DEFAULT_HEIGHT = DEFAULT_WIDTH / SCENE_WIDTH * SCENE_HEIGHT;
 #define PLATFORM_HEIGHT 0.5
 #define PLATFORMTEXTURE "platform"
 
+#define DASHX 25
+#define DASHY 25
+#define DASHTIME 0.8
+
 /** The initial position of the player*/
 float PLAYER_POS[] = {1.0f, 1.0f};
 
@@ -1253,7 +1257,7 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
         }
         else
         {
-            if (_meleeArmDash->getAnimeTimer() > 0.085f)
+            if (_meleeArmDash->getAnimeTimer() > (DASHTIME / 7))
             {
                 if (_player->isFacingRight())
                 {
@@ -2018,7 +2022,7 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
         _attacks->attackRight(Vec2(playerPos.x, playerPos.y), right, _swipes.getRightAngle(_swap), _player->isGrounded(), _player->isFacingRight(), _timer, _sound);
         if (right == SwipeController::chargedRight)
         {
-            _dashXVel = 20;
+            _dashXVel = DASHX + 3;
             _dashYVel = 1;
             _dashTime = 0;
             _player->setIsDashing(true);
@@ -2027,7 +2031,7 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
         }
         else if (right == SwipeController::chargedLeft)
         {
-            _dashXVel = -20;
+            _dashXVel = -DASHX - 3;
             _dashYVel = 1;
             _dashTime = 0;
             _player->setIsDashing(true);
@@ -2036,7 +2040,7 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
         }
         else if (right == SwipeController::chargedUp)
         {
-            _dashYVel = 20;
+            _dashYVel = DASHY + 3;
             _dashTime = 0;
             _player->setIsDashing(true);
             _player->setDashingLastFrame(false);
@@ -2044,29 +2048,73 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
         }
         else if (right == SwipeController::chargedDown)
         {
-            _dashYVel = -23;
+            _dashYVel = -DASHY - 3;
             _dashTime = 0;
             _player->setIsDashing(true);
             _player->setDashingLastFrame(false);
             _player->setDashAngle(270);
         }
+        else if (right == SwipeController::chargedNortheast)
+        {
+            _dashYVel = DASHX;
+            _dashXVel = DASHY;
+            _dashTime = 0;
+            _player->setIsDashing(true);
+            _player->setDashingLastFrame(false);
+            _player->setDashAngle(45);
+        }
+        else if (right == SwipeController::chargedNorthwest)
+        {
+            _dashYVel = DASHX;
+            _dashXVel = -DASHY;
+            _dashTime = 0;
+            _player->setIsDashing(true);
+            _player->setDashingLastFrame(false);
+            _player->setDashAngle(135);
+        }
+        else if (right == SwipeController::chargedSouthwest)
+        {
+            _dashYVel = -DASHX;
+            _dashXVel = -DASHY;
+            _dashTime = 0;
+            _player->setIsDashing(true);
+            _player->setDashingLastFrame(false);
+            _player->setDashAngle(225);
+        }
+        else if (right == SwipeController::chargedSoutheast)
+        {
+            _dashYVel = -DASHX;
+            _dashXVel = DASHY;
+            _dashTime = 0;
+            _player->setIsDashing(true);
+            _player->setDashingLastFrame(false);
+            _player->setDashAngle(315);
+        }
         // If the dash velocities are set, change player velocity if dash time is not complete
         if (_dashXVel || _dashYVel)
         {
-            if (_dashTime < 0.6f)
+            if (_dashTime < DASHTIME)
             {
-                // Slow down for last 0.25 seconds at the end of right/left dash
-                // This might be jank but its 1am
-                float slowDownTime = 0.6f - 0.25f;
+                // Slow down for last 0.25 seconds
+                float slowDownTime = DASHTIME - 0.25f;
                 if (_dashTime > slowDownTime && _dashXVel > 0)
                 {
-                    _dashXVel = 20 - (_dashTime - slowDownTime) * 80;
+                    _dashXVel = DASHX - ((_dashTime - slowDownTime) * (DASHX / 0.25));
                 }
                 else if (_dashTime > slowDownTime && _dashXVel < 0)
                 {
-                    _dashXVel = -20 + (_dashTime - slowDownTime) * 80;
+                    _dashXVel = -DASHX + ((_dashTime - slowDownTime) * (DASHX / 0.25));
                 }
-                // Set velocity for right/left dash
+                if (_dashTime > slowDownTime && _dashYVel > 0 && _dashYVel != 1)
+                {
+                    _dashYVel = DASHY - ((_dashTime - slowDownTime) * (DASHY / 0.25));
+                }
+                else if (_dashTime > slowDownTime && _dashYVel < 0 && _dashYVel != -1)
+                {
+                    _dashYVel = -DASHY + ((_dashTime - slowDownTime) * (DASHY / 0.25));
+                }
+                
+                // Set velocity for x dash
                 if (_dashXVel > 0)
                 {
                     _player->setVX(_dashXVel);
@@ -2077,20 +2125,13 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
                     _player->setVX(_dashXVel);
                     _player->setFacingRight(false);
                 }
-                // Always want to set x velocity to 0 for up/down charge attacks
-                // Up down dash is only 0.5 seconds
-                if (_dashTime < 0.5f)
+                // Set velocity for y dash
+                if (_dashYVel > 0) {
+                    _player->setVY(_dashYVel);
+                }
+                else if (_dashYVel < 0 && !_player->isGrounded())
                 {
-                    if (_dashYVel > 0)
-                    {
-                        _player->setVY(_dashYVel);
-                        _player->setVX(_dashXVel);
-                    }
-                    else if (_dashYVel < 0 && !_player->isGrounded())
-                    {
-                        _player->setVY(_dashYVel);
-                        _player->setVX(_dashXVel);
-                    }
+                    _player->setVY(_dashYVel);
                 }
                 // Invincibility, maintain same health throughout dash
                 _player->setIsInvincible(true);
@@ -2113,6 +2154,9 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
             else if (xPos < 0)
             {
                 _player->setFacingRight(false);
+            }
+            if (_dashXVel == 0 && _dashYVel == 0) {
+                _player->setIsDashing(false);
             }
         }
         if (_dashXVel == 0 && _dashYVel == 0 && _player->getInvincibilityTimer() <= 0)
