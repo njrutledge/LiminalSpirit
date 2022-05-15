@@ -85,7 +85,7 @@ void LiminalSpirit::onStartup()
     //_unlock_count = progress->get("unlock_count")->asInt();
     // Note: COMMENT THESE OUT TO ENABLE PROGRESSION!!!!!!!!
     _biome = 3;
-    _highest_level = 2;
+    _highest_level = 10;
     _unlock_count = 5;
     int swap = settings->get("swap")->asInt();
     _swap = settings->get("swap")->asInt();
