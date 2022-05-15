@@ -100,6 +100,10 @@ SoundController::SoundController(){};
 
 void SoundController::init(std::shared_ptr<cugl::AssetManager> &assets) {
     
+    _volume = 1.0f;
+    
+    _vSFX = 1.0f;
+    
     _state = LOAD;
     
     _assets = assets;
@@ -140,6 +144,8 @@ void SoundController::init(std::shared_ptr<cugl::AssetManager> &assets) {
 
 void SoundController::play_menu_music() {
     
+    cugl::AudioEngine::get()->getMusicQueue()->setVolume(_volume);
+    
     if (_state != MENU) {
         cugl::AudioEngine::get()->getMusicQueue()->advance(0, 0.2);
         cugl::AudioEngine::get()->getMusicQueue()->enqueue(_menu, true, 0.4);
@@ -149,6 +155,8 @@ void SoundController::play_menu_music() {
 }
 
 void SoundController::play_level_music(string biome, std::vector<bool> enemies) {
+    
+    cugl::AudioEngine::get()->getMusicQueue()->setVolume(_volume);
     
     if (biome == "cave") {
         if (_state != LEVEL_CAVE) {
@@ -198,30 +206,30 @@ void SoundController::play_level_music(string biome, std::vector<bool> enemies) 
 void SoundController::play_player_sound(playerSType sound) {
     switch (sound) {
         case slashEmpty:
-            cugl::AudioEngine::get()->play("playerSlashEmpty", _playerSlashEmpty, false, 1.0, true);
+            cugl::AudioEngine::get()->play("playerSlashEmpty", _playerSlashEmpty, false, _vSFX, true);
             break;
         case slashHit:
-            cugl::AudioEngine::get()->play("playerSlashEmpty", _playerSlashHit, false, 1.0, true);
+            cugl::AudioEngine::get()->play("playerSlashEmpty", _playerSlashHit, false, _vSFX, true);
             break;
         case slashDash:
         case shoot:
-            cugl::AudioEngine::get()->play("playerShoot", _playerShoot, false, 1.0, true);
+            cugl::AudioEngine::get()->play("playerShoot", _playerShoot, false, _vSFX, true);
             break;
         case shootHit:
-            cugl::AudioEngine::get()->play("playerShoot", _playerShootHit, false, 1.0, true);
+            cugl::AudioEngine::get()->play("playerShoot", _playerShootHit, false, _vSFX, true);
             break;
         case shootCharge:
-            cugl::AudioEngine::get()->play("playerChargeShoot", _playerExpPckg, false, 1.0, true);
+            cugl::AudioEngine::get()->play("playerChargeShoot", _playerExpPckg, false, _vSFX, true);
             break;
         case explosion:
-            cugl::AudioEngine::get()->play("playerExp", _playerExp, false, 1.0, true);
+            cugl::AudioEngine::get()->play("playerExp", _playerExp, false, _vSFX, true);
             break;
         case hurt:
-            cugl::AudioEngine::get()->play("playerShoot", _playerHurt, false, 1.0, true);
+            cugl::AudioEngine::get()->play("playerShoot", _playerHurt, false, _vSFX, true);
             break;
         case death:
         case step:
-            cugl::AudioEngine::get()->play("playerStep", _playerStep, false, 1.0, true);
+            cugl::AudioEngine::get()->play("playerStep", _playerStep, false, _vSFX, true);
             break;
         case jump:
         case chargeP:
