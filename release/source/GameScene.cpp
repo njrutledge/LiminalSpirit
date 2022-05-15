@@ -63,6 +63,10 @@ using namespace cugl;
 
 /** Width of the game world in Box2d units */
 #define DEFAULT_WIDTH 32.0f
+
+/** The scale of the wavebar*/
+#define WAVEBAR_SCALE .8f
+
 /** Height of the game world in Box2d units */
 float DEFAULT_HEIGHT = DEFAULT_WIDTH / SCENE_WIDTH * SCENE_HEIGHT;
 
@@ -312,6 +316,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     // Grab HUD elements
     _healthbar = std::dynamic_pointer_cast<scene2::ProgressBar>(assets->get<scene2::SceneNode>("HUD_healthbar"));
     _wavebar = std::dynamic_pointer_cast<scene2::ProgressBar>(assets->get<scene2::SceneNode>("HUD_wavebar"));
+    _wavebar->setScale(WAVEBAR_SCALE);
     _melee_charge = std::dynamic_pointer_cast<scene2::ProgressBar>(assets->get<scene2::SceneNode>("HUD_melee_charge"));
     _melee_charge->setAngle(M_PI_2);
     _range_charge = std::dynamic_pointer_cast<scene2::ProgressBar>(assets->get<scene2::SceneNode>("HUD_range_charge"));
@@ -322,12 +327,24 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
 
     scene->addChildWithName(HUD, "HUD");
     
+    //set wave marker positions
+    std::shared_ptr<cugl::Texture> wave_marker = _assets->get<cugl::Texture>("wave_bar_checkpoint");
+    
+    int total_time = _spawn_times[_numWaves - 1];
+    float wave_start_offset = 5;//45;
+    float wave_offset = wave_start_offset*2;
+    float wave_width = _wavebar->getWidth()-wave_offset;
+    CULog("width: %f", wave_width);
     for(int i = 0; i < _numWaves; i++){
-        std::shared_ptr<scene2::SceneNode> eye = scene2::TexturedNode::allocWithTex();
+        std::shared_ptr<scene2::PolygonNode> marker = scene2::PolygonNode::allocWithTexture(wave_marker);
+        marker->setTag(i+1);
+        float percent = _spawn_times[i]/total_time;
         
-        eye->setTexture
+        //marker->setAnchor(Vec2(percent, 0));
         
-        _wavebar->addChild(eye);
+        marker->setPositionX((percent*wave_width + wave_start_offset)/WAVEBAR_SCALE);
+        //CULog("pos x: %f", percent*wave_width);
+        _wavebar->addChild(marker);
     }
 
     _pauseScene = _assets->get<scene2::SceneNode>("pauseScene");
@@ -480,9 +497,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _text->layout();
 
     int duration = (int)_spawn_times[_nextWaveNum] - (int)_timer;
-    //std::string timer = strtool::format("Next Wave In: %d", duration);
-    //_timer_text = TextLayout::allocWithText(msg, assets->get<Font>("marker"));
-    //_timer_text->layout();
+    std::string timer = strtool::format("Next Wave In: %d", duration);
+    _timer_text = TextLayout::allocWithText(msg, assets->get<Font>("marker"));
+    _timer_text->layout();
 
     //Number Texture getting
 
@@ -601,7 +618,14 @@ void GameScene::dispose()
     _healthbar = nullptr;
     _range_charge = nullptr;
     _melee_charge = nullptr;
+    if(_wavebar){
+    //added i+1 to tag because tags are auto set to 0
+        for(int i = 0; i <_numWaves; i++){
+            _wavebar->getChildByTag(i+1) = nullptr;
+            _wavebar->removeChildByTag(i+1);
+        }
     _wavebar = nullptr;
+    }
     _lose = false;
     
     // TODO: CHECK IF THIS IS RIGHT FOR DISPOSING
@@ -802,13 +826,12 @@ void GameScene::update(float timestep, int unlockCount)
 
     updateRemoveDeletedPlayer();
 
-    updateHUD(unlockCount);
-
     updateCamera();
 
     updateSpawnEnemies(timestep);
 
     updateMeleeArm(timestep);
+    updateHUD(unlockCount);
 }
 
 void GameScene::updateSoundInputParticlesAndTilt(float timestep)
@@ -2612,30 +2635,23 @@ void GameScene::updateText()
     _text->layout();
 
     int duration = _nextWaveNum < _spawn_times.size() ? (int)_spawn_times[_nextWaveNum] - (int)_timer : -1;
-    //_timer_text->setText(strtool::format("Next Wave In: %d", duration > 0 ? duration : 0));
-   // _timer_text->layout();
+    _timer_text->setText(strtool::format("Next Wave In: %d", duration > 0 ? duration : 0));
+    _timer_text->layout();
 }
 
+/**
+ Updates the timer if all enemies are killed in this wave.
+ If the next wave is within three seconds when all the enemies are killed, does nothing.
+ Requires: spawns enemies of wave i after three seconds from _spawn_times[i]
+ */
 void GameScene::updateSpawnTimes()
 {
-    // Move wave spawn times up if all enemies killed
+    
     if (_nextWaveNum < _numWaves && !_enemies.size())
     {
         float nextSpawnTime = _spawn_times[_nextWaveNum];
-        float diff = nextSpawnTime - _timer;
-        // 3 second delay between waves
-        if (diff < 4.0f)
-        {
-            diff = 0.0f;
-        }
-        else
-        {
-            diff -= 3.0f;
-        }
-        for (int i = _nextWaveNum; i < _numWaves; i++)
-        {
-            _spawn_times[i] -= diff;
-        }
+        float nextTime = nextSpawnTime - 3;
+        _timer = _timer > nextTime ? _timer : nextTime;
     }
 }
 
@@ -2688,8 +2704,7 @@ void GameScene::updateHUD(int unlockCount)
         _melee_charge->setVisible(true);
     }
     
-    // TODO fix this next sprint
-    
+    //Set wavebar progress
     float time = _timer / _spawn_times[_numWaves - 1];
     _wavebar->setProgress(time > 1 ? 1 : time);
     //_wavebar->setVisible(false);
@@ -2871,10 +2886,12 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     batch->begin(getCamera()->getCombined());
 
     //_attacks.draw(batch);
-    batch->drawText(_text, Vec2(getSize().width / 2 - _text->getBounds().size.width / 2, getSize().height - _text->getBounds().size.height - 10));
-
-//    if (_nextWaveNum < _spawn_times.size())
-//        batch->drawText(_timer_text, Vec2(getSize().width - _timer_text->getBounds().size.width - 20, getSize().height - _timer_text->getBounds().size.height - 10));
+    if (_debug){
+        batch->drawText(_text, Vec2(getSize().width / 2 - _text->getBounds().size.width / 2, getSize().height - _text->getBounds().size.height - 10));
+    
+        if (_nextWaveNum < _spawn_times.size())
+        batch->drawText(_timer_text, Vec2(getSize().width - _timer_text->getBounds().size.width - 20, getSize().height - _timer_text->getBounds().size.height - 50));
+    }
 
     batch->setColor(Color4::GREEN);
     Affine2 trans;

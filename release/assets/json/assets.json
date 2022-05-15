@@ -594,7 +594,7 @@
             "file": "textures/hud/eye.png"
         },
         "wave_bar_indicator": {
-            "file": "textures/hud/projectile.png"
+            "file": "textures/hud/devil_head.png"
         },
 		"melee_charge_HUD": {
 			"file": "textures/hud/melee_charge_HUD.png",
@@ -1011,7 +1011,7 @@
 						"foreground": "healthbar_foreground",
 						"left_cap": "healthbar_leftcap",
 						"right_cap": "healthbar_rightcap",
-						"scale": 0.5
+						"scale": 0.6
 					},
 					"layout": {
 						"x_anchor": "left",
@@ -1031,8 +1031,7 @@
 						"background": "wave_bar_background",
 						"foreground": "wave_bar_foreground",
                         "left_cap": "wave_bar_leftcap",
-                        "right_cap": "wave_bar_rightcap",
-						"scale": 0.75
+                        "right_cap": "wave_bar_rightcap"
 					},
 					"layout": {
 						"x_anchor": "right",
