@@ -20,7 +20,7 @@ using namespace cugl;
 #define ATTACK_UPGRADE_1 4
 // FOREST UNLOCKS
 #define CHARGED_MELEE_UNLOCK 1
-#define ATTACK_UPGRADE_2 2
+#define ATTACK_UPGRADE_2 5
 
 #pragma mark -
 #pragma mark Gameplay Control

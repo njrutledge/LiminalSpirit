@@ -40,7 +40,7 @@ bool Particle::initRandomTexture(cugl::Vec2 position, float size, cugl::Vec2 gra
 	return true;
 }
 
-bool Particle::initSizeChanging(cugl::Vec2 position, float size, cugl::Vec2 gravity, float speed, float lifetime, float angle, float maxChangeTime, float changeRate) {
+bool Particle::initSizeChanging(cugl::Vec2 position, float size, cugl::Vec2 gravity, float speed, float lifetime, float angle, float maxChangeTime, float changeRate, float angleChange) {
 	init(position, size, gravity, speed, lifetime, angle);
 	_maxsizechangetime = maxChangeTime;
 	_sizechangerate = changeRate;
@@ -55,6 +55,16 @@ bool Particle::initSizeChanging(cugl::Vec2 position, float size, cugl::Vec2 grav
 		_shrinkOrEnlarge = 0;
 	}
 
+	if (angleChange != 0) {
+		_anglechange = true;
+	}
+	else {
+		_anglechange = false;
+	}
+
+	_angletimer = 0;
+	_anglechangerate = angleChange;
+
 	return true;
 }
 
@@ -65,7 +75,6 @@ void Particle::setAngle(float a) {
 
 void Particle::update(float dt) {
 	_velocity += _gravity * dt + _accel * dt;
-	_angle = atan2(_velocity.y, _velocity.x);
 	_position += _velocity * dt;
 	_lifetime = max(0.f, _lifetime - dt);
 	_opacity = _lifetime / _maxlifetime;
@@ -87,5 +96,9 @@ void Particle::update(float dt) {
 			_shrinkOrEnlarge = 0;
 			_size = prevSize; // set to previous last size (maybe setting to arbitrary small value is better?)
 		}
+	}
+	if (_anglechange) {
+		_angletimer += dt;
+		_angle = fmod(_angle + _anglechangerate, 6.28f);
 	}
 }

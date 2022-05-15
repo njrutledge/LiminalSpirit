@@ -182,6 +182,15 @@ protected:
     int _nextWaveNum;
     /** Whether or not spawn particles have been created already */
     bool _spawnParticlesDone;
+    /** Mirror Shard Texture vector*/
+    std::vector<std::shared_ptr<Texture>> _mirrorShardList;
+    /** Death Particle Texture Vector */
+    std::vector<std::shared_ptr<Texture>> _deathParticleList;
+    /** Melee Particle Texture Vector */
+    std::vector<std::shared_ptr<Texture>> _meleeParticleList;
+    /** Range Particle Texture Vector */
+    std::vector<std::shared_ptr<Texture>> _rangeParticleList;
+
     /** A game timer used for spawn times */
     float _timer;
     /** living spawners */
@@ -439,6 +448,10 @@ public:
      */
     bool isDebug() const { return _debug; }
 
+
+    /** Helper for creating an uninteractable obstacle with Texture textureName at startPos with scale scale */
+    void createAndAddDeathAnimationObstacle(string textureName, Vec2 startPos, float scale, int frames);
+
     /**
      * Sets whether debug mode is active.
      *
@@ -471,7 +484,7 @@ public:
 
     /** Helpers to create particles in GameScene */
     void createParticles(std::shared_ptr<Texture> texture, Vec2 pos, string poolName, Color4 tint, Vec2 pointOffset, float scale);
-    void createParticles(std::vector<std::shared_ptr<Texture>> textures, Vec2 pos, string poolName, Color4 tint, Vec2 pointOffset, float scale, bool hasMultipleLinkedTextures, Vec2 linkOffset);
+    void createParticles(std::vector<std::shared_ptr<Texture>> textures, Vec2 pos, string poolName, Color4 tint, Vec2 pointOffset, float scale, bool hasMultipleLinkedTextures, Vec2 linkOffset, int numTex);
 
 
     /** Helper to convert numbers into Textures **/

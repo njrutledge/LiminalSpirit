@@ -432,20 +432,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             } });
     _sfxButton->setScale(.4 * buttonScale);
 
-    std::vector<std::shared_ptr<Texture> > numTexts;
-    numTexts.push_back(_assets->get<Texture>("zero"));
-    numTexts.push_back(_assets->get<Texture>("one"));
-    numTexts.push_back(_assets->get<Texture>("two"));
-    numTexts.push_back(_assets->get<Texture>("three"));
-    numTexts.push_back(_assets->get<Texture>("four"));
-    numTexts.push_back(_assets->get<Texture>("five"));
-    numTexts.push_back(_assets->get<Texture>("six"));
-    numTexts.push_back(_assets->get<Texture>("seven"));
-    numTexts.push_back(_assets->get<Texture>("eight"));
-    numTexts.push_back(_assets->get<Texture>("nine"));
-
-    _numberTextures = numTexts;
-
     // lose screen
     _loseScene = _assets->get<scene2::SceneNode>("loseScene");
 
@@ -506,6 +492,52 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     std::string timer = strtool::format("Next Wave In: %d", duration);
     _timer_text = TextLayout::allocWithText(msg, assets->get<Font>("marker"));
     _timer_text->layout();
+
+    //Number Texture getting
+
+    _numberTextures.push_back(_assets->get<Texture>("zero"));
+    _numberTextures.push_back(_assets->get<Texture>("one"));
+    _numberTextures.push_back(_assets->get<Texture>("two"));
+    _numberTextures.push_back(_assets->get<Texture>("three"));
+    _numberTextures.push_back(_assets->get<Texture>("four"));
+    _numberTextures.push_back(_assets->get<Texture>("five"));
+    _numberTextures.push_back(_assets->get<Texture>("six"));
+    _numberTextures.push_back(_assets->get<Texture>("seven"));
+    _numberTextures.push_back(_assets->get<Texture>("eight"));
+    _numberTextures.push_back(_assets->get<Texture>("nine"));
+
+    //Mirror shared getting (reducing _assets->get overhead)
+        
+     _mirrorShardList.push_back(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_1));
+     _mirrorShardList.push_back(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_2));
+     _mirrorShardList.push_back(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_3));
+     _mirrorShardList.push_back(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_4));
+     _mirrorShardList.push_back(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_5));
+     _mirrorShardList.push_back(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_6));
+
+     //Death Particle getting
+     _deathParticleList.push_back(_assets->get<Texture>("death_particle1"));
+     _deathParticleList.push_back(_assets->get<Texture>("death_particle2"));
+     _deathParticleList.push_back(_assets->get<Texture>("death_particle3"));
+     _deathParticleList.push_back(_assets->get<Texture>("death_particle4"));
+
+     //Melee Hit Particle getting
+     _meleeParticleList.push_back(_assets->get<Texture>("melee_attack_particle1"));
+     _meleeParticleList.push_back(_assets->get<Texture>("melee_attack_particle2"));
+     _meleeParticleList.push_back(_assets->get<Texture>("melee_attack_particle3"));
+     _meleeParticleList.push_back(_assets->get<Texture>("attack_particle1"));
+     _meleeParticleList.push_back(_assets->get<Texture>("attack_particle2"));
+     _meleeParticleList.push_back(_assets->get<Texture>("attack_particle3"));
+     _meleeParticleList.push_back(_assets->get<Texture>("attack_particle4"));
+
+     //Range Hit Particle getting
+     _rangeParticleList.push_back(_assets->get<Texture>("range_attack_particle1"));
+     _rangeParticleList.push_back(_assets->get<Texture>("range_attack_particle2"));
+     _rangeParticleList.push_back(_assets->get<Texture>("range_attack_particle3"));
+     _rangeParticleList.push_back(_assets->get<Texture>("attack_particle1"));
+     _rangeParticleList.push_back(_assets->get<Texture>("attack_particle2"));
+     _rangeParticleList.push_back(_assets->get<Texture>("attack_particle3"));
+     _rangeParticleList.push_back(_assets->get<Texture>("attack_particle4"));
 
     _timer = 0.0f;
     _worldnode->setColor(Color4::WHITE);
@@ -806,17 +838,6 @@ void GameScene::updateSoundInputParticlesAndTilt(float timestep)
         setDebug(!isDebug());
     }
 
-    // Some Particle Stuff
-    // ********* this is how you'd make a new node of particles ***********/
-    // if (_meleeArm->getLastType() == AttackController::MeleeState::h1_left) { ///////////////////////////////////////A way to trigger
-    //    std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("collision"), Vec2(0,0));//Create the pool for the effect based on defined values in json
-    //    std::shared_ptr<Texture> text = _assets->get<Texture>(PLAYER_RANGE);////////////////////////////////////////Create a texture or vector of textures to use for the particle effect
-
-    //    std::shared_ptr<ParticleNode> newParts = ParticleNode::alloc(Vec2(10*_scale,10*_scale), text, pool);///////Create a node
-    //    newParts->setVisible(true);////////////////////////////////////////////////////////////////////////////////Make visible (not usually necessary)
-    //    _worldnode->addChildWithTag(newParts, 100);///////////////////////////////////////////////////////////////Add to worldnode with 100 tag (necessary)
-    //}
-
     ////Update all Particles
     for (std::shared_ptr<scene2::SceneNode> s : _worldnode->getChildren())
     {
@@ -828,6 +849,17 @@ void GameScene::updateSoundInputParticlesAndTilt(float timestep)
                 s->dispose();
             }
             pn->update(timestep);
+        }
+        else if (s->getTag() == 200) {
+            
+            scene2::SpriteNode* sp = dynamic_cast<scene2::SpriteNode*>(s.get());
+            if (sp->getFrame() == 4) {
+                sp->setVisible(false);
+            }
+            else if (rand() % 100 < 25) { // dead bodies decay at random rate
+                sp->setFrame(sp->getFrame() + 1);
+            }
+            
         }
     };
 }
@@ -1692,24 +1724,36 @@ void GameScene::updateEnemies(float timestep)
         if ((*it)->getInvincibilityTimer() > 0 && !(*it)->getPlayedDamagedParticle())
         {
             (*it)->setPlayedDamagedParticle(true);
-            if ((*it)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee)
+            float damageParticleScale;
+            if ((*it)->getName() == "Spawner") {
+                damageParticleScale = 0.15;
+            }
+            else if ((*it)->getName() == "Glutton") {
+                damageParticleScale = 0.2;
+            }
+            else {
+                damageParticleScale = 0.1;
+            }
+            if ((*it)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee || (*it)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_dash)
             {
-                createParticles(melee_impact, (*it)->getPosition() * _scale, "devil", Color4::WHITE, Vec2(0, 0), 0.1f);
+                createParticles(melee_impact, (*it)->getPosition() * _scale, "devil", Color4::WHITE, Vec2(0, 0), damageParticleScale);
+                createParticles(_meleeParticleList, (*it)->getPosition() * _scale, "sparks", Color4::WHITE, Vec2(0, 0), damageParticleScale*2, false, Vec2(), 7);
             }
             else
             {
-                createParticles(ranged_impact, (*it)->getPosition() * _scale, "devil", Color4::WHITE, Vec2(0, 0), 0.1f);
+                createParticles(ranged_impact, (*it)->getPosition() * _scale, "devil", Color4::WHITE, Vec2(0, 0), damageParticleScale);
+                createParticles(_rangeParticleList, (*it)->getPosition() * _scale, "sparks", Color4::WHITE, Vec2(0, 0), damageParticleScale*2, false, Vec2(), 7);
             }
             if ((*it)->getLastDamageAmount() < 10)
             {
                 std::vector<std::shared_ptr<Texture> > num;
                 num.push_back(_numberTextures[(*it)->getLastDamageAmount()]);
-                createParticles(num, (*it)->getPosition() * _scale, "number", Color4::WHITE, Vec2(0, 10), 0.1f, true, Vec2());
+                createParticles(num, (*it)->getPosition() * _scale, "number", Color4::WHITE, Vec2(0, 10), 0.1f, true, Vec2(), 0);
             }
             else
             {
                 std::vector<std::shared_ptr<Texture> > num = getTexturesFromNumber((*it)->getLastDamageAmount());
-                createParticles(num, (*it)->getPosition() * _scale, "number", Color4::WHITE, Vec2(0, 10), 0.1f, true, Vec2(-10, 0));
+                createParticles(num, (*it)->getPosition() * _scale, "number", Color4::WHITE, Vec2(0, 10), 0.1f, true, Vec2(-10, 0), 0);
             }
         }
 
@@ -1888,10 +1932,16 @@ void GameScene::createParticles(std::shared_ptr<Texture> texture, Vec2 pos, stri
     _worldnode->addChildWithTag(pn, 100);
 }
 
-void GameScene::createParticles(std::vector<std::shared_ptr<Texture> > textures, Vec2 pos, string poolName, Color4 tint, Vec2 pointOffset, float scale, bool hasMultipleLinkedTextures, Vec2 linkOffset)
+void GameScene::createParticles(std::vector<std::shared_ptr<Texture> > textures, Vec2 pos, string poolName, Color4 tint, Vec2 pointOffset, float scale, bool hasMultipleLinkedTextures, Vec2 linkOffset, int numTex)
 {
     std::shared_ptr<ParticleNode> pn;
-    std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get(poolName), pointOffset);
+    std::shared_ptr<ParticlePool> pool;
+    if (!hasMultipleLinkedTextures) {
+        pool = ParticlePool::allocPoint(_particleInfo->get(poolName), pointOffset, numTex);
+    }
+    else {
+        pool = ParticlePool::allocPoint(_particleInfo->get(poolName), pointOffset);
+    }
     pn = ParticleNode::alloc(pos, textures, pool, hasMultipleLinkedTextures, linkOffset);
     pn->setScale(scale);
     pn->setColor(tint);
@@ -2432,18 +2482,46 @@ void GameScene::updateRemoveDeletedEnemies()
         }
         if (!bypass && (*eit)->isRemoved())
         {
-            createParticles(_assets->get<Texture>("melee_impact"), (*eit)->getPosition() * _scale, "devil", Color4::WHITE, Vec2(0, 0), 0.1f);
+
+            float damageParticleScale;
+            if ((*eit)->getName() == "Spawner") {
+                damageParticleScale = 0.15;
+            }
+            else if ((*eit)->getName() == "Glutton") {
+                damageParticleScale = 0.2;
+            }
+            else {
+                damageParticleScale = 0.1;
+            }
+            //Plays damage particles then death particles shortly after (they fade-in on a delay)
+            if ((*eit)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_melee || (*eit)->getLastDamagedBy() == BaseEnemyModel::AttackType::p_dash) {
+                createParticles(_assets->get<Texture>("melee_impact"), (*eit)->getPosition() * _scale, "devil", Color4::WHITE, Vec2(0, 0), damageParticleScale);
+                createParticles(_meleeParticleList, (*eit)->getPosition() * _scale, "sparks", Color4::WHITE, Vec2(0, 0), damageParticleScale*2, false, Vec2(), 7);
+            }
+            else {
+                createParticles(_assets->get<Texture>("ranged_impact"), (*eit)->getPosition() * _scale, "devil", Color4::WHITE, Vec2(0, 0), damageParticleScale);
+                createParticles(_rangeParticleList, (*eit)->getPosition() * _scale, "sparks", Color4::WHITE, Vec2(0, 0), damageParticleScale*2, false, Vec2(), 7);
+            }
             
             if ((*eit)->getLastDamageAmount() < 10)
             {
                 std::vector<std::shared_ptr<Texture> > num;
                 num.push_back(_numberTextures[(*eit)->getLastDamageAmount()]);
-                createParticles(num, (*eit)->getPosition() * _scale, "number", Color4::WHITE, Vec2(0, 10), 0.1f, true, Vec2());
+                createParticles(num, (*eit)->getPosition() * _scale, "number", Color4::WHITE, Vec2(0, 10), 0.1f, true, Vec2(), 0);
             }
             else
             {
                 std::vector<std::shared_ptr<Texture> > num = getTexturesFromNumber((*eit)->getLastDamageAmount());
-                createParticles(num, (*eit)->getPosition() * _scale, "number", Color4::WHITE, Vec2(0, 10), 0.1f, true, Vec2(-10, 0));
+                createParticles(num, (*eit)->getPosition() * _scale, "number", Color4::WHITE, Vec2(0, 10), 0.1f, true, Vec2(-10, 0), 0);
+            }
+
+            //Mirror shard breaking
+            if (std::shared_ptr<Mirror> mirror = dynamic_pointer_cast<Mirror>(*eit)) {
+                createParticles(_mirrorShardList, (*eit)->getPosition() * _scale, "mirror_death", Color4::WHITE, Vec2(0, 10), 0.05f, false, Vec2(), 6);
+            }
+            else if (std::shared_ptr<Lost> lost = dynamic_pointer_cast<Lost>(*eit)) {
+                createAndAddDeathAnimationObstacle("lost_death", (*eit)->getPosition(), 0.125f, 5);
+                createParticles(_deathParticleList, (*eit)->getPosition() * _scale, "lost_death", Color4::WHITE, Vec2(0, -20), 0.15f, false, Vec2(), 4);
             }
             
             // int log1 = _world->getObstacles().size();
@@ -2463,6 +2541,21 @@ void GameScene::updateRemoveDeletedEnemies()
         }
     }
 }
+
+void GameScene::createAndAddDeathAnimationObstacle(string textureName, Vec2 startPos, float scale, int frames) {
+    std::shared_ptr<Texture> image = _assets->get<Texture>(textureName);
+    std::shared_ptr<Glow> glow = Glow::alloc(startPos, image->getSize() / _scale, _scale);
+    std::shared_ptr<scene2::SpriteNode> sprite = scene2::SpriteNode::alloc(image, 1, frames);
+    glow->setSceneNode(sprite);
+    glow->setAnimeTimer(0.f);
+    glow->setGlowTimer(0.f);
+    sprite->setPriority(1.29);
+    sprite->setFrame(0);
+    sprite->setRelativeColor(false);
+    sprite->setScale(scale);
+    _worldnode->addChildWithTag(glow->getSceneNode(), 200);
+}
+
 
 void GameScene::updateText()
 {
@@ -2629,12 +2722,12 @@ void GameScene::createSpawnParticles()
 
     for (int i = 0; i < positions.size(); i++)
     {
-        std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("spawning"), Vec2(0, 0));
+        std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("spawning_swirl"), Vec2(0, 0));
         std::shared_ptr<ParticlePool> pool2 = ParticlePool::allocPoint(_particleInfo->get("spawning"), Vec2(0, 0));
         std::shared_ptr<ParticleNode> spawning = ParticleNode::alloc(positions[i] * _scale, portal_swirl, pool);
         std::shared_ptr<ParticleNode> spawning2 = ParticleNode::alloc(positions[i] * _scale, portal, pool2);
-        spawning->setScale(0.15f);
-        spawning2->setScale(0.15f);
+        spawning->setScale(0.25f);
+        spawning2->setScale(0.25f);
         _worldnode->addChildWithTag(spawning2, 100);
         _worldnode->addChildWithTag(spawning, 100);
     }
@@ -2756,12 +2849,12 @@ void GameScene::createMirror(Vec2 enemyPos, Mirror::Type type, std::string asset
     std::shared_ptr<Texture> mirror_reflectattackImage = _assets->get<Texture>(MIRROR_REFLECT_TEXTURE);
     // shards
     std::shared_ptr<scene2::PolygonNode> mirrorShards[6];
-    mirrorShards[0] = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_1));
-    mirrorShards[1] = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_2));
-    mirrorShards[2] = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_3));
-    mirrorShards[3] = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_4));
-    mirrorShards[4] = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_5));
-    mirrorShards[5] = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(MIRROR_SHARD_TEXTURE_6));
+    mirrorShards[0] = scene2::PolygonNode::allocWithTexture(_mirrorShardList[0]);
+    mirrorShards[1] = scene2::PolygonNode::allocWithTexture(_mirrorShardList[1]);
+    mirrorShards[2] = scene2::PolygonNode::allocWithTexture(_mirrorShardList[2]);
+    mirrorShards[3] = scene2::PolygonNode::allocWithTexture(_mirrorShardList[3]);
+    mirrorShards[4] = scene2::PolygonNode::allocWithTexture(_mirrorShardList[4]);
+    mirrorShards[5] = scene2::PolygonNode::allocWithTexture(_mirrorShardList[5]);
 
     std::shared_ptr<Mirror> mirror = Mirror::alloc(enemyPos, mirrorImage->getSize(), mirrorImage->getSize() / _scale / 15, _scale, type); // TODO this is not right, fix this to be closest enemy
     std::shared_ptr<scene2::PolygonNode> mirrorSprite = scene2::PolygonNode::allocWithTexture(mirrorImage);

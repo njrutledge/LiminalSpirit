@@ -155,6 +155,13 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
+		"lost_death": {
+			"file": "textures/animations/lost_death.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
 		"glutton": {
 			"file": "textures/glutton.png",
 			"minfilter": "nearest",
@@ -248,21 +255,112 @@
 			"wrapT": "clamp"
 		},
 		"melee_impact": {
-			"file": "textures/meleeimpact.png",
+			"file": "textures/particles/meleeimpact.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
 		"ranged_impact": {
-			"file": "textures/rangedimpact.png",
+			"file": "textures/particles/rangedimpact.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
-		"melee_slash": {
-			"file": "textures/meleeslash.png",
+		"melee_attack_particle1": {
+			"file": "textures/particles/attack_particle1.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"melee_attack_particle2": {
+			"file": "textures/particles/attack_particle2.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"melee_attack_particle3": {
+			"file": "textures/particles/attack_particle3.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"range_attack_particle1": {
+			"file": "textures/particles/attack_particle5.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"range_attack_particle2": {
+			"file": "textures/particles/attack_particle6.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"range_attack_particle3": {
+			"file": "textures/particles/attack_particle7.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"attack_particle1": {
+			"file": "textures/particles/attack_particle4.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"attack_particle2": {
+			"file": "textures/particles/attack_particle8.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"attack_particle3": {
+			"file": "textures/particles/attack_particle9.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"attack_particle4": {
+			"file": "textures/particles/attack_particle10.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"death_particle1": {
+			"file": "textures/particles/death_particle1.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"death_particle2": {
+			"file": "textures/particles/death_particle2.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"death_particle3": {
+			"file": "textures/particles/death_particle3.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"death_particle4": {
+			"file": "textures/particles/death_particle4.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
@@ -1322,8 +1420,9 @@
 		"shroom9": "json/levels/shroom/mush9.json",
 		"levelt": "json/levels/levelt.json",
 		"level2": "json/levels/level2.json",
-		"forest1": "json/levels/forest/stack.json",
+		"forest1": "json/levels/forest/introdash.json",
 		"forest2": "json/levels/forest/forestation.json",
+        "forest3": "json/levels/forest/stacked.json",
 		"particles": "json/particles.json",
 		"BOSS": "json/levels/BOSS.json"
 	}
