@@ -735,16 +735,14 @@ void GameScene::update(float timestep, int unlockCount)
             _winInit = false;
             _winFadeTimer = 0;
         }
-        if (_player->getX() >= 30)
-        {
-            _tilt.reset();
+        
             this->setColor(Color4(255 - _winFadeTimer * 255 / 1.5, 255 - _winFadeTimer * 255 / 1.5, 255 - _winFadeTimer * 255 / 1.5, 255));
             _winFadeTimer = _winFadeTimer + timestep <= 1.5 ? _winFadeTimer + timestep : 1.5;
-            if (_winFadeTimer == 1.5)
+            if (_winFadeTimer == 1.5 && _player->getX()>=30)
             {
+                _tilt.reset();
                 _next = true;
             }
-        }
         _player->setVX(_tilt.getXpos());
         _player->setFacingRight(true);
 
