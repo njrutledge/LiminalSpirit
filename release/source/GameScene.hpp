@@ -205,6 +205,8 @@ protected:
     int _dashXVel;
     /** YVel for the current melee dash */
     int _dashYVel;
+    /** bool whether dash is cancelled */
+    bool _cancelDash;
     
     /** frame used for when animation interrupted when stunned */
     int _prevFrame;

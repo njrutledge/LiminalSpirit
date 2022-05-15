@@ -73,10 +73,6 @@ float DEFAULT_HEIGHT = DEFAULT_WIDTH / SCENE_WIDTH * SCENE_HEIGHT;
 #define PLATFORM_HEIGHT 0.5
 #define PLATFORMTEXTURE "platform"
 
-#define DASHX 25
-#define DASHY 25
-#define DASHTIME 0.8
-
 /** The initial position of the player*/
 float PLAYER_POS[] = {1.0f, 1.0f};
 
@@ -299,6 +295,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _dashTime = 0;
     _dashXVel = 0;
     _dashYVel = 0;
+    _cancelDash = false;
 
     _ai = AIController();
 
@@ -2143,55 +2140,71 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
         // If the dash velocities are set, change player velocity if dash time is not complete
         if (_dashXVel || _dashYVel)
         {
-            if (_dashTime < DASHTIME)
-            {
-                // Slow down for last 0.25 seconds
-                float slowDownTime = DASHTIME - 0.25f;
-                if (_dashTime > slowDownTime && _dashXVel > 0)
-                {
-                    _dashXVel = DASHX - ((_dashTime - slowDownTime) * (DASHX / 0.25));
-                }
-                else if (_dashTime > slowDownTime && _dashXVel < 0)
-                {
-                    _dashXVel = -DASHX + ((_dashTime - slowDownTime) * (DASHX / 0.25));
-                }
-                if (_dashTime > slowDownTime && _dashYVel > 0 && _dashYVel != 1)
-                {
-                    _dashYVel = DASHY - ((_dashTime - slowDownTime) * (DASHY / 0.25));
-                }
-                else if (_dashTime > slowDownTime && _dashYVel < 0 && _dashYVel != -1)
-                {
-                    _dashYVel = -DASHY + ((_dashTime - slowDownTime) * (DASHY / 0.25));
-                }
-                
-                // Set velocity for x dash
-                if (_dashXVel > 0)
-                {
-                    _player->setVX(_dashXVel);
-                    _player->setFacingRight(true);
-                }
-                else if (_dashXVel < 0)
-                {
-                    _player->setVX(_dashXVel);
-                    _player->setFacingRight(false);
-                }
-                // Set velocity for y dash
-                if (_dashYVel > 0) {
-                    _player->setVY(_dashYVel);
-                }
-                else if (_dashYVel < 0 && !_player->isGrounded())
-                {
-                    _player->setVY(_dashYVel);
-                }
-                // Invincibility, maintain same health throughout dash
-                _player->setIsInvincible(true);
-                _dashTime += timestep;
-            }
-            else
-            {
+            // Cancel dash with melee swipe
+            if (right == SwipeController::rightAttack || right == SwipeController::upAttack ||
+                right == SwipeController::leftAttack || right == SwipeController::downAttack ||
+                right == SwipeController::jump) {
                 _dashXVel = 0;
                 _dashYVel = 0;
                 _player->setIsDashing(false);
+                _player->setVX(0);
+                _player->setVY(0);
+                _dashTime = 0.7f;
+                _cancelDash = true;
+            }
+            else {
+                if (_dashTime < DASHTIME)
+                {
+                    // Slow down for last 0.25 seconds
+                    float slowDownTime = DASHTIME - 0.25f;
+                    if (_dashTime > slowDownTime && _dashXVel > 0)
+                    {
+                        _dashXVel = DASHX - ((_dashTime - slowDownTime) * (DASHX / 0.25));
+                    }
+                    else if (_dashTime > slowDownTime && _dashXVel < 0)
+                    {
+                        _dashXVel = -DASHX + ((_dashTime - slowDownTime) * (DASHX / 0.25));
+                    }
+                    if (_dashTime > slowDownTime && _dashYVel > 0 && _dashYVel != 1)
+                    {
+                        _dashYVel = DASHY - ((_dashTime - slowDownTime) * (DASHY / 0.25));
+                    }
+                    else if (_dashTime > slowDownTime && _dashYVel < 0 && _dashYVel != -1)
+                    {
+                        _dashYVel = -DASHY + ((_dashTime - slowDownTime) * (DASHY / 0.25));
+                    }
+                    
+                    // Set velocity for x dash
+                    if (_dashXVel > 0)
+                    {
+                        _player->setVX(_dashXVel);
+                        _player->setFacingRight(true);
+                    }
+                    else if (_dashXVel < 0)
+                    {
+                        _player->setVX(_dashXVel);
+                        _player->setFacingRight(false);
+                    }
+                    // Set velocity for y dash
+                    if (_dashYVel > 0) {
+                        _player->setVY(_dashYVel);
+                    }
+                    else if (_dashYVel < 0 && !_player->isGrounded())
+                    {
+                        _player->setVY(_dashYVel);
+                    }
+                    // Invincibility, maintain same health throughout dash
+                    _player->setIsInvincible(true);
+                    _dashTime += timestep;
+                }
+                else
+                {
+                    _dashXVel = 0;
+                    _dashYVel = 0;
+                    _player->setIsDashing(false);
+                    _player->setVX(0);
+                    _player->setVY(0);
+                }
             }
         }
         else
@@ -2396,7 +2409,7 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
     }
     _attacks->update(_player->getPosition(), _player->getBody()->GetLinearVelocity(), timestep);
     // DO NOT MOVE THE ABOVE LINE
-    if (right == SwipeController::upAttack || left == SwipeController::jump || right == SwipeController::jump)
+    if (!_cancelDash && (right == SwipeController::upAttack || left == SwipeController::jump || right == SwipeController::jump))
     {
         _player->setJumping(true);
         _player->setIsFirstFrame(true);
@@ -2458,6 +2471,17 @@ void GameScene::updateRemoveDeletedAttacks()
 
             // int log2 = _world->getObstacles().size();
             ait = _attacks->_current.erase(ait);
+        }
+        // Delete dash attack if dash cancelled
+        else if ((*ait)->getType() == AttackController::Type::p_dash && _cancelDash) {
+            // int log1 = _world->getObstacles().size();
+            cugl::physics2::Obstacle *obj = dynamic_cast<cugl::physics2::Obstacle *>(&**ait);
+            _world->removeObstacle(obj);
+            _worldnode2->removeChild(obj->_node);
+
+            // int log2 = _world->getObstacles().size();
+            ait = _attacks->_current.erase(ait);
+            _cancelDash = false;
         }
         else
         {

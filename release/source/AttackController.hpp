@@ -15,7 +15,9 @@
 /**Height of the sensor */
 #define SENSOR_HEIGHT 01.f
 
-
+#define DASHX 25
+#define DASHY 25
+#define DASHTIME 0.8
 
 #include <cugl/cugl.h>
 #include <unordered_set>
@@ -43,6 +45,10 @@ public:
         left,
         up,
         down,
+        northeast,
+        northwest,
+        southwest,
+        southeast,
         neither
     };
 
@@ -239,16 +245,16 @@ public:
                                              cugl::Vec2 vel, float angle, Side s, float timer, string attackID, int frames) {
             //TODO make this not hardcoded
             float off = 2.5f;
-            if (p.x + radius + off > _worldWidth && s == right) {
+            if (p.x + radius + off > _worldWidth && (s == right || s == northeast || s == southeast)) {
                 p.x = _worldWidth - 0.1f - radius - off;
             }
-            else if (p.x - radius - off < 0.0f && s == left) {
+            else if (p.x - radius - off < 0.0f && (s == left || s == northwest || s == southwest)) {
                 p.x = 0.1f + radius + off;
             }
 
-            if (p.y + radius > _worldHeight && s == up) {
+            if (p.y + radius > _worldHeight && (s == up || s == northeast || s == northwest)) {
                 p.y = _worldHeight - 0.1f - radius;
-            } else if (p.y - radius < 0.0f && s == down) {
+            } else if (p.y - radius < 0.0f && (s == down || s == southeast || s == southwest)) {
                 p.y = 0.1f + radius;
             }
 

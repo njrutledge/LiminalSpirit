@@ -73,7 +73,7 @@ void Mirror::updateAnimations(float dt) {
 			int nextFrame = -1;
 			if (_attackTime > .1f) {
 				nextFrame = _attackSprite->getFrame() + 1;
-				CULog("nextFrame: %d", nextFrame);
+//				CULog("nextFrame: %d", nextFrame);
 				if (nextFrame < 3) {
 					_attackSprite->setFrame(nextFrame);
 					setAttackAnimationTimer(0);

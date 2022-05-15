@@ -364,7 +364,7 @@ void SwipeController::calculateSwipeDirection(cugl::Vec2 startPos, cugl::Vec2 en
     }
     else {
         processRightState(grounded);
-        printSwipe(getRightSwipe(),false);
+//        printSwipe(getRightSwipe(), false);
     }
 }
 
