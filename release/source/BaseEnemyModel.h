@@ -132,6 +132,9 @@ protected:
 	/** Timer for the enemy's idle animation */
 	float _idleTime;
 
+	/** Timer for the enemy's attack animation */
+	float _attackAnimationTime;
+
 	/** Redraws outline of physics fixtures */
 	virtual void resetDebug() override;
 
@@ -294,6 +297,12 @@ public:
 
 	/** Sets the idle animation time */
 	void setIdleAnimationTimer(float value) { _idleTime = value; }
+
+	/** Returns the amount of time remaining for next attack animation frame */
+	float getAttackAnimationTimer() { return _attackAnimationTime; }
+
+	/** Sets the attack animation time */
+	void setAttackAnimationTimer(float value) { _attackAnimationTime = value; }
 
 	/** Sets the pointer to the enemy's glow */
 	void setGlow(std::shared_ptr<Glow> glow) { _glow = glow; }
