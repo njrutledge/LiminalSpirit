@@ -39,6 +39,7 @@ bool AttackController::Attack::init(const cugl::Vec2 p, float radius, float a, f
     _sensorFixture = nullptr;
     _homingSensorFixture = nullptr;
     _bodySensorFixture = nullptr;
+    _homingEnemy = nullptr;
     if (CapsuleObstacle::init(_position, Size(_radius, _radius))) {
         // TODO change the sensor naming based on if its player attack
         b2Filter filter = b2Filter();
@@ -168,7 +169,7 @@ void AttackController::Attack::update(const cugl::Vec2 p, bool follow, float dt,
         if (follow) {
             _position = p + _offset;
             _body->SetLinearVelocity(VX);
-        }else{
+        }else if (_body->GetLinearVelocity() == b2Vec2(0,0)) {
             _body->SetLinearVelocity(b2Vec2(_vel.x*_scale, _vel.y*_scale));
         }
         _position = _position + _vel;
@@ -176,8 +177,18 @@ void AttackController::Attack::update(const cugl::Vec2 p, bool follow, float dt,
         if (_age <= 0) {
             _active =  false;
         }
+        if (_homingEnemy && !_homingEnemy->isRemoved()) {
+            Vec2 enemyPos = _homingEnemy->getPosition();
+            Vec2 attackPos = getPosition();
+            Vec2 diffDirection = enemyPos - attackPos;
+            diffDirection.normalize().scale(10);
+            Vec2 start = getLinearVelocity();
+            Vec2 end = start + diffDirection;
+            setLinearVelocity(end.scale(start.length() / end.length()));
+        }
+        setNodeAngle(getLinearVelocity().getAngle());
 
-        //animations
+       //animations
         if (_maxFrames != 0) {
             _timer += dt;
             if (_type == p_exp) {
@@ -203,6 +214,8 @@ void AttackController::Attack::dispose() {
     _sensorNode = nullptr;
     _sensorFixture = nullptr;
     _bodySensorFixture = nullptr;
+    _hitEnemies.clear();
+    _homingEnemy = nullptr;
 
 }
 

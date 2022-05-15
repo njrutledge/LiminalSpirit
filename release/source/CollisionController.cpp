@@ -314,13 +314,7 @@ void CollisionController::handleAttackCollision(AttackController::Attack* attack
     }
     if (fd1 && *fd1 == "playerattacksensorhoming") {
         if (BaseEnemyModel* enemy = dynamic_cast<BaseEnemyModel*>(bd)) {
-            Vec2 enemyPos = enemy->getPosition();
-            Vec2 attackPos = attack->getPosition();
-            Vec2 diffDirection = enemyPos - attackPos;
-            //diffDirection.normalize();
-            Vec2 start = attack->getLinearVelocity();
-            Vec2 end = start + diffDirection;
-            attack->setLinearVelocity(diffDirection.scale(start.length() / diffDirection.length()));
+            attack->setHomingEnemy(enemy);
             //CULog("%f, %f", attack->getLinearVelocity().x, attack->getLinearVelocity().y);
 
         }
