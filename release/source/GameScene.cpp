@@ -831,7 +831,7 @@ void GameScene::updateSoundInputParticlesAndTilt(float timestep)
     _sound->play_level_music(_biome, e);
 
     // Update input controller
-    _input.update();
+    _input.update(_swap);
     // Debug Mode on/off
     if (_input.getDebugKeyPressed())
     {
@@ -1950,7 +1950,7 @@ void GameScene::createParticles(std::vector<std::shared_ptr<Texture> > textures,
 
 SwipeController::SwipeAttack GameScene::updateLeftSwipe(int unlockCount)
 {
-    SwipeController::SwipeAttack left = _swipes.getLeftSwipe(_swap);
+    SwipeController::SwipeAttack left = _swipes.getLeftSwipe();
 
     switch (left)
     {
@@ -2024,7 +2024,7 @@ SwipeController::SwipeAttack GameScene::updateLeftSwipe(int unlockCount)
 
 SwipeController::SwipeAttack GameScene::updateRightSwipe(int unlockCount)
 {
-    SwipeController::SwipeAttack right = _swipes.getRightSwipe(_swap);
+    SwipeController::SwipeAttack right = _swipes.getRightSwipe();
 
     switch (right)
     {
@@ -2068,8 +2068,8 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
 
     if (!_player->isStunned())
     {
-        _attacks->attackLeft(Vec2(playerPos.x, playerPos.y), left, _swipes.getLeftAngle(_swap), _player->isGrounded(), _timer, _sound);
-        _attacks->attackRight(Vec2(playerPos.x, playerPos.y), right, _swipes.getRightAngle(_swap), _player->isGrounded(), _player->isFacingRight(), _timer, _sound);
+        _attacks->attackLeft(Vec2(playerPos.x, playerPos.y), left, _swipes.getLeftAngle(), _player->isGrounded(), _timer, _sound);
+        _attacks->attackRight(Vec2(playerPos.x, playerPos.y), right, _swipes.getRightAngle(), _player->isGrounded(), _player->isFacingRight(), _timer, _sound);
         if (right == SwipeController::chargedRight)
         {
             _dashXVel = DASHX + 3;
