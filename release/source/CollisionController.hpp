@@ -14,6 +14,15 @@ public:
     /** Creates a new collision Controller */
     CollisionController() {_spawner_killed = -1; _index_spawner = -1;}
     
+    int _mCoolReduction;
+    
+    int _rCoolReduction;
+    
+    // Goes from 0 to 10, where 5 is 100% damage for both weapons. Going up increases melee, going down increases range
+    bool _stall;
+    
+    int _stale;
+    
     void init(std::shared_ptr<SoundController> sound);
 
     /**Deletes the collision controller */
@@ -31,6 +40,20 @@ public:
     
     int getIndexSpawner() {return _index_spawner;};
     void setIndexSpawner(int v) { _index_spawner = v;};
+    
+    int getMeleeReduction() {return _mCoolReduction;}
+    
+    void resetMelee() {_mCoolReduction = 0;}
+    
+    int getRangeReduction() {return _rCoolReduction;}
+    
+    void resetRange() {_rCoolReduction = 0;}
+    
+    bool getStall() {return _stall;}
+    
+    void resetStall() {_stall = false;}
+    
+    void reset();
 
 private:
     std::shared_ptr<SoundController> _sound;

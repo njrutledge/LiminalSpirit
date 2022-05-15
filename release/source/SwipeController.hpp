@@ -316,6 +316,10 @@ public:
         return _leftChargingTime;
     }
     
+    void coolMelee(int hits);
+    
+    void coolRange(int hits);
+    
     /**
      * Returns whether the left attack is charged
      *

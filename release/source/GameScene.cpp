@@ -291,7 +291,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     // TODO this init might be wrong, Nick had _scale/2.0f
     _pMeleeTexture = _assets->get<Texture>(PATTACK_TEXTURE);
     _attacks = std::make_shared<AttackController>();
-    _attacks->init(_scale, _scale * 1.5, 3, cugl::Vec2(0, 1.25), cugl::Vec2(0, 0.5), 0.5, 1, 0.25, 0.1, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    _attacks->init(_scale, _scale * 1.5, 3, cugl::Vec2(0, 1.25), cugl::Vec2(0, 0.5), 0.8, 1, 0.25, 0.1, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     _dashTime = 0;
     _dashXVel = 0;
     _dashYVel = 0;
@@ -763,6 +763,21 @@ void GameScene::update(float timestep, int unlockCount)
 
     SwipeController::SwipeAttack left = updateLeftSwipe(unlockCount);
     SwipeController::SwipeAttack right = updateRightSwipe(unlockCount);
+    
+    if (_collider.getMeleeReduction() > 0) {
+        _swipes.coolMelee(_collider.getMeleeReduction());
+        _collider.resetMelee();
+    }
+    
+    if (_collider.getRangeReduction() > 0) {
+        _swipes.coolRange(_collider.getRangeReduction());
+        _collider.resetRange();
+    }
+    //Air Stall (doesn't work properly, don't use it)
+//    if (_collider.getStall()) {
+//        _collider.resetStall();
+//        _player->applyAerialSustain();
+//    }
 
     updateAnimations(timestep, unlockCount, left, right);
 
@@ -3381,6 +3396,7 @@ void GameScene::reset()
     _input.reset();
     _swipes.reset();
     _tilt.reset();
+    _collider.reset();
     if (_worldnode)
     {
         for (std::shared_ptr<scene2::SceneNode> s : _worldnode->getChildren())

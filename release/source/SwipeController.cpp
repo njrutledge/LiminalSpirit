@@ -9,6 +9,12 @@
 #include "SwipeController.hpp"
 #include <math.h>
 
+#define RANGE_COOLDOWN 10.0f;
+#define MELEE_COOLDOWN 6.0f;
+
+#define RANGE_REDUCTION 0.5f;
+#define MELEE_REDUCTON 0.8f;
+
 /**
  * Creates a new swipe controller.
  */
@@ -18,11 +24,11 @@ SwipeController::SwipeController() : _leftSwipe(noAttack),
     _leftState.construct();
     _rightState.construct();
     
-    _cMeleeCount = 2.0f;
-    _cRangeCount = 5.0f;
+    _cMeleeCount = MELEE_COOLDOWN;
+    _cRangeCount = RANGE_COOLDOWN;
     
-    _cMCool = 2.0f;
-    _cRCool = 5.0f;
+    _cMCool = MELEE_COOLDOWN;
+    _cRCool = RANGE_COOLDOWN;
     
     _leftChargingTime = 0;
     _rightChargingTime = 0;
@@ -589,6 +595,18 @@ void SwipeController::printSwipe(SwipeAttack s, bool isLeftSidedSwipe)
         if (s == noAttack) {
             CULog("No right sided swipe completed this frame");
         }
+    }
+}
+
+void SwipeController::coolMelee(int hits) {
+    if (!hasRightChargedAttack()) {
+        _cMeleeCount += hits * MELEE_REDUCTON;
+    }
+}
+
+void SwipeController::coolRange(int hits) {
+    if (!hasLeftChargedAttack()) {
+        _cRangeCount += hits * RANGE_REDUCTION;
     }
 }
 
