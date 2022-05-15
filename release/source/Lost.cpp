@@ -15,7 +15,7 @@ EnemyProperties LOST_PROPS{
 	/** Horizontal speed of the lost*/
 	4.0f,
 	/** Cooldown for attack(s) in seconds*/
-    0.75,
+    0.35,
 	/** Attack radius of the lost*/
 	5.0f,
 	/** Density of the lost*/
