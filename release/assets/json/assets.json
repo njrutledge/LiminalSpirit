@@ -1322,8 +1322,9 @@
 		"shroom9": "json/levels/shroom/mush9.json",
 		"levelt": "json/levels/levelt.json",
 		"level2": "json/levels/level2.json",
-		"forest1": "json/levels/forest/stack.json",
+		"forest1": "json/levels/forest/introdash.json",
 		"forest2": "json/levels/forest/forestation.json",
+        "forest3": "json/levels/forest/stacked.json",
 		"particles": "json/particles.json",
 		"BOSS": "json/levels/BOSS.json"
 	}
