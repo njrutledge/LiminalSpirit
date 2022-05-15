@@ -152,6 +152,8 @@ public:
         int _maxFrames;
 
         vector<BaseEnemyModel*> _hitEnemies;
+
+        BaseEnemyModel* _homingEnemy;
         
     public:
         /**
@@ -227,6 +229,10 @@ public:
             _hitEnemies.push_back(enemy);
         }
 
+        void setHomingEnemy(BaseEnemyModel* enemy) {
+            _homingEnemy = enemy;
+        }
+
 #pragma mark - 
 #pragma mark Physics Methods
         /**Creates and adds the physics body(s) to the world */
@@ -261,7 +267,10 @@ public:
             std::shared_ptr<Attack> result = std::make_shared<Attack>();
             return (result->init(p, radius, age, dmg, scale, t, m, oof, b, vel, angle, timer, attackID, frames) ? result : nullptr);
         }
-        
+        void setNodeAngle(float angle) {
+            _node->setAngle(angle);
+        }
+
     };
     
     std::unordered_set<std::shared_ptr<Attack>> _pending;
@@ -366,6 +375,7 @@ public:
     cugl::Vec2 getDownOff() { return _downOff; }
     
     void reset();
+
     
 };
 

@@ -4,8 +4,15 @@
 #include "AttackController.hpp"
 using namespace cugl;
 
+#define MAX_STALEING 0.5
+
 void CollisionController::init(std::shared_ptr<SoundController> sound) {
     _sound = sound;
+    
+    _mCoolReduction = 0;
+    _rCoolReduction = 0;
+    
+    _stale = 5;
     
     std::shared_ptr<JsonReader> reader = JsonReader::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
     std::shared_ptr<JsonValue> save = reader->readJson();
@@ -146,6 +153,10 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                             mirror->markRemoved(true);
                         }
                         _sound->play_player_sound(SoundController::playerSType::slashHit);
+                        if (attack->getType() == AttackController::Type::p_melee) {
+                            _rCoolReduction += 1;
+                            _stall = true;
+                        }
                     }
                     else {
                         //CULog("SAME ATTACK");
@@ -194,10 +205,15 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                     switch (attack->getType()) {
                         case AttackController::p_range:
                             _sound->play_player_sound(SoundController::playerSType::shootHit);
+                            _mCoolReduction += 1;
+                            _stale = clampi(_stale + 1, 0, 10);
                             attack->setInactive();
                             break;
                         case AttackController::p_melee:
                             _sound->play_player_sound(SoundController::playerSType::slashHit);
+                            _rCoolReduction += 1;
+                            _stall = true;
+                            _stale = clampi(_stale - 1, 0, 10);
                             break;
                     default:
                         break;
@@ -314,13 +330,7 @@ void CollisionController::handleAttackCollision(AttackController::Attack* attack
     }
     if (fd1 && *fd1 == "playerattacksensorhoming") {
         if (BaseEnemyModel* enemy = dynamic_cast<BaseEnemyModel*>(bd)) {
-            Vec2 enemyPos = enemy->getPosition();
-            Vec2 attackPos = attack->getPosition();
-            Vec2 diffDirection = enemyPos - attackPos;
-            //diffDirection.normalize();
-            Vec2 start = attack->getLinearVelocity();
-            Vec2 end = start + diffDirection;
-            attack->setLinearVelocity(diffDirection.scale(start.length() / diffDirection.length()));
+            attack->setHomingEnemy(enemy);
             //CULog("%f, %f", attack->getLinearVelocity().x, attack->getLinearVelocity().y);
 
         }
@@ -359,25 +369,34 @@ void CollisionController::handleAttackCollision(AttackController::Attack* attack
 
 /** determine the amount of damage an enemy is going to take from a particular attack */
 int CollisionController::getDamageDealt(AttackController::Attack* attack, BaseEnemyModel* enemy){
+    float mMult = 1.0f;
+    float rMult = 1.0f;
+    if (_stale < 5) {
+        mMult -= (5 - _stale) * (MAX_STALEING / 5.0f);
+        rMult += (5 - _stale) * (MAX_STALEING / 5.0f);
+    } else if (_stale > 5) {
+        mMult += (_stale - 5) * (MAX_STALEING / 5.0f);
+        rMult -= (_stale - 5) * (MAX_STALEING / 5.0f);
+    }
     switch (attack->getType()){
         case AttackController::p_range:
             if (enemy->getName() == "Glutton"){
-                return attack->getDamage() / 2;
+                return attack->getDamage() / 2 * rMult;
             } else if (enemy->getName() == "Seeker") {
-                return attack->getDamage() * 2;
+                return attack->getDamage() * 2 * rMult;
             } else {
-                return attack->getDamage();
+                return attack->getDamage() * rMult;
             }
         case AttackController::p_exp:
             if (enemy->getName() == "Glutton"){
-                return attack->getDamage() / 2;
+                return attack->getDamage() / 2 * rMult;
             } else if (enemy->getName() == "Seeker") {
-                return attack->getDamage() * 2;
+                return attack->getDamage() * 2 * rMult;
             } else {
-                return attack->getDamage();
+                return attack->getDamage() * rMult;
             }
         default:
-            return attack->getDamage();
+            return attack->getDamage() * mMult;
     }
 }
 
@@ -400,4 +419,14 @@ void CollisionController::endContact(b2Contact* contact) {
     physics2::Obstacle* bd1 = reinterpret_cast<physics2::Obstacle*>(body1->GetUserData().pointer);
     physics2::Obstacle* bd2 = reinterpret_cast<physics2::Obstacle*>(body2->GetUserData().pointer);
     //currently nothing still?
+}
+
+void CollisionController::reset() {
+    _mCoolReduction = 0;
+    _rCoolReduction = 0;
+    
+    _stale = 5;
+    
+    _stall = false;
+    
 }

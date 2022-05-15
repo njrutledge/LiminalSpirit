@@ -116,6 +116,12 @@ protected:
     
     int _track;
     
+    //from 0 to 1 for music
+    float _volume;
+    
+    //from 0 to 1 for sfx
+    float _vSFX;
+    
     // Player Sounds
     
     std::vector<std::shared_ptr<cugl::audio::AudioScheduler>> _player_sfx_slots;
@@ -151,6 +157,20 @@ public:
     void play_player_sound(playerSType sound);
     
     void reset_level_tracks();
+    
+    /**
+     * Sets music volume
+     *
+     * @param vol   volume to set. Must be in range 0 - 1
+     */
+    void set_music_volume(float vol) {_volume = vol;};
+    
+    /**
+     * Sets sfx volume
+     *
+     * @param vol   volume to set. Must be in range 0 - 1
+     */
+    void set_sfx_volume(float vol) {_vSFX = vol;}
     
     /**
             Kill
