@@ -90,6 +90,7 @@ bool HomeScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
   _assets->attach<Font>(FontLoader::alloc()->getHook());
 
   _playButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("main_menu_start"));
+  _playButton->clearListeners();
   _playButton->addListener([=](const std::string& name, bool down)
       {
           if (!down) {
@@ -98,6 +99,7 @@ bool HomeScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
           }
       });
   _optionsButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("main_menu_options"));
+  _optionsButton->clearListeners();
   _optionsButton->addListener([=](const std::string& name, bool down)
       {
           if (!down) {
@@ -119,10 +121,7 @@ bool HomeScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
   float buttonScale = scale / 32.0f;
 
   _optionReturnButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_return"));
-  if (_optionReturnButton->hasListener())
-  {
-      _optionReturnButton->removeListener(1);
-  }
+  _optionReturnButton->clearListeners();
   _optionReturnButton->addListener([=](const std::string& name, bool down)
       {
           // Only quit when the button is released
@@ -132,10 +131,7 @@ bool HomeScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
   _optionReturnButton->setScale(.4 * buttonScale);
 
   _swapHandsButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_swap"));
-  if (_swapHandsButton->hasListener())
-  {
-      _swapHandsButton->removeListener(1);
-  }
+  _swapHandsButton->clearListeners();
   _swapHandsButton->addListener([=](const std::string& name, bool down)
       {
           // Only quit when the button is released
@@ -146,10 +142,7 @@ bool HomeScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
   _swapHandsButton->setScale(.4 * buttonScale);
 
   _musicButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_music"));
-  if (_musicButton->hasListener())
-  {
-      _musicButton->removeListener(1);
-  }
+  _musicButton->clearListeners();
   _musicButton->addListener([=](const std::string& name, bool down)
       {
           // Only quit when the button is released
@@ -159,10 +152,7 @@ bool HomeScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
   _musicButton->setScale(.4 * buttonScale);
 
   _sfxButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_sfx"));
-  if (_sfxButton->hasListener())
-  {
-      _sfxButton->removeListener(1);
-  }
+  _sfxButton->clearListeners();
   _sfxButton->addListener([=](const std::string& name, bool down)
       {
           // Only quit when the button is released

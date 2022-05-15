@@ -71,6 +71,9 @@ protected:
     // Acceloremeter variables
     /** Current acceleration */
     cugl::Vec3 _acceleration;
+    
+    // Swap
+    bool _swap;
 
 #pragma mark Input Control
 public:
@@ -134,7 +137,7 @@ public:
     /**
      * Updates the input controller for the latest frame.
      */
-    void update();
+    void update(bool swap);
     
     /**
      * Resets input controller. Does not remove listeners.

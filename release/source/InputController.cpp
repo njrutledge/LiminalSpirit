@@ -169,12 +169,38 @@ void InputController::dispose()
 /**
  * Updates the input controller for the latest frame.
  */
-void InputController::update()
+void InputController::update(bool swap)
 {
-    _prevRightDown = _currRightDown;
-    _currRightDown = _rightFingerDown;
-    _prevLeftDown = _currLeftDown;
-    _currLeftDown = _leftFingerDown;
+    if (_swap != swap) {
+        _prevRightDown = _currLeftDown;
+        _currRightDown = _leftFingerDown;
+        _prevLeftDown = _currRightDown;
+        _currLeftDown = _rightFingerDown;
+        
+        bool tempRightFingerDown = _rightFingerDown;
+        cugl::TouchID tempRightFingerID = _rightFingerID;
+        cugl::Vec2 tempRightStartPos = _rightStartPos;
+        cugl::Timestamp tempRightStartTime = _rightStartTime;
+        
+        _rightFingerDown = _leftFingerDown;
+        _rightFingerID = _leftFingerID;
+        _rightStartPos = _leftStartPos;
+        _rightStartTime = _leftStartTime;
+        
+        _leftFingerDown = tempRightFingerDown;
+        _leftFingerID = tempRightFingerID;
+        _leftStartPos = tempRightStartPos;
+        _leftStartTime = tempRightStartTime;
+    }
+    else {
+        _prevRightDown = _currRightDown;
+        _currRightDown = _rightFingerDown;
+        _prevLeftDown = _currLeftDown;
+        _currLeftDown = _leftFingerDown;
+    }
+    
+    _swap = swap;
+
 #ifdef CU_TOUCH_SCREEN
     _acceleration = Input::get<Accelerometer>()->getAcceleration();
 #else
@@ -210,24 +236,48 @@ void InputController::fingerDownCB(const cugl::TouchEvent &event, bool focus)
 {
     // Figure out which side of the screen the finger went down on
     // and update accordingly
-    if (event.position.x < _screenMidpoint)
-    {
-        if (!_leftFingerDown)
+    if (!_swap) {
+        if (event.position.x < _screenMidpoint)
         {
-            _leftFingerDown = true;
-            _leftFingerID = event.touch;
-            _leftStartPos = event.position;
-            _leftStartTime.mark();
+            if (!_leftFingerDown)
+            {
+                _leftFingerDown = true;
+                _leftFingerID = event.touch;
+                _leftStartPos = event.position;
+                _leftStartTime.mark();
+            }
+        }
+        else
+        {
+            if (!_rightFingerDown)
+            {
+                _rightFingerDown = true;
+                _rightFingerID = event.touch;
+                _rightStartPos = event.position;
+                _rightStartTime.mark();
+            }
         }
     }
-    else
-    {
-        if (!_rightFingerDown)
+    else {
+        if (event.position.x < _screenMidpoint)
         {
-            _rightFingerDown = true;
-            _rightFingerID = event.touch;
-            _rightStartPos = event.position;
-            _rightStartTime.mark();
+            if (!_rightFingerDown)
+            {
+                _rightFingerDown = true;
+                _rightFingerID = event.touch;
+                _rightStartPos = event.position;
+                _rightStartTime.mark();
+            }
+        }
+        else
+        {
+            if (!_leftFingerDown)
+            {
+                _leftFingerDown = true;
+                _leftFingerID = event.touch;
+                _leftStartPos = event.position;
+                _leftStartTime.mark();
+            }
         }
     }
 }

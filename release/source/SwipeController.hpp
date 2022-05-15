@@ -269,8 +269,8 @@ public:
      *
      * @return the left-sided swipe attack
      */
-    SwipeAttack getLeftSwipe(bool swap) {
-        return swap ? _rightSwipe : _leftSwipe;
+    SwipeAttack getLeftSwipe() {
+        return _leftSwipe;
     };
     
     /**
@@ -278,8 +278,8 @@ public:
      *
      * @return the left-sided swipe angle
      */
-    float getLeftAngle(bool swap) {
-        return swap ? _rightAngle : _leftAngle;
+    float getLeftAngle() {
+        return _leftAngle;
     };
     
     /**
@@ -287,8 +287,8 @@ public:
      *
      * @return the right-sided swipe attack
      */
-    SwipeAttack getRightSwipe(bool swap) {
-        return swap ? _leftSwipe : _rightSwipe;
+    SwipeAttack getRightSwipe() {
+        return _rightSwipe;
     };
     
     /**
@@ -296,8 +296,8 @@ public:
      *
      * @return the right-sided swipe angle
      */
-    float getRightAngle(bool swap) {
-        return swap ? _leftAngle : _rightAngle;
+    float getRightAngle() {
+        return _rightAngle;
     };
     
     float getRangeCharge() {
