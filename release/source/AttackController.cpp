@@ -106,13 +106,24 @@ void AttackController::Attack::createFixtures() {
         sensorDef3.isSensor = true;
         b2PolygonShape sensorShape3;
         b2Vec2 corners3[8];
-        cugl::Vec2 vec(0, _radius * 5.0);//TODO: 5.0 is random
-        for (int i = 0; i < 8; i++) {
-            corners3[i] = b2Vec2(vec.x, vec.y);
-            _debugVerticies3.push_back(Vec2(vec));
-            vec.rotate(M_PI / 4.0f);
+        
+        if (_type == p_exp_package) {
+            cugl::Vec2 vec(0, _radius * 10.0);//TODO: 10.0 is random
+            for (int i = 0; i < 8; i++) {
+                corners3[i] = b2Vec2(vec.x, vec.y);
+                _debugVerticies3.push_back(Vec2(vec));
+                vec.rotate(M_PI / 4.0f);
+            }
+        } else {
+            cugl::Vec2 vec(0, _radius * 5.0);//TODO: 5.0 is random
+            for (int i = 0; i < 8; i++) {
+                corners3[i] = b2Vec2(vec.x, vec.y);
+                _debugVerticies3.push_back(Vec2(vec));
+                vec.rotate(M_PI / 4.0f);
+            }
         }
-
+        
+        
         sensorShape3.Set(corners3, 8);
         sensorDef3.shape = &sensorShape3;
         sensorDef3.userData.pointer = reinterpret_cast<uintptr_t>(getHomingSensorName());
