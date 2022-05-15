@@ -31,6 +31,10 @@ public:
         chargedRight,
         chargedDown,
         chargedLeft,
+        chargedNortheast,
+        chargedNorthwest,
+        chargedSouthwest,
+        chargedSoutheast,
         jump,
         noAttack
     };
@@ -72,14 +76,14 @@ protected:
      * isCharged is whether the attack is charged
      */
     struct RightSwipeState {
-        SwipeDirection direction;
+        float angle;
         bool isCharged;
 
         /**
          * Constructor to initialize the left side state
          */
         void construct() {
-            direction = none;
+            angle = 0.0f;
             isCharged = false;
         }
     };
@@ -97,7 +101,7 @@ protected:
     
     /** Swipe attack completed on the right side */
     SwipeAttack _rightSwipe;
-    /** Swipe angle in degrees on the right side */
+    /** Swipe angle in degrees on the left side */
     float _rightAngle;
     
     /** Charge counter for melee (right) */
@@ -145,16 +149,8 @@ protected:
      *
      * @param s the swipe direction completed on the right side
      */
-    void setRightDirection(SwipeDirection d){
-        _rightState.direction = d;
-    };
-    
-    /**
-     * Set the right sided swipe angle
-     *
-     * @param s the swipe angle completed on the left side
-     */
     void setRightAngle(float a){
+        _rightState.angle = a;
         _rightAngle = a;
     };
     
@@ -236,7 +232,7 @@ protected:
      * Resets the left side state to no direction and not charged
      */
     void resetRightState() {
-        _rightState.direction = none;
+        _rightState.angle = 0;
         _rightState.isCharged = false;
         _rightChargingTime = 0;
         _rStart = true;
