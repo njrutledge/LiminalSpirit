@@ -1423,6 +1423,7 @@
 		"forest1": "json/levels/forest/introdash.json",
 		"forest2": "json/levels/forest/forestation.json",
         "forest3": "json/levels/forest/stacked.json",
+        "forest4": "json/levels/forest/guardian.json",
 		"particles": "json/particles.json",
 		"BOSS": "json/levels/BOSS.json"
 	}
