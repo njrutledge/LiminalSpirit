@@ -1434,6 +1434,7 @@
         "forest4": "json/levels/forest/guardian.json",
 		"forest5": "json/levels/forest/spectation.json",
 		"forest6": "json/levels/forest/gluttonyornah.json",
+		"forest7": "json/levels/forest/spawnmeman.json",
 		"particles": "json/particles.json",
 		"BOSS": "json/levels/BOSS.json"
 	}
