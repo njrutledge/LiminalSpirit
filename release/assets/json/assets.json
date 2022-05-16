@@ -912,6 +912,16 @@
             "type": "sample",
             "file": "sounds/playerSFX/Player_Exp_Pkg.wav",
             "volume": 0.3
+        },
+        "playerDash": {
+            "type": "sample",
+            "file": "sounds/playerSFX/Player_Dash.wav",
+            "volume": 0.4
+        },
+        "playerDashHit": {
+            "type": "sample",
+            "file": "sounds/playerSFX/Player_Dash_Hit.wav",
+            "volume": 0.05
         }
 	},
 	"widgets": {
@@ -1435,6 +1445,7 @@
 		"forest5": "json/levels/forest/spectation.json",
 		"forest6": "json/levels/forest/gluttonyornah.json",
 		"forest7": "json/levels/forest/spawnmeman.json",
+		"forest8": "json/levels/forest/chasethelost.json",
 		"particles": "json/particles.json",
 		"BOSS": "json/levels/BOSS.json"
 	}

@@ -19,6 +19,7 @@ public:
         slashEmpty,
         slashHit,
         slashDash,
+        slashDashHit,
         shoot,
         shootHit,
         shootCharge,
@@ -27,8 +28,7 @@ public:
         death,
         step,
         jump,
-        chargeP,
-        chargeM
+        charge
     };
     
     enum GameState {
@@ -37,7 +37,8 @@ public:
         PAUSE,
         LEVEL_CAVE,
         LEVEL_SHROOM,
-        LEVEL_FOREST
+        LEVEL_FOREST,
+        TRANSITION
     };
     
     class LevelMusic {
@@ -142,6 +143,10 @@ protected:
     
     std::shared_ptr<cugl::Sound> _playerExpPckg;
     
+    std::shared_ptr<cugl::Sound> _playerDash;
+    
+    std::shared_ptr<cugl::Sound> _playerDashHit;
+    
     
     
 public:
@@ -157,6 +162,8 @@ public:
     void play_player_sound(playerSType sound);
     
     void reset_level_tracks();
+    
+    void level_transition();
     
     /**
      * Sets music volume
