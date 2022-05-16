@@ -36,6 +36,13 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
+		"seeker_ani": {
+			"file": "textures/animations/seeker_spritesheet.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
 		"phantom": {
 			"file": "textures/phantom.png",
 			"minfilter": "nearest",

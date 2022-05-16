@@ -1960,6 +1960,47 @@ void GameScene::updateEnemies(float timestep)
         }
         else if ((*it)->getName() == "Seeker")
         {
+        if ((*it)->getInvincibilityTimer() > 0)
+        {
+            sprite->setFrame(12);
+        }
+        else if ((*it)->isAttacking()) {
+            if (sprite->getFrame() < 6 || sprite->getFrame() >= 12) {
+                sprite->setFrame(6);
+                (*it)->setAttackAnimationTimer(0);
+            }
+            else if ((*it)->getAttackAnimationTimer() > .06f) {
+                if (sprite->getFrame() != 9) {
+                    sprite->setFrame(((sprite->getFrame() + 1) % 4) + 6);
+                }
+                if (sprite->getFrame() == 7) {
+                    (*it)->setAttackAnimationTimer(0);
+                }
+                else if (sprite->getFrame() == 2) {
+                    (*it)->setAttackAnimationTimer(.05f);
+                }
+            }
+        }
+        else {
+
+            if (sprite->getFrame() == 12 || sprite->getFrame() == 9) {
+                sprite->setFrame(0);
+            }
+
+            if (((*it)->getIdleAnimationTimer() > .1f || sprite->getFrame() == 12 || sprite->getFrame() == 9))
+            {
+                sprite->setFrame(((sprite->getFrame() + 1) % 6));
+                if (sprite->getFrame() == 1) {
+                    (*it)->setIdleAnimationTimer(-0.2);
+                }
+                else if (sprite->getFrame() == 4) {
+                   (*it)->setIdleAnimationTimer(-0.3);
+                }
+                else {
+                    (*it)->setIdleAnimationTimer(0);
+                }
+            }
+        }
         }
         else if ((*it)->getName() == "Spawner")
         {
@@ -3134,9 +3175,10 @@ void GameScene::createEnemy(string enemyName, Vec2 enemyPos, int spawnerInd) {
     }
     else if (!enemyName.compare("seeker"))
     {
-        std::shared_ptr<Texture> seekerImage = _assets->get<Texture>("seeker");
-        std::shared_ptr<Seeker> seeker = Seeker::alloc(enemyPos, seekerImage->getSize(), seekerImage->getSize() / _scale / 10, _scale);
-        std::shared_ptr<scene2::PolygonNode> seekerSprite = scene2::PolygonNode::allocWithTexture(seekerImage);
+        std::shared_ptr<Texture> seekerHitboxImage = _assets->get<Texture>("seeker");
+        std::shared_ptr<Texture> seekerImage = _assets->get<Texture>("seeker_ani");
+        std::shared_ptr<Seeker> seeker = Seeker::alloc(enemyPos, seekerHitboxImage->getSize(), seekerHitboxImage->getSize() / _scale / 10, _scale);
+        std::shared_ptr<scene2::SpriteNode> seekerSprite = scene2::SpriteNode::alloc(seekerImage, 3, 6);
         seeker->setSceneNode(seekerSprite);
         seeker->setDebugColor(Color4::GREEN);
         seeker->setGlow(enemyGlow);
@@ -3144,6 +3186,7 @@ void GameScene::createEnemy(string enemyName, Vec2 enemyPos, int spawnerInd) {
         if (spawnerInd > -1) {
             seeker->setSpawnerInd(spawnerInd);
         }
+        seekerSprite->setFrame(0);
         seekerSprite->setScale(0.15f);
         seekerSprite->setPriority(1.1);
         addObstacle(seeker, seekerSprite, true);
