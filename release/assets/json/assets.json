@@ -912,6 +912,16 @@
             "type": "sample",
             "file": "sounds/playerSFX/Player_Exp_Pkg.wav",
             "volume": 0.3
+        },
+        "playerDash": {
+            "type": "sample",
+            "file": "sounds/playerSFX/Player_Dash.wav",
+            "volume": 0.4
+        },
+        "playerDashHit": {
+            "type": "sample",
+            "file": "sounds/playerSFX/Player_Dash_Hit.wav",
+            "volume": 0.05
         }
 	},
 	"widgets": {

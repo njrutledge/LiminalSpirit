@@ -732,6 +732,7 @@ void GameScene::update(float timestep, int unlockCount)
 
     if (_lose)
     {
+        _sound->level_transition();
         _pauseScene->setVisible(false);
         _optionScene->setVisible(false);
         _loseScene->setVisible(true);
@@ -756,6 +757,7 @@ void GameScene::update(float timestep, int unlockCount)
 
     if (updateWin())
     {
+        _sound->level_transition();
         // let player fall through platforms
         if (_winInit)
         {
