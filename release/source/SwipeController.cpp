@@ -155,25 +155,25 @@ void SwipeController::update(InputController &input, bool grounded, bool floored
         case 1:
         {
             setRightAngle(90);
-            processRightState(grounded);
+            processRightState(grounded, floored);
             break;
         }
         case 2:
         {
             setRightAngle(180);
-            processRightState(grounded);
+            processRightState(grounded, floored);
             break;
         }
         case 3:
         {
             setRightAngle(270);
-            processRightState(grounded);
+            processRightState(grounded, floored);
             break;
         }
         case 4:
         {
             setRightAngle(0);
-            processRightState(grounded);
+            processRightState(grounded, floored);
             break;
         }
         case 5:
