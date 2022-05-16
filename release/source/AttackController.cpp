@@ -188,15 +188,15 @@ void AttackController::Attack::update(const cugl::Vec2 p, bool follow, float dt,
         if (_age <= 0) {
             _active =  false;
         }
-        if (_homingEnemy && !_homingEnemy->isRemoved() && _homingEnemy->getHealth() > 0) {
-            Vec2 enemyPos = _homingEnemy->getPosition();
-            Vec2 attackPos = getPosition();
-            Vec2 diffDirection = enemyPos - attackPos;
-            diffDirection.normalize().scale(10);
-            Vec2 start = getLinearVelocity();
-            Vec2 end = start + diffDirection;
-            setLinearVelocity(end.scale(start.length() / end.length()));
-        }
+        //if (_homingEnemy && !_homingEnemy->isRemoved() && _homingEnemy->getHealth() > 0) {
+        //    Vec2 enemyPos = _homingEnemy->getPosition();
+        //    Vec2 attackPos = getPosition();
+        //    Vec2 diffDirection = enemyPos - attackPos;
+        //    diffDirection.normalize().scale(10);
+        //    Vec2 start = getLinearVelocity();
+        //    Vec2 end = start + diffDirection;
+        //    setLinearVelocity(end.scale(start.length() / end.length()));
+        //}
         setNodeAngle(getLinearVelocity().getAngle());
 
        //animations
