@@ -470,7 +470,7 @@ public:
     /**
     * Creates a single enemy
     */
-    void createEnemy(string enemyName, Vec2 enemyPos);
+    void createEnemy(string enemyName, Vec2 enemyPos, int isSpawnerEnemy);
 
     /**
      * Creates all enemies and adds to _enemies.

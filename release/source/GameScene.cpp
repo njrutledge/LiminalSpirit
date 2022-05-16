@@ -2964,10 +2964,10 @@ void GameScene::createSpawnerEnemy(int spawnerInd, string enemyName)
     std::transform(enemyName.begin(), enemyName.end(), enemyName.begin(),
                    [](unsigned char c)
                    { return std::tolower(c); });
-    createEnemy(enemyName, enemyPos);
+    createEnemy(enemyName, enemyPos, spawnerInd);
 }
 
-void GameScene::createEnemy(string enemyName, Vec2 enemyPos) {
+void GameScene::createEnemy(string enemyName, Vec2 enemyPos, int spawnerInd) {
 
     std::shared_ptr<Texture> enemyGlowImage = _assets->get<Texture>(GLOW_TEXTURE);
     std::shared_ptr<Glow> enemyGlow = Glow::alloc(enemyPos, enemyGlowImage->getSize() / _scale, _scale);
@@ -2990,6 +2990,9 @@ void GameScene::createEnemy(string enemyName, Vec2 enemyPos) {
         lost->setSceneNode(lostSprite);
         lost->setDebugColor(Color4::RED);
         lost->setPlayedDamagedParticle(false);
+        if (spawnerInd > -1) {
+            lost->setSpawnerInd(spawnerInd);
+        }
         lostSprite->setScale(0.15f);
         lostSprite->setPriority(1.3);
         addObstacle(lost, lostSprite, true);
@@ -3005,6 +3008,9 @@ void GameScene::createEnemy(string enemyName, Vec2 enemyPos) {
         phantom->setDebugColor(Color4::BLUE);
         phantom->setGlow(enemyGlow);
         phantom->setPlayedDamagedParticle(false);
+        if (spawnerInd > -1) {
+            phantom->setSpawnerInd(spawnerInd);
+        }
         phantomSprite->setScale(0.2f);
         phantomSprite->setFrame(0);
         phantomSprite->setPriority(1.2);
@@ -3032,6 +3038,9 @@ void GameScene::createEnemy(string enemyName, Vec2 enemyPos) {
         seeker->setDebugColor(Color4::GREEN);
         seeker->setGlow(enemyGlow);
         seeker->setPlayedDamagedParticle(false);
+        if (spawnerInd > -1) {
+            seeker->setSpawnerInd(spawnerInd);
+        }
         seekerSprite->setScale(0.15f);
         seekerSprite->setPriority(1.1);
         addObstacle(seeker, seekerSprite, true);
@@ -3049,6 +3058,9 @@ void GameScene::createEnemy(string enemyName, Vec2 enemyPos) {
         glutton->setDebugColor(Color4::BLUE);
         glutton->setGlow(enemyGlow);
         glutton->setPlayedDamagedParticle(false);
+        if (spawnerInd > -1) {
+            glutton->setSpawnerInd(spawnerInd);
+        }
         gluttonSprite->setScale(0.2f);
         gluttonSprite->setFrame(0);
         gluttonSprite->setPriority(1);
@@ -3128,7 +3140,7 @@ void GameScene::createEnemies(int wave)
         std::transform(enemyName.begin(), enemyName.end(), enemyName.begin(),
                        [](unsigned char c)
                        { return std::tolower(c); });
-        createEnemy(enemyName, enemyPos);
+        createEnemy(enemyName, enemyPos, -1);
 
     }
 }
