@@ -188,7 +188,7 @@ void AttackController::Attack::update(const cugl::Vec2 p, bool follow, float dt,
         if (_age <= 0) {
             _active =  false;
         }
-        if (_homingEnemy && !_homingEnemy->isRemoved()) {
+        if (_homingEnemy && !_homingEnemy->isRemoved() && _homingEnemy->getHealth() != 0) {
             Vec2 enemyPos = _homingEnemy->getPosition();
             Vec2 attackPos = getPosition();
             Vec2 diffDirection = enemyPos - attackPos;
