@@ -152,10 +152,13 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                         if (mirror->getHealth() <= 0) {
                             mirror->markRemoved(true);
                         }
-                        _sound->play_player_sound(SoundController::playerSType::slashHit);
+                        
                         if (attack->getType() == AttackController::Type::p_melee) {
+                            _sound->play_player_sound(SoundController::playerSType::slashHit);
                             _rCoolReduction += 1;
                             _stall = true;
+                        } else if (attack->getType() == AttackController::Type::p_dash) {
+                            _sound->play_player_sound(SoundController::playerSType::slashDashHit);
                         }
                     }
                     else {
@@ -215,6 +218,8 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                             _stall = true;
                             _stale = clampi(_stale - 1, 0, 10);
                             break;
+                        case AttackController::p_dash:
+                            _sound->play_player_sound(SoundController::playerSType::slashDashHit);
                     default:
                         break;
                     }
@@ -225,7 +230,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
 
 
                 if (attack->getType() == AttackController::p_exp_package) {
-                    AC->createAttack(attack->getPosition() /*cugl::Vec2(bd->getPosition().x, bd->getPosition().y)*/, 5, 0.15, 30, AttackController::p_exp, cugl::Vec2::ZERO, timer, PLAYER_RANGE, PLAYER_EXP_FRAMES);
+                    AC->createAttack(attack->getPosition() /*cugl::Vec2(bd->getPosition().x, bd->getPosition().y)*/, 5, 0.8, 30, AttackController::p_exp, cugl::Vec2::ZERO, timer, PLAYER_RANGE, PLAYER_EXP_FRAMES);
                     _sound->play_player_sound(SoundController::playerSType::explosion);
                     attack->setInactive();
                 }
@@ -389,12 +394,14 @@ int CollisionController::getDamageDealt(AttackController::Attack* attack, BaseEn
             }
         case AttackController::p_exp:
             if (enemy->getName() == "Glutton"){
-                return attack->getDamage() / 2 * rMult;
+                return attack->getDamage() / 2;
             } else if (enemy->getName() == "Seeker") {
-                return attack->getDamage() * 2 * rMult;
+                return attack->getDamage() * 2;
             } else {
-                return attack->getDamage() * rMult;
+                return attack->getDamage();
             }
+        case AttackController::p_dash:
+            return attack->getDamage();
         default:
             return attack->getDamage() * mMult;
     }
