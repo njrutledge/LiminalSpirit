@@ -792,7 +792,7 @@ void GameScene::update(float timestep, int unlockCount)
 
     if (!_player->isStunned())
     {
-        _swipes.update(_input, _player->isGrounded(), timestep);
+        _swipes.update(_input, _player->isGrounded(), _player->isFloored(), timestep);
     }
 
     SwipeController::SwipeAttack left = updateLeftSwipe(unlockCount);
@@ -2193,7 +2193,7 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
             // Cancel dash with melee swipe
             if (right == SwipeController::rightAttack || right == SwipeController::upAttack ||
                 right == SwipeController::leftAttack || right == SwipeController::downAttack ||
-                right == SwipeController::jump) {
+                right == SwipeController::jump || (_player->isFloored() && _player->getDashAngle() > 180)) {
                 _dashXVel = 0;
                 _dashYVel = 0;
                 _player->setIsDashing(false);
@@ -2268,9 +2268,7 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
             {
                 _player->setFacingRight(false);
             }
-            if (_dashXVel == 0 && _dashYVel == 0) {
-                _player->setIsDashing(false);
-            }
+            _player->setIsDashing(false);
         }
         if (_dashXVel == 0 && _dashYVel == 0 && _player->getInvincibilityTimer() <= 0)
         {
