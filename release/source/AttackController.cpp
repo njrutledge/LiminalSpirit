@@ -431,20 +431,13 @@ void AttackController::attackRight(cugl::Vec2 p, SwipeController::SwipeAttack at
             }
             case SwipeController::chargedDown:
             {
-                if(!grounded){
-                    float xOffset = 0.5;
-                    if (!facingRight) {
-                        xOffset *= -1;
-                    }
-                    _pending.emplace(Attack::alloc(p, 2, DASHTIME, 20, _scale, Type::p_dash, first, _downOff + Vec2(xOffset,0.5), ballMakyr, cugl::Vec2(0, -DASHY - 3), 270, down, timer, PLAYER_MELEE, 0));
-                    _meleeCounter = 0;
-                    sound->play_player_sound(SoundController::playerSType::slashDash);
-                } else {
-//                    _pending.emplace(Attack::alloc(p, 2, 0.05, 2, _scale, Type::p_melee, first, _leftOff, ballMakyr, cugl::Vec2::ZERO, 180, left, timer, PLAYER_MELEE, 0));
-//                    _meleeCounter = 0;
-//                    _pending.emplace(Attack::alloc(p, 2, 0.05, 2, _scale,  Type::p_melee, first, _rightOff, ballMakyr, cugl::Vec2::ZERO, 0, right, timer, PLAYER_MELEE, 0));
-//                    _meleeCounter = 0;
+                float xOffset = 0.5;
+                if (!facingRight) {
+                    xOffset *= -1;
                 }
+                _pending.emplace(Attack::alloc(p, 2, DASHTIME, 20, _scale, Type::p_dash, first, _downOff + Vec2(xOffset,0.5), ballMakyr, cugl::Vec2(0, -DASHY - 3), 270, down, timer, PLAYER_MELEE, 0));
+                _meleeCounter = 0;
+                sound->play_player_sound(SoundController::playerSType::slashDash);
                 _melee = cool;
                 break;
             }

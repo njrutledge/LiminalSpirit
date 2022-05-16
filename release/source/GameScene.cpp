@@ -2666,12 +2666,10 @@ void GameScene::updateRemoveDeletedAttacks()
         }
         // Delete dash attack if dash cancelled
         else if ((*ait)->getType() == AttackController::Type::p_dash && _cancelDash) {
-            // int log1 = _world->getObstacles().size();
             cugl::physics2::Obstacle *obj = dynamic_cast<cugl::physics2::Obstacle *>(&**ait);
             _world->removeObstacle(obj);
             _worldnode2->removeChild(obj->_node);
 
-            // int log2 = _world->getObstacles().size();
             ait = _attacks->_current.erase(ait);
             _cancelDash = false;
         }
