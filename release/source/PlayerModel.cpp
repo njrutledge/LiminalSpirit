@@ -55,6 +55,7 @@ bool PlayerModel::init(const cugl::Vec2& pos, const cugl::Size& size, float scal
         _isInvincible = false;
         _isStunned = false;
         _isGrounded = true;
+        _isFloored = false;
         _isJumping = false;
         _isMovingUp = false;
         _hasJustLanded = false;

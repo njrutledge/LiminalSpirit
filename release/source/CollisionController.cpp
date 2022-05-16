@@ -71,7 +71,7 @@ void CollisionController::beginContact(b2Contact* contact, std::shared_ptr<Attac
     if (PlayerModel* player = dynamic_cast<PlayerModel*>(bd1)) {
         handlePlayerCollision(player, bd2, fd2);
     }
-    else if (PlayerModel* player = dynamic_cast<PlayerModel*>(bd1)) {
+    else if (PlayerModel* player = dynamic_cast<PlayerModel*>(bd2)) {
         handlePlayerCollision(player, bd1, fd1);
 
     }
@@ -294,6 +294,17 @@ void CollisionController::handlePlayerCollision(PlayerModel* player, physics2::O
             }
         }
     }
+    
+    // Check if player is on the floor
+    if(!bd->getName().compare("floor")) {
+        player->setFloored(true);
+        player->setGrounded(true);
+    }
+    // Check if player is on platform
+    if(!bd->getName().compare("platform")) {
+        player->setGrounded(true);
+    }
+    
 }
 
 /**
