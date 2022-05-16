@@ -9,9 +9,8 @@
 #include "SwipeController.hpp"
 #include <math.h>
 
-//TODO FIX THIS BACK
 #define RANGE_COOLDOWN 10.0f;
-#define MELEE_COOLDOWN 2.0f;
+#define MELEE_COOLDOWN 6.0f;
 
 #define RANGE_REDUCTION 0.5f;
 #define MELEE_REDUCTON 0.8f;
