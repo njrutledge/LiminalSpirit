@@ -1826,13 +1826,75 @@ void GameScene::updateEnemies(float timestep)
         {
             if ((*it)->getInvincibilityTimer() > 0)
             {
-                sprite->setFrame(7);
+
+                if (!sprite->isFlipHorizontal())
+                {
+                    sprite->setFrame(14);
+                }
+                else {
+                    sprite->setFrame(20);
+                }
             }
-            else if ((*it)->getIdleAnimationTimer() > 1.f ||
-                     (!(sprite->getFrame() == 2) && (*it)->getIdleAnimationTimer() > 0.3f) || (!(sprite->getFrame() == 2 || sprite->getFrame() == 5 || sprite->getFrame() == 6) && (*it)->getIdleAnimationTimer() > 0.1f))
-            {
-                sprite->setFrame((sprite->getFrame() + 1) % 7);
-                (*it)->setIdleAnimationTimer(0);
+            else if ((*it)->isAttacking()) {
+                if (sprite->getFrame() < 21) {
+                    if (!sprite->isFlipHorizontal()) {
+                        sprite->setFrame(21);
+                    }
+                    else {
+                        sprite->setFrame(27);
+                    }
+                    (*it)->setAttackAnimationTimer(0.7f);
+                }
+                else if ((*it)->getAttackAnimationTimer() > 1.f) {
+                    if (!sprite->isFlipHorizontal()) {
+                        if (sprite->getFrame() != 27) {
+                            sprite->setFrame(((sprite->getFrame() + 1)% 7) + 21);
+                        }
+                        if (sprite->getFrame() == 22) {
+                            (*it)->setAttackAnimationTimer(0.3f);
+                        }
+                        else {
+                            (*it)->setAttackAnimationTimer(0.7f);
+                        }
+                    }
+                    else {
+                        if (sprite->getFrame() != 21) {
+                            sprite->setFrame(((sprite->getFrame() - 1) % 7) + 21);
+                        }
+                        if (sprite->getFrame() == 27) {
+                            (*it)->setAttackAnimationTimer(0.3f);
+                        }
+                        else {
+                            (*it)->setAttackAnimationTimer(0.7f);
+                        }
+                    }
+                }
+            }
+            else {
+
+                if (sprite->getFrame() == 14 || sprite->getFrame() == 27) {
+                    sprite->setFrame(0);
+                }
+                else if (sprite->getFrame() == 20 || sprite->getFrame() == 21) {
+                    sprite->setFrame(6);
+                }
+
+                if ((*it)->getX() > _player->getX()) {
+                    sprite->flipHorizontal(false);
+                }
+                else if ((*it)->getX() < _player->getX()) {
+                    sprite->flipHorizontal(true);
+                }
+                if (((*it)->getIdleAnimationTimer() > .1f || sprite->getFrame() == 14 || sprite->getFrame() == 20))
+                {
+                    sprite->setFrame((sprite->getFrame() + 1) % 7);
+                    (*it)->setIdleAnimationTimer(0);
+                }
+                else if (((*it)->getIdleAnimationTimer() > .1f || sprite->getFrame() == 14 || sprite->getFrame() == 20))
+                {
+                    sprite->setFrame((sprite->getFrame() - 1) % 7);
+                    (*it)->setIdleAnimationTimer(0);
+                }
             }
         }
         else if ((*it)->getName() == "Lost")
@@ -3092,7 +3154,7 @@ void GameScene::createEnemy(string enemyName, Vec2 enemyPos, int spawnerInd) {
         std::shared_ptr<Texture> gluttonHitboxImage = _assets->get<Texture>("glutton");
         std::shared_ptr<Texture> gluttonImage = _assets->get<Texture>("glutton_ani");
         std::shared_ptr<Glutton> glutton = Glutton::alloc(enemyPos + Vec2(0, 2), Vec2(gluttonImage->getSize().width / 7.0f, gluttonHitboxImage->getSize().height / 2.0f), gluttonHitboxImage->getSize() / _scale / 5, _scale);
-        std::shared_ptr<scene2::SpriteNode> gluttonSprite = scene2::SpriteNode::alloc(gluttonImage, 2, 7);
+        std::shared_ptr<scene2::SpriteNode> gluttonSprite = scene2::SpriteNode::alloc(gluttonImage, 4, 7);
         // fix the anchor slightly for glutton only
         gluttonSprite->setAnchor(.5, .4);
         glutton->setSceneNode(gluttonSprite);
