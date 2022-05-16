@@ -960,6 +960,11 @@
             "type": "sample",
             "file": "sounds/playerSFX/Player_Jump_Attack.wav",
             "volume": 0.2
+        },
+        "playerCharge": {
+            "type": "sample",
+            "file": "sounds/playerSFX/Player_Charge.wav",
+            "volume": 0.1
         }
 	},
 	"widgets": {

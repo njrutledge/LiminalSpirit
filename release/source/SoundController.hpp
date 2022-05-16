@@ -152,6 +152,8 @@ protected:
     
     std::shared_ptr<cugl::Sound> _playerJumpAttack;
     
+    std::shared_ptr<cugl::Sound> _playerCharge;
+    
     
 public:
     

@@ -103,6 +103,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _next = false;
     _pause = false;
     _options = false;
+    _chargeSoundCueM = true;
+    _chargeSoundCueR = true;
     std::shared_ptr<JsonReader> reader = JsonReader::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
     std::shared_ptr<JsonValue> save = reader->readJson();
     _progress = save->get("progress");
@@ -592,6 +594,9 @@ void GameScene::dispose()
         _optionButton->deactivate();
     if(_pauseButton)
         _pauseButton->deactivate();
+    
+    _chargeSoundCueM = true;
+    _chargeSoundCueR = true;
 
     // Delete all smart pointers
     _logo = nullptr;
@@ -2859,6 +2864,20 @@ void GameScene::updateHUD(int unlockCount)
     float time = _timer / _spawn_times[_numWaves - 1];
     _wavebar->setProgress(time > 1 ? 1 : time);
     //_wavebar->setVisible(false);
+    
+    if (_chargeSoundCueM && (_swipes.getRightChargingTime() > 150) && !_swipes.hasRightChargedAttack()) {
+        _sound->play_player_sound(SoundController::playerSType::charge);
+        _chargeSoundCueM = false;
+    } else if (!_chargeSoundCueM && _swipes.hasRightChargedAttack()) {
+        _chargeSoundCueM = true;
+    }
+        
+    if (_chargeSoundCueR && (_swipes.getLeftChargingTime() > 150) && !_swipes.hasLeftChargedAttack()) {
+        _sound->play_player_sound(SoundController::playerSType::charge);
+        _chargeSoundCueR = false;
+    } else if (!_chargeSoundCueR && _swipes.hasLeftChargedAttack()) {
+        _chargeSoundCueR = true;
+    }
     
     _melee_charge->setProgress(_swipes.getMeleeCharge());
     _range_charge->setProgress(_swipes.getRangeCharge());

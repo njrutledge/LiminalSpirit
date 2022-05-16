@@ -151,6 +151,8 @@ void SoundController::init(std::shared_ptr<cugl::AssetManager> &assets) {
     
     _playerJumpAttack = assets->get<cugl::Sound>("playerJumpAttack");
     
+    _playerCharge = assets->get<cugl::Sound>("playerCharge");
+    
 };
 
 void SoundController::play_menu_music() {
@@ -256,6 +258,7 @@ void SoundController::play_player_sound(playerSType sound) {
             cugl::AudioEngine::get()->play("playerJumpAttack", _playerJumpAttack, false, _vSFX, true);
             break;
         case charge:
+            cugl::AudioEngine::get()->play("playerCharge", _playerCharge, false, _vSFX, true);
             break;
     }
 };

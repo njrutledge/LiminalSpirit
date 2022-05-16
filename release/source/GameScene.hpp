@@ -246,6 +246,10 @@ protected:
     bool _options;
     
     bool _lose;
+    
+    bool _chargeSoundCueM;
+    
+    bool _chargeSoundCueR;
 
     std::shared_ptr<scene2::Button> _pauseButton;
 
