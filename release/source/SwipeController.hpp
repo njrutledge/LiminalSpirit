@@ -203,7 +203,7 @@ protected:
      * @param isLeftSidedSwipe  if the swipe was on the left side of the screen
      *
      */
-    void calculateSwipeDirection(cugl::Vec2 startPos, cugl::Vec2 endPos, bool isLeftSidedSwipe, bool grounded, cugl::Timestamp startTime);
+    void calculateSwipeDirection(cugl::Vec2 startPos, cugl::Vec2 endPos, bool isLeftSidedSwipe, bool grounded, bool floored,  cugl::Timestamp startTime);
     
     /**
      * Processes the type of swipe attack that was just completed on the left side
@@ -226,7 +226,7 @@ protected:
      * Processes the type of swipe attack that was just completed on the right side
      * and resets the right side state
      */
-    void processRightState(bool grounded);
+    void processRightState(bool grounded, bool floored);
     
     /**
      * Resets the left side state to no direction and not charged
@@ -262,7 +262,7 @@ public:
     /**
      * Updates the swipe controller based on the latest inputs.
      */
-    void update(InputController& input, bool grounded, float dt);
+    void update(InputController& input, bool grounded, bool floored, float dt);
     
     /**
      * Returns the type of swipe attack that was just completed on the left side

@@ -81,6 +81,8 @@ protected:
     bool _hasJustLanded;
 	/** Whether the player's feet is touching the ground*/
 	bool _isGrounded;
+    /** Whether the player's feet is touching the floor*/
+    bool _isFloored;
 	/** Ground/feet sensor */
 	b2Fixture* _sensorFixture;
 	/** Name of sensor */
@@ -249,6 +251,12 @@ public:
 
 	/** Sets whether the player is on the ground*/
 	void setGrounded(bool value) { _isGrounded = value;  }
+    
+    /** Returns true if the player is on the floor*/
+    bool isFloored() const { return _isFloored;  }
+
+    /** Sets whether the player is on the floor*/
+    void setFloored(bool value) { _isFloored = value; }
 
 	/** Set X velocity */
 	void setVX(float value) override;

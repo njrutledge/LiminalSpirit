@@ -786,13 +786,34 @@ void GameScene::update(float timestep, int unlockCount)
         updateCamera();
         updateMeleeArm(timestep);
         return;
+    } else {
+        std::vector<bool> e = std::vector<bool>(7);
+
+        for (auto it = _enemies.begin(); it != _enemies.end(); ++it)
+        {
+            string n = (*it)->getName();
+            if (n == "Glutton")
+            {
+                e[0] = true;
+            }
+            else if (n == "Phantom")
+            {
+                e[1] = true;
+            }
+            else if (n == "Mirror")
+            {
+                e[2] = true;
+            }
+        }
+        
+        _sound->play_level_music(_biome, e);
     }
 
     updateTilt();
 
     if (!_player->isStunned())
     {
-        _swipes.update(_input, _player->isGrounded(), timestep);
+        _swipes.update(_input, _player->isGrounded(), _player->isFloored(), timestep);
     }
 
     SwipeController::SwipeAttack left = updateLeftSwipe(unlockCount);
@@ -838,26 +859,7 @@ void GameScene::update(float timestep, int unlockCount)
 
 void GameScene::updateSoundInputParticlesAndTilt(float timestep)
 {
-    std::vector<bool> e = std::vector<bool>(7);
-
-    for (auto it = _enemies.begin(); it != _enemies.end(); ++it)
-    {
-        string n = (*it)->getName();
-        if (n == "Glutton")
-        {
-            e[0] = true;
-        }
-        else if (n == "Phantom")
-        {
-            e[1] = true;
-        }
-        else if (n == "Mirror")
-        {
-            e[2] = true;
-        }
-    }
-
-    _sound->play_level_music(_biome, e);
+    
 
     // Update input controller
     _input.update(_swap);
@@ -2323,7 +2325,7 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
             // Cancel dash with melee swipe
             if (right == SwipeController::rightAttack || right == SwipeController::upAttack ||
                 right == SwipeController::leftAttack || right == SwipeController::downAttack ||
-                right == SwipeController::jump) {
+                right == SwipeController::jump || (_player->isFloored() && _player->getDashAngle() > 180)) {
                 _dashXVel = 0;
                 _dashYVel = 0;
                 _player->setIsDashing(false);
@@ -2398,9 +2400,7 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
             {
                 _player->setFacingRight(false);
             }
-            if (_dashXVel == 0 && _dashYVel == 0) {
-                _player->setIsDashing(false);
-            }
+            _player->setIsDashing(false);
         }
         if (_dashXVel == 0 && _dashYVel == 0 && _player->getInvincibilityTimer() <= 0)
         {
@@ -2597,6 +2597,12 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
         {
             _player->setMovingUp(true);
             _player->setJumpAnimationTimer(0);
+            if (right == SwipeController::upAttack) {
+                _sound->play_player_sound(SoundController::playerSType::jumpAttack);
+            } else {
+                _sound->play_player_sound(SoundController::playerSType::jump);
+            }
+            
         }
     }
     else if (right == _swipes.downAttack)
@@ -2610,22 +2616,23 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
     }
     _player->applyForce();
 
-    if (_player->getVY() < -.2 || _player->getVY() > .2)
+    if (_player->getVY() < -.01 || _player->getVY() > .01)
     {
         _player->setGrounded(false);
+        _player->setFloored(false);
     }
-    else if (_player->getVY() >= -0.2 && _player->getVY() <= 0.2)
-    {
-        // check if this is the first "0" velocity frame, as this should not make the player grounded just yet. Might be height of jump.
-        if (_player->isFirstFrame())
-        {
-            _player->setIsFirstFrame(false);
-        }
-        else
-        {
-            _player->setGrounded(true);
-        }
-    }
+//    else if (_player->getVY() >= -0.2 && _player->getVY() <= 0.2)
+//    {
+//        // check if this is the first "0" velocity frame, as this should not make the player grounded just yet. Might be height of jump.
+//        if (_player->isFirstFrame())
+//        {
+//            _player->setIsFirstFrame(false);
+//        }
+//        else
+//        {
+//            _player->setGrounded(true);
+//        }
+//    }
 
     if (_player->getVY() < 0)
     {
@@ -3339,7 +3346,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
 
     std::shared_ptr<scene2::PolygonNode> floorNode = scene2::PolygonNode::allocWithPoly(floorRect * _scale);
     floorNode->setColor(Color4::CLEAR);
-    floor->setName("bottomwall");
+    floor->setName("floor");
     b2Filter filter = b2Filter();
     filter.categoryBits = 0b1000;
     // filter.maskBits = 0b1100;

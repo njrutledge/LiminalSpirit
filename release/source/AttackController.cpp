@@ -320,22 +320,22 @@ void AttackController::attackLeft(cugl::Vec2 p, SwipeController::SwipeAttack att
             sound->play_player_sound(SoundController::playerSType::shoot);
             break;
         case SwipeController::chargedLeft:
-            _pending.emplace(Attack::alloc(p, 0.3, 1.5, 0, _scale, Type::p_exp_package, first, Vec2(0, 0), ballMakyr, cugl::Vec2(_c_vel).rotate(angleAdjusted * M_PI / 180), angle, left, timer, PLAYER_RANGE, PLAYER_EXP_PKG_FRAMES));
+            _pending.emplace(Attack::alloc(p, 0.3, 4, 0, _scale, Type::p_exp_package, first, Vec2(0, 0), ballMakyr, cugl::Vec2(_c_vel).rotate(angleAdjusted * M_PI / 180), angle, left, timer, PLAYER_RANGE, PLAYER_EXP_PKG_FRAMES));
             _rangedCounter = 0;
             sound->play_player_sound(SoundController::playerSType::shootCharge);
             break;
         case SwipeController::chargedRight:
-            _pending.emplace(Attack::alloc(p, 0.3, 1.5, 0, _scale, Type::p_exp_package, first, Vec2(0, 0), ballMakyr, cugl::Vec2(_c_vel).rotate(angleAdjusted * M_PI / 180), angle, right, timer, PLAYER_RANGE, PLAYER_EXP_PKG_FRAMES));
+            _pending.emplace(Attack::alloc(p, 0.3, 4, 0, _scale, Type::p_exp_package, first, Vec2(0, 0), ballMakyr, cugl::Vec2(_c_vel).rotate(angleAdjusted * M_PI / 180), angle, right, timer, PLAYER_RANGE, PLAYER_EXP_PKG_FRAMES));
             _rangedCounter = 0;
             sound->play_player_sound(SoundController::playerSType::shootCharge);
             break;
         case SwipeController::chargedUp:
-            _pending.emplace(Attack::alloc(p, 0.3, 1.5, 0, _scale, Type::p_exp_package, first, Vec2(0, 0), ballMakyr, cugl::Vec2(_c_vel).rotate(angleAdjusted * M_PI / 180), angle, up, timer, PLAYER_RANGE, PLAYER_EXP_PKG_FRAMES));
+            _pending.emplace(Attack::alloc(p, 0.3, 4, 0, _scale, Type::p_exp_package, first, Vec2(0, 0), ballMakyr, cugl::Vec2(_c_vel).rotate(angleAdjusted * M_PI / 180), angle, up, timer, PLAYER_RANGE, PLAYER_EXP_PKG_FRAMES));
             _rangedCounter = 0;
             sound->play_player_sound(SoundController::playerSType::shootCharge);
             break;
         case SwipeController::chargedDown:
-            _pending.emplace(Attack::alloc(p, 0.3, 1.5, 0, _scale, Type::p_exp_package, first, Vec2(0, 0), ballMakyr, cugl::Vec2(_c_vel).rotate(angleAdjusted * M_PI / 180), angle, down, timer, PLAYER_RANGE, PLAYER_EXP_PKG_FRAMES));
+            _pending.emplace(Attack::alloc(p, 0.3, 4, 0, _scale, Type::p_exp_package, first, Vec2(0, 0), ballMakyr, cugl::Vec2(_c_vel).rotate(angleAdjusted * M_PI / 180), angle, down, timer, PLAYER_RANGE, PLAYER_EXP_PKG_FRAMES));
             _rangedCounter = 0;
             sound->play_player_sound(SoundController::playerSType::shootCharge);
             break;

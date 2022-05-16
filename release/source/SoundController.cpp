@@ -53,8 +53,9 @@ void SoundController::LevelMusic::play_music(std::vector<bool> e, GameState s) {
     
     
     if ((s != LEVEL_CAVE && b == "cave")  ||  (s != LEVEL_SHROOM && b == "mushroom") || (s != LEVEL_FOREST && b == "forest")) {
+        cugl::AudioEngine::get()->getMusicQueue()->clear(0.1);
         cugl::AudioEngine::get()->getMusicQueue()->enqueue(_mixer, true, 0.4);
-        cugl::AudioEngine::get()->getMusicQueue()->advance(0, 0.2);
+        
         
     }
     
@@ -145,6 +146,11 @@ void SoundController::init(std::shared_ptr<cugl::AssetManager> &assets) {
     _playerDash = assets->get<cugl::Sound>("playerDash");
     
     _playerDashHit = assets->get<cugl::Sound>("playerDashHit");
+    
+    _playerJump = assets->get<cugl::Sound>("playerJump");
+    
+    _playerJumpAttack = assets->get<cugl::Sound>("playerJumpAttack");
+    
 };
 
 void SoundController::play_menu_music() {
@@ -152,8 +158,9 @@ void SoundController::play_menu_music() {
     cugl::AudioEngine::get()->getMusicQueue()->setVolume(_volume);
     
     if (_state != MENU) {
+        cugl::AudioEngine::get()->getMusicQueue()->clear(0.1);
         cugl::AudioEngine::get()->getMusicQueue()->enqueue(_menu, true, 0.4);
-        cugl::AudioEngine::get()->getMusicQueue()->advance(0, 0.2);
+        
         
     }
     _state = MENU;
@@ -243,6 +250,11 @@ void SoundController::play_player_sound(playerSType sound) {
             cugl::AudioEngine::get()->play("playerStep", _playerStep, false, _vSFX, true);
             break;
         case jump:
+            cugl::AudioEngine::get()->play("playerJump", _playerJump, false, _vSFX, true);
+            break;
+        case jumpAttack:
+            cugl::AudioEngine::get()->play("playerJumpAttack", _playerJumpAttack, false, _vSFX, true);
+            break;
         case charge:
             break;
     }
@@ -257,8 +269,9 @@ void SoundController::reset_level_tracks() {
 };
 
 void SoundController::level_transition() {
+    
     if (_state != TRANSITION) {
-        cugl::AudioEngine::get()->getMusicQueue()->advance(0, 2.0);
+        cugl::AudioEngine::get()->getMusicQueue()->clear(1.0);
     }
     _state = TRANSITION;
     

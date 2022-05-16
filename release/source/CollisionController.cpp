@@ -71,7 +71,7 @@ void CollisionController::beginContact(b2Contact* contact, std::shared_ptr<Attac
     if (PlayerModel* player = dynamic_cast<PlayerModel*>(bd1)) {
         handlePlayerCollision(player, bd2, fd2);
     }
-    else if (PlayerModel* player = dynamic_cast<PlayerModel*>(bd1)) {
+    else if (PlayerModel* player = dynamic_cast<PlayerModel*>(bd2)) {
         handlePlayerCollision(player, bd1, fd1);
 
     }
@@ -230,7 +230,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
 
 
                 if (attack->getType() == AttackController::p_exp_package) {
-                    AC->createAttack(attack->getPosition() /*cugl::Vec2(bd->getPosition().x, bd->getPosition().y)*/, 5, 0.8, 30, AttackController::p_exp, cugl::Vec2::ZERO, timer, PLAYER_RANGE, PLAYER_EXP_FRAMES);
+                    AC->createAttack(attack->getPosition() /*cugl::Vec2(bd->getPosition().x, bd->getPosition().y)*/, 5, 0.15, 30, AttackController::p_exp, cugl::Vec2::ZERO, timer, PLAYER_RANGE, PLAYER_EXP_FRAMES);
                     _sound->play_player_sound(SoundController::playerSType::explosion);
                     attack->setInactive();
                 }
@@ -299,6 +299,17 @@ void CollisionController::handlePlayerCollision(PlayerModel* player, physics2::O
             }
         }
     }
+    
+    // Check if player is on the floor
+    if(!bd->getName().compare("floor")) {
+        player->setFloored(true);
+        player->setGrounded(true);
+    }
+    // Check if player is on platform
+    if(!bd->getName().compare("platform")) {
+        player->setGrounded(true);
+    }
+    
 }
 
 /**
