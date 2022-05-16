@@ -28,6 +28,7 @@ public:
         death,
         step,
         jump,
+        jumpAttack,
         charge
     };
     
@@ -147,6 +148,9 @@ protected:
     
     std::shared_ptr<cugl::Sound> _playerDashHit;
     
+    std::shared_ptr<cugl::Sound> _playerJump;
+    
+    std::shared_ptr<cugl::Sound> _playerJumpAttack;
     
     
 public:

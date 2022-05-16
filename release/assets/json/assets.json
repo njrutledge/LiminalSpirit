@@ -922,6 +922,16 @@
             "type": "sample",
             "file": "sounds/playerSFX/Player_Dash_Hit.wav",
             "volume": 0.05
+        },
+        "playerJump": {
+            "type": "sample",
+            "file": "sounds/playerSFX/Player_Jump.wav",
+            "volume": 0.3
+        },
+        "playerJumpAttack": {
+            "type": "sample",
+            "file": "sounds/playerSFX/Player_Jump_Attack.wav",
+            "volume": 0.2
         }
 	},
 	"widgets": {

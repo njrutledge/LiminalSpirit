@@ -786,6 +786,27 @@ void GameScene::update(float timestep, int unlockCount)
         updateCamera();
         updateMeleeArm(timestep);
         return;
+    } else {
+        std::vector<bool> e = std::vector<bool>(7);
+
+        for (auto it = _enemies.begin(); it != _enemies.end(); ++it)
+        {
+            string n = (*it)->getName();
+            if (n == "Glutton")
+            {
+                e[0] = true;
+            }
+            else if (n == "Phantom")
+            {
+                e[1] = true;
+            }
+            else if (n == "Mirror")
+            {
+                e[2] = true;
+            }
+        }
+        
+        _sound->play_level_music(_biome, e);
     }
 
     updateTilt();
@@ -838,26 +859,7 @@ void GameScene::update(float timestep, int unlockCount)
 
 void GameScene::updateSoundInputParticlesAndTilt(float timestep)
 {
-    std::vector<bool> e = std::vector<bool>(7);
-
-    for (auto it = _enemies.begin(); it != _enemies.end(); ++it)
-    {
-        string n = (*it)->getName();
-        if (n == "Glutton")
-        {
-            e[0] = true;
-        }
-        else if (n == "Phantom")
-        {
-            e[1] = true;
-        }
-        else if (n == "Mirror")
-        {
-            e[2] = true;
-        }
-    }
-
-    _sound->play_level_music(_biome, e);
+    
 
     // Update input controller
     _input.update(_swap);
@@ -2465,6 +2467,12 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
         {
             _player->setMovingUp(true);
             _player->setJumpAnimationTimer(0);
+            if (right == SwipeController::upAttack) {
+                _sound->play_player_sound(SoundController::playerSType::jumpAttack);
+            } else {
+                _sound->play_player_sound(SoundController::playerSType::jump);
+            }
+            
         }
     }
     else if (right == _swipes.downAttack)
