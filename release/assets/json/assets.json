@@ -162,6 +162,27 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
+		"phantom_death": {
+			"file": "textures/animations/phantom_death.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"seeker_death": {
+			"file": "textures/animations/seeker_death.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"glutton_death": {
+			"file": "textures/animations/glutton_death.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
 		"glutton": {
 			"file": "textures/glutton.png",
 			"minfilter": "nearest",

@@ -452,7 +452,7 @@ public:
 
 
     /** Helper for creating an uninteractable obstacle with Texture textureName at startPos with scale scale */
-    void createAndAddDeathAnimationObstacle(string textureName, Vec2 startPos, float scale, int frames);
+    void createAndAddDeathAnimationObstacle(string textureName, Vec2 startPos, float scale, int frames, int tag);
 
     /**
      * Sets whether debug mode is active.

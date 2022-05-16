@@ -867,7 +867,7 @@ void GameScene::updateSoundInputParticlesAndTilt(float timestep)
         setDebug(!isDebug());
     }
 
-    ////Update all Particles
+    ////Update all Particles and Death Animations
     for (std::shared_ptr<scene2::SceneNode> s : _worldnode->getChildren())
     {
         if (s->getTag() == 100)
@@ -889,6 +889,33 @@ void GameScene::updateSoundInputParticlesAndTilt(float timestep)
                 sp->setFrame(sp->getFrame() + 1);
             }
             
+        }
+        else if (s->getTag() == 201) {
+            scene2::SpriteNode* sp = dynamic_cast<scene2::SpriteNode*>(s.get());
+            if (sp->getFrame() == 5) {
+                sp->setVisible(false);
+            }
+            else if (rand() % 100 < 25) { // dead bodies decay at random rate
+                sp->setFrame(sp->getFrame() + 1);
+            }
+        }
+        else if (s->getTag() == 202) {
+            scene2::SpriteNode* sp = dynamic_cast<scene2::SpriteNode*>(s.get());
+            if (sp->getFrame() == 4) {
+                sp->setVisible(false);
+            }
+            else if (rand() % 100 < 10) { // dead bodies decay at random rate
+                sp->setFrame(sp->getFrame() + 1);
+            }
+        }
+        else if (s->getTag() == 203) {
+            scene2::SpriteNode* sp = dynamic_cast<scene2::SpriteNode*>(s.get());
+            if (sp->getFrame() == 4) {
+                sp->setVisible(false);
+            }
+            else if (rand() % 100 < 25) { // dead bodies decay at random rate
+                sp->setFrame(sp->getFrame() + 1);
+            }
         }
     };
 }
@@ -2594,7 +2621,19 @@ void GameScene::updateRemoveDeletedEnemies()
                 createParticles(_mirrorShardList, (*eit)->getPosition() * _scale, "mirror_death", Color4::WHITE, Vec2(0, 10), 0.05f, false, Vec2(), 6);
             }
             else if (std::shared_ptr<Lost> lost = dynamic_pointer_cast<Lost>(*eit)) {
-                createAndAddDeathAnimationObstacle("lost_death", (*eit)->getPosition(), 0.125f, 5);
+                createAndAddDeathAnimationObstacle("lost_death", (*eit)->getPosition(), 0.125f, 5, 200);
+                createParticles(_deathParticleList, (*eit)->getPosition() * _scale, "lost_death", Color4::WHITE, Vec2(0, -20), 0.15f, false, Vec2(), 4);
+            }
+            else if (std::shared_ptr<Phantom> phantom = dynamic_pointer_cast<Phantom>(*eit)) {
+                createAndAddDeathAnimationObstacle("phantom_death", (*eit)->getPosition(), 0.2f, 6, 201);
+                createParticles(_deathParticleList, (*eit)->getPosition() * _scale, "lost_death", Color4::WHITE, Vec2(0, -20), 0.15f, false, Vec2(), 4);
+            } 
+            else if (std::shared_ptr<Glutton> glutton = dynamic_pointer_cast<Glutton>(*eit)) {
+                createAndAddDeathAnimationObstacle("glutton_death", (*eit)->getPosition(), 0.2f, 5, 202);
+                createParticles(_deathParticleList, (*eit)->getPosition() * _scale, "lost_death", Color4::WHITE, Vec2(0, -20), 0.15f, false, Vec2(), 4);
+            }
+            else if (std::shared_ptr<Seeker> seeker = dynamic_pointer_cast<Seeker>(*eit)) {
+                createAndAddDeathAnimationObstacle("seeker_death", (*eit)->getPosition(), 0.125f, 6, 203);
                 createParticles(_deathParticleList, (*eit)->getPosition() * _scale, "lost_death", Color4::WHITE, Vec2(0, -20), 0.15f, false, Vec2(), 4);
             }
             
@@ -2616,7 +2655,7 @@ void GameScene::updateRemoveDeletedEnemies()
     }
 }
 
-void GameScene::createAndAddDeathAnimationObstacle(string textureName, Vec2 startPos, float scale, int frames) {
+void GameScene::createAndAddDeathAnimationObstacle(string textureName, Vec2 startPos, float scale, int frames, int tag) {
     std::shared_ptr<Texture> image = _assets->get<Texture>(textureName);
     std::shared_ptr<Glow> glow = Glow::alloc(startPos, image->getSize() / _scale, _scale);
     std::shared_ptr<scene2::SpriteNode> sprite = scene2::SpriteNode::alloc(image, 1, frames);
@@ -2627,7 +2666,7 @@ void GameScene::createAndAddDeathAnimationObstacle(string textureName, Vec2 star
     sprite->setFrame(0);
     sprite->setRelativeColor(false);
     sprite->setScale(scale);
-    _worldnode->addChildWithTag(glow->getSceneNode(), 200);
+    _worldnode->addChildWithTag(glow->getSceneNode(), tag);
 }
 
 
