@@ -856,6 +856,13 @@
         "lose_restart": {
             "file": "textures/menus/lose/restart_button.png"
         },
+        "lose-background": {
+            "file": "textures/menus/lose/darkrec.png",
+            "minfilter": "nearest",
+            "magfilter": "linear",
+            "wrapS": "clamp",
+            "wrapT": "clamp"
+        },
 		"swap": {
 			"file": "textures/menus/options/swap.png"
 		},

@@ -346,7 +346,7 @@ void CollisionController::handleAttackCollision(AttackController::Attack* attack
     }
     if (fd1 && *fd1 == "playerattacksensorhoming") {
         if (BaseEnemyModel* enemy = dynamic_cast<BaseEnemyModel*>(bd)) {
-            attack->setHomingEnemy(enemy);
+            attack->setDIRTYHomingEnemy(enemy);
             //CULog("%f, %f", attack->getLinearVelocity().x, attack->getLinearVelocity().y);
 
         }
@@ -368,7 +368,6 @@ void CollisionController::handleAttackCollision(AttackController::Attack* attack
         }
     }
     else if ((bd && (bd->getName().find("wall")!= std::string::npos))){
-        string text = fd1 ? *fd1 : "NULLLL";
         switch(attack->getType()) {
         case AttackController::p_exp_package:
             AC->createAttack(attack->getPosition(), 3, 0.15, 30, AttackController::p_exp, cugl::Vec2::ZERO, timer, PLAYER_RANGE, PLAYER_EXP_FRAMES);

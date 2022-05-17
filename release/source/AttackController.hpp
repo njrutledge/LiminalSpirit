@@ -153,7 +153,11 @@ public:
 
         vector<BaseEnemyModel*> _hitEnemies;
 
-        BaseEnemyModel* _homingEnemy;
+        BaseEnemyModel* _DIRTYHomingEnemy;
+
+        bool _dirtyHoming;
+
+        std::shared_ptr<BaseEnemyModel> _homingEnemy;
         
     public:
         /**
@@ -229,8 +233,22 @@ public:
             _hitEnemies.push_back(enemy);
         }
 
-        void setHomingEnemy(BaseEnemyModel* enemy) {
+        void setDIRTYHomingEnemy(BaseEnemyModel* enemy) {
+            _DIRTYHomingEnemy = enemy;
+            _dirtyHoming = true;
+        }
+        
+        BaseEnemyModel* getDIRTYHoming() {
+            return _DIRTYHomingEnemy;
+        }
+
+        bool isDirtyHoming() {
+            return _dirtyHoming;
+        }
+        void setHomingEnemy(std::shared_ptr<BaseEnemyModel> enemy) {
             _homingEnemy = enemy;
+            _DIRTYHomingEnemy = nullptr;
+            _dirtyHoming = false;
         }
 
 #pragma mark - 
@@ -326,6 +344,8 @@ public:
      *  Projectile velocities are vectors facing the +y direction. They are rotated accordingly when initializing different direction attacks.
      */
     void init(float scale, float rscale, float oof, cugl::Vec2 p_vel, cugl::Vec2 c_vel, float hit_wind, float hit_cooldown, float reload, float swingSpeed, float worldWidth, float worldHeight);
+
+    void fixDirtyHoming(std::shared_ptr<AttackController::Attack> attack, vector<std::shared_ptr<BaseEnemyModel>> enemies);
     
     /**
      *  Update function for attack controller. Updates all attacks and removes inactive attacks from queue.
@@ -334,7 +354,7 @@ public:
      *  @param VX   The linear velocity of the player
      *  @param dt   The timestep
      */
-    void update(const cugl::Vec2 p, b2Vec2 VX, float dt) ;
+    void update(const cugl::Vec2 p, b2Vec2 VX, float dt, vector < std::shared_ptr<BaseEnemyModel>> enemies);
     
     
     /**

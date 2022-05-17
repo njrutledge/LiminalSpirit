@@ -2792,7 +2792,7 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
         (*it)->setDebugColor(Color4::YELLOW);
         addObstacle((*it), attackSprite, true);
     }
-    _attacks->update(_player->getPosition(), _player->getBody()->GetLinearVelocity(), timestep);
+    _attacks->update(_player->getPosition(), _player->getBody()->GetLinearVelocity(), timestep, _enemies);
     // DO NOT MOVE THE ABOVE LINE
     if (!_cancelDash && (right == SwipeController::upAttack || left == SwipeController::jump || right == SwipeController::jump))
     {
