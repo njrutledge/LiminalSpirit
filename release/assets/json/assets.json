@@ -1489,6 +1489,7 @@
 		"forest6": "json/levels/forest/gluttonyornah.json",
 		"forest7": "json/levels/forest/spawnmeman.json",
 		"forest8": "json/levels/forest/chasethelost.json",
+        "forest9": "json/levels/forest/inversion.json",
 		"particles": "json/particles.json",
 		"BOSS": "json/levels/BOSS.json"
 	}
