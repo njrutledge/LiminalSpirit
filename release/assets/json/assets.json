@@ -920,6 +920,18 @@
             "stream": true,
             "volume": 0.2
         },
+        "cave1Spawner": {
+            "type": "sample",
+            "file": "sounds/cave/cave1/cave1_spawner.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
+        "cave1Seeker": {
+            "type": "sample",
+            "file": "sounds/cave/cave1/cave1_seeker.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
 		"cave2": {
 			"type": "sample",
 			"file": "sounds/cave/cave2/cave2.ogg",
@@ -944,6 +956,18 @@
             "stream": true,
             "volume": 0.1
         },
+        "cave2Spawner": {
+            "type": "sample",
+            "file": "sounds/cave/cave2/cave2_spawner.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
+        "cave2Seeker": {
+            "type": "sample",
+            "file": "sounds/cave/cave2/cave2_seeker.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
 		"mushroom1": {
 			"type": "sample",
 			"file": "sounds/mushroom/mush1/mushroom1.ogg",
@@ -965,6 +989,18 @@
         "mushroom1Mirror": {
             "type": "sample",
             "file": "sounds/mushroom/mush1/mush1_mirror.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
+        "mushroom1Spawner": {
+            "type": "sample",
+            "file": "sounds/mushroom/mush1/mush1_spawner.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
+        "mushroom1Seeker": {
+            "type": "sample",
+            "file": "sounds/mushroom/mush1/mush1_seeker.ogg",
             "stream": true,
             "volume": 0.2
         },
@@ -992,6 +1028,18 @@
             "stream": true,
             "volume": 0.1
         },
+        "mushroom2Spawner": {
+            "type": "sample",
+            "file": "sounds/mushroom/mush2/mush2_spawner.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
+        "mushroom2Seeker": {
+            "type": "sample",
+            "file": "sounds/mushroom/mush2/mush2_seeker.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
         "forest1": {
             "type": "sample",
             "file": "sounds/forest/forest1.ogg",
@@ -1015,6 +1063,18 @@
             "file": "sounds/forest/forest1_mirror.ogg",
             "stream": true,
             "volume": 0.1
+        },
+        "forest1Spawner": {
+            "type": "sample",
+            "file": "sounds/forest/forest1_spawner.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
+        "forest1Seeker": {
+            "type": "sample",
+            "file": "sounds/forest/forest1_seeker.ogg",
+            "stream": true,
+            "volume": 0.2
         },
 		"menu": {
 			"type": "sample",
