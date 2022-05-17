@@ -171,7 +171,13 @@ Vec2 AIController::getPhantomMovement(shared_ptr<Phantom> phantom, Vec2 player_p
             vector = phantom->targetPosition - phantom->getPosition();
         }
        
-        if(phantom->getPosition().y - phantom->getHeight()/2 <= bottomwall) {
+        if(phantom->getPosition().y - phantom->getHeight()/2 <= bottomwall && phantom->getPosition().x - phantom->getWidth()/2 <= 0) {
+            phantom->targetPosition = phantom->getPosition() + Vec2(-vector.x, -vector.y);
+        }
+        else if(phantom->getPosition().y - phantom->getHeight()/2 <= bottomwall && phantom->getPosition().x - phantom->getWidth()/2 >= worldwidth) {
+            phantom->targetPosition = phantom->getPosition() + Vec2(-vector.x, -vector.y);
+        }
+        else if(phantom->getPosition().y - phantom->getHeight()/2 <= bottomwall) {
             phantom->targetPosition = phantom->getPosition() + Vec2(vector.x, -vector.y);
         }
         else if(phantom->getPosition().x - phantom->getWidth()/2 <= 0) {
@@ -180,9 +186,6 @@ Vec2 AIController::getPhantomMovement(shared_ptr<Phantom> phantom, Vec2 player_p
         else if(phantom->getPosition().x + phantom->getWidth()/2 >= worldwidth) {
             phantom->targetPosition = phantom->getPosition() + Vec2(-vector.x, vector.y);
         }
-        
-        
-        
         
         return movementHelper(phantom->targetPosition, phantom->getPosition(), phantom->getHorizontalSpeed(), phantom->getVerticalSpeed(), 1);
 
@@ -228,8 +231,10 @@ Vec2 AIController::getSeekerMovement(shared_ptr<Seeker> seeker, Vec2 player_pos,
     seeker->setTimePast(seeker->getTimePast() + timestep);
 //    int flip = 1; // flips y direction
     //Check if enemy is already attacking
+
     if (!seeker->isAttacking()) {
         float angle = atan2(player_pos.y - seeker->getPosition().y, player_pos.x - seeker->getPosition().x);
+        
         if (seeker->stop) {
             seeker->stopTimer+=timestep;
             if (seeker->stopTimer >= 1) {
@@ -239,14 +244,13 @@ Vec2 AIController::getSeekerMovement(shared_ptr<Seeker> seeker, Vec2 player_pos,
             return Vec2();
         }
         if (!seeker->targetPosition.x) {
-            while (seeker->targetPosition.x < 2 || seeker->targetPosition.x > 30 || seeker->targetPosition.y < 2) {
+            while (seeker->targetPosition.x < seeker->getWidth()/2 || seeker->targetPosition.x > 32-seeker->getWidth()/2 || seeker->targetPosition.y < seeker->getHeight()/2) {
                 float r = 5 + 10 * std::sqrt(static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
                 float alpha = angle - M_PI/4 + static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * M_PI/2;
                 seeker->targetPosition = Vec2(r * std::cos(alpha), r * std::sin(alpha)) + seeker->getPosition();
             }
         }
-        
-        if(seeker->targetPosition.distance(seeker->getPosition()) <= 1) {
+        if (!seeker->justAttacked) {
             if (player_pos.x <= seeker->getPosition().x + seeker->getAttackRadius()/4
                 && player_pos.x >= seeker->getPosition().x - seeker->getAttackRadius()/4
                 && player_pos.y <= seeker->getPosition().y + seeker->getAttackRadius()/4
@@ -257,6 +261,12 @@ Vec2 AIController::getSeekerMovement(shared_ptr<Seeker> seeker, Vec2 player_pos,
                     seeker->setTimePast(0.0f);
                 }
                 return Vec2(); // Seeker stops moving
+            }
+        }
+        if (seeker->targetPosition.distance(seeker->getPosition()) <= 1) {
+            
+            if (seeker->justAttacked) {
+                seeker->justAttacked = false;
             }
             if (player_pos.distance(seeker->getPosition())>6) {
                 seeker->targetPosition = Vec2(0,0);
@@ -272,7 +282,8 @@ Vec2 AIController::getSeekerMovement(shared_ptr<Seeker> seeker, Vec2 player_pos,
             seeker->stopTimer = 0;
             return Vec2();
         }
-            
+        
+        
         return movementHelper(seeker->targetPosition, seeker->getPosition(), seeker->getHorizontalSpeed(), seeker->getVerticalSpeed(), seeker->velScale);
     }
     else {
@@ -281,11 +292,15 @@ Vec2 AIController::getSeekerMovement(shared_ptr<Seeker> seeker, Vec2 player_pos,
             seeker->setIsAttacking(false);
             seeker->setAttackCompleted(false);
             seeker->setTimePast(0.0f);
-            float r = 5 + 5 * std::sqrt(static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
-            float alpha = M_PI/4 + static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 3*M_PI/4;
-            seeker->targetPosition = seeker->getPosition() + Vec2(r * std::cos(alpha), r * std::sin(alpha));
+            Vec2 newxy;
+            while (newxy.x < seeker->getWidth()/2 || newxy.x > 32-seeker->getWidth()/2 || newxy.y < seeker->getHeight()/2) {
+                float r = 5 + 10 * std::sqrt(static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
+                float alpha = M_PI/4 + static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 3*M_PI/4;
+                newxy = seeker->getPosition() + Vec2(r * std::cos(alpha), r * std::sin(alpha));
+            }
+            seeker->targetPosition = newxy;
+            
         }
-        seeker->justAttacked = false;
         return Vec2();
     }
 }
