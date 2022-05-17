@@ -719,7 +719,7 @@ void GameScene::update(float timestep, int unlockCount)
         _optionButton->activate();
         Size pos1 = _optionScene->getContentSize();
         Vec2 pos2 = _returnButton->getPosition();
-        CULog("pos: %f, %f || %f, %f", pos1.width, pos1.height, pos2.x, pos2.y);
+//        CULog("pos: %f, %f || %f, %f", pos1.width, pos1.height, pos2.x, pos2.y);
         _pauseButton->setVisible(false);
         _pauseButton->deactivate();
         return;
@@ -3415,12 +3415,54 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     addObstacle(floor, floorNode, 1);
     
     // Split floor into parts to repeat texture
+    Rect safebounds = Application::get()->getSafeBounds();
+    float safeWidth = safebounds.size.width;
+    Rect screenbounds = Application::get()->getDisplayBounds();
+
+    float worldCoorWidth = safeWidth / DEFAULT_WIDTH;
+    float leftOffset = safebounds.getMinX() - screenbounds.getMinX();
+    float leftWorldCoors = leftOffset / worldCoorWidth;
+    float rightOffset = screenbounds.getMaxX() - safebounds.getMaxX();
+    float rightWorldCoors = rightOffset / worldCoorWidth;
+    float totalWorldCoors = leftWorldCoors + DEFAULT_WIDTH + rightWorldCoors;
+
+    vector<float> positions;
+    
     int split = 3;
+    // width of platform in world coors
+    float platformCoors = totalWorldCoors / split;
     if (!_biome.compare("shroom")) {
         split = 2;
+        platformCoors = totalWorldCoors / split;
+        
+        // x positions of each platform to make floor fill entire screen
+        float secondPos = platformCoors - leftWorldCoors;
+        positions.push_back(0);
+        positions.push_back(secondPos);
     }
+    else if (!_biome.compare("forest")) {
+        split = 8;
+        platformCoors = totalWorldCoors / split;
+        
+        float secondPos = platformCoors - leftWorldCoors;
+        positions.push_back(0);
+        positions.push_back(secondPos);
+        for (int i = 1; i < split - 1; i++) {
+            positions.push_back(secondPos + (platformCoors * i));
+        }
+    }
+    else {
+        float secondPos = platformCoors - leftWorldCoors;
+        float thirdPos = secondPos + platformCoors;
+        
+        positions.push_back(0);
+        positions.push_back(secondPos);
+        positions.push_back(thirdPos);
+    }
+    float leftAnchor = 1 - ((platformCoors * 0.5) - leftWorldCoors) / platformCoors;
+    
     for (int i = 0; i < split; i++) {
-        Rect floorRect = Rect(DEFAULT_WIDTH / split * i, 0, DEFAULT_WIDTH / split, 0.5);
+        Rect floorRect = Rect(positions[i], 0, platformCoors, 0.5);
         std::shared_ptr<physics2::PolygonObstacle> floor = physics2::PolygonObstacle::allocWithAnchor(floorRect, Vec2::ANCHOR_CENTER);
         floor->setBodyType(b2_staticBody);
 
@@ -3438,12 +3480,18 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
             floorImage = _assets->get<Texture>("forest_floor");
         }
         std::shared_ptr<scene2::PolygonNode> floorSprite = scene2::PolygonNode::allocWithTexture(floorImage);
-        float desiredWidth = DEFAULT_WIDTH * _scale;
+        float desiredWidth =  totalWorldCoors * _scale;
         float floorScale = desiredWidth / floorSprite->getWidth() / split;
         floorSprite->setScale(floorScale);
         floorSprite->setPriority(.1);
+        float xAnchor = 0.5;
+        if (i == 0) {
+            xAnchor = leftAnchor;
+        }
         if (!_biome.compare("shroom")) {
-            floorSprite->setAnchor(0.5, 0.45);
+            floorSprite->setAnchor(xAnchor, 0.45);
+        } else {
+            floorSprite->setAnchor(xAnchor, 0.5);
         }
         addObstacle(floor, floorSprite, 1);
     }
