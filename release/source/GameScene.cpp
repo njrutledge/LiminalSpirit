@@ -1823,10 +1823,44 @@ void GameScene::updateEnemies(float timestep)
         // For running idle animations specific (for speed) to enemies
         if ((*it)->getName() == "Phantom")
         {
-            if ((*it)->getIdleAnimationTimer() > 0.1f)
+
+            if ((*it)->getInvincibilityTimer() > 0)
             {
-                sprite->setFrame((sprite->getFrame() + 1) % 7);
-                (*it)->setIdleAnimationTimer(0);
+                // Hurt takes priority over everything else
+                sprite->setFrame(11);
+            }
+            else if ((*it)->isAttacking()) {
+                // First frame of attack
+                if (sprite->getFrame() < 7 || sprite->getFrame() >= 11) {
+                    sprite->setFrame(7);
+                    (*it)->setAttackAnimationTimer(0);
+                }
+                else if ((*it)->getAttackAnimationTimer() > .33f) {
+                    // Attack Animation up to release of attack
+                    if (sprite->getFrame() != 9) {
+                        sprite->setFrame(((sprite->getFrame() + 1) % 4) + 8);
+                    }
+                    (*it)->setAttackAnimationTimer(0);
+                }
+            }
+            else {
+
+                //start idle is post attack part of animation done, or if coming out of hurt
+                if (sprite->getFrame() == 11 || (sprite->getFrame() == 10 && (*it)->getIdleAnimationTimer() > .1f)) {
+                    sprite->setFrame(0);
+                }
+
+                //finish post attack animation, then start idle otherwise
+                if (sprite->getFrame() == 9 && (*it)->getAttackAnimationTimer() > .33f) {
+                    sprite->setFrame(10);
+                    (*it)->setAttackAnimationTimer(0);
+                    (*it)->setIdleAnimationTimer(-0.1);
+                }
+                else if (((*it)->getIdleAnimationTimer() > .1f || sprite->getFrame() == 11))
+                {
+                    sprite->setFrame(((sprite->getFrame() + 1) % 7));
+                    (*it)->setIdleAnimationTimer(0);
+                }
             }
         }
         else if ((*it)->getName() == "Glutton")
@@ -1850,54 +1884,64 @@ void GameScene::updateEnemies(float timestep)
                     else {
                         sprite->setFrame(27);
                     }
-                    (*it)->setAttackAnimationTimer(0.7f);
+                    (*it)->setAttackAnimationTimer(0.f);
                 }
                 else if ((*it)->getAttackAnimationTimer() > 1.f) {
                     if (!sprite->isFlipHorizontal()) {
-                        if (sprite->getFrame() != 27) {
+                        if (sprite->getFrame() != 25) {
                             sprite->setFrame(((sprite->getFrame() + 1)% 7) + 21);
                         }
                         if (sprite->getFrame() == 22) {
-                            (*it)->setAttackAnimationTimer(0.3f);
+                            (*it)->setAttackAnimationTimer(0.4f);
                         }
                         else {
-                            (*it)->setAttackAnimationTimer(0.7f);
+                            (*it)->setAttackAnimationTimer(0.8f);
                         }
                     }
                     else {
-                        if (sprite->getFrame() != 21) {
+                        if (sprite->getFrame() != 23) {
                             sprite->setFrame(((sprite->getFrame() - 1) % 7) + 21);
                         }
-                        if (sprite->getFrame() == 27) {
-                            (*it)->setAttackAnimationTimer(0.3f);
+                        if (sprite->getFrame() == 26) {
+                            (*it)->setAttackAnimationTimer(0.4f);
                         }
                         else {
-                            (*it)->setAttackAnimationTimer(0.7f);
+                            (*it)->setAttackAnimationTimer(0.8f);
                         }
                     }
                 }
             }
             else {
 
-                if (sprite->getFrame() == 14 || sprite->getFrame() == 27) {
+                if (sprite->getFrame() == 14 || (sprite->getFrame() == 27 && (*it)->getAttackAnimationTimer() > 1.f)) {
                     sprite->setFrame(0);
                 }
-                else if (sprite->getFrame() == 20 || sprite->getFrame() == 21) {
+                else if (sprite->getFrame() == 20 || (sprite->getFrame() == 21 && (*it)->getAttackAnimationTimer() > 1.f)) {
                     sprite->setFrame(6);
                 }
 
-                if ((*it)->getX() > _player->getX()) {
+                if (sprite->getFrame() > 21 && (*it)->getAttackAnimationTimer() > 1.f) {
+                    if (!sprite->isFlipHorizontal()) {
+                        sprite->setFrame(sprite->getFrame() + 1);
+                    }
+                    else {
+                        sprite->setFrame(sprite->getFrame() - 1);
+                    }
+                    (*it)->setIdleAnimationTimer(0);
+                    (*it)->setAttackAnimationTimer(0.8);
+                }
+                if ((*it)->getX() > _player->getX() && !sprite->getFrame() > 21) {
                     sprite->flipHorizontal(false);
                 }
-                else if ((*it)->getX() < _player->getX()) {
+                else if ((*it)->getX() < _player->getX() && !sprite->getFrame() > 21) {
                     sprite->flipHorizontal(true);
                 }
-                if (((*it)->getIdleAnimationTimer() > .1f || sprite->getFrame() == 14 || sprite->getFrame() == 20))
+                if (((*it)->getIdleAnimationTimer() > .1f || sprite->getFrame() == 14 || sprite->getFrame() == 20) && !sprite->getFrame() > 21)
                 {
                     sprite->setFrame((sprite->getFrame() + 1) % 7);
                     (*it)->setIdleAnimationTimer(0);
                 }
-                else if (((*it)->getIdleAnimationTimer() > .1f || sprite->getFrame() == 14 || sprite->getFrame() == 20))
+                else if (((*it)->getIdleAnimationTimer() > .1f || sprite->getFrame() == 14 || sprite->getFrame() == 20) && !sprite->getFrame() > 21)
                 {
                     sprite->setFrame((sprite->getFrame() - 1) % 7);
                     (*it)->setIdleAnimationTimer(0);
@@ -2562,7 +2606,7 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
             }
             else if ((*it)->getAttackID() == PHANTOM_ATTACK)
             {
-                attackSprite->setScale(0.4 * (*it)->getRadius());
+                attackSprite->setScale(0.3 * (*it)->getRadius());
                 attackSprite->setAngle((*it)->getAngle() + M_PI / 2);
                 attackSprite->setPriority(2.2);
 
@@ -3171,7 +3215,7 @@ void GameScene::createEnemy(string enemyName, Vec2 enemyPos, int spawnerInd) {
         std::shared_ptr<Texture> phantomHitboxImage = _assets->get<Texture>("phantom");
         std::shared_ptr<Texture> phantomImage = _assets->get<Texture>("phantom_ani");
         std::shared_ptr<Phantom> phantom = Phantom::alloc(enemyPos, Vec2(phantomImage->getSize().width / 7, phantomImage->getSize().height), phantomHitboxImage->getSize() / _scale / 10, _scale);
-        std::shared_ptr<scene2::SpriteNode> phantomSprite = scene2::SpriteNode::alloc(phantomImage, 1, 7);
+        std::shared_ptr<scene2::SpriteNode> phantomSprite = scene2::SpriteNode::alloc(phantomImage, 2, 7);
         phantom->setSceneNode(phantomSprite);
         phantom->setDebugColor(Color4::BLUE);
         phantom->setGlow(enemyGlow);
