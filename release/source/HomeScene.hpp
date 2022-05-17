@@ -119,6 +119,8 @@ public:
 
   Choice getChoice() { return _choice; };
 
+  void setDefaultChoice();
+
 #pragma mark -
 #pragma mark Screen Handling
   /**

@@ -18,6 +18,8 @@
 		8502D9A728205AA70007A787 /* LevelSelectScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8502D9A528205AA70007A787 /* LevelSelectScene.cpp */; };
 		8502D9A928205AF30007A787 /* widgets in Resources */ = {isa = PBXBuildFile; fileRef = 8502D9A828205AF30007A787 /* widgets */; };
 		8502D9AA28205AF30007A787 /* widgets in Resources */ = {isa = PBXBuildFile; fileRef = 8502D9A828205AF30007A787 /* widgets */; };
+		85358A71283440F100069991 /* CreditScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85358A6B283440F100069991 /* CreditScene.cpp */; };
+		85358A72283440F100069991 /* CreditScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85358A6B283440F100069991 /* CreditScene.cpp */; };
 		857201C827E25619006D48C6 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 857201C727E25619006D48C6 /* fonts */; };
 		857201C927E25619006D48C6 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 857201C727E25619006D48C6 /* fonts */; };
 		857201CA27E25619006D48C6 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 857201C727E25619006D48C6 /* fonts */; };
@@ -195,6 +197,8 @@
 		8502D9A128205AA70007A787 /* LevelSelectScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LevelSelectScene.hpp; sourceTree = "<group>"; };
 		8502D9A528205AA70007A787 /* LevelSelectScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LevelSelectScene.cpp; sourceTree = "<group>"; };
 		8502D9A828205AF30007A787 /* widgets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = widgets; sourceTree = "<group>"; };
+		85358A6B283440F100069991 /* CreditScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CreditScene.cpp; sourceTree = "<group>"; };
+		85358A70283440F100069991 /* CreditScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CreditScene.hpp; sourceTree = "<group>"; };
 		857201C727E25619006D48C6 /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
 		85841F3E2809F09300169F44 /* shaders */ = {isa = PBXFileReference; lastKnownFileType = folder; path = shaders; sourceTree = "<group>"; };
 		85841F3F2809F09300169F44 /* Phantom.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Phantom.hpp; sourceTree = "<group>"; };
@@ -491,6 +495,8 @@
 		EBBF18B11D749176008E2001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				85358A6B283440F100069991 /* CreditScene.cpp */,
+				85358A70283440F100069991 /* CreditScene.hpp */,
 				8502D9A128205AA70007A787 /* LevelSelectScene.hpp */,
 				8502D9A528205AA70007A787 /* LevelSelectScene.cpp */,
 				F01F990C281988F400701247 /* BossScene.cpp */,
@@ -770,6 +776,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5783892727E2369B000CB5B9 /* SwipeController.cpp in Sources */,
+				85358A72283440F100069991 /* CreditScene.cpp in Sources */,
 				F00746F427E91B2600AF5D7C /* SoundController.cpp in Sources */,
 				F09AF65D27F64ACA003C6EA2 /* Glow.cpp in Sources */,
 				8502D9A728205AA70007A787 /* LevelSelectScene.cpp in Sources */,
@@ -805,6 +812,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F025104127D02C6C00AB80AA /* SwipeController.cpp in Sources */,
+				85358A71283440F100069991 /* CreditScene.cpp in Sources */,
 				F00746F327E91B2600AF5D7C /* SoundController.cpp in Sources */,
 				F09AF65C27F64ACA003C6EA2 /* Glow.cpp in Sources */,
 				8502D9A628205AA70007A787 /* LevelSelectScene.cpp in Sources */,

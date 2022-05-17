@@ -40,6 +40,7 @@ bool AttackController::Attack::init(const cugl::Vec2 p, float radius, float a, f
     _homingSensorFixture = nullptr;
     _bodySensorFixture = nullptr;
     _homingEnemy = nullptr;
+    _dirtyHoming = false;
     if (CapsuleObstacle::init(_position, Size(_radius, _radius))) {
         // TODO change the sensor naming based on if its player attack
         b2Filter filter = b2Filter();
@@ -188,7 +189,7 @@ void AttackController::Attack::update(const cugl::Vec2 p, bool follow, float dt,
         if (_age <= 0) {
             _active =  false;
         }
-        if (_homingEnemy && !_homingEnemy->isRemoved() && _homingEnemy->getBody() != nullptr) {
+        if (_homingEnemy && !_dirtyHoming && !_homingEnemy->isRemoved()) {
             Vec2 enemyPos = _homingEnemy->getPosition();
             Vec2 attackPos = getPosition();
             Vec2 diffDirection = enemyPos - attackPos;
@@ -227,6 +228,7 @@ void AttackController::Attack::dispose() {
     _bodySensorFixture = nullptr;
     _hitEnemies.clear();
     _homingEnemy = nullptr;
+    _DIRTYHomingEnemy = nullptr;
 
 }
 
@@ -255,21 +257,39 @@ void AttackController::init(float scale, float rscale, float oof, cugl::Vec2 p_v
     _worldHeight = worldHeight;
 }
 
-void AttackController::update(const cugl::Vec2 p, b2Vec2 VX, float dt) {
+void AttackController::fixDirtyHoming(std::shared_ptr<AttackController::Attack> attack, vector<std::shared_ptr<BaseEnemyModel>> enemies) {
+    BaseEnemyModel* dirtyHomingEnemy = attack->getDIRTYHoming();
+    for (auto it = enemies.begin(); it != enemies.end(); ++it) {
+        if ((*it).get() == dirtyHomingEnemy) {
+            attack->setHomingEnemy(*it);
+            return;
+        }
+    }
+}
+
+void AttackController::update(const cugl::Vec2 p, b2Vec2 VX, float dt, vector<std::shared_ptr<BaseEnemyModel>> enemies) {
     auto it = _current.begin();
-    while(it != _current.end()) {
+    while (it != _current.end()) {
         if ((*it)->getType() == Type::p_melee) {
             (*it)->update(p, true, dt, VX);
-        } else if ((*it)->getType() == Type::p_dash) {
+        }
+        else if ((*it)->getType() == Type::p_dash) {
             (*it)->update(p, true, dt, VX);
-        } else {
+        }
+        else {
             (*it)->update(p, false, dt, VX);
         }
+
+        if ((*it)->isDirtyHoming()) {
+            fixDirtyHoming(*it, enemies);
+        }
+
         if (!((*it)->isActive())) {
             (*it)->markRemoved(true);
             it++;
             // it = _current.erase(it);
-        } else {
+        }
+        else {
             it++;
         }
     }

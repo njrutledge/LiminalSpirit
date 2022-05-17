@@ -80,13 +80,13 @@ void LiminalSpirit::onStartup()
     reader->close();
     
     // Note: COMMENT THESE OUT TO DISABLE PROGRESSION!!!!!!!!
-//    _biome = progress->get("biome")->asInt();
-//    _highest_level = progress->get("highest_level")->asInt();
-//    _unlock_count = progress->get("unlock_count")->asInt();
+    _biome = progress->get("biome")->asInt();
+    _highest_level = progress->get("highest_level")->asInt();
+    _unlock_count = progress->get("unlock_count")->asInt();
     // Note: COMMENT THESE OUT TO ENABLE PROGRESSION!!!!!!!!
-    _biome = 3;
-    _highest_level = 1;
-    _unlock_count = 4;
+//    _biome = 3;
+//    _highest_level = 1;
+//    _unlock_count = 4;
     int swap = settings->get("swap")->asInt();
     _swap = settings->get("swap")->asInt();
     this->save();
@@ -167,21 +167,6 @@ void LiminalSpirit::update(float timestep)
         updateBossScene(timestep);
         break;
     }
-    /*if (!_loaded && _loading.isActive())
-    {
-        _loading.update(0.01f);
-    }
-    else if (!_loaded)
-    {
-        _loading.dispose(); // Disables the input listeners in this mode
-        _gameplay.init(_assets, _sound_controller);
-        _home.init(_assets);
-        _loaded = true;
-    }
-    else
-    {
-        _gameplay.update(timestep);
-    }*/
 }
 
 /**
@@ -273,6 +258,11 @@ void LiminalSpirit::updateWorldSelectScene(float timestep)
         //_scene = State::GAME;
 //        _bossgame.init(_assets, _sound_controller);
 //        _scene = State::BOSS;
+        break;
+    case WorldSelectScene::Choice::BACK:
+        _scene = State::HOME;
+        _home.setDefaultChoice();
+        _worldSelect.setDefaultChoice();
         break;
     }
 }

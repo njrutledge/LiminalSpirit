@@ -920,6 +920,18 @@
             "stream": true,
             "volume": 0.2
         },
+        "cave1Spawner": {
+            "type": "sample",
+            "file": "sounds/cave/cave1/cave1_spawner.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
+        "cave1Seeker": {
+            "type": "sample",
+            "file": "sounds/cave/cave1/cave1_seeker.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
 		"cave2": {
 			"type": "sample",
 			"file": "sounds/cave/cave2/cave2.ogg",
@@ -944,6 +956,18 @@
             "stream": true,
             "volume": 0.1
         },
+        "cave2Spawner": {
+            "type": "sample",
+            "file": "sounds/cave/cave2/cave2_spawner.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
+        "cave2Seeker": {
+            "type": "sample",
+            "file": "sounds/cave/cave2/cave2_seeker.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
 		"mushroom1": {
 			"type": "sample",
 			"file": "sounds/mushroom/mush1/mushroom1.ogg",
@@ -965,6 +989,18 @@
         "mushroom1Mirror": {
             "type": "sample",
             "file": "sounds/mushroom/mush1/mush1_mirror.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
+        "mushroom1Spawner": {
+            "type": "sample",
+            "file": "sounds/mushroom/mush1/mush1_spawner.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
+        "mushroom1Seeker": {
+            "type": "sample",
+            "file": "sounds/mushroom/mush1/mush1_seeker.ogg",
             "stream": true,
             "volume": 0.2
         },
@@ -992,6 +1028,18 @@
             "stream": true,
             "volume": 0.1
         },
+        "mushroom2Spawner": {
+            "type": "sample",
+            "file": "sounds/mushroom/mush2/mush2_spawner.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
+        "mushroom2Seeker": {
+            "type": "sample",
+            "file": "sounds/mushroom/mush2/mush2_seeker.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
         "forest1": {
             "type": "sample",
             "file": "sounds/forest/forest1.ogg",
@@ -1015,6 +1063,18 @@
             "file": "sounds/forest/forest1_mirror.ogg",
             "stream": true,
             "volume": 0.1
+        },
+        "forest1Spawner": {
+            "type": "sample",
+            "file": "sounds/forest/forest1_spawner.ogg",
+            "stream": true,
+            "volume": 0.2
+        },
+        "forest1Seeker": {
+            "type": "sample",
+            "file": "sounds/forest/forest1_seeker.ogg",
+            "stream": true,
+            "volume": 0.2
         },
 		"menu": {
 			"type": "sample",
@@ -1239,13 +1299,13 @@
 						"foreground": "melee_charge_HUD_foreground",
 						"left_cap": "melee_charge_HUD_leftcap",
 						"right_cap": "melee_charge_HUD_rightcap",
-						"scale": 0.4
+						"scale": 0.35
 					},
 					"layout": {
-						"x_anchor": "right",
-						"y_anchor": "middle",
-						"x_offset": -0.05,
-						"y_offset": -0.1,
+						"x_anchor": "center",
+						"y_anchor": "top",
+						"x_offset": -0.1,
+						"y_offset": -0.08,
 						"absolute": false
 					}
 				},
@@ -1260,13 +1320,13 @@
 						"foreground": "range_charge_HUD_foreground",
 						"left_cap": "range_charge_HUD_leftcap",
 						"right_cap": "range_charge_HUD_rightcap",
-						"scale": 0.4
+						"scale": 0.35
 					},
 					"layout": {
-						"x_anchor": "right",
-						"y_anchor": "middle",
-						"x_offset": -0.05,
-						"y_offset": 0.1,
+						"x_anchor": "center",
+						"y_anchor": "top",
+						"x_offset": -0.15,
+						"y_offset": -0.08,
 						"absolute": false
 					}
 				}
@@ -1691,6 +1751,29 @@
 						"y_offset": -0.15,
 						"x_offset": 0.202,
 						"absolute": false
+					}
+				},
+				"back": {
+					"type": "Button",
+					"data": {
+						"upnode": "up",
+						"anchor": [
+							0,
+							1
+						],
+						"scale": 0.55
+					},
+					"children": {
+						"up": {
+							"type": "Image",
+							"data": {
+								"texture": "backward_arrow"
+							}
+						}
+					},
+					"layout": {
+						"x_anchor": "left",
+						"y_anchor": "top"
 					}
 				}
 			}

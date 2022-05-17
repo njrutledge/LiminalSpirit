@@ -884,7 +884,7 @@ void GameScene::update(float timestep, int unlockCount)
         updateMeleeArm(timestep);
         return;
     } else {
-        std::vector<bool> e = std::vector<bool>(7);
+        std::vector<bool> e = std::vector<bool>(5);
 
         for (auto it = _enemies.begin(); it != _enemies.end(); ++it)
         {
@@ -900,6 +900,14 @@ void GameScene::update(float timestep, int unlockCount)
             else if (n == "Mirror")
             {
                 e[2] = true;
+            }
+            else if (n == "Spawner")
+            {
+                e[3] = true;
+            }
+            else if (n == "Seeker")
+            {
+                e[4] = true;
             }
         }
         
@@ -2792,7 +2800,7 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
         (*it)->setDebugColor(Color4::YELLOW);
         addObstacle((*it), attackSprite, true);
     }
-    _attacks->update(_player->getPosition(), _player->getBody()->GetLinearVelocity(), timestep);
+    _attacks->update(_player->getPosition(), _player->getBody()->GetLinearVelocity(), timestep, _enemies);
     // DO NOT MOVE THE ABOVE LINE
     if (!_cancelDash && (right == SwipeController::upAttack || left == SwipeController::jump || right == SwipeController::jump))
     {
@@ -3178,12 +3186,6 @@ bool GameScene::updateWin()
     // All waves created and all enemies cleared
     if (_nextWaveNum >= _numWaves && !_enemies.size() && !_spawnerCount)
     {
-        // Create and layout win text
-        std::string msg = strtool::format("YOU WIN!");
-        _endText = TextLayout::allocWithText(msg, _font);
-        _endText->setVerticalAlignment(VerticalAlign::MIDDLE);
-        _endText->setHorizontalAlignment(HorizontalAlign::CENTER);
-        _endText->layout();
         return true;
     }
     else
@@ -3271,15 +3273,6 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     Affine2 trans;
     trans.scale(3);
     trans.translate(Vec2(getSize().width / 2, getSize().height / 2));
-
-    if (_endText && !_endText->getText().compare("YOU WIN!"))
-    {
-        batch->setColor(Color4::GREEN);
-        Affine2 trans;
-        trans.scale(3);
-        trans.translate(Vec2(getSize().width / 2, getSize().height / 2));
-        batch->drawText(_endText, trans);
-    }
 
     batch->end();
 }
