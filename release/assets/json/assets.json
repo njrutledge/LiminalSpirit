@@ -555,6 +555,13 @@
 			"minfilter": "linear",
 			"magfilter": "linear"
 		},
+        "home_credit": {
+            "file": "textures/menus/home/home_credit.png",
+            "wrapS": "clamp",
+            "wrapT": "clamp",
+            "minfilter": "linear",
+            "magfilter": "linear"
+        },
 		"zero": {
 			"file": "textures/numbers/0.png",
 			"wrapS": "clamp",
@@ -1423,7 +1430,33 @@
 						"x_offset": 0,
 						"absolute": false
 					}
-				}
+				},
+                "credit": {
+                    "type": "Button",
+                    "data": {
+                        "upnode": "up",
+                        "anchor": [
+                            0.5,
+                            0.4
+                        ],
+                        "scale": 0.5
+                    },
+                    "children": {
+                        "up": {
+                            "type": "Image",
+                            "data": {
+                                "texture": "home_credit"
+                            }
+                        }
+                    },
+                    "layout": {
+                        "x_anchor": "center",
+                        "y_anchor": "middle",
+                        "y_offset": -0.41,
+                        "x_offset": 0,
+                        "absolute": false
+                    }
+                }
 			}
 		},
 		"optionScene": {

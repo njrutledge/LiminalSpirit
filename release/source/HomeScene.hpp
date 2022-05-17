@@ -42,6 +42,7 @@ public:
 		MENU,
 		PLAY,
 		OPTIONS,
+        CREDIT,
 	};
 protected:
   /** The loaders to (synchronously) load in assets */
@@ -53,7 +54,8 @@ protected:
 
   std::shared_ptr<cugl::scene2::Button> _playButton;
   std::shared_ptr<cugl::scene2::Button> _optionsButton;
-
+  std::shared_ptr<cugl::scene2::Button> _creditButton;
+    
   std::shared_ptr<cugl::scene2::Label> _leftText;
   std::shared_ptr<cugl::scene2::Label> _rightText;
 

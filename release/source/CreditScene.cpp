@@ -77,15 +77,10 @@ bool CreditScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _homeButton->addListener([=](const std::string &name, bool down)
                              {
         if (down) {
-            cout << "prep" << endl;
             _homeChoice = Choice::HOME_PREP;
         }
         else if (_homeChoice == Choice::HOME_PREP) {
-            cout << "pressed" << endl;
             _homeChoice = Choice::HOME;
-        }
-        else {
-            cout << "nothing" << endl;
         }
     });
     _homeButton->activate();
