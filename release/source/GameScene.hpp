@@ -190,6 +190,8 @@ protected:
     std::vector<std::shared_ptr<Texture>> _meleeParticleList;
     /** Range Particle Texture Vector */
     std::vector<std::shared_ptr<Texture>> _rangeParticleList;
+    /** Spawn Portal Texture Vector */
+    std::vector<std::shared_ptr<Texture>> _spawnPortalList;
 
     /** A game timer used for spawn times */
     float _timer;

@@ -193,6 +193,7 @@
     <ClInclude Include="..\..\source\BaseEnemyModel.h" />
     <ClInclude Include="..\..\source\BossScene.hpp" />
     <ClInclude Include="..\..\source\CollisionController.hpp" />
+    <ClInclude Include="..\..\source\CreditScene.hpp" />
     <ClInclude Include="..\..\source\GameScene.hpp" />
     <ClInclude Include="..\..\source\Glow.hpp" />
     <ClInclude Include="..\..\source\Glutton.hpp" />
@@ -225,6 +226,7 @@
     <ClCompile Include="..\..\source\BaseEnemyModel.cpp" />
     <ClCompile Include="..\..\source\BossScene.cpp" />
     <ClCompile Include="..\..\source\CollisionController.cpp" />
+    <ClCompile Include="..\..\source\CreditScene.cpp" />
     <ClCompile Include="..\..\source\GameScene.cpp" />
     <ClCompile Include="..\..\source\Glow.cpp" />
     <ClCompile Include="..\..\source\Glutton.cpp" />
