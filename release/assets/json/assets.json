@@ -141,6 +141,13 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
+		"seeker_ani": {
+			"file": "textures/animations/seeker_spritesheet.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
 		"phantom": {
 			"file": "textures/phantom.png",
 			"minfilter": "nearest",
@@ -262,6 +269,27 @@
 		},
 		"lost_death": {
 			"file": "textures/animations/lost_death.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"phantom_death": {
+			"file": "textures/animations/phantom_death.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"seeker_death": {
+			"file": "textures/animations/seeker_death.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
+		"glutton_death": {
+			"file": "textures/animations/glutton_death.png",
 			"minfilter": "nearest",
 			"magfilter": "linear",
 			"wrapS": "clamp",
@@ -691,17 +719,24 @@
 		"background": {
 			"file": "textures/backgrounds/forest_background.png"
 		},
-        "wave_bar_background": {
-            "file": "textures/hud/bar.png"
-        },
-        "wave_bar_foreground": {
-            "file": "textures/hud/content.png"
+        "wave_bar": {
+            "file": "textures/hud/progress_wave.png",
+            "minfilter": "nearest",
+            "magfilter": "linear",
+            "wrapS": "clamp",
+            "wrapT": "clamp",
+            "atlas": {
+                "background": [ 0, 4, 385, 36],
+                "foreground": [ 2, 38, 385, 70],
+                "leftcap": [ 2, 38, 4, 70],
+                "rightcap": [ 383, 38, 385, 70]
+            }
         },
         "wave_bar_checkpoint": {
             "file": "textures/hud/eye.png"
         },
         "wave_bar_indicator": {
-            "file": "textures/hud/projectile.png"
+            "file": "textures/hud/devil_head.png"
         },
 		"melee_charge_HUD": {
 			"file": "textures/hud/melee_charge_HUD.png",
@@ -1019,6 +1054,31 @@
             "type": "sample",
             "file": "sounds/playerSFX/Player_Exp_Pkg.wav",
             "volume": 0.3
+        },
+        "playerDash": {
+            "type": "sample",
+            "file": "sounds/playerSFX/Player_Dash.wav",
+            "volume": 0.4
+        },
+        "playerDashHit": {
+            "type": "sample",
+            "file": "sounds/playerSFX/Player_Dash_Hit.wav",
+            "volume": 0.05
+        },
+        "playerJump": {
+            "type": "sample",
+            "file": "sounds/playerSFX/Player_Jump.wav",
+            "volume": 0.3
+        },
+        "playerJumpAttack": {
+            "type": "sample",
+            "file": "sounds/playerSFX/Player_Jump_Attack.wav",
+            "volume": 0.2
+        },
+        "playerCharge": {
+            "type": "sample",
+            "file": "sounds/playerSFX/Player_Charge.wav",
+            "volume": 0.1
         }
 	},
 	"widgets": {
@@ -1131,7 +1191,7 @@
 						"foreground": "healthbar_foreground",
 						"left_cap": "healthbar_leftcap",
 						"right_cap": "healthbar_rightcap",
-						"scale": 0.5
+						"scale": 0.6
 					},
 					"layout": {
 						"x_anchor": "left",
@@ -1150,7 +1210,8 @@
 						],
 						"background": "wave_bar_background",
 						"foreground": "wave_bar_foreground",
-						"scale": 0.5
+                        "left_cap": "wave_bar_leftcap",
+                        "right_cap": "wave_bar_rightcap"
 					},
 					"layout": {
 						"x_anchor": "right",
@@ -1708,6 +1769,9 @@
         "forest4": "json/levels/forest/guardian.json",
 		"forest5": "json/levels/forest/spectation.json",
 		"forest6": "json/levels/forest/gluttonyornah.json",
+		"forest7": "json/levels/forest/spawnmeman.json",
+		"forest8": "json/levels/forest/chasethelost.json",
+        "forest9": "json/levels/forest/inversion.json",
 		"particles": "json/particles.json",
 		"BOSS": "json/levels/BOSS.json"
 	}

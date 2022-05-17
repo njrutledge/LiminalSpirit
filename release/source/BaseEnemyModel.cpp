@@ -45,10 +45,10 @@ bool BaseEnemyModel::init(const cugl::Vec2& pos, const cugl::Size& realSize, con
 	_drawScale = scale;
 	_health = props.health;
 	_maxhealth = props.health;
-	_verticalSpeed = props.vspeed;
-	_horizontalSpeed = props.hspeed;
+	_verticalSpeed = props.vspeed - (static_cast <float> (rand()) / static_cast <float> (RAND_MAX));
+	_horizontalSpeed = props.hspeed - (static_cast <float> (rand()) / static_cast <float> (RAND_MAX));
 	_attackCooldown = props.attackCooldown;
-	_attackRadius = props.attackRadius;
+	_attackRadius = props.attackRadius - (static_cast <float> (rand()) / static_cast <float> (RAND_MAX/3));
     _damage = props.damage;
 	_timePast = 0.0f;
 	_attackAnimationTime = 0;

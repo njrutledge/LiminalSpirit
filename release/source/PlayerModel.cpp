@@ -55,6 +55,7 @@ bool PlayerModel::init(const cugl::Vec2& pos, const cugl::Size& size, float scal
         _isInvincible = false;
         _isStunned = false;
         _isGrounded = true;
+        _isFloored = false;
         _isJumping = false;
         _isMovingUp = false;
         _hasJustLanded = false;
@@ -234,6 +235,15 @@ void PlayerModel::update(float dt) {
     }
     setFilterData(filter);
     _dropTime -= dt;
+}
+
+void PlayerModel::applyAerialSustain() {
+    if (!isGrounded()) {
+//        b2Vec2 vel(_body->GetLinearVelocity().x, 0);
+//        _body->SetLinearVelocity(vel);
+        b2Vec2 force(0, 50 * (1 - (clampf(_body->GetLinearVelocity().y, 0.0f, 24.0f) / 24.0f)));
+        _body->ApplyLinearImpulse(force, _body->GetPosition(), true);
+    }
 }
 
 #pragma mark -

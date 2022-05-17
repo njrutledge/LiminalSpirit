@@ -246,6 +246,10 @@ protected:
     bool _options;
     
     bool _lose;
+    
+    bool _chargeSoundCueM;
+    
+    bool _chargeSoundCueR;
 
     int _tutorial;
     
@@ -466,7 +470,7 @@ public:
 
 
     /** Helper for creating an uninteractable obstacle with Texture textureName at startPos with scale scale */
-    void createAndAddDeathAnimationObstacle(string textureName, Vec2 startPos, float scale, int frames);
+    void createAndAddDeathAnimationObstacle(string textureName, Vec2 startPos, float scale, int frames, int tag);
 
     /**
      * Sets whether debug mode is active.
@@ -484,7 +488,7 @@ public:
     /**
     * Creates a single enemy
     */
-    void createEnemy(string enemyName, Vec2 enemyPos);
+    void createEnemy(string enemyName, Vec2 enemyPos, int isSpawnerEnemy);
 
     /**
      * Creates all enemies and adds to _enemies.

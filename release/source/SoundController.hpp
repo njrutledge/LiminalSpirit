@@ -19,6 +19,7 @@ public:
         slashEmpty,
         slashHit,
         slashDash,
+        slashDashHit,
         shoot,
         shootHit,
         shootCharge,
@@ -27,8 +28,8 @@ public:
         death,
         step,
         jump,
-        chargeP,
-        chargeM
+        jumpAttack,
+        charge
     };
     
     enum GameState {
@@ -37,7 +38,8 @@ public:
         PAUSE,
         LEVEL_CAVE,
         LEVEL_SHROOM,
-        LEVEL_FOREST
+        LEVEL_FOREST,
+        TRANSITION
     };
     
     class LevelMusic {
@@ -116,6 +118,12 @@ protected:
     
     int _track;
     
+    //from 0 to 1 for music
+    float _volume;
+    
+    //from 0 to 1 for sfx
+    float _vSFX;
+    
     // Player Sounds
     
     std::vector<std::shared_ptr<cugl::audio::AudioScheduler>> _player_sfx_slots;
@@ -136,6 +144,15 @@ protected:
     
     std::shared_ptr<cugl::Sound> _playerExpPckg;
     
+    std::shared_ptr<cugl::Sound> _playerDash;
+    
+    std::shared_ptr<cugl::Sound> _playerDashHit;
+    
+    std::shared_ptr<cugl::Sound> _playerJump;
+    
+    std::shared_ptr<cugl::Sound> _playerJumpAttack;
+    
+    std::shared_ptr<cugl::Sound> _playerCharge;
     
     
 public:
@@ -151,6 +168,22 @@ public:
     void play_player_sound(playerSType sound);
     
     void reset_level_tracks();
+    
+    void level_transition();
+    
+    /**
+     * Sets music volume
+     *
+     * @param vol   volume to set. Must be in range 0 - 1
+     */
+    void set_music_volume(float vol) {_volume = vol;};
+    
+    /**
+     * Sets sfx volume
+     *
+     * @param vol   volume to set. Must be in range 0 - 1
+     */
+    void set_sfx_volume(float vol) {_vSFX = vol;}
     
     /**
             Kill

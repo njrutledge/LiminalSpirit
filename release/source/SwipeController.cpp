@@ -9,6 +9,12 @@
 #include "SwipeController.hpp"
 #include <math.h>
 
+#define RANGE_COOLDOWN 10.0f;
+#define MELEE_COOLDOWN 6.0f;
+
+#define RANGE_REDUCTION 0.5f;
+#define MELEE_REDUCTON 0.8f;
+
 /**
  * Creates a new swipe controller.
  */
@@ -18,11 +24,11 @@ SwipeController::SwipeController() : _leftSwipe(noAttack),
     _leftState.construct();
     _rightState.construct();
     
-    _cMeleeCount = 2.0f;
-    _cRangeCount = 5.0f;
+    _cMeleeCount = MELEE_COOLDOWN;
+    _cRangeCount = RANGE_COOLDOWN;
     
-    _cMCool = 2.0f;
-    _cRCool = 5.0f;
+    _cMCool = MELEE_COOLDOWN;
+    _cRCool = RANGE_COOLDOWN;
     
     _leftChargingTime = 0;
     _rightChargingTime = 0;
@@ -45,7 +51,7 @@ SwipeController::~SwipeController()
 /**
  * Updates the swipe controller based on the latest inputs.
  */
-void SwipeController::update(InputController &input, bool grounded, float dt)
+void SwipeController::update(InputController &input, bool grounded, bool floored, float dt)
 {
     if (!hasLeftChargedAttack()) {
         _cRangeCount += dt;
@@ -68,7 +74,7 @@ void SwipeController::update(InputController &input, bool grounded, float dt)
     {
         _lStart = true;
         _lCoolStart = 0;
-        calculateSwipeDirection(input.getLeftStartPosition(), input.getLeftEndPosition(), true, grounded, input.getLeftStartTime());
+        calculateSwipeDirection(input.getLeftStartPosition(), input.getLeftEndPosition(), true, grounded, floored, input.getLeftStartTime());
     }
     // Otherwise note that no left swipe was completed this frame
     else
@@ -87,7 +93,7 @@ void SwipeController::update(InputController &input, bool grounded, float dt)
     else if(input.didRightRelease()) {
         _rStart = true;
         _rCoolStart = 0;
-        calculateSwipeDirection(input.getRightStartPosition(), input.getRightEndPosition(), false, grounded, input.getRightStartTime());
+        calculateSwipeDirection(input.getRightStartPosition(), input.getRightEndPosition(), false, grounded, floored, input.getRightStartTime());
     }
     // Otherwise note that no right swipe was completed this frame
     else
@@ -148,25 +154,25 @@ void SwipeController::update(InputController &input, bool grounded, float dt)
         case 1:
         {
             setRightAngle(90);
-            processRightState(grounded);
+            processRightState(grounded, floored);
             break;
         }
         case 2:
         {
             setRightAngle(180);
-            processRightState(grounded);
+            processRightState(grounded, floored);
             break;
         }
         case 3:
         {
             setRightAngle(270);
-            processRightState(grounded);
+            processRightState(grounded, floored);
             break;
         }
         case 4:
         {
             setRightAngle(0);
-            processRightState(grounded);
+            processRightState(grounded, floored);
             break;
         }
         case 5:
@@ -259,7 +265,7 @@ void SwipeController::calculateChargeAttack(cugl::Timestamp startTime, bool isLe
  * @param isLeftSidedSwipe  if the swipe was on the left side of the screen
  *
  */
-void SwipeController::calculateSwipeDirection(cugl::Vec2 startPos, cugl::Vec2 endPos, bool isLeftSidedSwipe, bool grounded, cugl::Timestamp startTime)
+void SwipeController::calculateSwipeDirection(cugl::Vec2 startPos, cugl::Vec2 endPos, bool isLeftSidedSwipe, bool grounded, bool floored, cugl::Timestamp startTime)
 {
 
     // x increases from left to right
@@ -363,7 +369,7 @@ void SwipeController::calculateSwipeDirection(cugl::Vec2 startPos, cugl::Vec2 en
 //        printSwipe(getLeftSwipe(), true);
     }
     else {
-        processRightState(grounded);
+        processRightState(grounded, floored);
 //        printSwipe(getRightSwipe(), false);
     }
 }
@@ -426,20 +432,20 @@ void SwipeController::processLeftState(){
  * Processes the type of swipe attack that was just completed on the left side
  * and resets the left side state
  */
-void SwipeController::processRightState(bool grounded){
+void SwipeController::processRightState(bool grounded, bool floored){
     
     bool charged = hasRightChargedAttack();
     float swipeAngle = _rightState.angle;
     
     // Can't charge attack up if not grounded, keep charged state
     if (charged && !grounded) {
-        if (swipeAngle > 67.5 && swipeAngle <= 112.5) {
+        if (swipeAngle > 22.5 && swipeAngle <= 157.5) {
             return;
         }
     }
-    // Can't charge attack down if grounded, keep charged state
-    if (charged && grounded) {
-        if (swipeAngle > 247.5 && swipeAngle <= 292.5) {
+    // Can't charge attack down if on floor, keep charged state
+    if (charged && floored) {
+        if (swipeAngle > 202.5 && swipeAngle <= 337.5) {
             return;
         }
     }
@@ -589,6 +595,18 @@ void SwipeController::printSwipe(SwipeAttack s, bool isLeftSidedSwipe)
         if (s == noAttack) {
             CULog("No right sided swipe completed this frame");
         }
+    }
+}
+
+void SwipeController::coolMelee(int hits) {
+    if (!hasRightChargedAttack()) {
+        _cMeleeCount += hits * MELEE_REDUCTON;
+    }
+}
+
+void SwipeController::coolRange(int hits) {
+    if (!hasLeftChargedAttack()) {
+        _cRangeCount += hits * RANGE_REDUCTION;
     }
 }
 

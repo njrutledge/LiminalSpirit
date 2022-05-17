@@ -65,7 +65,7 @@ void LiminalSpirit::onStartup()
     _assets->loadDirectoryAsync("json/assets.json", nullptr);
     //_assets->loadDirectory("json/assets.json");
     
-    AudioEngine::start();
+    AudioEngine::start(32);
     
     if (!filetool::file_exists(Application::get()->getSaveDirectory() + "savedGame.json")) {
         std::shared_ptr<TextWriter> writer = TextWriter::alloc(Application::get()->getSaveDirectory() + "savedGame.json");

@@ -53,17 +53,19 @@ void SoundController::LevelMusic::play_music(std::vector<bool> e, GameState s) {
     
     
     if ((s != LEVEL_CAVE && b == "cave")  ||  (s != LEVEL_SHROOM && b == "mushroom") || (s != LEVEL_FOREST && b == "forest")) {
-        cugl::AudioEngine::get()->getMusicQueue()->advance(0, 0.2);
+        cugl::AudioEngine::get()->getMusicQueue()->clear(0.1);
         cugl::AudioEngine::get()->getMusicQueue()->enqueue(_mixer, true, 0.4);
+        
+        
     }
     
     for (int i = 0; i < 7; i++) {
         switch (i) {
             case 0:
                 if (e[0]) {
-                    _gNode->setGain(clampf(_gNode->getGain() + (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME));
+                    _gNode->setGain(clampf(_gNode->getGain() + (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME * 1.15f));
                 } else {
-                    _gNode->setGain(clampf(_gNode->getGain() - (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME));
+                    _gNode->setGain(clampf(_gNode->getGain() - (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME * 1.15f));
                 }
                 break;
             case 1:
@@ -99,6 +101,10 @@ SoundController::SoundController(){};
 
 
 void SoundController::init(std::shared_ptr<cugl::AssetManager> &assets) {
+    
+    _volume = 1.0f;
+    
+    _vSFX = 1.0f;
     
     _state = LOAD;
     
@@ -136,19 +142,36 @@ void SoundController::init(std::shared_ptr<cugl::AssetManager> &assets) {
     _playerExp = assets->get<cugl::Sound>("playerExp");
     
     _playerExpPckg = assets->get<cugl::Sound>("playerExpPck");
+    
+    _playerDash = assets->get<cugl::Sound>("playerDash");
+    
+    _playerDashHit = assets->get<cugl::Sound>("playerDashHit");
+    
+    _playerJump = assets->get<cugl::Sound>("playerJump");
+    
+    _playerJumpAttack = assets->get<cugl::Sound>("playerJumpAttack");
+    
+    _playerCharge = assets->get<cugl::Sound>("playerCharge");
+    
 };
 
 void SoundController::play_menu_music() {
     
+    cugl::AudioEngine::get()->getMusicQueue()->setVolume(_volume);
+    
     if (_state != MENU) {
-        cugl::AudioEngine::get()->getMusicQueue()->advance(0, 0.2);
+        cugl::AudioEngine::get()->getMusicQueue()->clear(0.1);
         cugl::AudioEngine::get()->getMusicQueue()->enqueue(_menu, true, 0.4);
+        
+        
     }
     _state = MENU;
     
 }
 
 void SoundController::play_level_music(string biome, std::vector<bool> enemies) {
+    
+    cugl::AudioEngine::get()->getMusicQueue()->setVolume(_volume);
     
     if (biome == "cave") {
         if (_state != LEVEL_CAVE) {
@@ -198,34 +221,44 @@ void SoundController::play_level_music(string biome, std::vector<bool> enemies) 
 void SoundController::play_player_sound(playerSType sound) {
     switch (sound) {
         case slashEmpty:
-            cugl::AudioEngine::get()->play("playerSlashEmpty", _playerSlashEmpty, false, 1.0, true);
+            cugl::AudioEngine::get()->play("playerSlashEmpty", _playerSlashEmpty, false, _vSFX, true);
             break;
         case slashHit:
-            cugl::AudioEngine::get()->play("playerSlashEmpty", _playerSlashHit, false, 1.0, true);
+            cugl::AudioEngine::get()->play("playerSlashEmpty", _playerSlashHit, false, _vSFX, true);
             break;
         case slashDash:
+            cugl::AudioEngine::get()->play("playerSDash", _playerDash, false, _vSFX, true);
+            break;
+        case slashDashHit:
+            cugl::AudioEngine::get()->play("playerDashHit", _playerDashHit, false, _vSFX, true);
+            break;
         case shoot:
-            cugl::AudioEngine::get()->play("playerShoot", _playerShoot, false, 1.0, true);
+            cugl::AudioEngine::get()->play("playerShoot", _playerShoot, false, _vSFX, true);
             break;
         case shootHit:
-            cugl::AudioEngine::get()->play("playerShoot", _playerShootHit, false, 1.0, true);
+            cugl::AudioEngine::get()->play("playerShoot", _playerShootHit, false, _vSFX, true);
             break;
         case shootCharge:
-            cugl::AudioEngine::get()->play("playerChargeShoot", _playerExpPckg, false, 1.0, true);
+            cugl::AudioEngine::get()->play("playerChargeShoot", _playerExpPckg, false, _vSFX, true);
             break;
         case explosion:
-            cugl::AudioEngine::get()->play("playerExp", _playerExp, false, 1.0, true);
+            cugl::AudioEngine::get()->play("playerExp", _playerExp, false, _vSFX, true);
             break;
         case hurt:
-            cugl::AudioEngine::get()->play("playerShoot", _playerHurt, false, 1.0, true);
+            cugl::AudioEngine::get()->play("playerShoot", _playerHurt, false, _vSFX, true);
             break;
         case death:
         case step:
-            cugl::AudioEngine::get()->play("playerStep", _playerStep, false, 1.0, true);
+            cugl::AudioEngine::get()->play("playerStep", _playerStep, false, _vSFX, true);
             break;
         case jump:
-        case chargeP:
-        case chargeM:
+            cugl::AudioEngine::get()->play("playerJump", _playerJump, false, _vSFX, true);
+            break;
+        case jumpAttack:
+            cugl::AudioEngine::get()->play("playerJumpAttack", _playerJumpAttack, false, _vSFX, true);
+            break;
+        case charge:
+            cugl::AudioEngine::get()->play("playerCharge", _playerCharge, false, _vSFX, true);
             break;
     }
 };
@@ -237,6 +270,15 @@ void SoundController::reset_level_tracks() {
     _mushroom2->reset_mix();
     _forest1->reset_mix();
 };
+
+void SoundController::level_transition() {
+    
+    if (_state != TRANSITION) {
+        cugl::AudioEngine::get()->getMusicQueue()->clear(1.0);
+    }
+    _state = TRANSITION;
+    
+}
 
 void SoundController::dispose() {
     CULog("kill");
