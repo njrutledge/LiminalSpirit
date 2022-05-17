@@ -35,12 +35,22 @@ void SoundController::LevelMusic::init(string biome, std::shared_ptr<cugl::Asset
     _mirror->setVolume(0.0);
     _mNode = _mirror->createNode();
     
-    _mixer = cugl::audio::AudioMixer::alloc(8);
+    _spawner = assets->get<cugl::Sound>(biome + "Spawner");
+    _spawner->setVolume(0.0);
+    _spNode = _spawner->createNode();
     
-    _mixer->attach(7, _themeAsset->createNode());
+    _seeker = assets->get<cugl::Sound>(biome + "Seeker");
+    _seeker->setVolume(0.0);
+    _sNode = _seeker->createNode();
+    
+    _mixer = cugl::audio::AudioMixer::alloc(6);
+    
+    _mixer->attach(5, _themeAsset->createNode());
     _mixer->attach(0, _gNode);
     _mixer->attach(1, _pNode);
     _mixer->attach(2, _mNode);
+    _mixer->attach(3, _spNode);
+    _mixer->attach(4, _sNode);
 };
 
 /**
@@ -63,9 +73,9 @@ void SoundController::LevelMusic::play_music(std::vector<bool> e, GameState s) {
         switch (i) {
             case 0:
                 if (e[0]) {
-                    _gNode->setGain(clampf(_gNode->getGain() + (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME * 1.15f));
+                    _gNode->setGain(clampf(_gNode->getGain() + (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME * 1.3f));
                 } else {
-                    _gNode->setGain(clampf(_gNode->getGain() - (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME * 1.15f));
+                    _gNode->setGain(clampf(_gNode->getGain() - (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME * 1.3f));
                 }
                 break;
             case 1:
@@ -81,6 +91,18 @@ void SoundController::LevelMusic::play_music(std::vector<bool> e, GameState s) {
                 } else {
                     _mNode->setGain(clampf(_mNode->getGain() - (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME * 0.4f));
                 }
+            case 3:
+                if (e[3]) {
+                    _spNode->setGain(clampf(_spNode->getGain() + (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME * 1.1f));
+                } else {
+                    _spNode->setGain(clampf(_spNode->getGain() - (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME * 1.1f));
+                }
+            case 4:
+                if (e[4]) {
+                    _sNode->setGain(clampf(_sNode->getGain() + (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME * 1.1f));
+                } else {
+                    _sNode->setGain(clampf(_sNode->getGain() - (MAX_LAYER_VOLUME / (FADE * 60.0f)), 0.0f, MAX_LAYER_VOLUME * 1.1f));
+                }
             default:
                 break;
         }
@@ -94,6 +116,8 @@ void SoundController::LevelMusic::reset_mix() {
     _gNode->setGain(0.0f);
     _pNode->setGain(0.0f);
     _mNode->setGain(0.0f);
+    _spNode->setGain(0.0f);
+    _sNode->setGain(0.0f);
 }
 
 

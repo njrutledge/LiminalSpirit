@@ -884,7 +884,7 @@ void GameScene::update(float timestep, int unlockCount)
         updateMeleeArm(timestep);
         return;
     } else {
-        std::vector<bool> e = std::vector<bool>(7);
+        std::vector<bool> e = std::vector<bool>(5);
 
         for (auto it = _enemies.begin(); it != _enemies.end(); ++it)
         {
@@ -900,6 +900,14 @@ void GameScene::update(float timestep, int unlockCount)
             else if (n == "Mirror")
             {
                 e[2] = true;
+            }
+            else if (n == "Spawner")
+            {
+                e[3] = true;
+            }
+            else if (n == "Seeker")
+            {
+                e[4] = true;
             }
         }
         
