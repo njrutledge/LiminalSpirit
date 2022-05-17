@@ -3178,12 +3178,6 @@ bool GameScene::updateWin()
     // All waves created and all enemies cleared
     if (_nextWaveNum >= _numWaves && !_enemies.size() && !_spawnerCount)
     {
-        // Create and layout win text
-        std::string msg = strtool::format("YOU WIN!");
-        _endText = TextLayout::allocWithText(msg, _font);
-        _endText->setVerticalAlignment(VerticalAlign::MIDDLE);
-        _endText->setHorizontalAlignment(HorizontalAlign::CENTER);
-        _endText->layout();
         return true;
     }
     else
@@ -3271,15 +3265,6 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     Affine2 trans;
     trans.scale(3);
     trans.translate(Vec2(getSize().width / 2, getSize().height / 2));
-
-    if (_endText && !_endText->getText().compare("YOU WIN!"))
-    {
-        batch->setColor(Color4::GREEN);
-        Affine2 trans;
-        trans.scale(3);
-        trans.translate(Vec2(getSize().width / 2, getSize().height / 2));
-        batch->drawText(_endText, trans);
-    }
 
     batch->end();
 }
