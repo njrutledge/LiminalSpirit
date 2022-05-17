@@ -1692,6 +1692,29 @@
 						"x_offset": 0.202,
 						"absolute": false
 					}
+				},
+				"back": {
+					"type": "Button",
+					"data": {
+						"upnode": "up",
+						"anchor": [
+							0,
+							1
+						],
+						"scale": 0.55
+					},
+					"children": {
+						"up": {
+							"type": "Image",
+							"data": {
+								"texture": "backward_arrow"
+							}
+						}
+					},
+					"layout": {
+						"x_anchor": "left",
+						"y_anchor": "top"
+					}
 				}
 			}
 		},

@@ -42,12 +42,22 @@ using namespace cugl;
  */
 void WorldSelectScene::dispose()
 {
-    if (_caveButton) _caveButton->deactivate();
+    if (_caveButton) {
+        //_caveButton->setPositionX( _caveButton->getPositionX() - _safeBounds.getMinX());//reset the position, so it doesn't move
+        //_caveButtonBack->setPositionX( _caveButtonBack->getPositionX()- _safeBounds.getMinX());
+        _caveButton->deactivate();
+    }
+
     _caveButton = nullptr;
     if (_shroomButton) _shroomButton->deactivate();
     _shroomButton = nullptr;
     if (_forestButton) _forestButton->deactivate();
     _forestButton = nullptr;
+    if (_backButton) {
+        //_backButton->setPositionX(_backButton->getPositionX() - _safeBounds.getMinX());//reset the position, so it doesn't move
+        _backButton->deactivate();
+    }
+    _backButton = nullptr;
     _batch = nullptr;
     _assets = nullptr;
     removeAllChildren();
@@ -97,32 +107,40 @@ bool WorldSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _assets->attach<Texture>(TextureLoader::alloc()->getHook());
     _assets->attach<Font>(FontLoader::alloc()->getHook());
 
-    Rect bounds = Application::get()->getSafeBounds();
-    bounds.origin *= boundScale;
-    bounds.size *= boundScale;
+    _safeBounds = Application::get()->getSafeBounds();
+    _safeBounds.origin *= boundScale;
+    _safeBounds.size *= boundScale;
 
-    _caveButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("world_select_cave"));
-    _caveButton->setPositionX(bounds.getMinX() + _caveButton->getPositionX());
-    _caveButton->addListener([=](const std::string& name, bool down)
+    _backButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("world_select_back"));
+    _backButton->clearListeners();
+    _backButton->addListener([=](const std::string& name, bool down)
         {
-            if (down) {
-                _choice = Choice::CAVE_PREP;
-            }
-            else if (_choice == Choice::CAVE_PREP) {
-                _choice = Choice::CAVE;
+            if (!down) {
+                _choice = Choice::BACK;
             }
         });
 
+
+
+    _caveButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("world_select_cave"));
+    _caveButton->clearListeners();
+    _caveButton->addListener([=](const std::string& name, bool down)
+        {
+            if (!down) {
+                _choice = Choice::CAVE;
+            }
+        });
+    _caveButton->setPositionX(_safeBounds.getMinX() + _caveButton->getPositionX());
+
+
     _caveButtonBack = assets->get<scene2::SceneNode>("world_select_caveback");
-    _caveButtonBack->setPositionX(bounds.getMinX() + _caveButtonBack->getPositionX());
+    _caveButtonBack->setPositionX(_safeBounds.getMinX() + _caveButtonBack->getPositionX());
 
     _shroomButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("world_select_shroom"));
+    _shroomButton->clearListeners();
     _shroomButton->addListener([=](const std::string& name, bool down)
         {
-            if (down) {
-                _choice = Choice::SHROOM_PREP;
-            }
-            else if (_choice == Choice::SHROOM_PREP) {
+         if (!down) {
                 _choice = Choice::SHROOM;
             }
         });
@@ -132,12 +150,10 @@ bool WorldSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _shroomButtonBack->setColor(Color4(24,25,26));
 
     _forestButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("world_select_forest"));
+    _forestButton->clearListeners();
     _forestButton->addListener([=](const std::string& name, bool down)
         {
-            if (down) {
-                _choice = Choice::FOREST_PREP;
-            }
-            else if (_choice == Choice::FOREST_PREP) {
+         if (!down) {
                 _choice = Choice::FOREST;
             }
         });
@@ -187,6 +203,8 @@ void WorldSelectScene::update(float timestep, int biome)
     _caveButton->setVisible(true);
     _shroomButton->setVisible(true);
     _forestButton->setVisible(true);
+    _backButton->setVisible(true);
+    _backButton->activate();
     
     
     switch (biome){
