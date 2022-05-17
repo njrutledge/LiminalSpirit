@@ -641,6 +641,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
      _rangeParticleList.push_back(_assets->get<Texture>("attack_particle3"));
      _rangeParticleList.push_back(_assets->get<Texture>("attack_particle4"));
 
+     //Spawn Portal Textures
+     _spawnPortalList.push_back(_assets->get<Texture>("enemy_swirl"));
+     _spawnPortalList.push_back(_assets->get<Texture>("enemy_portal"));
+
     _timer = 0.0f;
     _worldnode->setColor(Color4::WHITE);
     _healthbar->setColor(Color4::WHITE);
@@ -715,6 +719,12 @@ void GameScene::dispose()
     _healthbar = nullptr;
     _range_charge = nullptr;
     _melee_charge = nullptr;
+    _numberTextures.clear();
+    _mirrorShardList.clear();
+    _deathParticleList.clear();
+    _rangeParticleList.clear();
+    _meleeParticleList.clear();
+    _spawnPortalList.clear();
     if(_wavebar){
     //added i+1 to tag because tags are auto set to 0
         for(int i = 0; i <_numWaves; i++){
@@ -3208,15 +3218,12 @@ void GameScene::createSpawnParticles()
     std::vector<cugl::Vec2> positions;
     positions = _spawn_pos.at(_nextWaveNum);
 
-    std::shared_ptr<Texture> portal_swirl = _assets->get<Texture>("enemy_swirl");
-    std::shared_ptr<Texture> portal = _assets->get<Texture>("enemy_portal");
-
     for (int i = 0; i < positions.size(); i++)
     {
         std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("spawning_swirl"), Vec2(0, 0));
         std::shared_ptr<ParticlePool> pool2 = ParticlePool::allocPoint(_particleInfo->get("spawning"), Vec2(0, 0));
-        std::shared_ptr<ParticleNode> spawning = ParticleNode::alloc(positions[i] * _scale, portal_swirl, pool);
-        std::shared_ptr<ParticleNode> spawning2 = ParticleNode::alloc(positions[i] * _scale, portal, pool2);
+        std::shared_ptr<ParticleNode> spawning = ParticleNode::alloc(positions[i] * _scale, _spawnPortalList[0], pool);
+        std::shared_ptr<ParticleNode> spawning2 = ParticleNode::alloc(positions[i] * _scale, _spawnPortalList[1], pool2);
         spawning->setScale(0.25f);
         spawning2->setScale(0.25f);
         _worldnode->addChildWithTag(spawning2, 100);
