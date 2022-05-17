@@ -210,6 +210,9 @@ protected:
     
     /** frame used for when animation interrupted when stunned */
     int _prevFrame;
+    
+    /** Used for dash animation */
+    SwipeController::SwipeAttack _dashDir;
 
     /** true if going back to world select */
     bool _back;

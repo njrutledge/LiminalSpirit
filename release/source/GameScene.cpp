@@ -1087,6 +1087,41 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
             sprite->setFrame(24);
         }
     }
+    else if (_player->isDashing()) {
+        switch (_dashDir) {
+            case SwipeController::chargedUp:
+            case SwipeController::chargedDown:
+            {
+                if (_player->isFacingRight()) {
+                    sprite->setFrame(38);
+                }
+                else {
+                    sprite->setFrame(33);
+                }
+                break;
+            }
+            case SwipeController::chargedRight:
+                sprite->setFrame(39);
+                break;
+            case SwipeController::chargedLeft:
+                sprite->setFrame(32);
+                break;
+            case SwipeController::chargedNortheast:
+                sprite->setFrame(37);
+                break;
+            case SwipeController::chargedNorthwest:
+                sprite->setFrame(34);
+                break;
+            case SwipeController::chargedSoutheast:
+                sprite->setFrame(36);
+                break;
+            case SwipeController::chargedSouthwest:
+                sprite->setFrame(35);
+                break;
+            default:
+                break;
+        }
+    }
     else if (!_player->isGrounded())
     {
         if (_player->getJumpAnimationTimer() > 0.03f)
@@ -2470,6 +2505,7 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
             _player->setIsDashing(true);
             _player->setDashingLastFrame(false);
             _player->setDashAngle(0);
+            _dashDir = right;
         }
         else if (right == SwipeController::chargedLeft)
         {
@@ -2479,6 +2515,7 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
             _player->setIsDashing(true);
             _player->setDashingLastFrame(false);
             _player->setDashAngle(180);
+            _dashDir = right;
         }
         else if (right == SwipeController::chargedUp)
         {
@@ -2487,6 +2524,7 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
             _player->setIsDashing(true);
             _player->setDashingLastFrame(false);
             _player->setDashAngle(90);
+            _dashDir = right;
         }
         else if (right == SwipeController::chargedDown)
         {
@@ -2495,6 +2533,7 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
             _player->setIsDashing(true);
             _player->setDashingLastFrame(false);
             _player->setDashAngle(270);
+            _dashDir = right;
         }
         else if (right == SwipeController::chargedNortheast)
         {
@@ -2504,6 +2543,7 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
             _player->setIsDashing(true);
             _player->setDashingLastFrame(false);
             _player->setDashAngle(45);
+            _dashDir = right;
         }
         else if (right == SwipeController::chargedNorthwest)
         {
@@ -2513,6 +2553,7 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
             _player->setIsDashing(true);
             _player->setDashingLastFrame(false);
             _player->setDashAngle(135);
+            _dashDir = right;
         }
         else if (right == SwipeController::chargedSouthwest)
         {
@@ -2522,6 +2563,7 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
             _player->setIsDashing(true);
             _player->setDashingLastFrame(false);
             _player->setDashAngle(225);
+            _dashDir = right;
         }
         else if (right == SwipeController::chargedSoutheast)
         {
@@ -2531,6 +2573,7 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
             _player->setIsDashing(true);
             _player->setDashingLastFrame(false);
             _player->setDashAngle(315);
+            _dashDir = right;
         }
         // If the dash velocities are set, change player velocity if dash time is not complete
         if (_dashXVel || _dashYVel)
@@ -3783,7 +3826,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     std::shared_ptr<Texture> image = _assets->get<Texture>(PLAYER_WALK_TEXTURE);
     std::shared_ptr<Texture> hitboxImage = _assets->get<Texture>(PLAYER_TEXTURE);
     _player = PlayerModel::alloc(playerPos + Vec2(0, .5), hitboxImage->getSize() / _scale / 8, _scale);
-    std::shared_ptr<scene2::SpriteNode> sprite = scene2::SpriteNode::alloc(image, 4, 8);
+    std::shared_ptr<scene2::SpriteNode> sprite = scene2::SpriteNode::alloc(image, 5, 8);
     sprite->setFrame(0);
     _prevFrame = 0;
     _player->setSceneNode(sprite);
