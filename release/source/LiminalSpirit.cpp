@@ -262,6 +262,7 @@ void LiminalSpirit::updateWorldSelectScene(float timestep)
     case WorldSelectScene::Choice::BACK:
         _scene = State::HOME;
         _home.setDefaultChoice();
+        _worldSelect.setDefaultChoice();
         break;
     }
 }
