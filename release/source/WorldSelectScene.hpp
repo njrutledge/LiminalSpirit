@@ -40,12 +40,10 @@ class WorldSelectScene : public cugl::Scene2
 public:
 	enum class Choice {
 		MENU,
-		CAVE_PREP,
 		CAVE,
-		SHROOM_PREP,
 		SHROOM,
-		FOREST_PREP,
 		FOREST,
+		BACK
 	};
 protected:
   /** The loaders to (synchronously) load in assets */
@@ -55,7 +53,10 @@ protected:
   /** A 3152 style SpriteBatch to render the scene */
   std::shared_ptr<cugl::SpriteBatch> _batch; // check this
 
+
   /** buttons for the world selection */
+  std::shared_ptr<cugl::scene2::Button> _backButton;
+
   std::shared_ptr<cugl::scene2::Button> _caveButton;
   std::shared_ptr<cugl::scene2::Button> _shroomButton;
   std::shared_ptr<cugl::scene2::Button> _forestButton;
@@ -63,6 +64,8 @@ protected:
   std::shared_ptr<cugl::scene2::SceneNode> _caveButtonBack;
   std::shared_ptr<cugl::scene2::SceneNode> _shroomButtonBack;
   std::shared_ptr<cugl::scene2::SceneNode> _forestButtonBack;
+
+  cugl::Rect _safeBounds;
 
   float _timerA;
     

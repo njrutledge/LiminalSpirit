@@ -175,6 +175,18 @@ bool HomeScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
   return true;
 }
 
+void HomeScene::setDefaultChoice() {
+    _choice = Choice::MENU;
+    //other stuff to reset HomeScene...didn't want to put it else where sue me - Nick
+    Size dimen = Application::get()->getDisplaySize();
+    float boundScale = SCENE_WIDTH / dimen.width;
+    dimen *= boundScale;
+    _optionScene = _assets->get<scene2::SceneNode>("optionScene");
+    _optionScene->setContentSize(dimen);
+    _optionScene->doLayout();
+    addChildWithName(_optionScene, "options");
+}
+
 /**
  * Disposes of all (non-static) resources allocated to this mode.
  */
