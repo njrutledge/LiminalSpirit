@@ -1930,18 +1930,18 @@ void GameScene::updateEnemies(float timestep)
                     (*it)->setIdleAnimationTimer(0);
                     (*it)->setAttackAnimationTimer(0.8);
                 }
-                if ((*it)->getX() > _player->getX() && !sprite->getFrame() > 21) {
+                if ((*it)->getX() > _player->getX() && !(sprite->getFrame() > 21)) {
                     sprite->flipHorizontal(false);
                 }
-                else if ((*it)->getX() < _player->getX() && !sprite->getFrame() > 21) {
+                else if ((*it)->getX() < _player->getX() && !(sprite->getFrame() > 21)) {
                     sprite->flipHorizontal(true);
                 }
-                if (((*it)->getIdleAnimationTimer() > .1f || sprite->getFrame() == 14 || sprite->getFrame() == 20) && !sprite->getFrame() > 21)
+                if (((*it)->getIdleAnimationTimer() > .1f || sprite->getFrame() == 14 || sprite->getFrame() == 20) && !(sprite->getFrame() > 21))
                 {
                     sprite->setFrame((sprite->getFrame() + 1) % 7);
                     (*it)->setIdleAnimationTimer(0);
                 }
-                else if (((*it)->getIdleAnimationTimer() > .1f || sprite->getFrame() == 14 || sprite->getFrame() == 20) && !sprite->getFrame() > 21)
+                else if (((*it)->getIdleAnimationTimer() > .1f || sprite->getFrame() == 14 || sprite->getFrame() == 20) && !(sprite->getFrame() > 21))
                 {
                     sprite->setFrame((sprite->getFrame() - 1) % 7);
                     (*it)->setIdleAnimationTimer(0);
