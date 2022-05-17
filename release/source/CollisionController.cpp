@@ -140,8 +140,19 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                 else if (attack->getType() == AttackController::Type::p_melee ||
                          attack->getType() == AttackController::Type::p_dash) {
                     if (!attack->hasHitEnemy(mirror)) {
+                        int damage = getDamageDealt(attack, enemy);
+                        switch (_unlock_count) {
+                            case 3:
+                            case 4:
+                                damage *= 2;
+                                break;
+                            case 5:
+                                damage *= 3;
+                            default:
+                                break;
+                        }
                         if (mirror->getHealth() > 0) {
-                            mirror->setHealth(mirror->getHealth() - attack->getDamage());
+                            mirror->setHealth(mirror->getHealth() - damage);
                             mirror->setHurt();
                         }
                         //mirror->setLastMelee(attack, timer)
