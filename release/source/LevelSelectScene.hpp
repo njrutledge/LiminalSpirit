@@ -34,7 +34,7 @@
 
 #define CAVE_MAXLEVELS 9
 #define SHROOM_MAXLEVELS 9
-#define FOREST_MAXLEVELS 9
+#define FOREST_MAXLEVELS 10
 /**
  * Class representing the Home screen. It links to world select and options menu.
  */
