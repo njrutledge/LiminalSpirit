@@ -342,7 +342,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     float wave_start_offset = 5;//45;
     float wave_offset = wave_start_offset*2;
     float wave_width = _wavebar->getWidth()-wave_offset;
-    CULog("width: %f", wave_width);
+//    CULog("width: %f", wave_width);
     for(int i = 0; i < _numWaves; i++){
         std::shared_ptr<scene2::PolygonNode> marker = scene2::PolygonNode::allocWithTexture(wave_marker);
         marker->setTag(i+1);
@@ -641,6 +641,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
      _rangeParticleList.push_back(_assets->get<Texture>("attack_particle3"));
      _rangeParticleList.push_back(_assets->get<Texture>("attack_particle4"));
 
+     //Spawn Portal Textures
+     _spawnPortalList.push_back(_assets->get<Texture>("enemy_swirl"));
+     _spawnPortalList.push_back(_assets->get<Texture>("enemy_portal"));
+
     _timer = 0.0f;
     _worldnode->setColor(Color4::WHITE);
     _healthbar->setColor(Color4::WHITE);
@@ -715,6 +719,12 @@ void GameScene::dispose()
     _healthbar = nullptr;
     _range_charge = nullptr;
     _melee_charge = nullptr;
+    _numberTextures.clear();
+    _mirrorShardList.clear();
+    _deathParticleList.clear();
+    _rangeParticleList.clear();
+    _meleeParticleList.clear();
+    _spawnPortalList.clear();
     if(_wavebar){
     //added i+1 to tag because tags are auto set to 0
         for(int i = 0; i <_numWaves; i++){
@@ -1087,6 +1097,41 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
             sprite->setFrame(24);
         }
     }
+    else if (_player->isDashing()) {
+        switch (_dashDir) {
+            case SwipeController::chargedUp:
+            case SwipeController::chargedDown:
+            {
+                if (_player->isFacingRight()) {
+                    sprite->setFrame(38);
+                }
+                else {
+                    sprite->setFrame(33);
+                }
+                break;
+            }
+            case SwipeController::chargedRight:
+                sprite->setFrame(39);
+                break;
+            case SwipeController::chargedLeft:
+                sprite->setFrame(32);
+                break;
+            case SwipeController::chargedNortheast:
+                sprite->setFrame(37);
+                break;
+            case SwipeController::chargedNorthwest:
+                sprite->setFrame(34);
+                break;
+            case SwipeController::chargedSoutheast:
+                sprite->setFrame(36);
+                break;
+            case SwipeController::chargedSouthwest:
+                sprite->setFrame(35);
+                break;
+            default:
+                break;
+        }
+    }
     else if (!_player->isGrounded())
     {
         if (_player->getJumpAnimationTimer() > 0.03f)
@@ -1204,7 +1249,7 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
         _player->setWalkAnimationTimer(0);
         _prevFrame = sprite->getFrame();
     }
-    else if (xPos == 0 && ((_player->getIdleAnimationTimer() > 1.f) || !(sprite->getFrame() == 13 || sprite->getFrame() == 8 || sprite->getFrame() == 10 || sprite->getFrame() == 15) && _player->getIdleAnimationTimer() < 0.2f))
+    else if (xPos == 0 && (((_player->getIdleAnimationTimer() > 1.f) || !(sprite->getFrame() == 13 || sprite->getFrame() == 8 || sprite->getFrame() == 10 || sprite->getFrame() == 15)) && _player->getIdleAnimationTimer() < 0.2f))
     {
         if (sprite->getFrame() < 8)
         {
@@ -1361,7 +1406,7 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
     }
     else if (_rangedArm->getLastType() == Glow::MeleeState::first)
     {
-        if (_rangedArm->getAnimeTimer() > 0.06f)
+        if (_rangedArm->getAnimeTimer() > 0.04f)
         {
             if ((rSprite->getFrame() == 4 && !_player->getRangedAttackRight()) ||
                 (rSprite->getFrame() == 0 && _player->getRangedAttackRight()))
@@ -2470,6 +2515,7 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
             _player->setIsDashing(true);
             _player->setDashingLastFrame(false);
             _player->setDashAngle(0);
+            _dashDir = right;
         }
         else if (right == SwipeController::chargedLeft)
         {
@@ -2479,6 +2525,7 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
             _player->setIsDashing(true);
             _player->setDashingLastFrame(false);
             _player->setDashAngle(180);
+            _dashDir = right;
         }
         else if (right == SwipeController::chargedUp)
         {
@@ -2487,6 +2534,7 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
             _player->setIsDashing(true);
             _player->setDashingLastFrame(false);
             _player->setDashAngle(90);
+            _dashDir = right;
         }
         else if (right == SwipeController::chargedDown)
         {
@@ -2495,6 +2543,7 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
             _player->setIsDashing(true);
             _player->setDashingLastFrame(false);
             _player->setDashAngle(270);
+            _dashDir = right;
         }
         else if (right == SwipeController::chargedNortheast)
         {
@@ -2504,6 +2553,7 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
             _player->setIsDashing(true);
             _player->setDashingLastFrame(false);
             _player->setDashAngle(45);
+            _dashDir = right;
         }
         else if (right == SwipeController::chargedNorthwest)
         {
@@ -2513,6 +2563,7 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
             _player->setIsDashing(true);
             _player->setDashingLastFrame(false);
             _player->setDashAngle(135);
+            _dashDir = right;
         }
         else if (right == SwipeController::chargedSouthwest)
         {
@@ -2522,6 +2573,7 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
             _player->setIsDashing(true);
             _player->setDashingLastFrame(false);
             _player->setDashAngle(225);
+            _dashDir = right;
         }
         else if (right == SwipeController::chargedSoutheast)
         {
@@ -2531,6 +2583,7 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
             _player->setIsDashing(true);
             _player->setDashingLastFrame(false);
             _player->setDashAngle(315);
+            _dashDir = right;
         }
         // If the dash velocities are set, change player velocity if dash time is not complete
         if (_dashXVel || _dashYVel)
@@ -3165,15 +3218,12 @@ void GameScene::createSpawnParticles()
     std::vector<cugl::Vec2> positions;
     positions = _spawn_pos.at(_nextWaveNum);
 
-    std::shared_ptr<Texture> portal_swirl = _assets->get<Texture>("enemy_swirl");
-    std::shared_ptr<Texture> portal = _assets->get<Texture>("enemy_portal");
-
     for (int i = 0; i < positions.size(); i++)
     {
         std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("spawning_swirl"), Vec2(0, 0));
         std::shared_ptr<ParticlePool> pool2 = ParticlePool::allocPoint(_particleInfo->get("spawning"), Vec2(0, 0));
-        std::shared_ptr<ParticleNode> spawning = ParticleNode::alloc(positions[i] * _scale, portal_swirl, pool);
-        std::shared_ptr<ParticleNode> spawning2 = ParticleNode::alloc(positions[i] * _scale, portal, pool2);
+        std::shared_ptr<ParticleNode> spawning = ParticleNode::alloc(positions[i] * _scale, _spawnPortalList[0], pool);
+        std::shared_ptr<ParticleNode> spawning2 = ParticleNode::alloc(positions[i] * _scale, _spawnPortalList[1], pool2);
         spawning->setScale(0.25f);
         spawning2->setScale(0.25f);
         _worldnode->addChildWithTag(spawning2, 100);
@@ -3783,7 +3833,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     std::shared_ptr<Texture> image = _assets->get<Texture>(PLAYER_WALK_TEXTURE);
     std::shared_ptr<Texture> hitboxImage = _assets->get<Texture>(PLAYER_TEXTURE);
     _player = PlayerModel::alloc(playerPos + Vec2(0, .5), hitboxImage->getSize() / _scale / 8, _scale);
-    std::shared_ptr<scene2::SpriteNode> sprite = scene2::SpriteNode::alloc(image, 4, 8);
+    std::shared_ptr<scene2::SpriteNode> sprite = scene2::SpriteNode::alloc(image, 5, 8);
     sprite->setFrame(0);
     _prevFrame = 0;
     _player->setSceneNode(sprite);

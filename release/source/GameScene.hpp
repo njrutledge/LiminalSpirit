@@ -190,6 +190,8 @@ protected:
     std::vector<std::shared_ptr<Texture>> _meleeParticleList;
     /** Range Particle Texture Vector */
     std::vector<std::shared_ptr<Texture>> _rangeParticleList;
+    /** Spawn Portal Texture Vector */
+    std::vector<std::shared_ptr<Texture>> _spawnPortalList;
 
     /** A game timer used for spawn times */
     float _timer;
@@ -210,6 +212,9 @@ protected:
     
     /** frame used for when animation interrupted when stunned */
     int _prevFrame;
+    
+    /** Used for dash animation */
+    SwipeController::SwipeAttack _dashDir;
 
     /** true if going back to world select */
     bool _back;
