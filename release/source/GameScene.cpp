@@ -342,7 +342,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     float wave_start_offset = 5;//45;
     float wave_offset = wave_start_offset*2;
     float wave_width = _wavebar->getWidth()-wave_offset;
-    CULog("width: %f", wave_width);
+//    CULog("width: %f", wave_width);
     for(int i = 0; i < _numWaves; i++){
         std::shared_ptr<scene2::PolygonNode> marker = scene2::PolygonNode::allocWithTexture(wave_marker);
         marker->setTag(i+1);
@@ -1249,7 +1249,7 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
         _player->setWalkAnimationTimer(0);
         _prevFrame = sprite->getFrame();
     }
-    else if (xPos == 0 && ((_player->getIdleAnimationTimer() > 1.f) || !(sprite->getFrame() == 13 || sprite->getFrame() == 8 || sprite->getFrame() == 10 || sprite->getFrame() == 15) && _player->getIdleAnimationTimer() < 0.2f))
+    else if (xPos == 0 && (((_player->getIdleAnimationTimer() > 1.f) || !(sprite->getFrame() == 13 || sprite->getFrame() == 8 || sprite->getFrame() == 10 || sprite->getFrame() == 15)) && _player->getIdleAnimationTimer() < 0.2f))
     {
         if (sprite->getFrame() < 8)
         {
@@ -1406,7 +1406,7 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
     }
     else if (_rangedArm->getLastType() == Glow::MeleeState::first)
     {
-        if (_rangedArm->getAnimeTimer() > 0.06f)
+        if (_rangedArm->getAnimeTimer() > 0.04f)
         {
             if ((rSprite->getFrame() == 4 && !_player->getRangedAttackRight()) ||
                 (rSprite->getFrame() == 0 && _player->getRangedAttackRight()))
