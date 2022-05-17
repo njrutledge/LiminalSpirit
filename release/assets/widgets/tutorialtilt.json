@@ -1,0 +1,53 @@
+{
+  "variables": {
+
+  },
+  "contents": {
+    "type": "Node",
+    "comment": "the root node for tilt tutorial",
+    "data": {
+      "visible": false
+    },
+    "format": {
+      "type": "Anchored"
+    },
+    
+    "children": {
+        "text": {
+          "type": "Image",
+          "data": {
+            "texture": "tutorial-tilt",
+            "anchor": [
+              0.5,
+              0.5
+            ],
+            "scale": 0.30
+          },
+          "layout": {
+            "x_anchor": "center",
+            "y_anchor": "middle"
+            
+          }
+        },
+        "background": {
+          "type": "Image",
+          "data": {
+            "texture": "tutorial-darkenbackground",
+            "anchor": [
+              0.5,
+              0.5
+            ],
+            "scale": 2
+          },
+          "layout": {
+            "x_anchor": "center",
+            "y_anchor": "middle"
+            
+          }
+        }
+
+    }
+  }
+}
+
+

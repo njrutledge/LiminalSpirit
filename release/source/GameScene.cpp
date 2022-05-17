@@ -72,7 +72,8 @@ float DEFAULT_HEIGHT = DEFAULT_WIDTH / SCENE_WIDTH * SCENE_HEIGHT;
 #define PLATFORM_COUNT 4
 #define PLATFORM_HEIGHT 0.5
 #define PLATFORMTEXTURE "platform"
-
+#define TUTORIAL_INIT_TIMER 2
+#define TUTORIAL_READING_TIMER 5
 /** The initial position of the player*/
 float PLAYER_POS[] = {1.0f, 1.0f};
 
@@ -89,7 +90,7 @@ float LEVEL_HEIGHT = 54;
  *
  * @return true if the controller is initialized properly, false otherwise.
  */
-bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const std::shared_ptr<SoundController> sound, string biome, int stageNum)
+bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const std::shared_ptr<SoundController> sound, string biome, int stageNum, int tutorial)
 {
     _back = false;
     _levelselect = false;
@@ -99,6 +100,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _next = false;
     _pause = false;
     _options = false;
+    _tutorial = tutorial;
+    _initTutorial = tutorial;
+    _tutorialTimer = TUTORIAL_INIT_TIMER;
+    _tutorialInd = 0;
     std::shared_ptr<JsonReader> reader = JsonReader::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
     std::shared_ptr<JsonValue> save = reader->readJson();
     _progress = save->get("progress");
@@ -450,7 +455,93 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
                 _levelselect = true;
             } });
     _loseLevelButton->setScale(.4 * buttonScale);
-
+    
+    // tutorial screen
+    if(tutorial == 1) {
+        _tutorialSceneFirst = _assets->get<scene2::SceneNode>("tutorialTiltScene");
+        _tutorialSceneFirst->setContentSize(dimen);
+        _tutorialSceneFirst->doLayout();
+        addChildWithName(_tutorialSceneFirst, "tutorialtilt");
+        
+        _tutorialSceneSecond = _assets->get<scene2::SceneNode>("tutorialMeleeScene");
+        _tutorialSceneSecond->setContentSize(dimen);
+        _tutorialSceneSecond->doLayout();
+        addChildWithName(_tutorialSceneSecond, "tutorialmelee");
+        
+        _tutorialSceneSecond->setVisible(false);
+        _tutorialSceneFirst->setVisible(false);
+    } else if (tutorial == 2) {
+        _tutorialSceneFirst = _assets->get<scene2::SceneNode>("tutorialJumpScene");
+        _tutorialSceneFirst->setContentSize(dimen);
+        _tutorialSceneFirst->doLayout();
+        addChildWithName(_tutorialSceneFirst, "tutorialjump");
+        
+        _tutorialSceneSecond = _assets->get<scene2::SceneNode>("tutorialJumpAttackScene");
+        _tutorialSceneSecond->setContentSize(dimen);
+        _tutorialSceneSecond->doLayout();
+        addChildWithName(_tutorialSceneSecond, "tutorialjumpattack");
+        
+        _tutorialSceneThird = _assets->get<scene2::SceneNode>("tutorialJumpDownScene");
+        _tutorialSceneThird->setContentSize(dimen);
+        _tutorialSceneThird->doLayout();
+        addChildWithName(_tutorialSceneThird, "tutorialjumpdown");
+        
+        _tutorialSceneThird->setVisible(false);
+        _tutorialSceneSecond->setVisible(false);
+        _tutorialSceneFirst->setVisible(false);
+    } else if (tutorial == 3) {
+        _tutorialSceneFirst = _assets->get<scene2::SceneNode>("tutorialRangeScene");
+        _tutorialSceneFirst->setContentSize(dimen);
+        _tutorialSceneFirst->doLayout();
+        addChildWithName(_tutorialSceneFirst, "tutorialrange");
+        
+        _tutorialSceneSecond = _assets->get<scene2::SceneNode>("tutorialRangeDirScene");
+        _tutorialSceneSecond->setContentSize(dimen);
+        _tutorialSceneSecond->doLayout();
+        addChildWithName(_tutorialSceneSecond, "tutorialrangedir");
+        
+        _tutorialSceneSecond->setVisible(false);
+        _tutorialSceneFirst->setVisible(false);
+    } else if (tutorial == 4) {
+        _tutorialSceneFirst = _assets->get<scene2::SceneNode>("tutorialChargedRangeScene");
+        _tutorialSceneFirst->setContentSize(dimen);
+        _tutorialSceneFirst->doLayout();
+        addChildWithName(_tutorialSceneFirst, "tutorialchargedrange");
+        
+        _tutorialSceneSecond = _assets->get<scene2::SceneNode>("tutorialExplosiveDirScene");
+        _tutorialSceneSecond->setContentSize(dimen);
+        _tutorialSceneSecond->doLayout();
+        addChildWithName(_tutorialSceneSecond, "tutorialexplosivedir");
+        
+        _tutorialSceneThird = _assets->get<scene2::SceneNode>("tutorialExplosiveCooldownScene");
+        _tutorialSceneThird->setContentSize(dimen);
+        _tutorialSceneThird->doLayout();
+        addChildWithName(_tutorialSceneThird, "tutorialexplosivecooldown");
+        
+        _tutorialSceneThird->setVisible(false);
+        _tutorialSceneSecond->setVisible(false);
+        _tutorialSceneFirst->setVisible(false);
+    } else if (tutorial == 5) {
+        _tutorialSceneFirst = _assets->get<scene2::SceneNode>("tutorialChargedMeleeScene");
+        _tutorialSceneFirst->setContentSize(dimen);
+        _tutorialSceneFirst->doLayout();
+        addChildWithName(_tutorialSceneFirst, "tutorialchargedmelee");
+        
+        _tutorialSceneSecond = _assets->get<scene2::SceneNode>("tutorialDashDirScene");
+        _tutorialSceneSecond->setContentSize(dimen);
+        _tutorialSceneSecond->doLayout();
+        addChildWithName(_tutorialSceneSecond, "tutorialdashdir");
+        
+        _tutorialSceneThird = _assets->get<scene2::SceneNode>("tutorialDashCooldownScene");
+        _tutorialSceneThird->setContentSize(dimen);
+        _tutorialSceneThird->doLayout();
+        addChildWithName(_tutorialSceneThird, "tutorialdashcooldown");
+        
+        _tutorialSceneThird->setVisible(false);
+        _tutorialSceneSecond->setVisible(false);
+        _tutorialSceneFirst->setVisible(false);
+    }
+    
     _optionScene->setVisible(false);
     _pauseScene->setVisible(false);
     _loseScene->setVisible(false);
@@ -774,6 +865,23 @@ void GameScene::update(float timestep, int unlockCount)
     updateRemoveDeletedAttacks();
 
     updateRemoveDeletedEnemies();
+    
+    updateMeleeArm(timestep);
+    
+    updateCamera();
+    
+    updateHUD(unlockCount);
+    if (_tutorial) {
+        if (_tutorial == 1 || _tutorial == 3) {
+            updateTutorialv1(timestep, _tutorialInd);
+            return;
+        }
+        else if (_tutorial == 2 || _tutorial == 4 || _tutorial == 5) {
+            updateTutorialv2(timestep, _tutorialInd);
+            return;
+        }
+
+    }
 
     updateText();
 
@@ -781,13 +889,9 @@ void GameScene::update(float timestep, int unlockCount)
 
     updateRemoveDeletedPlayer();
 
-    updateHUD(unlockCount);
-
-    updateCamera();
-
     updateSpawnEnemies(timestep);
 
-    updateMeleeArm(timestep);
+    
 }
 
 void GameScene::updateSoundInputParticlesAndTilt(float timestep)
@@ -859,6 +963,9 @@ void GameScene::updateTilt()
     else
     {
         _player->setVX(xPos);
+        if(_tutorial == 1 && _tutorialInd == 0 && xPos > 0) {
+            _tutorialActionDone = true;
+        }
     }
 }
 
@@ -1963,8 +2070,14 @@ SwipeController::SwipeAttack GameScene::updateLeftSwipe(int unlockCount)
         {
             left = SwipeController::noAttack;
         }
+        if (_tutorial == 3 && (_tutorialInd == 0 || _tutorialInd == 1)) {
+            _tutorialActionDone = true;
+        }
         break;
     case SwipeController::chargedUp:
+        if (_tutorial == 4 && _tutorialInd == 0) {
+            _tutorialActionDone = true;
+        }
         switch (unlockCount)
         {
         case 0:
@@ -1978,6 +2091,9 @@ SwipeController::SwipeAttack GameScene::updateLeftSwipe(int unlockCount)
         }
         break;
     case SwipeController::chargedRight:
+        if (_tutorial == 4 && _tutorialInd == 0) {
+            _tutorialActionDone = true;
+        }
         switch (unlockCount)
         {
         case 0:
@@ -1991,6 +2107,9 @@ SwipeController::SwipeAttack GameScene::updateLeftSwipe(int unlockCount)
         }
         break;
     case SwipeController::chargedDown:
+        if (_tutorial == 4 && _tutorialInd == 0) {
+            _tutorialActionDone = true;
+        }
         switch (unlockCount)
         {
         case 0:
@@ -2004,6 +2123,9 @@ SwipeController::SwipeAttack GameScene::updateLeftSwipe(int unlockCount)
         }
         break;
     case SwipeController::chargedLeft:
+        if (_tutorial == 4 && _tutorialInd == 0) {
+            _tutorialActionDone = true;
+        }
         switch (unlockCount)
         {
         case 0:
@@ -2014,6 +2136,14 @@ SwipeController::SwipeAttack GameScene::updateLeftSwipe(int unlockCount)
             break;
         default:
             break;
+        }
+        break;
+    case SwipeController::chargedNortheast:
+    case SwipeController::chargedSoutheast:
+    case SwipeController::chargedNorthwest:
+    case SwipeController::chargedSouthwest:
+        if (_tutorial == 4 && _tutorialInd == 0) {
+            _tutorialActionDone = true;
         }
         break;
     default:
@@ -2029,30 +2159,55 @@ SwipeController::SwipeAttack GameScene::updateRightSwipe(int unlockCount)
 
     switch (right)
     {
+    case SwipeController::rightAttack:
+    case SwipeController::leftAttack:
+        if (_tutorial == 1 && _tutorialInd == 1) {
+            _tutorialActionDone = true;
+        }
+        break;
     case SwipeController::chargedUp:
+        if (_tutorial == 5 && _tutorialInd == 0) {
+            _tutorialActionDone = true;
+        }
         if (unlockCount < 4)
         {
             right = SwipeController::upAttack;
         }
         break;
     case SwipeController::chargedRight:
+        if (_tutorial == 5 && _tutorialInd == 0) {
+            _tutorialActionDone = true;
+        }
         if (unlockCount < 4)
         {
             right = SwipeController::rightAttack;
         }
         break;
     case SwipeController::chargedDown:
+        if (_tutorial == 5 && _tutorialInd == 0) {
+            _tutorialActionDone = true;
+        }
         if (unlockCount < 4)
         {
             right = SwipeController::downAttack;
         }
         break;
     case SwipeController::chargedLeft:
+        if (_tutorial == 5 && _tutorialInd == 0) {
+            _tutorialActionDone = true;
+        }
         if (unlockCount < 4)
         {
             right = SwipeController::leftAttack;
         }
         break;
+    case SwipeController::chargedNortheast:
+    case SwipeController::chargedSoutheast:
+    case SwipeController::chargedNorthwest:
+    case SwipeController::chargedSouthwest:
+        if (_tutorial == 5 && _tutorialInd == 0) {
+            _tutorialActionDone = true;
+        }
     default:
         break;
     }
@@ -2416,6 +2571,16 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
     if (!_cancelDash && (right == SwipeController::upAttack || left == SwipeController::jump || right == SwipeController::jump))
     {
         _player->setJumping(true);
+        if (_tutorial == 2 && _tutorialInd == 0) {
+            if (left == SwipeController::jump || right == SwipeController::jump) {
+                _tutorialActionDone = true;
+            }
+        }
+        else if (_tutorial == 2 && _tutorialInd == 1) {
+            if (right == SwipeController::upAttack) {
+                _tutorialActionDone = true;
+            }
+        }
         _player->setIsFirstFrame(true);
         if (_player->isGrounded())
         {
@@ -2427,6 +2592,9 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
     {
         // IDK
         _player->setDropTime(0.4f);
+        if(_player->getY() >= 5 && _player->isGrounded() && _tutorial == 2 && _tutorialInd == 2) {
+            _tutorialActionDone = true;
+        }
     }
     else
     {
@@ -2626,11 +2794,6 @@ void GameScene::updateRemoveDeletedPlayer()
         _player->getSceneNode()->setVisible(false);
         _rangedArm->getSceneNode()->setVisible(false);
         _meleeArm->getSceneNode()->setVisible(false);
-        _worldnode->setColor(Color4(255 - 255 / 1.5, 255 - 255 / 1.5, 255 - 255 / 1.5, 255));
-        _healthbar->setColor(Color4(255 - 255 / 3, 255 - 255 / 3, 255 - 255 / 3, 255));
-        _pauseButton->setColor(Color4(255 - 255 / 3, 255 - 255 / 3, 255 - 255 / 3, 255));
-        _range_charge->setColor(Color4(255 - 255 / 1.5, 255 - 255 / 1.5, 255 - 255 / 1.5, 255));
-        _melee_charge->setColor(Color4(255 - 255 / 1.5, 255 - 255 / 1.5, 255 - 255 / 1.5, 255));
         //        reset();
         //        _player->markRemoved(false);
     }
@@ -2716,8 +2879,6 @@ void GameScene::updateSpawnEnemies(float timestep)
                 float timer = _spawner_enemy_types[index][name].timer;
                 int diff_count = _spawner_enemy_types[index][name].max_count - _spawner_enemy_types[index][name].current_count;
 
-                // cout << timestep << endl;
-                // cout << _spawner_enemy_types[index][name].timer << endl;
                 if (timer <= 0)
                 {
                     while (diff_count != 0)
@@ -3284,7 +3445,6 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
         float scale = desiredWidth / platformSprite->getWidth();
         platformSprite->setScale(scale);
         platformSprite->setAnchor(0.5, 1);
-        cout << pos.x << " " << pos.y << " " << width << endl;
         platform = PlatformModel::alloc(pos, width, PLATFORM_HEIGHT, _scale);
         _platforms.push_back(platform);
         _platformNodes.push_back(platformSprite);
@@ -3466,11 +3626,9 @@ void GameScene::reset()
         }
         index++;
     }
-    _worldnode->setColor(Color4::WHITE);
-    _healthbar->setColor(Color4::WHITE);
-    _pauseButton->setColor(Color4::WHITE);
-    _range_charge->setColor(Color4::WHITE);
-    _melee_charge->setColor(Color4::WHITE);
+    _tutorial = _initTutorial;
+    _tutorialInd = 0;
+    _tutorialTimer = TUTORIAL_INIT_TIMER;
     _endText = nullptr;
 }
 
@@ -3517,4 +3675,73 @@ void GameScene::save() {
     std::shared_ptr<TextWriter> writer = TextWriter::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
     writer->write("{\"progress\":" + _progress->toString() + ", \"settings\":{\"swap\": " + to_string(_swap) + "}}");
     writer->close();
+}
+
+void GameScene::updateTutorialv1(float timestep, int ind) {
+    if (_tutorialTimer <= 0 && ind == 1) {
+        _tutorial = 0;
+        _tutorialInd = 0;
+        _tutorialSceneSecond->setVisible(false);
+        _tutorialActionDone = false;
+        return;
+    }
+    if (_tutorialTimer <= 0 && ind == 0) {
+        _tutorialSceneFirst->setVisible(false);
+        _tutorialSceneSecond->setVisible(true);
+        _tutorialInd = 1;
+        _tutorialActionDone = false;
+        _tutorialTimer = TUTORIAL_INIT_TIMER;
+        return;
+    }
+    if(!_tutorialSceneFirst->isVisible() && !_tutorialSceneSecond->isVisible()) {
+        _tutorialSceneFirst->setVisible(true);
+    }
+    if (_tutorialTimer < TUTORIAL_INIT_TIMER || _tutorialActionDone) {
+        _tutorialTimer = _tutorialTimer - timestep;
+        return;
+    }
+}
+
+void GameScene::updateTutorialv2(float timestep, int ind) {
+    if (_tutorialTimer <= 0 && ind == 2) {
+        _tutorial = 0;
+        _tutorialInd = 0;
+        _tutorialSceneThird->setVisible(false);
+        _tutorialActionDone = false;
+        return;
+    }
+    if (_tutorialTimer <= 0 && ind == 1) {
+        _tutorialSceneSecond->setVisible(false);
+        _tutorialSceneThird->setVisible(true);
+        _tutorialInd = 2;
+        if (_tutorial == 4 || _tutorial == 5) {
+            _tutorialActionDone = true;
+            _tutorialTimer = TUTORIAL_READING_TIMER;
+        } else {
+            _tutorialActionDone = false;
+            _tutorialTimer = TUTORIAL_INIT_TIMER;
+        }
+        
+        return;
+    }
+    if (_tutorialTimer <= 0 && ind == 0) {
+        _tutorialSceneFirst->setVisible(false);
+        _tutorialSceneSecond->setVisible(true);
+        _tutorialInd = 1;
+        if (_tutorial == 4 || _tutorial == 5) {
+            _tutorialActionDone = true;
+            _tutorialTimer = TUTORIAL_READING_TIMER;
+        } else {
+            _tutorialActionDone = false;
+            _tutorialTimer = TUTORIAL_INIT_TIMER;
+        }
+        return;
+    }
+    if(!_tutorialSceneFirst->isVisible() && !_tutorialSceneSecond->isVisible() && !_tutorialSceneThird->isVisible()) {
+        _tutorialSceneFirst->setVisible(true);
+    }
+    if (_tutorialTimer < TUTORIAL_INIT_TIMER || _tutorialActionDone) {
+        _tutorialTimer = _tutorialTimer - timestep;
+        return;
+    }
 }

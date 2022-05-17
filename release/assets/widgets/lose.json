@@ -108,13 +108,23 @@
           "y_offset": -0.25,
           "absolute": false
         }
+      },
+      "background": {
+        "type": "Image",
+        "data": {
+          "texture": "tutorial-darkenbackground",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 2
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle"
+          
+        }
       }
-
-
-
-
-
-
 
     }
   }

@@ -29,6 +29,111 @@
             "wrapS": "clamp",
             "wrapT": "clamp"
         },
+        "tutorial-tilt": {
+            "file": "textures/tutorials/tilt_all.png",
+            "minfilter": "nearest",
+            "magfilter": "linear",
+            "wrapS": "clamp",
+            "wrapT": "clamp"
+        },
+        "tutorial-melee": {
+            "file": "textures/tutorials/meleeattack_all.png",
+            "minfilter": "nearest",
+            "magfilter": "linear",
+            "wrapS": "clamp",
+            "wrapT": "clamp"
+        },
+        "dottedline": {
+            "file": "textures/tutorials/dottedline.png",
+            "minfilter": "nearest",
+            "magfilter": "linear",
+            "wrapS": "clamp",
+            "wrapT": "clamp"
+        },
+        "tutorial-jump": {
+            "file": "textures/tutorials/Jump_All.png",
+            "minfilter": "nearest",
+            "magfilter": "linear",
+            "wrapS": "clamp",
+            "wrapT": "clamp"
+        },
+        "tutorial-jumpattack": {
+            "file": "textures/tutorials/jumpattack_all.png",
+            "minfilter": "nearest",
+            "magfilter": "linear",
+            "wrapS": "clamp",
+            "wrapT": "clamp"
+        },
+        "tutorial-jumpdown": {
+            "file": "textures/tutorials/Jumpdown_All.png",
+            "minfilter": "nearest",
+            "magfilter": "linear",
+            "wrapS": "clamp",
+            "wrapT": "clamp"
+        },
+        "tutorial-range": {
+            "file": "textures/tutorials/rangeattack_all.png",
+            "minfilter": "nearest",
+            "magfilter": "linear",
+            "wrapS": "clamp",
+            "wrapT": "clamp"
+        },
+        "tutorial-rangedir": {
+            "file": "textures/tutorials/Rangedirection_All.png",
+            "minfilter": "nearest",
+            "magfilter": "linear",
+            "wrapS": "clamp",
+            "wrapT": "clamp"
+        },
+        "tutorial-darkenbackground": {
+            "file": "textures/tutorials/darken_background.png",
+            "minfilter": "nearest",
+            "magfilter": "linear",
+            "wrapS": "clamp",
+            "wrapT": "clamp"
+        },
+        "tutorial-chargedrange": {
+            "file": "textures/tutorials/chargerange_all.png",
+            "minfilter": "nearest",
+            "magfilter": "linear",
+            "wrapS": "clamp",
+            "wrapT": "clamp"
+        },
+        "tutorial-explosivedir": {
+            "file": "textures/tutorials/Explosivedirection_all.png",
+            "minfilter": "nearest",
+            "magfilter": "linear",
+            "wrapS": "clamp",
+            "wrapT": "clamp"
+        },
+        "tutorial-explosivecool": {
+            "file": "textures/tutorials/Explosivecooldownall.png",
+            "minfilter": "nearest",
+            "magfilter": "linear",
+            "wrapS": "clamp",
+            "wrapT": "clamp"
+        },
+        "tutorial-chargedmelee": {
+            "file": "textures/tutorials/chargemelee_all.png",
+            "minfilter": "nearest",
+            "magfilter": "linear",
+            "wrapS": "clamp",
+            "wrapT": "clamp"
+        },
+        "tutorial-dashdir": {
+            "file": "textures/tutorials/dashdirection_all.png",
+            "minfilter": "nearest",
+            "magfilter": "linear",
+            "wrapS": "clamp",
+            "wrapT": "clamp"
+        },
+        "tutorial-dashcool": {
+            "file": "textures/tutorials/dashcooldown_all.png",
+            "minfilter": "nearest",
+            "magfilter": "linear",
+            "wrapS": "clamp",
+            "wrapT": "clamp"
+        },
 		"seeker": {
 			"file": "textures/seeker_static.png",
 			"minfilter": "nearest",
@@ -567,6 +672,15 @@
 		"world_select_forestback": {
 			"file": "textures/menus/world_select/world_select_forest_back.png"
 		},
+        "credit_background": {
+            "file": "textures/credit/background.png"
+        },
+        "credit-text": {
+            "file": "textures/credit/words.png"
+        },
+        "credit-home": {
+            "file": "textures/credit/home.png"
+        },
 		"whiteGrad": {
 			"file": "textures/circle.png",
 			"minfilter": "nearest",
@@ -911,7 +1025,20 @@
 		"levelselect": "widgets/levelselect.json",
 		"pause": "widgets/pause.json",
 		"options": "widgets/options.json",
-        "lose": "widgets/lose.json"
+        "lose": "widgets/lose.json",
+        "tutorialtilt": "widgets/tutorialtilt.json",
+        "tutorialmelee": "widgets/tutorialmelee.json",
+        "tutorialjump": "widgets/tutorialjump.json",
+        "tutorialjumpattack": "widgets/tutorialjumpattack.json",
+        "tutorialjumpdown": "widgets/tutorialjumpdown.json",
+        "tutorialrange": "widgets/tutorialrange.json",
+        "tutorialrangedir": "widgets/tutorialrangedir.json",
+        "tutorialchargedrange":  "widgets/tutorialchargedrange.json",
+        "tutorialexplosivedir": "widgets/tutorialexplosivedir.json",
+        "tutorialexplosivecooldown": "widgets/tutorialexplosivecooldown.json",
+        "tutorialchargedmelee":  "widgets/tutorialchargedmelee.json",
+        "tutorialdashdir": "widgets/tutorialdashdir.json",
+        "tutorialdashcooldown": "widgets/tutorialdashcooldown.json"
 	},
 	"scene2s": {
 		"cave": {
@@ -1189,6 +1316,161 @@
 				"key": "lose"
 			}
 		},
+        "tutorialTiltScene": {
+            "type": "Widget",
+            "data": {
+                "key": "tutorialtilt"
+            }
+        },
+        "tutorialMeleeScene": {
+            "type": "Widget",
+            "data": {
+                "key": "tutorialmelee"
+            }
+        },
+        "tutorialJumpScene": {
+            "type": "Widget",
+            "data": {
+                "key": "tutorialjump"
+            }
+        },
+        "tutorialJumpAttackScene": {
+            "type": "Widget",
+            "data": {
+                "key": "tutorialjumpattack"
+            }
+        },
+        "tutorialJumpDownScene": {
+            "type": "Widget",
+            "data": {
+                "key": "tutorialjumpdown"
+            }
+        },
+        "tutorialRangeScene": {
+            "type": "Widget",
+            "data": {
+                "key": "tutorialrange"
+            }
+        },
+        "tutorialRangeDirScene": {
+            "type": "Widget",
+            "data": {
+                "key": "tutorialrangedir"
+            }
+        },
+        "tutorialChargedRangeScene": {
+            "type": "Widget",
+            "data": {
+                "key": "tutorialchargedrange"
+            }
+        },
+        "tutorialExplosiveDirScene": {
+            "type": "Widget",
+            "data": {
+                "key": "tutorialexplosivedir"
+            }
+        },
+        "tutorialExplosiveCooldownScene": {
+            "type": "Widget",
+            "data": {
+                "key": "tutorialexplosivecooldown"
+            }
+        },
+        "tutorialChargedMeleeScene": {
+            "type": "Widget",
+            "data": {
+                "key": "tutorialchargedmelee"
+            }
+        },
+        "tutorialDashDirScene": {
+            "type": "Widget",
+            "data": {
+                "key": "tutorialdashdir"
+            }
+        },
+        "tutorialDashCooldownScene": {
+            "type": "Widget",
+            "data": {
+                "key": "tutorialdashcooldown"
+            }
+        },
+        "creditScene": {
+            "type": "Node",
+            "comment": "The root node for credit scene",
+            "format": {
+                "type": "Anchored"
+            },
+            "children": {
+                "backdrop": {
+                    "type": "Image",
+                    "data": {
+                        "texture": "credit_background",
+                        "anchor": [
+                            0.5,
+                            0.5
+                        ],
+                        "scale": 0.55
+                    },
+                    "layout": {
+                        "x_anchor": "center",
+                        "y_anchor": "middle"
+                    }
+                },
+                "home": {
+                  "type": "Button",
+                  "data": {
+                    "upnode": "up",
+                    "anchor": [
+                      0,
+                      1
+                    ],
+                    "scale": 0.3
+                  },
+                  "children": {
+                    "up": {
+                      "type": "Image",
+                      "data": {
+                        "texture": "credit-home"
+                      }
+                    }
+                  },
+                  "layout": {
+                    "x_anchor": "left",
+                    "y_anchor": "top",
+                    "x_offset": 0.0,
+                    "y_offset": -0.05,
+                    "absolute": false
+                  }
+                }
+            }
+        },
+        "creditText": {
+            "type": "Node",
+            "comment": "This is the root node of the scene",
+            "format": {
+                "type": "Anchored"
+            },
+            "children": {
+                "text": {
+                    "type": "Image",
+                    "data": {
+                        "texture": "credit-text",
+                        "anchor": [
+                            0.5,
+                            0.5
+                        ],
+                        "scale": 0.5
+                    },
+                    "layout": {
+                        "x_anchor": "center",
+                        "y_anchor": "middle",
+                        "y_offset": 0.0,
+                        "x_offset": -0.05,
+                        "absolute": false
+                    }
+                }
+            }
+        },
 		"world_select": {
 			"type": "Node",
 			"comment": "The root node for level select",
