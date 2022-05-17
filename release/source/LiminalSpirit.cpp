@@ -80,13 +80,13 @@ void LiminalSpirit::onStartup()
     reader->close();
     
     // Note: COMMENT THESE OUT TO DISABLE PROGRESSION!!!!!!!!
-    //_biome = progress->get("biome")->asInt();
-    //_highest_level = progress->get("highest_level")->asInt();
-    //_unlock_count = progress->get("unlock_count")->asInt();
+//    _biome = progress->get("biome")->asInt();
+//    _highest_level = progress->get("highest_level")->asInt();
+//    _unlock_count = progress->get("unlock_count")->asInt();
     // Note: COMMENT THESE OUT TO ENABLE PROGRESSION!!!!!!!!
     _biome = 3;
-    _highest_level = 10;
-    _unlock_count = 5;
+    _highest_level = 1;
+    _unlock_count = 4;
     int swap = settings->get("swap")->asInt();
     _swap = settings->get("swap")->asInt();
     this->save();
@@ -113,6 +113,7 @@ void LiminalSpirit::onShutdown()
     _home.dispose();
     _worldSelect.dispose();
     _levelSelect.dispose();
+    _credit.dispose();
     _assets = nullptr;
     _batch = nullptr;
     _sound_controller = nullptr;
@@ -158,6 +159,9 @@ void LiminalSpirit::update(float timestep)
         break;
     case GAME:
         updateGameScene(timestep);
+        break;
+    case CREDIT:
+        updateCreditScene();
         break;
     case BOSS:
         updateBossScene(timestep);
@@ -225,6 +229,17 @@ void LiminalSpirit::updateHomeScene(float timestep)
     }
 }
 
+void LiminalSpirit::updateCreditScene()
+{
+    _sound_controller->play_menu_music();
+    switch (_credit.getChoice()) {
+    case CreditScene::Choice::HOME:
+        _scene = State::WORLDS;
+        _credit.dispose();
+        _worldSelect.setDefaultChoice();
+        break;
+    }
+}
 /**
  * Individualized update method for the world select scene.
  *
@@ -237,6 +252,7 @@ void LiminalSpirit::updateWorldSelectScene(float timestep)
 {
     _worldSelect.update(timestep, _biome);
     _sound_controller->play_menu_music();
+    _credit.setDefaultChoice();
     switch (_worldSelect.getChoice()) {
     case WorldSelectScene::Choice::CAVE:
         _levelSelect.init(_assets, "cave");
@@ -304,7 +320,10 @@ void LiminalSpirit::updateGameScene(float timestep)
             }
             else {
                 //no more biomes, you won!
-                _scene = State::WORLDS;
+                _scene = State::CREDIT;
+                _credit.init(_assets);
+                _credit.setDefaultChoice();
+//                _scene = State::WORLDS;
                 _worldSelect.setDefaultChoice();
                 _levelSelect.setDefaultChoice();
                 return;
@@ -319,7 +338,26 @@ void LiminalSpirit::updateGameScene(float timestep)
         }
         checkPlayerUnlocks();
         save();
-        _gameplay.init(_assets, _sound_controller, biome, nextStage);
+        
+        if (checkLevels && biome == "cave" && _highest_level == 1 && nextStage == 1) {
+            _gameplay.init(_assets, _sound_controller, biome, nextStage, 1);
+        }
+        else if (checkLevels && biome == "cave" && _highest_level == 2 && nextStage == 2) {
+            _gameplay.init(_assets, _sound_controller, biome, nextStage, 2);
+        }
+        else if(checkLevels && biome == "cave" && _highest_level == RANGED_UNLOCK && nextStage == RANGED_UNLOCK) {
+            _gameplay.init(_assets, _sound_controller, biome, nextStage, 3);
+        }
+        else if(checkLevels && biome == "shroom" && _highest_level == CHARGED_RANGED_UNLOCK && nextStage == CHARGED_RANGED_UNLOCK) {
+            _gameplay.init(_assets, _sound_controller, biome, nextStage, 4);
+        }
+        else if(checkLevels && biome == "forest" && _highest_level == CHARGED_MELEE_UNLOCK && nextStage == CHARGED_MELEE_UNLOCK) {
+            _gameplay.init(_assets, _sound_controller, biome, nextStage, 5);
+        }
+        else {
+            _gameplay.init(_assets, _sound_controller, biome, nextStage, 0);
+        }
+        
     }
 }
 
@@ -348,16 +386,38 @@ void LiminalSpirit::updateLevelSelectScene(float timestep)
     }
     _levelSelect.update(timestep, biome, _highest_level);
     switch (_levelSelect.getChoice()) {
-    case LevelSelectScene::Choice::selected:
-        _gameplay.init(_assets, _sound_controller, _levelSelect.getBiome(), _levelSelect.getStage());
-        _levelSelect.dispose();
-        _scene = State::GAME;
-        break;
-    case LevelSelectScene::Choice::home:
-        _worldSelect.setDefaultChoice();
-        _levelSelect.dispose();
-        _scene = State::WORLDS;
-        break;
+        case LevelSelectScene::Choice::selected: {
+            string biome = _levelSelect.getBiome();
+            int nextStage = _levelSelect.getStage();
+            if (_biome == 1 && biome == "cave" && _highest_level == 1 && nextStage == 1) {
+                _gameplay.init(_assets, _sound_controller, biome, nextStage, 1);
+            }
+            else if (_biome == 1 && biome == "cave" && _highest_level == 2 && nextStage == 2) {
+                _gameplay.init(_assets, _sound_controller, biome, nextStage, 2);
+            }
+            else if(_biome == 1 && biome == "cave" && _highest_level == RANGED_UNLOCK && nextStage == RANGED_UNLOCK) {
+                _gameplay.init(_assets, _sound_controller, biome, nextStage, 3);
+            }
+            else if(_biome == 2 && biome == "shroom" && _highest_level == CHARGED_RANGED_UNLOCK && nextStage == CHARGED_RANGED_UNLOCK) {
+                _gameplay.init(_assets, _sound_controller, biome, nextStage, 4);
+            }
+            else if(_biome == 3 && biome == "forest" && _highest_level == CHARGED_MELEE_UNLOCK && nextStage == CHARGED_MELEE_UNLOCK) {
+                _gameplay.init(_assets, _sound_controller, biome, nextStage, 5);
+            }
+            else {
+                _gameplay.init(_assets, _sound_controller, biome, nextStage, 0);
+            }
+
+            _levelSelect.dispose();
+            _scene = State::GAME;
+            break;
+        }
+        case LevelSelectScene::Choice::home: {
+            _worldSelect.setDefaultChoice();
+            _levelSelect.dispose();
+            _scene = State::WORLDS;
+            break;
+        }
     }
 }
 
@@ -439,6 +499,9 @@ void LiminalSpirit::draw()
         break;
     case GAME:
         _gameplay.render(_batch);
+        break;
+    case CREDIT:
+        _credit.render(_batch);
         break;
     case BOSS:
         _bossgame.render(_batch);

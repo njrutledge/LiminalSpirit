@@ -13,6 +13,22 @@
     },
     
     "children": {
+        "background": {
+          "type": "Image",
+          "data": {
+            "texture": "lose-background",
+            "anchor": [
+              0.5,
+              0.5
+            ],
+            "scale": 2
+          },
+          "layout": {
+            "x_anchor": "center",
+            "y_anchor": "middle"
+            
+          }
+        },
         "text": {
           "type": "Image",
           "data": {
@@ -26,7 +42,6 @@
           "layout": {
             "x_anchor": "center",
             "y_anchor": "middle",
-            "y_offset": 0.1,
             "x_offset": 0,
             "absolute": false
           }
@@ -109,13 +124,6 @@
           "absolute": false
         }
       }
-
-
-
-
-
-
-
     }
   }
 }

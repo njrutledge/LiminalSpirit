@@ -251,6 +251,15 @@ protected:
     
     bool _chargeSoundCueR;
 
+    int _tutorial;
+    
+    int _initTutorial;
+    
+    float _tutorialTimer;
+    
+    int _tutorialInd;
+    
+    bool _tutorialActionDone;
     std::shared_ptr<scene2::Button> _pauseButton;
 
     std::shared_ptr<scene2::SceneNode> _pauseScene;
@@ -285,6 +294,11 @@ protected:
     
     std::shared_ptr<scene2::Button> _loseRestartButton;
 
+    std::shared_ptr<scene2::SceneNode> _tutorialSceneFirst;
+    
+    std::shared_ptr<scene2::SceneNode> _tutorialSceneSecond;
+    
+    std::shared_ptr<scene2::SceneNode> _tutorialSceneThird;
     std::shared_ptr<JsonValue> _progress;
 
     void save();
@@ -332,7 +346,7 @@ public:
      *
      * @return true if the controller is initialized properly, false otherwise.
      */
-    bool init(const std::shared_ptr<cugl::AssetManager> &assets, const std::shared_ptr<SoundController> sound, string biome, int stageNum);
+    bool init(const std::shared_ptr<cugl::AssetManager> &assets, const std::shared_ptr<SoundController> sound, string biome, int stageNum, int tutorial);
 
     bool goingBack() { return _back; }
     
@@ -504,7 +518,10 @@ public:
     string getBiome() { return _biome; }
 
     int getStageNum() { return _stageNum; }
+    
+    void updateTutorialv1(float timestep, int ind);
 
+    void updateTutorialv2(float timestep, int ind);
 
 };
 

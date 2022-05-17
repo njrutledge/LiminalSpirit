@@ -20,6 +20,7 @@
 #include "HomeScene.hpp"
 #include "WorldSelectScene.hpp"
 #include "LevelSelectScene.hpp"
+#include "CreditScene.hpp"
 
 /**
  * This class represents the application root for the ship demo.
@@ -71,6 +72,8 @@ protected:
         PAUSE,
         /** The scene to play the game */
         GAME,
+        /** The scene to credit */
+        CREDIT,
         /** The scene to play the boss */
         BOSS
     };
@@ -88,6 +91,9 @@ protected:
     WorldSelectScene _worldSelect;
     /** The controller for the world select screen */
     LevelSelectScene _levelSelect;
+    /** The controller for the credit screen */
+    CreditScene _credit;
+    
     /** Whether or not we have finished loading all assets */
     bool _loaded;
 
@@ -210,6 +216,8 @@ public:
      */
     void updateGameScene(float timestep);
 
+    void updateCreditScene();
+    
     /**
      * Individualized update method for the boss scene.
      *

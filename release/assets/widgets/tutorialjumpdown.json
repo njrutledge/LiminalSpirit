@@ -1,0 +1,69 @@
+{
+  "variables": {
+
+  },
+  "contents": {
+    "type": "Node",
+    "comment": "the root node for jump down tutorial",
+    "data": {
+      "visible": false
+    },
+    "format": {
+      "type": "Anchored"
+    },
+    
+    "children": {
+        "line": {
+          "type": "Image",
+          "data": {
+            "texture": "dottedline",
+            "anchor": [
+              0.5,
+              0.5
+            ],
+            "scale": 0.40
+          },
+          "layout": {
+            "x_anchor": "center",
+            "y_anchor": "middle"
+            
+          }
+        },
+        "background": {
+          "type": "Image",
+          "data": {
+            "texture": "tutorial-darkenbackground",
+            "anchor": [
+              0.5,
+              0.5
+            ],
+            "scale": 0.40
+          },
+          "layout": {
+            "x_anchor": "right",
+            "y_anchor": "middle",
+            "x_offset": -0.25
+            
+          }
+        },
+        "text": {
+          "type": "Image",
+          "data": {
+            "texture": "tutorial-jumpdown",
+            "anchor": [
+              0.5,
+              0.5
+            ],
+            "scale": 0.3
+          },
+          "layout": {
+            "x_anchor": "right",
+            "y_anchor": "middle",
+            "x_offset": -0.25
+            
+          }
+        }
+
+    }
+  }
+}
