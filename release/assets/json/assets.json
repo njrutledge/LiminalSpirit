@@ -1802,6 +1802,7 @@
 		"forest7": "json/levels/forest/spawnmeman.json",
 		"forest8": "json/levels/forest/chasethelost.json",
         "forest9": "json/levels/forest/inversion.json",
+        "forest10": "json/levels/forest/relentless.json",
 		"particles": "json/particles.json",
 		"BOSS": "json/levels/BOSS.json"
 	}
