@@ -364,7 +364,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
 
     float buttonScale = _scale / 32.0f;
 
-    addChildWithName(_pauseScene, "pause");
+    addChildWithName(_pauseScene, "pauseButton");
     _returnButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("pauseScene_resume"));
     _returnButton->clearListeners();
     _returnButton->addListener([=](const std::string &name, bool down)
@@ -666,28 +666,37 @@ void GameScene::dispose()
 
     if(_loseHomeButton)
         _loseHomeButton->deactivate();
+    _loseHomeButton = nullptr;
     if(_loseLevelButton)
         _loseLevelButton->deactivate();
+    _loseLevelButton = nullptr;
     if(_loseRestartButton)
         _loseRestartButton->deactivate();
-
+    _loseRestartButton = nullptr;
     if(_optionReturnButton)
         _optionReturnButton->deactivate();
+    _optionReturnButton = nullptr;
     if(_musicButton)
         _musicButton->deactivate();
+    _musicButton = nullptr;
     if(_sfxButton)
         _sfxButton->deactivate();
+    _sfxButton = nullptr;
     if(_swapHandsButton)
         _swapHandsButton->deactivate();
-
+    _swapHandsButton = nullptr;
     if(_returnButton)
         _returnButton->deactivate();
+    _returnButton = nullptr;
     if(_homeButton)
         _homeButton->deactivate();
+    _homeButton = nullptr;
     if(_optionButton)
         _optionButton->deactivate();
+    _optionButton = nullptr;
     if(_pauseButton)
         _pauseButton->deactivate();
+    _pauseButton = nullptr;
     
     _chargeSoundCueM = true;
     _chargeSoundCueR = true;
@@ -754,6 +763,7 @@ void GameScene::dispose()
     if (auto scene = getChildByName("scene"))
     {
         scene->removeChildByName("HUD");
+        scene->removeChildByName("pause");
     }
     removeAllChildren();
 }
@@ -3827,7 +3837,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     }
 
     // Add the logo and button to the scene graph
-    scene->addChild(_pauseButton);
+    scene->addChildWithName(_pauseButton, "pauseButton");
 
     // Glow effect on player
     Vec2 testPos = PLAYER_POS;
