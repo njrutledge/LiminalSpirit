@@ -2902,23 +2902,23 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
     }
     _player->applyForce();
 
-    if (_player->getVY() < -.01 || _player->getVY() > .01)
+    if (_player->getVY() < -.2 || _player->getVY() > .2)
     {
         _player->setGrounded(false);
         _player->setFloored(false);
     }
-//    else if (_player->getVY() >= -0.2 && _player->getVY() <= 0.2)
-//    {
-//        // check if this is the first "0" velocity frame, as this should not make the player grounded just yet. Might be height of jump.
-//        if (_player->isFirstFrame())
-//        {
-//            _player->setIsFirstFrame(false);
-//        }
-//        else
-//        {
-//            _player->setGrounded(true);
-//        }
-//    }
+    else if (_player->getVY() >= -0.2 && _player->getVY() <= 0.2)
+    {
+        // check if this is the first "0" velocity frame, as this should not make the player grounded just yet. Might be height of jump.
+        if (_player->isFirstFrame())
+        {
+            _player->setIsFirstFrame(false);
+        }
+        else
+        {
+            _player->setGrounded(true);
+        }
+    }
 
     if (_player->getVY() < 0)
     {
