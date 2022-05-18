@@ -378,7 +378,7 @@ void CollisionController::handleAttackCollision(AttackController::Attack* attack
             //TODO: stun both player and enemy?
         }
     }
-    else if ((bd && (bd->getName().find("wall")!= std::string::npos))){
+    else if ((bd && (bd->getName().find("wall") != std::string::npos || (bd->getName().find("floor") != std::string::npos)))){
         switch(attack->getType()) {
         case AttackController::p_exp_package:
             AC->createAttack(attack->getPosition(), 3, 0.15, 30, AttackController::p_exp, cugl::Vec2::ZERO, timer, PLAYER_RANGE, PLAYER_EXP_FRAMES);
