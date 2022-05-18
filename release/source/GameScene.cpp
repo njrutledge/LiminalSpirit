@@ -1195,7 +1195,7 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
             }
             if (_player->isFacingRight())
             {
-                if (nextFrame > 18)
+                if (nextFrame > 18 || nextFrame < 16)
                 {
                     nextFrame = 18;
                 }
@@ -1210,7 +1210,7 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
             }
             else
             {
-                if (nextFrame < 21)
+                if (nextFrame < 21 || nextFrame > 23)
                 {
                     nextFrame = 21;
                 }
@@ -1249,7 +1249,7 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
         _player->setWalkAnimationTimer(0);
         _prevFrame = sprite->getFrame();
     }
-    else if (xPos == 0 && (((_player->getIdleAnimationTimer() > 1.f) || !(sprite->getFrame() == 13 || sprite->getFrame() == 8 || sprite->getFrame() == 10 || sprite->getFrame() == 15)) && _player->getIdleAnimationTimer() < 0.2f))
+    else if (xPos == 0 && ((_player->getIdleAnimationTimer() > 1.f) || (!(sprite->getFrame() == 13 || sprite->getFrame() == 8 || sprite->getFrame() == 10 || sprite->getFrame() == 15) && _player->getIdleAnimationTimer() < 0.2f)))
     {
         if (sprite->getFrame() < 8)
         {
@@ -3834,8 +3834,8 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     std::shared_ptr<Texture> hitboxImage = _assets->get<Texture>(PLAYER_TEXTURE);
     _player = PlayerModel::alloc(playerPos + Vec2(0, .5), hitboxImage->getSize() / _scale / 8, _scale);
     std::shared_ptr<scene2::SpriteNode> sprite = scene2::SpriteNode::alloc(image, 5, 8);
-    sprite->setFrame(0);
-    _prevFrame = 0;
+    sprite->setFrame(12);
+    _prevFrame = 12;
     _player->setSceneNode(sprite);
     _player->setDebugColor(Color4::BLUE);
     sprite->setScale(0.175f);
@@ -3946,6 +3946,13 @@ void GameScene::reset()
     _player->getSceneNode()->setColor(Color4::WHITE);
     _rangedArm->getSceneNode()->setVisible(true);
     _meleeArm->getSceneNode()->setVisible(true);
+    scene2::SpriteNode *sprite = dynamic_cast<scene2::SpriteNode *>(_player->getSceneNode().get());
+    sprite->setFrame(12);
+    _prevFrame = 12;
+    _dashTime = 0;
+    _dashXVel = 0;
+    _dashYVel = 0;
+    _cancelDash = false;
     // Remove all enemies
     auto eit = _enemies.begin();
     while (eit != _enemies.end())
@@ -3964,6 +3971,7 @@ void GameScene::reset()
     // Reset wave spawning
     _timer = 0.0f;
     _nextWaveNum = 0;
+    _spawnParticlesDone = false;
     auto spawnTime = _constants->get("spawn_times");
     for (int i = 0; i < _numWaves; i++)
     {
