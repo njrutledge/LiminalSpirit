@@ -106,7 +106,15 @@ bool HomeScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
               _choice = Choice::OPTIONS;
           }
       });
-  
+  _creditButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("main_menu_credit"));
+  _creditButton->clearListeners();
+  _creditButton->addListener([=](const std::string& name, bool down)
+      {
+          if (!down) {
+              _choice = Choice::CREDIT;
+              removeChildByName("options");
+        }
+      });
   Rect bounds = Application::get()->getSafeBounds();
   bounds.origin *= boundScale;
   bounds.size *= boundScale;
@@ -196,6 +204,8 @@ void HomeScene::dispose()
   _playButton = nullptr;
   if(_optionsButton) _optionsButton->deactivate();
   _optionsButton = nullptr;
+  if(_creditButton) _creditButton->deactivate();
+  _creditButton = nullptr;
   _batch = nullptr;
   _assets = nullptr;
 }
@@ -214,6 +224,8 @@ void HomeScene::update(float timestep)
     if (_choice != Choice::OPTIONS) {
         _playButton->setVisible(true);
         _playButton->activate();
+        _creditButton->setVisible(true);
+        _creditButton->activate();
         _optionsButton->setVisible(true);
         _optionsButton->activate();
 
@@ -228,7 +240,8 @@ void HomeScene::update(float timestep)
         _playButton->deactivate();
         _optionsButton->setVisible(false);
         _optionsButton->deactivate();
-
+        _creditButton->setVisible(false);
+        _creditButton->deactivate();
         _optionScene->setVisible(true);
         _optionReturnButton->setVisible(true);
         _optionReturnButton->activate();
