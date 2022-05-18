@@ -4,7 +4,7 @@
 #include "AttackController.hpp"
 using namespace cugl;
 
-#define MAX_STALEING 0.5
+#define MAX_STALEING 0.2
 
 void CollisionController::init(std::shared_ptr<SoundController> sound) {
     _sound = sound;
@@ -12,7 +12,7 @@ void CollisionController::init(std::shared_ptr<SoundController> sound) {
     _mCoolReduction = 0;
     _rCoolReduction = 0;
     
-    _stale = 5;
+    _stale = 50;
     
     std::shared_ptr<JsonReader> reader = JsonReader::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
     std::shared_ptr<JsonValue> save = reader->readJson();
@@ -220,14 +220,14 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                         case AttackController::p_range:
                             _sound->play_player_sound(SoundController::playerSType::shootHit);
                             _mCoolReduction += 1;
-                            _stale = clampi(_stale + 1, 0, 10);
+                            _stale = clampi(_stale + 10, 0, 100);
                             attack->setInactive();
                             break;
                         case AttackController::p_melee:
                             _sound->play_player_sound(SoundController::playerSType::slashHit);
                             _rCoolReduction += 1;
                             _stall = true;
-                            _stale = clampi(_stale - 1, 0, 10);
+                            _stale = clampi(_stale - 5, 0, 100);
                             break;
                         case AttackController::p_dash:
                             _sound->play_player_sound(SoundController::playerSType::slashDashHit);
@@ -397,12 +397,12 @@ void CollisionController::handleAttackCollision(AttackController::Attack* attack
 int CollisionController::getDamageDealt(AttackController::Attack* attack, BaseEnemyModel* enemy){
     float mMult = 1.0f;
     float rMult = 1.0f;
-    if (_stale < 5) {
-        mMult -= (5 - _stale) * (MAX_STALEING / 5.0f);
-        rMult += (5 - _stale) * (MAX_STALEING / 5.0f);
-    } else if (_stale > 5) {
-        mMult += (_stale - 5) * (MAX_STALEING / 5.0f);
-        rMult -= (_stale - 5) * (MAX_STALEING / 5.0f);
+    if (_stale < 50) {
+        mMult -= (50 - _stale) * (MAX_STALEING / 50.0f);
+        rMult += (50 - _stale) * (MAX_STALEING / 50.0f) * 2;
+    } else if (_stale > 50) {
+        mMult += (_stale - 50) * (MAX_STALEING / 50.0f) * 2;
+        rMult -= (_stale - 50) * (MAX_STALEING / 50.0f);
     }
     switch (attack->getType()){
         case AttackController::p_range:
@@ -453,7 +453,7 @@ void CollisionController::reset() {
     _mCoolReduction = 0;
     _rCoolReduction = 0;
     
-    _stale = 5;
+    _stale = 50;
     
     _stall = false;
     

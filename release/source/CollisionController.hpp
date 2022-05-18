@@ -18,7 +18,7 @@ public:
     
     int _rCoolReduction;
     
-    // Goes from 0 to 10, where 5 is 100% damage for both weapons. Going up increases melee, going down increases range
+    // Goes from 0 to 100, where 50 is 100% damage for both weapons. Going up increases melee, going down increases range
     bool _stall;
     
     int _stale;
