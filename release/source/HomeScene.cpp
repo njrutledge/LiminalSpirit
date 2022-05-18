@@ -185,6 +185,7 @@ void HomeScene::addMusicButtons(float buttonScale) {
                 // Only quit when the button is released
                 if (!down) {
                     _music = i;
+                    _sound->set_music_volume(i / 10.0f);
                 } });
         _musicButtons.push_back(button);
 
@@ -205,6 +206,8 @@ void HomeScene::addSFXButtons(float buttonScale) {
                 // Only quit when the button is released
                 if (!down) {
                     _sfx = i;
+                    _sound->set_sfx_volume(i / 10.0f);
+
                 } });
         _sfxButtons.push_back(button);
 
