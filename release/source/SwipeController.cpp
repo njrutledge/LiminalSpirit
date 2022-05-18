@@ -39,10 +39,7 @@ SwipeController::SwipeController() : _leftSwipe(noAttack),
     _lCoolStart = 0;
     _rCoolStart = 0;
     
-    std::shared_ptr<cugl::JsonReader> reader = cugl::JsonReader::alloc(cugl::Application::get()->getSaveDirectory() + "savedGame.json");
-    std::shared_ptr<cugl::JsonValue> save = reader->readJson();
-    std::shared_ptr<cugl::JsonValue> progress = save->get("progress");
-    _unlock_count = progress->get("unlock_count")->asInt();
+    
 }
 
 /**
@@ -56,7 +53,7 @@ SwipeController::~SwipeController()
 /**
  * Updates the swipe controller based on the latest inputs.
  */
-void SwipeController::update(InputController &input, bool grounded, bool floored, float dt)
+void SwipeController::update(InputController &input, bool grounded, bool floored, float dt, int unlock_count)
 {
     if (!hasLeftChargedAttack()) {
         _cRangeCount += dt;
@@ -71,7 +68,7 @@ void SwipeController::update(InputController &input, bool grounded, bool floored
 
     // If the left finger is pressed down, check if it has been pressed long enough for
     // a charge attack
-    if(input.isLeftDown()) {
+    if(input.isLeftDown() && unlock_count >= 2) {
         calculateChargeAttack(input.getLeftStartTime(), true);
     }
     // If left finger lifted, process left swipe
@@ -91,7 +88,7 @@ void SwipeController::update(InputController &input, bool grounded, bool floored
     
     // If the right finger is pressed down, check if it has been pressed long enough for
     // a charge attack
-    if(input.isRightDown()) {
+    if(input.isRightDown() && unlock_count >= 4) {
         calculateChargeAttack(input.getRightStartTime(), false);
     }
     // If right finger lifted, process right swipe
@@ -212,9 +209,9 @@ void SwipeController::calculateChargeAttack(cugl::Timestamp startTime, bool isLe
     
     // If the attack is already charged, stop calculating the time diff
     if (isLeftSidedCharge) {
-        if (hasLeftChargedAttack() && _unlock_count >= 2) return;
+        if (hasLeftChargedAttack()) return;
     } else {
-        if (hasRightChargedAttack() && _unlock_count >= 4) return;
+        if (hasRightChargedAttack()) return;
     }
         
     _currTime.mark();

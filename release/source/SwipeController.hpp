@@ -88,8 +88,6 @@ protected:
         }
     };
     
-    int _unlock_count;
-    
     /** State of the left side swipes */
     LeftSwipeState _leftState;
     
@@ -178,7 +176,8 @@ protected:
      * Calculates whether a finger has been pressed down long enough for a charge attack
      * and updates the state accordingly
      *
-     * @param leftStartTime  the timestamp for when the left finger went down
+     * @param startTime  the timestamp for when the left finger went down
+     * @param isLeftSidedCharge whether the charge is on left side or not
      *
      */
     void calculateChargeAttack(cugl::Timestamp startTime, bool isLeftSidedCharge);
@@ -264,7 +263,7 @@ public:
     /**
      * Updates the swipe controller based on the latest inputs.
      */
-    void update(InputController& input, bool grounded, bool floored, float dt);
+    void update(InputController& input, bool grounded, bool floored, float dt, int unlock_count);
     
     /**
      * Returns the type of swipe attack that was just completed on the left side

@@ -928,7 +928,7 @@ void GameScene::update(float timestep, int unlockCount)
 
     if (!_player->isStunned())
     {
-        _swipes.update(_input, _player->isGrounded(), _player->isFloored(), timestep);
+        _swipes.update(_input, _player->isGrounded(), _player->isFloored(), timestep, unlockCount);
     }
 
     SwipeController::SwipeAttack left = updateLeftSwipe(unlockCount);
