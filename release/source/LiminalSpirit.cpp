@@ -191,6 +191,7 @@ void LiminalSpirit::updateLoadingScene(float timestep)
         _home.init(_assets);
         _sound_controller = make_shared<SoundController>();
         _sound_controller->init(_assets);
+        _home.setSoundController(_sound_controller);
         _worldSelect.init(_assets);
         _scene = State::HOME;
     }

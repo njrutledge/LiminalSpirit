@@ -31,6 +31,7 @@
 #define HomeScene_hpp
 #include <cugl/cugl.h>
 #include "InputController.hpp"
+#include "SoundController.hpp"
 
 /**
  * Class representing the Home screen. It links to world select and options menu.
@@ -45,6 +46,9 @@ public:
         CREDIT,
 	};
 protected:
+
+  std::shared_ptr<SoundController> _sound;
+
   /** The loaders to (synchronously) load in assets */
   std::shared_ptr<cugl::AssetManager> _assets;
   /** A scene graph, used to display our 2D scenes */
@@ -128,6 +132,10 @@ public:
   void addMusicButtons(float buttonScale);
 
   void addSFXButtons(float buttonScale);
+
+  void setSoundController(std::shared_ptr<SoundController> sound) {
+	  _sound = sound;
+  };
 
 #pragma mark -
 #pragma mark Screen Handling
