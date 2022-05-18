@@ -1888,7 +1888,7 @@
 		"level2": "json/levels/level2.json",
 		"forest1": "json/levels/forest/introdash.json",
 		"forest2": "json/levels/forest/spectation.json",
-        "forest3": "json/levels/forest/gluttonornah.json",
+        "forest3": "json/levels/forest/gluttonyornah.json",
         "forest4": "json/levels/forest/stacked.json",
 		"forest5": "json/levels/forest/spawnmeman.json",
 		"forest6": "json/levels/forest/forestation.json",
