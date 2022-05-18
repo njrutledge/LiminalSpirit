@@ -2230,6 +2230,7 @@ void GameScene::updateEnemies(float timestep)
             if ((*it)->getName() == "Lost")
             {
                 _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 1.0f, 0.2f, (*it)->getAttackDamage(), AttackController::Type::e_melee, vel.rotate((play_p - en_p).getAngle()), _timer, LOST_ATTACK, 0);
+                _sound->play_enemy_sound(SoundController::enemy::lost, SoundController::etype::attack);
             }
             else if ((*it)->getName() == "Phantom")
             {

@@ -177,6 +177,10 @@ void SoundController::init(std::shared_ptr<cugl::AssetManager> &assets) {
     
     _playerCharge = assets->get<cugl::Sound>("playerCharge");
     
+    _enemyDeath = assets->get<cugl::Sound>("deathOrg");
+    
+    _lostAttack = assets->get<cugl::Sound>("lostAttack");
+    
 };
 
 void SoundController::play_menu_music() {
@@ -285,7 +289,7 @@ void SoundController::play_player_sound(playerSType sound) {
             cugl::AudioEngine::get()->play("playerCharge", _playerCharge, false, _vSFX, true);
             break;
     }
-};
+}
 
 void SoundController::reset_level_tracks() {
     _cave1->reset_mix();
@@ -293,7 +297,7 @@ void SoundController::reset_level_tracks() {
     _mushroom1->reset_mix();
     _mushroom2->reset_mix();
     _forest1->reset_mix();
-};
+}
 
 void SoundController::level_transition() {
     
@@ -304,7 +308,35 @@ void SoundController::level_transition() {
     
 }
 
+void SoundController::play_death_sound(bool mirror) {
+    if (mirror) {
+        
+    } else {
+        cugl::AudioEngine::get()->play("enemyDeath", _enemyDeath, false, _vSFX, true);
+    }
+}
+
+void SoundController::play_enemy_sound(enemy e, etype t) {
+    switch (e) {
+        case lost:
+            switch (t) {
+                case attack:
+                    cugl::AudioEngine::get()->play("lostAttack", _lostAttack, false, _vSFX, true);
+                case ehurt:
+                    break;
+            }
+        case phantom:
+        case mirror:
+        case seeker:
+        case glutton:
+        case spawner:
+            break;
+    }
+}
+
 void SoundController::dispose() {
     CULog("kill");
-};
+}
+
+
 
