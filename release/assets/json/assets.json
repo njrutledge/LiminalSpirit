@@ -784,6 +784,12 @@
 				"rightcap": [ 492, 202, 503, 312 ]
 			}
 		},
+        "dmg_2":{
+            "file": "textures/hud/dmg_2.png"
+        },
+        "dmg_3":{
+            "file": "textures/hud/dmg_3.png"
+        },
 		"seed": {
 			"file": "textures/pattack.png",
 			"minfilter": "nearest",
@@ -1336,7 +1342,41 @@
 						"y_offset": -0.08,
 						"absolute": false
 					}
-				}
+				},
+                "dmg_two": {
+                    "type": "Image",
+                    "data": {
+                        "texture": "dmg_2",
+                        "anchor": [
+                            0.5,
+                            0.5
+                        ],
+                        "scale": 0.75
+                    },
+                    "layout": {
+                        "x_anchor": "center",
+                        "y_anchor": "top",
+                        "x_offset": 0.07,
+                        "y_offset": -0.07
+                    }
+                },
+                "dmg_three": {
+                    "type": "Image",
+                    "data": {
+                        "texture": "dmg_3",
+                        "anchor": [
+                            0.5,
+                            0.5
+                        ],
+                        "scale": 0.75
+                    },
+                    "layout": {
+                        "x_anchor": "center",
+                        "y_anchor": "top",
+                        "x_offset": 0.07,
+                        "y_offset": -0.07
+                    }
+                }
 			}
 		},
 		"main_menu": {

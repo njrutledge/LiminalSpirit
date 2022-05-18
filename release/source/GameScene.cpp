@@ -329,6 +329,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _melee_charge->setAngle(M_PI_2);
     _range_charge = std::dynamic_pointer_cast<scene2::ProgressBar>(assets->get<scene2::SceneNode>("HUD_range_charge"));
     _range_charge->setAngle(M_PI_2);
+    _dmg2 = std::dynamic_pointer_cast<scene2::SceneNode>(assets->get<scene2::SceneNode>("HUD_dmg_two"));
+    _dmg3 = std::dynamic_pointer_cast<scene2::SceneNode>(assets->get<scene2::SceneNode>("HUD_dmg_three"));
     auto HUD = assets->get<scene2::SceneNode>("HUD");
     HUD->setContentSize(dimen);
     HUD->doLayout();
@@ -1363,7 +1365,7 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
     }
     else if (_rangedArm->getLastType() == Glow::MeleeState::cool)
     {
-        if (_swipes.getLeftChargingTime() >= 100 && _swipes.getLeftChargingTime() < 100 + ((CHARGE_TIME - 100) / 2) && unlockCount >= 4)
+        if (_swipes.getLeftChargingTime() >= 100 && _swipes.getLeftChargingTime() < 100 + ((CHARGE_TIME - 100) / 2) && unlockCount >= 2)
         {
             if (_player->getRangedAttackRight())
             {
@@ -1374,11 +1376,11 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
                 rSprite->setFrame(6);
             }
         }
-        else if (_swipes.getLeftChargingTime() >= 100 + ((CHARGE_TIME - 100) / 2) && _swipes.getLeftChargingTime() < CHARGE_TIME && unlockCount >= 4)
+        else if (_swipes.getLeftChargingTime() >= 100 + ((CHARGE_TIME - 100) / 2) && _swipes.getLeftChargingTime() < CHARGE_TIME && unlockCount >= 2)
         {
             rSprite->setFrame(7);
         }
-        else if (_swipes.getLeftChargingTime() >= CHARGE_TIME && unlockCount >= 4)
+        else if (_swipes.getLeftChargingTime() >= CHARGE_TIME && unlockCount >= 2)
         {
             if (_player->getRangedAttackRight())
             {
@@ -3112,19 +3114,36 @@ void GameScene::updateHUD(int unlockCount)
 
     switch (unlockCount)
     {
-    case 0:
-    case 1:
-        _range_charge->setVisible(false);
-        _melee_charge->setVisible(false);
-        break;
-    case 2:
-    case 3:
-        _range_charge->setVisible(true);
-        _melee_charge->setVisible(false);
-        break;
-    default:
-        _range_charge->setVisible(true);
-        _melee_charge->setVisible(true);
+        case 0:
+        case 1:
+            _range_charge->setVisible(false);
+            _melee_charge->setVisible(false);
+            _dmg2->setVisible(false);
+            _dmg3->setVisible(false);
+            break;
+        case 2:
+            _range_charge->setVisible(true);
+            _melee_charge->setVisible(false);
+            _dmg2->setVisible(false);
+            _dmg3->setVisible(false);
+            break;
+        case 3:
+            _range_charge->setVisible(true);
+            _melee_charge->setVisible(false);
+            _dmg2->setVisible(true);
+            _dmg3->setVisible(false);
+            break;
+        case 4:
+            _dmg2->setVisible(true);
+            _dmg3->setVisible(false);
+            _range_charge->setVisible(true);
+            _melee_charge->setVisible(true);
+            break;
+        default:
+            _range_charge->setVisible(true);
+            _melee_charge->setVisible(true);
+            _dmg2->setVisible(false);
+            _dmg3->setVisible(true);
     }
     
     //Set wavebar progress

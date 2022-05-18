@@ -79,6 +79,10 @@ protected:
     std::shared_ptr<cugl::SpriteBatch> _batch; // check this
     /** A reference to the logo, so that we can move it around */
     std::shared_ptr<cugl::scene2::SceneNode> _logo;
+    /** The first damage upgrade picture */
+    std::shared_ptr<cugl::scene2::SceneNode> _dmg2;
+    /** The second damage upgrade picture */
+    std::shared_ptr<cugl::scene2::SceneNode> _dmg3;
 
     /** The physics world */
     std::shared_ptr<cugl::physics2::ObstacleWorld> _world;
