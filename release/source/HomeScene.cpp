@@ -155,6 +155,8 @@ void HomeScene::addOptionsButtons(float scale) {
     _leftText = std::dynamic_pointer_cast<scene2::Label>(_assets->get<scene2::SceneNode>("optionScene_text_left"));
     _rightText = std::dynamic_pointer_cast<scene2::Label>(_assets->get<scene2::SceneNode>("optionScene_text_right"));
 
+    _leftText->setScale(.66 * buttonScale);
+    _rightText->setScale(.66 * buttonScale);
     _swapHandsButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_swap"));
     _swapHandsButton->clearListeners();
     _swapHandsButton->addListener([=](const std::string& name, bool down)
@@ -286,13 +288,29 @@ void HomeScene::update(float timestep)
         _optionReturnButton->activate();
         _swapHandsButton->setVisible(true);
         _swapHandsButton->activate();
+        int counter = 1;
         for (auto it = _musicButtons.begin(); it != _musicButtons.end(); ++it) {
             (*it)->activate();
             (*it)->setVisible(true);
+            if (counter <= _music) {
+                (*it)->setColor(Color4(255, 255, 255));
+            }
+            else {
+                (*it)->setColor(Color4(150, 150, 150));
+            }
+            counter++;
         }
+        counter = 1;
         for (auto it = _sfxButtons.begin(); it != _sfxButtons.end(); ++it) {
             (*it)->activate();
             (*it)->setVisible(true);
+            if (counter <= _sfx) {
+                (*it)->setColor(Color4(255, 255, 255));
+            }
+            else {
+                (*it)->setColor(Color4(150, 150, 150));
+            }
+            counter++;
         }
         if (!_swap) {
             _leftText->setText("range");
