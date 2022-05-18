@@ -88,6 +88,8 @@ protected:
         }
     };
     
+    int _unlock_count;
+    
     /** State of the left side swipes */
     LeftSwipeState _leftState;
     

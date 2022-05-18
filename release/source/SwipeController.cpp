@@ -38,6 +38,11 @@ SwipeController::SwipeController() : _leftSwipe(noAttack),
     
     _lCoolStart = 0;
     _rCoolStart = 0;
+    
+    std::shared_ptr<cugl::JsonReader> reader = cugl::JsonReader::alloc(cugl::Application::get()->getSaveDirectory() + "savedGame.json");
+    std::shared_ptr<cugl::JsonValue> save = reader->readJson();
+    std::shared_ptr<cugl::JsonValue> progress = save->get("progress");
+    _unlock_count = progress->get("unlock_count")->asInt();
 }
 
 /**
@@ -207,9 +212,9 @@ void SwipeController::calculateChargeAttack(cugl::Timestamp startTime, bool isLe
     
     // If the attack is already charged, stop calculating the time diff
     if (isLeftSidedCharge) {
-        if (hasLeftChargedAttack()) return;
+        if (hasLeftChargedAttack() && _unlock_count >= 2) return;
     } else {
-        if (hasRightChargedAttack()) return;
+        if (hasRightChargedAttack() && _unlock_count >= 4) return;
     }
         
     _currTime.mark();
