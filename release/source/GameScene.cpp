@@ -1249,7 +1249,7 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
         _player->setWalkAnimationTimer(0);
         _prevFrame = sprite->getFrame();
     }
-    else if (xPos == 0 && (((_player->getIdleAnimationTimer() > 1.f) || !(sprite->getFrame() == 13 || sprite->getFrame() == 8 || sprite->getFrame() == 10 || sprite->getFrame() == 15)) && _player->getIdleAnimationTimer() < 0.2f))
+    else if (xPos == 0 && ((_player->getIdleAnimationTimer() > 1.f) || (!(sprite->getFrame() == 13 || sprite->getFrame() == 8 || sprite->getFrame() == 10 || sprite->getFrame() == 15) && _player->getIdleAnimationTimer() < 0.2f)))
     {
         if (sprite->getFrame() < 8)
         {
