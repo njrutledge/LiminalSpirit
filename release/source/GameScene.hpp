@@ -131,8 +131,6 @@ protected:
     std::shared_ptr<SoundController> _sound;
 
     float _platform_attr;
-    /** Particle Pool */
-    std::vector<std::shared_ptr<Particle>> _particlePool;
 
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
     float _scale;
