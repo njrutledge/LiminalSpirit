@@ -1195,7 +1195,7 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
             }
             if (_player->isFacingRight())
             {
-                if (nextFrame > 18)
+                if (nextFrame > 18 || nextFrame < 16)
                 {
                     nextFrame = 18;
                 }
@@ -1210,7 +1210,7 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
             }
             else
             {
-                if (nextFrame < 21)
+                if (nextFrame < 21 || nextFrame > 23)
                 {
                     nextFrame = 21;
                 }
