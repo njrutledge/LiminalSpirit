@@ -286,11 +286,11 @@ protected:
 
     bool _swap;
 
-    std::shared_ptr<scene2::Button> _musicButton;
+    std::vector<std::shared_ptr<scene2::Button>> _musicButtons;
 
     int _music;
 
-    std::shared_ptr<scene2::Button> _sfxButton;
+    std::vector<std::shared_ptr<scene2::Button>> _sfxButtons;
 
     int _sfx;
 
@@ -365,6 +365,10 @@ public:
     bool next() { return _next; }
 
     void addOptionsButtons(float buttonScale);
+
+    void addMusicButtons(float buttonScale);
+
+    void addSFXButtons(float buttonScale);
 
 #pragma mark -
 #pragma mark Gameplay Handling
