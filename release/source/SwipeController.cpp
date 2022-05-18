@@ -437,12 +437,6 @@ void SwipeController::processRightState(bool grounded, bool floored){
     bool charged = hasRightChargedAttack();
     float swipeAngle = _rightState.angle;
     
-    // Can't charge attack up if not grounded, keep charged state
-    if (charged && !grounded) {
-        if (swipeAngle > 22.5 && swipeAngle <= 157.5) {
-            return;
-        }
-    }
     // Can't charge attack down if on floor, keep charged state
     if (charged && floored) {
         if (swipeAngle > 202.5 && swipeAngle <= 337.5) {
