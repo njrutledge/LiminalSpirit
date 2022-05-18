@@ -63,9 +63,9 @@ protected:
 
   std::shared_ptr<cugl::scene2::Button> _swapHandsButton;
 
-  std::shared_ptr<cugl::scene2::Button> _musicButton;
+  std::vector<std::shared_ptr<cugl::scene2::Button>> _musicButtons;
 
-  std::shared_ptr<cugl::scene2::Button> _sfxButton;
+  std::vector<std::shared_ptr<cugl::scene2::Button>> _sfxButtons;
 
 
 
@@ -122,6 +122,10 @@ public:
   Choice getChoice() { return _choice; };
 
   void setDefaultChoice();
+
+  void addOptionsButtons(float scale);
+
+  void addMusicButtons(float buttonScale);
 
 #pragma mark -
 #pragma mark Screen Handling

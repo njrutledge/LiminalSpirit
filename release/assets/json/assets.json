@@ -896,6 +896,12 @@
 		},
 		"options_rocksmol": {
 			"file": "textures/menus/options/rocksmol.png"
+		},
+		"options_onButton": {
+			"file": "textures/menus/options/on.png"
+		},
+		"options_offButton": {
+			"file": "textures/menus/options/off.png"
 		}
 	},
 	"fonts": {
