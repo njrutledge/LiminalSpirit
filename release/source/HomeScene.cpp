@@ -121,7 +121,6 @@ bool HomeScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
   float scale = bounds.size.width / 32.0f;
 
 
-  addOptionsButtons(scale);
  
 
   addChild(scene);
@@ -133,6 +132,8 @@ bool HomeScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
   _optionScene = _assets->get<scene2::SceneNode>("optionScene");
   _optionScene->setContentSize(dimen);
   _optionScene->doLayout();
+  addOptionsButtons(scale);
+
   addChildWithName(_optionScene, "options");
 
   return true;
@@ -165,15 +166,14 @@ void HomeScene::addOptionsButtons(float scale) {
             } });
     _swapHandsButton->setScale(.4 * buttonScale);
     addMusicButtons(buttonScale);
+    addSFXButtons(buttonScale);
 }
 
 void HomeScene::addMusicButtons(float buttonScale) {
     _musicButtons.clear();
-    for (int i = 1; i <= 1; i++) {
+    for (int i = 1; i <= 10; i++) {
         std::shared_ptr<scene2::Button> button = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_musicButton" + std::to_string(i)));
         button->setScale(.4*buttonScale);
-        // button->setAnchor(Vec2(1, 1));
-        // scene2::PolygonNode::allocWithTexture(down));
 
         // Create a callback function for the button
         button->setName("music" + i);
@@ -189,6 +189,26 @@ void HomeScene::addMusicButtons(float buttonScale) {
     }
 }
 
+void HomeScene::addSFXButtons(float buttonScale) {
+    _sfxButtons.clear();
+    for (int i = 1; i <= 10; i++) {
+        std::shared_ptr<scene2::Button> button = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_sfxButton" + std::to_string(i)));
+        button->setScale(.4 * buttonScale);
+
+        // Create a callback function for the button
+        button->setName("sfx" + i);
+        button->clearListeners();
+        button->addListener([=](const std::string& name, bool down)
+            {
+                // Only quit when the button is released
+                if (!down) {
+                    _sfx = i;
+                } });
+        _sfxButtons.push_back(button);
+
+    }
+}
+
 void HomeScene::setDefaultChoice() {
     _choice = Choice::MENU;
     //other stuff to reset HomeScene...didn't want to put it else where sue me - Nick
@@ -199,12 +219,12 @@ void HomeScene::setDefaultChoice() {
     Rect bounds = Application::get()->getSafeBounds();
     bounds.origin *= boundScale;
     bounds.size *= boundScale;
-    addOptionsButtons(bounds.size.width / 32.0f);
 
     _optionScene = _assets->get<scene2::SceneNode>("optionScene");
     _optionScene->setContentSize(dimen);
     _optionScene->doLayout();
-    
+    addOptionsButtons(bounds.size.width / 32.0f);
+
     addChildWithName(_optionScene, "options");
 }
 
@@ -250,6 +270,9 @@ void HomeScene::update(float timestep)
         for (auto it = _musicButtons.begin(); it != _musicButtons.end(); ++it) {
             (*it)->deactivate();
         }
+        for (auto it = _sfxButtons.begin(); it != _sfxButtons.end(); ++it) {
+            (*it)->deactivate();
+        }
     }
     else {
         _playButton->setVisible(false);
@@ -264,6 +287,10 @@ void HomeScene::update(float timestep)
         _swapHandsButton->setVisible(true);
         _swapHandsButton->activate();
         for (auto it = _musicButtons.begin(); it != _musicButtons.end(); ++it) {
+            (*it)->activate();
+            (*it)->setVisible(true);
+        }
+        for (auto it = _sfxButtons.begin(); it != _sfxButtons.end(); ++it) {
             (*it)->activate();
             (*it)->setVisible(true);
         }

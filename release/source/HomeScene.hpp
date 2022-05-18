@@ -127,6 +127,8 @@ public:
 
   void addMusicButtons(float buttonScale);
 
+  void addSFXButtons(float buttonScale);
+
 #pragma mark -
 #pragma mark Screen Handling
   /**
