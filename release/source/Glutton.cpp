@@ -22,7 +22,7 @@ EnemyProperties GLUTTON_PROPS{
     /** Density of the glutton*/
     1.0f,
     /** Damage of the glutton */
-    25,
+    20,
     /** Name of the glutton*/
     "Glutton",
 };
