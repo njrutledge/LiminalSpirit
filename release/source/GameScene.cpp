@@ -3626,7 +3626,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     safe.size *= scale;
 
     // Get the right and bottom offsets.
-    float bOffset = safe.origin.y;
+    float bOffset = (size.height) - (safe.origin.y + safe.size.height);
     float rOffset = (size.width) - (safe.origin.x + safe.size.width);
 
     // Making the floor -jdg274
@@ -3759,7 +3759,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
 
     // Position the button in the bottom right corner
     _pauseButton->setAnchor(Vec2(0, 1));
-    _pauseButton->setPosition(size.width - (bsize.width + rOffset) / 2, size.height - (bsize.height + bOffset) / 2);
+    _pauseButton->setPosition(size.width - (bsize.width + rOffset) / 2, size.height);// - (bsize.height + bOffset) / 2);
 
     // Add platforms to the world
     Vec2 pos;
