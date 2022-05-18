@@ -643,10 +643,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
      _rangeParticleList.push_back(_assets->get<Texture>("attack_particle3"));
      _rangeParticleList.push_back(_assets->get<Texture>("attack_particle4"));
 
-     //Spawn Portal Textures
-     _spawnPortalList.push_back(_assets->get<Texture>("enemy_swirl"));
-     _spawnPortalList.push_back(_assets->get<Texture>("enemy_portal"));
-
     _timer = 0.0f;
     _worldnode->setColor(Color4::WHITE);
     _healthbar->setColor(Color4::WHITE);
@@ -726,7 +722,6 @@ void GameScene::dispose()
     _deathParticleList.clear();
     _rangeParticleList.clear();
     _meleeParticleList.clear();
-    _spawnPortalList.clear();
     if(_wavebar){
     //added i+1 to tag because tags are auto set to 0
         for(int i = 0; i <_numWaves; i++){
@@ -3241,8 +3236,8 @@ void GameScene::createSpawnParticles()
     {
         std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("spawning_swirl"), Vec2(0, 0));
         std::shared_ptr<ParticlePool> pool2 = ParticlePool::allocPoint(_particleInfo->get("spawning"), Vec2(0, 0));
-        std::shared_ptr<ParticleNode> spawning = ParticleNode::alloc(positions[i] * _scale, _spawnPortalList[0], pool);
-        std::shared_ptr<ParticleNode> spawning2 = ParticleNode::alloc(positions[i] * _scale, _spawnPortalList[1], pool2);
+        std::shared_ptr<ParticleNode> spawning = ParticleNode::alloc(positions[i] * _scale, _assets->get<Texture>("enemy_swirl"), pool);
+        std::shared_ptr<ParticleNode> spawning2 = ParticleNode::alloc(positions[i] * _scale, _assets->get<Texture>("enemy_portal"), pool2);
         spawning->setScale(0.25f);
         spawning2->setScale(0.25f);
         _worldnode->addChildWithTag(spawning2, 100);
