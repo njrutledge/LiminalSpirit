@@ -3492,7 +3492,7 @@ void GameScene::createEnemy(string enemyName, Vec2 enemyPos, int spawnerInd) {
     {
         std::shared_ptr<Texture> gluttonHitboxImage = _assets->get<Texture>("glutton");
         std::shared_ptr<Texture> gluttonImage = _assets->get<Texture>("glutton_ani");
-        std::shared_ptr<Glutton> glutton = Glutton::alloc(enemyPos + Vec2(0, 2), Vec2(gluttonImage->getSize().width / 7.0f, gluttonHitboxImage->getSize().height / 2.0f), gluttonHitboxImage->getSize() / _scale / 5, _scale);
+        std::shared_ptr<Glutton> glutton = Glutton::alloc(enemyPos + Vec2(0, 2), Vec2(gluttonImage->getSize().width / 7.0f, gluttonHitboxImage->getSize().height / 2.0f), gluttonHitboxImage->getSize() / _scale * 0.17f, _scale);
         std::shared_ptr<scene2::SpriteNode> gluttonSprite = scene2::SpriteNode::alloc(gluttonImage, 4, 7);
         // fix the anchor slightly for glutton only
         gluttonSprite->setAnchor(.5, .4);
