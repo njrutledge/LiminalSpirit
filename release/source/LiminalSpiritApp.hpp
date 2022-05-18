@@ -46,6 +46,12 @@ protected:
     
     /** Whether or not the player's hands are swapped */
     bool _swap;
+    
+    /** The music volume (1 to 10) */
+    int _music;
+    
+    /** The sfx volume (1 to 10) */
+    int _sfx;
 
     /**
      * The current active scene
