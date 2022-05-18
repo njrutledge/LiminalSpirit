@@ -210,6 +210,13 @@ void LiminalSpirit::updateHomeScene(float timestep)
     case HomeScene::Choice::PLAY:
         _scene = State::WORLDS;
         break;
+    case HomeScene::Choice::CREDIT:
+        _credit.init(_assets);
+        _credit.setDefaultChoice();
+        _worldSelect.setDefaultChoice();
+        _levelSelect.setDefaultChoice();
+        _scene = State::CREDIT;
+        break;
     }
 }
 
