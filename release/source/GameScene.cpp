@@ -2988,7 +2988,7 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
             std::shared_ptr<Texture> attackTexture = _assets->get<Texture>("player_explosion");
             attackSprite = scene2::SpriteNode::alloc(attackTexture, 1, 7);
             attackSprite->setAnchor(0.5, 0.5);
-            attackSprite->setScale(.35f * (*it)->getRadius());
+            attackSprite->setScale(.25f * (*it)->getRadius());
             dynamic_pointer_cast<scene2::SpriteNode>(attackSprite)->setFrame(1);
             attackSprite->setPriority(3);
         }
