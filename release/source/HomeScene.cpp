@@ -55,10 +55,9 @@ bool HomeScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     _progress = save->get("progress");
     std::shared_ptr<JsonValue> settings = save->get("settings");
     reader->close();
-    int swap = settings->get("swap")->asInt();
     _swap = settings->get("swap")->asInt();
-    //_sxf = settings->get("sfx")->asInt();
-    //_music = settings->get("music")->asInt();
+    _sfx = settings->get("sfx")->asInt();
+    _music = settings->get("music")->asInt();
     Size dimen = Application::get()->getDisplaySize();
     float boundScale = SCENE_WIDTH / dimen.width;
     dimen *= boundScale;
@@ -121,53 +120,8 @@ bool HomeScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
 
   float scale = bounds.size.width / 32.0f;
 
-  _leftText = std::dynamic_pointer_cast<scene2::Label>(_assets->get<scene2::SceneNode>("optionScene_text_left"));
-  _rightText = std::dynamic_pointer_cast<scene2::Label>(_assets->get<scene2::SceneNode>("optionScene_text_right"));
 
-
-
-  float buttonScale = scale / 32.0f;
-
-  _optionReturnButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_return"));
-  _optionReturnButton->clearListeners();
-  _optionReturnButton->addListener([=](const std::string& name, bool down)
-      {
-          // Only quit when the button is released
-          if (!down) {
-              _choice = Choice::MENU;
-          } });
-  _optionReturnButton->setScale(.4 * buttonScale);
-
-  _swapHandsButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_swap"));
-  _swapHandsButton->clearListeners();
-  _swapHandsButton->addListener([=](const std::string& name, bool down)
-      {
-          // Only quit when the button is released
-          if (!down) {
-              _swap = !_swap;
-              this->save();
-          } });
-  _swapHandsButton->setScale(.4 * buttonScale);
-
-  _musicButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_music"));
-  _musicButton->clearListeners();
-  _musicButton->addListener([=](const std::string& name, bool down)
-      {
-          // Only quit when the button is released
-          if (!down) {
-
-          } });
-  _musicButton->setScale(.4 * buttonScale);
-
-  _sfxButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_sfx"));
-  _sfxButton->clearListeners();
-  _sfxButton->addListener([=](const std::string& name, bool down)
-      {
-          // Only quit when the button is released
-          if (!down) {
-
-          } });
-  _sfxButton->setScale(.4 * buttonScale);
+ 
 
   addChild(scene);
 
@@ -178,9 +132,86 @@ bool HomeScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
   _optionScene = _assets->get<scene2::SceneNode>("optionScene");
   _optionScene->setContentSize(dimen);
   _optionScene->doLayout();
+  addOptionsButtons(scale);
+
   addChildWithName(_optionScene, "options");
 
   return true;
+}
+
+void HomeScene::addOptionsButtons(float scale) {
+    float buttonScale = scale / 32.0f;
+
+    _optionReturnButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_return"));
+    _optionReturnButton->clearListeners();
+    _optionReturnButton->addListener([=](const std::string& name, bool down)
+        {
+            // Only quit when the button is released
+            if (!down) {
+                _choice = Choice::MENU;
+            } });
+    _optionReturnButton->setScale(.4 * buttonScale);
+
+    _leftText = std::dynamic_pointer_cast<scene2::Label>(_assets->get<scene2::SceneNode>("optionScene_text_left"));
+    _rightText = std::dynamic_pointer_cast<scene2::Label>(_assets->get<scene2::SceneNode>("optionScene_text_right"));
+
+    _leftText->setScale(.66 * buttonScale);
+    _rightText->setScale(.66 * buttonScale);
+    _swapHandsButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_swap"));
+    _swapHandsButton->clearListeners();
+    _swapHandsButton->addListener([=](const std::string& name, bool down)
+        {
+            // Only quit when the button is released
+            if (!down) {
+                _swap = !_swap;
+                this->save();
+            } });
+    _swapHandsButton->setScale(.4 * buttonScale);
+    addMusicButtons(buttonScale);
+    addSFXButtons(buttonScale);
+}
+
+void HomeScene::addMusicButtons(float buttonScale) {
+    _musicButtons.clear();
+    for (int i = 1; i <= 10; i++) {
+        std::shared_ptr<scene2::Button> button = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_musicButton" + std::to_string(i)));
+        button->setScale(.4*buttonScale);
+
+        // Create a callback function for the button
+        button->setName("music" + i);
+        button->clearListeners();
+        button->addListener([=](const std::string& name, bool down)
+            {
+                // Only quit when the button is released
+                if (!down) {
+                    _music = i;
+                    _sound->set_music_volume(i / 10.0f);
+                } });
+        _musicButtons.push_back(button);
+
+    }
+}
+
+void HomeScene::addSFXButtons(float buttonScale) {
+    _sfxButtons.clear();
+    for (int i = 1; i <= 10; i++) {
+        std::shared_ptr<scene2::Button> button = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_sfxButton" + std::to_string(i)));
+        button->setScale(.4 * buttonScale);
+
+        // Create a callback function for the button
+        button->setName("sfx" + i);
+        button->clearListeners();
+        button->addListener([=](const std::string& name, bool down)
+            {
+                // Only quit when the button is released
+                if (!down) {
+                    _sfx = i;
+                    _sound->set_sfx_volume(i / 10.0f);
+
+                } });
+        _sfxButtons.push_back(button);
+
+    }
 }
 
 void HomeScene::setDefaultChoice() {
@@ -189,9 +220,16 @@ void HomeScene::setDefaultChoice() {
     Size dimen = Application::get()->getDisplaySize();
     float boundScale = SCENE_WIDTH / dimen.width;
     dimen *= boundScale;
+
+    Rect bounds = Application::get()->getSafeBounds();
+    bounds.origin *= boundScale;
+    bounds.size *= boundScale;
+
     _optionScene = _assets->get<scene2::SceneNode>("optionScene");
     _optionScene->setContentSize(dimen);
     _optionScene->doLayout();
+    addOptionsButtons(bounds.size.width / 32.0f);
+
     addChildWithName(_optionScene, "options");
 }
 
@@ -206,6 +244,8 @@ void HomeScene::dispose()
   _optionsButton = nullptr;
   if(_creditButton) _creditButton->deactivate();
   _creditButton = nullptr;
+  if (_swapHandsButton) _swapHandsButton->deactivate();
+  _swapHandsButton = nullptr;
   _batch = nullptr;
   _assets = nullptr;
 }
@@ -232,8 +272,12 @@ void HomeScene::update(float timestep)
         _optionScene->setVisible(false);
         _optionReturnButton->deactivate();
         _swapHandsButton->deactivate();
-        _musicButton->deactivate();
-        _sfxButton->deactivate();
+        for (auto it = _musicButtons.begin(); it != _musicButtons.end(); ++it) {
+            (*it)->deactivate();
+        }
+        for (auto it = _sfxButtons.begin(); it != _sfxButtons.end(); ++it) {
+            (*it)->deactivate();
+        }
     }
     else {
         _playButton->setVisible(false);
@@ -247,10 +291,30 @@ void HomeScene::update(float timestep)
         _optionReturnButton->activate();
         _swapHandsButton->setVisible(true);
         _swapHandsButton->activate();
-        _musicButton->setVisible(true);
-        _musicButton->activate();
-        _sfxButton->setVisible(true);
-        _sfxButton->activate();
+        int counter = 1;
+        for (auto it = _musicButtons.begin(); it != _musicButtons.end(); ++it) {
+            (*it)->activate();
+            (*it)->setVisible(true);
+            if (counter <= _music) {
+                (*it)->setColor(Color4(255, 255, 255));
+            }
+            else {
+                (*it)->setColor(Color4(150, 150, 150));
+            }
+            counter++;
+        }
+        counter = 1;
+        for (auto it = _sfxButtons.begin(); it != _sfxButtons.end(); ++it) {
+            (*it)->activate();
+            (*it)->setVisible(true);
+            if (counter <= _sfx) {
+                (*it)->setColor(Color4(255, 255, 255));
+            }
+            else {
+                (*it)->setColor(Color4(150, 150, 150));
+            }
+            counter++;
+        }
         if (!_swap) {
             _leftText->setText("range");
             _rightText->setText("melee");
@@ -275,6 +339,6 @@ void HomeScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
 void HomeScene::save() {
     std::shared_ptr<TextWriter> writer = TextWriter::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
     string test = _progress->toString();
-    writer->write("{\"progress\":" + _progress->toString() + ", \"settings\":{\"swap\": " + to_string(_swap) + "}}");
+    writer->write("{\"progress\":" + _progress->toString() + "settings\":{\"swap\": " + to_string(_swap) +", \"music\": " + to_string(_music) +", \"sfx\": " + to_string(_sfx) +"}}");
     writer->close();
 }

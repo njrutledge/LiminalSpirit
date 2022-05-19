@@ -36,7 +36,7 @@
         "layout": {
           "x_anchor": "center",
           "y_anchor": "middle",
-          "x_offset": 0,
+          "x_offset": 0.05,
           "y_offset": 0,
           "absolute": false
         }
@@ -88,73 +88,8 @@
         "layout": {
           "x_anchor": "center",
           "y_anchor": "middle",
-          "x_offset": 0.05,
+          "x_offset": 0.1,
           "y_offset": 0.05,
-          "absolute": false
-        }
-      },
-      "music": {
-        "type": "Button",
-        "data": {
-          "upnode": "up",
-          "downnode": "down",
-          "anchor": [
-            0.5,
-            0.5
-          ],
-          "scale": 0.25
-        },
-        "children": {
-          "up": {
-            "type": "Image",
-            "data": {
-              "texture": "options_button_on"
-            }
-          },
-          "down": {
-            "type": "Image",
-            "data": {
-              "texture": "options_button_down"
-            }
-          }
-        },
-        "layout": {
-          "x_anchor": "center",
-          "y_anchor": "middle",
-          "x_offset": -0.05,
-          "y_offset": -0.15,
-          "absolute": false
-        }
-      },
-      "sfx": {
-        "type": "Button",
-        "data": {
-          "upnode": "up",
-          "anchor": [
-            0.5,
-            0.5
-          ],
-          "scale": 0.25
-        },
-        "children": {
-          "up": {
-            "type": "Image",
-            "data": {
-              "texture": "options_button_on"
-            }
-          },
-          "up2": {
-            "type": "Image",
-            "data": {
-              "texture": "options_button_down"
-            }
-          }
-        },
-        "layout": {
-          "x_anchor": "center",
-          "y_anchor": "middle",
-          "x_offset": 0.12,
-          "y_offset": -0.15,
           "absolute": false
         }
       },
@@ -171,7 +106,7 @@
         "layout": {
           "x_anchor": "center",
           "y_anchor": "middle",
-          "x_offset": -0.05,
+          "x_offset": 0,
           "y_offset": 0.05,
           "absolute": false
         }
@@ -189,7 +124,7 @@
         "layout": {
           "x_anchor": "center",
           "y_anchor": "middle",
-          "x_offset": 0.15,
+          "x_offset": 0.2,
           "y_offset": 0.05,
           "absolute": false
         }
@@ -220,7 +155,7 @@
         "layout": {
           "x_anchor": "center",
           "y_anchor": "middle",
-          "x_offset": 0.005,
+          "x_offset": 0.055,
           "y_offset": 0.025,
           "absolute": false
         }
@@ -251,14 +186,625 @@
         "layout": {
           "x_anchor": "center",
           "y_anchor": "middle",
-          "x_offset": 0.095,
+          "x_offset": 0.145,
           "y_offset": 0.025,
           "absolute": false
 
         }
+      },
+      "text_swap": {
+        "type": "Label",
+        "format": {
+          "type": "Anchored"
+        },
+        "data": {
+          "font": "spectral",
+          "anchor": [
+            0.5,
+            0
+          ],
+          "visible": true,
+          "text": "Swap Hands",
+          "foreground": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "halign": "center",
+          "valign": "middle",
+          "scale": 0.75
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": -0.08,
+          "y_offset": 0.02,
+          "absolute": false
+        }
+      },
+      "text_music": {
+        "type": "Label",
+        "format": {
+          "type": "Anchored"
+        },
+        "data": {
+          "font": "spectral",
+          "anchor": [
+            0.5,
+            0
+          ],
+          "visible": true,
+          "text": "Music",
+          "foreground": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "halign": "center",
+          "valign": "middle",
+          "scale": 0.75
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": -0.11,
+          "y_offset": -0.1,
+          "absolute": false
+        }
+      },
+      "text_sfx": {
+        "type": "Label",
+        "format": {
+          "type": "Anchored"
+        },
+        "data": {
+          "font": "spectral",
+          "anchor": [
+            0.5,
+            0
+          ],
+          "visible": true,
+          "text": "SFX",
+          "foreground": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "halign": "center",
+          "valign": "middle",
+          "scale": 0.75
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": -0.12,
+          "y_offset": -0.25,
+          "absolute": false
+        }
+      },
+      "musicButton1": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.4
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "options_onButton"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": -0.12,
+          "y_offset": -0.15,
+          "absolute": false
+        }
+      },
+      "musicButton2": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.4
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "options_onButton"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": -0.08,
+          "y_offset": -0.15,
+          "absolute": false
+        }
+      },
+      "musicButton3": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.4
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "options_onButton"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": -0.04,
+          "y_offset": -0.15,
+          "absolute": false
+        }
+      },
+      "musicButton4": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.4
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "options_onButton"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": 0.0,
+          "y_offset": -0.15,
+          "absolute": false
+        }
+      },
+      "musicButton5": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.4
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "options_onButton"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": 0.04,
+          "y_offset": -0.15,
+          "absolute": false
+        }
+      },
+      "musicButton6": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.4
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "options_onButton"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": 0.08,
+          "y_offset": -0.15,
+          "absolute": false
+        }
+      },
+      "musicButton7": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.4
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "options_onButton"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": 0.12,
+          "y_offset": -0.15,
+          "absolute": false
+        }
+      },
+      "musicButton8": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.4
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "options_onButton"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": 0.16,
+          "y_offset": -0.15,
+          "absolute": false
+        }
+      },
+      "musicButton9": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.4
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "options_onButton"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": 0.2,
+          "y_offset": -0.15,
+          "absolute": false
+        }
+      },
+      "musicButton10": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.4
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "options_onButton"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": 0.24,
+          "y_offset": -0.15,
+          "absolute": false
+        }
+      },
+      "sfxButton1": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.4
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "options_onButton"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": -0.12,
+          "y_offset": -0.30,
+          "absolute": false
+        }
+      },
+      "sfxButton2": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.4
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "options_onButton"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": -0.08,
+          "y_offset": -0.30,
+          "absolute": false
+        }
+      },
+      "sfxButton3": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.4
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "options_onButton"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": -0.04,
+          "y_offset": -0.30,
+          "absolute": false
+        }
+      },
+      "sfxButton4": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.4
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "options_onButton"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": 0.0,
+          "y_offset": -0.30,
+          "absolute": false
+        }
+      },
+      "sfxButton5": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.4
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "options_onButton"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": 0.04,
+          "y_offset": -0.30,
+          "absolute": false
+        }
+      },
+      "sfxButton6": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.4
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "options_onButton"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": 0.08,
+          "y_offset": -0.30,
+          "absolute": false
+        }
+      },
+      "sfxButton7": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.4
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "options_onButton"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": 0.12,
+          "y_offset": -0.30,
+          "absolute": false
+        }
+      },
+      "sfxButton8": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.4
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "options_onButton"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": 0.16,
+          "y_offset": -0.30,
+          "absolute": false
+        }
+      },
+      "sfxButton9": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.4
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "options_onButton"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": 0.2,
+          "y_offset": -0.30,
+          "absolute": false
+        }
+      },
+      "sfxButton10": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.4
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "options_onButton"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
+          "x_offset": 0.24,
+          "y_offset": -0.30,
+          "absolute": false
+        }
       }
-
-
 
 
 
