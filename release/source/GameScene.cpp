@@ -1590,7 +1590,7 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
     }
     else if (_rangedArm->getLastType() == Glow::MeleeState::first)
     {
-        if (_rangedArm->getAnimeTimer() > 0.049f)
+        if (_rangedArm->getAnimeTimer() > 0.044f)
         {
             if ((rSprite->getFrame() == 4 && !_player->getRangedAttackRight()) ||
                 (rSprite->getFrame() == 0 && _player->getRangedAttackRight()))
