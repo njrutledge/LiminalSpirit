@@ -374,7 +374,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
                 _pause = false;
             } });
-    _returnButton->setScale(.3 * buttonScale);
+    _returnButton->setScale(.35 * buttonScale);
 
     _homeButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("pauseScene_home"));
     _homeButton->clearListeners();
@@ -384,7 +384,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
                 _back = true;
             } });
-    _homeButton->setScale(.3 * buttonScale);
+    _homeButton->setScale(.35 *buttonScale);
 
     _optionButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("pauseScene_options"));
     _optionButton->clearListeners();
@@ -394,18 +394,18 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
                 _options = true;
             } });
-    _optionButton->setScale(.3 * buttonScale);
+    _optionButton->setScale(.35 * buttonScale);
 
 
-    _restartButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("pauseScene_options"));
+    _restartButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("pauseScene_restart"));
     _restartButton->clearListeners();
     _restartButton->addListener([=](const std::string& name, bool down)
         {
             // Only quit when the button is released
             if (!down) {
-                _options = true;
+                _restart = true;
             } });
-    _optionButton->setScale(.3 * buttonScale);
+    _restartButton->setScale(.35 * buttonScale);
 
     _optionScene = _assets->get<scene2::SceneNode>("optionScene");
     _optionScene->setContentSize(dimen);
@@ -730,6 +730,9 @@ void GameScene::dispose()
     if(_pauseButton)
         _pauseButton->deactivate();
     _pauseButton = nullptr;
+    if (_restartButton)
+        _restartButton->deactivate();
+    _restartButton = nullptr;
     
     _chargeSoundCueM = true;
     _chargeSoundCueR = true;
@@ -829,6 +832,7 @@ void GameScene::update(float timestep, int unlockCount)
         _returnButton->deactivate();
         _homeButton->deactivate();
         _optionButton->deactivate();
+        _restartButton->deactivate();
         _pauseButton->setVisible(false);
         _pauseButton->deactivate();
         int counter = 1;
@@ -914,9 +918,8 @@ void GameScene::update(float timestep, int unlockCount)
         _returnButton->activate();
         _homeButton->activate();
         _optionButton->activate();
-        Size pos1 = _optionScene->getContentSize();
-        Vec2 pos2 = _returnButton->getPosition();
-//        CULog("pos: %f, %f || %f, %f", pos1.width, pos1.height, pos2.x, pos2.y);
+        _restartButton->activate();
+
         _pauseButton->setVisible(false);
         _pauseButton->deactivate();
         return;
@@ -930,6 +933,7 @@ void GameScene::update(float timestep, int unlockCount)
         _optionButton->deactivate();
         _pauseButton->setVisible(true);
         _pauseButton->activate();
+        _restartButton->deactivate();
     }
 
     if (_lose)
