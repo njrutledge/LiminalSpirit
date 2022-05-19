@@ -248,6 +248,8 @@ void HomeScene::dispose()
   _swapHandsButton = nullptr;
   _batch = nullptr;
   _assets = nullptr;
+  _musicButtons.clear();
+  _sfxButtons.clear();
 }
 
 #pragma mark -

@@ -635,6 +635,51 @@ void GameScene::addOptionsButtons(float buttonScale) {
                 this->save();
             } });
     _swapHandsButton->setScale(.4 * buttonScale);
+    addMusicButtons(buttonScale);
+    addSFXButtons(buttonScale);
+}
+
+void GameScene::addMusicButtons(float buttonScale) {
+    _musicButtons.clear();
+    for (int i = 1; i <= 10; i++) {
+        std::shared_ptr<scene2::Button> button = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_musicButton" + std::to_string(i)));
+        button->setScale(.4 * buttonScale);
+
+        // Create a callback function for the button
+        button->setName("music" + i);
+        button->clearListeners();
+        button->addListener([=](const std::string& name, bool down)
+            {
+                // Only quit when the button is released
+                if (!down) {
+                    _music = i;
+                    _sound->set_music_volume(i / 10.0f);
+                } });
+        _musicButtons.push_back(button);
+
+    }
+}
+
+void GameScene::addSFXButtons(float buttonScale) {
+    _sfxButtons.clear();
+    for (int i = 1; i <= 10; i++) {
+        std::shared_ptr<scene2::Button> button = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_sfxButton" + std::to_string(i)));
+        button->setScale(.4 * buttonScale);
+
+        // Create a callback function for the button
+        button->setName("sfx" + i);
+        button->clearListeners();
+        button->addListener([=](const std::string& name, bool down)
+            {
+                // Only quit when the button is released
+                if (!down) {
+                    _sfx = i;
+                    _sound->set_sfx_volume(i / 10.0f);
+
+                } });
+        _sfxButtons.push_back(button);
+
+    }
 }
 
 /**
@@ -742,6 +787,8 @@ void GameScene::dispose()
         scene->removeChildByName("HUD");
         scene->removeChildByName("pause");
     }
+    _musicButtons.clear();
+    _sfxButtons.clear();
     removeAllChildren();
 }
 
@@ -773,6 +820,30 @@ void GameScene::update(float timestep, int unlockCount)
         _optionButton->deactivate();
         _pauseButton->setVisible(false);
         _pauseButton->deactivate();
+        int counter = 1;
+        for (auto it = _musicButtons.begin(); it != _musicButtons.end(); ++it) {
+            (*it)->activate();
+            (*it)->setVisible(true);
+            if (counter <= _music) {
+                (*it)->setColor(Color4(255, 255, 255));
+            }
+            else {
+                (*it)->setColor(Color4(150, 150, 150));
+            }
+            counter++;
+        }
+        counter = 1;
+        for (auto it = _sfxButtons.begin(); it != _sfxButtons.end(); ++it) {
+            (*it)->activate();
+            (*it)->setVisible(true);
+            if (counter <= _sfx) {
+                (*it)->setColor(Color4(255, 255, 255));
+            }
+            else {
+                (*it)->setColor(Color4(150, 150, 150));
+            }
+            counter++;
+        }
         if (!_swap) {
             _leftText->setText("range");
             _rightText->setText("melee");
@@ -781,6 +852,33 @@ void GameScene::update(float timestep, int unlockCount)
             _leftText->setText("melee");
             _rightText->setText("range");
         }
+        std::vector<bool> e = std::vector<bool>(5);
+
+        for (auto it = _enemies.begin(); it != _enemies.end(); ++it)
+        {
+            string n = (*it)->getName();
+            if (n == "Glutton")
+            {
+                e[0] = true;
+            }
+            else if (n == "Phantom")
+            {
+                e[1] = true;
+            }
+            else if (n == "Mirror")
+            {
+                e[2] = true;
+            }
+            else if (n == "Spawner")
+            {
+                e[3] = true;
+            }
+            else if (n == "Seeker")
+            {
+                e[4] = true;
+            }
+        }
+        _sound->play_level_music(_biome, e);
         return;
     }
     else
@@ -789,6 +887,12 @@ void GameScene::update(float timestep, int unlockCount)
         _pauseScene->setVisible(false);
         _optionReturnButton->deactivate();
         _swapHandsButton->deactivate();
+        for (auto it = _musicButtons.begin(); it != _musicButtons.end(); ++it) {
+            (*it)->deactivate();
+        }
+        for (auto it = _sfxButtons.begin(); it != _sfxButtons.end(); ++it) {
+            (*it)->deactivate();
+        }
     }
 
     if (_pause)
@@ -1997,7 +2101,7 @@ void GameScene::updateEnemies(float timestep)
     std::shared_ptr<Texture> ranged_impact = _assets->get<Texture>("ranged_impact");
     for (auto it = _enemies.begin(); it != _enemies.end(); ++it)
     {
-        Vec2 direction = _ai.getMovement(*it, _player->getPosition(), timestep, 0, DEFAULT_WIDTH);
+        Vec2 direction = _ai.getMovement(*it, _player->getPosition(), timestep, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
         (*it)->setVX(direction.x);
         if ((*it)->getName() == "Lost")
