@@ -56,8 +56,8 @@ bool HomeScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     std::shared_ptr<JsonValue> settings = save->get("settings");
     reader->close();
     _swap = settings->get("swap")->asInt();
-    _sfx = 0;// settings->get("sfx")->asInt();
-    _music = 0;// settings->get("music")->asInt();
+    _sfx = settings->get("sfx")->asInt();
+    _music = settings->get("music")->asInt();
     Size dimen = Application::get()->getDisplaySize();
     float boundScale = SCENE_WIDTH / dimen.width;
     dimen *= boundScale;
@@ -341,6 +341,6 @@ void HomeScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
 void HomeScene::save() {
     std::shared_ptr<TextWriter> writer = TextWriter::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
     string test = _progress->toString();
-    writer->write("{\"progress\":" + _progress->toString() + ", \"settings\":{\"swap\": " + to_string(_swap) + "}}");
+    writer->write("{\"progress\":" + _progress->toString() + "settings\":{\"swap\": " + to_string(_swap) +", \"music\": " + to_string(_music) +", \"sfx\": " + to_string(_sfx) +"}}");
     writer->close();
 }

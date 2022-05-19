@@ -69,7 +69,7 @@ void LiminalSpirit::onStartup()
     
     if (!filetool::file_exists(Application::get()->getSaveDirectory() + "savedGame.json")) {
         std::shared_ptr<TextWriter> writer = TextWriter::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
-        writer->write("{\"progress\":{\"biome\": 1, \"highest_level\": 1, \"unlock_count\": 0}, \"settings\":{\"swap\": false}}");
+        writer->write("{\"progress\":{\"biome\": 1, \"highest_level\": 1, \"unlock_count\": 0}, \"settings\":{\"swap\": false, \"music\": 10, \"sfx\": 10}}");
         writer->close();
     }
     
@@ -88,6 +88,8 @@ void LiminalSpirit::onStartup()
 //    _highest_level = 10;
 //    _unlock_count = 5;
     _swap = settings->get("swap")->asInt();
+    _music = settings->get("music")->asInt();
+    _sfx = settings->get("sfx")->asInt();
     this->save();
     
     CULog("Biome: %d, Level: %d, Unlocks: %d, Swap: %d", _biome, _highest_level, _unlock_count, _swap);
@@ -493,7 +495,7 @@ void LiminalSpirit::checkPlayerUnlocks(){
 /** Saves progress */
 void LiminalSpirit::save(){
     std::shared_ptr<TextWriter> writer = TextWriter::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
-    writer->write("{\"progress\":{\"biome\": " + to_string(_biome) + ", \"highest_level\": " + to_string(_highest_level) + ", \"unlock_count\": " + to_string(_unlock_count) + "}, \"settings\":{\"swap\": " + to_string(_swap) +"}}");
+    writer->write("{\"progress\":{\"biome\": " + to_string(_biome) + ", \"highest_level\": " + to_string(_highest_level) + ", \"unlock_count\": " + to_string(_unlock_count) + "}, \"settings\":{\"swap\": " + to_string(_swap) +", \"music\": " + to_string(_music) +", \"sfx\": " + to_string(_sfx) +"}}");
     writer->close();
 }
 
