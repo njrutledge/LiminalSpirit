@@ -60,6 +60,7 @@ bool PlayerModel::init(const cugl::Vec2& pos, const cugl::Size& size, float scal
         _isMovingUp = false;
         _hasJustLanded = false;
         _isDashing = false;
+        _isChargeFiring = false;
         _rangedAttackRight = false;
         _isStunned = false;
         _movement = 0;
@@ -168,6 +169,7 @@ void PlayerModel::reset(Vec2 pos) {
     _isGrounded = true;
     _isFloored = false;
     _isDashing = false;
+    _isChargeFiring = false;
     _isInvincible = false;
     _invincibilityTime = 0;
     _postStunInvincibilityTimer = 0;

@@ -73,23 +73,32 @@ void LiminalSpirit::onStartup()
         writer->close();
     }
     
-    std::shared_ptr<JsonReader> reader = JsonReader::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
-    std::shared_ptr<JsonValue> save = reader->readJson();
-    std::shared_ptr<JsonValue> progress = save->get("progress");
-    std::shared_ptr<JsonValue> settings = save->get("settings");
-    reader->close();
+    try{
+        std::shared_ptr<JsonReader> reader = JsonReader::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
+        std::shared_ptr<JsonValue> save = reader->readJson();
+        std::shared_ptr<JsonValue> progress = save->get("progress");
+        std::shared_ptr<JsonValue> settings = save->get("settings");
+        reader->close();
     
-    // Note: COMMENT THESE OUT TO DISABLE PROGRESSION!!!!!!!!
-    _biome = progress->get("biome")->asInt();
-    _highest_level = progress->get("highest_level")->asInt();
-    _unlock_count = progress->get("unlock_count")->asInt();
-    // Note: COMMENT THESE OUT TO ENABLE PROGRESSION!!!!!!!!
-//    _biome = 3;
-//    _highest_level = 10;
-//    _unlock_count = 5;
-    _swap = settings->get("swap")->asInt();
-    _music = settings->get("music")->asInt();
-    _sfx = settings->get("sfx")->asInt();
+        // Note: COMMENT THESE OUT TO DISABLE PROGRESSION!!!!!!!!
+        _biome = progress->has("biome") ? progress->get("biome")->asInt() : 1;
+        _highest_level = progress->has("highest_level") ? progress->get("highest_level")->asInt() : 1;
+        _unlock_count = progress->has("unlock_count") ? progress->get("unlock_count")->asInt() : 0;
+        // Note: COMMENT THESE OUT TO ENABLE PROGRESSION!!!!!!!!
+//      _biome = 3;
+//      _highest_level = 10;
+//      _unlock_count = 5;
+        _swap = settings->has("swap") ? settings->get("swap")->asInt() : 0;
+        _music = settings->has("music") ? settings->get("music")->asInt() : 10;
+        _sfx = settings->has("sfx") ? settings->get("sfx")->asInt() : 10;
+    } catch(...){
+        _biome = 1;
+        _highest_level = 1;
+        _unlock_count = 0;
+        _swap = 0;
+        _music = 10;
+        _sfx = 10;
+    }
     this->save();
     
     CULog("Biome: %d, Level: %d, Unlocks: %d, Swap: %d", _biome, _highest_level, _unlock_count, _swap);
@@ -299,34 +308,6 @@ void LiminalSpirit::updateGameScene(float timestep)
         _levelSelect.init(_assets, biome);
         _scene = State::SELECT;
         _gameplay.dispose();
-    }
-    else if (_gameplay.goingToRestart()) {
-        _gameplay.dispose();
-        string biome = _gameplay.getBiome();
-        int stageNum = _gameplay.getStageNum();
-
-        bool checkLevels = (biome == "cave" && _biome == 1) || (biome == "shroom" && _biome == 2) || (biome == "forest" && _biome == 3);
-
-        if (checkLevels && biome == "cave" && _highest_level == 1 && stageNum == 1) {
-            _gameplay.init(_assets, _sound_controller, biome, stageNum, 1);
-        }
-        else if (checkLevels && biome == "cave" && _highest_level == 2 && stageNum == 2) {
-            _gameplay.init(_assets, _sound_controller, biome, stageNum, 2);
-        }
-        else if (checkLevels && biome == "cave" && _highest_level == RANGED_UNLOCK && stageNum == RANGED_UNLOCK) {
-            _gameplay.init(_assets, _sound_controller, biome, stageNum, 3);
-        }
-        else if (checkLevels && biome == "shroom" && _highest_level == CHARGED_RANGED_UNLOCK && stageNum == CHARGED_RANGED_UNLOCK) {
-            _gameplay.init(_assets, _sound_controller, biome, stageNum, 4);
-        }
-        else if (checkLevels && biome == "forest" && _highest_level == CHARGED_MELEE_UNLOCK && stageNum == CHARGED_MELEE_UNLOCK) {
-            _gameplay.init(_assets, _sound_controller, biome, stageNum, 5);
-        }
-        else {
-            _gameplay.init(_assets, _sound_controller, biome, stageNum, 0);
-        }
-
-
     }
     else if (_gameplay.next()) {
         _gameplay.dispose();

@@ -66,7 +66,7 @@ protected:
         int current_count;
         float timer;
     };
-
+    
     /** The loaders to (synchronously) load in assets */
     std::shared_ptr<cugl::AssetManager> _assets;
     /** The JSON value with all of the constants */
@@ -98,6 +98,8 @@ protected:
 
     /** Ranged arm texture*/
     std::shared_ptr<Glow> _rangedArm;
+    /** Ranged arm charge shot texture*/
+    std::shared_ptr<Glow> _rangedArmCharge;
     /** Melee arm texture */
     std::shared_ptr<Glow> _meleeArm;
     /** Melee arm dash texture */
@@ -114,7 +116,7 @@ protected:
     std::shared_ptr<cugl::Texture> _textureGraphics;
     /** The type*/
     int _type;
-
+    
     /** The text with the current wave */
     std::shared_ptr<cugl::TextLayout> _text;
     /** The text with the wave timer */
@@ -131,7 +133,7 @@ protected:
 
     /** The temp text with the ending win message */
     std::shared_ptr<cugl::TextLayout> _endText;
-
+    
     std::shared_ptr<SoundController> _sound;
 
     float _platform_attr;
@@ -168,7 +170,7 @@ protected:
     std::vector<float*> _platforms_attr;
     std::vector<std::shared_ptr<PlatformModel>> _platforms;
     std::vector <std::shared_ptr<scene2::PolygonNode>> _platformNodes;
-
+    
     /**spawn info */
     std::vector<vector<string>> _spawn_order;
     std::vector<vector<Vec2>> _spawn_pos;
@@ -197,10 +199,10 @@ protected:
     float _timer;
     /** living spawners */
     std::vector<int> _living_spawners;
-
+    
     /** Whether or not debug mode is active */
     bool _debug;
-
+    
     /** How long current melee dash has lasted */
     float _dashTime;
     /** XVel for this current melee dash */
@@ -209,34 +211,31 @@ protected:
     int _dashYVel;
     /** bool whether dash is cancelled */
     bool _cancelDash;
-
+    
     /** frame used for when animation interrupted when stunned */
     int _prevFrame;
-
+    
     /** Used for dash animation */
     SwipeController::SwipeAttack _dashDir;
 
     /** true if going back to world select */
     bool _back;
-
+    
     /** true if going to level select */
     bool _levelselect;
-
-    /** true if restarting*/
-    bool _restart;
-
+    
     /** Boolean check for walking sound effect timing*/
     bool _step;
 
     /** healthbar */
     std::shared_ptr<scene2::ProgressBar> _healthbar;
-
+    
     /** range charge indicator */
     std::shared_ptr<scene2::ProgressBar> _range_charge;
-
+    
     /** melee charge indicator */
     std::shared_ptr<scene2::ProgressBar> _melee_charge;
-
+    
     std::shared_ptr<scene2::ProgressBar> _wavebar;
 
     bool _winInit;
@@ -252,21 +251,21 @@ protected:
     bool _pause;
 
     bool _options;
-
+    
     bool _lose;
-
+    
     bool _chargeSoundCueM;
-
+    
     bool _chargeSoundCueR;
 
     int _tutorial;
-
+    
     int _initTutorial;
-
+    
     float _tutorialTimer;
-
+    
     int _tutorialInd;
-
+    
     bool _tutorialActionDone;
     std::shared_ptr<scene2::Button> _pauseButton;
 
@@ -293,25 +292,25 @@ protected:
     std::vector<std::shared_ptr<scene2::Button>> _sfxButtons;
 
     int _sfx;
-
+    
     std::shared_ptr<scene2::SceneNode> _loseScene;
-
+    
     std::shared_ptr<scene2::Button> _loseHomeButton;
 
     std::shared_ptr<scene2::Button> _loseLevelButton;
-
+    
     std::shared_ptr<scene2::Button> _loseRestartButton;
 
     std::shared_ptr<scene2::SceneNode> _tutorialSceneFirst;
-
+    
     std::shared_ptr<scene2::SceneNode> _tutorialSceneSecond;
-
+    
     std::shared_ptr<scene2::SceneNode> _tutorialSceneThird;
     std::shared_ptr<JsonValue> _progress;
 
     void save();
 
-
+    
     /**
      * Internal helper to build the scene graph.
      *
@@ -354,11 +353,9 @@ public:
      *
      * @return true if the controller is initialized properly, false otherwise.
      */
-    bool init(const std::shared_ptr<cugl::AssetManager>& assets, const std::shared_ptr<SoundController> sound, string biome, int stageNum, int tutorial);
+    bool init(const std::shared_ptr<cugl::AssetManager> &assets, const std::shared_ptr<SoundController> sound, string biome, int stageNum, int tutorial);
 
     bool goingBack() { return _back; }
-
-    bool goingToRestart() { return _restart; }
     
     bool goingLevelSelect() {return _levelselect; }
 
@@ -451,6 +448,11 @@ public:
     bool updateWin();
 
     void updateTilt();
+
+    /**
+     * Resets the status of the game so that we can play again.
+     */
+    void reset();
 
     /**
      * @brief Overrides the Scene2 render to render the scene.
