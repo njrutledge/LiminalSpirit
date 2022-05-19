@@ -345,6 +345,13 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
+        "player_range_arm_charge": {
+            "file": "textures/animations/range_charge.png",
+            "minfilter": "nearest",
+            "magfilter": "linear",
+            "wrapS": "clamp",
+            "wrapT": "clamp"
+        },
 		"player_melee_arm": {
 			"file": "textures/sword_arm_static.png",
 			"minfilter": "nearest",
