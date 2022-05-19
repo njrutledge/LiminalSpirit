@@ -309,34 +309,6 @@ void LiminalSpirit::updateGameScene(float timestep)
         _scene = State::SELECT;
         _gameplay.dispose();
     }
-    else if (_gameplay.goingToRestart()) {
-        _gameplay.dispose();
-        string biome = _gameplay.getBiome();
-        int stageNum = _gameplay.getStageNum();
-
-        bool checkLevels = (biome == "cave" && _biome == 1) || (biome == "shroom" && _biome == 2) || (biome == "forest" && _biome == 3);
-
-        if (checkLevels && biome == "cave" && _highest_level == 1 && stageNum == 1) {
-            _gameplay.init(_assets, _sound_controller, biome, stageNum, 1);
-        }
-        else if (checkLevels && biome == "cave" && _highest_level == 2 && stageNum == 2) {
-            _gameplay.init(_assets, _sound_controller, biome, stageNum, 2);
-        }
-        else if (checkLevels && biome == "cave" && _highest_level == RANGED_UNLOCK && stageNum == RANGED_UNLOCK) {
-            _gameplay.init(_assets, _sound_controller, biome, stageNum, 3);
-        }
-        else if (checkLevels && biome == "shroom" && _highest_level == CHARGED_RANGED_UNLOCK && stageNum == CHARGED_RANGED_UNLOCK) {
-            _gameplay.init(_assets, _sound_controller, biome, stageNum, 4);
-        }
-        else if (checkLevels && biome == "forest" && _highest_level == CHARGED_MELEE_UNLOCK && stageNum == CHARGED_MELEE_UNLOCK) {
-            _gameplay.init(_assets, _sound_controller, biome, stageNum, 5);
-        }
-        else {
-            _gameplay.init(_assets, _sound_controller, biome, stageNum, 0);
-        }
-
-
-    }
     else if (_gameplay.next()) {
         _gameplay.dispose();
         string biome = _gameplay.getBiome();

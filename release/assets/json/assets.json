@@ -345,6 +345,13 @@
 			"wrapS": "clamp",
 			"wrapT": "clamp"
 		},
+        "player_range_arm_charge": {
+            "file": "textures/animations/range_charge.png",
+            "minfilter": "nearest",
+            "magfilter": "linear",
+            "wrapS": "clamp",
+            "wrapT": "clamp"
+        },
 		"player_melee_arm": {
 			"file": "textures/sword_arm_static.png",
 			"minfilter": "nearest",
@@ -650,15 +657,24 @@
 		"shroom_background": {
 			"file": "textures/backgrounds/shroom_background.png"
 		},
-		"shroom_small_platform": {
-			"file": "textures/shroom/3-S.png"
+		"shroom_1_platform": {
+			"file": "textures/shroom/3.png"
 		},
-		"shroom_medium_platform": {
-			"file": "textures/shroom/6-M.png"
+		"shroom_2_platform": {
+			"file": "textures/shroom/6.png"
 		},
-		"shroom_large_platform": {
-			"file": "textures/shroom/2-L.png"
+		"shroom_3_platform": {
+			"file": "textures/shroom/5.png"
 		},
+        "shroom_4_platform": {
+            "file": "textures/shroom/4.png"
+        },
+        "shroom_5_platform": {
+            "file": "textures/shroom/2.png"
+        },
+        "shroom_6_platform": {
+            "file": "textures/shroom/1.png"
+        },
         "shroom_floor": {
             "file": "textures/shroom/shroom_floor.png"
         },

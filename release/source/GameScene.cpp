@@ -98,7 +98,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
 {
     _back = false;
     _levelselect = false;
-    _restart = false;
     _step = false;
     _winInit = true;
     _lose = false;
@@ -417,7 +416,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
                                     {
             // Only quit when the button is released
             if (!down) {
-                _restart = true;
+                _lose = false;
+                reset();
+                _player->markRemoved(false);
             } });
     _loseRestartButton->setScale(.4 * buttonScale);
 
@@ -1057,6 +1058,7 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
     scene2::SpriteNode *sprite = dynamic_cast<scene2::SpriteNode *>(_player->getSceneNode().get());
 
     _rangedArm->getSceneNode()->setVisible(unlockCount >= 1);
+    _rangedArmCharge->getSceneNode()->setVisible(unlockCount >= 1);
 
     sprite->setAnchor(0.5, 0.3);
     // Player (body) Animations
@@ -1273,6 +1275,7 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
     _player->setWalkAnimationTimer(_player->getWalkAnimationTimer() + timestep);
     _player->setIdleAnimationTimer(_player->getIdleAnimationTimer() + timestep);
     _rangedArm->setGlowTimer(_rangedArm->getGlowTimer() + timestep);
+    _rangedArmCharge->setGlowTimer(_rangedArmCharge->getGlowTimer() + timestep);
     _meleeArm->setGlowTimer(_meleeArm->getGlowTimer() + timestep);
     _meleeArmDash->setGlowTimer(_meleeArmDash->getGlowTimer() + timestep);
 
@@ -1292,6 +1295,7 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
     // Arm and Player Flipping
     scene2::TexturedNode *image = dynamic_cast<scene2::TexturedNode *>(_player->getSceneNode().get());
     scene2::TexturedNode *arm1Image = dynamic_cast<scene2::TexturedNode *>(_rangedArm->getSceneNode().get());
+    scene2::TexturedNode *armChargeImage = dynamic_cast<scene2::TexturedNode *>(_rangedArmCharge->getSceneNode().get());
     scene2::TexturedNode *arm2Image = dynamic_cast<scene2::TexturedNode *>(_meleeArm->getSceneNode().get());
     scene2::TexturedNode *armDashImage = dynamic_cast<scene2::TexturedNode *>(_meleeArmDash->getSceneNode().get());
 
@@ -1302,6 +1306,10 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
     if (arm1Image != nullptr)
     {
         arm1Image->flipHorizontal(_player->getRangedAttackRight());
+    }
+    if (armChargeImage != nullptr)
+    {
+        armChargeImage->flipHorizontal(_player->getRangedAttackRight());
     }
     if (arm2Image != nullptr)
     {
@@ -1323,10 +1331,29 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
     scene2::SpriteNode *mSprite = dynamic_cast<scene2::SpriteNode *>(_meleeArm->getSceneNode().get());
     scene2::SpriteNode *mdSprite = dynamic_cast<scene2::SpriteNode *>(_meleeArmDash->getSceneNode().get());
     scene2::SpriteNode *rSprite = dynamic_cast<scene2::SpriteNode *>(_rangedArm->getSceneNode().get());
+    scene2::SpriteNode *rcSprite = dynamic_cast<scene2::SpriteNode *>(_rangedArmCharge->getSceneNode().get());
     _meleeArm->setAnimeTimer(_meleeArm->getAnimeTimer() + timestep);
     _meleeArmDash->setAnimeTimer(_meleeArmDash->getAnimeTimer() + timestep);
     _rangedArm->setAnimeTimer(_rangedArm->getAnimeTimer() + timestep);
+    _rangedArmCharge->setAnimeTimer(_rangedArmCharge->getAnimeTimer() + timestep);
 
+    if (_player->isChargeFiring())
+    {
+        _rangedArm->getSceneNode()->setVisible(false);
+        _rangedArmCharge->getSceneNode()->setVisible(true);
+    }
+    else
+    {
+        _rangedArm->getSceneNode()->setVisible(true);
+        _rangedArmCharge->getSceneNode()->setVisible(false);;
+        if (_player->isFacingRight()) {
+            rcSprite->setFrame(7);
+        } else {
+            rcSprite->setFrame(0);
+        }
+        
+    }
+    
     // Ranged Arm
     if (_player->isStunned())
     {
@@ -1339,6 +1366,54 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
         _rangedArm->setAttackAngle(0);
         _rangedArm->setLastType(Glow::MeleeState::cool);
         _rangedArm->setAnimeTimer(0);
+    }
+    else if (_player->isChargeFiring()) {
+        if (_rangedArmCharge->getAnimeTimer() > 0.049f)
+        {
+            if ((rcSprite->getFrame() == 7 && !_player->getRangedAttackRight()) ||
+                (rcSprite->getFrame() == 0 && _player->getRangedAttackRight()))
+            {
+                // Attack is finished
+                if (_player->getRangedAttackRight())
+                {
+                    rcSprite->setFrame(7);
+                    rcSprite->setAnchor(0.5, 0.5);
+                    _rangedArmCharge->setAttackAngle(0);
+                }
+                else
+                {
+                    rcSprite->setFrame(0);
+                    rcSprite->setAnchor(0.5, 0.5);
+                    _rangedArmCharge->setAttackAngle(0);
+                }
+                _rangedArmCharge->setLastType(Glow::MeleeState::cool);
+                _rangedArmCharge->setAnimeTimer(0);
+                armChargeImage->flipHorizontal(_player->isFacingRight());
+                _player->setRangedAttackRight(_player->isFacingRight());
+                _player->setIsChargeFiring(false);
+            }
+            else
+            {
+                if (_player->getRangedAttackRight())
+                {
+                    rcSprite->setAnchor(0.8, 0.45);
+                    if (rcSprite->getFrame() == 0)
+                    {
+                        rcSprite->setFrame(8);
+                    }
+                    else
+                    {
+                        rcSprite->setFrame(rcSprite->getFrame() - 1);
+                    }
+                }
+                else
+                {
+                    rcSprite->setAnchor(0.2, 0.45);
+                    rcSprite->setFrame((rcSprite->getFrame() + 1) % 8);
+                }
+                _rangedArmCharge->setAnimeTimer(0);
+            }
+        }
     }
     else if (_rangedArm->getLastType() == Glow::MeleeState::cool)
     {
@@ -1385,7 +1460,7 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
     }
     else if (_rangedArm->getLastType() == Glow::MeleeState::first)
     {
-        if (_rangedArm->getAnimeTimer() > 0.04f)
+        if (_rangedArm->getAnimeTimer() > 0.049f)
         {
             if ((rSprite->getFrame() == 4 && !_player->getRangedAttackRight()) ||
                 (rSprite->getFrame() == 0 && _player->getRangedAttackRight()))
@@ -1758,7 +1833,10 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
     }
 
     float offsetArm = -2.6f;
-    if (_rangedArm->getLastType() != Glow::MeleeState::cool)
+    if (_player->isChargeFiring()) {
+        offsetArm = -3.1f;
+    }
+    else if (_rangedArm->getLastType() != Glow::MeleeState::cool)
     {
         offsetArm = -3.0f;
     }
@@ -1767,8 +1845,13 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
     {
         offsetArm = -1 * offsetArm;
     }
-
-    if ((!_player->getRangedAttackRight() && rSprite->getFrame() != 0 && _rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270) ||
+    
+    if ((_player->isChargeFiring() && !_player->getRangedAttackRight() && _rangedArmCharge->getAttackAngle() > 90 && _rangedArmCharge->getAttackAngle() < 270) ||
+        (_player->isChargeFiring() && _player->getRangedAttackRight() && (_rangedArmCharge->getAttackAngle() > 90 && _rangedArmCharge->getAttackAngle() < 270)))
+    {
+        offsetArm = -1 * offsetArm;
+    }
+    else if ((!_player->getRangedAttackRight() && rSprite->getFrame() != 0 && _rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270) ||
         (_player->getRangedAttackRight() && rSprite->getFrame() != 4 && (_rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270)))
     {
         offsetArm = -1 * offsetArm;
@@ -1787,31 +1870,67 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
         upDownY1 = -1 * spacing + upDownY1;
     }
 
-    if (_player->getRangedAttackRight() && (rSprite->getFrame() != 4 && rSprite->getFrame() != 6 && rSprite->getFrame() != 7 && rSprite->getFrame() != 8))
-    {
-        if (_rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270)
+    if (_player->isChargeFiring()) {
+        float upOffset = 0.3f;
+        if (_player->getRangedAttackRight())
         {
-            _rangedArm->setPosition(_player->getPosition().x + offsetArm - 2, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
+            if (_rangedArmCharge->getAttackAngle() > 90 && _rangedArmCharge->getAttackAngle() < 270)
+            {
+                _rangedArm->setPosition(_player->getPosition().x + offsetArm - 2, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
+                _rangedArmCharge->setPosition(_player->getPosition().x + offsetArm - 2, _player->getPosition().y + (upDownY1 / spacing / 3) + upOffset);
+            }
+            else
+            {
+                _rangedArm->setPosition(_player->getPosition().x + offsetArm + 2, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
+                _rangedArmCharge->setPosition(_player->getPosition().x + offsetArm + 2, _player->getPosition().y + (upDownY1 / spacing / 3) + upOffset);
+            }
         }
         else
         {
-            _rangedArm->setPosition(_player->getPosition().x + offsetArm + 2, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
+            if (_rangedArmCharge->getAttackAngle() > 90 && _rangedArmCharge->getAttackAngle() < 270)
+            {
+                _rangedArm->setPosition(_player->getPosition().x + offsetArm + 2, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
+                _rangedArmCharge->setPosition(_player->getPosition().x + offsetArm + 2, _player->getPosition().y + (upDownY1 / spacing / 3) + upOffset);
+            }
+            else
+            {
+                _rangedArm->setPosition(_player->getPosition().x + offsetArm - 2, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
+                _rangedArmCharge->setPosition(_player->getPosition().x + offsetArm - 2, _player->getPosition().y + (upDownY1 / spacing / 3) + upOffset);
+            }
         }
     }
-    else if (!_player->getRangedAttackRight() && (rSprite->getFrame() != 0 && rSprite->getFrame() != 6 && rSprite->getFrame() != 7 && rSprite->getFrame() != 8))
-    {
-        if (_rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270)
+    else {
+        if (_player->getRangedAttackRight() && (rSprite->getFrame() != 4 && rSprite->getFrame() != 6 && rSprite->getFrame() != 7 && rSprite->getFrame() != 8))
         {
-            _rangedArm->setPosition(_player->getPosition().x + offsetArm + 2, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
+            if (_rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270)
+            {
+                _rangedArm->setPosition(_player->getPosition().x + offsetArm - 2, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
+                _rangedArmCharge->setPosition(_player->getPosition().x + offsetArm - 2, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
+            }
+            else
+            {
+                _rangedArm->setPosition(_player->getPosition().x + offsetArm + 2, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
+                _rangedArmCharge->setPosition(_player->getPosition().x + offsetArm + 2, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
+            }
+        }
+        else if (!_player->getRangedAttackRight() && (rSprite->getFrame() != 0 && rSprite->getFrame() != 6 && rSprite->getFrame() != 7 && rSprite->getFrame() != 8))
+        {
+            if (_rangedArm->getAttackAngle() > 90 && _rangedArm->getAttackAngle() < 270)
+            {
+                _rangedArm->setPosition(_player->getPosition().x + offsetArm + 2, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
+                _rangedArmCharge->setPosition(_player->getPosition().x + offsetArm + 2, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
+            }
+            else
+            {
+                _rangedArm->setPosition(_player->getPosition().x + offsetArm - 2, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
+                _rangedArmCharge->setPosition(_player->getPosition().x + offsetArm - 2, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
+            }
         }
         else
         {
-            _rangedArm->setPosition(_player->getPosition().x + offsetArm - 2, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
+            _rangedArm->setPosition(_player->getPosition().x + offsetArm, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
+            _rangedArmCharge->setPosition(_player->getPosition().x + offsetArm, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
         }
-    }
-    else
-    {
-        _rangedArm->setPosition(_player->getPosition().x + offsetArm, _player->getPosition().y + (upDownY1 / spacing / 3) + 0.2f);
     }
 
     ////////////////////////////////////////
@@ -2486,6 +2605,9 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
     if (!_player->isStunned())
     {
         _attacks->attackLeft(Vec2(playerPos.x, playerPos.y), left, _swipes.getLeftAngle(), _player->isGrounded(), _timer, _sound);
+        if (left == SwipeController::chargedLeft || left == SwipeController::chargedRight || left == SwipeController::chargedUp || left == SwipeController::chargedDown) {
+            _player->setIsChargeFiring(true);
+        }
         _attacks->attackRight(Vec2(playerPos.x, playerPos.y), right, _swipes.getRightAngle(), _player->isGrounded(), _player->isFacingRight(), _timer, _sound);
         if (right == SwipeController::chargedRight)
         {
@@ -2726,19 +2848,19 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
             dynamic_pointer_cast<scene2::SpriteNode>(attackSprite)->setFrame(0);
             attackSprite->setAngle((*it)->getAngle() * M_PI / 180);
             attackSprite->setPriority(3);
-            _rangedArm->setLastType(Glow::MeleeState::first);
+            _rangedArmCharge->setLastType(Glow::MeleeState::first);
             _player->setRangedAttackRight(_player->isFacingRight());
             if (left == SwipeController::downAttack)
             {
-                _rangedArm->setAttackAngle(270);
+                _rangedArmCharge->setAttackAngle(270);
             }
             else
             {
-                _rangedArm->setAttackAngle((*it)->getAngle());
+                _rangedArmCharge->setAttackAngle((*it)->getAngle());
             }
             if (_player->isFacingRight())
             {
-                _rangedArm->setAttackAngle(fmod(_rangedArm->getAttackAngle() + 180, 360));
+                _rangedArmCharge->setAttackAngle(fmod(_rangedArmCharge->getAttackAngle() + 180, 360));
             }
         }
         else if (attackType == AttackController::Type::p_exp)
@@ -3466,7 +3588,7 @@ void GameScene::createEnemy(string enemyName, Vec2 enemyPos, int spawnerInd) {
     {
         std::shared_ptr<Texture> gluttonHitboxImage = _assets->get<Texture>("glutton");
         std::shared_ptr<Texture> gluttonImage = _assets->get<Texture>("glutton_ani");
-        std::shared_ptr<Glutton> glutton = Glutton::alloc(enemyPos + Vec2(0, 2), Vec2(gluttonImage->getSize().width / 7.0f, gluttonHitboxImage->getSize().height / 2.0f), gluttonHitboxImage->getSize() / _scale * 0.17f, _scale);
+        std::shared_ptr<Glutton> glutton = Glutton::alloc(enemyPos + Vec2(0, 2), Vec2(gluttonImage->getSize().width / 7.0f, gluttonHitboxImage->getSize().height / 2.0f), gluttonHitboxImage->getSize() / _scale / 5, _scale);
         std::shared_ptr<scene2::SpriteNode> gluttonSprite = scene2::SpriteNode::alloc(gluttonImage, 4, 7);
         // fix the anchor slightly for glutton only
         gluttonSprite->setAnchor(.5, .4);
@@ -3747,22 +3869,38 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
         pos.x = _platforms_attr[i][0];
         pos.y = _platforms_attr[i][1];
         float width = _platforms_attr[i][2];
+        float yAnchor = 0.9;
         if (!_biome.compare("shroom"))
         {
-            if (width < DEFAULT_WIDTH / 3)
+            if (width < DEFAULT_WIDTH / 6)
             {
-                // use small platform
-                platformImage = _assets->get<Texture>("shroom_small_platform");
+                // use smallest platform
+                platformImage = _assets->get<Texture>("shroom_1_platform");
             }
-            else if (width < (DEFAULT_WIDTH / 3) * 2)
+            else if (width < (DEFAULT_WIDTH / 6) * 2)
             {
-                // use medium platform
-                platformImage = _assets->get<Texture>("shroom_medium_platform");
+                platformImage = _assets->get<Texture>("shroom_2_platform");
+                yAnchor = 0.94;
+            }
+            else if (width < (DEFAULT_WIDTH / 6) * 3)
+            {
+                platformImage = _assets->get<Texture>("shroom_3_platform");
+            }
+            else if (width < (DEFAULT_WIDTH / 6) * 4)
+            {
+                yAnchor = 0.97;
+                platformImage = _assets->get<Texture>("shroom_4_platform");
+            }
+            else if (width < (DEFAULT_WIDTH / 6) * 5)
+            {
+                yAnchor = 0.97;
+                platformImage = _assets->get<Texture>("shroom_5_platform");
             }
             else
             {
-                // use large platform
-                platformImage = _assets->get<Texture>("shroom_large_platform");
+                // use largest platform
+                yAnchor = 0.97;
+                platformImage = _assets->get<Texture>("shroom_6_platform");
             }
         }
         else if (!_biome.compare("forest"))
@@ -3770,14 +3908,17 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
             if (width < DEFAULT_WIDTH / 3)
             {
                 platformImage = _assets->get<Texture>("forest_small_platform");
+                yAnchor = 0.9;
             }
             else if (width < (DEFAULT_WIDTH / 3) * 2)
             {
                 platformImage = _assets->get<Texture>("forest_medium_platform");
+                yAnchor = 0.9;
             }
             else
             {
                 platformImage = _assets->get<Texture>("forest_large_platform");
+                yAnchor = 0.93;
             }
         }
         else
@@ -3785,21 +3926,24 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
             if (width < DEFAULT_WIDTH / 3)
             {
                 platformImage = _assets->get<Texture>("cave_small_platform");
+                yAnchor = 0.98;
             }
             else if (width < (DEFAULT_WIDTH / 3) * 2)
             {
                 platformImage = _assets->get<Texture>("cave_medium_platform");
+                yAnchor = 0.98;
             }
             else
             {
                 platformImage = _assets->get<Texture>("cave_large_platform");
+                yAnchor = 0.99;
             }
         }
         platformSprite = scene2::PolygonNode::allocWithTexture(platformImage);
         float desiredWidth = width * _scale;
         float scale = desiredWidth / platformSprite->getWidth();
         platformSprite->setScale(scale);
-        platformSprite->setAnchor(0.5, 1);
+        platformSprite->setAnchor(0.5, yAnchor);
         platform = PlatformModel::alloc(pos, width, PLATFORM_HEIGHT, _scale);
         _platforms.push_back(platform);
         _platformNodes.push_back(platformSprite);
@@ -3893,6 +4037,21 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     rangeArmSprite->setPriority(5);
     addObstacle(_rangedArm, rangeArmSprite, true);
 
+    // Ranged Arm for the charge shot for player
+    std::shared_ptr<Texture> rangeChargeHitboxImage = _assets->get<Texture>(PLAYER_RANGE_TEXTURE);
+    std::shared_ptr<Texture> rangeChargeImage = _assets->get<Texture>("player_range_arm_charge");
+    _rangedArmCharge = Glow::alloc(rangeArmPos, rangeChargeHitboxImage->getSize() / _scale, _scale);
+    _rangedArmCharge->setAttackAngle(0);
+    _rangedArmCharge->setGlowTimer(0);
+    _rangedArmCharge->setAnimeTimer(0);
+    _rangedArmCharge->setLastType(Glow::MeleeState::cool);
+    std::shared_ptr<scene2::SpriteNode> rangeChargeSprite = scene2::SpriteNode::alloc(rangeChargeImage, 1, 8);
+    _rangedArmCharge->setSceneNode(rangeChargeSprite);
+    rangeChargeSprite->setFrame(0);
+    rangeChargeSprite->setScale(0.22);
+    rangeChargeSprite->setPriority(5);
+    addObstacle(_rangedArmCharge, rangeChargeSprite, true);
+    
     // Melee Arm for the player
     Vec2 meleeArmPos = PLAYER_POS;
     std::shared_ptr<Texture> meleeHitboxImage = _assets->get<Texture>(PLAYER_MELEE_TEXTURE);
@@ -3926,6 +4085,113 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
 
     // We can only activate a button AFTER it is added to a scene
     _pauseButton->activate();
+}
+
+/**
+ * Resets the status of the game so that we can play again.
+ */
+void GameScene::reset()
+{
+    _input.reset();
+    _swipes.reset();
+    _tilt.reset();
+    _collider.reset();
+    if (_worldnode)
+    {
+        for (std::shared_ptr<scene2::SceneNode> s : _worldnode->getChildren())
+        {
+            if (s->getTag() == 100)
+            {
+                s->dispose();
+            }
+        };
+    }
+
+    auto ac_it = _attacks->_current.begin();
+    while (ac_it != _attacks->_current.end())
+    {
+        // int log1 = _world->getObstacles().size();
+        cugl::physics2::Obstacle *obj = dynamic_cast<cugl::physics2::Obstacle *>(&**ac_it);
+        _world->removeObstacle(obj);
+        _worldnode2->removeChild(obj->_node);
+
+        // int log2 = _world->getObstacles().size();
+        ac_it = _attacks->_current.erase(ac_it);
+    }
+    auto ap_it = _attacks->_current.begin();
+    while (ap_it != _attacks->_current.end())
+    {
+        // int log1 = _world->getObstacles().size();
+        cugl::physics2::Obstacle *obj = dynamic_cast<cugl::physics2::Obstacle *>(&**ap_it);
+        _world->removeObstacle(obj);
+        _worldnode2->removeChild(obj->_node);
+
+        // int log2 = _world->getObstacles().size();
+        ac_it = _attacks->_current.erase(ap_it);
+    }
+    //_attacks->reset();  Shouldn't be needed now
+    // Does nothing right now
+    _ai.reset();
+
+    // Reset player position & health & other member fields
+    Vec2 playerPos = PLAYER_POS;
+    _player->reset(playerPos);
+    _player->getSceneNode()->setVisible(true);
+    _player->getSceneNode()->setColor(Color4::WHITE);
+    _rangedArm->getSceneNode()->setVisible(true);
+    _meleeArm->getSceneNode()->setVisible(true);
+    scene2::SpriteNode *sprite = dynamic_cast<scene2::SpriteNode *>(_player->getSceneNode().get());
+    sprite->setFrame(12);
+    _prevFrame = 12;
+    _dashTime = 0;
+    _dashXVel = 0;
+    _dashYVel = 0;
+    _cancelDash = false;
+    // Remove all enemies
+    auto eit = _enemies.begin();
+    while (eit != _enemies.end())
+    {
+        cugl::physics2::Obstacle *obj = dynamic_cast<cugl::physics2::Obstacle *>(&**eit);
+        cugl::physics2::Obstacle *glowObj = dynamic_cast<cugl::physics2::Obstacle *>(&*(*eit)->getGlow());
+        _world->removeObstacle(glowObj);
+        _worldnode2->removeChild(glowObj->_node);
+        _world->removeObstacle(obj);
+        _worldnode2->removeChild(obj->_node);
+
+        eit = _enemies.erase(eit);
+    }
+
+    _spawners.clear();
+    // Reset wave spawning
+    _timer = 0.0f;
+    _nextWaveNum = 0;
+    _spawnParticlesDone = false;
+    auto spawnTime = _constants->get("spawn_times");
+    for (int i = 0; i < _numWaves; i++)
+    {
+        _spawn_times[i] = spawnTime->get(i)->asFloat();
+    }
+    _spawnerCount = 0;
+    _spawner_ind = -1;
+    int index = 0;
+    for (auto it = _spawner_enemy_types.begin(); it != _spawner_enemy_types.end(); ++it)
+    {
+        if (_living_spawners[index])
+        {
+            _living_spawners[index] = 0;
+        }
+        for (auto i : (*it))
+        {
+            _spawner_enemy_types[index][(i.first)].timer = 10.0f;
+            _spawner_enemy_types[index][(i.first)].current_count = 0;
+        }
+        index++;
+    }
+    _tutorial = _initTutorial;
+    _tutorialInd = 0;
+    _tutorialTimer = TUTORIAL_INIT_TIMER;
+    _tutorialActionDone = false;
+    _endText = nullptr;
 }
 
 /**

@@ -110,6 +110,9 @@ protected:
     /** if player is dash attacking*/
     bool _isDashing;
     
+    /** if player is firing charge range*/
+    bool _isChargeFiring;
+    
     /** Angle the player is dashing at in degrees */
     float _dashAngle;
     
@@ -287,6 +290,12 @@ public:
 
     /** True if the player is dashing */
     bool isDashing() { return _isDashing; }
+    
+    /** Sets whether the player is dashing */
+    void setIsChargeFiring(bool firing) { _isChargeFiring = firing; }
+
+    /** True if the player is dashing */
+    bool isChargeFiring() { return _isChargeFiring; }
     
     /** True if the player is dashing */
     float getDashAngle() { return _dashAngle; }
