@@ -135,6 +135,8 @@ public:
 
   void setSoundController(std::shared_ptr<SoundController> sound) {
 	  _sound = sound;
+	  _sound->set_music_volume(_music/10.0f);
+	  _sound->set_sfx_volume(_sfx/10.0f);
   };
 
 #pragma mark -

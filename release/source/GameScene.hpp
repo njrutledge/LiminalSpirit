@@ -273,6 +273,8 @@ protected:
 
     std::shared_ptr<scene2::Button> _returnButton;
 
+    std::shared_ptr<scene2::Button> _restartButton;
+
     std::shared_ptr<scene2::Button> _homeButton;
 
     std::shared_ptr<scene2::Button> _optionButton;

@@ -373,7 +373,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
                 _pause = false;
             } });
-    _returnButton->setScale(.4 * buttonScale);
+    _returnButton->setScale(.3 * buttonScale);
 
     _homeButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("pauseScene_home"));
     _homeButton->clearListeners();
@@ -383,7 +383,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
                 _back = true;
             } });
-    _homeButton->setScale(.4 * buttonScale);
+    _homeButton->setScale(.3 * buttonScale);
 
     _optionButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("pauseScene_options"));
     _optionButton->clearListeners();
@@ -393,7 +393,18 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
                 _options = true;
             } });
-    _optionButton->setScale(.4 * buttonScale);
+    _optionButton->setScale(.3 * buttonScale);
+
+
+    _restartButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("pauseScene_options"));
+    _restartButton->clearListeners();
+    _restartButton->addListener([=](const std::string& name, bool down)
+        {
+            // Only quit when the button is released
+            if (!down) {
+                _options = true;
+            } });
+    _optionButton->setScale(.3 * buttonScale);
 
     _optionScene = _assets->get<scene2::SceneNode>("optionScene");
     _optionScene->setContentSize(dimen);
@@ -654,6 +665,7 @@ void GameScene::addMusicButtons(float buttonScale) {
                 if (!down) {
                     _music = i;
                     _sound->set_music_volume(i / 10.0f);
+                    this->save();
                 } });
         _musicButtons.push_back(button);
 
@@ -675,7 +687,7 @@ void GameScene::addSFXButtons(float buttonScale) {
                 if (!down) {
                     _sfx = i;
                     _sound->set_sfx_volume(i / 10.0f);
-
+                    this->save();
                 } });
         _sfxButtons.push_back(button);
 
@@ -3024,7 +3036,7 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
                 // this is mirrors
                 attackSprite->setScale(.85f * (*it)->getRadius());
                 attackSprite->setAngle((*it)->getAngle());
-                attackSprite->setColor(Color4::BLUE);
+                attackSprite->setColor(Color4::GRAY);
                 attackSprite->setPriority(2.1);
             }
             else if ((*it)->getAttackID() == PHANTOM_ATTACK)
@@ -4342,7 +4354,7 @@ void GameScene::addObstacle(const std::shared_ptr<cugl::physics2::Obstacle> &obj
 /** Saves progress */
 void GameScene::save() {
     std::shared_ptr<TextWriter> writer = TextWriter::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
-    writer->write("{\"progress\":" + _progress->toString() + "settings\":{\"swap\": " + to_string(_swap) +", \"music\": " + to_string(_music) +", \"sfx\": " + to_string(_sfx) +"}}");
+    writer->write("{\"progress\":" + _progress->toString() + ",\"settings\":{\"swap\": " + to_string(_swap) +", \"music\": " + to_string(_music) +", \"sfx\": " + to_string(_sfx) +"}}");
     writer->close();
 }
 

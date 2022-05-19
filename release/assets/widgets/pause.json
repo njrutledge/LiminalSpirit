@@ -33,8 +33,34 @@
         "layout": {
           "x_anchor": "center",
           "y_anchor": "middle",
+          "x_offset": 0.10,
+          "y_offset": 0.1,
+          "absolute": false
+        }
+      },
+      "restart": {
+        "type": "Button",
+        "data": {
+          "upnode": "up",
+          "anchor": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.4
+        },
+        "children": {
+          "up": {
+            "type": "Image",
+            "data": {
+              "texture": "pause_restart"
+            }
+          }
+        },
+        "layout": {
+          "x_anchor": "center",
+          "y_anchor": "middle",
           "x_offset": -0.1,
-          "y_offset": -0.2,
+          "y_offset": -0.1,
           "absolute": false
         }
       },
@@ -59,8 +85,8 @@
         "layout": {
           "x_anchor": "center",
           "y_anchor": "middle",
-          "x_offset": 0.00,
-          "y_offset": 0.28,
+          "x_offset": 0.35,
+          "y_offset": 0.0,
           "absolute": false
         }
       },
@@ -85,8 +111,8 @@
         "layout": {
           "x_anchor": "center",
           "y_anchor": "middle",
-          "x_offset": 0.2,
-          "y_offset": -0.1,
+          "x_offset": -0.35,
+          "y_offset": 0.0,
           "absolute": false
         }
       }
