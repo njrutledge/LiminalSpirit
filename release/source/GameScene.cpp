@@ -3954,12 +3954,14 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
         addObstacle(platform, platformSprite, true);
     }
 
+    float xBackgroundAnchor = (leftWorldCoors / totalWorldCoors);
+    CULog("%f", xBackgroundAnchor);
     if (!_biome.compare("cave")) {
         Vec2 test_pos = Vec2(0, 0);
         std::shared_ptr<Texture> backgroundImage = _assets->get<Texture>("cave_background");
         std::shared_ptr<Glow> testBackground = Glow::alloc(test_pos, backgroundImage->getSize() / _scale, _scale);
         std::shared_ptr<scene2::PolygonNode> bSprite = scene2::PolygonNode::allocWithTexture(backgroundImage);
-        bSprite->setAnchor(0, 0);
+        bSprite->setAnchor(xBackgroundAnchor, 0);
         testBackground->setSceneNode(bSprite);
         bSprite->setPosition(testBackground->getPosition() * _scale);
         bSprite->setScale(0.65);
@@ -3971,7 +3973,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
         std::shared_ptr<Texture> backgroundImage = _assets->get<Texture>("shroom_background");
         std::shared_ptr<Glow> testBackground = Glow::alloc(test_pos, backgroundImage->getSize() / _scale, _scale);
         std::shared_ptr<scene2::PolygonNode> bSprite = scene2::PolygonNode::allocWithTexture(backgroundImage);
-        bSprite->setAnchor(0, 0);
+        bSprite->setAnchor(xBackgroundAnchor, 0);
         testBackground->setSceneNode(bSprite);
         bSprite->setPosition(testBackground->getPosition() * _scale);
         bSprite->setScale(0.4);
@@ -3983,7 +3985,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
         std::shared_ptr<Texture> backgroundImage = _assets->get<Texture>("forest_background");
         std::shared_ptr<Glow> testBackground = Glow::alloc(test_pos, backgroundImage->getSize() / _scale, _scale);
         std::shared_ptr<scene2::PolygonNode> bSprite = scene2::PolygonNode::allocWithTexture(backgroundImage);
-        bSprite->setAnchor(0, 0);
+        bSprite->setAnchor(xBackgroundAnchor, 0);
         testBackground->setSceneNode(bSprite);
         bSprite->setPosition(testBackground->getPosition() * _scale);
         bSprite->setScale(0.5);
