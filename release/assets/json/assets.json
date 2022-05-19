@@ -1185,7 +1185,7 @@
         "deathOrg": {
             "type": "sample",
             "file": "sounds/enemy/Organic_Death.wav",
-            "volume": 0.5
+            "volume": 0.1
         },
         "lostAttack": {
             "type": "sample",
