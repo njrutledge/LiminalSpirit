@@ -2263,7 +2263,7 @@ void GameScene::updateEnemies(float timestep)
                     else {
                         sprite->setFrame(27);
                     }
-                    (*it)->setAttackAnimationTimer(0.f);
+                    (*it)->setAttackAnimationTimer(-0.4f);
                 }
                 else if ((*it)->getAttackAnimationTimer() > 1.f) {
                     if (!sprite->isFlipHorizontal()) {
@@ -2271,10 +2271,10 @@ void GameScene::updateEnemies(float timestep)
                             sprite->setFrame(((sprite->getFrame() + 1)% 7) + 21);
                         }
                         if (sprite->getFrame() == 22) {
-                            (*it)->setAttackAnimationTimer(0.4f);
+                            (*it)->setAttackAnimationTimer(0.6f);
                         }
                         else {
-                            (*it)->setAttackAnimationTimer(0.8f);
+                            (*it)->setAttackAnimationTimer(0.9f);
                         }
                     }
                     else {
@@ -2282,10 +2282,10 @@ void GameScene::updateEnemies(float timestep)
                             sprite->setFrame(((sprite->getFrame() - 1) % 7) + 21);
                         }
                         if (sprite->getFrame() == 26) {
-                            (*it)->setAttackAnimationTimer(0.4f);
+                            (*it)->setAttackAnimationTimer(0.6f);
                         }
                         else {
-                            (*it)->setAttackAnimationTimer(0.8f);
+                            (*it)->setAttackAnimationTimer(0.9f);
                         }
                     }
                 }
@@ -2307,7 +2307,7 @@ void GameScene::updateEnemies(float timestep)
                         sprite->setFrame(sprite->getFrame() - 1);
                     }
                     (*it)->setIdleAnimationTimer(0);
-                    (*it)->setAttackAnimationTimer(0.8);
+                    (*it)->setAttackAnimationTimer(0.9);
                 }
                 if ((*it)->getX() > _player->getX() && !(sprite->getFrame() > 21)) {
                     sprite->flipHorizontal(false);
