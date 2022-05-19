@@ -3399,32 +3399,23 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
 
     if (_swipes.hasLeftChargedAttack())
     {
-        std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("charged"), Vec2(0, 0));
-        std::shared_ptr<Texture> melee_impact = _assets->get<Texture>("melee_impact");
         int flip = 1;
         if (_player->isFacingRight())
         {
             flip = -1;
         }
-        std::shared_ptr<ParticleNode> charged = ParticleNode::alloc((_rangedArm->getPosition() - Vec2(1.25 * flip, 0)) * _scale, melee_impact, pool);
-        charged->setScale(0.025f);
-        charged->setColor(Color4::BLUE);
-        _worldnode->addChildWithTag(charged, 100);
+        createParticles(_rangeParticleList, (_rangedArm->getPosition() - Vec2(1.25 * flip, 0)), "charged", Color4::BLUE, Vec2(0, 0), 0.05f, false, Vec2(), 7);
     }
 
     if (_swipes.hasRightChargedAttack())
     {
-        std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("charged"), Vec2(0, 0));
-        std::shared_ptr<Texture> melee_impact = _assets->get<Texture>("melee_impact");
         int flip = 1;
         if (_player->isFacingRight())
         {
             flip = -1;
         }
-        std::shared_ptr<ParticleNode> charged = ParticleNode::alloc((_meleeArm->getPosition() - Vec2(-1.5 * flip, 0)) * _scale, melee_impact, pool);
-        charged->setScale(0.025f);
-        charged->setColor(Color4::RED);
-        _worldnode->addChildWithTag(charged, 100);
+
+        createParticles(_meleeParticleList, (_meleeArm->getPosition() - Vec2(-1.5 * flip, 0)), "charged", Color4::RED, Vec2(0, 0), 0.05f, false, Vec2(), 7);
     }
 
     Scene2::render(batch);
