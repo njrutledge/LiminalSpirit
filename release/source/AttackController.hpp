@@ -276,8 +276,8 @@ public:
                 p.x = 0.1f + radius + off;
             }
 
-            if (p.y + radius > _worldHeight && (s == up || s == northeast || s == northwest)) {
-                p.y = _worldHeight - 0.1f - radius;
+            if (p.y + radius + off > _worldHeight && (s == up || s == northeast || s == northwest)) {
+                p.y = _worldHeight - 0.1f - radius - off;
             } else if (p.y - radius < 0.0f && (s == down || s == southeast || s == southwest)) {
                 p.y = 0.1f + radius;
             }
