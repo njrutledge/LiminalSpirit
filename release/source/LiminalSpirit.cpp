@@ -88,6 +88,7 @@ void LiminalSpirit::onStartup()
 //      _biome = 3;
 //      _highest_level = 10;
 //      _unlock_count = 5;
+        // leave below uncommented
         _swap = settings->has("swap") ? settings->get("swap")->asInt() : 0;
         _music = settings->has("music") ? settings->get("music")->asInt() : 10;
         _sfx = settings->has("sfx") ? settings->get("sfx")->asInt() : 10;

@@ -635,6 +635,51 @@ void GameScene::addOptionsButtons(float buttonScale) {
                 this->save();
             } });
     _swapHandsButton->setScale(.4 * buttonScale);
+    addMusicButtons(buttonScale);
+    addSFXButtons(buttonScale);
+}
+
+void GameScene::addMusicButtons(float buttonScale) {
+    _musicButtons.clear();
+    for (int i = 1; i <= 10; i++) {
+        std::shared_ptr<scene2::Button> button = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_musicButton" + std::to_string(i)));
+        button->setScale(.4 * buttonScale);
+
+        // Create a callback function for the button
+        button->setName("music" + i);
+        button->clearListeners();
+        button->addListener([=](const std::string& name, bool down)
+            {
+                // Only quit when the button is released
+                if (!down) {
+                    _music = i;
+                    _sound->set_music_volume(i / 10.0f);
+                } });
+        _musicButtons.push_back(button);
+
+    }
+}
+
+void GameScene::addSFXButtons(float buttonScale) {
+    _sfxButtons.clear();
+    for (int i = 1; i <= 10; i++) {
+        std::shared_ptr<scene2::Button> button = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_sfxButton" + std::to_string(i)));
+        button->setScale(.4 * buttonScale);
+
+        // Create a callback function for the button
+        button->setName("sfx" + i);
+        button->clearListeners();
+        button->addListener([=](const std::string& name, bool down)
+            {
+                // Only quit when the button is released
+                if (!down) {
+                    _sfx = i;
+                    _sound->set_sfx_volume(i / 10.0f);
+
+                } });
+        _sfxButtons.push_back(button);
+
+    }
 }
 
 /**
@@ -742,6 +787,8 @@ void GameScene::dispose()
         scene->removeChildByName("HUD");
         scene->removeChildByName("pause");
     }
+    _musicButtons.clear();
+    _sfxButtons.clear();
     removeAllChildren();
 }
 
@@ -773,6 +820,30 @@ void GameScene::update(float timestep, int unlockCount)
         _optionButton->deactivate();
         _pauseButton->setVisible(false);
         _pauseButton->deactivate();
+        int counter = 1;
+        for (auto it = _musicButtons.begin(); it != _musicButtons.end(); ++it) {
+            (*it)->activate();
+            (*it)->setVisible(true);
+            if (counter <= _music) {
+                (*it)->setColor(Color4(255, 255, 255));
+            }
+            else {
+                (*it)->setColor(Color4(150, 150, 150));
+            }
+            counter++;
+        }
+        counter = 1;
+        for (auto it = _sfxButtons.begin(); it != _sfxButtons.end(); ++it) {
+            (*it)->activate();
+            (*it)->setVisible(true);
+            if (counter <= _sfx) {
+                (*it)->setColor(Color4(255, 255, 255));
+            }
+            else {
+                (*it)->setColor(Color4(150, 150, 150));
+            }
+            counter++;
+        }
         if (!_swap) {
             _leftText->setText("range");
             _rightText->setText("melee");
@@ -781,6 +852,33 @@ void GameScene::update(float timestep, int unlockCount)
             _leftText->setText("melee");
             _rightText->setText("range");
         }
+        std::vector<bool> e = std::vector<bool>(5);
+
+        for (auto it = _enemies.begin(); it != _enemies.end(); ++it)
+        {
+            string n = (*it)->getName();
+            if (n == "Glutton")
+            {
+                e[0] = true;
+            }
+            else if (n == "Phantom")
+            {
+                e[1] = true;
+            }
+            else if (n == "Mirror")
+            {
+                e[2] = true;
+            }
+            else if (n == "Spawner")
+            {
+                e[3] = true;
+            }
+            else if (n == "Seeker")
+            {
+                e[4] = true;
+            }
+        }
+        _sound->play_level_music(_biome, e);
         return;
     }
     else
@@ -789,6 +887,12 @@ void GameScene::update(float timestep, int unlockCount)
         _pauseScene->setVisible(false);
         _optionReturnButton->deactivate();
         _swapHandsButton->deactivate();
+        for (auto it = _musicButtons.begin(); it != _musicButtons.end(); ++it) {
+            (*it)->deactivate();
+        }
+        for (auto it = _sfxButtons.begin(); it != _sfxButtons.end(); ++it) {
+            (*it)->deactivate();
+        }
     }
 
     if (_pause)
@@ -3869,22 +3973,38 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
         pos.x = _platforms_attr[i][0];
         pos.y = _platforms_attr[i][1];
         float width = _platforms_attr[i][2];
+        float yAnchor = 0.9;
         if (!_biome.compare("shroom"))
         {
-            if (width < DEFAULT_WIDTH / 3)
+            if (width < DEFAULT_WIDTH / 6)
             {
-                // use small platform
-                platformImage = _assets->get<Texture>("shroom_small_platform");
+                // use smallest platform
+                platformImage = _assets->get<Texture>("shroom_1_platform");
             }
-            else if (width < (DEFAULT_WIDTH / 3) * 2)
+            else if (width < (DEFAULT_WIDTH / 6) * 2)
             {
-                // use medium platform
-                platformImage = _assets->get<Texture>("shroom_medium_platform");
+                platformImage = _assets->get<Texture>("shroom_2_platform");
+                yAnchor = 0.94;
+            }
+            else if (width < (DEFAULT_WIDTH / 6) * 3)
+            {
+                platformImage = _assets->get<Texture>("shroom_3_platform");
+            }
+            else if (width < (DEFAULT_WIDTH / 6) * 4)
+            {
+                yAnchor = 0.97;
+                platformImage = _assets->get<Texture>("shroom_4_platform");
+            }
+            else if (width < (DEFAULT_WIDTH / 6) * 5)
+            {
+                yAnchor = 0.97;
+                platformImage = _assets->get<Texture>("shroom_5_platform");
             }
             else
             {
-                // use large platform
-                platformImage = _assets->get<Texture>("shroom_large_platform");
+                // use largest platform
+                yAnchor = 0.97;
+                platformImage = _assets->get<Texture>("shroom_6_platform");
             }
         }
         else if (!_biome.compare("forest"))
@@ -3892,14 +4012,17 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
             if (width < DEFAULT_WIDTH / 3)
             {
                 platformImage = _assets->get<Texture>("forest_small_platform");
+                yAnchor = 0.9;
             }
             else if (width < (DEFAULT_WIDTH / 3) * 2)
             {
                 platformImage = _assets->get<Texture>("forest_medium_platform");
+                yAnchor = 0.9;
             }
             else
             {
                 platformImage = _assets->get<Texture>("forest_large_platform");
+                yAnchor = 0.93;
             }
         }
         else
@@ -3907,28 +4030,71 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
             if (width < DEFAULT_WIDTH / 3)
             {
                 platformImage = _assets->get<Texture>("cave_small_platform");
+                yAnchor = 0.98;
             }
             else if (width < (DEFAULT_WIDTH / 3) * 2)
             {
                 platformImage = _assets->get<Texture>("cave_medium_platform");
+                yAnchor = 0.98;
             }
             else
             {
                 platformImage = _assets->get<Texture>("cave_large_platform");
+                yAnchor = 0.99;
             }
         }
         platformSprite = scene2::PolygonNode::allocWithTexture(platformImage);
         float desiredWidth = width * _scale;
         float scale = desiredWidth / platformSprite->getWidth();
         platformSprite->setScale(scale);
-        platformSprite->setAnchor(0.5, 1);
+        platformSprite->setAnchor(0.5, yAnchor);
         platform = PlatformModel::alloc(pos, width, PLATFORM_HEIGHT, _scale);
         _platforms.push_back(platform);
         _platformNodes.push_back(platformSprite);
         platform->setName("platform");
         platform->setSceneNode(_platformNodes[i]);
         platform->setDebugColor(Color4::RED);
+        platformSprite->setPriority(0.1);
         addObstacle(platform, platformSprite, true);
+    }
+
+    float xBackgroundAnchor = (leftWorldCoors / totalWorldCoors);
+    CULog("%f", xBackgroundAnchor);
+    if (!_biome.compare("cave")) {
+        Vec2 test_pos = Vec2(0, 0);
+        std::shared_ptr<Texture> backgroundImage = _assets->get<Texture>("cave_background");
+        std::shared_ptr<Glow> testBackground = Glow::alloc(test_pos, backgroundImage->getSize() / _scale, _scale);
+        std::shared_ptr<scene2::PolygonNode> bSprite = scene2::PolygonNode::allocWithTexture(backgroundImage);
+        bSprite->setAnchor(xBackgroundAnchor, 0);
+        testBackground->setSceneNode(bSprite);
+        bSprite->setPosition(testBackground->getPosition() * _scale);
+        bSprite->setScale(0.65);
+        bSprite->setPriority(0.01);
+        _worldnode2->addChild(bSprite);
+    }
+    else if (!_biome.compare("shroom")) {
+        Vec2 test_pos = Vec2(0, 0);
+        std::shared_ptr<Texture> backgroundImage = _assets->get<Texture>("shroom_background");
+        std::shared_ptr<Glow> testBackground = Glow::alloc(test_pos, backgroundImage->getSize() / _scale, _scale);
+        std::shared_ptr<scene2::PolygonNode> bSprite = scene2::PolygonNode::allocWithTexture(backgroundImage);
+        bSprite->setAnchor(xBackgroundAnchor, 0);
+        testBackground->setSceneNode(bSprite);
+        bSprite->setPosition(testBackground->getPosition() * _scale);
+        bSprite->setScale(0.4);
+        bSprite->setPriority(0.01);
+        _worldnode2->addChild(bSprite);
+    }
+    else {
+        Vec2 test_pos = Vec2(0, 0);
+        std::shared_ptr<Texture> backgroundImage = _assets->get<Texture>("forest_background");
+        std::shared_ptr<Glow> testBackground = Glow::alloc(test_pos, backgroundImage->getSize() / _scale, _scale);
+        std::shared_ptr<scene2::PolygonNode> bSprite = scene2::PolygonNode::allocWithTexture(backgroundImage);
+        bSprite->setAnchor(xBackgroundAnchor, 0);
+        testBackground->setSceneNode(bSprite);
+        bSprite->setPosition(testBackground->getPosition() * _scale);
+        bSprite->setScale(0.5);
+        bSprite->setPriority(0.01);
+        _worldnode2->addChild(bSprite);
     }
 
     // Add the logo and button to the scene graph
@@ -4168,7 +4334,8 @@ void GameScene::addObstacle(const std::shared_ptr<cugl::physics2::Obstacle> &obj
         obj->setListener([=](physics2::Obstacle *obs)
                          {
                 weak->setPosition(obs->getPosition() * _scale);
-                weak->setAngle(node->getAngle()); });
+                weak->setAngle(node->getAngle());
+                });
     }
 }
 

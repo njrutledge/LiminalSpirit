@@ -61,7 +61,7 @@ void ParticleNode::draw(const std::shared_ptr<SpriteBatch>& batch, const Affine2
 			tintLerp.a = p->getOpacity() * 255.f;
 		}
 		if (_hasMultipleTextures) {
-			std::shared_ptr<Texture> texture = _textures.at(p->getTexture());
+			std::shared_ptr<Texture> texture = _textures.at(p->getTexture() % _textures.size());
 			batch->draw(texture, tintLerp, Vec2(texture->getWidth() / 2, texture->getHeight() / 2), transform.getScale()*p->getSize(), p->getAngle(), transform.getTranslation() + p->getPosition());
 		}
 		else if (_hasLinkedTextures) {
