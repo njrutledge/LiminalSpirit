@@ -457,12 +457,12 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
         _tutorialSceneFirst = _assets->get<scene2::SceneNode>("tutorialTiltScene");
         _tutorialSceneFirst->setContentSize(dimen);
         _tutorialSceneFirst->doLayout();
-        addChildWithName(_tutorialSceneFirst, "tutorialtilt");
+        _worldnode->addChildWithName(_tutorialSceneFirst, "tutorialtilt");
         
         _tutorialSceneSecond = _assets->get<scene2::SceneNode>("tutorialMeleeScene");
         _tutorialSceneSecond->setContentSize(dimen);
         _tutorialSceneSecond->doLayout();
-        addChildWithName(_tutorialSceneSecond, "tutorialmelee");
+        _worldnode->addChildWithName(_tutorialSceneSecond, "tutorialmelee");
         
         _tutorialSceneSecond->setVisible(false);
         _tutorialSceneFirst->setVisible(false);
@@ -470,17 +470,17 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
         _tutorialSceneFirst = _assets->get<scene2::SceneNode>("tutorialJumpScene");
         _tutorialSceneFirst->setContentSize(dimen);
         _tutorialSceneFirst->doLayout();
-        addChildWithName(_tutorialSceneFirst, "tutorialjump");
+        _worldnode->addChildWithName(_tutorialSceneFirst, "tutorialjump");
         
         _tutorialSceneSecond = _assets->get<scene2::SceneNode>("tutorialJumpAttackScene");
         _tutorialSceneSecond->setContentSize(dimen);
         _tutorialSceneSecond->doLayout();
-        addChildWithName(_tutorialSceneSecond, "tutorialjumpattack");
+        _worldnode->addChildWithName(_tutorialSceneSecond, "tutorialjumpattack");
         
         _tutorialSceneThird = _assets->get<scene2::SceneNode>("tutorialJumpDownScene");
         _tutorialSceneThird->setContentSize(dimen);
         _tutorialSceneThird->doLayout();
-        addChildWithName(_tutorialSceneThird, "tutorialjumpdown");
+        _worldnode->addChildWithName(_tutorialSceneThird, "tutorialjumpdown");
         
         _tutorialSceneThird->setVisible(false);
         _tutorialSceneSecond->setVisible(false);
@@ -489,12 +489,12 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
         _tutorialSceneFirst = _assets->get<scene2::SceneNode>("tutorialRangeScene");
         _tutorialSceneFirst->setContentSize(dimen);
         _tutorialSceneFirst->doLayout();
-        addChildWithName(_tutorialSceneFirst, "tutorialrange");
+        _worldnode->addChildWithName(_tutorialSceneFirst, "tutorialrange");
         
         _tutorialSceneSecond = _assets->get<scene2::SceneNode>("tutorialRangeDirScene");
         _tutorialSceneSecond->setContentSize(dimen);
         _tutorialSceneSecond->doLayout();
-        addChildWithName(_tutorialSceneSecond, "tutorialrangedir");
+        _worldnode->addChildWithName(_tutorialSceneSecond, "tutorialrangedir");
         
         _tutorialSceneSecond->setVisible(false);
         _tutorialSceneFirst->setVisible(false);
@@ -502,17 +502,17 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
         _tutorialSceneFirst = _assets->get<scene2::SceneNode>("tutorialChargedRangeScene");
         _tutorialSceneFirst->setContentSize(dimen);
         _tutorialSceneFirst->doLayout();
-        addChildWithName(_tutorialSceneFirst, "tutorialchargedrange");
+        _worldnode->addChildWithName(_tutorialSceneFirst, "tutorialchargedrange");
         
         _tutorialSceneSecond = _assets->get<scene2::SceneNode>("tutorialExplosiveDirScene");
         _tutorialSceneSecond->setContentSize(dimen);
         _tutorialSceneSecond->doLayout();
-        addChildWithName(_tutorialSceneSecond, "tutorialexplosivedir");
+        _worldnode->addChildWithName(_tutorialSceneSecond, "tutorialexplosivedir");
         
         _tutorialSceneThird = _assets->get<scene2::SceneNode>("tutorialExplosiveCooldownScene");
         _tutorialSceneThird->setContentSize(dimen);
         _tutorialSceneThird->doLayout();
-        addChildWithName(_tutorialSceneThird, "tutorialexplosivecooldown");
+        _worldnode->addChildWithName(_tutorialSceneThird, "tutorialexplosivecooldown");
         
         _tutorialSceneThird->setVisible(false);
         _tutorialSceneSecond->setVisible(false);
@@ -521,17 +521,17 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
         _tutorialSceneFirst = _assets->get<scene2::SceneNode>("tutorialChargedMeleeScene");
         _tutorialSceneFirst->setContentSize(dimen);
         _tutorialSceneFirst->doLayout();
-        addChildWithName(_tutorialSceneFirst, "tutorialchargedmelee");
+        _worldnode->addChildWithName(_tutorialSceneFirst, "tutorialchargedmelee");
         
         _tutorialSceneSecond = _assets->get<scene2::SceneNode>("tutorialDashDirScene");
         _tutorialSceneSecond->setContentSize(dimen);
         _tutorialSceneSecond->doLayout();
-        addChildWithName(_tutorialSceneSecond, "tutorialdashdir");
+        _worldnode->addChildWithName(_tutorialSceneSecond, "tutorialdashdir");
         
         _tutorialSceneThird = _assets->get<scene2::SceneNode>("tutorialDashCooldownScene");
         _tutorialSceneThird->setContentSize(dimen);
         _tutorialSceneThird->doLayout();
-        addChildWithName(_tutorialSceneThird, "tutorialdashcooldown");
+        _worldnode->addChildWithName(_tutorialSceneThird, "tutorialdashcooldown");
         
         _tutorialSceneThird->setVisible(false);
         _tutorialSceneSecond->setVisible(false);
