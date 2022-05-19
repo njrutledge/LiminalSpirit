@@ -374,7 +374,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
                 _pause = false;
             } });
-    _returnButton->setScale(.3 * buttonScale);
+    _returnButton->setScale(.35 * buttonScale);
 
     _homeButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("pauseScene_home"));
     _homeButton->clearListeners();
@@ -384,7 +384,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
                 _back = true;
             } });
-    _homeButton->setScale(.3 * buttonScale);
+    _homeButton->setScale(.35 *buttonScale);
 
     _optionButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("pauseScene_options"));
     _optionButton->clearListeners();
@@ -394,7 +394,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
                 _options = true;
             } });
-    _optionButton->setScale(.3 * buttonScale);
+    _optionButton->setScale(.35 * buttonScale);
 
 
     _restartButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("pauseScene_restart"));
@@ -405,7 +405,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
                 _restart = true;
             } });
-    _restartButton->setScale(.3 * buttonScale);
+    _restartButton->setScale(.35 * buttonScale);
 
     _optionScene = _assets->get<scene2::SceneNode>("optionScene");
     _optionScene->setContentSize(dimen);
