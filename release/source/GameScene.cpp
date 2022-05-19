@@ -1177,7 +1177,6 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
     scene2::SpriteNode *sprite = dynamic_cast<scene2::SpriteNode *>(_player->getSceneNode().get());
 
     _rangedArm->getSceneNode()->setVisible(unlockCount >= 1);
-    _rangedArmCharge->getSceneNode()->setVisible(unlockCount >= 1);
 
     sprite->setAnchor(0.5, 0.3);
     // Player (body) Animations
@@ -1456,21 +1455,23 @@ void GameScene::updateAnimations(float timestep, int unlockCount, SwipeControlle
     _rangedArm->setAnimeTimer(_rangedArm->getAnimeTimer() + timestep);
     _rangedArmCharge->setAnimeTimer(_rangedArmCharge->getAnimeTimer() + timestep);
 
-    if (_player->isChargeFiring())
-    {
-        _rangedArm->getSceneNode()->setVisible(false);
-        _rangedArmCharge->getSceneNode()->setVisible(true);
-    }
-    else
-    {
-        _rangedArm->getSceneNode()->setVisible(true);
-        _rangedArmCharge->getSceneNode()->setVisible(false);;
-        if (_player->isFacingRight()) {
-            rcSprite->setFrame(7);
-        } else {
-            rcSprite->setFrame(0);
+    if (unlockCount >= 2) {
+        if (_player->isChargeFiring())
+        {
+            _rangedArm->getSceneNode()->setVisible(false);
+            _rangedArmCharge->getSceneNode()->setVisible(true);
         }
-        
+        else
+        {
+            _rangedArm->getSceneNode()->setVisible(true);
+            _rangedArmCharge->getSceneNode()->setVisible(false);;
+            if (_player->isFacingRight()) {
+                rcSprite->setFrame(7);
+            } else {
+                rcSprite->setFrame(0);
+            }
+            
+        }
     }
     
     // Ranged Arm
@@ -4143,6 +4144,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     _rangedArm->setLastType(Glow::MeleeState::cool);
     std::shared_ptr<scene2::SpriteNode> rangeArmSprite = scene2::SpriteNode::alloc(rangeImage, 2, 5);
     _rangedArm->setSceneNode(rangeArmSprite);
+    _rangedArm->getSceneNode()->setVisible(false);
     rangeArmSprite->setFrame(0);
     rangeArmSprite->setScale(0.22);
     rangeArmSprite->setPriority(5);
@@ -4158,6 +4160,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     _rangedArmCharge->setLastType(Glow::MeleeState::cool);
     std::shared_ptr<scene2::SpriteNode> rangeChargeSprite = scene2::SpriteNode::alloc(rangeChargeImage, 1, 8);
     _rangedArmCharge->setSceneNode(rangeChargeSprite);
+    _rangedArmCharge->getSceneNode()->setVisible(false);
     rangeChargeSprite->setFrame(0);
     rangeChargeSprite->setScale(0.22);
     rangeChargeSprite->setPriority(5);
@@ -4189,6 +4192,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     std::shared_ptr<scene2::SpriteNode> meleeDashSprite = scene2::SpriteNode::alloc(meleeDashImage, 1, 7);
     meleeDashSprite->setFrame(0);
     _meleeArmDash->setSceneNode(meleeDashSprite);
+    _meleeArmDash->getSceneNode()->setVisible(false);
     _meleeArmDash->setAnimeTimer(0);
     meleeDashSprite->setScale(0.24);
     meleeDashSprite->setPriority(6);
