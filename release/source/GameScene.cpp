@@ -987,6 +987,12 @@ void GameScene::update(float timestep, int unlockCount)
         _player->setFacingRight(true);
 
         // perform necessary update loop
+        _player->setIsDashing(false);
+        if (_attacks)
+        {
+            _attacks->_current.clear();
+            _attacks->_pending.clear();
+        }
         updateAnimations(timestep, unlockCount, SwipeController::noAttack, SwipeController::noAttack);
         _world->update(timestep);
         updateCamera();
@@ -2986,10 +2992,10 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
         else if (attackType == AttackController::Type::p_exp)
         {
             std::shared_ptr<Texture> attackTexture = _assets->get<Texture>("player_explosion");
-            attackSprite = scene2::SpriteNode::alloc(attackTexture, 1, 7);
+            attackSprite = scene2::SpriteNode::alloc(attackTexture, 1, 6);
             attackSprite->setAnchor(0.5, 0.5);
-            attackSprite->setScale(.35f * (*it)->getRadius());
-            dynamic_pointer_cast<scene2::SpriteNode>(attackSprite)->setFrame(1);
+            attackSprite->setScale(.25f * (*it)->getRadius());
+            dynamic_pointer_cast<scene2::SpriteNode>(attackSprite)->setFrame(0);
             attackSprite->setPriority(3);
         }
         else if (attackType == AttackController::Type::p_melee)
