@@ -1206,7 +1206,18 @@
             "type": "sample",
             "file": "sounds/enemy/phantom/Phantom_Hurt.wav",
             "volume": 0.8
+        },
+        "gluttonAttack": {
+            "type": "sample",
+            "file": "sounds/enemy/glutton/Glutton_Attack.wav",
+            "volume": 1.0
+        },
+        "gluttonHurt": {
+            "type": "sample",
+            "file": "sounds/enemy/glutton/Glutton_Hurt.wav",
+            "volume": 0.6
         }
+        
 	},
 	"widgets": {
 		"levelselect": "widgets/levelselect.json",

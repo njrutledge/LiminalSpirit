@@ -212,8 +212,8 @@ void SoundController::init(std::shared_ptr<cugl::AssetManager> &assets) {
 //    _seeker = make_shared<EnemySFX>();
 //    _seeker->init("seeker", _assets);
 //
-//    _glutton = make_shared<EnemySFX>();
-//    _glutton->init("glutton", _assets);
+    _glutton = make_shared<EnemySFX>();
+    _glutton->init("glutton", _assets);
 //
 //    _spawner = make_shared<EnemySFX>();
 //    _spawner->init("spawner", _assets);
@@ -357,11 +357,17 @@ void SoundController::play_enemy_sound(enemy e, etype t) {
     switch (e) {
         case lost:
             _lost->play_sound(t, _vSFX);
+            break;
         case phantom:
             _phantom->play_sound(t, _vSFX);
+            break;
         case mirror:
+            break;
         case seeker:
+            break;
         case glutton:
+            _glutton->play_sound(t, _vSFX);
+            break;
         case spawner:
             break;
     }
