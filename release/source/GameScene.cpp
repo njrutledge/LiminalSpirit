@@ -3869,22 +3869,38 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
         pos.x = _platforms_attr[i][0];
         pos.y = _platforms_attr[i][1];
         float width = _platforms_attr[i][2];
+        float yAnchor = 0.9;
         if (!_biome.compare("shroom"))
         {
-            if (width < DEFAULT_WIDTH / 3)
+            if (width < DEFAULT_WIDTH / 6)
             {
-                // use small platform
-                platformImage = _assets->get<Texture>("shroom_small_platform");
+                // use smallest platform
+                platformImage = _assets->get<Texture>("shroom_1_platform");
             }
-            else if (width < (DEFAULT_WIDTH / 3) * 2)
+            else if (width < (DEFAULT_WIDTH / 6) * 2)
             {
-                // use medium platform
-                platformImage = _assets->get<Texture>("shroom_medium_platform");
+                platformImage = _assets->get<Texture>("shroom_2_platform");
+                yAnchor = 0.94;
+            }
+            else if (width < (DEFAULT_WIDTH / 6) * 3)
+            {
+                platformImage = _assets->get<Texture>("shroom_3_platform");
+            }
+            else if (width < (DEFAULT_WIDTH / 6) * 4)
+            {
+                yAnchor = 0.97;
+                platformImage = _assets->get<Texture>("shroom_4_platform");
+            }
+            else if (width < (DEFAULT_WIDTH / 6) * 5)
+            {
+                yAnchor = 0.97;
+                platformImage = _assets->get<Texture>("shroom_5_platform");
             }
             else
             {
-                // use large platform
-                platformImage = _assets->get<Texture>("shroom_large_platform");
+                // use largest platform
+                yAnchor = 0.97;
+                platformImage = _assets->get<Texture>("shroom_6_platform");
             }
         }
         else if (!_biome.compare("forest"))
@@ -3892,14 +3908,17 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
             if (width < DEFAULT_WIDTH / 3)
             {
                 platformImage = _assets->get<Texture>("forest_small_platform");
+                yAnchor = 0.9;
             }
             else if (width < (DEFAULT_WIDTH / 3) * 2)
             {
                 platformImage = _assets->get<Texture>("forest_medium_platform");
+                yAnchor = 0.9;
             }
             else
             {
                 platformImage = _assets->get<Texture>("forest_large_platform");
+                yAnchor = 0.93;
             }
         }
         else
@@ -3907,21 +3926,24 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
             if (width < DEFAULT_WIDTH / 3)
             {
                 platformImage = _assets->get<Texture>("cave_small_platform");
+                yAnchor = 0.98;
             }
             else if (width < (DEFAULT_WIDTH / 3) * 2)
             {
                 platformImage = _assets->get<Texture>("cave_medium_platform");
+                yAnchor = 0.98;
             }
             else
             {
                 platformImage = _assets->get<Texture>("cave_large_platform");
+                yAnchor = 0.99;
             }
         }
         platformSprite = scene2::PolygonNode::allocWithTexture(platformImage);
         float desiredWidth = width * _scale;
         float scale = desiredWidth / platformSprite->getWidth();
         platformSprite->setScale(scale);
-        platformSprite->setAnchor(0.5, 1);
+        platformSprite->setAnchor(0.5, yAnchor);
         platform = PlatformModel::alloc(pos, width, PLATFORM_HEIGHT, _scale);
         _platforms.push_back(platform);
         _platformNodes.push_back(platformSprite);
