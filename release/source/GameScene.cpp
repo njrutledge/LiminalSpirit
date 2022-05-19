@@ -3229,6 +3229,9 @@ void GameScene::updateRemoveDeletedEnemies()
                 createAndAddDeathAnimationObstacle("seeker_death", (*eit)->getPosition(), 0.125f, 6, 203);
                 createParticles(_deathParticleList, (*eit)->getPosition() * _scale, "lost_death", Color4::WHITE, Vec2(0, -20), 0.15f, false, Vec2(), 4);
             }
+            else if (std::shared_ptr<Spawner> spawner = dynamic_pointer_cast<Spawner>(*eit)) {
+                createParticles(_deathParticleList, (*eit)->getPosition() * _scale, "lost_death", Color4::WHITE, Vec2(0, -20), 0.15f, false, Vec2(), 4);
+            }
             
             // int log1 = _world->getObstacles().size();
             cugl::physics2::Obstacle *glowObj = dynamic_cast<cugl::physics2::Obstacle *>(&*(*eit)->getGlow());
@@ -3508,7 +3511,7 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
         {
             flip = -1;
         }
-        createParticles(_rangeParticleList, (_rangedArm->getPosition() - Vec2(1.25 * flip, 0)), "charged", Color4::BLUE, Vec2(0, 0), 0.05f, false, Vec2(), 7);
+        createParticles(_rangeParticleList, (_rangedArm->getPosition() - Vec2(1.25 * flip, 0))*_scale, "charged", Color4::BLUE, Vec2(0, 0), 0.2f, false, Vec2(), 7);
     }
 
     if (_swipes.hasRightChargedAttack())
@@ -3519,7 +3522,7 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
             flip = -1;
         }
 
-        createParticles(_meleeParticleList, (_meleeArm->getPosition() - Vec2(-1.5 * flip, 0)), "charged", Color4::RED, Vec2(0, 0), 0.05f, false, Vec2(), 7);
+        createParticles(_meleeParticleList, (_meleeArm->getPosition() - Vec2(-1.5 * flip, 0))*_scale, "charged", Color4::RED, Vec2(0, 0), 0.2f, false, Vec2(), 7);
     }
 
     Scene2::render(batch);

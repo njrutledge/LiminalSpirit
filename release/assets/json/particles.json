@@ -61,15 +61,15 @@
           "maxSizeChangeTime": 100
      },
     "charged": {
-          "burstParticles": 1, 
-          "maxParticleCount": 1,
+          "burstParticles": 2, 
+          "maxParticleCount": 2,
           "gravity": [-20, -30],
           "emissionRateRange": [1, 1],
-          "lifetimeRange": [0.5, 0.75],
+          "lifetimeRange": [0.75, 1.25],
           "angleRange": [0, 3.14],
           "speedRange": [30, 50],
           "startSizeRange": [1, 1],
-          "sizeChangeRateRange": [-0.01, -0.01],
+          "sizeChangeRateRange": [-0.1, -0.1],
           "maxSizeChangeTime": 10
      },
     "number": {
