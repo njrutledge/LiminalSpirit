@@ -498,6 +498,13 @@ void LiminalSpirit::checkPlayerUnlocks(){
             }
             break;
     }
+    std::shared_ptr<JsonReader> reader = JsonReader::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
+    std::shared_ptr<JsonValue> save = reader->readJson();
+    std::shared_ptr<JsonValue> settings = save->get("settings");
+    reader->close(); 
+    _swap = settings->has("swap") ? settings->get("swap")->asInt() : 0;
+    _music = settings->has("music") ? settings->get("music")->asInt() : 10;
+    _sfx = settings->has("sfx") ? settings->get("sfx")->asInt() : 10;
 }
 
 /** Saves progress */
