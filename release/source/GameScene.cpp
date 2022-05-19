@@ -3245,18 +3245,18 @@ void GameScene::updateRemoveDeletedEnemies()
             }
             else if (std::shared_ptr<Phantom> phantom = dynamic_pointer_cast<Phantom>(*eit)) {
                 createAndAddDeathAnimationObstacle("phantom_death", (*eit)->getPosition(), 0.2f, 6, 201);
-                createParticles(_deathParticleList, (*eit)->getPosition() * _scale, "lost_death", Color4::WHITE, Vec2(0, -20), 0.15f, false, Vec2(), 4);
+                createParticles(_deathParticleList, (*eit)->getPosition() * _scale, "lost_death", Color4::WHITE, Vec2(0, -20), 0.25f, false, Vec2(), 4);
             } 
             else if (std::shared_ptr<Glutton> glutton = dynamic_pointer_cast<Glutton>(*eit)) {
                 createAndAddDeathAnimationObstacle("glutton_death", (*eit)->getPosition(), 0.2f, 5, 202);
-                createParticles(_deathParticleList, (*eit)->getPosition() * _scale, "lost_death", Color4::WHITE, Vec2(0, -20), 0.15f, false, Vec2(), 4);
+                createParticles(_deathParticleList, (*eit)->getPosition() * _scale, "big_death", Color4::WHITE, Vec2(0, -20), 0.4f, false, Vec2(), 4);
             }
             else if (std::shared_ptr<Seeker> seeker = dynamic_pointer_cast<Seeker>(*eit)) {
                 createAndAddDeathAnimationObstacle("seeker_death", (*eit)->getPosition(), 0.125f, 6, 203);
-                createParticles(_deathParticleList, (*eit)->getPosition() * _scale, "lost_death", Color4::WHITE, Vec2(0, -20), 0.15f, false, Vec2(), 4);
+                createParticles(_deathParticleList, (*eit)->getPosition() * _scale, "lost_death", Color4::WHITE, Vec2(0, -20), 0.35f, false, Vec2(), 4);
             }
             else if (std::shared_ptr<Spawner> spawner = dynamic_pointer_cast<Spawner>(*eit)) {
-                createParticles(_deathParticleList, (*eit)->getPosition() * _scale, "lost_death", Color4::WHITE, Vec2(0, -20), 0.15f, false, Vec2(), 4);
+                createParticles(_deathParticleList, (*eit)->getPosition() * _scale, "big_death", Color4::WHITE, Vec2(0, -20), 0.35f, false, Vec2(), 4);
             }
             
             // int log1 = _world->getObstacles().size();
@@ -4086,7 +4086,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
         bSprite->setPosition(testBackground->getPosition() * _scale);
         bSprite->setScale(0.7 * _scale / 32);
         bSprite->setPriority(0.01);
-        _worldnode2->addChild(bSprite);
+        _worldnode2->addChildWithTag(bSprite, 300);
     }
     else if (!_biome.compare("shroom")) {
         Vec2 test_pos = Vec2(0, 0);
@@ -4098,7 +4098,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
         bSprite->setPosition(testBackground->getPosition() * _scale);
         bSprite->setScale(0.6 * _scale/32);
         bSprite->setPriority(0.01);
-        _worldnode2->addChild(bSprite);
+        _worldnode2->addChildWithTag(bSprite, 300);
     }
     else {
         Vec2 test_pos = Vec2(0, 0);
@@ -4110,7 +4110,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
         bSprite->setPosition(testBackground->getPosition() * _scale);
         bSprite->setScale(0.6 * _scale / 32);
         bSprite->setPriority(0.01);
-        _worldnode2->addChild(bSprite);
+        _worldnode2->addChildWithTag(bSprite, 300);
     }
 
     // Add the logo and button to the scene graph

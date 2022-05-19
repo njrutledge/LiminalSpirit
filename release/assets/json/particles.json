@@ -109,5 +109,19 @@
           "startSizeRange": [1, 2],
           "sizeChangeRateRange": [0,0],
           "maxSizeChangeTime": 10
+     },
+     "big_death": {
+          "fadein": true,
+          "fadeinRange": [1, 1.5],
+          "burstParticles": 72, 
+          "maxParticleCount": 72,
+          "gravity": [20, 30],
+          "emissionRateRange": [1, 1],
+          "lifetimeRange": [1.5, 2.5],
+          "angleRange": [0, 3.14],
+          "speedRange": [30, 70],
+          "startSizeRange": [1, 5],
+          "sizeChangeRateRange": [0,0],
+          "maxSizeChangeTime": 10
      }
 }
