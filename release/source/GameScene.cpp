@@ -4140,6 +4140,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     _rangedArm->setLastType(Glow::MeleeState::cool);
     std::shared_ptr<scene2::SpriteNode> rangeArmSprite = scene2::SpriteNode::alloc(rangeImage, 2, 5);
     _rangedArm->setSceneNode(rangeArmSprite);
+    _rangedArm->getSceneNode()->setVisible(false);
     rangeArmSprite->setFrame(0);
     rangeArmSprite->setScale(0.22);
     rangeArmSprite->setPriority(5);
