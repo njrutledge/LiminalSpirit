@@ -4074,7 +4074,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
         bSprite->setAnchor(xBackgroundAnchor, 0);
         testBackground->setSceneNode(bSprite);
         bSprite->setPosition(testBackground->getPosition() * _scale);
-        bSprite->setScale(0.6*_scale / 32);
+        bSprite->setScale(0.7 * _scale / 32);
         bSprite->setPriority(0.01);
         _worldnode2->addChild(bSprite);
     }
@@ -4098,7 +4098,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
         bSprite->setAnchor(xBackgroundAnchor, 0);
         testBackground->setSceneNode(bSprite);
         bSprite->setPosition(testBackground->getPosition() * _scale);
-        bSprite->setScale(0.6*_scale / 32);
+        bSprite->setScale(0.6 * _scale / 32);
         bSprite->setPriority(0.01);
         _worldnode2->addChild(bSprite);
     }
