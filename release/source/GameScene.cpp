@@ -3398,7 +3398,6 @@ void GameScene::updateCamera()
     float dy = getChild(0)->getContentSize().height / 2 - _worldnode->getPaneTransform().transform(_player->getSceneNode()->getPosition()).y;
     Vec2 pan = Vec2(0, dy);
     pan = pan * pan.length() / 3000;
-    _worldnode->applyPan(pan);
     // Copy World's zoom and transform
     _debugnode->applyPan(-_debugnode->getPaneTransform().transform(Vec2()));
     _debugnode->applyPan(_worldnode->getPaneTransform().transform(Vec2()) / _scale);
@@ -4076,7 +4075,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
         bSprite->setPosition(testBackground->getPosition() * _scale);
         bSprite->setScale(0.7 * _scale / 32);
         bSprite->setPriority(0.01);
-        _worldnode2->addChild(bSprite);
+        _worldnode2->addChildWithTag(bSprite, 300);
     }
     else if (!_biome.compare("shroom")) {
         Vec2 test_pos = Vec2(0, 0);
@@ -4088,7 +4087,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
         bSprite->setPosition(testBackground->getPosition() * _scale);
         bSprite->setScale(0.6 * _scale/32);
         bSprite->setPriority(0.01);
-        _worldnode2->addChild(bSprite);
+        _worldnode2->addChildWithTag(bSprite, 300);
     }
     else {
         Vec2 test_pos = Vec2(0, 0);
@@ -4100,7 +4099,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
         bSprite->setPosition(testBackground->getPosition() * _scale);
         bSprite->setScale(0.6 * _scale / 32);
         bSprite->setPriority(0.01);
-        _worldnode2->addChild(bSprite);
+        _worldnode2->addChildWithTag(bSprite, 300);
     }
 
     // Add the logo and button to the scene graph
