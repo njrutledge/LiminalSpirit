@@ -1191,6 +1191,21 @@
             "type": "sample",
             "file": "sounds/enemy/lost/Lost_Attack.wav",
             "volume": 0.3
+        },
+        "lostHurt": {
+            "type": "sample",
+            "file": "sounds/enemy/lost/Lost_Hurt.wav",
+            "volume": 0.2
+        },
+        "phantomAttack": {
+            "type": "sample",
+            "file": "sounds/enemy/phantom/Phantom_Attack.wav",
+            "volume": 0.5
+        },
+        "phantomHurt": {
+            "type": "sample",
+            "file": "sounds/enemy/phantom/Phantom_Hurt.wav",
+            "volume": 0.8
         }
 	},
 	"widgets": {

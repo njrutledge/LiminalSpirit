@@ -191,6 +191,24 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                             break;
                     }
                     enemy->setHealth(enemy->getHealth() - damage);
+                    //Play Hurt Sound
+                    
+                    if (enemy->getName() == "Lost") {
+                        _sound->play_enemy_sound(SoundController::enemy::lost, SoundController::etype::ehurt);
+                    } else if (enemy->getName() == "Phantom") {
+                        _sound->play_enemy_sound(SoundController::enemy::phantom, SoundController::etype::ehurt);
+                    } else if (enemy->getName() == "Mirror") {
+                        _sound->play_enemy_sound(SoundController::enemy::mirror, SoundController::etype::ehurt);
+                    } else if (enemy->getName() == "Seeker") {
+                        _sound->play_enemy_sound(SoundController::enemy::seeker, SoundController::etype::ehurt);
+                    } else if (enemy->getName() == "Glutton") {
+                        _sound->play_enemy_sound(SoundController::enemy::glutton, SoundController::etype::ehurt);
+                    } else {
+                        _sound->play_enemy_sound(SoundController::enemy::spawner, SoundController::etype::ehurt);
+                    }
+                    
+                    
+                    
                     //CULog("HEALTH SET");
                     if (damage > 0) {
                         //enemy->setInvincibility(true);

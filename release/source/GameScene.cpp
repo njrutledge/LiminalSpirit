@@ -2484,6 +2484,7 @@ void GameScene::updateEnemies(float timestep)
             else if ((*it)->getName() == "Phantom")
             {
                 _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 0.5f, 3.0f, (*it)->getAttackDamage(), AttackController::Type::e_range, (vel.scale(0.5)).rotate((play_p - en_p).getAngle()), _timer, PHANTOM_ATTACK, PHANTOM_FRAMES);
+                _sound->play_enemy_sound(SoundController::enemy::phantom, SoundController::etype::attack);
             }
             else if ((*it)->getName() == "Glutton")
             {

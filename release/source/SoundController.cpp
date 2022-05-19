@@ -120,6 +120,27 @@ void SoundController::LevelMusic::reset_mix() {
     _sNode->setGain(0.0f);
 }
 
+SoundController::EnemySFX::EnemySFX() {};
+
+void SoundController::EnemySFX::init(string enemy, std::shared_ptr<cugl::AssetManager> &assets) {
+    _enemy = enemy;
+    
+    _attack = assets->get<cugl::Sound>(enemy + "Attack");
+    
+    _hurt = assets->get<cugl::Sound>(enemy + "Hurt");
+}
+
+void SoundController::EnemySFX::play_sound(etype t, float vol) {
+    switch (t) {
+        case attack:
+            cugl::AudioEngine::get()->play(_enemy + "Attack", _attack, false, vol, true);
+            break;
+        case ehurt:
+            cugl::AudioEngine::get()->play(_enemy+ "hurt", _hurt, false, vol, false);
+            break;
+    }
+}
+
 
 SoundController::SoundController(){};
 
@@ -179,7 +200,23 @@ void SoundController::init(std::shared_ptr<cugl::AssetManager> &assets) {
     
     _enemyDeath = assets->get<cugl::Sound>("deathOrg");
     
-    _lostAttack = assets->get<cugl::Sound>("lostAttack");
+    _lost = make_shared<EnemySFX>();
+    _lost->init("lost", _assets);
+    
+    _phantom = make_shared<EnemySFX>();
+    _phantom->init("phantom", _assets);
+//
+//    _mirror = make_shared<EnemySFX>();
+//    _mirror->init("mirror", _assets);
+//
+//    _seeker = make_shared<EnemySFX>();
+//    _seeker->init("seeker", _assets);
+//
+//    _glutton = make_shared<EnemySFX>();
+//    _glutton->init("glutton", _assets);
+//
+//    _spawner = make_shared<EnemySFX>();
+//    _spawner->init("spawner", _assets);
     
 };
 
@@ -252,7 +289,7 @@ void SoundController::play_player_sound(playerSType sound) {
             cugl::AudioEngine::get()->play("playerSlashEmpty", _playerSlashEmpty, false, _vSFX, true);
             break;
         case slashHit:
-            cugl::AudioEngine::get()->play("playerSlashEmpty", _playerSlashHit, false, _vSFX, true);
+            cugl::AudioEngine::get()->play("playerSlashHit", _playerSlashHit, false, _vSFX, true);
             break;
         case slashDash:
             cugl::AudioEngine::get()->play("playerSDash", _playerDash, false, _vSFX, true);
@@ -264,7 +301,7 @@ void SoundController::play_player_sound(playerSType sound) {
             cugl::AudioEngine::get()->play("playerShoot", _playerShoot, false, _vSFX, true);
             break;
         case shootHit:
-            cugl::AudioEngine::get()->play("playerShoot", _playerShootHit, false, _vSFX, true);
+            cugl::AudioEngine::get()->play("playerShootHit", _playerShootHit, false, _vSFX, true);
             break;
         case shootCharge:
             cugl::AudioEngine::get()->play("playerChargeShoot", _playerExpPckg, false, _vSFX, true);
@@ -319,13 +356,9 @@ void SoundController::play_death_sound(bool mirror) {
 void SoundController::play_enemy_sound(enemy e, etype t) {
     switch (e) {
         case lost:
-            switch (t) {
-                case attack:
-                    cugl::AudioEngine::get()->play("lostAttack", _lostAttack, false, _vSFX, true);
-                case ehurt:
-                    break;
-            }
+            _lost->play_sound(t, _vSFX);
         case phantom:
+            _phantom->play_sound(t, _vSFX);
         case mirror:
         case seeker:
         case glutton:

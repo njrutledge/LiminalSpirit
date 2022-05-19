@@ -102,11 +102,7 @@ public:
         
         string _enemy;
         
-        std::shared_ptr<cugl::audio::AudioPlayer> _player;
-        
         std::shared_ptr<cugl::Sound> _attack;
-        
-        std::shared_ptr<cugl::Sound> _death;
         
         std::shared_ptr<cugl::Sound> _hurt;
         
@@ -114,7 +110,9 @@ public:
         
         EnemySFX();
         
-        void init();
+        void init(string enemy, std::shared_ptr<cugl::AssetManager> &assets);
+        
+        void play_sound(etype t, float vol);
     };
     
 protected:
@@ -178,7 +176,17 @@ protected:
     
     std::shared_ptr<cugl::Sound> _mirrorDeath;
     
-    std::shared_ptr<cugl::Sound> _lostAttack;
+    std::shared_ptr<EnemySFX> _lost;
+    
+    std::shared_ptr<EnemySFX> _phantom;
+    
+    std::shared_ptr<EnemySFX> _mirror;
+    
+    std::shared_ptr<EnemySFX> _glutton;
+    
+    std::shared_ptr<EnemySFX> _seeker;
+    
+    std::shared_ptr<EnemySFX> _spawner;
     
     
 public:
