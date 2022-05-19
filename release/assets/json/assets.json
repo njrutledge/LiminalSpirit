@@ -868,30 +868,33 @@
 			"file": "textures/menus/level_select/treehole3.png"
 		},
 		"pause_resume": {
-			"file": "textures/menus/pause/resume_button.png"
+			"file": "textures/menus/pause/resume_button_use.png"
 		},
 		"pause_home": {
-			"file": "textures/menus/pause/home_button.png"
+			"file": "textures/menus/pause/home_button_use.png"
 		},
 		"pause_options": {
-			"file": "textures/menus/pause/options_button.png"
+			"file": "textures/menus/pause/options_button_use.png"
 		},
-        "lose_level": {
-            "file": "textures/menus/lose/level_button.png"
-        },
-        "lose_home": {
-            "file": "textures/menus/lose/home_button.png"
-        },
-        "lose_restart": {
-            "file": "textures/menus/lose/restart_button.png"
-        },
-        "lose-background": {
-            "file": "textures/menus/lose/darkrec.png",
-            "minfilter": "nearest",
-            "magfilter": "linear",
-            "wrapS": "clamp",
-            "wrapT": "clamp"
-        },
+		"pause_restart": {
+			"file": "textures/menus/pause/restart_button_use.png"
+		},
+		"lose_level": {
+			"file": "textures/menus/lose/level_button.png"
+		},
+		"lose_home": {
+			"file": "textures/menus/lose/home_button.png"
+		},
+		"lose_restart": {
+			"file": "textures/menus/lose/restart_button.png"
+		},
+		"lose-background": {
+			"file": "textures/menus/lose/darkrec.png",
+			"minfilter": "nearest",
+			"magfilter": "linear",
+			"wrapS": "clamp",
+			"wrapT": "clamp"
+		},
 		"swap": {
 			"file": "textures/menus/options/swap.png"
 		},
@@ -1472,7 +1475,7 @@
 					"layout": {
 						"x_anchor": "center",
 						"y_anchor": "middle",
-						"y_offset": -0.25,
+						"y_offset": -0.21,
 						"x_offset": 0,
 						"absolute": false
 					}
@@ -1503,32 +1506,32 @@
 						"absolute": false
 					}
 				},
-                "credit": {
-                    "type": "Button",
-                    "data": {
-                        "upnode": "up",
-                        "anchor": [
-                            0.5,
-                            0.4
-                        ],
-                        "scale": 0.5
-                    },
-                    "children": {
-                        "up": {
-                            "type": "Image",
-                            "data": {
-                                "texture": "home_credit"
-                            }
-                        }
-                    },
-                    "layout": {
-                        "x_anchor": "center",
-                        "y_anchor": "middle",
-                        "y_offset": -0.41,
-                        "x_offset": 0,
-                        "absolute": false
-                    }
-                }
+				"credit": {
+					"type": "Button",
+					"data": {
+						"upnode": "up",
+						"anchor": [
+							0.5,
+							0.4
+						],
+						"scale": 0.5
+					},
+					"children": {
+						"up": {
+							"type": "Image",
+							"data": {
+								"texture": "home_credit"
+							}
+						}
+					},
+					"layout": {
+						"x_anchor": "center",
+						"y_anchor": "middle",
+						"y_offset": -0.45,
+						"x_offset": 0,
+						"absolute": false
+					}
+				}
 			}
 		},
 		"optionScene": {

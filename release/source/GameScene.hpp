@@ -218,6 +218,9 @@ protected:
     /** Used for dash animation */
     SwipeController::SwipeAttack _dashDir;
 
+    /** true if restarting*/
+    bool _restart;
+
     /** true if going back to world select */
     bool _back;
     
@@ -272,6 +275,8 @@ protected:
     std::shared_ptr<scene2::SceneNode> _pauseScene;
 
     std::shared_ptr<scene2::Button> _returnButton;
+
+    std::shared_ptr<scene2::Button> _restartButton;
 
     std::shared_ptr<scene2::Button> _homeButton;
 
@@ -353,7 +358,9 @@ public:
      *
      * @return true if the controller is initialized properly, false otherwise.
      */
-    bool init(const std::shared_ptr<cugl::AssetManager> &assets, const std::shared_ptr<SoundController> sound, string biome, int stageNum, int tutorial);
+    bool init(const std::shared_ptr<cugl::AssetManager>& assets, const std::shared_ptr<SoundController> sound, string biome, int stageNum, int tutorial);
+
+    bool goingToRestart() { return _restart; }
 
     bool goingBack() { return _back; }
     
@@ -448,11 +455,6 @@ public:
     bool updateWin();
 
     void updateTilt();
-
-    /**
-     * Resets the status of the game so that we can play again.
-     */
-    void reset();
 
     /**
      * @brief Overrides the Scene2 render to render the scene.

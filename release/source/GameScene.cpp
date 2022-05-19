@@ -98,6 +98,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
 {
     _back = false;
     _levelselect = false;
+    _restart = false;
     _step = false;
     _winInit = true;
     _lose = false;
@@ -373,7 +374,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
                 _pause = false;
             } });
-    _returnButton->setScale(.4 * buttonScale);
+    _returnButton->setScale(.3 * buttonScale);
 
     _homeButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("pauseScene_home"));
     _homeButton->clearListeners();
@@ -383,7 +384,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
                 _back = true;
             } });
-    _homeButton->setScale(.4 * buttonScale);
+    _homeButton->setScale(.3 * buttonScale);
 
     _optionButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("pauseScene_options"));
     _optionButton->clearListeners();
@@ -393,7 +394,18 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
             if (!down) {
                 _options = true;
             } });
-    _optionButton->setScale(.4 * buttonScale);
+    _optionButton->setScale(.3 * buttonScale);
+
+
+    _restartButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("pauseScene_options"));
+    _restartButton->clearListeners();
+    _restartButton->addListener([=](const std::string& name, bool down)
+        {
+            // Only quit when the button is released
+            if (!down) {
+                _options = true;
+            } });
+    _optionButton->setScale(.3 * buttonScale);
 
     _optionScene = _assets->get<scene2::SceneNode>("optionScene");
     _optionScene->setContentSize(dimen);
@@ -416,9 +428,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
                                     {
             // Only quit when the button is released
             if (!down) {
-                _lose = false;
-                reset();
-                _player->markRemoved(false);
+                _restart = true;
             } });
     _loseRestartButton->setScale(.4 * buttonScale);
 
@@ -654,6 +664,7 @@ void GameScene::addMusicButtons(float buttonScale) {
                 if (!down) {
                     _music = i;
                     _sound->set_music_volume(i / 10.0f);
+                    this->save();
                 } });
         _musicButtons.push_back(button);
 
@@ -675,7 +686,7 @@ void GameScene::addSFXButtons(float buttonScale) {
                 if (!down) {
                     _sfx = i;
                     _sound->set_sfx_volume(i / 10.0f);
-
+                    this->save();
                 } });
         _sfxButtons.push_back(button);
 
@@ -3025,7 +3036,7 @@ void GameScene::updateAttacks(float timestep, int unlockCount, SwipeController::
                 // this is mirrors
                 attackSprite->setScale(.85f * (*it)->getRadius());
                 attackSprite->setAngle((*it)->getAngle());
-                attackSprite->setColor(Color4::BLUE);
+                attackSprite->setColor(Color4::GRAY);
                 attackSprite->setPriority(2.1);
             }
             else if ((*it)->getAttackID() == PHANTOM_ATTACK)
@@ -3228,6 +3239,9 @@ void GameScene::updateRemoveDeletedEnemies()
             }
             else if (std::shared_ptr<Seeker> seeker = dynamic_pointer_cast<Seeker>(*eit)) {
                 createAndAddDeathAnimationObstacle("seeker_death", (*eit)->getPosition(), 0.125f, 6, 203);
+                createParticles(_deathParticleList, (*eit)->getPosition() * _scale, "lost_death", Color4::WHITE, Vec2(0, -20), 0.15f, false, Vec2(), 4);
+            }
+            else if (std::shared_ptr<Spawner> spawner = dynamic_pointer_cast<Spawner>(*eit)) {
                 createParticles(_deathParticleList, (*eit)->getPosition() * _scale, "lost_death", Color4::WHITE, Vec2(0, -20), 0.15f, false, Vec2(), 4);
             }
             
@@ -3445,12 +3459,8 @@ void GameScene::createSpawnParticles()
     for (int i = 0; i < positions.size(); i++)
     {
         std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("spawning_swirl"), Vec2(0, 0));
-        std::shared_ptr<ParticlePool> pool2 = ParticlePool::allocPoint(_particleInfo->get("spawning"), Vec2(0, 0));
         std::shared_ptr<ParticleNode> spawning = ParticleNode::alloc(positions[i] * _scale, _assets->get<Texture>("enemy_swirl"), pool);
-        std::shared_ptr<ParticleNode> spawning2 = ParticleNode::alloc(positions[i] * _scale, _assets->get<Texture>("enemy_portal"), pool2);
-        spawning->setScale(0.25f);
-        spawning2->setScale(0.25f);
-        _worldnode->addChildWithTag(spawning2, 100);
+        spawning->setScale(0.35f);
         _worldnode->addChildWithTag(spawning, 100);
     }
 }
@@ -3509,7 +3519,7 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
         {
             flip = -1;
         }
-        createParticles(_rangeParticleList, (_rangedArm->getPosition() - Vec2(1.25 * flip, 0)), "charged", Color4::BLUE, Vec2(0, 0), 0.05f, false, Vec2(), 7);
+        createParticles(_rangeParticleList, (_rangedArm->getPosition() - Vec2(1.25 * flip, 0))*_scale, "charged", Color4::BLUE, Vec2(0, 0), 0.2f, false, Vec2(), 7);
     }
 
     if (_swipes.hasRightChargedAttack())
@@ -3520,7 +3530,7 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
             flip = -1;
         }
 
-        createParticles(_meleeParticleList, (_meleeArm->getPosition() - Vec2(-1.5 * flip, 0)), "charged", Color4::RED, Vec2(0, 0), 0.05f, false, Vec2(), 7);
+        createParticles(_meleeParticleList, (_meleeArm->getPosition() - Vec2(-1.5 * flip, 0))*_scale, "charged", Color4::RED, Vec2(0, 0), 0.2f, false, Vec2(), 7);
     }
 
     Scene2::render(batch);
@@ -4188,113 +4198,6 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
 }
 
 /**
- * Resets the status of the game so that we can play again.
- */
-void GameScene::reset()
-{
-    _input.reset();
-    _swipes.reset();
-    _tilt.reset();
-    _collider.reset();
-    if (_worldnode)
-    {
-        for (std::shared_ptr<scene2::SceneNode> s : _worldnode->getChildren())
-        {
-            if (s->getTag() == 100)
-            {
-                s->dispose();
-            }
-        };
-    }
-
-    auto ac_it = _attacks->_current.begin();
-    while (ac_it != _attacks->_current.end())
-    {
-        // int log1 = _world->getObstacles().size();
-        cugl::physics2::Obstacle *obj = dynamic_cast<cugl::physics2::Obstacle *>(&**ac_it);
-        _world->removeObstacle(obj);
-        _worldnode2->removeChild(obj->_node);
-
-        // int log2 = _world->getObstacles().size();
-        ac_it = _attacks->_current.erase(ac_it);
-    }
-    auto ap_it = _attacks->_current.begin();
-    while (ap_it != _attacks->_current.end())
-    {
-        // int log1 = _world->getObstacles().size();
-        cugl::physics2::Obstacle *obj = dynamic_cast<cugl::physics2::Obstacle *>(&**ap_it);
-        _world->removeObstacle(obj);
-        _worldnode2->removeChild(obj->_node);
-
-        // int log2 = _world->getObstacles().size();
-        ac_it = _attacks->_current.erase(ap_it);
-    }
-    //_attacks->reset();  Shouldn't be needed now
-    // Does nothing right now
-    _ai.reset();
-
-    // Reset player position & health & other member fields
-    Vec2 playerPos = PLAYER_POS;
-    _player->reset(playerPos);
-    _player->getSceneNode()->setVisible(true);
-    _player->getSceneNode()->setColor(Color4::WHITE);
-    _rangedArm->getSceneNode()->setVisible(true);
-    _meleeArm->getSceneNode()->setVisible(true);
-    scene2::SpriteNode *sprite = dynamic_cast<scene2::SpriteNode *>(_player->getSceneNode().get());
-    sprite->setFrame(12);
-    _prevFrame = 12;
-    _dashTime = 0;
-    _dashXVel = 0;
-    _dashYVel = 0;
-    _cancelDash = false;
-    // Remove all enemies
-    auto eit = _enemies.begin();
-    while (eit != _enemies.end())
-    {
-        cugl::physics2::Obstacle *obj = dynamic_cast<cugl::physics2::Obstacle *>(&**eit);
-        cugl::physics2::Obstacle *glowObj = dynamic_cast<cugl::physics2::Obstacle *>(&*(*eit)->getGlow());
-        _world->removeObstacle(glowObj);
-        _worldnode2->removeChild(glowObj->_node);
-        _world->removeObstacle(obj);
-        _worldnode2->removeChild(obj->_node);
-
-        eit = _enemies.erase(eit);
-    }
-
-    _spawners.clear();
-    // Reset wave spawning
-    _timer = 0.0f;
-    _nextWaveNum = 0;
-    _spawnParticlesDone = false;
-    auto spawnTime = _constants->get("spawn_times");
-    for (int i = 0; i < _numWaves; i++)
-    {
-        _spawn_times[i] = spawnTime->get(i)->asFloat();
-    }
-    _spawnerCount = 0;
-    _spawner_ind = -1;
-    int index = 0;
-    for (auto it = _spawner_enemy_types.begin(); it != _spawner_enemy_types.end(); ++it)
-    {
-        if (_living_spawners[index])
-        {
-            _living_spawners[index] = 0;
-        }
-        for (auto i : (*it))
-        {
-            _spawner_enemy_types[index][(i.first)].timer = 10.0f;
-            _spawner_enemy_types[index][(i.first)].current_count = 0;
-        }
-        index++;
-    }
-    _tutorial = _initTutorial;
-    _tutorialInd = 0;
-    _tutorialTimer = TUTORIAL_INIT_TIMER;
-    _tutorialActionDone = false;
-    _endText = nullptr;
-}
-
-/**
  * Adds the physics object to the physics world and loosely couples it to the scene graph
  *
  * There are two ways to link a physics object to a scene graph node on the
@@ -4336,7 +4239,7 @@ void GameScene::addObstacle(const std::shared_ptr<cugl::physics2::Obstacle> &obj
 /** Saves progress */
 void GameScene::save() {
     std::shared_ptr<TextWriter> writer = TextWriter::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
-    writer->write("{\"progress\":" + _progress->toString() + "settings\":{\"swap\": " + to_string(_swap) +", \"music\": " + to_string(_music) +", \"sfx\": " + to_string(_sfx) +"}}");
+    writer->write("{\"progress\":" + _progress->toString() + ",\"settings\":{\"swap\": " + to_string(_swap) +", \"music\": " + to_string(_music) +", \"sfx\": " + to_string(_sfx) +"}}");
     writer->close();
 }
 

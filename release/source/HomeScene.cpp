@@ -186,6 +186,7 @@ void HomeScene::addMusicButtons(float buttonScale) {
                 if (!down) {
                     _music = i;
                     _sound->set_music_volume(i / 10.0f);
+                    this->save();
                 } });
         _musicButtons.push_back(button);
 
@@ -207,6 +208,7 @@ void HomeScene::addSFXButtons(float buttonScale) {
                 if (!down) {
                     _sfx = i;
                     _sound->set_sfx_volume(i / 10.0f);
+                    this->save();
 
                 } });
         _sfxButtons.push_back(button);
@@ -341,6 +343,6 @@ void HomeScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
 void HomeScene::save() {
     std::shared_ptr<TextWriter> writer = TextWriter::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
     string test = _progress->toString();
-    writer->write("{\"progress\":" + _progress->toString() + "settings\":{\"swap\": " + to_string(_swap) +", \"music\": " + to_string(_music) +", \"sfx\": " + to_string(_sfx) +"}}");
+    writer->write("{\"progress\":" + _progress->toString() + ",\"settings\":{\"swap\": " + to_string(_swap) +", \"music\": " + to_string(_music) +", \"sfx\": " + to_string(_sfx) +"}}");
     writer->close();
 }
