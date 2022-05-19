@@ -987,13 +987,17 @@ void GameScene::update(float timestep, int unlockCount)
         _player->setFacingRight(true);
 
         // perform necessary update loop
+        // stop dashing when you win
         _player->setIsDashing(false);
-        if (_attacks)
+        // remove attacks
+        auto ait = _attacks->_current.begin();
+        while (ait != _attacks->_current.end())
         {
-            _attacks->_current.clear();
-            _attacks->_pending.clear();
+            (*ait)->markRemoved(true);
+            ait++;
         }
         updateAnimations(timestep, unlockCount, SwipeController::noAttack, SwipeController::noAttack);
+        updateRemoveDeletedAttacks();
         _world->update(timestep);
         updateCamera();
         updateMeleeArm(timestep);
