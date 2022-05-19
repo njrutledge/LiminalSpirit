@@ -3929,7 +3929,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
         float desiredWidth =  totalWorldCoors * _scale;
         float floorScale = desiredWidth / floorSprite->getWidth() / split;
         floorSprite->setScale(floorScale);
-        floorSprite->setPriority(.1);
+        floorSprite->setPriority(.11);
         float xAnchor = 0.5;
         if (i == 0) {
             xAnchor = leftAnchor;
