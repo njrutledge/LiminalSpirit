@@ -240,7 +240,7 @@ void LiminalSpirit::updateCreditScene()
     case CreditScene::Choice::HOME:
         _scene = State::HOME;
         _credit.dispose();
-        _worldSelect.setDefaultChoice();
+        _home.setDefaultChoice();
         break;
     }
 }
