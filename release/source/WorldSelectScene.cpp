@@ -102,6 +102,15 @@ bool WorldSelectScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     auto scene = _assets->get<scene2::SceneNode>("world_select");
     scene->setContentSize(dimen);
     scene->doLayout();
+    
+    Rect bounds = Application::get()->getSafeBounds();
+    bounds.origin *= boundScale;
+    bounds.size *= boundScale;
+
+    float scale = bounds.size.width / 32.0f;
+
+      auto backdrop = _assets->get<scene2::SceneNode>("world_select_backdrop");
+      backdrop->setScale(0.66 * scale / 32.0f);
 
     // You have to attach the individual loaders for each asset type
     _assets->attach<Texture>(TextureLoader::alloc()->getHook());

@@ -120,7 +120,8 @@ bool HomeScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
 
   float scale = bounds.size.width / 32.0f;
 
-
+    auto backdrop = _assets->get<scene2::SceneNode>("main_menu_backdrop");
+    backdrop->setScale(0.66 * scale / 32.0f);
  
 
   addChild(scene);
