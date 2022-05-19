@@ -3241,18 +3241,18 @@ void GameScene::updateRemoveDeletedEnemies()
             }
             else if (std::shared_ptr<Phantom> phantom = dynamic_pointer_cast<Phantom>(*eit)) {
                 createAndAddDeathAnimationObstacle("phantom_death", (*eit)->getPosition(), 0.2f, 6, 201);
-                createParticles(_deathParticleList, (*eit)->getPosition() * _scale, "lost_death", Color4::WHITE, Vec2(0, -20), 0.15f, false, Vec2(), 4);
+                createParticles(_deathParticleList, (*eit)->getPosition() * _scale, "lost_death", Color4::WHITE, Vec2(0, -20), 0.25f, false, Vec2(), 4);
             } 
             else if (std::shared_ptr<Glutton> glutton = dynamic_pointer_cast<Glutton>(*eit)) {
                 createAndAddDeathAnimationObstacle("glutton_death", (*eit)->getPosition(), 0.2f, 5, 202);
-                createParticles(_deathParticleList, (*eit)->getPosition() * _scale, "lost_death", Color4::WHITE, Vec2(0, -20), 0.15f, false, Vec2(), 4);
+                createParticles(_deathParticleList, (*eit)->getPosition() * _scale, "big_death", Color4::WHITE, Vec2(0, -20), 0.4f, false, Vec2(), 4);
             }
             else if (std::shared_ptr<Seeker> seeker = dynamic_pointer_cast<Seeker>(*eit)) {
                 createAndAddDeathAnimationObstacle("seeker_death", (*eit)->getPosition(), 0.125f, 6, 203);
-                createParticles(_deathParticleList, (*eit)->getPosition() * _scale, "lost_death", Color4::WHITE, Vec2(0, -20), 0.15f, false, Vec2(), 4);
+                createParticles(_deathParticleList, (*eit)->getPosition() * _scale, "lost_death", Color4::WHITE, Vec2(0, -20), 0.35f, false, Vec2(), 4);
             }
             else if (std::shared_ptr<Spawner> spawner = dynamic_pointer_cast<Spawner>(*eit)) {
-                createParticles(_deathParticleList, (*eit)->getPosition() * _scale, "lost_death", Color4::WHITE, Vec2(0, -20), 0.15f, false, Vec2(), 4);
+                createParticles(_deathParticleList, (*eit)->getPosition() * _scale, "big_death", Color4::WHITE, Vec2(0, -20), 0.35f, false, Vec2(), 4);
             }
             
             // int log1 = _world->getObstacles().size();
@@ -3404,6 +3404,7 @@ void GameScene::updateCamera()
     float dy = getChild(0)->getContentSize().height / 2 - _worldnode->getPaneTransform().transform(_player->getSceneNode()->getPosition()).y;
     Vec2 pan = Vec2(0, dy);
     pan = pan * pan.length() / 3000;
+    _worldnode->applyPan(pan);
     // Copy World's zoom and transform
     _debugnode->applyPan(-_debugnode->getPaneTransform().transform(Vec2()));
     _debugnode->applyPan(_worldnode->getPaneTransform().transform(Vec2()) / _scale);
