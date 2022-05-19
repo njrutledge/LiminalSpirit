@@ -694,10 +694,7 @@
             "file": "textures/forest/forest_floor.png"
         },
 		"home_background": {
-			"file": "textures/menus/home/home_background.png"
-		},
-		"home_title": {
-			"file": "textures/menus/home/title_text.png"
+			"file": "textures/menus/home/newhomescreen.png"
 		},
 		"textbutton_base": {
 			"file": "textures/hud/text_highlight.png"
@@ -1188,7 +1185,7 @@
         "deathOrg": {
             "type": "sample",
             "file": "sounds/enemy/Organic_Death.wav",
-            "volume": 0.5
+            "volume": 0.1
         },
         "lostAttack": {
             "type": "sample",
@@ -1429,29 +1426,11 @@
 							0.5,
 							0.5
 						],
-						"scale": 0.75
+						"scale": 0.55
 					},
 					"layout": {
 						"x_anchor": "center",
 						"y_anchor": "middle"
-					}
-				},
-				"title": {
-					"type": "Image",
-					"data": {
-						"texture": "home_title",
-						"anchor": [
-							0.5,
-							0.5
-						],
-						"scale": 0.66
-					},
-					"layout": {
-						"x_anchor": "center",
-						"y_anchor": "middle",
-						"y_offset": 0.15,
-						"x_offset": 0,
-						"absolute": false
 					}
 				},
 				"start": {
