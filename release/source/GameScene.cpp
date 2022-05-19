@@ -1011,7 +1011,7 @@ void GameScene::updateSoundInputParticlesAndTilt(float timestep)
             ParticleNode *pn = dynamic_cast<ParticleNode *>(s.get());
             if (pn->getPool()->isComplete())
             {
-                s->dispose();
+                s->removeFromParent();
             }
             pn->update(timestep);
         }
