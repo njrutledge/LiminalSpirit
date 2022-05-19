@@ -3806,7 +3806,45 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
         platform->setName("platform");
         platform->setSceneNode(_platformNodes[i]);
         platform->setDebugColor(Color4::RED);
+        platformSprite->setPriority(0.1);
         addObstacle(platform, platformSprite, true);
+    }
+
+    if (!_biome.compare("cave")) {
+        Vec2 test_pos = Vec2(0, 0);
+        std::shared_ptr<Texture> backgroundImage = _assets->get<Texture>("cave_background");
+        std::shared_ptr<Glow> testBackground = Glow::alloc(test_pos, backgroundImage->getSize() / _scale, _scale);
+        std::shared_ptr<scene2::PolygonNode> bSprite = scene2::PolygonNode::allocWithTexture(backgroundImage);
+        bSprite->setAnchor(0, 0);
+        testBackground->setSceneNode(bSprite);
+        bSprite->setPosition(testBackground->getPosition() * _scale);
+        bSprite->setScale(0.65);
+        bSprite->setPriority(0.01);
+        _worldnode2->addChild(bSprite);
+    }
+    else if (!_biome.compare("shroom")) {
+        Vec2 test_pos = Vec2(0, 0);
+        std::shared_ptr<Texture> backgroundImage = _assets->get<Texture>("shroom_background");
+        std::shared_ptr<Glow> testBackground = Glow::alloc(test_pos, backgroundImage->getSize() / _scale, _scale);
+        std::shared_ptr<scene2::PolygonNode> bSprite = scene2::PolygonNode::allocWithTexture(backgroundImage);
+        bSprite->setAnchor(0, 0);
+        testBackground->setSceneNode(bSprite);
+        bSprite->setPosition(testBackground->getPosition() * _scale);
+        bSprite->setScale(0.4);
+        bSprite->setPriority(0.01);
+        _worldnode2->addChild(bSprite);
+    }
+    else {
+        Vec2 test_pos = Vec2(0, 0);
+        std::shared_ptr<Texture> backgroundImage = _assets->get<Texture>("forest_background");
+        std::shared_ptr<Glow> testBackground = Glow::alloc(test_pos, backgroundImage->getSize() / _scale, _scale);
+        std::shared_ptr<scene2::PolygonNode> bSprite = scene2::PolygonNode::allocWithTexture(backgroundImage);
+        bSprite->setAnchor(0, 0);
+        testBackground->setSceneNode(bSprite);
+        bSprite->setPosition(testBackground->getPosition() * _scale);
+        bSprite->setScale(0.5);
+        bSprite->setPriority(0.01);
+        _worldnode2->addChild(bSprite);
     }
 
     // Add the logo and button to the scene graph
@@ -3924,7 +3962,8 @@ void GameScene::addObstacle(const std::shared_ptr<cugl::physics2::Obstacle> &obj
         obj->setListener([=](physics2::Obstacle *obs)
                          {
                 weak->setPosition(obs->getPosition() * _scale);
-                weak->setAngle(node->getAngle()); });
+                weak->setAngle(node->getAngle());
+                });
     }
 }
 
