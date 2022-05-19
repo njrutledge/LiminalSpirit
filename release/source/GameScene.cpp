@@ -4075,7 +4075,7 @@ void GameScene::buildScene(std::shared_ptr<scene2::SceneNode> scene)
     }
 
     float xBackgroundAnchor = (leftWorldCoors / totalWorldCoors);
-    CULog("%f", xBackgroundAnchor);
+    //CULog("%f", xBackgroundAnchor);
     if (!_biome.compare("cave")) {
         Vec2 test_pos = Vec2(0, 0);
         std::shared_ptr<Texture> backgroundImage = _assets->get<Texture>("cave_background");

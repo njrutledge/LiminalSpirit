@@ -102,7 +102,7 @@ void LiminalSpirit::onStartup()
     }
     this->save();
     
-    CULog("Biome: %d, Level: %d, Unlocks: %d, Swap: %d", _biome, _highest_level, _unlock_count, _swap);
+    //CULog("Biome: %d, Level: %d, Unlocks: %d, Swap: %d", _biome, _highest_level, _unlock_count, _swap);
     Application::onStartup(); // YOU MUST END with call to parent
 }
 
