@@ -238,7 +238,7 @@ void LiminalSpirit::updateCreditScene()
     _sound_controller->play_menu_music();
     switch (_credit.getChoice()) {
     case CreditScene::Choice::HOME:
-        _scene = State::WORLDS;
+        _scene = State::HOME;
         _credit.dispose();
         _worldSelect.setDefaultChoice();
         break;
