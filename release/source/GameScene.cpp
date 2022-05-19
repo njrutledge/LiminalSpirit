@@ -987,6 +987,12 @@ void GameScene::update(float timestep, int unlockCount)
         _player->setFacingRight(true);
 
         // perform necessary update loop
+        _player->setIsDashing(false);
+        if (_attacks)
+        {
+            _attacks->_current.clear();
+            _attacks->_pending.clear();
+        }
         updateAnimations(timestep, unlockCount, SwipeController::noAttack, SwipeController::noAttack);
         _world->update(timestep);
         updateCamera();
