@@ -117,8 +117,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     std::shared_ptr<JsonValue> settings = save->get("settings");
     reader->close();
     _swap = settings->get("swap")->asInt();
-    //_sxf = settings->get("sfx")->asInt();
-    //_music = settings->get("music")->asInt();
+    _sfx = settings->get("sfx")->asInt();
+    _music = settings->get("music")->asInt();
 
     Size dimen = Application::get()->getDisplaySize();
     float boundScale = SCENE_WIDTH / dimen.width;
@@ -401,51 +401,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
 
     addChildWithName(_optionScene, "options");
 
-    _optionReturnButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_return"));
-    _optionReturnButton->clearListeners();
-    _optionReturnButton->addListener([=](const std::string &name, bool down)
-                                     {
-            // Only quit when the button is released
-            if (!down) {
-                _options = false;
-                _pause = true;
-            } });
-    _optionReturnButton->setScale(.4 * buttonScale);
-
-    _leftText = std::dynamic_pointer_cast<scene2::Label>(_assets->get<scene2::SceneNode>("optionScene_text_left"));
-    _rightText = std::dynamic_pointer_cast<scene2::Label>(_assets->get<scene2::SceneNode>("optionScene_text_right"));
-
-
-    _swapHandsButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_swap"));
-    _swapHandsButton->clearListeners();
-    _swapHandsButton->addListener([=](const std::string &name, bool down)
-                                  {
-            // Only quit when the button is released
-            if (!down) {
-                _swap = !_swap;
-                this->save();
-            } });
-    _swapHandsButton->setScale(.4 * buttonScale);
-
-    _musicButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_music"));
-    _musicButton->clearListeners();
-    _musicButton->addListener([=](const std::string &name, bool down)
-                              {
-            // Only quit when the button is released
-            if (!down) {
-
-            } });
-    _musicButton->setScale(.4 * buttonScale);
-
-    _sfxButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_sfx"));
-    _sfxButton->clearListeners();
-    _sfxButton->addListener([=](const std::string &name, bool down)
-                            {
-            // Only quit when the button is released
-            if (!down) {
-
-            } });
-    _sfxButton->setScale(.4 * buttonScale);
+    addOptionsButtons(buttonScale);
 
     // lose screen
     _loseScene = _assets->get<scene2::SceneNode>("loseScene");
@@ -576,8 +532,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _pauseScene->setVisible(false);
     _loseScene->setVisible(false);
     _optionReturnButton->deactivate();
-    _musicButton->deactivate();
-    _sfxButton->deactivate();
     _swapHandsButton->deactivate();
     _returnButton->deactivate();
     _homeButton->deactivate();
@@ -654,6 +608,35 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     return true;
 }
 
+void GameScene::addOptionsButtons(float buttonScale) {
+
+    _optionReturnButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_return"));
+    _optionReturnButton->clearListeners();
+    _optionReturnButton->addListener([=](const std::string& name, bool down)
+        {
+            // Only quit when the button is released
+            if (!down) {
+                _options = false;
+                _pause = true;
+            } });
+    _optionReturnButton->setScale(.4 * buttonScale);
+
+    _leftText = std::dynamic_pointer_cast<scene2::Label>(_assets->get<scene2::SceneNode>("optionScene_text_left"));
+    _rightText = std::dynamic_pointer_cast<scene2::Label>(_assets->get<scene2::SceneNode>("optionScene_text_right"));
+
+
+    _swapHandsButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("optionScene_swap"));
+    _swapHandsButton->clearListeners();
+    _swapHandsButton->addListener([=](const std::string& name, bool down)
+        {
+            // Only quit when the button is released
+            if (!down) {
+                _swap = !_swap;
+                this->save();
+            } });
+    _swapHandsButton->setScale(.4 * buttonScale);
+}
+
 /**
  * Disposes of all (non-static) resources allocated to this mode.
  */
@@ -676,12 +659,6 @@ void GameScene::dispose()
     if(_optionReturnButton)
         _optionReturnButton->deactivate();
     _optionReturnButton = nullptr;
-    if(_musicButton)
-        _musicButton->deactivate();
-    _musicButton = nullptr;
-    if(_sfxButton)
-        _sfxButton->deactivate();
-    _sfxButton = nullptr;
     if(_swapHandsButton)
         _swapHandsButton->deactivate();
     _swapHandsButton = nullptr;
@@ -789,8 +766,6 @@ void GameScene::update(float timestep, int unlockCount)
         _pauseScene->setVisible(false);
         _loseScene->setVisible(false);
         _optionReturnButton->activate();
-        _musicButton->activate();
-        _sfxButton->activate();
         _swapHandsButton->activate();
 
         _returnButton->deactivate();
@@ -813,8 +788,6 @@ void GameScene::update(float timestep, int unlockCount)
         _optionScene->setVisible(false);
         _pauseScene->setVisible(false);
         _optionReturnButton->deactivate();
-        _musicButton->deactivate();
-        _sfxButton->deactivate();
         _swapHandsButton->deactivate();
     }
 
@@ -1012,7 +985,7 @@ void GameScene::updateSoundInputParticlesAndTilt(float timestep)
             ParticleNode *pn = dynamic_cast<ParticleNode *>(s.get());
             if (pn->getPool()->isComplete())
             {
-                s->dispose();
+                s->removeFromParent();
             }
             pn->update(timestep);
         }
@@ -2376,6 +2349,7 @@ void GameScene::updateEnemies(float timestep)
             if ((*it)->getName() == "Lost")
             {
                 _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 1.0f, 0.2f, (*it)->getAttackDamage(), AttackController::Type::e_melee, vel.rotate((play_p - en_p).getAngle()), _timer, LOST_ATTACK, 0);
+                _sound->play_enemy_sound(SoundController::enemy::lost, SoundController::etype::attack);
             }
             else if ((*it)->getName() == "Phantom")
             {
@@ -4201,7 +4175,7 @@ void GameScene::addObstacle(const std::shared_ptr<cugl::physics2::Obstacle> &obj
 /** Saves progress */
 void GameScene::save() {
     std::shared_ptr<TextWriter> writer = TextWriter::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
-    writer->write("{\"progress\":" + _progress->toString() + ", \"settings\":{\"swap\": " + to_string(_swap) + "}}");
+    writer->write("{\"progress\":" + _progress->toString() + "settings\":{\"swap\": " + to_string(_swap) +", \"music\": " + to_string(_music) +", \"sfx\": " + to_string(_sfx) +"}}");
     writer->close();
 }
 

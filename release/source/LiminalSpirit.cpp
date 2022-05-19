@@ -69,25 +69,36 @@ void LiminalSpirit::onStartup()
     
     if (!filetool::file_exists(Application::get()->getSaveDirectory() + "savedGame.json")) {
         std::shared_ptr<TextWriter> writer = TextWriter::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
-        writer->write("{\"progress\":{\"biome\": 1, \"highest_level\": 1, \"unlock_count\": 0}, \"settings\":{\"swap\": false}}");
+        writer->write("{\"progress\":{\"biome\": 1, \"highest_level\": 1, \"unlock_count\": 0}, \"settings\":{\"swap\": false, \"music\": 10, \"sfx\": 10}}");
         writer->close();
     }
     
-    std::shared_ptr<JsonReader> reader = JsonReader::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
-    std::shared_ptr<JsonValue> save = reader->readJson();
-    std::shared_ptr<JsonValue> progress = save->get("progress");
-    std::shared_ptr<JsonValue> settings = save->get("settings");
-    reader->close();
+    try{
+        std::shared_ptr<JsonReader> reader = JsonReader::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
+        std::shared_ptr<JsonValue> save = reader->readJson();
+        std::shared_ptr<JsonValue> progress = save->get("progress");
+        std::shared_ptr<JsonValue> settings = save->get("settings");
+        reader->close();
     
-    // Note: COMMENT THESE OUT TO DISABLE PROGRESSION!!!!!!!!
-    _biome = progress->get("biome")->asInt();
-    _highest_level = progress->get("highest_level")->asInt();
-    _unlock_count = progress->get("unlock_count")->asInt();
-    // Note: COMMENT THESE OUT TO ENABLE PROGRESSION!!!!!!!!
-//    _biome = 3;
-//    _highest_level = 10;
-//    _unlock_count = 5;
-    _swap = settings->get("swap")->asInt();
+        // Note: COMMENT THESE OUT TO DISABLE PROGRESSION!!!!!!!!
+        _biome = progress->has("biome") ? progress->get("biome")->asInt() : 1;
+        _highest_level = progress->has("highest_level") ? progress->get("highest_level")->asInt() : 1;
+        _unlock_count = progress->has("unlock_count") ? progress->get("unlock_count")->asInt() : 0;
+        // Note: COMMENT THESE OUT TO ENABLE PROGRESSION!!!!!!!!
+//      _biome = 3;
+//      _highest_level = 10;
+//      _unlock_count = 5;
+        _swap = settings->has("swap") ? settings->get("swap")->asInt() : 0;
+        _music = settings->has("music") ? settings->get("music")->asInt() : 10;
+        _sfx = settings->has("sfx") ? settings->get("sfx")->asInt() : 10;
+    } catch(...){
+        _biome = 1;
+        _highest_level = 1;
+        _unlock_count = 0;
+        _swap = 0;
+        _music = 10;
+        _sfx = 10;
+    }
     this->save();
     
     CULog("Biome: %d, Level: %d, Unlocks: %d, Swap: %d", _biome, _highest_level, _unlock_count, _swap);
@@ -189,6 +200,7 @@ void LiminalSpirit::updateLoadingScene(float timestep)
         _home.init(_assets);
         _sound_controller = make_shared<SoundController>();
         _sound_controller->init(_assets);
+        _home.setSoundController(_sound_controller);
         _worldSelect.init(_assets);
         _scene = State::HOME;
     }
@@ -464,7 +476,7 @@ void LiminalSpirit::checkPlayerUnlocks(){
 /** Saves progress */
 void LiminalSpirit::save(){
     std::shared_ptr<TextWriter> writer = TextWriter::alloc(Application::get()->getSaveDirectory() + "savedGame.json");
-    writer->write("{\"progress\":{\"biome\": " + to_string(_biome) + ", \"highest_level\": " + to_string(_highest_level) + ", \"unlock_count\": " + to_string(_unlock_count) + "}, \"settings\":{\"swap\": " + to_string(_swap) +"}}");
+    writer->write("{\"progress\":{\"biome\": " + to_string(_biome) + ", \"highest_level\": " + to_string(_highest_level) + ", \"unlock_count\": " + to_string(_unlock_count) + "}, \"settings\":{\"swap\": " + to_string(_swap) +", \"music\": " + to_string(_music) +", \"sfx\": " + to_string(_sfx) +"}}");
     writer->close();
 }
 

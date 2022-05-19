@@ -903,6 +903,12 @@
 		},
 		"options_rocksmol": {
 			"file": "textures/menus/options/rocksmol.png"
+		},
+		"options_onButton": {
+			"file": "textures/menus/options/on.png"
+		},
+		"options_offButton": {
+			"file": "textures/menus/options/off.png"
 		}
 	},
 	"fonts": {
@@ -1166,6 +1172,16 @@
             "type": "sample",
             "file": "sounds/playerSFX/Player_Charge.wav",
             "volume": 0.1
+        },
+        "deathOrg": {
+            "type": "sample",
+            "file": "sounds/enemy/Organic_Death.wav",
+            "volume": 0.5
+        },
+        "lostAttack": {
+            "type": "sample",
+            "file": "sounds/enemy/lost/Lost_Attack.wav",
+            "volume": 0.3
         }
 	},
 	"widgets": {

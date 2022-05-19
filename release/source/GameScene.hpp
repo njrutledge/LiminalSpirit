@@ -361,6 +361,8 @@ public:
 
     bool next() { return _next; }
 
+    void addOptionsButtons(float buttonScale);
+
 #pragma mark -
 #pragma mark Gameplay Handling
     /**

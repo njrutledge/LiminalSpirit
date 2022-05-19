@@ -215,6 +215,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                             _index_spawner = enemy->getSpawnerInd();
                         }
                         enemy->markRemoved(true);
+                        _sound->play_death_sound(false);
                     }
                     switch (attack->getType()) {
                         case AttackController::p_range:

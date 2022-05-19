@@ -32,6 +32,20 @@ public:
         charge
     };
     
+    enum enemy {
+        lost,
+        phantom,
+        mirror,
+        seeker,
+        glutton,
+        spawner
+    };
+    
+    enum etype {
+        attack,
+        ehurt
+    };
+    
     enum GameState {
         LOAD,
         MENU,
@@ -160,6 +174,12 @@ protected:
     
     std::shared_ptr<cugl::Sound> _playerCharge;
     
+    std::shared_ptr<cugl::Sound> _enemyDeath;
+    
+    std::shared_ptr<cugl::Sound> _mirrorDeath;
+    
+    std::shared_ptr<cugl::Sound> _lostAttack;
+    
     
 public:
     
@@ -176,6 +196,10 @@ public:
     void reset_level_tracks();
     
     void level_transition();
+    
+    void play_death_sound(bool mirror);
+    
+    void play_enemy_sound(enemy e, etype t);
     
     /**
      * Sets music volume
