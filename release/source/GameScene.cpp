@@ -1997,7 +1997,7 @@ void GameScene::updateEnemies(float timestep)
     std::shared_ptr<Texture> ranged_impact = _assets->get<Texture>("ranged_impact");
     for (auto it = _enemies.begin(); it != _enemies.end(); ++it)
     {
-        Vec2 direction = _ai.getMovement(*it, _player->getPosition(), timestep, 0, DEFAULT_WIDTH);
+        Vec2 direction = _ai.getMovement(*it, _player->getPosition(), timestep, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
         (*it)->setVX(direction.x);
         if ((*it)->getName() == "Lost")
