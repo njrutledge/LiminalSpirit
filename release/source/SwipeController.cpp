@@ -9,8 +9,7 @@
 #include "SwipeController.hpp"
 #include <math.h>
 
-//TODO switch back
-#define RANGE_COOLDOWN 1.0f;
+#define RANGE_COOLDOWN 10.0f;
 #define MELEE_COOLDOWN 6.0f;
 
 #define RANGE_REDUCTION 0.5f;
