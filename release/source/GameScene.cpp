@@ -2474,6 +2474,7 @@ void GameScene::updateEnemies(float timestep)
                 (*it)->setAttackCompleted(true);
 
                 _attacks->createAttack(Vec2((*it)->getX(), (*it)->getY()), 1.0f, 0.2f, seeker->getAttackDamage(), AttackController::Type::e_melee, (vel.scale(0.2)).rotate((play_p - en_p).getAngle()), _timer, SEEKER_ATTACK, 0);
+                _sound->play_enemy_sound(SoundController::enemy::seeker, SoundController::etype::attack);
             }
 
             if ((*it)->getName() == "Lost")
