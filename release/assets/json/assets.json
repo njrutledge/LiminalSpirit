@@ -1216,6 +1216,16 @@
             "type": "sample",
             "file": "sounds/enemy/glutton/Glutton_Hurt.wav",
             "volume": 0.6
+        },
+        "seekerAttack": {
+            "type": "sample",
+            "file": "sounds/enemy/seeker/Seeker_Attack.wav",
+            "volume": 0.3
+        },
+        "seekerHurt": {
+            "type": "sample",
+            "file": "sounds/enemy/seeker/Seeker_Hurt.wav",
+            "volume": 0.6
         }
         
 	},
