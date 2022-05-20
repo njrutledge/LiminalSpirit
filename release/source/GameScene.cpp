@@ -1112,11 +1112,11 @@ void GameScene::updateSoundInputParticlesAndTilt(float timestep)
         if (s->getTag() == 100)
         {
             ParticleNode *pn = dynamic_cast<ParticleNode *>(s.get());
+            pn->update(timestep);
             if (pn->getPool()->isComplete())
             {
                 s->removeFromParent();
             }
-            pn->update(timestep);
         }
         else if (s->getTag() == 200) {
             
