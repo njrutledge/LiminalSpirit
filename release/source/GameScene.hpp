@@ -268,6 +268,9 @@ protected:
     float _tutorialTimer;
     
     int _tutorialInd;
+
+    // Timer for spawn portals
+    float _spawnParticleTimer;
     
     bool _tutorialActionDone;
     std::shared_ptr<scene2::Button> _pauseButton;

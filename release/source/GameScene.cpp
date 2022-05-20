@@ -108,6 +108,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, const st
     _tutorial = tutorial;
     _initTutorial = tutorial;
     _tutorialTimer = TUTORIAL_INIT_TIMER;
+    _spawnParticleTimer = 0.0f;
     _tutorialActionDone = false;
     _tutorialInd = 0;
     _chargeSoundCueM = true;
@@ -1104,6 +1105,17 @@ void GameScene::updateSoundInputParticlesAndTilt(float timestep)
     if (_input.getDebugKeyPressed())
     {
         setDebug(!isDebug());
+    }
+
+    for (std::shared_ptr<scene2::SceneNode> s : _worldnode2->getChildren()) {
+        //update portals
+        if (s->getTag() == 69) {
+            scene2::PolygonNode* p = dynamic_cast<scene2::PolygonNode*>(s.get());
+            p->setAngle(fmod(p->getAngle() - 0.06f, 6.28f));
+            if (_spawnParticleTimer > 3.75f) {
+                p->removeFromParent();
+            }
+        }
     }
 
     ////Update all Particles and Death Animations
@@ -3421,11 +3433,12 @@ void GameScene::updateSpawnEnemies(float timestep)
 {
     // Spawn new enemies if time for next wave
     _timer += timestep;
-
+    _spawnParticleTimer += timestep;
     if (_nextWaveNum < _numWaves && _timer >= _spawn_times[_nextWaveNum] - 3 && !_spawnParticlesDone)
     {
         createSpawnParticles();
         _spawnParticlesDone = true;
+        _spawnParticleTimer = 0.0f;
     }
 
     if (_nextWaveNum < _numWaves && _timer >= _spawn_times[_nextWaveNum])
@@ -3472,13 +3485,15 @@ void GameScene::createSpawnParticles()
 {
     std::vector<cugl::Vec2> positions;
     positions = _spawn_pos.at(_nextWaveNum);
+    std::shared_ptr<Texture> portal = _assets->get<Texture>("enemy_swirl");
 
     for (int i = 0; i < positions.size(); i++)
     {
-        std::shared_ptr<ParticlePool> pool = ParticlePool::allocPoint(_particleInfo->get("spawning_swirl"), Vec2(0, 0));
-        std::shared_ptr<ParticleNode> spawning = ParticleNode::alloc(positions[i] * _scale, _assets->get<Texture>("enemy_swirl"), pool);
-        spawning->setScale(0.35f);
-        _worldnode->addChildWithTag(spawning, 100);
+        std::shared_ptr<scene2::PolygonNode> portalSprite = scene2::PolygonNode::allocWithTexture(portal);
+        portalSprite->setPosition(positions[i]*_scale);
+        portalSprite->setScale(0.35f);
+        portalSprite->setPriority(0.99);
+        _worldnode2->addChildWithTag(portalSprite, 69);
     }
 }
 
