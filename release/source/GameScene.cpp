@@ -3438,6 +3438,11 @@ void GameScene::updateSpawnEnemies(float timestep)
     _spawnParticleTimer += timestep;
     if (_nextWaveNum < _numWaves && _timer >= _spawn_times[_nextWaveNum] - 3 && !_spawnParticlesDone)
     {
+        for (std::shared_ptr<scene2::SceneNode> s : _worldnode2->getChildren()) {
+            if (s->getTag() == 69) {
+                s->removeFromParent();
+            }
+        }
         createSpawnParticles();
         _spawnParticlesDone = true;
         _spawnParticleTimer = 0.0f;
