@@ -1187,6 +1187,11 @@
             "file": "sounds/enemy/Organic_Death.wav",
             "volume": 0.1
         },
+        "deathGlass": {
+            "type": "sample",
+            "file": "sounds/enemy/Mirror_Death.wav",
+            "volume": 0.1
+        },
         "lostAttack": {
             "type": "sample",
             "file": "sounds/enemy/lost/Lost_Attack.wav",
@@ -1225,6 +1230,26 @@
         "seekerHurt": {
             "type": "sample",
             "file": "sounds/enemy/seeker/Seeker_Hurt.wav",
+            "volume": 0.6
+        },
+        "mirrorAttack": {
+            "type": "sample",
+            "file": "sounds/enemy/mirror/Mirror_Attack.wav",
+            "volume": 0.3
+        },
+        "mirrorHurt": {
+            "type": "sample",
+            "file": "sounds/enemy/mirror/Mirror_Hurt.wav",
+            "volume": 0.4
+        },
+        "spawnerAttack": {
+            "type": "sample",
+            "file": "sounds/enemy/spawner/Spawner_Attack.wav",
+            "volume": 0.3
+        },
+        "spawnerHurt": {
+            "type": "sample",
+            "file": "sounds/enemy/spawner/Spawner_Hurt.wav",
             "volume": 0.6
         }
         

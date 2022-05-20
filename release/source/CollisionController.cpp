@@ -135,6 +135,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                     }
                     //set to show the attack animation
                     mirror->showAttack(true);
+                    _sound->play_enemy_sound(SoundController::enemy::mirror, SoundController::etype::attack);
                     
                 }
                 else if (attack->getType() == AttackController::Type::p_melee ||
@@ -154,6 +155,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                         if (mirror->getHealth() > 0) {
                             mirror->setHealth(mirror->getHealth() - damage);
                             mirror->setHurt();
+                            _sound->play_enemy_sound(SoundController::enemy::mirror, SoundController::etype::ehurt);
                         }
                         //mirror->setLastMelee(attack, timer)
                         attack->hitEnemy(mirror);
@@ -162,6 +164,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                         //CULog("NEW ATTACK~~~~~~~~~~~~~~~~~~");
                         if (mirror->getHealth() <= 0) {
                             mirror->markRemoved(true);
+                            //_sound->play_death_sound(true);
                         }
                         
                         if (attack->getType() == AttackController::Type::p_melee) {
@@ -301,6 +304,7 @@ void CollisionController::handleEnemyCollision(BaseEnemyModel* enemy, physics2::
                 }
                 //set to show the attack animation
                 mirror->showAttack(true);
+                _sound->play_enemy_sound(SoundController::enemy::mirror, SoundController::etype::attack);
             }
         }
     }
