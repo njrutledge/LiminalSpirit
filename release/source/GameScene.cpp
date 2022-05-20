@@ -3493,14 +3493,29 @@ void GameScene::createSpawnParticles()
 {
     std::vector<cugl::Vec2> positions;
     positions = _spawn_pos.at(_nextWaveNum);
+    std::vector <std::string> enemyNames;
+    enemyNames = _spawn_order.at(_nextWaveNum);
     std::shared_ptr<Texture> portal = _assets->get<Texture>("enemy_swirl");
 
     for (int i = 0; i < positions.size(); i++)
     {
         std::shared_ptr<scene2::PolygonNode> portalSprite = scene2::PolygonNode::allocWithTexture(portal);
-        portalSprite->setPosition(positions[i]*_scale);
-        portalSprite->setScale(0.35f);
-        portalSprite->setPriority(0.99);
+        
+        if (!enemyNames[i].compare("glutton")) {
+            portalSprite->setPosition(Vec2(positions[i].x * _scale, (positions[i].y + 1.25) * _scale));
+            portalSprite->setScale(0.9f);
+            portalSprite->setPriority(0.97);
+        }
+        else if (!enemyNames[i].compare("spawner")) {
+            portalSprite->setPosition(Vec2(positions[i].x * _scale, (positions[i].y + 0.75) * _scale));
+            portalSprite->setScale(0.6f);
+            portalSprite->setPriority(0.98);
+        }
+        else {
+            portalSprite->setPosition(Vec2(positions[i].x * _scale, (positions[i].y + 0.75) * _scale));
+            portalSprite->setScale(0.35f);
+            portalSprite->setPriority(0.99);
+        }
         _worldnode2->addChildWithTag(portalSprite, 69);
     }
 }
