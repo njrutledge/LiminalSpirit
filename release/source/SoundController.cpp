@@ -216,8 +216,8 @@ void SoundController::init(std::shared_ptr<cugl::AssetManager> &assets) {
     _glutton = make_shared<EnemySFX>();
     _glutton->init("glutton", _assets);
 
-//    _spawner = make_shared<EnemySFX>();
-//    _spawner->init("spawner", _assets);
+    _spawner = make_shared<EnemySFX>();
+    _spawner->init("spawner", _assets);
     
 };
 
@@ -372,6 +372,7 @@ void SoundController::play_enemy_sound(enemy e, etype t) {
             _glutton->play_sound(t, _vSFX);
             break;
         case spawner:
+            _spawner->play_sound(t, _vSFX);
             break;
     }
 }

@@ -1241,6 +1241,16 @@
             "type": "sample",
             "file": "sounds/enemy/mirror/Mirror_Hurt.wav",
             "volume": 0.4
+        },
+        "spawnerAttack": {
+            "type": "sample",
+            "file": "sounds/enemy/spawner/Spawner_Attack.wav",
+            "volume": 0.3
+        },
+        "spawnerHurt": {
+            "type": "sample",
+            "file": "sounds/enemy/spawner/Spawner_Hurt.wav",
+            "volume": 0.6
         }
         
 	},

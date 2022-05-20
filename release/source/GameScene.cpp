@@ -3454,6 +3454,7 @@ void GameScene::updateSpawnEnemies(float timestep)
                     {
                         _spawners.at(index)->setSpawned(true);
                         createSpawnerEnemy(index, name);
+                        _sound->play_enemy_sound(SoundController::enemy::spawner, SoundController::etype::attack);
 
                         _spawner_enemy_types[index][name].current_count++;
                         diff_count--;
