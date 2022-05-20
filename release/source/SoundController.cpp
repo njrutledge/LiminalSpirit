@@ -199,6 +199,7 @@ void SoundController::init(std::shared_ptr<cugl::AssetManager> &assets) {
     _playerCharge = assets->get<cugl::Sound>("playerCharge");
     
     _enemyDeath = assets->get<cugl::Sound>("deathOrg");
+    _mirrorDeath = assets->get<cugl::Sound>("deathGlass");
     
     _lost = make_shared<EnemySFX>();
     _lost->init("lost", _assets);
@@ -206,8 +207,8 @@ void SoundController::init(std::shared_ptr<cugl::AssetManager> &assets) {
     _phantom = make_shared<EnemySFX>();
     _phantom->init("phantom", _assets);
 
-//    _mirror = make_shared<EnemySFX>();
-//    _mirror->init("mirror", _assets);
+    _mirror = make_shared<EnemySFX>();
+    _mirror->init("mirror", _assets);
 
     _seeker = make_shared<EnemySFX>();
     _seeker->init("seeker", _assets);
@@ -347,7 +348,7 @@ void SoundController::level_transition() {
 
 void SoundController::play_death_sound(bool mirror) {
     if (mirror) {
-        
+        cugl::AudioEngine::get()->play("mirrorDeath", _mirrorDeath, false, _vSFX, true);
     } else {
         cugl::AudioEngine::get()->play("enemyDeath", _enemyDeath, false, _vSFX, true);
     }
@@ -362,6 +363,7 @@ void SoundController::play_enemy_sound(enemy e, etype t) {
             _phantom->play_sound(t, _vSFX);
             break;
         case mirror:
+            _mirror->play_sound(t, _vSFX);
             break;
         case seeker:
             _seeker->play_sound(t, _vSFX);

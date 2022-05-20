@@ -2502,6 +2502,7 @@ void GameScene::updateEnemies(float timestep)
                 {
                     mirror->setHurt();
                     mirror->markRemoved(true);
+                    //_sound->play_death_sound(true);
                 }
             }
         }
@@ -3241,6 +3242,7 @@ void GameScene::updateRemoveDeletedEnemies()
             //Mirror shard breaking
             if (std::shared_ptr<Mirror> mirror = dynamic_pointer_cast<Mirror>(*eit)) {
                 createParticles(_mirrorShardList, (*eit)->getPosition() * _scale, "mirror_death", Color4::WHITE, Vec2(0, 10), 0.05f, false, Vec2(), 6);
+                _sound->play_death_sound(true);
             }
             else if (std::shared_ptr<Lost> lost = dynamic_pointer_cast<Lost>(*eit)) {
                 createAndAddDeathAnimationObstacle("lost_death", (*eit)->getPosition(), 0.125f, 5, 200);
