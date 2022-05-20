@@ -3640,7 +3640,7 @@ void GameScene::createEnemy(string enemyName, Vec2 enemyPos, int spawnerInd) {
     {
         std::shared_ptr<Texture> lostHitBoxImage = _assets->get<Texture>("lost");
         std::shared_ptr<Texture> lostImage = _assets->get<Texture>("lost_ani");
-        std::shared_ptr<Lost> lost = Lost::alloc(enemyPos, Size(lostImage->getSize().width / 4.0f, lostImage->getSize().height / 2.0f), lostHitBoxImage->getSize() / _scale / 10, _scale);
+        std::shared_ptr<Lost> lost = Lost::alloc(enemyPos, Size(lostImage->getSize().width / 4.0f, lostImage->getSize().height / 3.0f), lostHitBoxImage->getSize() / _scale / 10, _scale);
         std::shared_ptr<scene2::SpriteNode> lostSprite = scene2::SpriteNode::alloc(lostImage, 3, 4);
         lostSprite->setFrame(0);
         lostSprite->setAnchor(Vec2(0.5, 0.25));
@@ -3660,7 +3660,7 @@ void GameScene::createEnemy(string enemyName, Vec2 enemyPos, int spawnerInd) {
     {
         std::shared_ptr<Texture> phantomHitboxImage = _assets->get<Texture>("phantom");
         std::shared_ptr<Texture> phantomImage = _assets->get<Texture>("phantom_ani");
-        std::shared_ptr<Phantom> phantom = Phantom::alloc(enemyPos, Vec2(phantomImage->getSize().width / 7, phantomImage->getSize().height), phantomHitboxImage->getSize() / _scale / 10, _scale);
+        std::shared_ptr<Phantom> phantom = Phantom::alloc(enemyPos, Vec2(phantomImage->getSize().width / 7, phantomImage->getSize().height/2), phantomHitboxImage->getSize() / _scale / 10, _scale);
         std::shared_ptr<scene2::SpriteNode> phantomSprite = scene2::SpriteNode::alloc(phantomImage, 2, 7);
         phantom->setSceneNode(phantomSprite);
         phantom->setDebugColor(Color4::BLUE);
