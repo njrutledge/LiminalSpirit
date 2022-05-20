@@ -990,6 +990,9 @@ void GameScene::update(float timestep, int unlockCount)
         // perform necessary update loop
         // stop dashing when you win
         _player->setIsDashing(false);
+        _meleeArm->setLastType(Glow::MeleeState::cool);
+        _rangedArm->setLastType(Glow::MeleeState::cool);
+
         // remove attacks
         auto ait = _attacks->_current.begin();
         while (ait != _attacks->_current.end())
@@ -3504,11 +3507,16 @@ void GameScene::createSpawnParticles()
         if (!enemyNames[i].compare("glutton")) {
             portalSprite->setPosition(Vec2(positions[i].x * _scale, (positions[i].y + 1.25) * _scale));
             portalSprite->setScale(0.9f);
-            portalSprite->setPriority(0.97);
+            portalSprite->setPriority(0.96);
         }
         else if (!enemyNames[i].compare("spawner")) {
-            portalSprite->setPosition(Vec2(positions[i].x * _scale, (positions[i].y + 0.75) * _scale));
+            portalSprite->setPosition(Vec2(positions[i].x * _scale, (positions[i].y + 0.85) * _scale));
             portalSprite->setScale(0.6f);
+            portalSprite->setPriority(0.97);
+        }
+        else if (!enemyNames[i].compare("seeker")) {
+            portalSprite->setPosition(Vec2(positions[i].x * _scale, (positions[i].y + 0.77) * _scale));
+            portalSprite->setScale(0.45f);
             portalSprite->setPriority(0.98);
         }
         else {
