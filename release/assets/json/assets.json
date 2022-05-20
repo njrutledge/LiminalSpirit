@@ -1245,7 +1245,7 @@
         "spawnerAttack": {
             "type": "sample",
             "file": "sounds/enemy/spawner/Spawner_Attack.wav",
-            "volume": 0.3
+            "volume": 0.5
         },
         "spawnerHurt": {
             "type": "sample",
@@ -1996,8 +1996,8 @@
 		"shroom4": "json/levels/shroom/mush4.json",
 		"shroom5": "json/levels/shroom/mush5.json",
 		"shroom6": "json/levels/shroom/mush6.json",
-		"shroom7": "json/levels/shroom/old/battlefield.json",
-		"shroom8": "json/levels/shroom/mush6.json",
+		"shroom7": "json/levels/shroom/mush7.json",
+		"shroom8": "json/levels/shroom/mush8.json",
 		"shroom9": "json/levels/shroom/mush9.json",
 		"levelt": "json/levels/levelt.json",
 		"level2": "json/levels/level2.json",
