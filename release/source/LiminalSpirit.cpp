@@ -81,13 +81,13 @@ void LiminalSpirit::onStartup()
         reader->close();
     
         // Note: COMMENT THESE OUT TO DISABLE PROGRESSION!!!!!!!!
-        _biome = progress->has("biome") ? progress->get("biome")->asInt() : 1;
-        _highest_level = progress->has("highest_level") ? progress->get("highest_level")->asInt() : 1;
-        _unlock_count = progress->has("unlock_count") ? progress->get("unlock_count")->asInt() : 0;
+//        _biome = progress->has("biome") ? progress->get("biome")->asInt() : 1;
+//        _highest_level = progress->has("highest_level") ? progress->get("highest_level")->asInt() : 1;
+//        _unlock_count = progress->has("unlock_count") ? progress->get("unlock_count")->asInt() : 0;
         // Note: COMMENT THESE OUT TO ENABLE PROGRESSION!!!!!!!!
-//      _biome = 3;
-//      _highest_level = 10;
-//      _unlock_count = 5;
+      _biome = 3;
+      _highest_level = 10;
+      _unlock_count = 5;
         // leave below uncommented
         _swap = settings->has("swap") ? settings->get("swap")->asInt() : 0;
         _music = settings->has("music") ? settings->get("music")->asInt() : 10;
