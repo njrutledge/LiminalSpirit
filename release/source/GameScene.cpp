@@ -3531,7 +3531,7 @@ void GameScene::createSpawnParticles()
 bool GameScene::updateWin()
 {
     // All waves created and all enemies cleared
-    if (_nextWaveNum >= _numWaves && !_enemies.size() && !_spawnerCount)
+    if (_nextWaveNum >= _numWaves && !_enemies.size())
     {
         return true;
     }
