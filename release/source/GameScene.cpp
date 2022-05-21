@@ -1064,13 +1064,12 @@ void GameScene::update(float timestep, int unlockCount)
 
     updateAnimations(timestep, unlockCount, left, right);
 
-    updateRemoveDeletedAttacks();
-
-    updateRemoveDeletedEnemies();
     updateEnemies(timestep);
 
     updateAttacks(timestep, unlockCount, left, right);
+    updateRemoveDeletedAttacks();
 
+    updateRemoveDeletedEnemies();
     
     updateMeleeArm(timestep);
     
@@ -2146,7 +2145,6 @@ void GameScene::updateEnemies(float timestep)
         Vec2 direction = _ai.getMovement(*it, _player->getPosition(), timestep, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
         (*it)->setVX(direction.x);
-       
         if ((*it)->getName() == "Lost")
         {
             float distance = _player->getPosition().distance((*it)->getPosition());
@@ -2530,27 +2528,18 @@ void GameScene::updateEnemies(float timestep)
     {
         if (_collider.getSpawnerKilled() != -1)
         {
-            for (auto it = _spawners.begin(); it != _spawners.end(); ++it) {
-                if ((*it)->isRemoved()) {
-                    _living_spawners[_collider.getSpawnerKilled()] = 0;
-                    _spawnerCount--;
-                }
-            }
+            _living_spawners[_collider.getSpawnerKilled()] = 0;
+            _spawnerCount--;
             _collider.setSpawnerKilled(-1);
-
         }
         if (_collider.getIndexSpawner() != -1)
         {
-            for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
-                if ((*it)->isRemoved() && (*it)->getSpawnerInd() != -1) {
-                    int i = (*it)->getSpawnerInd();
-                    string name = _collider.getSpawnerEnemyName();
-                    std::transform(name.begin(), name.end(), name.begin(),
-                                   [](unsigned char c)
-                                   { return std::tolower(c); });
-                    _spawner_enemy_types[i][name].current_count = _spawner_enemy_types[i][name].current_count - 1;
-                }
-            }
+            int i = _collider.getIndexSpawner();
+            string name = _collider.getSpawnerEnemyName();
+            std::transform(name.begin(), name.end(), name.begin(),
+                           [](unsigned char c)
+                           { return std::tolower(c); });
+            _spawner_enemy_types[i][name].current_count = _spawner_enemy_types[i][name].current_count - 1;
             _collider.setIndexSpawner(-1);
         }
     }
@@ -3232,10 +3221,7 @@ void GameScene::updateRemoveDeletedEnemies()
         }
         if (!bypass && (*eit)->isRemoved())
         {
-            if ((*eit)->getName() == "Spawner")
-            {
-                _living_spawners[(*eit)->getSpawnerInd()] = 0;
-            }
+
             float damageParticleScale;
             if ((*eit)->getName() == "Spawner") {
                 damageParticleScale = 0.15;
